@@ -1292,50 +1292,82 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
 
       {/* 12a0. FLAMETHROWER STREAM (Arcanine/Charmeleon/Magmar/Flareon Flamethrower)
-            Layered horizontal fire-breath cone with wavering wisps and a scorch glow at the
-            impact point. GBA Flamethrower: sustained directional stream, not a single fireball. */}
+            Thick, turbulent horizontal fire-breath cone with multiple organic flame tongues,
+            wavering wisps above and below, and a scorch glow at the impact point.
+            GBA Flamethrower: sustained directional stream with visible heat turbulence. */}
       {fx.type === 'flamethrower_stream' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Main cone — tapered fire breath body */}
+          {/* Main cone — thick turbulent fire breath body with multiple flame tongues */}
           <div className="absolute" style={{ animation: 'gbaFlameStreamCone 1.2s ease-out forwards' }}>
-            <svg width="120" height="46" viewBox="0 0 120 46" className="drop-shadow-[0_0_18px_#ea580c]">
+            <svg width="140" height="80" viewBox="0 0 140 80" className="drop-shadow-[0_0_22px_#ea580c]">
               <defs>
                 <linearGradient id="ftsGrad" x1="0" y1="0" x2="1" y2="0">
                   <stop offset="0%" stopColor="#fef3c7" />
-                  <stop offset="30%" stopColor="#fbbf24" />
-                  <stop offset="65%" stopColor="#f97316" />
+                  <stop offset="25%" stopColor="#fbbf24" />
+                  <stop offset="55%" stopColor="#f97316" />
+                  <stop offset="80%" stopColor="#ea580c" />
                   <stop offset="100%" stopColor="#dc2626" />
                 </linearGradient>
+                <linearGradient id="ftsInner" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+                  <stop offset="40%" stopColor="#fef3c7" />
+                  <stop offset="100%" stopColor="#fbbf24" />
+                </linearGradient>
               </defs>
-              <path d="M2 23 Q20 14, 45 16 Q75 12, 100 18 Q116 21, 118 23 Q116 25, 100 28 Q75 34, 45 30 Q20 32, 2 23 Z" fill="url(#ftsGrad)" opacity="0.9" />
-              <path d="M6 23 Q28 18, 52 20 Q80 17, 104 21 Q112 22, 113 23 Q112 24, 104 25 Q80 29, 52 26 Q28 28, 6 23 Z" fill="#fbbf24" opacity="0.75" />
-              <path d="M10 23 Q34 20, 58 21 Q84 20, 102 22.5 Q106 23, 102 23.5 Q84 26, 58 25 Q34 26, 10 23 Z" fill="#fef3c7" opacity="0.7" />
+              {/* Outer flame body — thick, irregular cone */}
+              <path d="M4 40 Q10 22, 30 18 Q45 12, 60 20 Q75 14, 95 22 Q110 18, 125 28 Q136 34, 138 40 Q136 46, 125 52 Q110 62, 95 58 Q75 66, 60 60 Q45 68, 30 62 Q10 58, 4 40 Z" fill="url(#ftsGrad)" opacity="0.92" />
+              {/* Upper flame tongue */}
+              <path d="M20 28 Q35 18, 55 22 Q70 16, 88 24 Q100 20, 112 28 Q118 32, 115 35 Q100 30, 85 32 Q65 28, 48 32 Q32 30, 20 28 Z" fill="#f97316" opacity="0.8" />
+              {/* Lower flame tongue */}
+              <path d="M22 52 Q38 62, 56 58 Q72 64, 90 56 Q104 60, 114 52 Q118 48, 114 45 Q102 50, 88 48 Q70 52, 52 48 Q36 50, 22 52 Z" fill="#ef4444" opacity="0.75" />
+              {/* Mid hot core */}
+              <path d="M12 40 Q25 30, 50 33 Q75 28, 100 34 Q120 36, 130 40 Q120 44, 100 46 Q75 52, 50 47 Q25 50, 12 40 Z" fill="url(#ftsInner)" opacity="0.85" />
+              {/* Flickering tips at the cone edge */}
+              <path d="M120 30 Q126 26, 132 30 Q136 34, 133 37 Q128 34, 124 36 Q120 33, 120 30 Z" fill="#fbbf24" opacity="0.9" />
+              <path d="M122 44 Q128 48, 134 45 Q137 42, 134 39 Q130 42, 126 41 Q122 42, 122 44 Z" fill="#f97316" opacity="0.85" />
+              <path d="M110 24 Q114 20, 118 24 Q120 28, 116 29 Q112 27, 110 24 Z" fill="#fef3c7" opacity="0.8" />
+              <path d="M112 54 Q116 58, 120 55 Q122 52, 119 50 Q115 52, 112 54 Z" fill="#fbbf24" opacity="0.75" />
             </svg>
           </div>
-          {/* Wavering wisps riding the stream */}
-          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp1 1.2s ease-out 0.1s forwards', opacity: 0 }}>
-            <svg width="26" height="20" viewBox="0 0 26 20">
-              <path d="M2 16 Q6 8, 10 12 Q13 4, 16 10 Q20 6, 22 12 Q24 16, 20 17 Q12 19, 2 16 Z" fill="#f97316" opacity="0.85" />
-              <path d="M6 14 Q9 10, 12 13 Q15 9, 18 13 Q20 15, 16 15.5 Q10 16.5, 6 14 Z" fill="#fbbf24" opacity="0.7" />
+          {/* Turbulent wisps riding above the stream */}
+          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp1 1.2s ease-out 0.08s forwards', opacity: 0 }}>
+            <svg width="34" height="28" viewBox="0 0 34 28">
+              <path d="M3 22 Q8 12, 14 16 Q18 6, 24 12 Q29 8, 32 14 Q34 20, 28 23 Q18 26, 8 24 Q4 23, 3 22 Z" fill="#f97316" opacity="0.85" />
+              <path d="M8 19 Q12 13, 17 16 Q21 11, 25 15 Q28 18, 24 20 Q16 22, 8 19 Z" fill="#fbbf24" opacity="0.7" />
             </svg>
           </div>
-          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp2 1.2s ease-out 0.2s forwards', opacity: 0 }}>
-            <svg width="22" height="18" viewBox="0 0 22 18">
-              <path d="M2 13 Q5 6, 9 10 Q12 3, 14 9 Q17 5, 19 10 Q21 14, 17 14.5 Q9 16, 2 13 Z" fill="#ef4444" opacity="0.8" />
-              <path d="M5 12 Q8 8, 10 11 Q13 7, 15 11 Q17 13, 13 13.5 Q8 14, 5 12 Z" fill="#fbbf24" opacity="0.65" />
+          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp4 1.2s ease-out 0.15s forwards', opacity: 0 }}>
+            <svg width="28" height="24" viewBox="0 0 28 24">
+              <path d="M2 18 Q6 10, 12 14 Q16 6, 22 10 Q26 14, 24 18 Q18 22, 8 20 Q3 19, 2 18 Z" fill="#ef4444" opacity="0.8" />
+              <path d="M7 16 Q10 11, 15 14 Q19 10, 22 14 Q23 17, 19 18 Q12 19, 7 16 Z" fill="#fbbf24" opacity="0.65" />
             </svg>
           </div>
-          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp3 1.2s ease-out 0.3s forwards', opacity: 0 }}>
-            <svg width="18" height="14" viewBox="0 0 18 14">
-              <path d="M2 10 Q4 5, 7 8 Q9 2, 11 7 Q14 4, 15 8 Q17 11, 13 11.5 Q7 13, 2 10 Z" fill="#f97316" opacity="0.75" />
+          {/* Turbulent wisps below the stream */}
+          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp2 1.2s ease-out 0.12s forwards', opacity: 0 }}>
+            <svg width="30" height="26" viewBox="0 0 30 26">
+              <path d="M2 14 Q7 6, 13 10 Q17 3, 23 8 Q28 12, 26 17 Q20 22, 10 20 Q4 18, 2 14 Z" fill="#ef4444" opacity="0.8" />
+              <path d="M7 13 Q10 8, 15 11 Q19 7, 23 11 Q25 15, 20 16 Q12 17, 7 13 Z" fill="#f97316" opacity="0.7" />
             </svg>
           </div>
-          {/* Scorch glow at the impact point */}
-          <div className="absolute translate-x-[46px]" style={{ animation: 'gbaFlameStreamScorch 1.2s ease-out 0.35s forwards', opacity: 0 }}>
-            <svg width="44" height="44" viewBox="0 0 44 44">
-              <circle cx="22" cy="22" r="18" fill="#dc2626" opacity="0.35" />
-              <circle cx="22" cy="22" r="12" fill="#f97316" opacity="0.4" />
-              <circle cx="22" cy="22" r="6" fill="#fbbf24" opacity="0.5" />
+          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp5 1.2s ease-out 0.22s forwards', opacity: 0 }}>
+            <svg width="26" height="22" viewBox="0 0 26 22">
+              <path d="M2 14 Q6 7, 11 10 Q14 4, 19 8 Q23 12, 21 16 Q16 19, 8 17 Q3 16, 2 14 Z" fill="#f97316" opacity="0.75" />
+            </svg>
+          </div>
+          {/* Central wisp riding the core */}
+          <div className="absolute" style={{ animation: 'gbaFlameStreamWisp3 1.2s ease-out 0.18s forwards', opacity: 0 }}>
+            <svg width="32" height="20" viewBox="0 0 32 20">
+              <path d="M2 12 Q8 5, 14 9 Q18 3, 24 7 Q29 10, 27 14 Q22 18, 10 16 Q4 14, 2 12 Z" fill="#fbbf24" opacity="0.8" />
+              <path d="M8 11 Q12 7, 17 10 Q21 6, 25 10 Q26 13, 22 14 Q14 15, 8 11 Z" fill="#fef3c7" opacity="0.6" />
+            </svg>
+          </div>
+          {/* Scorch glow at the impact point — organic flame burst */}
+          <div className="absolute translate-x-[50px]" style={{ animation: 'gbaFlameStreamScorch 1.2s ease-out 0.3s forwards', opacity: 0 }}>
+            <svg width="56" height="56" viewBox="0 0 56 56">
+              <path d="M28 4 Q34 12, 32 20 Q38 16, 40 24 Q46 20, 44 30 Q50 28, 46 38 Q52 40, 44 46 Q48 52, 38 50 Q36 56, 28 52 Q20 56, 18 50 Q8 52, 12 46 Q4 40, 10 38 Q6 28, 12 30 Q10 20, 16 24 Q18 16, 24 20 Q22 12, 28 4 Z" fill="#dc2626" opacity="0.5" />
+              <path d="M28 12 Q32 18, 30 24 Q36 22, 36 28 Q42 28, 38 34 Q42 40, 34 40 Q34 46, 28 44 Q22 46, 22 40 Q14 40, 18 34 Q14 28, 20 28 Q20 22, 26 24 Q24 18, 28 12 Z" fill="#f97316" opacity="0.55" />
+              <circle cx="28" cy="28" r="8" fill="#fbbf24" opacity="0.6" />
+              <circle cx="28" cy="28" r="4" fill="#fef3c7" opacity="0.7" />
             </svg>
           </div>
         </div>
@@ -1362,30 +1394,44 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 12b. FLARE BURST (Growlithe — quick radial flash with outward rays, GBA Flare style) */}
+      {/* 12b. FLARE BURST (Growlithe — quick organic flash of flame tongues, GBA Flare style) */}
       {fx.type === 'flare_burst' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Central organic flame cluster — overlapping tongues, not a perfect circle */}
           <div className="absolute" style={{ animation: 'gbaFlareBurstCore 1.2s ease-out forwards' }}>
-            <svg width="64" height="64" viewBox="0 0 64 64" className="drop-shadow-[0_0_24px_#fbbf24]">
-              <circle cx="32" cy="32" r="18" fill="url(#fbCoreGrad)" />
-              <circle cx="32" cy="32" r="10" fill="#fef3c7" opacity="0.8" />
+            <svg width="68" height="68" viewBox="0 0 68 68" className="drop-shadow-[0_0_22px_#fbbf24]">
               <defs>
-                <radialGradient id="fbCoreGrad" cx="50%" cy="50%" r="50%">
+                <linearGradient id="fbCoreGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#fef3c7" />
-                  <stop offset="40%" stopColor="#fbbf24" />
+                  <stop offset="50%" stopColor="#fbbf24" />
                   <stop offset="100%" stopColor="#f97316" />
-                </radialGradient>
+                </linearGradient>
               </defs>
+              {/* Organic flame burst shape — irregular, not circular */}
+              <path d="M34 6 Q40 14, 38 22 Q44 16, 46 26 Q52 22, 50 32 Q56 30, 52 40 Q58 44, 48 46 Q52 54, 42 52 Q40 60, 34 56 Q28 60, 26 52 Q16 54, 20 46 Q10 44, 16 40 Q12 30, 18 32 Q16 22, 22 26 Q24 16, 30 22 Q28 14, 34 6 Z" fill="url(#fbCoreGrad)" opacity="0.9" />
+              <path d="M34 16 Q38 22, 36 28 Q42 24, 42 32 Q46 30, 44 38 Q48 42, 40 42 Q42 48, 34 46 Q26 48, 28 42 Q20 42, 24 38 Q22 30, 26 32 Q26 24, 32 28 Q30 22, 34 16 Z" fill="#fef3c7" opacity="0.7" />
+              <circle cx="34" cy="34" r="6" fill="#ffffff" opacity="0.6" />
             </svg>
           </div>
-          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
-            <div key={`fb-ray-${i}`} className="absolute" style={{ '--ray-angle': `${angle}deg`, animation: `gbaFlareBurstRay 1.2s ease-out ${0.05 + i * 0.03}s forwards`, opacity: 0 } as React.CSSProperties}>
-              <svg width="40" height="6" viewBox="0 0 40 6">
-                <rect x="0" y="2" width="40" height="2" rx="1" fill={i % 2 === 0 ? '#fbbf24' : '#f97316'} opacity="0.8" />
+          {/* 6 organic flame tongues radiating at irregular angles */}
+          {[
+            { dx: '22px', dy: '-16px', r: -25 }, { dx: '-20px', dy: '-18px', r: 20 },
+            { dx: '26px', dy: '10px', r: 15 }, { dx: '-24px', dy: '12px', r: -18 },
+            { dx: '8px', dy: '-26px', r: 5 }, { dx: '-6px', dy: '24px', r: -8 }
+          ].map((p, i) => (
+            <div key={`fb-tongue-${i}`} className="absolute" style={{ '--ray-dx': p.dx, '--ray-dy': p.dy, '--ray-rot': `${p.r}deg`, animation: `gbaFlareBurstRay 1.2s ease-out ${0.06 + i * 0.04}s forwards`, opacity: 0 } as React.CSSProperties}>
+              <svg width="22" height="26" viewBox="0 0 22 26">
+                <path d="M11 26 Q7 18, 8 12 Q5 6, 11 1 Q17 6, 14 12 Q15 18, 11 26 Z" fill={i % 2 === 0 ? '#f97316' : '#fbbf24'} opacity="0.85" />
+                <path d="M11 20 Q9 15, 10 11 Q8 7, 11 4 Q14 7, 12 11 Q13 15, 11 20 Z" fill="#fef3c7" opacity="0.7" />
               </svg>
             </div>
           ))}
-          <div className="absolute w-20 h-20 rounded-full border-2 border-amber-400/70" style={{ animation: 'gbaFlareBurstRing 1.2s ease-out 0.2s forwards', opacity: 0 }} />
+          {/* Soft expanding glow — organic, not a CSS border ring */}
+          <div className="absolute" style={{ animation: 'gbaFlareBurstRing 1.2s ease-out 0.15s forwards', opacity: 0 }}>
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <path d="M36 4 Q44 12, 42 20 Q50 16, 52 26 Q60 24, 56 34 Q64 36, 56 44 Q60 52, 50 50 Q52 58, 42 54 Q40 62, 36 58 Q32 62, 30 54 Q20 58, 22 50 Q12 52, 16 44 Q8 36, 16 34 Q12 24, 20 26 Q22 16, 30 20 Q28 12, 36 4 Z" fill="none" stroke="#f97316" strokeWidth="2" opacity="0.5" />
+            </svg>
+          </div>
         </div>
       )}
 
@@ -1587,29 +1633,42 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       )}
 
       {/* 12h. WILDFIRE SCORCH (Moltres — expanding legendary heat wave, no direct damage)
-            Moltres spreads an all-consuming heat wave. GBA Wildfire: expanding ring of fire. */}
+            Moltres spreads an all-consuming heat wave. GBA Wildfire: organic expanding fire. */}
       {fx.type === 'wildfire_scorch' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Organic expanding flame wave — not a radial gradient circle */}
           <div className="absolute" style={{ animation: 'gbaWildfireWave 1.2s ease-out forwards' }}>
-            <svg width="80" height="80" viewBox="0 0 80 80" className="drop-shadow-[0_0_28px_#ef4444]">
+            <svg width="90" height="90" viewBox="0 0 90 90" className="drop-shadow-[0_0_26px_#ef4444]">
               <defs>
-                <radialGradient id="wfGrad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#fef3c7" stopOpacity="0.9" />
-                  <stop offset="35%" stopColor="#fbbf24" stopOpacity="0.8" />
-                  <stop offset="65%" stopColor="#f97316" stopOpacity="0.7" />
-                  <stop offset="100%" stopColor="#dc2626" stopOpacity="0.4" />
-                </radialGradient>
+                <linearGradient id="wfGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#fef3c7" />
+                  <stop offset="40%" stopColor="#fbbf24" />
+                  <stop offset="70%" stopColor="#f97316" />
+                  <stop offset="100%" stopColor="#dc2626" />
+                </linearGradient>
               </defs>
-              <circle cx="40" cy="40" r="36" fill="url(#wfGrad)" />
-              <circle cx="40" cy="40" r="20" fill="#fef3c7" opacity="0.5" />
+              {/* Organic flame wave shape */}
+              <path d="M45 5 Q55 15, 52 25 Q62 18, 64 30 Q74 26, 70 38 Q80 38, 74 48 Q82 54, 72 56 Q76 66, 64 62 Q64 72, 54 68 Q52 78, 45 74 Q38 78, 36 68 Q26 72, 26 62 Q14 66, 18 56 Q8 54, 16 48 Q10 38, 20 38 Q16 26, 26 30 Q28 18, 38 25 Q35 15, 45 5 Z" fill="url(#wfGrad)" opacity="0.85" />
+              <path d="M45 20 Q52 26, 50 34 Q58 30, 58 38 Q64 38, 60 46 Q66 50, 58 52 Q60 58, 52 56 Q52 64, 45 60 Q38 64, 38 56 Q30 58, 32 52 Q24 50, 30 46 Q26 38, 32 38 Q32 30, 40 34 Q38 26, 45 20 Z" fill="#fef3c7" opacity="0.5" />
+              <circle cx="45" cy="45" r="8" fill="#ffffff" opacity="0.4" />
             </svg>
           </div>
-          <div className="absolute w-24 h-24 rounded-full border-2 border-red-500/70" style={{ animation: 'gbaWildfireRing 1.2s ease-out 0.1s forwards', opacity: 0 }} />
-          <div className="absolute w-32 h-32 rounded-full border border-orange-400/50" style={{ animation: 'gbaWildfireRing 1.2s ease-out 0.25s forwards', opacity: 0 }} />
+          {/* Organic expanding rings — SVG paths, not CSS borders */}
+          <div className="absolute" style={{ animation: 'gbaWildfireRing 1.2s ease-out 0.1s forwards', opacity: 0 }}>
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <path d="M40 6 Q50 12, 48 20 Q58 16, 58 26 Q66 24, 62 34 Q70 36, 64 44 Q70 50, 60 50 Q62 58, 52 56 Q52 64, 44 60 Q42 68, 38 62 Q30 66, 32 58 Q22 60, 26 52 Q16 50, 22 44 Q14 36, 22 34 Q18 24, 26 26 Q28 16, 36 20 Q34 12, 40 6 Z" fill="none" stroke="#ef4444" strokeWidth="2" opacity="0.6" />
+            </svg>
+          </div>
+          <div className="absolute" style={{ animation: 'gbaWildfireRing 1.2s ease-out 0.25s forwards', opacity: 0 }}>
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <path d="M50 8 Q62 14, 60 24 Q72 20, 72 32 Q82 30, 78 42 Q88 44, 80 52 Q86 60, 74 60 Q76 70, 64 66 Q64 76, 54 72 Q52 80, 48 74 Q40 78, 42 70 Q30 72, 34 64 Q22 62, 28 54 Q18 48, 26 44 Q20 34, 30 34 Q28 24, 38 26 Q36 16, 46 20 Q44 12, 50 8 Z" fill="none" stroke="#f97316" strokeWidth="1.5" opacity="0.4" />
+            </svg>
+          </div>
+          {/* Scattered flame sparks */}
           {[0, 1, 2, 3, 4, 5].map(i => (
             <div key={`wf-s-${i}`} className="absolute" style={{ '--wx': `${Math.cos(i * Math.PI / 3) * 28}px`, '--wy': `${Math.sin(i * Math.PI / 3) * 28}px`, animation: `gbaWildfireSpark 1.2s ease-out ${0.15 + i * 0.08}s forwards`, opacity: 0 } as React.CSSProperties}>
-              <svg width="9" height="9" viewBox="0 0 9 9">
-                <circle cx="4.5" cy="4.5" r="3" fill={i % 2 === 0 ? '#fbbf24' : '#ef4444'} opacity="0.85" />
+              <svg width="12" height="14" viewBox="0 0 12 14">
+                <path d="M6 14 Q4 10, 5 7 Q3 4, 6 1 Q9 4, 7 7 Q8 10, 6 14 Z" fill={i % 2 === 0 ? '#fbbf24' : '#ef4444'} opacity="0.85" />
               </svg>
             </div>
           ))}
