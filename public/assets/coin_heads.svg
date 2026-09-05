@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="goldEdge" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fff5a6"/>
+      <stop offset="40%" stop-color="#ffd000"/>
+      <stop offset="85%" stop-color="#b8860b"/>
+      <stop offset="100%" stop-color="#704214"/>
+    </radialGradient>
+    <linearGradient id="innerMetallic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe680"/>
+      <stop offset="50%" stop-color="#ffbf00"/>
+      <stop offset="100%" stop-color="#d49b00"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer Bezel -->
+  <circle cx="100" cy="100" r="96" fill="url(#goldEdge)" stroke="#4a3000" stroke-width="4"/>
+  <circle cx="100" cy="100" r="82" fill="none" stroke="#ffe066" stroke-width="2" stroke-dasharray="4,4"/>
+  <!-- Inner Surface -->
+  <circle cx="100" cy="100" r="76" fill="url(#innerMetallic)"/>
+  
+  <!-- Chansey Icon Outline (Classic 1999 Coin Art) -->
+  <g transform="translate(45, 45) scale(1.1)">
+    <!-- Chansey Body -->
+    <ellipse cx="50" cy="55" rx="36" ry="32" fill="#ff99bb" stroke="#591d2d" stroke-width="3"/>
+    <!-- Chansey Ears / Hair tufts -->
+    <path d="M 18,35 Q 2,28 12,42 Q 8,50 20,48" fill="#ff77a9" stroke="#591d2d" stroke-width="2.5"/>
+    <path d="M 82,35 Q 98,28 88,42 Q 92,50 80,48" fill="#ff77a9" stroke="#591d2d" stroke-width="2.5"/>
+    <!-- Eyes -->
+    <circle cx="38" cy="45" r="3" fill="#222"/>
+    <circle cx="62" cy="45" r="3" fill="#222"/>
+    <!-- Smile & Blush -->
+    <path d="M 46,53 Q 50,57 54,53" stroke="#222" stroke-width="2.5" fill="none"/>
+    <ellipse cx="32" cy="52" rx="4" ry="2.5" fill="#ff4d88" opacity="0.6"/>
+    <ellipse cx="68" cy="52" rx="4" ry="2.5" fill="#ff4d88" opacity="0.6"/>
+    <!-- Egg in Pouch -->
+    <path d="M 32,60 Q 50,75 68,60" fill="#ffb3cc" stroke="#591d2d" stroke-width="2.5"/>
+    <ellipse cx="50" cy="62" rx="10" ry="12" fill="#ffffff" stroke="#591d2d" stroke-width="2"/>
+    <!-- Arms -->
+    <ellipse cx="25" cy="58" rx="6" ry="4" fill="#ff99bb" stroke="#591d2d" stroke-width="2"/>
+    <ellipse cx="75" cy="58" rx="6" ry="4" fill="#ff99bb" stroke="#591d2d" stroke-width="2"/>
+    <!-- Feet -->
+    <ellipse cx="36" cy="85" rx="8" ry="5" fill="#ff99bb" stroke="#591d2d" stroke-width="2"/>
+    <ellipse cx="64" cy="85" rx="8" ry="5" fill="#ff99bb" stroke="#591d2d" stroke-width="2"/>
+  </g>
+  <text x="100" y="180" font-family="'Press Start 2P', system-ui" font-size="10" fill="#664400" text-anchor="middle" font-weight="bold">HEADS</text>
+</svg>

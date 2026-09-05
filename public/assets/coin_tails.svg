@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="silverEdge" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#f0f4f8"/>
+      <stop offset="40%" stop-color="#b0c0d0"/>
+      <stop offset="85%" stop-color="#607080"/>
+      <stop offset="100%" stop-color="#304050"/>
+    </radialGradient>
+    <linearGradient id="innerSilver" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d0dde8"/>
+      <stop offset="50%" stop-color="#98abbc"/>
+      <stop offset="100%" stop-color="#708294"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer Bezel -->
+  <circle cx="100" cy="100" r="96" fill="url(#silverEdge)" stroke="#203040" stroke-width="4"/>
+  <circle cx="100" cy="100" r="82" fill="none" stroke="#e0e8f0" stroke-width="2" stroke-dasharray="4,4"/>
+  <!-- Inner Surface -->
+  <circle cx="100" cy="100" r="76" fill="url(#innerSilver)"/>
+  
+  <!-- Classic Pokeball Emblem for Tails -->
+  <g transform="translate(60, 50) scale(0.8)">
+    <circle cx="50" cy="50" r="44" fill="#203040" stroke="#102030" stroke-width="4"/>
+    <path d="M 50,8 A 42,42 0 0,1 92,50 L 64,50 A 14,14 0 0,0 36,50 L 8,50 A 42,42 0 0,1 50,8 Z" fill="#cc3333"/>
+    <path d="M 50,92 A 42,42 0 0,1 8,50 L 36,50 A 14,14 0 0,0 64,50 L 92,50 A 42,42 0 0,1 50,92 Z" fill="#eaeaea"/>
+    <circle cx="50" cy="50" r="14" fill="#203040"/>
+    <circle cx="50" cy="50" r="7" fill="#ffffff"/>
+  </g>
+  <text x="100" y="160" font-family="'Press Start 2P', system-ui" font-size="14" fill="#ffffff" stroke="#102030" stroke-width="1" text-anchor="middle" font-weight="bold">TAILS</text>
+  <text x="100" y="180" font-family="'Press Start 2P', system-ui" font-size="10" fill="#203040" text-anchor="middle" font-weight="bold">NO DAMAGE / MISS</text>
+</svg>

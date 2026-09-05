@@ -1,0 +1,4 @@
+.vercel
+.tmpverify
+node_modules
+dist

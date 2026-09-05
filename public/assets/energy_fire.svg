@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#e83818" stroke="#7a1402" stroke-width="4"/>
+  <g fill="#ffffff" stroke="#520c00" stroke-width="3" stroke-linejoin="round">
+    <!-- Classic Flame Silhouette -->
+    <path d="M50 14 C58 26 62 34 54 42 C51 45 52 50 58 46 C66 40 70 32 71 39 C78 52 76 72 58 80 C39 88 23 72 26 53 C28 36 42 30 43 24 C44 19 47 16 50 14 Z"/>
+    <!-- Inner Flame Hollow -->
+    <path d="M48 46 C42 55 45 68 54 69 C60 70 63 63 60 57 C57 52 51 56 50 50 C49 45 51 41 48 46 Z" fill="#e83818" stroke="none"/>
+  </g>
+</svg>

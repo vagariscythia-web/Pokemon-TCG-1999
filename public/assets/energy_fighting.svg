@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#b84c16" stroke="#571e03" stroke-width="4"/>
+  <g fill="#ffffff" stroke="#381100" stroke-width="3" stroke-linejoin="round">
+    <!-- Boxing Fist -->
+    <path d="M34 32 C34 26 41 24 46 27 C49 24 56 24 59 28 C62 25 68 26 70 31 C72 36 71 43 70 51 C68 66 58 75 47 75 C35 75 26 66 27 54 C28 47 30 42 34 32 Z"/>
+    <path d="M29 45 C35 45 40 52 37 59 C34 62 30 58 29 45 Z" fill="#ffffff"/>
+    <line x1="41" y1="31" x2="41" y2="49" stroke="#b84c16" stroke-width="3"/>
+    <line x1="52" y1="32" x2="52" y2="49" stroke="#b84c16" stroke-width="3"/>
+    <line x1="62" y1="34" x2="62" y2="49" stroke="#b84c16" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="#1b85e0" stroke="#083d6e" stroke-width="4"/>
+  <g fill="#ffffff" stroke="#062e54" stroke-width="3" stroke-linejoin="round">
+    <!-- Authentic Water Droplet -->
+    <path d="M50 14 C54 22 76 48 76 63 C76 78 64 86 50 86 C36 86 24 78 24 63 C24 48 46 22 50 14 Z"/>
+    <!-- Droplet Shine -->
+    <path d="M35 56 C33 63 36 74 44 78" stroke="#1b85e0" stroke-width="4" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>
