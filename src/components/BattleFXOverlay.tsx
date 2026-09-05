@@ -1160,51 +1160,43 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 11b. THUNDERPUNCH (Electabuzz - yellow fist with lightning streaks) */}
       {fx.type === 'thunder_punch' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Fist shape - yellow with black stripes like Electabuzz */}
-          <div
-            className="absolute flex items-center justify-center"
-            style={{ animation: 'gbaThunderPunchSlam 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
-          >
-            {/* Electabuzz fist — HEAD-ON 90° view: knuckles face viewer, palm hidden, mirror-perspective */}
-            <svg width="80" height="58" viewBox="0 0 80 58" className="drop-shadow-[0_0_24px_#facc15]">
-              {/* Wrist — tiny, foreshortened, barely visible behind fist (no palm visible) */}
-              <ellipse cx="40" cy="52" rx="12" ry="5" fill="#f59e0b" stroke="#d97706" strokeWidth="1" opacity="0.45" />
-              {/* Main fist mass — wide & compact, seen STRAIGHT ON */}
-              <path d="M8 14 Q8 8, 16 7 L64 7 Q72 8, 72 14 L72 38 Q72 46, 62 46 L18 46 Q8 46, 8 38 Z" fill="url(#ebFistGrad)" stroke="#d97706" strokeWidth="2" />
-              {/* Four knuckle bumps — curled-finger top joints seen from the FRONT (no finger shafts) */}
-              <ellipse cx="19" cy="9" rx="6.5" ry="5" fill="#fde047" stroke="#d97706" strokeWidth="1.2" />
-              <ellipse cx="33" cy="7.5" rx="7" ry="5.5" fill="#fde047" stroke="#d97706" strokeWidth="1.2" />
-              <ellipse cx="47" cy="7.5" rx="7" ry="5.5" fill="#fde047" stroke="#d97706" strokeWidth="1.2" />
-              <ellipse cx="61" cy="9" rx="6.5" ry="5" fill="#fde047" stroke="#d97706" strokeWidth="1.2" />
-              {/* Knuckle highlights — bright front-facing spots on each bump */}
-              <ellipse cx="19" cy="8" rx="3.5" ry="2.5" fill="#fef9c3" opacity="0.8" />
-              <ellipse cx="33" cy="6.5" rx="3.5" ry="2.5" fill="#fef9c3" opacity="0.8" />
-              <ellipse cx="47" cy="6.5" rx="3.5" ry="2.5" fill="#fef9c3" opacity="0.8" />
-              <ellipse cx="61" cy="8" rx="3.5" ry="2.5" fill="#fef9c3" opacity="0.8" />
-              {/* Finger crease lines — subtle horizontal marks below knuckles */}
-              <line x1="13" y1="15" x2="25" y2="15" stroke="#d97706" strokeWidth="0.8" opacity="0.4" />
-              <line x1="27" y1="14" x2="39" y2="14" stroke="#d97706" strokeWidth="0.8" opacity="0.4" />
-              <line x1="41" y1="14" x2="53" y2="14" stroke="#d97706" strokeWidth="0.8" opacity="0.4" />
-              <line x1="55" y1="15" x2="67" y2="15" stroke="#d97706" strokeWidth="0.8" opacity="0.4" />
-              {/* Thumb wrapping HORIZONTALLY across front-bottom (visible from head-on) */}
-              <path d="M10 33 Q8 29, 15 28 L62 30 Q70 30.5, 70 35 Q70 40, 62 40 L15 39 Q8 38, 10 34 Z" fill="url(#ebFistGrad)" stroke="#d97706" strokeWidth="1.5" />
-              {/* Thumb tip */}
-              <ellipse cx="64" cy="35" rx="5" ry="5" fill="#fde047" stroke="#d97706" strokeWidth="1" />
-              {/* Electabuzz black stripes on fist sides */}
-              <path d="M10 18 Q12 25, 10 32" fill="none" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
-              <path d="M70 18 Q68 25, 70 32" fill="none" stroke="#1e293b" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
-              <defs>
-                <linearGradient id="ebFistGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#fef08a" />
-                  <stop offset="50%" stopColor="#facc15" />
-                  <stop offset="100%" stopColor="#f59e0b" />
-                </linearGradient>
-              </defs>
+          {/* Camouflage spark burst — masks the reference image's built-in electricity
+              during the initial small/transparent spawn phase at the right-back origin */}
+          <div className="absolute" style={{ transform: 'translate(38%, -18%)', animation: 'gbaThunderPunchCamouflage 0.45s ease-out forwards', opacity: 0 }}>
+            <svg width="52" height="52" viewBox="0 0 52 52" className="drop-shadow-[0_0_14px_#fef08a]">
+              <path d="M26 2 L22 16 L26 14 L20 30 L28 20 L24 24 L30 6 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.6" />
+              <path d="M40 12 L34 22 L38 20 L32 34 L38 26 L36 28 L42 14 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.5" opacity="0.85" />
+              <path d="M10 16 L14 26 L11 24 L16 36 L12 28 L13 30 L8 18 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.5" opacity="0.8" />
+              <circle cx="26" cy="26" r="8" fill="none" stroke="#fef08a" strokeWidth="1.5" opacity="0.6" />
+              <circle cx="26" cy="26" r="14" fill="none" stroke="#fde047" strokeWidth="1" opacity="0.4" />
             </svg>
           </div>
-          {/* Impact glow flash behind the fist */}
-          <div className="absolute" style={{ animation: 'gbaThunderPunchGlow 1.2s ease-out 0.25s forwards', opacity: 0 }}>
-            <div className="w-32 h-32 rounded-full bg-gradient-to-t from-yellow-300 via-amber-200/70 to-transparent blur-md" />
+          <div className="absolute" style={{ transform: 'translate(42%, -22%)', animation: 'gbaThunderPunchCamouflage 0.4s ease-out 0.06s forwards', opacity: 0 }}>
+            <svg width="36" height="36" viewBox="0 0 36 36" className="drop-shadow-[0_0_10px_#fef9c3]">
+              <path d="M18 3 L15 14 L18 12 L13 26 L20 16 L17 19 L22 5 Z" fill="#ffffff" stroke="#fef08a" strokeWidth="0.5" opacity="0.9" />
+              <path d="M28 10 L24 18 L27 16 L22 28 L27 21 L25 23 L30 12 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.4" opacity="0.7" />
+            </svg>
+          </div>
+          {/* Electabuzz fist + arm — reference image with approach trajectory.
+              Spawns small at right-back, grows while sweeping left-front with
+              angular rotation, accelerating into a dead-on frontal impact.
+              Final width = 80% of card (20% margin from horizontal edge). */}
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ animation: 'gbaThunderPunchApproach 1.2s cubic-bezier(0.3, 0.0, 0.85, 0.35) forwards' }}
+          >
+            <img
+              src="/assets/ThunderPunch_Fist.png"
+              alt=""
+              className="select-none pointer-events-none drop-shadow-[0_0_22px_#facc15]"
+              style={{ width: '80%', maxWidth: '80%', height: 'auto', objectFit: 'contain' }}
+              draggable={false}
+            />
+          </div>
+          {/* Impact glow flash behind the fist — soft outer halo + tighter hot core for cleaner falloff */}
+          <div className="absolute" style={{ animation: 'gbaThunderPunchGlow 1.2s ease-out forwards', opacity: 0 }}>
+            <div className="w-32 h-32 rounded-full bg-gradient-to-t from-yellow-300 via-amber-200/60 to-transparent blur-md" />
+            <div className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-gradient-to-t from-yellow-100 via-yellow-200/70 to-transparent blur-sm" />
           </div>
           {/* Rotating electric aura ring wrapping the fist */}
           <div className="absolute w-32 h-32" style={{ animation: 'gbaThunderPunchAura 1.2s linear 0.2s forwards', opacity: 0 }}>
@@ -1261,9 +1253,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           <div className="absolute top-1 -left-5" style={{ animation: 'gbaElectricFlicker 1.2s linear 0.5s forwards', opacity: 0 }}>
             <span className="text-xs text-amber-200 select-none drop-shadow-[0_0_5px_#fde047]">✦</span>
           </div>
-          {/* Double impact rings */}
-          <div className="absolute w-24 h-24 rounded-full border-3 border-yellow-300/80" style={{ animation: 'gbaThunderPunchRing 1.2s ease-out 0.3s forwards', opacity: 0 }} />
-          <div className="absolute w-16 h-16 rounded-full border-2 border-yellow-100/90" style={{ animation: 'gbaThunderPunchRing 1.2s ease-out 0.4s forwards', opacity: 0 }} />
+          <div className="absolute -bottom-4 -left-2" style={{ animation: 'gbaElectricFlicker 1.2s linear 0.55s forwards', opacity: 0 }}>
+            <span className="text-sm text-yellow-200 select-none drop-shadow-[0_0_6px_#fef08a]">✦</span>
+          </div>
+          {/* Double impact rings — fire once the fist has grown close to the viewer */}
+          <div className="absolute w-24 h-24 rounded-full border-3 border-yellow-300/80" style={{ animation: 'gbaThunderPunchRing 1.2s ease-out 0.55s forwards', opacity: 0 }} />
+          <div className="absolute w-16 h-16 rounded-full border-2 border-yellow-100/90" style={{ animation: 'gbaThunderPunchRing 1.2s ease-out 0.68s forwards', opacity: 0 }} />
         </div>
       )}
 
@@ -3480,13 +3475,34 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 40. PLUSPOWER / DEFENDER / BARRIER (GBA-style trainer item activation) */}
       {fx.type === 'pluspower' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Attack power surge - upward arrows */}
-          <div className="absolute" style={{ animation: 'gbaPlusPowerSurge 1.25s ease-out forwards' }}>
-            <svg width="40" height="50" viewBox="0 0 40 50" className="drop-shadow-[0_0_10px_#f59e0b]">
-              <path d="M20 45 L20 10" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
-              <path d="M12 18 L20 6 L28 18" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M14 28 L20 18 L26 28" fill="none" stroke="#fde047" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
-            </svg>
+          {/* Power-up aura: warm pulse hugging the card while the item takes hold */}
+          <div
+            className="absolute inset-0 rounded-lg"
+            style={{
+              animation: 'gbaPlusPowerAura 1.25s ease-out forwards',
+              opacity: 0,
+              boxShadow: '0 0 18px 5px rgba(245,158,11,0.55), inset 0 0 12px 3px rgba(251,191,36,0.4)'
+            }}
+          />
+          {/* Rising energy wash: power flooding the Pokémon bottom-up */}
+          <div className="absolute inset-0 overflow-hidden rounded-lg">
+            <div
+              className="absolute inset-0"
+              style={{
+                animation: 'gbaPlusPowerWash 1.25s ease-out forwards',
+                opacity: 0,
+                background: 'linear-gradient(to top, rgba(249,115,22,0.55), rgba(251,191,36,0.3) 45%, rgba(251,191,36,0) 72%)'
+              }}
+            />
+          </div>
+          {/* PlusPower capsule icon (stock art, white background pre-extracted) */}
+          <div className="absolute" style={{ animation: 'gbaPlusPowerIconPop 1.25s ease-out forwards' }}>
+            <img
+              src="/assets/PlusPower.png"
+              alt="PlusPower"
+              className="w-16 sm:w-20 md:w-24 h-auto object-contain drop-shadow-[0_0_10px_#f59e0b] select-none"
+              draggable={false}
+            />
           </div>
           {/* Power sparkles */}
           <div className="absolute -top-2" style={{ animation: 'gbaTrainerSparkle 1.25s ease-out 0.2s forwards', opacity: 0 }}>

@@ -1083,14 +1083,32 @@ html, body {
   100% { opacity: 0; transform: scale(1.2); }
 }
 
-/* GBA THUNDER PUNCH (Electabuzz) */
-@keyframes gbaThunderPunchSlam {
-  0% { transform: scale(0.15); opacity: 0; }
-  20% { transform: scale(0.5); opacity: 0.7; }
-  40% { transform: scale(1.0); opacity: 1; }
-  60% { transform: scale(1.5); opacity: 1; filter: drop-shadow(0 0 30px #facc15); }
-  75% { transform: scale(1.85); opacity: 0.9; filter: drop-shadow(0 0 35px #facc15); }
-  100% { transform: scale(2.3); opacity: 0; }
+/* GBA THUNDER PUNCH (Electabuzz) — Reference-image approach trajectory.
+   Fist+arm spawns small at the right-back of the card (depth: far),
+   sweeps toward the left-front while growing and rotating. Angular
+   tilt settles to 0° at impact. Motion accelerates via cubic-bezier
+   on the parent; keyframes add the spatial path + scale + rotation.
+   Final scale(1) = 80% card width (20% horizontal margin preserved). */
+@keyframes gbaThunderPunchApproach {
+  0%   { transform: translate(42%, -20%) scale(0.10) rotate(16deg); opacity: 0; }
+  8%   { transform: translate(38%, -17%) scale(0.14) rotate(13deg); opacity: 0.55; }
+  20%  { transform: translate(30%, -12%) scale(0.24) rotate(9deg);  opacity: 0.82; }
+  36%  { transform: translate(18%, -6%)  scale(0.42) rotate(5deg);  opacity: 0.94; }
+  52%  { transform: translate(7%, -2%)   scale(0.62) rotate(2deg);  opacity: 1; }
+  68%  { transform: translate(-1%, 0%)   scale(0.80) rotate(0.5deg); opacity: 1; filter: drop-shadow(0 0 18px #facc15); }
+  82%  { transform: translate(-4%, 0%)   scale(0.94) rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 26px #facc15); }
+  92%  { transform: translate(-5%, 0%)   scale(1.0)  rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 30px #facc15); }
+  100% { transform: translate(-5%, 0%)   scale(1.0)  rotate(0deg);  opacity: 0; }
+}
+
+/* Camouflage spark burst — masks the reference image's built-in electric
+   FX during the tiny/transparent spawn phase. Quick bloom + fade. */
+@keyframes gbaThunderPunchCamouflage {
+  0%   { transform: scale(0.3); opacity: 0; }
+  18%  { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 12px #fef08a); }
+  45%  { transform: scale(1.3); opacity: 0.85; }
+  75%  { transform: scale(1.0); opacity: 0.4; }
+  100% { transform: scale(0.6); opacity: 0; }
 }
 
 @keyframes gbaThunderPunchSpark {
@@ -1115,12 +1133,13 @@ html, body {
   100% { transform: rotate(360deg) scale(1.35); opacity: 0; }
 }
 
-/* Glow flash behind the Thunderpunch fist */
+/* Glow flash behind the Thunderpunch fist — grows with the fist and
+   peaks as the fist gets closest to the viewer */
 @keyframes gbaThunderPunchGlow {
-  0% { transform: scale(0.5); opacity: 0; }
-  30% { transform: scale(1.15); opacity: 0.85; }
-  60% { transform: scale(1); opacity: 0.6; }
-  100% { transform: scale(1.25); opacity: 0; }
+  0%   { transform: scale(0.3); opacity: 0; }
+  35%  { transform: scale(0.7); opacity: 0.5; }
+  65%  { transform: scale(1.15); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
 }
 
 /* Electric flicker for crackle arcs and sparks */
@@ -2857,12 +2876,31 @@ html, body {
 }
 
 /* PLUS POWER */
-@keyframes gbaPlusPowerSurge {
-  0% { transform: scale(0.3); opacity: 0; }
-  25% { transform: scale(0.8); opacity: 0.9; }
-  50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 16px #f97316); }
-  75% { transform: scale(1.2); opacity: 0.7; }
-  100% { transform: scale(1.4); opacity: 0; }
+/* Capsule icon: springy pop-in over the card, hot glow hold, then lift away and fade */
+@keyframes gbaPlusPowerIconPop {
+  0% { transform: scale(0.2) translateY(12px); opacity: 0; }
+  18% { transform: scale(1.12) translateY(-2px); opacity: 1; }
+  30% { transform: scale(0.96) translateY(0); opacity: 1; }
+  48% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 16px #f97316); }
+  72% { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 10px #f59e0b); }
+  100% { transform: scale(1.15) translateY(-14px); opacity: 0; }
+}
+
+/* Warm aura pulsing around the powered-up card */
+@keyframes gbaPlusPowerAura {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  45% { opacity: 0.55; }
+  70% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+/* Energy flooding the card from bottom to top */
+@keyframes gbaPlusPowerWash {
+  0% { opacity: 0; transform: translateY(65%); }
+  25% { opacity: 0.9; transform: translateY(15%); }
+  60% { opacity: 0.7; transform: translateY(-12%); }
+  100% { opacity: 0; transform: translateY(-75%); }
 }
 
 /* ============================================

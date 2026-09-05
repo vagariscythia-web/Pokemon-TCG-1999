@@ -782,6 +782,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         }
         else if (step.card.name === 'Gust of Wind') triggerFX('gust', 'player');
         else if (step.card.name.includes('Energy Removal')) triggerFX('energy_removal', 'player');
+        else if (step.card.name === 'PlusPower') triggerFX('pluspower', 'cpu');
         setState(prev => GameEngine.playTrainer(prev, 'cpu', -1, { targetBenchIndex: step.benchIndex }, step.card));
         setTimeout(executeNextStep, 1500);
       } else if (step.type === 'ATTACK') {
@@ -1132,6 +1133,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               triggerFX('energy_removal', 'player');
             }
           }
+          else if (action.card?.name === 'PlusPower') triggerFX('pluspower', 'cpu');
           setState(prev => GameEngine.playTrainer(prev, 'cpu', -1, action.trainerParams, action.card));
         } else if (action.type === 'RETREAT' || action.type === 'SELECT_BENCH_REPLACEMENT') {
           const bIdx = action.benchIndex || 0;
