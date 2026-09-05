@@ -2241,6 +2241,12 @@ export class GameEngine {
         if (idx !== -1) attackerPlayer.discard.push(attacker.attachedEnergy.splice(idx, 1)[0]);
       }
       GameEngine.addLog(next, `🔥 Fire Spin: Discarded ${discardCount} Fire Energy cards!`, 'action');
+    } else if (attackName === 'rock throw') {
+      // Onix's Rock Throw (10 dmg) shares Graveler's big_boulder animation but at 0.4 intensity.
+      // Graveler (40 dmg) keeps the default 1.0 scale.
+      if (attacker.card.name.includes('Onix')) {
+        fxIntensity = 0.4;
+      }
     }
 
     // Capture Swords Dance state before consumption — the UI needs it for the X-slash visual.

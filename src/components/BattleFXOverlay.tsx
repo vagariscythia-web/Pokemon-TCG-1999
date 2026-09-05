@@ -264,11 +264,12 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   // Stone Barrage / Rock Throw — per-Pokémon variants:
   //  Geodude's Stone Barrage is an until-tails multi-coin move: each heads throws ONE small
   //  rock at a varying spot; the UI plays sequential single-rock beats.
-  //  Graveler's Rock Throw is a flat-damage Stage 1 move: one BIG boulder with a heavier impact.
-  //  Everything else (Onix Rock Throw, Avalanche, Bonemerang…) keeps the classic three-rock volley.
+  //  Graveler's Rock Throw (40 dmg) is a flat-damage Stage 1 move: one BIG boulder at full intensity.
+  //  Onix's Rock Throw (10 dmg) shares the same big_boulder animation but scaled to 0.4 intensity.
+  //  Everything else (Avalanche, Bonemerang…) keeps the classic three-rock volley.
   if (name.includes('stone barrage')) return 'stone_barrage_single';
   if (name.includes('rock throw')) {
-    if (pkm.includes('graveler')) return 'big_boulder';
+    if (pkm.includes('graveler') || pkm.includes('onix')) return 'big_boulder';
     return 'rock_barrage';
   }
   // Stomp: a hoof/foot slamming down, never a boxing glove
@@ -3336,7 +3337,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
       {/* 37. POTION (gray-purple round-bulb bottle, card-accurate, grainy GBA fade-out) */}
       {fx.type === 'potion' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40"
+          style={fx.slot === 'bench' ? { transform: 'scale(0.7)' } : undefined}>
           <div
             className="relative flex flex-col items-center justify-center"
             style={{ animation: 'gbaPotionCardHolo 1.4s ease-out forwards' }}
@@ -3372,7 +3374,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
       {/* 37b. SUPER POTION (yellow-red angular bottle, card-accurate, grainy GBA fade-out) */}
       {fx.type === 'super_potion' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40"
+          style={fx.slot === 'bench' ? { transform: 'scale(0.7)' } : undefined}>
           <div
             className="relative flex flex-col items-center justify-center"
             style={{ animation: 'gbaSuperPotionCardHolo 1.4s ease-out forwards' }}
@@ -4107,10 +4110,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             The boulder is roughly 2× the small rocks and the impact burst is 1.5–2× bigger
             than the standard rock impact to sell the Stage 1 power difference. */}
       {fx.type === 'big_boulder' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Large Graveler boulder — 20% larger, full geological rework: heavy angular mass
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible" style={{ transform: `scale(${fx.whiffed ? (fx.intensity ?? 1) * 0.7 : (fx.intensity ?? 1)})`, transformOrigin: 'center' }}>
+          {/* Large boulder — full geological rework: heavy angular mass
               with strata bands, deep fracture cracks, embedded mineral chunks, chipped spurs
-              and micro-texture pitting for realistic stone. */}
+              and micro-texture pitting for realistic stone.
+              Intensity-aware: Graveler (40 dmg) renders at 1.0, Onix (10 dmg) at 0.4.
+              Whiffed (confusion tails) beats shrink the boulder by 30 %. */}
           <div className="absolute" style={{ animation: 'gbaBigBoulderToss 1.1s cubic-bezier(0.2, 0.65, 0.5, 1) forwards' }}>
             <svg width="67" height="60" viewBox="0 0 67 60" className="drop-shadow-[0_0_16px_#78716c]">
               <defs>

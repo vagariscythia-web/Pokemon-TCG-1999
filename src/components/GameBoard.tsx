@@ -558,7 +558,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const triggerConfusionSelfHit = (
     moveFxType: ActiveFX['type'],
     selfHit: ConfusionSelfHit,
-    attackerName: string
+    attackerName: string,
+    intensity?: number
   ) => {
     const uid = () => Math.random().toString(36).substring(2, 9);
     const defender: 'player' | 'cpu' = selfHit.target === 'player' ? 'cpu' : 'player';
@@ -577,7 +578,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         target: defender,
         pokemonName: attackerName,
         delayMs: CONFUSION_MOVE_FX_DELAY_MS,
-        whiffed: true
+        whiffed: true,
+        intensity
       }
     ]);
   };
@@ -764,8 +766,20 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         sounds.playCardDraw();
         showFloatingTrainer(step.card, true);
         setActionBanner({ text: step.description, type: 'info' });
-        if (step.card.name === 'Super Potion') triggerFX('super_potion', 'cpu');
-        else if (step.card.name.includes('Potion')) triggerFX('potion', 'cpu');
+        if (step.card.name === 'Super Potion') {
+          if (step.benchIndex !== undefined && step.benchIndex >= 0) {
+            triggerFX('super_potion', 'cpu', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', step.benchIndex);
+          } else {
+            triggerFX('super_potion', 'cpu');
+          }
+        }
+        else if (step.card.name.includes('Potion')) {
+          if (step.benchIndex !== undefined && step.benchIndex >= 0) {
+            triggerFX('potion', 'cpu', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', step.benchIndex);
+          } else {
+            triggerFX('potion', 'cpu');
+          }
+        }
         else if (step.card.name === 'Gust of Wind') triggerFX('gust', 'player');
         else if (step.card.name.includes('Energy Removal')) triggerFX('energy_removal', 'player');
         setState(prev => GameEngine.playTrainer(prev, 'cpu', -1, { targetBenchIndex: step.benchIndex }, step.card));
@@ -886,7 +900,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             const selfTarget = isSelfTargetingMove(attackToUse.name);
             // A confused CPU attacker that rolled TAILS hit itself, not the player's Pokémon.
             if (atkRes?.confusionSelfHit) {
-              triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, prev.cpu.active!.card.name);
+              const confusionIntensity = (prev.cpu.active!.card.name.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
+              triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, prev.cpu.active!.card.name, confusionIntensity);
             } else {
               playAttackFX({
                 fxType: isBlocked ? 'barrier' : fxType,
@@ -1091,8 +1106,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           if (action.card) showFloatingTrainer(action.card, true);
           setActionBanner({ text: `Opponent played ${action.card?.name}!`, type: 'info' });
           setTimeout(() => setActionBanner(null), 2500);
-          if (action.card?.name === 'Super Potion') triggerFX('super_potion', 'cpu');
-          else if (action.card?.name?.includes('Potion')) triggerFX('potion', 'cpu');
+          if (action.card?.name === 'Super Potion') {
+            const cpuSpBench = action.trainerParams?.targetBenchIndex;
+            if (cpuSpBench !== undefined && cpuSpBench >= 0) {
+              triggerFX('super_potion', 'cpu', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', cpuSpBench);
+            } else {
+              triggerFX('super_potion', 'cpu');
+            }
+          }
+          else if (action.card?.name?.includes('Potion')) {
+            const cpuPBench = action.trainerParams?.targetBenchIndex;
+            if (cpuPBench !== undefined && cpuPBench >= 0) {
+              triggerFX('potion', 'cpu', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', cpuPBench);
+            } else {
+              triggerFX('potion', 'cpu');
+            }
+          }
           else if (action.card?.name === 'Gust of Wind') triggerFX('gust', 'player');
           else if (action.card?.name?.includes('Energy Removal')) {
             const erTarget = action.trainerParams?.oppTargetPokemon;
@@ -1153,7 +1182,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             if (atk) {
               const atkRes = resolved.lastAttackResult;
               if (atkRes?.confusionSelfHit) {
-                triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, attackerName);
+                const confusionIntensity = (attackerName.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
+                triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, attackerName, confusionIntensity);
               } else {
                 const selfTarget = isSelfTargetingMove(atk.name);
                 const dealtDmg = atkRes ? atkRes.damage : (atk.damage || 0);
@@ -2943,8 +2973,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         triggerFX('energy_removal', 'cpu');
       }
     }
-    else if (card.name === 'Super Potion') triggerFX('super_potion', 'player');
-    else if (card.name.includes('Potion') || card.name === 'Full Heal') triggerFX('potion', 'player');
+    else if (card.name === 'Super Potion') {
+      const spBenchIdx = targetPokemon ? player.bench.findIndex(b => b.instanceId === targetPokemon.instanceId) : (targetBenchIndex !== undefined ? targetBenchIndex : -1);
+      if (spBenchIdx !== -1) {
+        triggerFX('super_potion', 'player', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', spBenchIdx);
+      } else {
+        triggerFX('super_potion', 'player');
+      }
+    }
+    else if (card.name.includes('Potion') || card.name === 'Full Heal') {
+      const pBenchIdx = targetPokemon ? player.bench.findIndex(b => b.instanceId === targetPokemon.instanceId) : (targetBenchIndex !== undefined ? targetBenchIndex : -1);
+      if (pBenchIdx !== -1) {
+        triggerFX('potion', 'player', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', pBenchIdx);
+      } else {
+        triggerFX('potion', 'player');
+      }
+    }
     else if (card.name === 'PlusPower') triggerFX('pluspower', 'player');
     else if (card.name === 'Defender') triggerFX('defender', 'player');
 
@@ -3111,7 +3155,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const selfTarget = isSelfTargetingMove(attack.name);
       // A confused attacker that rolled TAILS hit itself, so the impact belongs on its own card.
       if (atkRes?.confusionSelfHit) {
-        triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active!.card.name);
+        const confusionIntensity = (player.active!.card.name.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
+        triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active!.card.name, confusionIntensity);
       } else {
         playAttackFX({
           fxType: isBlocked ? 'barrier' : fxType,
@@ -3256,7 +3301,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const selfTarget = attack ? isSelfTargetingMove(attack.name) : false;
     // A confused attacker that rolled TAILS hit itself, so the impact belongs on its own card.
     if (atkRes?.confusionSelfHit) {
-      triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active.card.name);
+      const confusionIntensity = (player.active.card.name.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
+      triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active.card.name, confusionIntensity);
     } else {
       playAttackFX({
         fxType: isBlocked ? 'barrier' : fxType,
