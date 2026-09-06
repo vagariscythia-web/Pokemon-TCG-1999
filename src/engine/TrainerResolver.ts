@@ -98,6 +98,7 @@ export function resolveTrainer(
       const oldActive = player.active;
       if (oldActive) {
         oldActive.status = 'None'; // Switching clears status
+        oldActive.poisonType = undefined;
         const newActive = player.bench.splice(benchIndex, 1)[0];
         player.bench.push(oldActive);
         player.active = newActive;
@@ -119,6 +120,7 @@ export function resolveTrainer(
       const oldOppActive = opponent.active;
       if (oldOppActive) {
         oldOppActive.status = 'None';
+        oldOppActive.poisonType = undefined;
         const newOppActive = opponent.bench.splice(oppBenchIndex, 1)[0];
         opponent.bench.push(oldOppActive);
         opponent.active = newOppActive;
@@ -195,6 +197,7 @@ export function resolveTrainer(
     case 82: {
       if (!player.active) return { state, success: false, message: 'No active Pokémon.' };
       player.active.status = 'None';
+      player.active.poisonType = undefined;
       player.active.toxicCounter = 0;
       return {
         state,

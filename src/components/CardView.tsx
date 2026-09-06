@@ -106,13 +106,21 @@ export const CardView: React.FC<CardViewProps> = ({
               <span className="text-[8px] font-black uppercase px-1 py-0.2 rounded bg-red-950 text-red-300 border border-red-600 flex items-center gap-0.5">
                 <Skull className="w-2.5 h-2.5" /> FAINTED
               </span>
-            ) : inPlayCard.status !== 'None' ? (
-              <span lang="en" className={`text-[8px] font-black px-1 py-0.2 rounded ${
-                inPlayCard.status === 'Poisoned' || inPlayCard.status === 'Toxic' ? 'bg-purple-900 text-purple-200' :
-                inPlayCard.status === 'Paralyzed' ? 'bg-yellow-900 text-yellow-200' :
-                inPlayCard.status === 'Asleep' ? 'bg-blue-900 text-blue-200' : 'bg-orange-900 text-orange-200'
-              }`}>
-                {inPlayCard.status.toUpperCase()}
+            ) : (inPlayCard.status !== 'None' || inPlayCard.poisonType) ? (
+              <span className="flex items-center gap-0.5">
+                {inPlayCard.status !== 'None' && (
+                  <span lang="en" className={`text-[8px] font-black px-1 py-0.2 rounded ${
+                    inPlayCard.status === 'Paralyzed' ? 'bg-yellow-900 text-yellow-200' :
+                    inPlayCard.status === 'Asleep' ? 'bg-blue-900 text-blue-200' : 'bg-orange-900 text-orange-200'
+                  }`}>
+                    {inPlayCard.status.toUpperCase()}
+                  </span>
+                )}
+                {inPlayCard.poisonType && (
+                  <span lang="en" className="text-[8px] font-black px-1 py-0.2 rounded bg-purple-900 text-purple-200">
+                    {inPlayCard.poisonType.toUpperCase()}
+                  </span>
+                )}
               </span>
             ) : null}
           </div>

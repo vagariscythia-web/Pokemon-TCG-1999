@@ -1,0 +1,63 @@
+# CONTEXT AND TASK MANAGEMENT RULES
+
+## 1. Interrupted Task Recovery & Git State
+* If this task is a continuation of a previously interrupted session, DO NOT guess or assume the previous state.
+* Before writing any new code, always run `git status` and `git diff --stat` first. Inspect full diffs ONLY for relevant source code files to prevent flooding the context window with lockfile or build asset changes.
+* Locate and inspect the last active working file. For large files (>600 lines), focus inspection on the specific block that was being edited rather than reading the entire file.
+
+## 2. External Scratchpad & State Persistence (CRITICAL)
+* Never rely on internal or "mental" memory across compactions or interruptions; LLM internal state is completely stateless.
+* For multi-step, multi-file, or architecturally complex tasks, maintain a lightweight state file: `.cline/task_state.md` (or `.task_state.md` in root). Skip this file for single-file, 1-turn trivial edits (e.g., typos, simple CSS tweaks).
+* Git Safety: NEVER commit `.task_state.md` to the repository. Add it to `.git/info/exclude` or `.gitignore` if untracked changes persist.
+* This file must remain concise (<40 lines) and track:
+  1. Current Objective (1 sentence)
+  2. Planned Sub-steps (checklist: `[x]` done, `[ ]` pending)
+  3. Key Decisions & Architectural Constraints (bullet points)
+  4. Active Working File & Immediate Target
+* Update this file BEFORE executing complex multi-file edits.
+* Upon resumption after ANY interrupt or context compact: ALWAYS read this scratchpad first before executing commands or generating code.
+* Task Completion Cleanup: Once the task is finished and verified, delete this file or overwrite it with `[COMPLETED]` to prevent state pollution in future unrelated tasks.
+
+## 3. Recovery of Lost "Thinking" and Unsaved Drafts
+* If an interruption occurs WHILE thinking, planning, or generating a code block:
+  * DO NOT attempt to hallucinate missing internal thinking tokens or restart the entire architecture from scratch.
+  * Reconstruct the execution state strictly from four sources: (1) target file `git diff`, (2) unsaved/truncated lines in the target file, (3) `.cline/task_state.md`, and (4) any visible partial snippets in the immediate previous turn.
+  * If ambiguity persists about the intended design, output a 1-sentence recap of what you can confirm from disk and ask the user for directional confirmation before proceeding.
+
+## 4. Post-Interrupt File Corruption Prevention
+* When a task is interrupted, files being written to may be left in a corrupted or incomplete state (e.g., missing closing brackets, half-written functions).
+* Immediately upon resumption, if a file edit was cut off, check that file for syntax errors or truncated blocks before running build, test, or run commands.
+* For large files, read the import statements plus 20 lines around the interrupted edit point to verify structural integrity.
+* Repair any syntax corruption caused by the hard interruption before taking any further steps.
+
+## 5. Anti-Hallucination & Error Loop Protection
+* If you encounter the same terminal error or bug more than TWO (2) times in a row, STOP writing code immediately.
+* Do not attempt blind variations, as repetitive error dumps rapidly consume and compact the context pool.
+* Pivot your strategy: explain the root cause loop to the user, list what has failed, and propose an alternative architectural approach before making another attempt.
+
+## 6. Context Window & Compaction Protection
+* Auto-compact summarizers drop nuanced conversation history and previous thinking chains.
+* To prevent architectural drift after compaction:
+  * Use `.cline/task_state.md` as the permanent Single Source of Truth for global variables, API contracts, and active schemas.
+  * Separate Planning from Execution: finalize the implementation plan in the scratchpad first, then execute file changes systematically.
+  * If compaction occurs and critical project context appears ambiguous or truncated in the summary, explicitly ask the user for clarification rather than assuming outdated specifications.
+
+## 7. Token & Memory Efficiency (Smart Chunking & Search Hygiene)
+* File Reading Threshold:
+  * Read files under 600 lines in full to ensure accurate replacement context and avoid multiple round-trip tool calls.
+  * For files exceeding 600 lines: do NOT read in full. Read imports plus the target function block, including at least 15 lines of surrounding context to prevent `replace_in_file` match failures.
+* Directory & Search Boundaries:
+  * Never run broad, unconstrained searches or directory listings. Always exclude build, cache, and dependency directories (e.g., `node_modules`, `dist`, `build`, `.next`, `.git`, `venv`).
+* Terminal Output Throttling:
+  * Redirect standard error and limit output lines (e.g., `command 2>&1 | head -n 30` or OS-native stream trimmers, along with `--silent`, `--quiet` flags).
+  * Never allow commands to dump more than 50 lines of logs into context unless diagnosing an elusive build failure.
+* Keep intermediate conversational prose concise. Prioritize precise execution over lengthy preambles.
+
+## 8. Continuity, Micro-Checkpoints & Progress Tracking
+* At the end of every significant code modification, output a clear micro-checkpoint line:
+  `[STATE: Step X/Y complete - Next: <specific_action>]`
+* This explicit tag anchors the auto-compact summarizer, ensuring the resumption point is preserved even if the detailed history is compressed.
+
+## 9. Safety Before Destructive Actions
+* Before running commands that modify global dependencies (e.g., `npm install`, `pip install`), delete files in bulk, or perform wide refactoring across multiple files, verify that the current workspace is stable.
+* Avoid `git stash` (to prevent unresolvable stash conflicts). Instead, establish a clean rollback point using a temporary commit (`git commit -m "wip: checkpoint before major change"`) or a temporary branch (`git checkout -b temp-wip-checkpoint`).

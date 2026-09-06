@@ -282,7 +282,7 @@ export class AIPlayer {
           });
         } else {
           const fullHealIdx = cpu.hand.findIndex(c => c.name === 'Full Heal');
-          if (fullHealIdx !== -1 && simulatedActive.status !== 'None') {
+          if (fullHealIdx !== -1 && (simulatedActive.status !== 'None' || simulatedActive.poisonType !== undefined)) {
             steps.push({
               type: 'TRAINER',
               card: cpu.hand[fullHealIdx],

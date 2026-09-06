@@ -1,7 +1,8 @@
 export type CardSupertype = 'Pokemon' | 'Energy' | 'Trainer';
 export type PokemonSubtype = 'Basic' | 'Stage 1' | 'Stage 2' | 'Basic Energy' | 'Special Energy';
 export type EnergyType = 'Grass' | 'Fire' | 'Water' | 'Lightning' | 'Psychic' | 'Fighting' | 'Colorless';
-export type StatusCondition = 'None' | 'Asleep' | 'Confused' | 'Paralyzed' | 'Poisoned' | 'Toxic';
+export type StatusCondition = 'None' | 'Asleep' | 'Confused' | 'Paralyzed';
+export type PoisonCondition = 'Poisoned' | 'Toxic';
 
 export interface Attack {
   name: string;
@@ -118,6 +119,11 @@ export interface InPlayCard {
   powerDisabledUntilTurn?: number;
   toxicCounter?: number;
   powerUsedThisTurn?: boolean;
+  /**
+   * Independent poison track (official TCG rules): Poisoned/Toxic coexists with
+   * Asleep/Paralyzed/Confused. Cleared by retreat, evolution, Full Heal, or benching.
+   */
+  poisonType?: PoisonCondition;
 }
 
 /** Why a Pokémon is currently not allowed to use a given attack. */

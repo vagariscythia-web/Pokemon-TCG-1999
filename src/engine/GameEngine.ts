@@ -739,6 +739,7 @@ export class GameEngine {
     target.card = stage2Card;
     target.currentHp = Math.max(1, target.currentHp + Math.max(0, hpDiff));
     target.status = 'None';
+    target.poisonType = undefined;
     target.turnsInPlay = 0;
     player.trainerPlayedThisTurn = true;
 
@@ -819,6 +820,7 @@ export class GameEngine {
     target.card = card;
     target.currentHp = Math.max(1, target.currentHp + Math.max(0, hpDiff));
     target.status = 'None';
+    target.poisonType = undefined;
     target.turnsInPlay = 0;
     delete (target as any).isClefairyDoll;
 
@@ -915,6 +917,7 @@ export class GameEngine {
     const oldActive = player.active;
     const newActive = player.bench.splice(benchIndex, 1)[0];
     oldActive.status = 'None';
+    oldActive.poisonType = undefined;
     oldActive.sandAttackedNextTurn = false;
     GameEngine.clearAttackBlock(oldActive);
     oldActive.preventDamageNextTurn = false;
@@ -925,6 +928,7 @@ export class GameEngine {
     oldActive.defendersAttached = 0;
 
     newActive.status = 'None';
+    newActive.poisonType = undefined;
     newActive.sandAttackedNextTurn = false;
     GameEngine.clearAttackBlock(newActive);
     newActive.preventDamageNextTurn = false;
@@ -1065,6 +1069,7 @@ export class GameEngine {
     } else if (card.name === 'Full Heal') {
       if (player.active) {
         player.active.status = 'None';
+        player.active.poisonType = undefined;
         GameEngine.addLog(next, `${player.active.card.name} was healed of all status conditions!`, 'status');
       }
     } else if (card.name === 'Switch') {
@@ -1075,6 +1080,7 @@ export class GameEngine {
         const oldActive = player.active;
         const newActive = player.bench.splice(bIdx, 1)[0];
         oldActive.status = 'None';
+        oldActive.poisonType = undefined;
         oldActive.sandAttackedNextTurn = false;
         GameEngine.clearAttackBlock(oldActive);
         oldActive.preventDamageNextTurn = false;
@@ -1082,6 +1088,7 @@ export class GameEngine {
         oldActive.hardenActiveNextTurn = false;
 
         newActive.status = 'None';
+        newActive.poisonType = undefined;
         newActive.sandAttackedNextTurn = false;
         GameEngine.clearAttackBlock(newActive);
         newActive.preventDamageNextTurn = false;
@@ -1100,6 +1107,7 @@ export class GameEngine {
         const oldActive = opponent.active;
         const newActive = opponent.bench.splice(bIdx, 1)[0];
         oldActive.status = 'None';
+        oldActive.poisonType = undefined;
         oldActive.sandAttackedNextTurn = false;
         GameEngine.clearAttackBlock(oldActive);
         oldActive.preventDamageNextTurn = false;
@@ -1107,6 +1115,7 @@ export class GameEngine {
         oldActive.hardenActiveNextTurn = false;
 
         newActive.status = 'None';
+        newActive.poisonType = undefined;
         newActive.sandAttackedNextTurn = false;
         GameEngine.clearAttackBlock(newActive);
         newActive.preventDamageNextTurn = false;
@@ -1233,6 +1242,7 @@ export class GameEngine {
         player.discard.push(target.card);
         target.card = prevCard;
         target.status = 'None';
+        target.poisonType = undefined;
         target.currentHp = Math.min(prevCard.hp || 50, target.currentHp);
         GameEngine.addLog(next, `${player.name} devolved ${target.card.name} with Devolution Spray!`, 'action');
       }
@@ -1415,6 +1425,8 @@ export class GameEngine {
     } else if (card.name.includes('Pokémon Center') || card.name.includes('Pokemon Center')) {
       [player.active, ...player.bench].forEach(p => {
         if (p) {
+          p.status = 'None';
+          p.poisonType = undefined;
           p.damage = 0;
           p.currentHp = p.card.hp || 50;
           player.discard.push(...p.attachedEnergy);
@@ -2462,7 +2474,7 @@ export class GameEngine {
       defenderPlayer.bench.forEach((b, bIdx) => {
         recordBenchHit(defenderPlayer.id, b, bIdx, hitBench(b, 10));
       });
-      defender.status = 'Poisoned';
+      defender.poisonType = 'Poisoned';
       GameEngine.addLog(next, `☠️ Poison Vapor: Poisoned ${defender.card.name} and dealt 10 damage to each opponent benched Pokémon!`, 'status');
     }
 
@@ -2625,7 +2637,7 @@ export class GameEngine {
     // Stun Gas (Dark Weezing)
     if (attackName === 'stun gas') {
       if (primaryFlip) {
-        defender.status = 'Poisoned';
+        defender.poisonType = 'Poisoned';
         GameEngine.addLog(next, `☠️ Stun Gas: HEADS! ${defender.card.name} is now Poisoned!`, 'status');
       } else {
         defender.status = 'Paralyzed';
@@ -2646,7 +2658,7 @@ export class GameEngine {
 
     // Sludge Punch / Poison Claws / Poison Gas / Psybeam / Sticky Hands
     if (attackName === 'sludge punch' || (attackName === 'poison claws' && primaryFlip)) {
-      defender.status = 'Poisoned';
+      defender.poisonType = 'Poisoned';
       GameEngine.addLog(next, `☠️ ${defender.card.name} is now Poisoned!`, 'status');
     } else if (attackName === 'poison gas') {
       defender.status = 'Asleep';
@@ -2681,6 +2693,7 @@ export class GameEngine {
         const oldDefender = defenderPlayer.active;
         const newDefender = defenderPlayer.bench.splice(chosenBenchIdx, 1)[0];
         oldDefender.status = 'None';
+        oldDefender.poisonType = undefined;
         defenderPlayer.bench.push(oldDefender);
         defenderPlayer.active = newDefender;
         GameEngine.addLog(next, `✨ ${attackerPlayer.name}'s Ninetales used Lure! Dragged ${newDefender.card.name} into the Active position!`, 'action');
@@ -2694,6 +2707,7 @@ export class GameEngine {
         const oldDefender = defenderPlayer.active;
         const newDefender = defenderPlayer.bench.splice(pickBenchIndex(defenderPlayer.bench, 'random'), 1)[0];
         oldDefender.status = 'None';
+        oldDefender.poisonType = undefined;
         defenderPlayer.bench.push(oldDefender);
         defenderPlayer.active = newDefender;
         GameEngine.addLog(next, `💨 Whirlwind forced ${defenderPlayer.name}'s ${newDefender.card.name} into the Active position!`, 'action');
@@ -2708,6 +2722,7 @@ export class GameEngine {
         const oldDefender = defenderPlayer.active;
         const newDefender = defenderPlayer.bench.splice(pickBenchIndex(defenderPlayer.bench, 'random'), 1)[0];
         oldDefender.status = 'None';
+        oldDefender.poisonType = undefined;
         defenderPlayer.bench.push(oldDefender);
         defenderPlayer.active = newDefender;
         GameEngine.addLog(next, `🐍 Terror Strike: HEADS! Forced ${defenderPlayer.name}'s ${newDefender.card.name} into the Active position!`, 'action');
@@ -3170,6 +3185,7 @@ export class GameEngine {
         attacker.card = evoCard;
         attacker.currentHp += Math.max(0, (evoCard.hp || 100) - 30);
         attacker.status = 'None';
+        attacker.poisonType = undefined;
         attackerPlayer.deck = GameEngine.shuffle(attackerPlayer.deck);
         GameEngine.addLog(next, `🌊 Rapid Evolution! Magikarp evolved into ${evoCard.name} directly from the deck!`, 'action');
       } else {
@@ -3278,17 +3294,17 @@ export class GameEngine {
       }
     } else if (attackText.includes('poisoned') || attackName === 'toxic' || attackName === 'poison sting' || attackName === 'poisonpowder' || attackName === 'poison vapor' || attackName === 'sludge punch' || attackName === 'jellyfish sting' || attackName === 'poison fang') {
       if (attackName === 'toxic') {
-        defender.status = 'Toxic';
+        defender.poisonType = 'Toxic';
         GameEngine.addLog(next, `☠️ ${defender.card.name} is badly Poisoned (Takes 20 damage between turns)!`, 'status');
       } else if (attackText.includes('flip a coin')) {
         if (primaryFlip) {
-          defender.status = 'Poisoned';
+          defender.poisonType = 'Poisoned';
           GameEngine.addLog(next, `☠️ Coin flip: HEADS! ${defender.card.name} is now Poisoned!`, 'status');
         } else {
           GameEngine.addLog(next, `Coin flip: TAILS! ${defender.card.name} avoided Poison.`, 'action');
         }
       } else {
-        defender.status = 'Poisoned';
+        defender.poisonType = 'Poisoned';
         GameEngine.addLog(next, `☠️ ${defender.card.name} is now Poisoned!`, 'status');
       }
     } else if (attackText.includes('asleep') || attackName === 'hypnosis' || attackName === 'sleep powder' || attackName === 'sing' || attackName === 'lullaby') {
@@ -3306,7 +3322,7 @@ export class GameEngine {
     } else if (attackText.includes('confused') || attackName === 'confuse ray' || attackName === 'foul gas' || attackName === 'venom powder') {
       if (attackName === 'foul gas') {
         if (primaryFlip) {
-          defender.status = 'Poisoned';
+          defender.poisonType = 'Poisoned';
           GameEngine.addLog(next, `☠️ Coin flip: HEADS! ${defender.card.name} is now Poisoned!`, 'status');
         } else {
           defender.status = 'Confused';
@@ -3315,6 +3331,7 @@ export class GameEngine {
       } else if (attackName === 'venom powder') {
         if (primaryFlip) {
           defender.status = 'Confused';
+          defender.poisonType = 'Poisoned';
           GameEngine.addLog(next, `😵 Coin flip: HEADS! ${defender.card.name} is now Confused and Poisoned!`, 'status');
         }
       } else if (attackText.includes('flip a coin')) {
@@ -3333,9 +3350,11 @@ export class GameEngine {
     // Mysterious Fossil & Clefairy Doll are immune to all special conditions (Asleep, Confused, Paralyzed, Poisoned, Toxic)
     if (defender.card.name === 'Mysterious Fossil' || defender.card.name === 'Clefairy Doll' || defender.isClefairyDoll) {
       defender.status = 'None';
+      defender.poisonType = undefined;
     }
     if (attacker.card.name === 'Mysterious Fossil' || attacker.card.name === 'Clefairy Doll' || attacker.isClefairyDoll) {
       attacker.status = 'None';
+      attacker.poisonType = undefined;
     }
 
     // Hand the UI the list of Benched Pokémon this attack damaged on top of its main target.
@@ -3426,6 +3445,7 @@ export class GameEngine {
         current.bench.forEach((b, i) => { if (b.currentHp > bestHp) { bestHp = b.currentHp; bestIdx = i; } });
         const newActive = current.bench.splice(bestIdx, 1)[0];
         newActive.status = 'None';
+        newActive.poisonType = undefined;
         current.active = newActive;
         GameEngine.addLog(next, `${current.name} sent out ${newActive.card.name} from the bench!`, 'ai');
       }
@@ -3441,6 +3461,7 @@ export class GameEngine {
         opponent.bench.forEach((b, i) => { if (b.currentHp > bestHp) { bestHp = b.currentHp; bestIdx = i; } });
         const newActive = opponent.bench.splice(bestIdx, 1)[0];
         newActive.status = 'None';
+        newActive.poisonType = undefined;
         opponent.active = newActive;
         GameEngine.addLog(next, `${opponent.name} sent out ${newActive.card.name} from the bench!`, 'ai');
       }
@@ -3563,6 +3584,7 @@ export class GameEngine {
           });
           const newActive = faintedPlayer.bench.splice(bestIdx, 1)[0];
           newActive.status = 'None';
+          newActive.poisonType = undefined;
           newActive.sandAttackedNextTurn = false;
           GameEngine.clearAttackBlock(newActive);
           newActive.preventDamageNextTurn = false;
@@ -3607,12 +3629,12 @@ export class GameEngine {
     [current.active, opponent.active].forEach(pokemon => {
       if (!pokemon) return;
 
-      if (pokemon.status === 'Poisoned') {
+      if (pokemon.poisonType === 'Poisoned') {
         pokemon.damage += 10;
         pokemon.currentHp = Math.max(0, (pokemon.card.hp || 0) - pokemon.damage);
         statusTicks.push({ target: sideOf(pokemon), instanceId: pokemon.instanceId, pokemonName: pokemon.card.name, amount: 10, kind: 'Poisoned' });
         GameEngine.addLog(next, `☠️ ${pokemon.card.name} took 10 Poison damage (${pokemon.currentHp}/${pokemon.card.hp} HP remaining).`, 'status');
-      } else if (pokemon.status === 'Toxic') {
+      } else if (pokemon.poisonType === 'Toxic') {
         pokemon.damage += 20;
         pokemon.currentHp = Math.max(0, (pokemon.card.hp || 0) - pokemon.damage);
         statusTicks.push({ target: sideOf(pokemon), instanceId: pokemon.instanceId, pokemonName: pokemon.card.name, amount: 20, kind: 'Toxic' });
@@ -3638,7 +3660,7 @@ export class GameEngine {
 
     // Ensure all bench Pokémon have clean status
     [next.player.bench, next.cpu.bench].forEach(bList => {
-      bList.forEach(p => { if (p) p.status = 'None'; });
+      bList.forEach(p => { if (p) { p.status = 'None'; p.poisonType = undefined; } });
     });
 
     const hasAnyKnockout =
@@ -3683,6 +3705,7 @@ export class GameEngine {
     newActivePlayer.bench.forEach(p => {
       p.turnsInPlay += 1;
       p.status = 'None';
+      p.poisonType = undefined;
       p.preventDamageNextTurn = false;
       p.preventAllEffectsNextTurn = false;
       p.hardenActiveNextTurn = false;
@@ -3706,7 +3729,7 @@ export class GameEngine {
     GameEngine.pruneAttackBlocks(next);
 
     [next.player.bench, next.cpu.bench].forEach(bList => {
-      bList.forEach(p => { if (p) p.status = 'None'; });
+      bList.forEach(p => { if (p) { p.status = 'None'; p.poisonType = undefined; } });
     });
 
 

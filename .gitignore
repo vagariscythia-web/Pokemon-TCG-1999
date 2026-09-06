@@ -2,3 +2,5 @@
 .tmpverify
 node_modules
 dist
+.task_state.md
+.cline/
