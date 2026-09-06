@@ -9,12 +9,17 @@
 * Never rely on internal or "mental" memory across compactions or interruptions; LLM internal state is completely stateless.
 * For multi-step, multi-file, or architecturally complex tasks, maintain a lightweight state file: `.cline/task_state.md` (or `.task_state.md` in root). Skip this file for single-file, 1-turn trivial edits (e.g., typos, simple CSS tweaks).
 * Git Safety: NEVER commit `.task_state.md` to the repository. Add it to `.git/info/exclude` or `.gitignore` if untracked changes persist.
-* This file must remain concise (<40 lines) and track:
+* Total Size Limit: Keep this file concise (<80 lines total).
+* File Structure:
   1. Current Objective (1 sentence)
   2. Planned Sub-steps (checklist: `[x]` done, `[ ]` pending)
   3. Key Decisions & Architectural Constraints (bullet points)
-  4. Active Working File & Immediate Target
-* Update this file BEFORE executing complex multi-file edits.
+  4. Active Target & Anchor: File path + specific function/symbol (e.g., `src/auth.ts -> handleTokenRefresh()`, approximate line if helpful)
+  5. Blockers & Failed Attempts: Document terminal errors or discarded solutions to prevent infinite retry loops.
+  6. In-Flight Logic & Thinking Draft (ONLY for complex logic/refactors):
+     - Active Hypothesis: What is being solved, tested, or optimized right now?
+     - Logic Outline / Pseudocode (5-15 lines): Step-by-step flow, input/output contracts, and critical edge cases. DO NOT paste full production code blocks.
+* Enforcement Timing: You MUST write or update sections 4, 5, and 6 in the scratchpad BEFORE generating or modifying code in actual source files.
 * Upon resumption after ANY interrupt or context compact: ALWAYS read this scratchpad first before executing commands or generating code.
 * Task Completion Cleanup: Once the task is finished and verified, delete this file or overwrite it with `[COMPLETED]` to prevent state pollution in future unrelated tasks.
 

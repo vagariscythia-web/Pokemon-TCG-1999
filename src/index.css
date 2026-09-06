@@ -2355,22 +2355,42 @@ html, body {
 }
 
 /* HITMONCHAN JAB / SPECIAL PUNCH */
+/* Jab approach — the <img> width sets final size (30% of card); keyframes drive
+   the GBA-snappy spatial path: tiny spawn at right-back, accelerating left-front,
+   dead stop at scale(1) by 90%, quick fade. Impact star delay (0.75s) is tuned
+   to the 80-90% arrival window so it completes before the ~1300ms FX cleanup. */
 @keyframes gbaHitmonchanJab {
-  0% { transform: translateX(-30px) scale(0.7) rotate(-5deg); opacity: 0; }
-  20% { transform: translateX(-15px) scale(0.9) rotate(0deg); opacity: 1; }
-  45% { transform: translateX(8px) scale(1.05) rotate(2deg); opacity: 1; }
-  55% { transform: translateX(10px) scale(1) rotate(0deg); opacity: 1; }
-  80% { transform: translateX(5px) scale(0.95) rotate(-2deg); opacity: 0.8; }
-  100% { transform: translateX(-10px) scale(0.8) rotate(-5deg); opacity: 0; }
+  0%   { transform: translate(40%, -18%) scale(0.12) rotate(14deg); opacity: 0; }
+  10%  { transform: translate(36%, -15%) scale(0.18) rotate(11deg); opacity: 0.6; }
+  25%  { transform: translate(27%, -10%) scale(0.32) rotate(7deg);  opacity: 0.85; }
+  45%  { transform: translate(14%, -5%)  scale(0.52) rotate(3deg);  opacity: 1; }
+  65%  { transform: translate(2%, -1%)   scale(0.78) rotate(1deg);  opacity: 1; }
+  80%  { transform: translate(-3%, 0%)   scale(0.96) rotate(0deg);  opacity: 1; }
+  90%  { transform: translate(-4%, 0%)   scale(1)    rotate(0deg);  opacity: 1; }
+  100% { transform: translate(-4%, 0%)   scale(1)    rotate(0deg);  opacity: 0; }
 }
+/* Jab wind streaks — bloom in during flight, sweep backward, gone at impact */
+@keyframes gbaHitmonchanWindStreaks {
+  0%   { transform: translateX(16px) scaleX(0.4); opacity: 0; }
+  20%  { transform: translateX(6px) scaleX(0.85); opacity: 0.9; }
+  55%  { transform: translateX(-4px) scaleX(1); opacity: 0.7; }
+  80%  { transform: translateX(-16px) scaleX(1.1); opacity: 0; }
+  100% { transform: translateX(-16px) scaleX(1.1); opacity: 0; }
+}
+/* Special Punch approach — single-arm layer fills entire timeline (dual-arm
+   windup removed). Spawns tiny at right-back, becomes visible early (~8%),
+   accelerates left-front with GBA easing; dead-stop at scale(1) ~90%, fade.
+   Final size 60% card width (ThunderPunch parity). */
 @keyframes gbaHitmonchanSpecialPunch {
-  0% { transform: translateX(-40px) scale(0.6) rotate(-15deg); opacity: 0; }
-  15% { transform: translateX(-30px) scale(0.7) rotate(-10deg); opacity: 0.8; }
-  30% { transform: translateX(-20px) scale(0.85) rotate(-5deg); opacity: 1; }
-  50% { transform: translateX(10px) scale(1.15) rotate(3deg); opacity: 1; }
-  60% { transform: translateX(14px) scale(1.1) rotate(0deg); opacity: 1; }
-  80% { transform: translateX(8px) scale(1) rotate(-2deg); opacity: 0.85; }
-  100% { transform: translateX(-15px) scale(0.85) rotate(-8deg); opacity: 0; }
+  0%   { transform: translate(48%, -22%) scale(0.06) rotate(12deg); opacity: 0; }
+  8%   { transform: translate(44%, -19%) scale(0.1) rotate(11deg); opacity: 0.3; }
+  18%  { transform: translate(36%, -14%) scale(0.2) rotate(9deg); opacity: 0.7; }
+  30%  { transform: translate(28%, -9%) scale(0.35) rotate(6deg); opacity: 1; }
+  48%  { transform: translate(16%, -5%) scale(0.55) rotate(3deg); opacity: 1; }
+  65%  { transform: translate(4%, -1%) scale(0.8) rotate(1deg); opacity: 1; }
+  80%  { transform: translate(-3%, 0%) scale(0.95) rotate(0deg); opacity: 1; }
+  90%  { transform: translate(-4%, 0%) scale(1) rotate(0deg); opacity: 1; }
+  100% { transform: translate(-4%, 0%) scale(1) rotate(0deg); opacity: 0; }
 }
 @keyframes gbaHitmonchanImpactStar {
   0% { transform: scale(0.2) rotate(0deg); opacity: 0; }

@@ -1044,32 +1044,35 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 10b. HITMONCHAN JAB (red boxing glove — quick straight punch with small impact) */}
       {fx.type === 'hitmonchan_jab' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Red boxing glove lunging forward */}
-          <div className="absolute" style={{ animation: 'gbaHitmonchanJab 1.1s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
-            <svg width="44" height="40" viewBox="0 0 44 40" className="drop-shadow-[0_0_12px_#dc2626]">
-              {/* Glove body */}
-              <ellipse cx="22" cy="18" rx="16" ry="14" fill="#dc2626" stroke="#991b1b" strokeWidth="2" />
-              {/* Glove highlight */}
-              <ellipse cx="18" cy="14" rx="8" ry="6" fill="#ef4444" opacity="0.6" />
-              {/* Lacing */}
-              <path d="M16 24 L20 22 L24 24 L28 22" fill="none" stroke="#fef2f2" strokeWidth="1.5" strokeLinecap="round" />
-              {/* Wrist/cuff */}
-              <rect x="14" y="30" width="16" height="8" rx="3" fill="#b91c1c" stroke="#7f1d1d" strokeWidth="1" />
-              {/* Knuckle ridge */}
-              <path d="M10 12 Q22 6, 34 12" fill="none" stroke="#991b1b" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+          {/* Watercolor glove stock art — GBA approach trajectory: spawns tiny at
+              right-back, accelerates left-front, dead-stops at 30% card width
+              (img width) behind the card boundary; quick fade at the end. */}
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ animation: 'gbaHitmonchanJab 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) forwards' }}
+          >
+            <img
+              src="/assets/Hitmonchan_Jab.png"
+              alt=""
+              className="select-none pointer-events-none drop-shadow-[0_0_18px_#ec4899]"
+              style={{ width: '30%', maxWidth: '30%', height: 'auto', objectFit: 'contain' }}
+              draggable={false}
+            />
           </div>
-          {/* Speed lines */}
-          <div className="absolute -left-5" style={{ animation: 'gbaPunchSpeedLines 1.1s ease-out forwards', opacity: 0 }}>
-            <svg width="36" height="26" viewBox="0 0 36 26">
-              <line x1="0" y1="7" x2="26" y2="7" stroke="#fca5a5" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
-              <line x1="4" y1="13" x2="34" y2="13" stroke="#ef4444" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
-              <line x1="0" y1="19" x2="24" y2="19" stroke="#fca5a5" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-            </svg>
+          {/* Wind streaks trailing the glove — staggered opacity, sweep backward
+              during flight and vanish at the impact window */}
+          <div className="absolute" style={{ transform: 'translate(30%, -8%)' }}>
+            <div style={{ animation: 'gbaHitmonchanWindStreaks 1.1s ease-out forwards', opacity: 0 }}>
+              <svg width="46" height="30" viewBox="0 0 46 30">
+                <line x1="6" y1="7" x2="44" y2="7" stroke="#f9a8d4" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
+                <line x1="0" y1="15" x2="38" y2="15" stroke="#ec4899" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+                <line x1="8" y1="23" x2="40" y2="23" stroke="#f9a8d4" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+              </svg>
+            </div>
           </div>
           {/* Small impact star */}
           {!fx.whiffed && (
-            <div className="absolute" style={{ animation: 'gbaPunchImpactStar 1.1s ease-out 0.35s forwards', opacity: 0 }}>
+            <div className="absolute" style={{ animation: 'gbaHitmonchanImpactStar 0.55s ease-out 0.75s forwards', opacity: 0 }}>
               <svg width="40" height="40" viewBox="0 0 40 40">
                 <polygon points="20,2 24,14 38,14 27,22 30,36 20,28 10,36 13,22 2,14 16,14" fill="#fef08a" stroke="#f59e0b" strokeWidth="1.2" />
                 <circle cx="20" cy="20" r="6" fill="#ffffff" opacity="0.8" />
@@ -1085,22 +1088,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Screen shake wrapper */}
           <div className="absolute inset-0" style={{ animation: 'gbaHitmonchanScreenShake 1.3s ease-out 0.4s forwards' }}>
-            {/* Large red boxing glove — bigger than Jab, with wind-up rotation */}
+            {/* Single-arm punch layer — GBA approach from right-back, slight windup
+                counter-rotate, snaps left-front; final size 60% card width */}
             <div className="absolute inset-0 flex items-center justify-center" style={{ animation: 'gbaHitmonchanSpecialPunch 1.3s cubic-bezier(0.15, 0.9, 0.25, 1) forwards' }}>
-              <svg width="60" height="54" viewBox="0 0 60 54" className="drop-shadow-[0_0_18px_#dc2626]">
-                {/* Glove body — larger */}
-                <ellipse cx="30" cy="24" rx="22" ry="19" fill="#dc2626" stroke="#7f1d1d" strokeWidth="2.5" />
-                {/* Glove highlight */}
-                <ellipse cx="24" cy="18" rx="11" ry="8" fill="#ef4444" opacity="0.6" />
-                {/* Lacing */}
-                <path d="M20 33 L26 30 L32 33 L38 30" fill="none" stroke="#fef2f2" strokeWidth="2" strokeLinecap="round" />
-                {/* Wrist/cuff */}
-                <rect x="18" y="41" width="24" height="10" rx="4" fill="#b91c1c" stroke="#7f1d1d" strokeWidth="1.5" />
-                {/* Knuckle ridge — more pronounced */}
-                <path d="M12 15 Q30 7, 48 15" fill="none" stroke="#7f1d1d" strokeWidth="2.5" strokeLinecap="round" />
-                {/* Impact glow ring */}
-                <circle cx="30" cy="24" r="24" fill="none" stroke="#fbbf24" strokeWidth="1.5" opacity="0.4" />
-              </svg>
+              <img
+                src="/assets/Hitmonchan_SpecialPunch.png"
+                alt=""
+                className="select-none pointer-events-none drop-shadow-[0_0_18px_#ec4899]"
+                style={{ width: '60%', maxWidth: '60%', height: 'auto', objectFit: 'contain' }}
+                draggable={false}
+              />
             </div>
             {/* Heavy speed lines — thicker, more numerous */}
             <div className="absolute -left-8" style={{ animation: 'gbaPunchSpeedLines 1.3s ease-out forwards', opacity: 0 }}>
