@@ -715,11 +715,23 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     }
     lastAiTurnRunRef.current = state.turn;
 
-    // Check if CPU active is fainted
-    if (!state.cpu.active || state.cpu.active.currentHp <= 0) {
+    // Check if CPU active is fainted.
+    // When the active slot is already EMPTY (null) there is no card left to
+    // animate, so resolve immediately.  When the active still exists but has
+    // 0 HP, do NOT resolve here — the knockout-watchdog effect (which shows
+    // the 💀 banner + grayscale/pulse animation for 1800 ms) or the explicit
+    // handler inside performAttack / handleEndTurn will call resolveKnockout
+    // after the faint animation has played.  Resolving here would race those
+    // timers and discard the card before the player ever sees the effect.
+    if (!state.cpu.active) {
       setIsAiThinking(false);
       isAiRunningRef.current = false;
       setState(curr => GameEngine.resolveKnockout(curr));
+      return;
+    }
+    if (state.cpu.active.currentHp <= 0) {
+      setIsAiThinking(false);
+      isAiRunningRef.current = false;
       return;
     }
 
