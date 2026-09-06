@@ -1742,6 +1742,13 @@ export class GameEngine {
       }
     }
 
+    // 4b. Flitter (Dark Golbat), Dig Under (Diglett), Coin Hurl (Meowth):
+    // card data stores damage: 0 because the hit goes to a *chosen* Pokémon, but the
+    // amount itself is fixed. The preview must show the real number, not "effect".
+    if (attackName === 'flitter') baseDamage = 20;
+    else if (attackName === 'dig under') baseDamage = 10;
+    else if (attackName === 'coin hurl') baseDamage = 20;
+
     // 5. Karate Chop (50 - attacker damage taken)
     if (attackName === 'karate chop') {
       if (attacker.damage > 0) {
@@ -1963,7 +1970,11 @@ export class GameEngine {
      * has to speak of the chosen one instead - otherwise a Benched pick takes the hit while the
      * Active Pokémon stands there untouched, which is the exact opposite of the card.
      */
-    const stareTargetIndex = attackName === 'stare'
+    // Flitter, Dig Under and Coin Hurl share Stare's wording: "Choose 1 of your
+    // opponent's Pokémon. This attack does N damage to that Pokémon." They all
+    // resolve through the same target-pick pipeline.
+    const CHOOSE_TARGET_MOVES = ['stare', 'flitter', 'dig under', 'coin hurl'];
+    const stareTargetIndex = CHOOSE_TARGET_MOVES.includes(attackName)
       ? GameEngine.pickStareTargetIndex(defenderPlayer, next.turn, effectChoices?.stareTargetIndex)
       : 0;
     const damageTarget: InPlayCard = stareTargetIndex > 0
@@ -3863,6 +3874,50 @@ export class GameEngine {
       } else {
         player.deck = GameEngine.shuffle(player.deck);
         GameEngine.addLog(next, `Evolutionary Light: No Evolution cards found in deck.`, 'action');
+      }
+      pokemon.powerUsedThisTurn = true;
+    }
+
+    // 2b. Sneak Attack (Dark Golbat)
+    // "When you play Dark Golbat from your hand, you may choose 1 of your
+    // opponent's Pokémon. If you do, Dark Golbat does 10 damage to that Pokémon.
+    // Apply Weakness and Resistance."
+    else if (normPower === 'sneak attack') {
+      const candidates: (InPlayCard | null)[] = [opponent.active, ...opponent.bench];
+      const targetIdx = (params?.targetInstanceId !== undefined)
+        ? candidates.findIndex(p => p && p.instanceId === params.targetInstanceId)
+        : 0;
+      const idx = (targetIdx !== -1 && candidates[targetIdx]) ? targetIdx : 0;
+      const target = candidates[idx]!;
+
+      let dmg = 10;
+      const attackerType = pokemon.card.types?.[0];
+      // Apply Weakness and Resistance (unlike Flitter / Stare)
+      if (attackerType && target.card.weakness && target.card.weakness.type === attackerType) {
+        let mult = 2;
+        if (typeof target.card.weakness.value === 'number') mult = target.card.weakness.value;
+        else if (typeof target.card.weakness.value === 'string') {
+          const m = (target.card.weakness.value as string).match(/\d+/);
+          if (m) mult = parseInt(m[0], 10);
+        }
+        dmg = Math.round(dmg * mult);
+      }
+      if (attackerType && target.card.resistance && target.card.resistance.type === attackerType) {
+        let reduction = 30;
+        if (typeof target.card.resistance.value === 'number') reduction = Math.abs(target.card.resistance.value);
+        else if (typeof target.card.resistance.value === 'string') {
+          const m = (target.card.resistance.value as string).match(/\d+/);
+          if (m) reduction = parseInt(m[0], 10);
+        }
+        dmg = Math.max(0, dmg - reduction);
+      }
+
+      target.damage += dmg;
+      target.currentHp = Math.max(0, (target.card.hp || 0) - target.damage);
+      GameEngine.addLog(next, `🦇 Sneak Attack! Dark Golbat dealt ${dmg} damage to ${target.card.name} (${target.currentHp}/${target.card.hp} HP)!`, 'action');
+
+      if (target.currentHp <= 0) {
+        next.pendingKnockout = { faintedName: target.card.name, isPlayer: playerId !== 'player' };
       }
       pokemon.powerUsedThisTurn = true;
     }

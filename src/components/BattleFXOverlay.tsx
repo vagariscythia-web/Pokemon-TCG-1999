@@ -115,7 +115,9 @@ export interface ActiveFX {
     | 'waterfall_surf'
     | 'avalanche_cascade'
     | 'hitmonchan_jab'
-    | 'hitmonchan_special_punch';
+    | 'hitmonchan_special_punch'
+    | 'bat_wing_flap'
+    | 'water_vortex';
   target: 'player' | 'cpu';
   /**
    * Which slot of `target` this beat belongs to. Attacks that name their own victim (Stare) or
@@ -369,6 +371,10 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     if (pkm.includes('eevee')) return 'sand_attack_dust';
     return 'sand_attack_throw';
   }
+  // Thematic overrides before the generic funnel: Water-type Whirlpool (Poliwrath, Dark Vaporeon)
+  // is a swirling water vortex, and Flitter (Golbat) is a wing strike - neither is a wind funnel.
+  if (name === 'whirlpool' && pokemonCard.types?.[0] === 'Water') return 'water_vortex';
+  if (name.includes('flitter')) return 'bat_wing_flap';
   if (name.includes('whirlwind') || name.includes('gust') || name.includes('tornado') || name.includes('cyclone') || name.includes('whirlpool') || name.includes('hurricane')) return 'whirlwind_cyclone';
   if (name.includes('wing attack') || name.includes('dive bomb')) return 'wing_slash';
   if (name.includes('pay day') || name.includes('scavenge') || name.includes('coin hurl') || name.includes('fetch')) return 'pay_day_coins';
@@ -404,7 +410,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   // 12. Additional poison / misc mappings
   if (name.includes('acid') || name.includes('poison claws') || name.includes('toxic') || name.includes('jellyfish sting')) return 'poison_sting';
   if (name.includes('nasty goo') || name.includes('sticky hands')) return 'nasty_goo';
-  if (name.includes('flitter') || name.includes('vanish') || name.includes('mischief')) return 'whirlwind_cyclone';
+  if (name.includes('vanish') || name.includes('mischief')) return 'whirlwind_cyclone';
   if (name.includes('magnetic lines') || name.includes('magnetism') || name.includes('lightning flash') || name.includes('chain lightning') || name.includes('electric shock') || name.includes('thunder jolt') || name.includes('thunder attack') || name.includes('surprise thunder') || name.includes('thunderbolt')) return 'thunder_wave';
   if (name.includes('flare')) return 'flare_burst';
   if (name.includes('wildfire')) return 'wildfire_scorch';
@@ -2480,6 +2486,72 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <line x1="20" y1="15" x2="36" y2="22" stroke="#fde047" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
             </svg>
           </div>
+        </div>
+      )}
+
+      {/* 22a. BAT WING FLAP (Flitter - Golbat's wing strike) */}
+      {fx.type === 'bat_wing_flap' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Flapping bat wings */}
+          <div className="absolute flex items-center justify-center" style={{ animation: 'gbaBatWingFlap 1.05s ease-out forwards' }}>
+            <svg width="110" height="70" viewBox="0 0 110 70">
+              <path d="M50 42 Q30 8, 6 14 Q16 20, 14 30 Q24 26, 28 35 Q36 31, 42 42 Z" fill="url(#batWingGrad)" opacity="0.9" />
+              <path d="M60 42 Q80 8, 104 14 Q94 20, 96 30 Q86 26, 82 35 Q74 31, 68 42 Z" fill="url(#batWingGrad)" opacity="0.9" />
+              <defs>
+                <linearGradient id="batWingGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#c084fc" />
+                  <stop offset="100%" stopColor="#6d28d9" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          {/* Wing-beat speed streaks */}
+          <div className="absolute -left-5 top-1/3" style={{ animation: 'gbaWindStreak 1.05s linear forwards', opacity: 0 }}>
+            <svg width="60" height="14" viewBox="0 0 60 14">
+              <path d="M2 4 Q20 0, 38 5 Q50 8, 58 4" fill="none" stroke="#c4b5fd" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+              <path d="M6 10 Q24 6, 44 10" fill="none" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+            </svg>
+          </div>
+          <div className="absolute -right-5 bottom-1/4" style={{ animation: 'gbaWindStreak 1.05s linear 0.15s forwards', opacity: 0 }}>
+            <svg width="60" height="14" viewBox="0 0 60 14">
+              <path d="M2 4 Q20 0, 38 5 Q50 8, 58 4" fill="none" stroke="#ddd6fe" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+            </svg>
+          </div>
+          {!fx.whiffed && (
+            <div className="absolute text-3xl select-none" style={{ animation: 'gbaVenomSplash 0.9s ease-out 0.35s forwards', opacity: 0 }}>💥</div>
+          )}
+        </div>
+      )}
+
+      {/* 22b. WATER VORTEX (Whirlpool - Poliwrath, Dark Vaporeon) */}
+      {fx.type === 'water_vortex' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Spinning spiral of water rings */}
+          <div className="absolute" style={{ animation: 'gbaWaterVortexSpin 1.25s cubic-bezier(0.3, 0.7, 0.4, 1) forwards' }}>
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" fill="none" stroke="#38bdf8" strokeWidth="3" strokeDasharray="40 26" opacity="0.85" />
+              <circle cx="50" cy="50" r="31" fill="none" stroke="#0ea5e9" strokeWidth="3.5" strokeDasharray="30 22" opacity="0.9" />
+              <circle cx="50" cy="50" r="20" fill="none" stroke="#7dd3fc" strokeWidth="3" strokeDasharray="22 16" opacity="0.95" />
+              <circle cx="50" cy="50" r="10" fill="url(#vortexCoreGrad)" opacity="0.9" />
+              <defs>
+                <radialGradient id="vortexCoreGrad">
+                  <stop offset="0%" stopColor="#e0f2fe" />
+                  <stop offset="100%" stopColor="#0284c7" />
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          {/* Droplets flung outward by the spin */}
+          <div className="absolute text-xl select-none" style={{ animation: 'gbaGustLeaf 1.1s ease-out 0.2s forwards', opacity: 0 }}>💧</div>
+          <div className="absolute -left-4 text-lg select-none" style={{ animation: 'gbaGustLeaf 1.1s ease-out 0.35s forwards', opacity: 0 }}>💧</div>
+          {/* Splash lines once the vortex collapses */}
+          {!fx.whiffed && (
+            <div className="absolute bottom-2" style={{ animation: 'gbaAvalancheShake 1.0s ease-out 0.5s forwards', opacity: 0 }}>
+              <svg width="70" height="12" viewBox="0 0 80 12">
+                <path d="M5 6 Q15 2, 25 8 Q35 3, 45 9 Q55 4, 65 8 Q72 5, 78 6" fill="none" stroke="#7dd3fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+              </svg>
+            </div>
+          )}
         </div>
       )}
 

@@ -170,6 +170,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     isOpen: boolean;
     attackIndex: number;
     coinResults?: boolean[];
+    attackName?: string;
+    /** 'attack' = Stare/Flitter/Dig Under/Coin Hurl; 'power' = Sneak Attack */
+    mode?: 'attack' | 'power';
+    powerInstanceId?: string;
+    powerName?: string;
   } | null>(null);
   const [powerDiscardModal, setPowerDiscardModal] = useState<{
     isOpen: boolean;
@@ -2874,7 +2879,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       'final beam',
       'summon minions',
       'reel in',
-      'sneak attack',
       'healing wind'
     ];
     return passives.includes(norm);
@@ -2939,6 +2943,25 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           setDeckSearchModal(null);
           executePowerActivation(inPlay.instanceId, power.name, { chosenDeckIndex });
         }
+      });
+      return;
+    }
+
+    // 2b. Sneak Attack (Dark Golbat) - choose target
+    if (normPower === 'sneak attack') {
+      const targets = [cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
+      if (targets.length <= 1) {
+        // Only Active Pokémon, no choice needed
+        executePowerActivation(inPlay.instanceId, power.name, { targetInstanceId: cpu.active?.instanceId });
+        return;
+      }
+      setStareTargetModal({
+        isOpen: true,
+        attackIndex: -1,
+        attackName: 'Sneak Attack',
+        mode: 'power',
+        powerInstanceId: inPlay.instanceId,
+        powerName: power.name
       });
       return;
     }
@@ -3254,12 +3277,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const performAttack = (coinResults?: boolean[]) => {
       if (hasExecutedPlayerAttack) return;
 
-      // Stare names its own victim: "Choose 1 of your opponent's Pokémon." Only interrupt when
-      // the opponent actually has a choice to make - with a lone Active Pokémon there is nothing
-      // to pick, and a modal there would just be friction.
-      if (atkNameLower === 'stare' && cpu.bench.length > 0) {
+      // Stare, Flitter, Dig Under and Coin Hurl all say "Choose 1 of your opponent's Pokémon."
+      // Only interrupt when the opponent actually has a choice to make - with a lone Active
+      // Pokémon there is nothing to pick, and a modal there would just be friction.
+      const CHOOSE_TARGET_MOVES = ['stare', 'flitter', 'dig under', 'coin hurl'];
+      if (CHOOSE_TARGET_MOVES.includes(atkNameLower) && cpu.bench.length > 0) {
         hasExecutedPlayerAttack = true;
-        setStareTargetModal({ isOpen: true, attackIndex: atkIndex, coinResults });
+        setStareTargetModal({ isOpen: true, attackIndex: atkIndex, coinResults, attackName: attack.name, mode: 'attack' });
         return;
       }
 
@@ -3575,6 +3599,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const modal = stareTargetModal;
     setStareTargetModal(null);
     if (!modal) return;
+    if (modal.mode === 'power' && modal.powerInstanceId && modal.powerName) {
+      // Sneak Attack power: resolve the targetInstanceId from the index
+      const candidates = [cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
+      const target = candidates[targetIndex];
+      if (target) {
+        executePowerActivation(modal.powerInstanceId, modal.powerName, { targetInstanceId: target.instanceId });
+      }
+      return;
+    }
     executeAttackWithChoices(modal.attackIndex, modal.coinResults, { stareTargetIndex: targetIndex });
   };
 
@@ -3583,6 +3616,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const modal = stareTargetModal;
     setStareTargetModal(null);
     if (!modal) return;
+    if (modal.mode === 'power') {
+      // Sneak Attack: skipping means choosing the Active Pokémon (index 0)
+      if (modal.powerInstanceId && modal.powerName) {
+        const target = cpu.active;
+        if (target) {
+          executePowerActivation(modal.powerInstanceId, modal.powerName, { targetInstanceId: target.instanceId });
+        }
+      }
+      return;
+    }
     // No pick made means the default target, which is the Defending Pokémon.
     executeAttackWithChoices(modal.attackIndex, modal.coinResults, { stareTargetIndex: 0 });
   };
@@ -5766,12 +5809,20 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 safe-area-padding animate-fade-in">
           <div className="bg-slate-900 border-2 border-fuchsia-500/80 rounded-3xl p-5 max-w-2xl w-full text-white shadow-2xl flex flex-col items-center">
             <h3 className="text-base sm:text-lg font-black text-fuchsia-300 mb-1 text-center">
-              👁️ {lang === 'tr' ? 'Stare: Hedef Pokémonu Seçin' : 'Stare: Choose the Target Pokémon'}
+              👁️ {stareTargetModal.attackName || 'Stare'}: {lang === 'tr' ? 'Hedef Pokémonu Seçin' : 'Choose the Target Pokémon'}
             </h3>
             <p className="text-[11px] sm:text-xs text-gray-300 mb-4 text-center max-w-xl leading-snug">
-              {lang === 'tr'
-                ? 'Rakibinin Aktif ya da Yedek Pokémonlarından birini seç: 10 hasar Zayıflık/Direnç hesaplanmadan o Pokémona uygulanır ve varsa özel yeteneği rakibin sonraki turu sona erene kadar devre dışı kalır.'
-                : "Pick any opposing Active or Benched Pokémon: the 10 damage is dealt to that Pokémon without Weakness or Resistance, and its Pokémon Power (if any) stops working until the end of your opponent's next turn."}
+              {stareTargetModal.mode === 'power'
+                ? (lang === 'tr'
+                    ? 'Rakibinin Aktif ya da Yedek Pokémonlarından birini seç: 10 hasar Zayıflık/Direnç uygulanarak o Pokémona verilir.'
+                    : 'Pick any opposing Active or Benched Pokémon: 10 damage is dealt to that Pokémon (applying Weakness and Resistance).')
+                : (stareTargetModal.attackName === 'Stare'
+                    ? (lang === 'tr'
+                        ? 'Rakibinin Aktif ya da Yedek Pokémonlarından birini seç: 10 hasar Zayıflık/Direnç hesaplanmadan o Pokémona uygulanır ve varsa özel yeteneği rakibin sonraki turu sona erene kadar devre dışı kalır.'
+                        : "Pick any opposing Active or Benched Pokémon: the 10 damage is dealt to that Pokémon without Weakness or Resistance, and its Pokémon Power (if any) stops working until the end of your opponent's next turn.")
+                    : (lang === 'tr'
+                        ? 'Rakibinin Aktif ya da Yedek Pokémonlarından birini seç: hasar Zayıflık/Direnç hesaplanmadan o Pokémona uygulanır.'
+                        : 'Pick any opposing Active or Benched Pokémon: the damage is dealt to that Pokémon without applying Weakness or Resistance.'))}
             </p>
 
             {cpu.active && (
@@ -5798,7 +5849,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               onClick={abandonStareTarget}
               className="bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-bold px-6 py-2 rounded-xl border border-slate-700 active:scale-95"
             >
-              {lang === 'tr' ? 'Seçmeden Saldır (Aktif)' : 'Attack the Active Pokémon Instead'}
+              {stareTargetModal.mode === 'power'
+                ? (lang === 'tr' ? 'Aktif Pokémona Uygula' : 'Target the Active Pokémon')
+                : (lang === 'tr' ? 'Seçmeden Saldır (Aktif)' : 'Attack the Active Pokémon Instead')}
             </button>
           </div>
         </div>
