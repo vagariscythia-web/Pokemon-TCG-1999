@@ -1088,16 +1088,19 @@ html, body {
    sweeps toward the left-front while growing and rotating. Angular
    tilt settles to 0° at impact. Motion accelerates via cubic-bezier
    on the parent; keyframes add the spatial path + scale + rotation.
-   Final scale(1) = 80% card width (20% horizontal margin preserved). */
+   Final scale(1) = 60% card width (40% horizontal margin preserved).
+   Impact sync: fist reaches ~94% size at 80% (0.80s) and full size at
+   90% (0.90s) of the 1.0s duration — impact FX delays are tuned to
+   fire exactly at that arrival moment. */
 @keyframes gbaThunderPunchApproach {
   0%   { transform: translate(42%, -20%) scale(0.10) rotate(16deg); opacity: 0; }
   8%   { transform: translate(38%, -17%) scale(0.14) rotate(13deg); opacity: 0.55; }
   20%  { transform: translate(30%, -12%) scale(0.24) rotate(9deg);  opacity: 0.82; }
   36%  { transform: translate(18%, -6%)  scale(0.42) rotate(5deg);  opacity: 0.94; }
   52%  { transform: translate(7%, -2%)   scale(0.62) rotate(2deg);  opacity: 1; }
-  68%  { transform: translate(-1%, 0%)   scale(0.80) rotate(0.5deg); opacity: 1; filter: drop-shadow(0 0 18px #facc15); }
-  82%  { transform: translate(-4%, 0%)   scale(0.94) rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 26px #facc15); }
-  92%  { transform: translate(-5%, 0%)   scale(1.0)  rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 30px #facc15); }
+  66%  { transform: translate(-1%, 0%)   scale(0.80) rotate(0.5deg); opacity: 1; filter: drop-shadow(0 0 18px #facc15); }
+  80%  { transform: translate(-4%, 0%)   scale(0.94) rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 26px #facc15); }
+  90%  { transform: translate(-5%, 0%)   scale(1.0)  rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 30px #facc15); }
   100% { transform: translate(-5%, 0%)   scale(1.0)  rotate(0deg);  opacity: 0; }
 }
 
@@ -1118,10 +1121,12 @@ html, body {
   100% { transform: scale(0.7); opacity: 0; }
 }
 
+/* Impact ring — short, sharp burst; runs on a 0.4-0.45s duration so it
+   completes fully before the 1300ms FX cleanup. */
 @keyframes gbaThunderPunchRing {
   0% { transform: scale(0.3); opacity: 0; }
-  35% { transform: scale(1); opacity: 0.9; }
-  70% { transform: scale(1.4); opacity: 0.5; }
+  30% { transform: scale(1); opacity: 0.9; }
+  65% { transform: scale(1.4); opacity: 0.5; }
   100% { transform: scale(1.8); opacity: 0; }
 }
 
@@ -1134,11 +1139,12 @@ html, body {
 }
 
 /* Glow flash behind the Thunderpunch fist — grows with the fist and
-   peaks as the fist gets closest to the viewer */
+   peaks at 78% (0.78s of the 1.0s duration), just as the fist arrives
+   at full size, so the flash reads as the impact moment */
 @keyframes gbaThunderPunchGlow {
   0%   { transform: scale(0.3); opacity: 0; }
-  35%  { transform: scale(0.7); opacity: 0.5; }
-  65%  { transform: scale(1.15); opacity: 0.9; }
+  45%  { transform: scale(0.7); opacity: 0.5; }
+  78%  { transform: scale(1.15); opacity: 0.9; }
   100% { transform: scale(1.6); opacity: 0; }
 }
 

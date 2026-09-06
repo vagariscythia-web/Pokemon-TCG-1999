@@ -1180,26 +1180,26 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           {/* Electabuzz fist + arm — reference image with approach trajectory.
               Spawns small at right-back, grows while sweeping left-front with
               angular rotation, accelerating into a dead-on frontal impact.
-              Final width = 80% of card (20% margin from horizontal edge). */}
+              Final width = 60% of card (40% margin from horizontal edge). */}
           <div
             className="absolute inset-0 flex items-center justify-center"
-            style={{ animation: 'gbaThunderPunchApproach 1.2s cubic-bezier(0.3, 0.0, 0.85, 0.35) forwards' }}
+            style={{ animation: 'gbaThunderPunchApproach 1.0s cubic-bezier(0.3, 0.0, 0.85, 0.35) forwards' }}
           >
             <img
               src="/assets/ThunderPunch_Fist.png"
               alt=""
               className="select-none pointer-events-none drop-shadow-[0_0_22px_#facc15]"
-              style={{ width: '80%', maxWidth: '80%', height: 'auto', objectFit: 'contain' }}
+              style={{ width: '60%', maxWidth: '60%', height: 'auto', objectFit: 'contain' }}
               draggable={false}
             />
           </div>
           {/* Impact glow flash behind the fist — soft outer halo + tighter hot core for cleaner falloff */}
-          <div className="absolute" style={{ animation: 'gbaThunderPunchGlow 1.2s ease-out forwards', opacity: 0 }}>
+          <div className="absolute" style={{ animation: 'gbaThunderPunchGlow 1.0s ease-out forwards', opacity: 0 }}>
             <div className="w-32 h-32 rounded-full bg-gradient-to-t from-yellow-300 via-amber-200/60 to-transparent blur-md" />
             <div className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-gradient-to-t from-yellow-100 via-yellow-200/70 to-transparent blur-sm" />
           </div>
           {/* Rotating electric aura ring wrapping the fist */}
-          <div className="absolute w-32 h-32" style={{ animation: 'gbaThunderPunchAura 1.2s linear 0.2s forwards', opacity: 0 }}>
+          <div className="absolute w-32 h-32" style={{ animation: 'gbaThunderPunchAura 0.9s linear 0.1s forwards', opacity: 0 }}>
             <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_#fde047]">
               <circle cx="50" cy="50" r="44" fill="none" stroke="#fde047" strokeWidth="2.5" strokeDasharray="10 6" opacity="0.85" />
               <circle cx="50" cy="50" r="36" fill="none" stroke="#fef9c3" strokeWidth="1.5" strokeDasharray="4 8" opacity="0.7" />
@@ -1207,7 +1207,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           </div>
           {/* Radial lightning bolts bursting outward from the fist (tip-up bolts, rotated per direction) */}
           <div className="absolute" style={{ transform: 'translate(-48px, -50px) rotate(-40deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 1.2s ease-out 0.25s forwards', opacity: 0 }}>
+            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.35s forwards', opacity: 0 }}>
               <svg width="26" height="44" viewBox="0 0 26 44" className="drop-shadow-[0_0_12px_#fef08a]">
                 <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.8" />
                 <path d="M13 6 L10 18 L13 17 L9 33 L14 22 L12 24 L15 6 Z" fill="#ffffff" opacity="0.7" />
@@ -1215,7 +1215,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </div>
           </div>
           <div className="absolute" style={{ transform: 'translate(26px, -52px) rotate(40deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 1.2s ease-out 0.32s forwards', opacity: 0 }}>
+            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.4s forwards', opacity: 0 }}>
               <svg width="26" height="44" viewBox="0 0 26 44" className="drop-shadow-[0_0_12px_#fef08a]">
                 <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.8" />
                 <path d="M13 6 L10 18 L13 17 L9 33 L14 22 L12 24 L15 6 Z" fill="#ffffff" opacity="0.7" />
@@ -1223,42 +1223,44 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </div>
           </div>
           <div className="absolute" style={{ transform: 'translate(44px, -14px) rotate(90deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 1.2s ease-out 0.38s forwards', opacity: 0 }}>
+            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.45s forwards', opacity: 0 }}>
               <svg width="22" height="38" viewBox="0 0 26 44" className="drop-shadow-[0_0_10px_#fde047]">
                 <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.8" />
               </svg>
             </div>
           </div>
           <div className="absolute" style={{ transform: 'translate(-64px, -14px) rotate(-90deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 1.2s ease-out 0.42s forwards', opacity: 0 }}>
+            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.5s forwards', opacity: 0 }}>
               <svg width="22" height="38" viewBox="0 0 26 44" className="drop-shadow-[0_0_10px_#fde047]">
                 <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.8" />
               </svg>
             </div>
           </div>
           {/* Jagged crackle arcs zapping across the fist surface */}
-          <div className="absolute" style={{ animation: 'gbaElectricFlicker 1.2s linear 0.3s forwards', opacity: 0 }}>
+          <div className="absolute" style={{ animation: 'gbaElectricFlicker 0.7s linear 0.3s forwards', opacity: 0 }}>
             <svg width="76" height="54" viewBox="0 0 76 54">
               <path d="M4 28 L14 20 L12 28 L24 16 L22 26 L36 12" fill="none" stroke="#fde047" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
               <path d="M72 32 L60 38 L63 30 L50 42" fill="none" stroke="#fef9c3" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
             </svg>
           </div>
           {/* Flickering spark particles scattering */}
-          <div className="absolute -top-6 left-1" style={{ animation: 'gbaElectricFlicker 1.2s linear 0.35s forwards', opacity: 0 }}>
+          <div className="absolute -top-6 left-1" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.35s forwards', opacity: 0 }}>
             <span className="text-lg text-yellow-200 select-none drop-shadow-[0_0_8px_#fef08a]">✦</span>
           </div>
-          <div className="absolute bottom-0 -right-4" style={{ animation: 'gbaElectricFlicker 1.2s linear 0.45s forwards', opacity: 0 }}>
+          <div className="absolute bottom-0 -right-4" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.42s forwards', opacity: 0 }}>
             <span className="text-sm text-yellow-300 select-none drop-shadow-[0_0_6px_#fde047]">✦</span>
           </div>
-          <div className="absolute top-1 -left-5" style={{ animation: 'gbaElectricFlicker 1.2s linear 0.5s forwards', opacity: 0 }}>
+          <div className="absolute top-1 -left-5" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.48s forwards', opacity: 0 }}>
             <span className="text-xs text-amber-200 select-none drop-shadow-[0_0_5px_#fde047]">✦</span>
           </div>
-          <div className="absolute -bottom-4 -left-2" style={{ animation: 'gbaElectricFlicker 1.2s linear 0.55s forwards', opacity: 0 }}>
+          <div className="absolute -bottom-4 -left-2" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.52s forwards', opacity: 0 }}>
             <span className="text-sm text-yellow-200 select-none drop-shadow-[0_0_6px_#fef08a]">✦</span>
           </div>
-          {/* Double impact rings — fire once the fist has grown close to the viewer */}
-          <div className="absolute w-24 h-24 rounded-full border-3 border-yellow-300/80" style={{ animation: 'gbaThunderPunchRing 1.2s ease-out 0.55s forwards', opacity: 0 }} />
-          <div className="absolute w-16 h-16 rounded-full border-2 border-yellow-100/90" style={{ animation: 'gbaThunderPunchRing 1.2s ease-out 0.68s forwards', opacity: 0 }} />
+          {/* Double impact rings — fire the moment the fist reaches full size
+              (0.82s / 0.88s ≈ fist at 94-100% scale) so the impact reads as
+              the hit itself; short durations finish before the 1300ms cleanup */}
+          <div className="absolute w-24 h-24 rounded-full border-3 border-yellow-300/80" style={{ animation: 'gbaThunderPunchRing 0.45s ease-out 0.82s forwards', opacity: 0 }} />
+          <div className="absolute w-16 h-16 rounded-full border-2 border-yellow-100/90" style={{ animation: 'gbaThunderPunchRing 0.4s ease-out 0.88s forwards', opacity: 0 }} />
         </div>
       )}
 
