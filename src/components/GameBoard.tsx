@@ -39,8 +39,9 @@ interface GameBoardProps {
 const statusTicksToShow = (resolved: GameState): StatusTick[] =>
   (resolved.lastStatusTicks || []).filter(tk => {
     const active = resolved[tk.target]?.active;
-    // Never show a tick on a Pokémon that has since fainted or been replaced.
-    return !!active && active.instanceId === tk.instanceId && active.currentHp > 0;
+    // Never show a tick on a Pokémon that has since been replaced.
+    // Allow 0 HP so lethal poison ticks are still displayed before the fainted animation.
+    return !!active && active.instanceId === tk.instanceId;
   });
 
 const poisonFXFromTicks = (ticks: StatusTick[]): ActiveFX[] =>
@@ -249,6 +250,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     if (state.phase === 'GAME_OVER' || state.winner) return;
     // Never re-resolve if already in replacement selection
     if (state.phase === 'SELECT_BENCH_REPLACEMENT') return;
+    // Skip while the poison tick sequence is animating; the explicit handler
+    // in handleEndTurn / AI PASS will resolve the knockout after the FX.
+    if (isPoisonSequenceActive) return;
 
     const anyPlayerFainted = (state.player.active && state.player.active.currentHp <= 0) || state.player.bench.some(b => b.currentHp <= 0);
     const anyCpuFainted = (state.cpu.active && state.cpu.active.currentHp <= 0) || state.cpu.bench.some(b => b.currentHp <= 0);
@@ -320,7 +324,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     state.player.bench.map(b => b.currentHp).join(','),
     state.cpu.bench.map(b => b.currentHp).join(','),
     state.phase,
-    state.winner
+    state.winner,
+    isPoisonSequenceActive
   ]);
 
     // PRELOAD ALL MATCH CARD IMAGES & COIN ASSETS
@@ -1042,8 +1047,29 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             setTimeout(() => {
               setActiveFXList([]);
               setIsPoisonSequenceActive(false);
-              setIsTurnLocked(false);
-              cleanupAiTurn();
+
+              // Check if the poison/toxic tick was lethal
+              const playerFainted = resolved.player.active && resolved.player.active.currentHp <= 0;
+              const cpuFainted = resolved.cpu.active && resolved.cpu.active.currentHp <= 0;
+
+              if (playerFainted || cpuFainted) {
+                const faintedName = playerFainted
+                  ? resolved.player.active!.card.name
+                  : resolved.cpu.active!.card.name;
+                const bannerText = playerFainted
+                  ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
+                  : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
+                setActionBanner({ text: bannerText, type: 'knockout' });
+                setTimeout(() => {
+                  setState(post => GameEngine.resolveKnockout(post));
+                  setActionBanner(null);
+                  setIsTurnLocked(false);
+                  cleanupAiTurn();
+                }, 1800);
+              } else {
+                setIsTurnLocked(false);
+                cleanupAiTurn();
+              }
             }, 1600);
           }, 60);
         }, 700);
@@ -1317,7 +1343,27 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               setTimeout(() => {
                 setActiveFXList([]);
                 setIsPoisonSequenceActive(false);
-                setIsTurnLocked(false);
+
+                // Check if the poison/toxic tick was lethal
+                const playerFainted = resolved.player.active && resolved.player.active.currentHp <= 0;
+                const cpuFainted = resolved.cpu.active && resolved.cpu.active.currentHp <= 0;
+
+                if (playerFainted || cpuFainted) {
+                  const faintedName = playerFainted
+                    ? resolved.player.active!.card.name
+                    : resolved.cpu.active!.card.name;
+                  const bannerText = playerFainted
+                    ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
+                    : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
+                  setActionBanner({ text: bannerText, type: 'knockout' });
+                  setTimeout(() => {
+                    setState(post => GameEngine.resolveKnockout(post));
+                    setActionBanner(null);
+                    setIsTurnLocked(false);
+                  }, 1800);
+                } else {
+                  setIsTurnLocked(false);
+                }
               }, 1600);
             }, 60);
           }, 700);
@@ -3686,7 +3732,27 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       setTimeout(() => {
         setActiveFXList([]);
         setIsPoisonSequenceActive(false);
-        setIsTurnLocked(false);
+
+        // Check if the poison/toxic tick was lethal
+        const playerFainted = resolved.player.active && resolved.player.active.currentHp <= 0;
+        const cpuFainted = resolved.cpu.active && resolved.cpu.active.currentHp <= 0;
+
+        if (playerFainted || cpuFainted) {
+          const faintedName = playerFainted
+            ? resolved.player.active!.card.name
+            : resolved.cpu.active!.card.name;
+          const bannerText = playerFainted
+            ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
+            : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
+          setActionBanner({ text: bannerText, type: 'knockout' });
+          setTimeout(() => {
+            setState(post => GameEngine.resolveKnockout(post));
+            setActionBanner(null);
+            setIsTurnLocked(false);
+          }, 1800);
+        } else {
+          setIsTurnLocked(false);
+        }
       }, 1600);
     } else {
       setIsTurnLocked(false);

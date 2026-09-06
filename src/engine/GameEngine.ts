@@ -3648,7 +3648,10 @@ export class GameEngine {
       opponent.bench.some(b => b.currentHp <= 0);
 
     if (hasAnyKnockout) {
-      return GameEngine.resolveKnockout(next);
+      // Do NOT resolve the knockout here. Return the state with the 0-HP Pokémon still
+      // in play so the UI can display the fainted animation (grayscale + knockout banner)
+      // before calling resolveKnockout() explicitly — matching the attack-KO flow.
+      return next;
     }
 
     return GameEngine.advanceTurn(next);
