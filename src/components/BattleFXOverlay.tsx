@@ -793,7 +793,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
           {/* Sickly haze that sits over the whole card while the gas rolls through */}
           <div
-            className="absolute inset-[-10px] rounded-2xl backdrop-blur-[1.5px]"
+            className="absolute inset-0 rounded-xl backdrop-blur-[1.5px]"
             style={{
               animation: 'gbaVaporHaze 1.25s ease-in-out forwards',
               opacity: 0,
@@ -935,7 +935,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </div>
             </div>
           </div>
-          <div className="absolute inset-0 bg-purple-950/30 rounded-2xl animate-pulse border border-purple-500/40" />
+          <div
+            className="absolute inset-0 rounded-xl"
+            style={{
+              animation: 'gbaPoisonGasHazePulse 1.2s ease-in-out forwards',
+              opacity: 0,
+              background: 'radial-gradient(ellipse at 50% 55%, rgba(147,51,234,0.22) 0%, rgba(88,28,135,0.16) 50%, rgba(30,10,60,0.10) 80%, transparent 100%)'
+            }}
+          />
         </div>
       )}
 
@@ -2334,131 +2341,56 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20c. COBRA STARE (Dark Arbok) - the hood opens over the chosen Pokémon, then it strikes.
-           Nested beats so it reads as one creature: the wrapper rears and lunges, the inner group
-           sways like a charmed cobra, and the hood, the pattern, the head and the tongue each run
-           their own clock on top of that. */}
+      {/* 20c. COBRA STARE (Dark Arbok) - the reference illustration materializes through a
+           GBA-style grainy dissolve. The light drains, static coalesces into the image, holds
+           with a pulsing horror glow, then dissolves back into grain leaving an afterimage. */}
       {fx.type === 'cobra_stare' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Beat 0: the light drains out of the victim's card before anything appears */}
+          {/* Beat 0: soft dread vignette — the light drains from the victim's card.
+              Kept to inset-0 with a low-alpha gradient so it reads as the card dimming,
+              never as a solid block or a frame bleeding past the card edge. */}
           <div
-            className="absolute inset-[-14px] rounded-2xl"
+            className="absolute inset-0 rounded-xl"
             style={{
               animation: 'gbaCobraDread 1.25s ease-in-out forwards',
               opacity: 0,
-              background: 'radial-gradient(ellipse at 50% 42%, rgba(88,28,135,0.10) 0%, rgba(30,10,60,0.62) 62%, rgba(8,3,20,0.88) 100%)'
+              background: 'radial-gradient(ellipse at 50% 45%, rgba(88,28,135,0.05) 0%, rgba(30,10,60,0.20) 58%, rgba(12,5,28,0.36) 100%)'
             }}
           />
 
-          <div className="absolute" style={{ animation: 'gbaCobraRear 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards', opacity: 0 }}>
-            <div className="relative" style={{ animation: 'gbaCobraSway 1.25s ease-in-out forwards', transformOrigin: '50% 92%' }}>
-              {/* Coiled body the hood rises out of (also carries every gradient the cobra uses) */}
-              <svg width="150" height="150" viewBox="0 0 150 150" className="absolute -left-[75px] -top-[75px] overflow-visible">
-                <defs>
-                  <linearGradient id="cobraBodyGrad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#1e1b4b" />
-                    <stop offset="45%" stopColor="#5b21b6" />
-                    <stop offset="100%" stopColor="#151038" />
-                  </linearGradient>
-                  <linearGradient id="cobraHoodGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#7c3aed" />
-                    <stop offset="42%" stopColor="#4c1d95" />
-                    <stop offset="100%" stopColor="#170f33" />
-                  </linearGradient>
-                  <radialGradient id="cobraEyeGrad" cx="50%" cy="45%" r="60%">
-                    <stop offset="0%" stopColor="#fef9c3" />
-                    <stop offset="45%" stopColor="#facc15" />
-                    <stop offset="100%" stopColor="#78350f" />
-                  </radialGradient>
-                </defs>
-                <path
-                  d="M75 112 C 56 112, 42 124, 48 136 C 55 149, 92 149, 100 136 C 107 125, 96 114, 84 113"
-                  fill="url(#cobraBodyGrad)" stroke="#0a0518" strokeWidth="3" strokeLinejoin="round"
-                />
-                <path d="M52 128 C 62 134, 88 134, 98 127" fill="none" stroke="#c4b5fd" strokeWidth="1.6" opacity="0.45" />
-                <path d="M55 137 C 66 143, 86 143, 95 136" fill="none" stroke="#c4b5fd" strokeWidth="1.4" opacity="0.3" />
-              </svg>
-
-              {/* The hood: flares open with an overshoot, then holds its spread */}
-              <svg
-                width="150" height="150" viewBox="0 0 150 150"
-                className="absolute -left-[75px] -top-[75px] overflow-visible"
-                style={{ animation: 'gbaCobraHoodFlare 1.25s cubic-bezier(0.22, 1.2, 0.36, 1) forwards', transformOrigin: '50% 78%', opacity: 0 }}
-              >
-                <path
-                  d="M75 26 C 103 26, 125 47, 127 72 C 129 95, 110 114, 75 116 C 40 114, 21 95, 23 72 C 25 47, 47 26, 75 26 Z"
-                  fill="url(#cobraHoodGrad)" stroke="#0a0518" strokeWidth="3.5" strokeLinejoin="round"
-                />
-                {/* scalloped rim - the row of scales that catches the light as the hood opens */}
-                <path
-                  d="M75 26 C 103 26, 125 47, 127 72 C 129 95, 110 114, 75 116 C 40 114, 21 95, 23 72 C 25 47, 47 26, 75 26 Z"
-                  fill="none" stroke="#a78bfa" strokeWidth="4" strokeDasharray="3 6" opacity="0.5"
-                />
-                <path d="M75 34 C 98 34, 118 52, 119 72" fill="none" stroke="#ddd6fe" strokeWidth="2" opacity="0.35" strokeLinecap="round" />
-              </svg>
-
-              {/* The hood pattern - Dark Arbok's two false eyes and its fang mark. This is the
-                  part of the illustration the move is named after, so it lights up from inside. */}
-              <svg
-                width="150" height="150" viewBox="0 0 150 150"
-                className="absolute -left-[75px] -top-[75px] overflow-visible"
-                style={{ animation: 'gbaCobraPatternGlow 1.25s ease-in-out forwards', opacity: 0 }}
-              >
-                <ellipse cx="55" cy="74" rx="10" ry="14" fill="#e9d5ff" opacity="0.92" />
-                <ellipse cx="95" cy="74" rx="10" ry="14" fill="#e9d5ff" opacity="0.92" />
-                <ellipse cx="55" cy="75" rx="4" ry="9" fill="#1e1b4b" />
-                <ellipse cx="95" cy="75" rx="4" ry="9" fill="#1e1b4b" />
-                <path d="M66 96 L75 110 L84 96" fill="none" stroke="#f5d0fe" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
-                <path d="M70 98 L72 106 M80 98 L78 106" stroke="#c084fc" strokeWidth="1.6" strokeLinecap="round" opacity="0.7" />
-              </svg>
-
-              {/* Hypnotic rings thrown off the pattern, spinning as they expand */}
-              <div className="absolute" style={{ animation: 'gbaCobraHypnoRing 1.25s ease-out 0.22s forwards', opacity: 0 }}>
-                <div className="w-24 h-24 rounded-full border-2 border-fuchsia-300/70" />
-              </div>
-              <div className="absolute" style={{ animation: 'gbaCobraHypnoRing 1.25s ease-out 0.38s forwards', opacity: 0 }}>
-                <div className="w-16 h-16 rounded-full border-2 border-purple-200/60" />
-              </div>
-
-              {/* The head, riding above the hood and dipping into the strike */}
-              <svg
-                width="150" height="150" viewBox="0 0 150 150"
-                className="absolute -left-[75px] -top-[75px] overflow-visible"
-                style={{ animation: 'gbaCobraHeadLift 1.25s cubic-bezier(0.22, 1, 0.36, 1) forwards', transformOrigin: '50% 30%', opacity: 0 }}
-              >
-                <path
-                  d="M75 4 C 90 4, 99 13, 99 22 C 99 30, 92 34, 84 36 L 75 44 L 66 36 C 58 34, 51 30, 51 22 C 51 13, 60 4, 75 4 Z"
-                  fill="#4c1d95" stroke="#0a0518" strokeWidth="3" strokeLinejoin="round"
-                />
-                <path d="M57 18 C 65 12, 85 12, 93 18" fill="none" stroke="#a78bfa" strokeWidth="2.2" strokeLinecap="round" opacity="0.7" />
-                <path d="M75 26 L75 42" stroke="#2e1065" strokeWidth="1.6" opacity="0.6" />
-                <ellipse cx="66" cy="22" rx="5.5" ry="4.5" fill="url(#cobraEyeGrad)" />
-                <ellipse cx="84" cy="22" rx="5.5" ry="4.5" fill="url(#cobraEyeGrad)" />
-                <ellipse cx="66" cy="22" rx="1.6" ry="4" fill="#0a0518" />
-                <ellipse cx="84" cy="22" rx="1.6" ry="4" fill="#0a0518" />
-                <circle cx="64" cy="20" r="1.2" fill="#fffbeb" opacity="0.9" />
-                <circle cx="82" cy="20" r="1.2" fill="#fffbeb" opacity="0.9" />
-              </svg>
-
-              {/* Forked tongue: two flicks before it commits */}
-              <svg
-                width="40" height="40" viewBox="0 0 40 40"
-                className="absolute -left-[20px] top-[16px] overflow-visible"
-                style={{ animation: 'gbaCobraTongueFlick 1.25s ease-in-out forwards', transformOrigin: '50% 0%' }}
-              >
-                <path d="M20 2 L20 18 M20 18 L13 30 M20 18 L27 30" stroke="#fb7185" strokeWidth="2.6" strokeLinecap="round" fill="none" />
-              </svg>
-            </div>
+          {/* Beat 1: the reference image materializes through grainy dissolve */}
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ animation: 'gbaStareMaterialize 0.7s steps(8) 0.15s forwards', opacity: 0 }}
+          >
+            <img
+              src="/assets/dark_arbok_stare.png"
+              alt=""
+              className="select-none pointer-events-none"
+              style={{
+                width: '72%',
+                maxWidth: '72%',
+                height: 'auto',
+                objectFit: 'contain',
+                animation: 'gbaStarePulse 0.5s ease-in-out 0.85s 2',
+                filter: 'drop-shadow(0 0 12px rgba(147,51,234,0.6))'
+              }}
+              draggable={false}
+            />
           </div>
 
-          {/* The strike landing: a fang-mark burst snapped out under the hood */}
-          <div className="absolute" style={{ animation: 'gbaCobraStrikeFlash 1.25s ease-out forwards', opacity: 0 }}>
-            <svg width="120" height="120" viewBox="0 0 120 120">
-              <polygon
-                points="60,6 70,44 106,32 80,60 114,76 76,76 70,114 56,80 26,102 38,66 6,60 44,52 32,16 54,44"
-                fill="#f0abfc" stroke="#fdf4ff" strokeWidth="2" strokeLinejoin="round" opacity="0.85"
-              />
-            </svg>
+          {/* Beat 3: dissolve out — the image breaks back into grain */}
+          <div
+            className="absolute inset-0 flex items-center justify-center"
+            style={{ animation: 'gbaStareDissolveOut 0.45s steps(5) 0.8s forwards', opacity: 0 }}
+          >
+            <img
+              src="/assets/dark_arbok_stare.png"
+              alt=""
+              className="select-none pointer-events-none"
+              style={{ width: '72%', maxWidth: '72%', height: 'auto', objectFit: 'contain' }}
+              draggable={false}
+            />
           </div>
 
           {/* Afterimage: the stare keeps sitting on the victim after the sprite is gone */}
@@ -3326,9 +3258,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <span className="text-[10px] font-black text-fuchsia-200 select-none drop-shadow-[0_0_3px_#e879f9]">z</span>
           </div>
           {/* Drowsy haze */}
-          <div className="absolute inset-0 rounded-lg" style={{ animation: 'gbaSleepHaze 1.3s ease-out forwards', opacity: 0 }}>
-            <div className="absolute inset-0 rounded-lg bg-purple-500/6" />
-          </div>
+          <div
+            className="absolute inset-0 rounded-xl"
+            style={{
+              animation: 'gbaSleepHaze 1.3s ease-in-out forwards',
+              opacity: 0,
+              background: 'radial-gradient(ellipse at 50% 60%, rgba(168,85,247,0.14) 0%, rgba(126,34,206,0.08) 55%, transparent 100%)'
+            }}
+          />
         </div>
       )}
 

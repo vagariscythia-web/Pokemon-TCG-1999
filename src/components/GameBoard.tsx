@@ -227,10 +227,21 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const isAiRunningRef = useRef(false);
   const lastAiTurnRunRef = useRef<number>(-1);
   const isChoosingReplacementRef = useRef(false);
+  // Engaged when CPU attack beats are still on screen at the moment the turn hands back to the
+  // player; keeps the turn locked until they drain without re-locking on the player's own FX.
+  const playerTurnFxGateRef = useRef(false);
   const stateRef = useRef(state);
   useEffect(() => {
     stateRef.current = state;
   }, [state]);
+
+  // Ref mirror of activeFXList so the CPU choreography — which must NOT list activeFXList in
+  // its dep array — can still read the live FX queue when gating step transitions.
+  const activeFXListRef = useRef(activeFXList);
+  useEffect(() => {
+    activeFXListRef.current = activeFXList;
+  }, [activeFXList]);
+
 
     // AUTOMATIC FAINTED / KNOCKOUT WATCHDOG (Active & Bench)
     // This is the PRIMARY and RELIABLE mechanism for resolving knockouts.
@@ -689,6 +700,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       return;
     }
 
+    // Animation-completion gating happens inside executeNextStep() (see the FX-COMPLETION GATE
+    // there). activeFXList must NOT appear in this effect's dep list: every self-removing beat
+    // would tear the choreography down and restart it from step 0, duplicating AI actions.
+
     // Ensure this turn is not duplicate-run while executing
     if (lastAiTurnRunRef.current === state.turn && isAiRunningRef.current) {
       return;
@@ -707,6 +722,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setIsAiThinking(true);
 
     let isCleanedUp = false;
+    // Retry handle for the FX-completion gate inside executeNextStep; cleared in the cleanup.
+    let fxGateRetryTimer: ReturnType<typeof setTimeout> | null = null;
     const steps = AIPlayer.planTurn(state);
 
     // Ensure the steps list ALWAYS has a terminal ending step (ATTACK or PASS)
@@ -729,6 +746,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const executeNextStep = () => {
       if (isCleanedUp || state.winner || state.phase === 'GAME_OVER') {
         cleanupAiTurn();
+        return;
+      }
+
+      // FX-COMPLETION GATE: never advance to the next CPU step while animation beats are still
+      // on screen. The player's previous-turn beats (Thunder Punch ~1.0 s, Agility buff+damage
+      // ~1.75 s, Stone Barrage multi-rock volleys 2 s+) outlive the fixed inter-step timeouts,
+      // and advancing anyway lets the CPU's coin-flip modal open on top of a still-playing
+      // animation. activeFXList is deliberately NOT in this effect's dep list (it churns every
+      // time a beat self-removes), so the gate polls against the ref mirror on a short timer;
+      // the 15 s watchdog still bounds total wait so a stuck beat can never deadlock the game.
+      if (activeFXListRef.current.length > 0) {
+        fxGateRetryTimer = setTimeout(executeNextStep, 120);
         return;
       }
 
@@ -1039,23 +1068,40 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       isCleanedUp = true;
       clearTimeout(initialTimer);
       clearTimeout(failSafeTimer);
+      if (fxGateRetryTimer) clearTimeout(fxGateRetryTimer);
     };
   }, [state.turnPlayer, state.turn, state.phase, state.winner, isMultiplayer, isPoisonSequenceActive]);
 
   // Ensure locks and thinking indicators are reset when it becomes the player's turn
   useEffect(() => {
-    if (state.turnPlayer === 'player') {
-      setIsAiThinking(false);
-      isAiRunningRef.current = false;
-      setIsRetreatMode(false);
-      // A pending poison tick owns the turn lock: endTurn() already flipped turnPlayer, but
-      // the HP bar has not been released yet. Releasing the lock here would let the player
-      // act (and start new choreography) on top of the tick FX.
-      if (!isPoisonSequenceActive) {
-        setIsTurnLocked(false);
-      }
+    if (state.turnPlayer !== 'player') {
+      playerTurnFxGateRef.current = false;
+      return;
     }
-  }, [state.turnPlayer, isPoisonSequenceActive]);
+    setIsAiThinking(false);
+    isAiRunningRef.current = false;
+    setIsRetreatMode(false);
+    // A pending poison tick owns the turn lock: endTurn() already flipped turnPlayer, but
+    // the HP bar has not been released yet. Releasing the lock here would let the player
+    // act (and start new choreography) on top of the tick FX.
+    if (isPoisonSequenceActive) return;
+    // Symmetric gate: executeAttack() hands the turn back synchronously, but the CPU's attack
+    // beats may still be animating. Hold the turn lock ONLY for beats that were already on
+    // screen at the handoff (once engaged, the gate holds until the queue fully drains); FX
+    // the player triggers during their own turn must not re-lock it, hence the flag.
+    if (playerTurnFxGateRef.current) {
+      if (activeFXList.length > 0) {
+        setIsTurnLocked(true);
+        return;
+      }
+      playerTurnFxGateRef.current = false;
+    } else if (activeFXList.length > 0) {
+      playerTurnFxGateRef.current = true;
+      setIsTurnLocked(true);
+      return;
+    }
+    setIsTurnLocked(false);
+  }, [state.turnPlayer, isPoisonSequenceActive, activeFXList]);
 
   // CRITICAL: Ensure isTurnLocked is ALWAYS false during SELECT_BENCH_REPLACEMENT
   // so the player can interact with bench Pokemon to choose a replacement.

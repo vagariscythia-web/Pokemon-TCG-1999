@@ -2779,10 +2779,21 @@ html, body {
   100% { transform: translateY(20px) translateX(-3px) scale(0.6); opacity: 0; }
 }
 @keyframes gbaSleepHaze {
-  0% { transform: scale(0.4) translateY(5px); opacity: 0; }
-  30% { transform: scale(0.8) translateY(-3px); opacity: 0.7; }
-  60% { transform: scale(1.1) translateY(-10px); opacity: 0.4; }
-  100% { transform: scale(1.3) translateY(-18px); opacity: 0; }
+  0% { opacity: 0; }
+  25% { opacity: 0.6; }
+  55% { opacity: 0.8; }
+  80% { opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
+/* Soft breathing pulse for the Poison Gas / Foul Gas card tint */
+@keyframes gbaPoisonGasHazePulse {
+  0% { opacity: 0; }
+  20% { opacity: 0.7; }
+  45% { opacity: 1; }
+  70% { opacity: 0.6; }
+  85% { opacity: 0.8; }
+  100% { opacity: 0; }
 }
 @keyframes gbaSleepZzz1 {
   0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
@@ -2913,13 +2924,13 @@ html, body {
    COBRA STARE (Dark Arbok) - hood flare, sway, strike
    ============================================ */
 
-/* The light drains out of the victim's card before the cobra shows itself */
+/* Soft dread vignette: dims the victim card for horror tone. The element itself is
+   inset-0 with a low-alpha gradient, so this only fades the dimming in and out. */
 @keyframes gbaCobraDread {
   0% { opacity: 0; }
-  12% { opacity: 0.55; }
-  26% { opacity: 0.95; }
-  58% { opacity: 1; }
-  82% { opacity: 0.7; }
+  15% { opacity: 0.5; }
+  40% { opacity: 0.85; }
+  70% { opacity: 0.7; }
   100% { opacity: 0; }
 }
 
@@ -3012,6 +3023,30 @@ html, body {
   64% { opacity: 1; }
   84% { opacity: 0.6; }
   100% { opacity: 0; }
+}
+
+/* --- Dark Arbok Stare: GBA-style grainy dissolve (reference image) --- */
+
+/* Image materializes through discrete opacity steps — the GBA dither feel */
+@keyframes gbaStareMaterialize {
+  0% { opacity: 0; transform: scale(0.82); filter: brightness(0.2) contrast(1.8) saturate(0.4); }
+  25% { opacity: 0.35; transform: scale(0.88); }
+  50% { opacity: 0.6; transform: scale(0.93); filter: brightness(0.6) contrast(1.4) saturate(0.7); }
+  75% { opacity: 0.85; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1); filter: brightness(1) contrast(1) saturate(1); }
+}
+
+/* Horror pulse while the stare holds — purple glow throbs */
+@keyframes gbaStarePulse {
+  0%, 100% { filter: drop-shadow(0 0 8px rgba(147,51,234,0.4)) brightness(1); }
+  50% { filter: drop-shadow(0 0 22px rgba(147,51,234,0.9)) brightness(1.2); }
+}
+
+/* Image dissolves back into grain at the end */
+@keyframes gbaStareDissolveOut {
+  0% { opacity: 1; transform: scale(1); }
+  40% { opacity: 0.6; transform: scale(1.03); filter: brightness(0.7); }
+  100% { opacity: 0; transform: scale(1.08); filter: brightness(0.15); }
 }
 
 /* CURSE */
