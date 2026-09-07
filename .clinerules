@@ -25,7 +25,9 @@
        * Dense Expressions: Exact 1-2 line critical snippets allowed verbatim (e.g., complex regex, mathematical formulas, bitwise operations, reduce/filter logic).
        * Invariants & Side Effects: Non-obvious assumptions (e.g., "timestamps must be UTC ms", "must not mutate input array") and downstream side effects/events that must be triggered.
      - Noise Filter: DO NOT paste full file imports, large raw types, full UI/JSX markup, or console loggers. Preserve dense algorithmic intent only.
-* Enforcement Timing: You MUST write or update sections 4, 5, and 6 in the scratchpad BEFORE generating or modifying code in actual source files.
+* Enforcement Timing & Churn Prevention:
+  - You MUST write or update sections 4, 5, and 6 in the scratchpad BEFORE generating or modifying code in actual source files.
+  - DO NOT update this file for incremental code lines or micro-steps. Update status markers (`[DONE]`) ONLY after an entire function, symbol, or logical block is fully implemented and passes basic syntax checks.
 * Upon resumption after ANY interrupt or context compact: ALWAYS read this scratchpad first before executing commands or generating code.
 * Task Completion Cleanup: Once the task is finished and verified, delete this file or overwrite it with `[COMPLETED]` to prevent state pollution in future unrelated tasks.
 
