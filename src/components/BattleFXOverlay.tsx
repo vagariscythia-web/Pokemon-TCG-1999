@@ -117,7 +117,10 @@ export interface ActiveFX {
     | 'hitmonchan_jab'
     | 'hitmonchan_special_punch'
     | 'bat_wing_flap'
-    | 'water_vortex';
+    | 'water_vortex'
+    | 'bubble_gentle'
+    | 'sticky_hands_grab'
+    | 'hyper_beam_ice';
   target: 'player' | 'cpu';
   /**
    * Which slot of `target` this beat belongs to. Attacks that name their own victim (Stare) or
@@ -330,7 +333,8 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   // 5. Water & Ice
   if (name.includes('waterfall')) return 'waterfall_surf';
   if (name.includes('hydro pump') || name.includes('water gun') || name.includes('surf') || name.includes('tsunami') || name.includes('hydro') || name.includes('aqua')) return 'water_gun_stream';
-  if (name.includes('bubble') || name.includes('bubblebeam')) return 'bubblebeam';
+  if (name.includes('bubblebeam')) return 'bubblebeam';
+  if (name.includes('bubble')) return 'bubble_gentle';
   if (name.includes('star freeze') || name.includes('freeze star')) return 'star_freeze';
   if (name.includes('ice beam') || name.includes('blizzard') || name.includes('freeze') || name.includes('frost') || name.includes('aurora beam')) return 'ice_beam_frost';
 
@@ -379,6 +383,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('wing attack') || name.includes('dive bomb')) return 'wing_slash';
   if (name.includes('pay day') || name.includes('scavenge') || name.includes('coin hurl') || name.includes('fetch')) return 'pay_day_coins';
   if (name.includes('selfdestruct') || name.includes('explosion') || name.includes('mass explosion') || name.includes('big eggsplosion')) return 'selfdestruct_shockwave';
+  if (name.includes('hyper beam') && pkm.includes('golduck')) return 'hyper_beam_ice';
   if (name.includes('hyper beam') || name.includes('energy bomb') || name.includes('speed ball') || name.includes('sonicboom')) return 'hyper_beam_laser';
   if (name.includes('horn attack') || name.includes('horn hazard')) return 'horn_gore';
 
@@ -409,7 +414,8 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
 
   // 12. Additional poison / misc mappings
   if (name.includes('acid') || name.includes('poison claws') || name.includes('toxic') || name.includes('jellyfish sting')) return 'poison_sting';
-  if (name.includes('nasty goo') || name.includes('sticky hands')) return 'nasty_goo';
+  if (name.includes('nasty goo')) return 'nasty_goo';
+  if (name.includes('sticky hands')) return 'sticky_hands_grab';
   if (name.includes('vanish') || name.includes('mischief')) return 'whirlwind_cyclone';
   if (name.includes('magnetic lines') || name.includes('magnetism') || name.includes('lightning flash') || name.includes('chain lightning') || name.includes('electric shock') || name.includes('thunder jolt') || name.includes('thunder attack') || name.includes('surprise thunder') || name.includes('thunderbolt')) return 'thunder_wave';
   if (name.includes('flare')) return 'flare_burst';
@@ -1381,21 +1387,39 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 12a. EMBER SPARK (Charmander, Ponyta — small rising flame pops, GBA-style)
-            Tiny fire motes that pop upward. Deliberately small and brief: low-damage starter move. */}
+      {/* 12a. EMBER SPARK (Charmander, Ponyta — rising flame with visible fire body, GBA-style)
+            Small but clearly a flame: teardrop fire shape with layered color, wider impact glow. */}
       {fx.type === 'ember_spark' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          <div className="absolute" style={{ animation: 'gbaEmberSparkRise 1.2s ease-out forwards' }}>
-            <svg width="36" height="40" viewBox="0 0 36 40" className="drop-shadow-[0_0_10px_#f97316]">
-              <path d="M18 38 Q14 28, 16 20 Q13 14, 18 6 Q23 14, 20 20 Q22 28, 18 38 Z" fill="#f97316" opacity="0.9" />
-              <path d="M18 34 Q16 26, 17 20 Q15 15, 18 10 Q21 15, 19 20 Q20 26, 18 34 Z" fill="#fbbf24" opacity="0.8" />
-              <path d="M18 28 Q17 23, 18 16 Q19 23, 18 28 Z" fill="#fef3c7" opacity="0.9" />
+          {/* Main flame body — larger, clearly fire-shaped */}
+          <div className="absolute" style={{ animation: 'gbaEmberSparkRise 1.25s ease-out forwards' }}>
+            <svg width="48" height="56" viewBox="0 0 48 56" className="drop-shadow-[0_0_14px_#f97316]">
+              {/* Outer flame silhouette */}
+              <path d="M24 54 Q16 42, 18 32 Q12 26, 16 18 Q14 10, 20 6 Q24 2, 28 6 Q34 10, 32 18 Q36 26, 30 32 Q32 42, 24 54 Z" fill="#ea580c" opacity="0.9" />
+              {/* Middle flame layer */}
+              <path d="M24 48 Q18 38, 20 30 Q16 24, 20 18 Q22 12, 24 10 Q26 12, 28 18 Q32 24, 28 30 Q30 38, 24 48 Z" fill="#f97316" opacity="0.85" />
+              {/* Inner bright core */}
+              <path d="M24 42 Q20 34, 22 28 Q20 22, 24 16 Q28 22, 26 28 Q28 34, 24 42 Z" fill="#fbbf24" opacity="0.9" />
+              {/* Hottest center */}
+              <path d="M24 36 Q22 30, 24 22 Q26 30, 24 36 Z" fill="#fef3c7" opacity="0.95" />
+              {/* Flame tongue flickers */}
+              <path d="M16 20 Q14 14, 17 10" fill="none" stroke="#f97316" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
+              <path d="M32 18 Q34 12, 31 8" fill="none" stroke="#fbbf24" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
             </svg>
           </div>
-          {[0, 1, 2].map(i => (
-            <div key={`ember-p-${i}`} className="absolute" style={{ animation: `gbaEmberSparkP${i + 1} 1.2s ease-out ${0.15 + i * 0.12}s forwards`, opacity: 0 }}>
-              <svg width="10" height="10" viewBox="0 0 10 10">
-                <circle cx="5" cy="5" r={3.5 - i * 0.5} fill={i === 0 ? '#fbbf24' : i === 1 ? '#f97316' : '#ef4444'} opacity="0.9" />
+          {/* Impact glow ring at base */}
+          <div className="absolute" style={{ animation: 'gbaEmberImpactGlow 1.25s ease-out 0.2s forwards', opacity: 0 }}>
+            <svg width="64" height="32" viewBox="0 0 64 32">
+              <ellipse cx="32" cy="20" rx="26" ry="10" fill="#f97316" opacity="0.3" />
+              <ellipse cx="32" cy="20" rx="18" ry="7" fill="#fbbf24" opacity="0.25" />
+              <ellipse cx="32" cy="20" rx="10" ry="4" fill="#fef3c7" opacity="0.3" />
+            </svg>
+          </div>
+          {/* Rising spark particles — more and slightly larger */}
+          {[0, 1, 2, 3].map(i => (
+            <div key={`ember-p-${i}`} className="absolute" style={{ animation: `gbaEmberSparkP${i + 1} 1.25s ease-out ${0.12 + i * 0.1}s forwards`, opacity: 0 }}>
+              <svg width="12" height="12" viewBox="0 0 12 12">
+                <circle cx="6" cy="6" r={4 - i * 0.5} fill={i === 0 ? '#fbbf24' : i === 1 ? '#f97316' : i === 2 ? '#ef4444' : '#fbbf24'} opacity="0.9" />
               </svg>
             </div>
           ))}
@@ -1828,8 +1852,87 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         );
       })()}
 
-      {/* 14. BUBBLEBEAM / BUBBLE (GBA-style rising iridescent bubbles) */}
+      {/* 14. BUBBLEBEAM (Gyarados 40 dmg — dense, fast, high-impact GBA bubble barrage) */}
       {fx.type === 'bubblebeam' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Large central bubble — bigger, faster */}
+          <div className="absolute" style={{ animation: 'gbaBubbleRise1 1.0s cubic-bezier(0.2, 0.85, 0.35, 1) forwards' }}>
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <circle cx="22" cy="22" r="18" fill="none" stroke="#67e8f9" strokeWidth="2" opacity="0.85" />
+              <circle cx="22" cy="22" r="18" fill="url(#bubbleGrad1)" opacity="0.35" />
+              <ellipse cx="16" cy="14" rx="5" ry="4" fill="#e0f2fe" opacity="0.65" />
+              <circle cx="28" cy="28" r="3" fill="#a5f3fc" opacity="0.5" />
+              <defs>
+                <radialGradient id="bubbleGrad1" cx="0.35" cy="0.35">
+                  <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.5" />
+                  <stop offset="70%" stopColor="#22d3ee" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="#0891b2" stopOpacity="0.35" />
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+          {/* Medium bubble left */}
+          <div className="absolute -left-6" style={{ animation: 'gbaBubbleRise2 1.0s cubic-bezier(0.2, 0.85, 0.35, 1) 0.06s forwards', opacity: 0 }}>
+            <svg width="30" height="30" viewBox="0 0 30 30">
+              <circle cx="15" cy="15" r="12" fill="none" stroke="#a5f3fc" strokeWidth="1.5" opacity="0.8" />
+              <circle cx="15" cy="15" r="12" fill="#22d3ee" opacity="0.15" />
+              <ellipse cx="11" cy="10" rx="4" ry="3" fill="#e0f2fe" opacity="0.55" />
+            </svg>
+          </div>
+          {/* Medium bubble right */}
+          <div className="absolute -right-5" style={{ animation: 'gbaBubbleRise3 1.0s cubic-bezier(0.2, 0.85, 0.35, 1) 0.1s forwards', opacity: 0 }}>
+            <svg width="34" height="34" viewBox="0 0 34 34">
+              <circle cx="17" cy="17" r="14" fill="none" stroke="#67e8f9" strokeWidth="1.5" opacity="0.8" />
+              <circle cx="17" cy="17" r="14" fill="#06b6d4" opacity="0.12" />
+              <ellipse cx="12" cy="11" rx="4" ry="3" fill="#cffafe" opacity="0.6" />
+            </svg>
+          </div>
+          {/* Dense small bubbles — extra count for 40 dmg intensity */}
+          <div className="absolute -left-3 -top-4" style={{ animation: 'gbaBubbleRise2 1.0s ease-out 0.15s forwards', opacity: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="8" fill="none" stroke="#a5f3fc" strokeWidth="1.2" opacity="0.7" />
+              <ellipse cx="7" cy="7" rx="2.5" ry="2" fill="#e0f2fe" opacity="0.5" />
+            </svg>
+          </div>
+          <div className="absolute right-2 -top-5" style={{ animation: 'gbaBubbleRise1 1.0s ease-out 0.2s forwards', opacity: 0 }}>
+            <svg width="16" height="16" viewBox="0 0 16 16">
+              <circle cx="8" cy="8" r="6.5" fill="none" stroke="#67e8f9" strokeWidth="1.2" opacity="0.65" />
+              <ellipse cx="6" cy="5" rx="2" ry="1.5" fill="#cffafe" opacity="0.5" />
+            </svg>
+          </div>
+          <div className="absolute -left-7 top-2" style={{ animation: 'gbaBubbleRise3 1.0s ease-out 0.25s forwards', opacity: 0 }}>
+            <svg width="14" height="14" viewBox="0 0 14 14">
+              <circle cx="7" cy="7" r="5.5" fill="none" stroke="#a5f3fc" strokeWidth="1" opacity="0.6" />
+            </svg>
+          </div>
+          <div className="absolute right-6 top-0" style={{ animation: 'gbaBubbleRise1 1.0s ease-out 0.3s forwards', opacity: 0 }}>
+            <svg width="12" height="12" viewBox="0 0 12 12">
+              <circle cx="6" cy="6" r="4.5" fill="none" stroke="#67e8f9" strokeWidth="1" opacity="0.55" />
+            </svg>
+          </div>
+          {/* Impact burst — multi-line pop for 40 dmg */}
+          <div className="absolute" style={{ animation: 'gbaBubblePop 1.0s ease-out 0.35s forwards', opacity: 0 }}>
+            <svg width="38" height="38" viewBox="0 0 38 38">
+              <line x1="19" y1="4" x2="19" y2="13" stroke="#a5f3fc" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
+              <line x1="19" y1="25" x2="19" y2="34" stroke="#a5f3fc" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
+              <line x1="4" y1="19" x2="13" y2="19" stroke="#67e8f9" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+              <line x1="25" y1="19" x2="34" y2="19" stroke="#67e8f9" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+              <line x1="8" y1="8" x2="13" y2="13" stroke="#22d3ee" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+              <line x1="25" y1="25" x2="30" y2="30" stroke="#22d3ee" strokeWidth="1.5" strokeLinecap="round" opacity="0.7" />
+            </svg>
+          </div>
+          {/* Secondary impact ring */}
+          <div className="absolute" style={{ animation: 'gbaBubblePop 1.0s ease-out 0.5s forwards', opacity: 0 }}>
+            <svg width="28" height="28" viewBox="0 0 28 28">
+              <circle cx="14" cy="14" r="10" fill="none" stroke="#67e8f9" strokeWidth="1.5" opacity="0.6" />
+              <circle cx="14" cy="14" r="5" fill="#a5f3fc" opacity="0.3" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 14b. BUBBLE (Squirtle — original gentle rising iridescent bubbles) */}
+      {fx.type === 'bubble_gentle' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Large central bubble */}
           <div className="absolute" style={{ animation: 'gbaBubbleRise1 1.25s cubic-bezier(0.25, 0.8, 0.4, 1) forwards' }}>
@@ -2914,16 +3017,59 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 28. SLUDGE BOMB */}
+      {/* 28. SLUDGE BOMB (Muk — GBA-style viscous purple sludge lob, thick and gooey) */}
       {fx.type === 'sludge_bomb' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-          <div
-            className="flex flex-col items-center"
-            style={{ animation: 'gbaSludgeSplat 1.2s cubic-bezier(0.3, 1.2, 0.4, 1) forwards' }}
-          >
-            <div className="w-20 h-20 rounded-full bg-purple-950 border-4 border-purple-600 flex items-center justify-center shadow-[0_0_25px_#7e22ce]">
-              <span className="text-4xl select-none">🧪</span>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Main sludge blob arcing toward target */}
+          <div className="absolute" style={{ animation: 'gbaSludgeThrow 1.3s cubic-bezier(0.35, 0.9, 0.5, 1) forwards' }}>
+            <svg width="56" height="48" viewBox="0 0 56 48" className="drop-shadow-[0_0_16px_#7e22ce]">
+              {/* Thick viscous blob body */}
+              <path d="M28 4 Q36 8, 38 16 Q42 14, 44 20 Q48 22, 44 28 Q46 34, 40 36 Q42 42, 34 42 Q30 46, 24 42 Q18 44, 16 38 Q10 38, 12 30 Q8 26, 12 20 Q10 14, 16 14 Q18 8, 24 8 Q26 4, 28 4 Z" fill="#6b21a8" opacity="0.95" />
+              <path d="M28 10 Q34 12, 35 18 Q38 17, 39 22 Q42 24, 39 28 Q40 32, 35 33 Q36 37, 30 36 Q27 40, 23 36 Q19 38, 18 32 Q14 31, 16 26 Q13 23, 17 20 Q16 16, 21 16 Q22 11, 28 10 Z" fill="#7e22ce" opacity="0.85" />
+              {/* Glossy highlight */}
+              <ellipse cx="22" cy="18" rx="5" ry="4" fill="#a855f7" opacity="0.6" />
+              {/* Dripping trail behind blob */}
+              <path d="M28 4 Q26 0, 24 2" fill="none" stroke="#6b21a8" strokeWidth="3" strokeLinecap="round" opacity="0.7" />
+              <path d="M34 8 Q36 4, 33 2" fill="none" stroke="#7e22ce" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+              {/* Bubbles in sludge */}
+              <circle cx="32" cy="26" r="3" fill="#9333ea" opacity="0.7" />
+              <circle cx="22" cy="30" r="2" fill="#a855f7" opacity="0.6" />
+              <circle cx="30" cy="34" r="1.5" fill="#c084fc" opacity="0.5" />
+            </svg>
+          </div>
+          {/* Impact splatter on landing */}
+          <div className="absolute" style={{ animation: 'gbaSludgeImpactSplat 1.3s ease-out 0.5s forwards', opacity: 0 }}>
+            <svg width="90" height="50" viewBox="0 0 90 50">
+              {/* Main splat pool */}
+              <ellipse cx="45" cy="34" rx="32" ry="12" fill="#581c87" opacity="0.8" />
+              <ellipse cx="45" cy="32" rx="26" ry="10" fill="#6b21a8" opacity="0.7" />
+              <ellipse cx="45" cy="30" rx="18" ry="7" fill="#7e22ce" opacity="0.6" />
+              {/* Splatter blobs flying outward */}
+              <ellipse cx="20" cy="24" rx="7" ry="5" fill="#6b21a8" opacity="0.8" />
+              <ellipse cx="70" cy="22" rx="8" ry="6" fill="#7e22ce" opacity="0.75" />
+              <ellipse cx="35" cy="16" rx="5" ry="4" fill="#9333ea" opacity="0.7" />
+              <ellipse cx="58" cy="14" rx="6" ry="4" fill="#6b21a8" opacity="0.65" />
+              {/* Drip strings hanging */}
+              <path d="M30 20 Q28 12, 30 6" fill="none" stroke="#6b21a8" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+              <path d="M60 18 Q62 10, 60 4" fill="none" stroke="#7e22ce" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+              <path d="M45 24 Q44 16, 46 10" fill="none" stroke="#581c87" strokeWidth="3" strokeLinecap="round" opacity="0.65" />
+            </svg>
+          </div>
+          {/* Dripping viscous drops falling from splat */}
+          <div className="absolute -bottom-3" style={{ animation: 'gbaSludgeDripFall 1.3s ease-in 0.7s forwards', opacity: 0 }}>
+            <div className="flex gap-1.5">
+              <div className="w-2.5 h-5 rounded-b-full bg-purple-800/90" />
+              <div className="w-2 h-4 rounded-b-full bg-purple-900/80" />
+              <div className="w-3 h-6 rounded-b-full bg-purple-800/70" />
+              <div className="w-1.5 h-3 rounded-b-full bg-purple-700/80" />
             </div>
+          </div>
+          {/* Toxic purple wisps rising from sludge */}
+          <div className="absolute -top-2" style={{ animation: 'gbaSludgeWispRise 1.3s ease-out 0.8s forwards', opacity: 0 }}>
+            <svg width="40" height="24" viewBox="0 0 40 24">
+              <path d="M8 18 Q14 10, 20 14 Q26 18, 32 12" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+              <path d="M12 22 Q20 16, 28 20" fill="none" stroke="#c084fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+            </svg>
           </div>
         </div>
       )}
@@ -2974,6 +3120,61 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <circle cx="20" cy="14" r="3" fill="#a3e635" opacity="0.6" />
               <circle cx="15" cy="8" r="2" fill="#bef264" opacity="0.5" />
             </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 28c. STICKY HANDS (Grimer — GBA-style stretching sticky arms reaching out) */}
+      {fx.type === 'sticky_hands_grab' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Left sticky arm reaching right */}
+          <div className="absolute -left-4" style={{ animation: 'gbaStickyArmReach 1.3s cubic-bezier(0.3, 0.9, 0.4, 1) forwards' }}>
+            <svg width="70" height="36" viewBox="0 0 70 36" className="drop-shadow-[0_0_10px_#4d7c0f]">
+              {/* Arm body — thick, gooey, tapered */}
+              <path d="M4 20 Q14 14, 26 16 Q38 12, 50 15 Q58 14, 64 17 Q66 20, 64 23 Q58 26, 50 24 Q38 28, 26 25 Q14 28, 4 22 Z" fill="#3f6212" opacity="0.9" />
+              <path d="M8 20 Q16 16, 28 17 Q40 14, 52 16 Q58 16, 62 19 Q58 23, 52 22 Q40 26, 28 23 Q16 26, 8 22 Z" fill="#4d7c0f" opacity="0.8" />
+              {/* Hand/fingers at tip — three stubby digits */}
+              <ellipse cx="64" cy="17" rx="5" ry="4" fill="#4d7c0f" opacity="0.9" />
+              <ellipse cx="66" cy="14" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
+              <ellipse cx="67" cy="20" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
+              <ellipse cx="65" cy="23" rx="2.5" ry="2.5" fill="#4d7c0f" opacity="0.7" />
+              {/* Shine on arm */}
+              <ellipse cx="30" cy="17" rx="8" ry="3" fill="#84cc16" opacity="0.4" />
+            </svg>
+          </div>
+          {/* Right sticky arm reaching left */}
+          <div className="absolute -right-4" style={{ animation: 'gbaStickyArmReachR 1.3s cubic-bezier(0.3, 0.9, 0.4, 1) 0.1s forwards', opacity: 0 }}>
+            <svg width="70" height="36" viewBox="0 0 70 36" className="drop-shadow-[0_0_10px_#4d7c0f]">
+              {/* Arm body mirrored */}
+              <path d="M66 20 Q56 14, 44 16 Q32 12, 20 15 Q12 14, 6 17 Q4 20, 6 23 Q12 26, 20 24 Q32 28, 44 25 Q56 28, 66 22 Z" fill="#3f6212" opacity="0.9" />
+              <path d="M62 20 Q54 16, 42 17 Q30 14, 18 16 Q12 16, 8 19 Q12 23, 18 22 Q30 26, 42 23 Q54 26, 62 22 Z" fill="#4d7c0f" opacity="0.8" />
+              {/* Hand/fingers at tip */}
+              <ellipse cx="6" cy="17" rx="5" ry="4" fill="#4d7c0f" opacity="0.9" />
+              <ellipse cx="4" cy="14" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
+              <ellipse cx="3" cy="20" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
+              <ellipse cx="5" cy="23" rx="2.5" ry="2.5" fill="#4d7c0f" opacity="0.7" />
+              {/* Shine */}
+              <ellipse cx="40" cy="17" rx="8" ry="3" fill="#84cc16" opacity="0.4" />
+            </svg>
+          </div>
+          {/* Grab impact — sticky residue at center */}
+          <div className="absolute" style={{ animation: 'gbaStickyGrabImpact 1.3s ease-out 0.5s forwards', opacity: 0 }}>
+            <svg width="50" height="40" viewBox="0 0 50 40">
+              <ellipse cx="25" cy="24" rx="18" ry="10" fill="#3f6212" opacity="0.6" />
+              <ellipse cx="25" cy="22" rx="12" ry="7" fill="#4d7c0f" opacity="0.5" />
+              {/* Sticky strings connecting */}
+              <path d="M15 18 Q12 12, 14 6" fill="none" stroke="#4d7c0f" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+              <path d="M35 16 Q38 10, 36 4" fill="none" stroke="#65a30d" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+              <path d="M25 14 Q24 8, 26 3" fill="none" stroke="#3f6212" strokeWidth="2.5" strokeLinecap="round" opacity="0.55" />
+            </svg>
+          </div>
+          {/* Dripping goo from grab point */}
+          <div className="absolute -bottom-2" style={{ animation: 'gbaNastyGooDrip 1.3s ease-in 0.7s forwards', opacity: 0 }}>
+            <div className="flex gap-1.5">
+              <div className="w-2 h-4 rounded-b-full bg-lime-800/80" />
+              <div className="w-1.5 h-3 rounded-b-full bg-lime-700/70" />
+              <div className="w-2 h-5 rounded-b-full bg-lime-800/60" />
+            </div>
           </div>
         </div>
       )}
@@ -4737,6 +4938,65 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 <line x1="34" y1="22" x2="40" y2="22" />
                 <line x1="9" y1="9" x2="13" y2="13" />
                 <line x1="31" y1="31" x2="35" y2="35" />
+              </g>
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 48b. HYPER BEAM ICE (Golduck — ice-blue charged beam, GBA-style) */}
+      {fx.type === 'hyper_beam_ice' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Outer beam glow — ice blue */}
+          <div className="absolute" style={{ animation: 'gbaHyperBeamIceGlow 1.25s ease-out forwards' }}>
+            <svg width="130" height="24" viewBox="0 0 130 24">
+              <rect x="0" y="4" width="130" height="16" rx="8" fill="url(#hyperBeamIceOuterGrad)" opacity="0.5" />
+              <defs>
+                <linearGradient id="hyperBeamIceOuterGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.3" />
+                  <stop offset="40%" stopColor="#67e8f9" />
+                  <stop offset="100%" stopColor="#ffffff" stopOpacity="0.4" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          {/* Core beam — ice blue/white */}
+          <div className="absolute" style={{ animation: 'gbaHyperBeamIceCore 1.25s ease-out 0.1s forwards', opacity: 0 }}>
+            <svg width="120" height="12" viewBox="0 0 120 12">
+              <rect x="0" y="2" width="120" height="8" rx="4" fill="url(#hyperBeamIceCoreGrad)" />
+              <rect x="10" y="4" width="100" height="4" rx="2" fill="#ffffff" opacity="0.85" />
+              <defs>
+                <linearGradient id="hyperBeamIceCoreGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#0284c7" />
+                  <stop offset="50%" stopColor="#a5f3fc" />
+                  <stop offset="100%" stopColor="#ffffff" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          {/* Muzzle flash — cool blue */}
+          <div className="absolute -left-2" style={{ animation: 'gbaHyperBeamIceMuzzle 1.25s ease-out forwards', opacity: 0 }}>
+            <svg width="30" height="30" viewBox="0 0 30 30">
+              <circle cx="15" cy="15" r="10" fill="#a5f3fc" opacity="0.6" />
+              <circle cx="15" cy="15" r="5" fill="#ffffff" opacity="0.8" />
+            </svg>
+          </div>
+          {/* Impact burst — ice blue with frost shards */}
+          <div className="absolute right-0" style={{ animation: 'gbaHyperBeamIceImpact 1.25s ease-out 0.5s forwards', opacity: 0 }}>
+            <svg width="48" height="48" viewBox="0 0 48 48">
+              <circle cx="24" cy="24" r="15" fill="#67e8f9" opacity="0.35" />
+              <circle cx="24" cy="24" r="9" fill="#a5f3fc" opacity="0.5" />
+              <circle cx="24" cy="24" r="4" fill="#ffffff" opacity="0.7" />
+              {/* Frost shard lines */}
+              <g stroke="#0ea5e9" strokeWidth="2" strokeLinecap="round" opacity="0.8">
+                <line x1="24" y1="4" x2="24" y2="11" />
+                <line x1="24" y1="37" x2="24" y2="44" />
+                <line x1="4" y1="24" x2="11" y2="24" />
+                <line x1="37" y1="24" x2="44" y2="24" />
+                <line x1="10" y1="10" x2="15" y2="15" />
+                <line x1="33" y1="33" x2="38" y2="38" />
+                <line x1="10" y1="38" x2="15" y2="33" />
+                <line x1="33" y1="15" x2="38" y2="10" />
               </g>
             </svg>
           </div>
