@@ -189,6 +189,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   // that has since been replaced by a Knockout).
   const [withheldTicks, setWithheldTicks] = useState<StatusTick[]>([]);
   const [isPoisonSequenceActive, setIsPoisonSequenceActive] = useState(false);
+  // True while a knockout banner + grayscale fainted animation is on screen.
+  // Suppresses the watchdog so it cannot race the explicit handler's timer.
+  const [knockoutAnimationActive, setKnockoutAnimationActive] = useState(false);
   const [activeSidebarTab, setActiveSidebarTab] = useState<'log' | 'chat'>('log');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
@@ -258,6 +261,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     // Skip while the poison tick sequence is animating; the explicit handler
     // in handleEndTurn / AI PASS will resolve the knockout after the FX.
     if (isPoisonSequenceActive) return;
+    // Skip while a knockout banner is already showing — the explicit handler
+    // (poison-kill or attack-KO) owns the resolveKnockout timing.
+    if (knockoutAnimationActive) return;
 
     const anyPlayerFainted = (state.player.active && state.player.active.currentHp <= 0) || state.player.bench.some(b => b.currentHp <= 0);
     const anyCpuFainted = (state.cpu.active && state.cpu.active.currentHp <= 0) || state.cpu.bench.some(b => b.currentHp <= 0);
@@ -287,8 +293,30 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const faintedName = (state.player.active && state.player.active.currentHp <= 0)
         ? state.player.active.card.name
         : state.player.bench.find(b => b.currentHp <= 0)?.card.name || 'Pokémon';
-      setActionBanner({ text: `💀 ${faintedName} was Knocked Out!`, type: 'knockout' });
+      const wdTicks = statusTicksToShow(state);
       setIsTurnLocked(false);
+      if (wdTicks.length > 0) {
+        setWithheldTicks([]);
+        setActiveFXList(poisonFXFromTicks(wdTicks));
+        const timer = setTimeout(() => {
+          setActiveFXList([]);
+          setIsPoisonSequenceActive(false);
+          setActionBanner({ text: `💀 ${faintedName} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          const inner = setTimeout(() => {
+            setState(curr => {
+              if (curr.phase === 'SELECT_BENCH_REPLACEMENT' || curr.winner || curr.phase === 'GAME_OVER') return curr;
+              return GameEngine.resolveKnockout(curr);
+            });
+            setActionBanner(null);
+            setKnockoutAnimationActive(false);
+          }, 1300);
+          return () => clearTimeout(inner);
+        }, 1600);
+        return () => clearTimeout(timer);
+      }
+      setActionBanner({ text: `💀 ${faintedName} was Knocked Out!`, type: 'knockout' });
+      setKnockoutAnimationActive(true);
       const timer = setTimeout(() => {
         setActiveFXList([]);
         setState(curr => {
@@ -296,7 +324,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           return GameEngine.resolveKnockout(curr);
         });
         setActionBanner(null);
-      }, 1800);
+        setKnockoutAnimationActive(false);
+      }, 1300);
       return () => clearTimeout(timer);
     }
 
@@ -306,7 +335,31 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const faintedName = (state.cpu.active && state.cpu.active.currentHp <= 0)
         ? state.cpu.active.card.name
         : state.cpu.bench.find(b => b.currentHp <= 0)?.card.name || 'Pokémon';
+      const wdTicks = statusTicksToShow(state);
+      if (wdTicks.length > 0) {
+        setWithheldTicks([]);
+        setActiveFXList(poisonFXFromTicks(wdTicks));
+        const timer = setTimeout(() => {
+          setActiveFXList([]);
+          setIsPoisonSequenceActive(false);
+          setActionBanner({ text: `💀 Opponent's ${faintedName} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          const inner = setTimeout(() => {
+            setState(curr => {
+              if (curr.phase === 'SELECT_BENCH_REPLACEMENT' || curr.winner || curr.phase === 'GAME_OVER') return curr;
+              return GameEngine.resolveKnockout(curr);
+            });
+            setActionBanner(null);
+            setKnockoutAnimationActive(false);
+            setIsAiThinking(false);
+            isAiRunningRef.current = false;
+          }, 1300);
+          return () => clearTimeout(inner);
+        }, 1600);
+        return () => clearTimeout(timer);
+      }
       setActionBanner({ text: `💀 Opponent's ${faintedName} was Knocked Out!`, type: 'knockout' });
+      setKnockoutAnimationActive(true);
       const timer = setTimeout(() => {
         setActiveFXList([]);
         setState(curr => {
@@ -314,9 +367,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           return GameEngine.resolveKnockout(curr);
         });
         setActionBanner(null);
+        setKnockoutAnimationActive(false);
         setIsAiThinking(false);
         isAiRunningRef.current = false;
-      }, 1800);
+      }, 1300);
       return () => clearTimeout(timer);
     }
   }, [
@@ -330,7 +384,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     state.cpu.bench.map(b => b.currentHp).join(','),
     state.phase,
     state.winner,
-    isPoisonSequenceActive
+    isPoisonSequenceActive,
+    knockoutAnimationActive
   ]);
 
     // PRELOAD ALL MATCH CARD IMAGES & COIN ASSETS
@@ -979,33 +1034,86 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               const cpuActiveFainted = current.cpu.active && current.cpu.active.currentHp <= 0;
 
               if (playerActiveFainted) {
-                setActionBanner({ text: `💀 ${current.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
-                setTimeout(() => {
-                  setActiveFXList([]);
+                const koTicks = statusTicksToShow(current);
+                if (koTicks.length > 0) {
                   setWithheldTicks([]);
-                  setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-                  setActionBanner(null);
-                  cleanupAiTurn();
-                }, 1800);
-              } else if (cpuActiveFainted) {
-                setActionBanner({ text: `💀 Opponent's ${current.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
-                setTimeout(() => {
-                  setActiveFXList([]);
-                  if (current.cpu.bench.length > 0) {
-                    setAscendingCpuBenchIdx(0);
+                  setActiveFXList(poisonFXFromTicks(koTicks));
+                  setTimeout(() => {
+                    setActiveFXList([]);
+                    setIsPoisonSequenceActive(false);
+                    setActionBanner({ text: `💀 ${current.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
+                    setKnockoutAnimationActive(true);
                     setTimeout(() => {
-                      setActiveFXList([]);
                       setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-                      setAscendingCpuBenchIdx(null);
                       setActionBanner(null);
+                      setKnockoutAnimationActive(false);
                       cleanupAiTurn();
-                    }, 650);
-                  } else {
+                    }, 1300);
+                  }, 1600);
+                } else {
+                  setActionBanner({ text: `💀 ${current.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
+                  setKnockoutAnimationActive(true);
+                  setTimeout(() => {
+                    setActiveFXList([]);
+                    setWithheldTicks([]);
                     setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
                     setActionBanner(null);
+                    setKnockoutAnimationActive(false);
                     cleanupAiTurn();
-                  }
-                }, 1800);
+                  }, 1300);
+                }
+              } else if (cpuActiveFainted) {
+                const koTicks = statusTicksToShow(current);
+                if (koTicks.length > 0) {
+                  setWithheldTicks([]);
+                  setActiveFXList(poisonFXFromTicks(koTicks));
+                  setTimeout(() => {
+                    setActiveFXList([]);
+                    setIsPoisonSequenceActive(false);
+                    setActionBanner({ text: `💀 Opponent's ${current.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
+                    setKnockoutAnimationActive(true);
+                    setTimeout(() => {
+                      if (current.cpu.bench.length > 0) {
+                        setAscendingCpuBenchIdx(0);
+                        setTimeout(() => {
+                          setActiveFXList([]);
+                          setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                          setAscendingCpuBenchIdx(null);
+                          setActionBanner(null);
+                          setKnockoutAnimationActive(false);
+                          cleanupAiTurn();
+                        }, 650);
+                      } else {
+                        setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                        setActionBanner(null);
+                        setKnockoutAnimationActive(false);
+                        cleanupAiTurn();
+                      }
+                    }, 1300);
+                  }, 1600);
+                } else {
+                  setActionBanner({ text: `💀 Opponent's ${current.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
+                  setKnockoutAnimationActive(true);
+                  setTimeout(() => {
+                    setActiveFXList([]);
+                    if (current.cpu.bench.length > 0) {
+                      setAscendingCpuBenchIdx(0);
+                      setTimeout(() => {
+                        setActiveFXList([]);
+                        setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                        setAscendingCpuBenchIdx(null);
+                        setActionBanner(null);
+                        setKnockoutAnimationActive(false);
+                        cleanupAiTurn();
+                      }, 650);
+                    } else {
+                      setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                      setActionBanner(null);
+                      setKnockoutAnimationActive(false);
+                      cleanupAiTurn();
+                    }
+                  }, 1300);
+                }
               } else {
                 // Release the held-back poison damage in the very same frame the tick FX starts,
                 // so the HP bar and the floating number always agree.
@@ -1030,11 +1138,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                         ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
                         : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
                       setActionBanner({ text: bannerText, type: 'knockout' });
+                      setKnockoutAnimationActive(true);
                       setTimeout(() => {
                         setState(post => GameEngine.resolveKnockout(post));
                         setActionBanner(null);
+                        setKnockoutAnimationActive(false);
                         cleanupAiTurn();
-                      }, 1800);
+                      }, 1300);
                     } else {
                       cleanupAiTurn();
                     }
@@ -1099,12 +1209,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
                   : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
                 setActionBanner({ text: bannerText, type: 'knockout' });
+                setKnockoutAnimationActive(true);
                 setTimeout(() => {
                   setState(post => GameEngine.resolveKnockout(post));
                   setActionBanner(null);
+                  setKnockoutAnimationActive(false);
                   setIsTurnLocked(false);
                   cleanupAiTurn();
-                }, 1800);
+                }, 1300);
               } else {
                 setIsTurnLocked(false);
                 cleanupAiTurn();
@@ -1318,33 +1430,83 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           setTimeout(() => {
             const current = stateRef.current;
             if (current.player.active && current.player.active.currentHp <= 0) {
-              setActionBanner({ text: `💀 Your ${current.player.active.card.name} was Knocked Out!`, type: 'knockout' });
-              setTimeout(() => {
-                setActiveFXList([]);
+              const koTicks = statusTicksToShow(current);
+              if (koTicks.length > 0) {
                 setWithheldTicks([]);
-                setIsPoisonSequenceActive(false);
-                setState(postHold => GameEngine.resolveKnockout(postHold));
-                setActionBanner(null);
-              }, 1800);
-            } else if (current.cpu.active && current.cpu.active.currentHp <= 0) {
-              setActionBanner({ text: `💀 Opponent's ${current.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
-              setTimeout(() => {
-                setActiveFXList([]);
-                setWithheldTicks([]);
-                setIsPoisonSequenceActive(false);
-                if (current.cpu.bench.length > 0) {
-                  setAscendingCpuBenchIdx(0);
+                setActiveFXList(poisonFXFromTicks(koTicks));
+                setTimeout(() => {
+                  setActiveFXList([]);
+                  setIsPoisonSequenceActive(false);
+                  setActionBanner({ text: `💀 Your ${current.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
+                  setKnockoutAnimationActive(true);
                   setTimeout(() => {
-                    setActiveFXList([]);
                     setState(postHold => GameEngine.resolveKnockout(postHold));
-                    setAscendingCpuBenchIdx(null);
                     setActionBanner(null);
-                  }, 650);
-                } else {
+                    setKnockoutAnimationActive(false);
+                  }, 1300);
+                }, 1600);
+              } else {
+                setActionBanner({ text: `💀 Your ${current.player.active.card.name} was Knocked Out!`, type: 'knockout' });
+                setKnockoutAnimationActive(true);
+                setTimeout(() => {
+                  setActiveFXList([]);
+                  setWithheldTicks([]);
+                  setIsPoisonSequenceActive(false);
                   setState(postHold => GameEngine.resolveKnockout(postHold));
                   setActionBanner(null);
-                }
-              }, 1800);
+                  setKnockoutAnimationActive(false);
+                }, 1300);
+              }
+            } else if (current.cpu.active && current.cpu.active.currentHp <= 0) {
+              const koTicks = statusTicksToShow(current);
+              if (koTicks.length > 0) {
+                setWithheldTicks([]);
+                setActiveFXList(poisonFXFromTicks(koTicks));
+                setTimeout(() => {
+                  setActiveFXList([]);
+                  setIsPoisonSequenceActive(false);
+                  setActionBanner({ text: `💀 Opponent's ${current.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
+                  setKnockoutAnimationActive(true);
+                  setTimeout(() => {
+                    if (current.cpu.bench.length > 0) {
+                      setAscendingCpuBenchIdx(0);
+                      setTimeout(() => {
+                        setActiveFXList([]);
+                        setState(postHold => GameEngine.resolveKnockout(postHold));
+                        setAscendingCpuBenchIdx(null);
+                        setActionBanner(null);
+                        setKnockoutAnimationActive(false);
+                      }, 650);
+                    } else {
+                      setState(postHold => GameEngine.resolveKnockout(postHold));
+                      setActionBanner(null);
+                      setKnockoutAnimationActive(false);
+                    }
+                  }, 1300);
+                }, 1600);
+              } else {
+                setActionBanner({ text: `💀 Opponent's ${current.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
+                setKnockoutAnimationActive(true);
+                setTimeout(() => {
+                  setActiveFXList([]);
+                  setWithheldTicks([]);
+                  setIsPoisonSequenceActive(false);
+                  if (current.cpu.bench.length > 0) {
+                    setAscendingCpuBenchIdx(0);
+                    setTimeout(() => {
+                      setActiveFXList([]);
+                      setState(postHold => GameEngine.resolveKnockout(postHold));
+                      setAscendingCpuBenchIdx(null);
+                      setActionBanner(null);
+                      setKnockoutAnimationActive(false);
+                    }, 650);
+                  } else {
+                    setState(postHold => GameEngine.resolveKnockout(postHold));
+                    setActionBanner(null);
+                    setKnockoutAnimationActive(false);
+                  }
+                }, 1300);
+              }
             } else {
               setActionBanner(null);
               // Release the held-back damage in the same frame the tick FX starts.
@@ -1367,10 +1529,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
                       : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
                     setActionBanner({ text: bannerText, type: 'knockout' });
+                    setKnockoutAnimationActive(true);
                     setTimeout(() => {
                       setState(post => GameEngine.resolveKnockout(post));
                       setActionBanner(null);
-                    }, 1800);
+                      setKnockoutAnimationActive(false);
+                      setIsTurnLocked(false);
+                    }, 1300);
                   }
                 }, 1600);
               } else {
@@ -1413,11 +1578,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
                     : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
                   setActionBanner({ text: bannerText, type: 'knockout' });
+                  setKnockoutAnimationActive(true);
                   setTimeout(() => {
                     setState(post => GameEngine.resolveKnockout(post));
                     setActionBanner(null);
+                    setKnockoutAnimationActive(false);
                     setIsTurnLocked(false);
-                  }, 1800);
+                  }, 1300);
                 } else {
                   setIsTurnLocked(false);
                 }
@@ -3355,36 +3522,88 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       setIsRetreatMode(false);
 
       if (next.player.active && next.player.active.currentHp <= 0) {
-        setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
-        setTimeout(() => {
-          setActiveFXList([]);
+        // If a poison tick also landed this beat, play it before the knockout.
+        if (playerTicks.length > 0) {
           setWithheldTicks([]);
-          setIsPoisonSequenceActive(false);
-          setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-          setActionBanner(null);
-          setIsTurnLocked(false);
-        }, 1800);
-      } else if (next.cpu.active && next.cpu.active.currentHp <= 0) {
-        setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
-        setTimeout(() => {
-          setActiveFXList([]);
-          setWithheldTicks([]);
-          setIsPoisonSequenceActive(false);
-          if (next.cpu.bench.length > 0) {
-            setAscendingCpuBenchIdx(0);
+          setActiveFXList(poisonFXFromTicks(playerTicks));
+          setTimeout(() => {
+            setActiveFXList([]);
+            setIsPoisonSequenceActive(false);
+            setActionBanner({ text: `💀 ${next.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
+            setKnockoutAnimationActive(true);
             setTimeout(() => {
-              setActiveFXList([]);
               setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-              setAscendingCpuBenchIdx(null);
               setActionBanner(null);
+              setKnockoutAnimationActive(false);
               setIsTurnLocked(false);
-            }, 650);
-          } else {
+            }, 1300);
+          }, 1600);
+        } else {
+          setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          setTimeout(() => {
+            setActiveFXList([]);
+            setWithheldTicks([]);
+            setIsPoisonSequenceActive(false);
             setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
             setActionBanner(null);
+            setKnockoutAnimationActive(false);
             setIsTurnLocked(false);
-          }
-        }, 1800);
+          }, 1300);
+        }
+      } else if (next.cpu.active && next.cpu.active.currentHp <= 0) {
+        if (playerTicks.length > 0) {
+          setWithheldTicks([]);
+          setActiveFXList(poisonFXFromTicks(playerTicks));
+          setTimeout(() => {
+            setActiveFXList([]);
+            setIsPoisonSequenceActive(false);
+            setActionBanner({ text: `💀 Opponent's ${next.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
+            setKnockoutAnimationActive(true);
+            setTimeout(() => {
+              if (next.cpu.bench.length > 0) {
+                setAscendingCpuBenchIdx(0);
+                setTimeout(() => {
+                  setActiveFXList([]);
+                  setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                  setAscendingCpuBenchIdx(null);
+                  setActionBanner(null);
+                  setKnockoutAnimationActive(false);
+                  setIsTurnLocked(false);
+                }, 650);
+              } else {
+                setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                setActionBanner(null);
+                setKnockoutAnimationActive(false);
+                setIsTurnLocked(false);
+              }
+            }, 1300);
+          }, 1600);
+        } else {
+          setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          setTimeout(() => {
+            setActiveFXList([]);
+            setWithheldTicks([]);
+            setIsPoisonSequenceActive(false);
+            if (next.cpu.bench.length > 0) {
+              setAscendingCpuBenchIdx(0);
+              setTimeout(() => {
+                setActiveFXList([]);
+                setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                setAscendingCpuBenchIdx(null);
+                setActionBanner(null);
+                setKnockoutAnimationActive(false);
+                setIsTurnLocked(false);
+              }, 650);
+            } else {
+              setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+              setActionBanner(null);
+              setKnockoutAnimationActive(false);
+              setIsTurnLocked(false);
+            }
+          }, 1300);
+        }
       } else {
         // Dynamic timeout: multi-hit moves (Stone Barrage with many heads) stagger beats at
         // 380ms intervals. The unlock must wait for the LAST beat to finish its animation
@@ -3422,11 +3641,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
                   : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
                 setActionBanner({ text: bannerText, type: 'knockout' });
+                setKnockoutAnimationActive(true);
                 setTimeout(() => {
                   setState(post => GameEngine.resolveKnockout(post));
                   setActionBanner(null);
+                  setKnockoutAnimationActive(false);
                   setIsTurnLocked(false);
-                }, 1800);
+                }, 1300);
               } else {
                 setIsTurnLocked(false);
               }
@@ -3522,36 +3743,87 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setIsRetreatMode(false);
 
     if (next.player.active && next.player.active.currentHp <= 0) {
-      setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
-      setTimeout(() => {
-        setActiveFXList([]);
+      if (choiceTicks.length > 0) {
         setWithheldTicks([]);
-        setIsPoisonSequenceActive(false);
-        setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-        setActionBanner(null);
-        setIsTurnLocked(false);
-      }, 1800);
-    } else if (next.cpu.active && next.cpu.active.currentHp <= 0) {
-      setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
-      setTimeout(() => {
-        setActiveFXList([]);
-        setWithheldTicks([]);
-        setIsPoisonSequenceActive(false);
-        if (next.cpu.bench.length > 0) {
-          setAscendingCpuBenchIdx(0);
+        setActiveFXList(poisonFXFromTicks(choiceTicks));
+        setTimeout(() => {
+          setActiveFXList([]);
+          setIsPoisonSequenceActive(false);
+          setActionBanner({ text: `💀 ${next.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
           setTimeout(() => {
-            setActiveFXList([]);
             setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-            setAscendingCpuBenchIdx(null);
             setActionBanner(null);
+            setKnockoutAnimationActive(false);
             setIsTurnLocked(false);
-          }, 650);
-        } else {
+          }, 1300);
+        }, 1600);
+      } else {
+        setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
+        setKnockoutAnimationActive(true);
+        setTimeout(() => {
+          setActiveFXList([]);
+          setWithheldTicks([]);
+          setIsPoisonSequenceActive(false);
           setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
           setActionBanner(null);
+          setKnockoutAnimationActive(false);
           setIsTurnLocked(false);
-        }
-      }, 1800);
+        }, 1300);
+      }
+    } else if (next.cpu.active && next.cpu.active.currentHp <= 0) {
+      if (choiceTicks.length > 0) {
+        setWithheldTicks([]);
+        setActiveFXList(poisonFXFromTicks(choiceTicks));
+        setTimeout(() => {
+          setActiveFXList([]);
+          setIsPoisonSequenceActive(false);
+          setActionBanner({ text: `💀 Opponent's ${next.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          setTimeout(() => {
+            if (next.cpu.bench.length > 0) {
+              setAscendingCpuBenchIdx(0);
+              setTimeout(() => {
+                setActiveFXList([]);
+                setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                setAscendingCpuBenchIdx(null);
+                setActionBanner(null);
+                setKnockoutAnimationActive(false);
+                setIsTurnLocked(false);
+              }, 650);
+            } else {
+              setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+              setActionBanner(null);
+              setKnockoutAnimationActive(false);
+              setIsTurnLocked(false);
+            }
+          }, 1300);
+        }, 1600);
+      } else {
+        setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
+        setKnockoutAnimationActive(true);
+        setTimeout(() => {
+          setActiveFXList([]);
+          setWithheldTicks([]);
+          setIsPoisonSequenceActive(false);
+          if (next.cpu.bench.length > 0) {
+            setAscendingCpuBenchIdx(0);
+            setTimeout(() => {
+              setActiveFXList([]);
+              setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+              setAscendingCpuBenchIdx(null);
+              setActionBanner(null);
+              setKnockoutAnimationActive(false);
+              setIsTurnLocked(false);
+            }, 650);
+          } else {
+            setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+            setActionBanner(null);
+            setKnockoutAnimationActive(false);
+            setIsTurnLocked(false);
+          }
+        }, 1300);
+      }
     } else {
       setTimeout(() => {
         setActionBanner(null);
@@ -3574,11 +3846,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
                 : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
               setActionBanner({ text: bannerText, type: 'knockout' });
+              setKnockoutAnimationActive(true);
               setTimeout(() => {
                 setState(post => GameEngine.resolveKnockout(post));
                 setActionBanner(null);
+                setKnockoutAnimationActive(false);
                 setIsTurnLocked(false);
-              }, 1800);
+              }, 1300);
             } else {
               setIsTurnLocked(false);
             }
@@ -3882,11 +4156,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             ? `💀 Your ${faintedName} succumbed to Poison and was Knocked Out!`
             : `💀 Opponent's ${faintedName} succumbed to Poison and was Knocked Out!`;
           setActionBanner({ text: bannerText, type: 'knockout' });
+          setKnockoutAnimationActive(true);
           setTimeout(() => {
             setState(post => GameEngine.resolveKnockout(post));
             setActionBanner(null);
+            setKnockoutAnimationActive(false);
             setIsTurnLocked(false);
-          }, 1800);
+          }, 1300);
         } else {
           setIsTurnLocked(false);
         }

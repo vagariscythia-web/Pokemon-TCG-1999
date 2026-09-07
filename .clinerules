@@ -9,7 +9,8 @@
 * Never rely on internal or "mental" memory across compactions or interruptions; LLM internal state is completely stateless.
 * For multi-step, multi-file, or architecturally complex tasks, maintain a lightweight state file: `.cline/task_state.md` (or `.task_state.md` in root). Skip this file for single-file, 1-turn trivial edits (e.g., typos, simple CSS tweaks).
 * Git Safety: NEVER commit `.task_state.md` to the repository. Add it to `.git/info/exclude` or `.gitignore` if untracked changes persist.
-* Total Size Limit: Keep this file concise (<80 lines total).
+* File Immutability: NEVER modify, overwrite, or delete `.clinerules` under any circumstances unless explicitly commanded by the user.
+* Total Size Limit: Keep this file concise (<120 lines total).
 * File Structure:
   1. Current Objective (1 sentence)
   2. Planned Sub-steps (checklist: `[x]` done, `[ ]` pending)
@@ -18,7 +19,12 @@
   5. Blockers & Failed Attempts: Document terminal errors or discarded solutions to prevent infinite retry loops.
   6. In-Flight Logic & Thinking Draft (ONLY for complex logic/refactors):
      - Active Hypothesis: What is being solved, tested, or optimized right now?
-     - Logic Outline / Pseudocode (5-15 lines): Step-by-step flow, input/output contracts, and critical edge cases. DO NOT paste full production code blocks.
+     - Core Logic Skeleton (up to 35 lines max):
+       * Input/Output & State Mapping: Target signatures, payload shapes, and legacy-to-new variable mappings (`oldVar -> newVar`).
+       * Step-by-Step Flow: Control flow with micro-progress markers (`[DONE]`, `[IN-PROGRESS]`, `[PENDING]`), branching logic, and critical edge cases before touching source code.
+       * Dense Expressions: Exact 1-2 line critical snippets allowed verbatim (e.g., complex regex, mathematical formulas, bitwise operations, reduce/filter logic).
+       * Invariants & Side Effects: Non-obvious assumptions (e.g., "timestamps must be UTC ms", "must not mutate input array") and downstream side effects/events that must be triggered.
+     - Noise Filter: DO NOT paste full file imports, large raw types, full UI/JSX markup, or console loggers. Preserve dense algorithmic intent only.
 * Enforcement Timing: You MUST write or update sections 4, 5, and 6 in the scratchpad BEFORE generating or modifying code in actual source files.
 * Upon resumption after ANY interrupt or context compact: ALWAYS read this scratchpad first before executing commands or generating code.
 * Task Completion Cleanup: Once the task is finished and verified, delete this file or overwrite it with `[COMPLETED]` to prevent state pollution in future unrelated tasks.

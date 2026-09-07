@@ -20,19 +20,30 @@ export const VictoryModal: React.FC<VictoryModalProps> = ({
   lang = 'tr'
 }) => {
   const t = TRANSLATIONS[lang];
-  if (!winner) return null;
+  // Delay the modal so the fainted animation (grayscale pulse + knockout banner)
+  // is visible before the victory/defeat screen covers the board.
+  const [visible, setVisible] = React.useState(false);
+
+  useEffect(() => {
+    if (!winner) { setVisible(false); return; }
+    const timer = setTimeout(() => setVisible(true), 650);
+    return () => clearTimeout(timer);
+  }, [winner]);
+
   const isPlayerWin = winner === 'player';
 
   useEffect(() => {
-    if (isPlayerWin) {
-      sounds.playVictory();
-      confetti({
-        particleCount: 120,
-        spread: 80,
-        origin: { y: 0.6 }
-      });
-    }
-  }, [isPlayerWin]);
+    // Only celebrate once the modal is actually shown (after the delay).
+    if (!visible || !isPlayerWin) return;
+    sounds.playVictory();
+    confetti({
+      particleCount: 120,
+      spread: 80,
+      origin: { y: 0.6 }
+    });
+  }, [visible, isPlayerWin]);
+
+  if (!winner || !visible) return null;
 
   const defaultWinDesc = isPlayerWin
     ? (lang === 'tr' ? 'Tebrikler! Pokémon TCG maçını kazandınız!' : 'You have won the Pokémon TCG match!')

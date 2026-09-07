@@ -144,7 +144,7 @@ export const CardView: React.FC<CardViewProps> = ({
           isAscending
             ? 'scale-105 shadow-2xl z-20'
             : isZeroHp || isFainted
-            ? 'grayscale brightness-75 ring-2 ring-red-600 animate-pulse'
+            ? 'grayscale brightness-75 ring-2 ring-red-600 fainted-pulse'
             : isDropHovered
             ? 'scale-[1.04] shadow-2xl z-20'
             : isSelected

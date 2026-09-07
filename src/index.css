@@ -2823,6 +2823,18 @@ html, body {
   100% { opacity: 0; }
 }
 
+/* FAINTED / KNOCKOUT — single, decisive pulse for a fallen Pokémon.
+   One iteration only: the KO is unmistakable after the first dip, so extra
+   cycles were removed to cut redundant waiting before the next beat. */
+@keyframes faintedPulse {
+  0% { opacity: 1; transform: scale(1); }
+  40% { opacity: 0.2; transform: scale(0.97); }
+  100% { opacity: 0.75; transform: scale(1); }
+}
+.fainted-pulse {
+  animation: faintedPulse 1200ms ease-in-out 1 forwards;
+}
+
 /* Soft breathing pulse for the Poison Gas / Foul Gas card tint */
 @keyframes gbaPoisonGasHazePulse {
   0% { opacity: 0; }
