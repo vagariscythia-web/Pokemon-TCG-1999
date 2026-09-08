@@ -154,6 +154,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     onSelect: (chosenDeckIndex: number) => void;
     /** Optional: lets a caller recover cleanly when the player backs out of a mandatory choice. */
     onCancel?: () => void;
+    /** When true the picker cannot be dismissed without a selection (attack is already declared). */
+    mandatory?: boolean;
   } | null>(null);
   const [trainerSwitchModal, setTrainerSwitchModal] = useState<{
     isOpen: boolean;
@@ -2336,7 +2338,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       description: string,
       cards: { card: Card; originalDeckIndex: number }[],
       onPick: (originalIndex: number) => void,
-      onCancel?: () => void
+      onCancel?: () => void,
+      mandatory?: boolean
     ) => {
       setDeckSearchModal({
         isOpen: true,
@@ -2346,6 +2349,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         handIndex,
         cards,
         onCancel,
+        mandatory,
         onSelect: (chosenIndex) => {
           setDeckSearchModal(null);
           onPick(chosenIndex);
@@ -4015,9 +4019,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         step.description,
         step.options,
         (i) => { step.apply(i, acc); takeNext(rest); },
-        // The attack was already declared and its coins flipped, so backing out resolves it
-        // with the engine default rather than leaving the turn locked forever.
-        () => executeAttackWithChoices(attackIndex, coinResults, acc)
+        // The attack was already declared and its coins flipped — the effect MUST resolve.
+        // No cancel path: the picker renders without an "İptal/Cancel" button (mandatory),
+        // so the engine never silently applies its own default (e.g. auto-discarding the
+        // first attached Energy for Whirlpool / Hyper Beam).
+        undefined,
+        true
       );
     };
     takeNext(steps);
@@ -6143,19 +6150,20 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 </button>
               ))}
             </div>
-
-            <div className="flex justify-end pt-2 border-t border-slate-800">
-              <button
-                onClick={() => {
-                  const onCancel = deckSearchModal.onCancel;
-                  setDeckSearchModal(null);
-                  onCancel?.();
-                }}
-                className="bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-bold px-6 py-2 rounded-xl border border-slate-700 active:scale-95"
-              >
-                {t.cancel}
-              </button>
-            </div>
+            {!deckSearchModal.mandatory && (
+              <div className="flex justify-end pt-2 border-t border-slate-800">
+                <button
+                  onClick={() => {
+                    const onCancel = deckSearchModal.onCancel;
+                    setDeckSearchModal(null);
+                    onCancel?.();
+                  }}
+                  className="bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-bold px-6 py-2 rounded-xl border border-slate-700 active:scale-95"
+                >
+                  {t.cancel}
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
