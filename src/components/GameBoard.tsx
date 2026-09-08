@@ -2306,6 +2306,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     }
   };
 
+  // Trainer cards that directly target the OPPONENT's Pokémon (clicking an enemy card
+  // while one of these is selected should trigger the card instead of the inspect modal).
+  const OPPONENT_TARGET_TRAINERS = ['Energy Removal', 'Super Energy Removal', 'Gust of Wind', 'Sleep!', 'Digger', 'Pokémon Flute', 'Pokemon Flute'];
+
+  const handleOpponentInPlayClick = (target: InPlayCard, isBench: boolean) => {
+    if (!isPlayerTurn || selectedHandIndex === null) {
+      handleInspect(target.card, target);
+      return;
+    }
+    const card = player.hand[selectedHandIndex];
+    if (card && card.supertype === 'Trainer' && OPPONENT_TARGET_TRAINERS.includes(card.name)) {
+      const benchIdx = isBench ? cpu.bench.findIndex(b => b.instanceId === target.instanceId) : -1;
+      triggerTrainerCardPlay(card, selectedHandIndex, benchIdx !== -1 ? benchIdx : undefined, target, true);
+      return;
+    }
+    handleInspect(target.card, target);
+  };
+
     /**
      * Opens the shared card-selection modal - the very same screen Poké Ball, Energy Search
      * and Recycle use - over an arbitrary list of cards. Every "choose a card" decision the
@@ -2346,7 +2364,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
      * Every one of those is a player decision, so walk them through the shared picker instead
      * of letting the engine grab the last attached Energy.
      */
-    const playEnergyRemoval = (card: Card, handIndex: number) => {
+    const playEnergyRemoval = (card: Card, handIndex: number, preSelectedOppTarget?: InPlayCard) => {
       const isSuper = card.name === 'Super Energy Removal';
       const ownActive = player.active;
 
@@ -2427,6 +2445,37 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         );
       };
 
+      // The player clicked an opponent Pokémon directly while holding the card - skip the
+      // target picker and jump straight to choosing which Energy to strip from that Pokémon.
+      if (preSelectedOppTarget) {
+        if (preSelectedOppTarget.attachedEnergy.length === 0) {
+          showTrainerInfo(lang === 'tr'
+            ? `${preSelectedOppTarget.card.name} üzerinde atılacak Enerji kartı yok!`
+            : `${preSelectedOppTarget.card.name} has no Energy cards attached to strip!`);
+          return;
+        }
+        if (isSuper) {
+          const preOwnEnergies = ownActive!.attachedEnergy;
+          if (preOwnEnergies.length === 1) {
+            chooseOppEnergy(preSelectedOppTarget, 0, []);
+            return;
+          }
+          chooseCardFromList(
+            card,
+            handIndex,
+            lang === 'tr' ? 'Süper Enerji Giderme: Ödeyeceğiniz Enerjiyi Seçin' : 'Super Energy Removal: Choose the Energy You Pay',
+            lang === 'tr'
+              ? "Efekti başlatmak için Aktif Pokémon'unuzdan atacağınız enerji kartını seçin:"
+              : 'Discard 1 Energy from your Active Pokémon to pay for the effect - choose which:',
+            preOwnEnergies.map((e, i) => ({ card: e, originalDeckIndex: i })),
+            (ownIdx) => chooseOppEnergy(preSelectedOppTarget, ownIdx, [])
+          );
+          return;
+        }
+        chooseOppEnergy(preSelectedOppTarget, undefined, []);
+        return;
+      }
+
       if (isSuper) {
         const ownEnergies = ownActive!.attachedEnergy;
         if (ownEnergies.length === 1) {
@@ -2449,7 +2498,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       chooseOppTarget(undefined);
     };
 
-    const triggerTrainerCardPlay = (card: Card, handIndex: number, targetBenchIdx?: number, targetPokemon?: InPlayCard) => {
+    const triggerTrainerCardPlay = (card: Card, handIndex: number, targetBenchIdx?: number, targetPokemon?: InPlayCard, isOpponentTarget?: boolean) => {
     if (!isPlayerTurn || handIndex === null || handIndex === undefined || handIndex < 0) return;
 
     if (player.trainerPlayedThisTurn) {
@@ -2530,7 +2579,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
     // 0.05 Energy Removal / Super Energy Removal - handled in its own block below.
     if (card.name === 'Energy Removal' || card.name === 'Super Energy Removal') {
-      return playEnergyRemoval(card, handIndex);
+      return playEnergyRemoval(card, handIndex, isOpponentTarget ? targetPokemon : undefined);
     }
 
     // 0.06 Other "choose ..." Trainers the engine used to decide on the player's behalf.
@@ -2847,6 +2896,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       if (cpu.bench.length === 0) {
         setActionBanner({ text: lang === 'tr' ? 'Rakibin yedek kulübesinde hiç Pokémon yok!' : 'Opponent has no Pokémon on bench!', type: 'info' });
         setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+      // The player clicked the opponent's ACTIVE card while holding Gust of Wind - the card
+      // must pull a Benched Pokémon forward, so guide them to click a benched target instead.
+      if (isOpponentTarget && targetBenchIdx === undefined) {
+        setActionBanner({
+          text: lang === 'tr'
+            ? 'Gust of Wind rakibin YEDEK Pokémonunu hedef almalıdır - rakip yedek kulübesindeki bir Pokémona tıklayın!'
+            : "Gust of Wind must target a Benched Pokémon - click one of your opponent's Benched Pokémon!",
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 3000);
         return;
       }
       if (targetBenchIdx !== undefined) {
@@ -4412,6 +4473,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     inPlayCard={b}
                     size="sm"
                     isAscending={ascendingCpuBenchIdx === bIdx}
+                    isTargetable={!!selectedCard && selectedCard.supertype === 'Trainer' && OPPONENT_TARGET_TRAINERS.includes(selectedCard.name)}
+                    onClick={() => handleOpponentInPlayClick(b, true)}
                     onInspect={() => handleInspect(b.card, b)}
                   />
                   {/* A move that picked a Benched Pokémon (Stare) or swept the whole Bench
@@ -4452,6 +4515,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     inPlayCard={displayActive('cpu')}
                     size="active"
                     isDescending={descendingCpuActive}
+                    isTargetable={!!selectedCard && selectedCard.supertype === 'Trainer' && OPPONENT_TARGET_TRAINERS.includes(selectedCard.name)}
+                    onClick={() => handleOpponentInPlayClick(cpu.active!, false)}
                     onInspect={() => handleInspect(cpu.active!.card, cpu.active!)}
                   />
                 ) : (

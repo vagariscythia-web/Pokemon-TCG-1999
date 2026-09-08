@@ -1864,60 +1864,20 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         const wi = Math.max(1, fx.intensity ?? 1);
         return (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Left cannon barrel — bottom-left, ~33° outward splay per stock reference:
-              stepped socket neck (two rings) → straight uniform barrel → open elliptical bore */}
-          <div className="absolute bottom-1 left-8" style={{ transform: 'rotate(-33deg)', transformOrigin: '50% 100%' }}>
-            <svg width={Math.round(44 * wi)} height={Math.round(76 * wi)} viewBox="0 0 44 76">
-              {/* Stepped neck: thin pipe segments rising out of the shell socket */}
-              <path d="M16 76 L16 66 L28 66 L28 76 Z" fill="#94a3b8" opacity="0.95" />
-              <rect x="14.5" y="63" width="15" height="4" rx="2" fill="#cbd5e1" opacity="0.95" />
-              <path d="M14.5 66 L14.5 54 L29.5 54 L29.5 66 Z" fill="#8b98ab" opacity="0.95" />
-              <rect x="13" y="50.5" width="18" height="4.5" rx="2.2" fill="#cbd5e1" opacity="0.95" />
-              {/* Main barrel: straight uniform cylinder with side shading */}
-              <path d="M10 52 L10 14 Q10 11, 13 11 L31 11 Q34 11, 34 14 L34 52 Z" fill="#cbd5e1" opacity="0.98" />
-              <path d="M13.5 50 L13.5 15 L20 15 L20 50 Z" fill="#e2e8f0" opacity="0.75" />
-              <path d="M28 50 L28 15 L32 15 L32 50 Z" fill="#94a3b8" opacity="0.55" />
-              {/* Rim + open bore mouth (dark interior with lit crescent) */}
-              <rect x="9" y="8" width="26" height="6" rx="3" fill="#94a3b8" opacity="0.95" />
-              <ellipse cx="22" cy="8.5" rx="13" ry="5" fill="#94a3b8" opacity="0.95" />
-              <ellipse cx="22" cy="8.5" rx="10.5" ry="3.9" fill="#475569" opacity="0.95" />
-              <ellipse cx="21" cy="8" rx="8" ry="2.7" fill="#64748b" opacity="0.85" />
-              <ellipse cx="23" cy="8.8" rx="6" ry="2.1" fill="#1e293b" opacity="0.9" />
-              <ellipse cx="23.5" cy="9" rx="3" ry="1.1" fill="#0f172a" opacity="0.85" />
-            </svg>
+          {/* Blastoise shell + twin cannons — stock PNG (1024×559, transparent bg) */}
+          <div className="absolute bottom-0 left-1/2" style={{ transform: 'translateX(-50%)', width: Math.round(160 * wi), zIndex: 1 }}>
+            <img src="/blastoise-hydro-cannon.png" alt="" draggable={false} style={{ width: '100%', height: 'auto', display: 'block' }} />
           </div>
-          {/* Right cannon barrel — bottom-right, ~33° outward splay per stock reference:
-              stepped socket neck (two rings) → straight uniform barrel → open elliptical bore */}
-          <div className="absolute bottom-1 right-8" style={{ transform: 'rotate(33deg)', transformOrigin: '50% 100%' }}>
-            <svg width={Math.round(44 * wi)} height={Math.round(76 * wi)} viewBox="0 0 44 76">
-              {/* Stepped neck: thin pipe segments rising out of the shell socket */}
-              <path d="M16 76 L16 66 L28 66 L28 76 Z" fill="#94a3b8" opacity="0.95" />
-              <rect x="14.5" y="63" width="15" height="4" rx="2" fill="#cbd5e1" opacity="0.95" />
-              <path d="M14.5 66 L14.5 54 L29.5 54 L29.5 66 Z" fill="#8b98ab" opacity="0.95" />
-              <rect x="13" y="50.5" width="18" height="4.5" rx="2.2" fill="#cbd5e1" opacity="0.95" />
-              {/* Main barrel: straight uniform cylinder with side shading */}
-              <path d="M10 52 L10 14 Q10 11, 13 11 L31 11 Q34 11, 34 14 L34 52 Z" fill="#cbd5e1" opacity="0.98" />
-              <path d="M13.5 50 L13.5 15 L20 15 L20 50 Z" fill="#e2e8f0" opacity="0.75" />
-              <path d="M28 50 L28 15 L32 15 L32 50 Z" fill="#94a3b8" opacity="0.55" />
-              {/* Rim + open bore mouth (dark interior with lit crescent) */}
-              <rect x="9" y="8" width="26" height="6" rx="3" fill="#94a3b8" opacity="0.95" />
-              <ellipse cx="22" cy="8.5" rx="13" ry="5" fill="#94a3b8" opacity="0.95" />
-              <ellipse cx="22" cy="8.5" rx="10.5" ry="3.9" fill="#475569" opacity="0.95" />
-              <ellipse cx="21" cy="8" rx="8" ry="2.7" fill="#64748b" opacity="0.85" />
-              <ellipse cx="23" cy="8.8" rx="6" ry="2.1" fill="#1e293b" opacity="0.9" />
-              <ellipse cx="23.5" cy="9" rx="3" ry="1.1" fill="#0f172a" opacity="0.85" />
-            </svg>
-          </div>
-          {/* Left cannon jet — anchored exactly at the tilted muzzle mouth (no inset drift) */}
-          <div className="absolute" style={{ left: `${Math.round(32 - 42.76 * wi)}px`, bottom: `${Math.round(4 + 53.01 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetLeft 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+          {/* Left cannon jet — linear trajectory from PNG bore */}
+          <div className="absolute" style={{ left: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetLeft 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
             <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
               {/* Initial pressure burst cone at nozzle exit */}
               <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
               <path d="M16 100 L28 80 L40 100 Z" fill="#7dd3fc" opacity="0.45" />
-              {/* Main jet body (+30% thickness) */}
-              <path d="M28 96 Q24 70, 26 50 Q28 30, 32 6" fill="none" stroke="url(#hydroCannonGradL)" strokeWidth={23.4 * wi} strokeLinecap="round" opacity="0.92" />
-              <path d="M30 94 Q26 68, 28 48 Q30 28, 34 8" fill="none" stroke="#7dd3fc" strokeWidth={11.7 * wi} strokeLinecap="round" opacity="0.7" />
-              <path d="M26 92 Q24 66, 26 46 Q28 26, 30 10" fill="none" stroke="#e0f2fe" strokeWidth={6.5 * wi} strokeLinecap="round" opacity="0.8" />
+              {/* Main jet body — straight linear path (+20% thickness) */}
+              <path d="M28 96 L28 6" fill="none" stroke="url(#hydroCannonGradL)" strokeWidth={28.1 * wi} strokeLinecap="round" opacity="0.92" />
+              <path d="M28 94 L28 8" fill="none" stroke="#7dd3fc" strokeWidth={14 * wi} strokeLinecap="round" opacity="0.7" />
+              <path d="M28 92 L28 10" fill="none" stroke="#e0f2fe" strokeWidth={7.8 * wi} strokeLinecap="round" opacity="0.8" />
               <defs>
                 <linearGradient id="hydroCannonGradL" x1="0" y1="1" x2="0" y2="0">
                   <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.7" />
@@ -1927,16 +1887,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </defs>
             </svg>
           </div>
-          {/* Right cannon jet — anchored exactly at the tilted muzzle mouth (no inset drift) */}
-          <div className="absolute" style={{ right: `${Math.round(32 - 42.76 * wi)}px`, bottom: `${Math.round(4 + 53.01 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetRight 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+          {/* Right cannon jet — linear trajectory from PNG bore */}
+          <div className="absolute" style={{ right: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetRight 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
             <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
               {/* Initial pressure burst cone at nozzle exit */}
               <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
               <path d="M16 100 L28 80 L40 100 Z" fill="#7dd3fc" opacity="0.45" />
-              {/* Main jet body (+30% thickness) */}
-              <path d="M28 96 Q32 70, 30 50 Q28 30, 24 6" fill="none" stroke="url(#hydroCannonGradR)" strokeWidth={23.4 * wi} strokeLinecap="round" opacity="0.92" />
-              <path d="M26 94 Q30 68, 28 48 Q26 28, 22 8" fill="none" stroke="#7dd3fc" strokeWidth={11.7 * wi} strokeLinecap="round" opacity="0.7" />
-              <path d="M30 92 Q32 66, 30 46 Q28 26, 26 10" fill="none" stroke="#e0f2fe" strokeWidth={6.5 * wi} strokeLinecap="round" opacity="0.8" />
+              {/* Main jet body — straight linear path (+20% thickness) */}
+              <path d="M28 96 L28 6" fill="none" stroke="url(#hydroCannonGradR)" strokeWidth={28.1 * wi} strokeLinecap="round" opacity="0.92" />
+              <path d="M28 94 L28 8" fill="none" stroke="#7dd3fc" strokeWidth={14 * wi} strokeLinecap="round" opacity="0.7" />
+              <path d="M28 92 L28 10" fill="none" stroke="#e0f2fe" strokeWidth={7.8 * wi} strokeLinecap="round" opacity="0.8" />
               <defs>
                 <linearGradient id="hydroCannonGradR" x1="0" y1="1" x2="0" y2="0">
                   <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.7" />
@@ -1947,7 +1907,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
           {/* Muzzle flash — left cannon (double ring + 8-spike burst) */}
-          <div className="absolute" style={{ left: `${Math.round(32 - 40.76 * wi)}px`, bottom: `${Math.round(4 + 30.61 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out forwards', opacity: 0 }}>
+          <div className="absolute" style={{ left: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out forwards', opacity: 0 }}>
             <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
               <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
               <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
@@ -1965,7 +1925,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
           {/* Muzzle flash — right cannon (double ring + 8-spike burst) */}
-          <div className="absolute" style={{ right: `${Math.round(32 - 40.76 * wi)}px`, bottom: `${Math.round(4 + 30.61 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.06s forwards', opacity: 0 }}>
+          <div className="absolute" style={{ right: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.06s forwards', opacity: 0 }}>
             <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
               <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
               <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
