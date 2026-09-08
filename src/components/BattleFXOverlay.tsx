@@ -1864,12 +1864,13 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         const wi = Math.max(1, fx.intensity ?? 1);
         return (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Blastoise shell + twin cannons — stock PNG (1024×559, transparent bg) */}
-          <div className="absolute bottom-0 left-1/2" style={{ transform: 'translateX(-50%)', width: Math.round(160 * wi), zIndex: 1 }}>
+          {/* Blastoise shell + twin cannons — stock PNG (1024×559, transparent bg)
+              blur-in + anticipation overshoot → hold → grainy dissolve-out */}
+          <div className="absolute bottom-0 left-1/2" style={{ width: Math.round(160 * wi), zIndex: 1, animation: 'gbaHydroCannonShell 1.9s cubic-bezier(0.22, 0.9, 0.36, 1) forwards', opacity: 0 }}>
             <img src="/blastoise-hydro-cannon.png" alt="" draggable={false} style={{ width: '100%', height: 'auto', display: 'block' }} />
           </div>
-          {/* Left cannon jet — linear trajectory from PNG bore */}
-          <div className="absolute" style={{ left: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetLeft 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+          {/* Left cannon jet — linear trajectory from PNG bore (delayed 0.3s for shell anticipation) */}
+          <div className="absolute" style={{ left: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetLeft 1.4s cubic-bezier(0.15, 0.8, 0.35, 1) 0.3s forwards', opacity: 0, filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
             <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
               {/* Initial pressure burst cone at nozzle exit */}
               <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
@@ -1887,8 +1888,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </defs>
             </svg>
           </div>
-          {/* Right cannon jet — linear trajectory from PNG bore */}
-          <div className="absolute" style={{ right: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetRight 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+          {/* Right cannon jet — linear trajectory from PNG bore (delayed 0.3s for shell anticipation) */}
+          <div className="absolute" style={{ right: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetRight 1.4s cubic-bezier(0.15, 0.8, 0.35, 1) 0.3s forwards', opacity: 0, filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
             <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
               {/* Initial pressure burst cone at nozzle exit */}
               <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
@@ -1906,8 +1907,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </defs>
             </svg>
           </div>
-          {/* Muzzle flash — left cannon (double ring + 8-spike burst) */}
-          <div className="absolute" style={{ left: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out forwards', opacity: 0 }}>
+          {/* Muzzle flash — left cannon (double ring + 8-spike burst, delayed after shell) */}
+          <div className="absolute" style={{ left: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.35s forwards', opacity: 0 }}>
             <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
               <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
               <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
@@ -1924,8 +1925,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <path d="M44 44 L34 36 L38 32 Z" fill="#e0f2fe" opacity="0.6" />
             </svg>
           </div>
-          {/* Muzzle flash — right cannon (double ring + 8-spike burst) */}
-          <div className="absolute" style={{ right: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.06s forwards', opacity: 0 }}>
+          {/* Muzzle flash — right cannon (double ring + 8-spike burst, delayed after shell) */}
+          <div className="absolute" style={{ right: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.41s forwards', opacity: 0 }}>
             <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
               <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
               <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
@@ -1942,15 +1943,15 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <path d="M44 44 L34 36 L38 32 Z" fill="#e0f2fe" opacity="0.6" />
             </svg>
           </div>
-          {/* Heavy spray droplets — scatter left */}
-          <div className="absolute top-2 left-4" style={{ animation: 'gbaHydroCannonDrop1 1.3s ease-out 0.2s forwards', opacity: 0 }}>
+          {/* Heavy spray droplets — scatter left (delayed to match jet arrival) */}
+          <div className="absolute top-2 left-4" style={{ animation: 'gbaHydroCannonDrop1 1.3s ease-out 0.65s forwards', opacity: 0 }}>
             <svg width={Math.round(14 * wi)} height={Math.round(18 * wi)} viewBox="0 0 14 18">
               <path d="M7 1 Q10.5 7, 10.5 10.5 Q10.5 15, 7 17 Q3.5 15, 3.5 10.5 Q3.5 7, 7 1 Z" fill="#38bdf8" opacity="0.9" />
               <ellipse cx="5.5" cy="9" rx="1.8" ry="2.4" fill="#bae6fd" opacity="0.7" />
             </svg>
           </div>
-          {/* Heavy spray droplets — scatter right */}
-          <div className="absolute top-2 right-4" style={{ animation: 'gbaHydroCannonDrop2 1.3s ease-out 0.3s forwards', opacity: 0 }}>
+          {/* Heavy spray droplets — scatter right (delayed to match jet arrival) */}
+          <div className="absolute top-2 right-4" style={{ animation: 'gbaHydroCannonDrop2 1.3s ease-out 0.72s forwards', opacity: 0 }}>
             <svg width={Math.round(12 * wi)} height={Math.round(16 * wi)} viewBox="0 0 12 16">
               <path d="M6 1 Q9 5.5, 9 8.5 Q9 12.5, 6 14.5 Q3 12.5, 3 8.5 Q3 5.5, 6 1 Z" fill="#0ea5e9" opacity="0.85" />
               <ellipse cx="4.5" cy="7.5" rx="1.5" ry="2" fill="#e0f2fe" opacity="0.6" />
@@ -1958,14 +1959,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           </div>
           {/* Extra droplets at higher intensity */}
           {wi > 1.08 && (
-            <div className="absolute top-3" style={{ animation: 'gbaHydroCannonDrop3 1.3s ease-out 0.38s forwards', opacity: 0 }}>
+            <div className="absolute top-3" style={{ animation: 'gbaHydroCannonDrop3 1.3s ease-out 0.8s forwards', opacity: 0 }}>
               <svg width={Math.round(10 * wi)} height={Math.round(14 * wi)} viewBox="0 0 10 14">
                 <path d="M5 1 Q7.5 4.5, 7.5 7 Q7.5 10.5, 5 12 Q2.5 10.5, 2.5 7 Q2.5 4.5, 5 1 Z" fill="#7dd3fc" opacity="0.8" />
               </svg>
             </div>
           )}
           {/* Convergence impact splash — where both jets meet the target (top) */}
-          <div className="absolute -top-2" style={{ animation: 'gbaHydroCannonImpact 1.3s ease-out 0.45s forwards', opacity: 0 }}>
+          <div className="absolute -top-2" style={{ animation: 'gbaHydroCannonImpact 1.3s ease-out 0.9s forwards', opacity: 0 }}>
             <svg width={Math.round(70 * wi)} height={Math.round(60 * wi)} viewBox="0 0 70 60">
               <path d="M35 50 Q22 38, 14 24 Q19 34, 25 42" fill="none" stroke="#7dd3fc" strokeWidth={3.5 * wi} strokeLinecap="round" opacity="0.9" />
               <path d="M35 50 Q42 34, 52 20 Q46 34, 41 42" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} strokeLinecap="round" opacity="0.85" />
