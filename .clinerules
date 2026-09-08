@@ -7,8 +7,9 @@
 
 ## 2. External Scratchpad & State Persistence (CRITICAL)
 * Never rely on internal or "mental" memory across compactions or interruptions; LLM internal state is completely stateless.
-* For multi-step, multi-file, or architecturally complex tasks, maintain a lightweight state file: `.cline/task_state.md` (or `.task_state.md` in root). Skip this file for single-file, 1-turn trivial edits (e.g., typos, simple CSS tweaks).
-* Git Safety: NEVER commit `.task_state.md` to the repository. Add it to `.git/info/exclude` or `.gitignore` if untracked changes persist.
+* Primary Scratchpad Path: Always create and maintain the scratchpad directly in the workspace root as `.task_state.md`. Do NOT attempt to create subdirectories (like `.cline/`) unless they already physically exist on disk.
+* Skip Threshold: Skip this scratchpad for single-file, 1-turn trivial edits (e.g., typos, simple CSS tweaks).
+* Git Safety: NEVER commit `.task_state.md` to the repository. Ensure it is listed in `.git/info/exclude` or `.gitignore`.
 * File Immutability: NEVER modify, overwrite, or delete `.clinerules` under any circumstances unless explicitly commanded by the user.
 * Total Size Limit: Keep this file concise (<120 lines total).
 * File Structure:
@@ -27,40 +28,44 @@
      - Noise Filter: DO NOT paste full file imports, large raw types, full UI/JSX markup, or console loggers. Preserve dense algorithmic intent only.
 * Enforcement Timing & Churn Prevention:
   - You MUST write or update sections 4, 5, and 6 in the scratchpad BEFORE generating or modifying code in actual source files.
-  - DO NOT update this file for incremental code lines or micro-steps. Update status markers (`[DONE]`) ONLY after an entire function, symbol, or logical block is fully implemented and passes basic syntax checks.
+  - Tool Failure Escape Hatch: If writing to the scratchpad triggers a file system or tool execution error, DO NOT retry the identical tool call. Fall back to project root `.task_state.md` immediately or ask the user for confirmation.
+  - DO NOT update this scratchpad for incremental lines of code or micro-steps. Update status markers (`[DONE]`) ONLY after an entire function, symbol, or logical block is fully implemented and passes basic syntax checks.
 * Upon resumption after ANY interrupt or context compact: ALWAYS read this scratchpad first before executing commands or generating code.
-* Task Completion Cleanup: Once the task is finished and verified, delete this file or overwrite it with `[COMPLETED]` to prevent state pollution in future unrelated tasks.
+* Task Completion Cleanup: Once the task is finished and verified, overwrite `.task_state.md` with `[COMPLETED]` instead of executing file deletion commands.
 
 ## 3. Recovery of Lost "Thinking" and Unsaved Drafts
 * If an interruption occurs WHILE thinking, planning, or generating a code block:
   * DO NOT attempt to hallucinate missing internal thinking tokens or restart the entire architecture from scratch.
-  * Reconstruct the execution state strictly from four sources: (1) target file `git diff`, (2) unsaved/truncated lines in the target file, (3) `.cline/task_state.md`, and (4) any visible partial snippets in the immediate previous turn.
+  * Reconstruct the execution state strictly from four sources: (1) target file `git diff`, (2) unsaved/truncated lines in the target file, (3) `.task_state.md`, and (4) any visible partial snippets in the immediate previous turn.
   * If ambiguity persists about the intended design, output a 1-sentence recap of what you can confirm from disk and ask the user for directional confirmation before proceeding.
 
-## 4. Post-Interrupt File Corruption Prevention
+## 4. Post-Interrupt File Corruption & Edit Precision
 * When a task is interrupted, files being written to may be left in a corrupted or incomplete state (e.g., missing closing brackets, half-written functions).
 * Immediately upon resumption, if a file edit was cut off, check that file for syntax errors or truncated blocks before running build, test, or run commands.
 * For large files, read the import statements plus 20 lines around the interrupted edit point to verify structural integrity.
-* Repair any syntax corruption caused by the hard interruption before taking any further steps.
+* Edit Tool Failure Guard: If a `replace_in_file` call fails due to search block mismatch or indentation differences, DO NOT guess or retry blindly. Re-read the exact 20 lines around the target area from disk first, then execute the replacement with the exact on-disk content.
 
 ## 5. Anti-Hallucination & Error Loop Protection
-* If you encounter the same terminal error or bug more than TWO (2) times in a row, STOP writing code immediately.
-* Do not attempt blind variations, as repetitive error dumps rapidly consume and compact the context pool.
-* Pivot your strategy: explain the root cause loop to the user, list what has failed, and propose an alternative architectural approach before making another attempt.
+* If you encounter the same terminal error, build failure, or tool execution error more than TWO (2) times in a row, STOP immediately.
+* Loop Prevention Guard: NEVER issue identical tool calls with the same parameters if the previous call failed. Always modify arguments, diagnose the environment, or change strategy.
+* Pivot Strategy: Explain the root cause loop to the user, list what has failed, and propose an alternative approach before making another attempt.
 
 ## 6. Context Window & Compaction Protection
 * Auto-compact summarizers drop nuanced conversation history and previous thinking chains.
 * To prevent architectural drift after compaction:
-  * Use `.cline/task_state.md` as the permanent Single Source of Truth for global variables, API contracts, and active schemas.
+  * Use `.task_state.md` as the permanent Single Source of Truth for global variables, API contracts, and active schemas.
   * Separate Planning from Execution: finalize the implementation plan in the scratchpad first, then execute file changes systematically.
   * If compaction occurs and critical project context appears ambiguous or truncated in the summary, explicitly ask the user for clarification rather than assuming outdated specifications.
 
-## 7. Token & Memory Efficiency (Smart Chunking & Search Hygiene)
+## 7. Token, Terminal & Execution Hygiene
 * File Reading Threshold:
   * Read files under 600 lines in full to ensure accurate replacement context and avoid multiple round-trip tool calls.
   * For files exceeding 600 lines: do NOT read in full. Read imports plus the target function block, including at least 15 lines of surrounding context to prevent `replace_in_file` match failures.
 * Directory & Search Boundaries:
   * Never run broad, unconstrained searches or directory listings. Always exclude build, cache, and dependency directories (e.g., `node_modules`, `dist`, `build`, `.next`, `.git`, `venv`).
+* Non-Interactive Terminal Execution:
+  * NEVER run long-running servers, dev watchers, or interactive CLI sessions (e.g., `npm run dev`, interactive `jest` without `--watchAll=false`, or `git log` without pagination flags).
+  * Always use non-interactive and CI flags when available (e.g., `CI=true`, `--non-interactive`, `--no-watch`).
 * Terminal Output Throttling:
   * Redirect standard error and limit output lines (e.g., `command 2>&1 | head -n 30` or OS-native stream trimmers, along with `--silent`, `--quiet` flags).
   * Never allow commands to dump more than 50 lines of logs into context unless diagnosing an elusive build failure.

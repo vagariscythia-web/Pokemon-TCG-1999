@@ -72,6 +72,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const t = TRANSLATIONS[lang];
   const [state, setState] = useState<GameState>(initialState);
   const [selectedHandIndex, setSelectedHandIndex] = useState<number | null>(null);
+  const [selectedBenchIndex, setSelectedBenchIndex] = useState<number | null>(null);
   const [zoomedCard, setZoomedCard] = useState<Card | null>(null);
   const [zoomedInPlay, setZoomedInPlay] = useState<InPlayCard | null>(null);
   const [isAiThinking, setIsAiThinking] = useState(false);
@@ -415,6 +416,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   useEffect(() => {
     setState(initialState);
     setSelectedHandIndex(null);
+    setSelectedBenchIndex(null);
     setZoomedCard(null);
     setZoomedInPlay(null);
     setActiveFXList([]);
@@ -1033,7 +1035,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               const playerActiveFainted = current.player.active && current.player.active.currentHp <= 0;
               const cpuActiveFainted = current.cpu.active && current.cpu.active.currentHp <= 0;
 
-              if (playerActiveFainted) {
+              // A fainted Pokémon that still has a matching withheld tick died from endTurn's
+              // poison step, not the CPU's attack. Route it through the else branch so the
+              // sequence is attack FX → poison tick FX → lethal KO banner → resolveKnockout.
+              const aiTicks = statusTicksToShow(current);
+              const aiPlayerKoIsFromTick = playerActiveFainted &&
+                aiTicks.some(t => t.instanceId === current.player.active!.instanceId);
+              const aiCpuKoIsFromTick = cpuActiveFainted &&
+                aiTicks.some(t => t.instanceId === current.cpu.active!.instanceId);
+
+              if (playerActiveFainted && !aiPlayerKoIsFromTick) {
                 setWithheldTicks([]);
                 setActionBanner({ text: `💀 ${current.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
                 setKnockoutAnimationActive(true);
@@ -1044,7 +1055,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   setKnockoutAnimationActive(false);
                   cleanupAiTurn();
                 }, 1300);
-              } else if (cpuActiveFainted) {
+              } else if (cpuActiveFainted && !aiCpuKoIsFromTick) {
                 setWithheldTicks([]);
                 setActionBanner({ text: `💀 Opponent's ${current.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
                 setKnockoutAnimationActive(true);
@@ -2238,6 +2249,29 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     }
 
     if (!isPlayerTurn || selectedHandIndex === null) {
+      if (isBench) {
+        // Select / deselect bench Pokémon (similar to hand card selection)
+        const bIdx = player.bench.findIndex(b => b.instanceId === target.instanceId);
+        if (bIdx !== -1) {
+          if (selectedBenchIndex === bIdx) {
+            // Already selected → deselect (no retreat on double-click)
+            setSelectedBenchIndex(null);
+          } else {
+            setSelectedBenchIndex(bIdx);
+          }
+        }
+        return;
+      }
+      // Active card clicked while a bench Pokémon is selected → attempt retreat
+      if (selectedBenchIndex !== null && player.active) {
+        if (GameEngine.canRetreat(player.active, player.hasRetreatedThisTurn)) {
+          handleRetreatToBench(selectedBenchIndex);
+        } else {
+          // Retreat cost not met – silently deselect (matches drag-and-drop behavior)
+          setSelectedBenchIndex(null);
+        }
+        return;
+      }
       handleInspect(target.card, target);
       return;
     }
@@ -3474,7 +3508,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       setSelectedHandIndex(null);
       setIsRetreatMode(false);
 
-      if (next.player.active && next.player.active.currentHp <= 0) {
+      // If the fainted Pokémon has a matching withheld tick the lethal damage came
+      // from endTurn's poison/toxic step, NOT from the attack itself. In that case
+      // we must NOT collapse into the immediate-KO branch; fall through to the else
+      // branch which sequences: attack FX → poison tick FX → lethal KO banner.
+      const cpuKoIsFromTick = next.cpu.active &&
+        playerTicks.some(t => t.instanceId === next.cpu.active!.instanceId);
+      const playerKoIsFromTick = next.player.active &&
+        playerTicks.some(t => t.instanceId === next.player.active!.instanceId);
+
+      if (next.player.active && next.player.active.currentHp <= 0 && !playerKoIsFromTick) {
         setWithheldTicks([]);
         setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
         setKnockoutAnimationActive(true);
@@ -3486,7 +3529,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           setKnockoutAnimationActive(false);
           setIsTurnLocked(false);
         }, 1300);
-      } else if (next.cpu.active && next.cpu.active.currentHp <= 0) {
+      } else if (next.cpu.active && next.cpu.active.currentHp <= 0 && !cpuKoIsFromTick) {
         setWithheldTicks([]);
         setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
         setKnockoutAnimationActive(true);
@@ -3648,7 +3691,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setSelectedHandIndex(null);
     setIsRetreatMode(false);
 
-    if (next.player.active && next.player.active.currentHp <= 0) {
+    // Same as performAttack: a fainted Pokémon that still has a matching withheld tick
+    // died from endTurn's poison step, not the attack. Route it through the else branch
+    // so the sequence is attack FX → poison tick FX → lethal KO banner → resolveKnockout.
+    const choiceCpuKoIsFromTick = next.cpu.active &&
+      choiceTicks.some(t => t.instanceId === next.cpu.active!.instanceId);
+    const choicePlayerKoIsFromTick = next.player.active &&
+      choiceTicks.some(t => t.instanceId === next.player.active!.instanceId);
+
+    if (next.player.active && next.player.active.currentHp <= 0 && !choicePlayerKoIsFromTick) {
       setWithheldTicks([]);
       setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
       setKnockoutAnimationActive(true);
@@ -3660,7 +3711,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         setKnockoutAnimationActive(false);
         setIsTurnLocked(false);
       }, 1300);
-    } else if (next.cpu.active && next.cpu.active.currentHp <= 0) {
+    } else if (next.cpu.active && next.cpu.active.currentHp <= 0 && !choiceCpuKoIsFromTick) {
       setWithheldTicks([]);
       setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
       setKnockoutAnimationActive(true);
@@ -3954,6 +4005,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
   const handleRetreatToBench = (benchIndex: number) => {
     if (!isPlayerTurn || !player.active || isPlayerParalyzed || isPlayerAsleep || isAttackFXPlaying) return;
+    if (!GameEngine.canRetreat(player.active, player.hasRetreatedThisTurn)) return;
     sounds.playCardDraw();
     
     setDescendingPlayerActive(true);
@@ -3977,6 +4029,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     }, 650);
 
     setSelectedHandIndex(null);
+    setSelectedBenchIndex(null);
   };
 
   const handleEndTurn = () => {
@@ -3994,6 +4047,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setState(resolved);
     setIsRetreatMode(false);
     setSelectedHandIndex(null);
+    setSelectedBenchIndex(null);
 
     if (ticks.length > 0) {
       setWithheldTicks(ticks);
@@ -4501,11 +4555,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     <CardView
                       inPlayCard={b}
                       size="sm"
-                      isSelected={false}
+                      isSelected={selectedBenchIndex === bIdx}
                       isDropHovered={hoveredDropTarget?.type === 'bench' && hoveredDropTarget.benchIndex === bIdx}
                       isAscending={ascendingPlayerBenchIdx === bIdx}
                       isTargetable={isRetreatMode || isSelectReplacement}
-                      showInspectIcon={isSelectReplacement || !player.active}
+                      showInspectIcon={true}
                       onClick={() => handleInPlayClick(b, true)}
                       onInspect={() => handleInspect(b.card, b)}
                     />

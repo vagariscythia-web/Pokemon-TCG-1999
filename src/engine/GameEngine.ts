@@ -1845,6 +1845,13 @@ export class GameEngine {
   // --- EXECUTE ATTACK WITH COIN FLIP RESULTS & ATTACHED EFFECTS ---
   static executeAttack(state: GameState, attackIndex: number, coinResults?: boolean[], effectChoices?: AttackEffectChoices): GameState {
     const next = JSON.parse(JSON.stringify(state)) as GameState;
+    // lastStatusTicks still holds the ticks recorded by the PREVIOUS turn's endTurn (already
+    // shown on that turn). Wipe them so they cannot leak into this resolution: when the attack
+    // itself scores a KO we return early (pendingKnockout) without calling endTurn, and a
+    // leftover tick on the fainted Pokémon would make the UI misread a clean attack-KO as a
+    // poison-tick-KO (holding damage back on the HP bar and replaying a phantom poison FX).
+    // endTurn repopulates this field whenever it actually runs.
+    next.lastStatusTicks = [];
     const isPlayer = next.turnPlayer === 'player';
     const attackerPlayer = isPlayer ? next.player : next.cpu;
     const defenderPlayer = isPlayer ? next.cpu : next.player;
