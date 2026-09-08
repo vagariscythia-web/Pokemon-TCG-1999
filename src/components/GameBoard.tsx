@@ -3098,9 +3098,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       'final beam',
       'summon minions',
       'reel in',
-      'healing wind'
+      'healing wind',
+      'transform',
+      'clairvoyance'
     ];
     return passives.includes(norm);
+  };
+
+  /** Check if Clairvoyance (Omanyte) is active - opponent's hand is shown face-up */
+  const isClairvoyanceActive = (): boolean => {
+    const allCards = [player.active, ...player.bench, cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
+    const isToxicGas = allCards.some(p => p.card.name === 'Muk' && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused');
+    if (isToxicGas) return false;
+    return allCards.some(p => {
+      if (p.card.name !== 'Omanyte') return false;
+      if (p.status === 'Asleep' || p.status === 'Paralyzed' || p.status === 'Confused') return false;
+      const power = p.card.pokemonPower || p.card.power;
+      return power && power.name.toLowerCase() === 'clairvoyance';
+    });
   };
 
   const handleDiscardFossil = (instanceId: string) => {
@@ -4283,6 +4298,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             </div>
           </div>
         </div>
+
+        {/* Clairvoyance: Show opponent's hand face-up when Omanyte's power is active */}
+        {isClairvoyanceActive() && cpu.hand.length > 0 && (
+          <div className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 border border-purple-500/40 rounded-lg flex-wrap">
+            <span className="text-[9px] text-purple-300 font-bold mr-1">🔮 Clairvoyance:</span>
+            {cpu.hand.map((card, i) => (
+              <div key={`clair-${i}`} className="w-14 h-8 rounded border border-purple-400/50 bg-slate-800 flex items-center justify-center overflow-hidden" title={card.name}>
+                <span className="text-[7px] text-purple-200 text-center leading-tight px-0.5">{card.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Turn Status Announcement */}
         <div className="text-center">

@@ -828,13 +828,13 @@ export class GameEngine {
     return next;
   }
 
-  static canRetreat(inPlay: InPlayCard, hasRetreatedThisTurn = false): boolean {
+  static canRetreat(inPlay: InPlayCard, hasRetreatedThisTurn = false, costModifier = 0): boolean {
     if (hasRetreatedThisTurn) return false;
     if (inPlay.preventRetreatNextTurn) return false;
     if (inPlay.status === 'Paralyzed' || inPlay.status === 'Asleep') return false;
     if (inPlay.card.name === 'Mysterious Fossil' || inPlay.card.name === 'Clefairy Doll' || inPlay.isClefairyDoll) return false;
 
-    const retreatCost = inPlay.card.retreatCost || 0;
+    const retreatCost = Math.max(0, (inPlay.card.retreatCost || 0) + costModifier);
     if (retreatCost === 0) return true;
 
     let energyAvailable = 0;
@@ -900,12 +900,13 @@ export class GameEngine {
     if (!player.active || player.hasRetreatedThisTurn) return next;
     if (benchIndex < 0 || benchIndex >= player.bench.length) return next;
 
-    if (!GameEngine.canRetreat(player.active, player.hasRetreatedThisTurn)) {
+    const costModifier = GameEngine.getRetreatCostModifier(next, playerId);
+    if (!GameEngine.canRetreat(player.active, player.hasRetreatedThisTurn, costModifier)) {
       GameEngine.addLog(next, `${player.active.card.name} cannot retreat!`, 'system');
       return next;
     }
 
-    const retreatCost = player.active.card.retreatCost || 0;
+    const retreatCost = Math.max(0, (player.active.card.retreatCost || 0) + costModifier);
     let discarded = 0;
     while (discarded < retreatCost && player.active.attachedEnergy.length > 0) {
       const removed = player.active.attachedEnergy.pop()!;
@@ -946,6 +947,30 @@ export class GameEngine {
     GameEngine.pruneAttackBlocks(next);
 
     GameEngine.addLog(next, `🔄 ${player.name} retreated ${oldActive.card.name} and sent out ${newActive.card.name}!`, playerId === 'cpu' ? 'ai' : 'action');
+
+    // Sinkhole (Dark Dugtrio): Whenever your opponent's Active Pokémon retreats, flip a coin.
+    // If tails, this power does 20 damage to that Pokémon.
+    const opponent = next[playerId === 'player' ? 'cpu' : 'player'];
+    const isToxicGasInPlay = [next.player.active, ...next.player.bench, next.cpu.active, ...next.cpu.bench].some(
+      p => p && p.card.name === 'Muk' && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused'
+        && !GameEngine.isPowerDisabled(p, next.turn)
+    );
+    if (!isToxicGasInPlay && opponent.active && opponent.active.card.name === 'Dark Dugtrio' &&
+      opponent.active.status !== 'Asleep' && opponent.active.status !== 'Paralyzed' && opponent.active.status !== 'Confused' &&
+      !GameEngine.isPowerDisabled(opponent.active, next.turn)) {
+      const sinkholeFlip = Math.random() >= 0.5;
+      if (!sinkholeFlip) {
+        oldActive.damage += 20;
+        oldActive.currentHp = Math.max(0, (oldActive.card.hp || 0) - oldActive.damage);
+        GameEngine.addLog(next, `🕳️ Sinkhole! TAILS! ${oldActive.card.name} takes 20 damage while retreating (${oldActive.currentHp}/${oldActive.card.hp} HP)!`, 'damage');
+        if (oldActive.currentHp <= 0) {
+          next.pendingKnockout = { faintedName: oldActive.card.name, isPlayer: playerId === 'player' };
+        }
+      } else {
+        GameEngine.addLog(next, `🕳️ Sinkhole check: HEADS! ${oldActive.card.name} retreated safely!`, 'action');
+      }
+    }
+
     return next;
   }
 
@@ -1812,6 +1837,63 @@ export class GameEngine {
   }
 
   /**
+   * Thick Skinned (Snorlax): Snorlax can't become Asleep, Confused, Paralyzed, or Poisoned.
+   * Returns true if the given Pokémon currently has an active Thick Skinned power.
+   */
+  static isThickSkinnedActive(state: GameState, pokemon: InPlayCard | null | undefined): boolean {
+    if (!pokemon || pokemon.card.name !== 'Snorlax') return false;
+    if (pokemon.status === 'Asleep' || pokemon.status === 'Paralyzed' || pokemon.status === 'Confused') return false;
+    if (GameEngine.isPowerDisabled(pokemon, state.turn)) return false;
+    // Toxic Gas check
+    const opponent = state[pokemon === state.player.active || state.player.bench.includes(pokemon) ? 'cpu' : 'player'];
+    const owner = pokemon === state.player.active || state.player.bench.includes(pokemon) ? state.player : state.cpu;
+    const isMukInPlay = [state.player.active, ...state.player.bench, state.cpu.active, ...state.cpu.bench].some(
+      p => p && p.card.name === 'Muk' && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused'
+        && !GameEngine.isPowerDisabled(p, state.turn)
+    );
+    if (isMukInPlay) return false;
+    const power = GameEngine.powerOf(pokemon);
+    return power !== null && power.name.toLowerCase() === 'thick skinned';
+  }
+
+  /**
+   * Computes the effective retreat cost modifier for a player.
+   * Retreat Aid (Dodrio): -1 if Dodrio is benched and active.
+   * Sticky Goo (Dark Muk): +2 if opponent's Dark Muk is active.
+   */
+  static getRetreatCostModifier(state: GameState, playerId: 'player' | 'cpu'): number {
+    const player = state[playerId];
+    const opponent = state[playerId === 'player' ? 'cpu' : 'player'];
+    let modifier = 0;
+
+    const isToxicGasInPlay = [state.player.active, ...state.player.bench, state.cpu.active, ...state.cpu.bench].some(
+      p => p && p.card.name === 'Muk' && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused'
+        && !GameEngine.isPowerDisabled(p, state.turn)
+    );
+
+    // Retreat Aid (Dodrio): As long as Dodrio is Benched, pay {C} less to retreat
+    if (!isToxicGasInPlay) {
+      const hasRetreatAid = player.bench.some(b =>
+        b && b.card.name === 'Dodrio' &&
+        b.status !== 'Asleep' && b.status !== 'Paralyzed' && b.status !== 'Confused' &&
+        !GameEngine.isPowerDisabled(b, state.turn)
+      );
+      if (hasRetreatAid) modifier -= 1;
+    }
+
+    // Sticky Goo (Dark Muk): opponent pays {C}{C} more to retreat
+    if (!isToxicGasInPlay && opponent.active) {
+      const hasStickyGoo =
+        opponent.active.card.name === 'Dark Muk' &&
+        opponent.active.status !== 'Asleep' && opponent.active.status !== 'Paralyzed' && opponent.active.status !== 'Confused' &&
+        !GameEngine.isPowerDisabled(opponent.active, state.turn);
+      if (hasStickyGoo) modifier += 2;
+    }
+
+    return modifier;
+  }
+
+  /**
    * Stare's target: 0 is the Defending Pokémon, n > 0 is defenderPlayer.bench[n - 1].
    *
    * A human answers through the target picker, so this only decides for the AI and for callers
@@ -1930,7 +2012,15 @@ export class GameEngine {
     if (attacker.status === 'Confused') {
       const confusionFlip = (coinResults && coinResults[coinIdx] !== undefined) ? coinResults[coinIdx++] : (Math.random() >= 0.5);
       if (!confusionFlip) {
-        const CONFUSION_SELF_DAMAGE = 20;
+        let CONFUSION_SELF_DAMAGE = 20;
+        // Frenzy (Dark Primeape): +30 damage while Confused (even to itself)
+        if (attacker.card.name === 'Dark Primeape') {
+          const frenzyPwr = GameEngine.powerOf(attacker);
+          if (frenzyPwr && frenzyPwr.name.toLowerCase() === 'frenzy' && !GameEngine.isPowerDisabled(attacker, next.turn)) {
+            CONFUSION_SELF_DAMAGE += 30;
+            GameEngine.addLog(next, `🐒 Frenzy! Dark Primeape's confusion self-hit deals +30 damage!`, 'status');
+          }
+        }
         attacker.damage += CONFUSION_SELF_DAMAGE;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
         const selfHitTarget: 'player' | 'cpu' = attackerPlayer.id === 'player' ? 'player' : 'cpu';
@@ -2298,6 +2388,15 @@ export class GameEngine {
     }
 
     let finalDamage = baseDamage;
+
+    // Frenzy (Dark Primeape): If Dark Primeape does any damage while it's Confused, it does 30 more damage.
+    if (attacker.card.name === 'Dark Primeape' && attacker.status === 'Confused' && finalDamage > 0) {
+      const frenzyPwr = GameEngine.powerOf(attacker);
+      if (frenzyPwr && frenzyPwr.name.toLowerCase() === 'frenzy' && !GameEngine.isPowerDisabled(attacker, next.turn)) {
+        finalDamage += 30;
+        GameEngine.addLog(next, `🐒 Frenzy! Dark Primeape deals +30 damage while Confused (${finalDamage} total)!`, 'status');
+      }
+    }
 
     // PlusPower reads "If this Pokémon's attack does damage to the Defending Pokémon", so a move
     // that picked a Benched Pokémon instead (Stare) does not get the bonus.
@@ -3381,6 +3480,22 @@ export class GameEngine {
       attacker.poisonType = undefined;
     }
 
+    // Thick Skinned (Snorlax): Can't become Asleep, Confused, Paralyzed, or Poisoned.
+    if (GameEngine.isThickSkinnedActive(next, defender)) {
+      if (defender.status !== 'None' || defender.poisonType !== undefined) {
+        defender.status = 'None';
+        defender.poisonType = undefined;
+        GameEngine.addLog(next, `🛡️ Thick Skinned! Snorlax is immune to special conditions!`, 'status');
+      }
+    }
+    if (GameEngine.isThickSkinnedActive(next, attacker)) {
+      if (attacker.status !== 'None' || attacker.poisonType !== undefined) {
+        attacker.status = 'None';
+        attacker.poisonType = undefined;
+        GameEngine.addLog(next, `🛡️ Thick Skinned! Snorlax is immune to special conditions!`, 'status');
+      }
+    }
+
     // Hand the UI the list of Benched Pokémon this attack damaged on top of its main target.
     // Poison Vapor and Blizzard both read as a field-wide effect, and an animation that stops on
     // the Active card makes the move look like it did nothing at all to the Bench.
@@ -3422,6 +3537,51 @@ export class GameEngine {
         isPlayer: isPlyr
       };
       GameEngine.addLog(next, `💀 ${fName} was Knocked Out!`, 'damage');
+
+      // Final Beam (Dark Gyarados): When KO'd by an attack, flip a coin. If heads, deal 20 damage
+      // per Water Energy attached to the Pokémon that knocked it out. Apply Weakness/Resistance.
+      if (defender.currentHp === 0 && defender.card.name === 'Dark Gyarados') {
+        const fbPower = GameEngine.powerOf(defender);
+        if (fbPower && fbPower.name.toLowerCase() === 'final beam' &&
+            defender.status !== 'Asleep' && defender.status !== 'Paralyzed' && defender.status !== 'Confused' &&
+            !GameEngine.isPowerDisabled(defender, next.turn)) {
+          const fbFlip = Math.random() >= 0.5;
+          if (fbFlip) {
+            const waterCount = defender.attachedEnergy.filter(e => e.types?.includes('Water') || e.name.includes('Water')).length;
+            if (waterCount > 0) {
+              let fbDamage = waterCount * 20;
+              // Apply Weakness and Resistance of the attacker (target of Final Beam) vs Water type
+              if (attacker.card.weakness && attacker.card.weakness.type === 'Water') {
+                let mult = 2;
+                if (typeof attacker.card.weakness.value === 'number') mult = attacker.card.weakness.value;
+                else if (typeof attacker.card.weakness.value === 'string') {
+                  const m = (attacker.card.weakness.value as string).match(/\d+/);
+                  if (m) mult = parseInt(m[0], 10);
+                }
+                fbDamage = Math.round(fbDamage * mult);
+              }
+              if (attacker.card.resistance && attacker.card.resistance.type === 'Water') {
+                let reduction = 30;
+                if (typeof attacker.card.resistance.value === 'number') reduction = Math.abs(attacker.card.resistance.value);
+                else if (typeof attacker.card.resistance.value === 'string') {
+                  const m = (attacker.card.resistance.value as string).match(/\d+/);
+                  if (m) reduction = parseInt(m[0], 10);
+                }
+                fbDamage = Math.max(0, fbDamage - reduction);
+              }
+              attacker.damage += fbDamage;
+              attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+              GameEngine.addLog(next, `💥 Final Beam! HEADS! Dark Gyarados deals ${fbDamage} damage to ${attacker.card.name} (${waterCount} Water Energy × 20)!`, 'damage');
+              if (attacker.currentHp <= 0) {
+                GameEngine.addLog(next, `💀 ${attacker.card.name} was also Knocked Out by Final Beam!`, 'damage');
+              }
+            }
+          } else {
+            GameEngine.addLog(next, `💥 Final Beam: TAILS! Dark Gyarados' Final Beam missed!`, 'action');
+          }
+        }
+      }
+
       return next;
     }
 
@@ -4144,6 +4304,108 @@ export class GameEngine {
         }
       } else {
         GameEngine.addLog(next, `🌸 Heal coin flip: TAILS! Heal failed.`, 'action');
+      }
+      pokemon.powerUsedThisTurn = true;
+    }
+
+    // 18. Peek (Mankey)
+    // "Once during your turn (before your attack), you may look at one of the following:
+    // the top card of either player's deck, a random card from your opponent's hand,
+    // or one of either player's Prizes."
+    else if (normPower === 'peek') {
+      if (opponent.hand.length > 0) {
+        const randomIdx = Math.floor(Math.random() * opponent.hand.length);
+        const peekedCard = opponent.hand[randomIdx];
+        GameEngine.addLog(next, `👀 Peek! ${player.name} looked at opponent's hand and saw: ${peekedCard.name}!`, 'action');
+      } else if (opponent.deck.length > 0) {
+        const topCard = opponent.deck[0];
+        GameEngine.addLog(next, `👀 Peek! ${player.name} looked at the top of opponent's deck: ${topCard.name}!`, 'action');
+      } else {
+        GameEngine.addLog(next, `👀 Peek! Opponent has no cards in hand or deck to look at.`, 'system');
+      }
+      pokemon.powerUsedThisTurn = true;
+    }
+
+    // 18b. Summon Minions (Dark Dragonite)
+    // "When you play Dark Dragonite from your hand, search your deck for up to 2 Basic Pokémon
+    // and put them onto your Bench. Shuffle your deck afterward."
+    else if (normPower === 'summon minions') {
+      const benchSpace = 5 - player.bench.length;
+      const summonCount = Math.min(2, benchSpace);
+      if (summonCount === 0) {
+        GameEngine.addLog(next, `🐉 Summon Minions: Bench is full! Cannot summon more Pokémon.`, 'system');
+      } else {
+        let summoned = 0;
+        for (let i = 0; i < summonCount; i++) {
+          const basicIdx = player.deck.findIndex(c => c.supertype === 'Pokemon' && c.subtype === 'Basic');
+          if (basicIdx !== -1) {
+            const basicCard = player.deck.splice(basicIdx, 1)[0];
+            const newInPlay = GameEngine.createInPlayCard(basicCard);
+            player.bench.push(newInPlay);
+            summoned++;
+            GameEngine.addLog(next, `🐉 Summon Minions! ${basicCard.name} was placed on the Bench!`, 'action');
+          }
+        }
+        player.deck = GameEngine.shuffle(player.deck);
+        if (summoned === 0) {
+          GameEngine.addLog(next, `🐉 Summon Minions: No Basic Pokémon found in deck.`, 'system');
+        } else {
+          GameEngine.addLog(next, `🐉 Summon Minions! ${summoned} Basic Pokémon summoned to the Bench!`, 'action');
+        }
+      }
+      pokemon.powerUsedThisTurn = true;
+    }
+
+    // 18c. Transform (Ditto)
+    // "If Ditto is your Active Pokémon, treat it as if it were the same card as the Defending
+    // Pokémon, including type, Hit Points, Weakness, and so on, except Ditto can't evolve,
+    // always remains a Basic Pokémon, and you may treat any Energy attached to Ditto as Energy
+    // of any type."
+    else if (normPower === 'transform') {
+      if (!opponent.active) {
+        GameEngine.addLog(next, `🔄 Transform: No opposing Active Pokémon to copy!`, 'system');
+        return next;
+      }
+      const targetCard = opponent.active.card;
+      pokemon.transformedInto = { ...targetCard };
+      pokemon.card = {
+        ...pokemon.card,
+        types: targetCard.types,
+        hp: targetCard.hp,
+        weakness: targetCard.weakness,
+        resistance: targetCard.resistance,
+        attacks: targetCard.attacks,
+        retreatCost: targetCard.retreatCost
+      };
+      const newMaxHp = targetCard.hp || pokemon.card.hp || 40;
+      pokemon.currentHp = Math.max(0, newMaxHp - pokemon.damage);
+      GameEngine.addLog(next, `🔄 Transform! Ditto transformed into ${targetCard.name}! (HP: ${newMaxHp}, Type: ${targetCard.types?.join('/') || '?'})`, 'action');
+      pokemon.powerUsedThisTurn = true;
+    }
+
+    // 19. Reel In (Dark Slowbro)
+    // "When you play Dark Slowbro from your hand, choose up to 3 Basic Pokémon and/or
+    // Evolution cards from your discard pile and put them into your hand."
+    else if (normPower === 'reel in') {
+      const eligible = player.discard.filter(c =>
+        c.supertype === 'Pokemon' && (c.subtype === 'Basic' || c.subtype === 'Stage 1' || c.subtype === 'Stage 2')
+      );
+      const pickCount = Math.min(3, eligible.length);
+      if (pickCount === 0) {
+        GameEngine.addLog(next, `🎣 Reel In: No Basic Pokémon or Evolution cards in discard pile.`, 'system');
+      } else {
+        let picked = 0;
+        for (let i = 0; i < pickCount; i++) {
+          const idx = player.discard.findIndex(c =>
+            c.supertype === 'Pokemon' && (c.subtype === 'Basic' || c.subtype === 'Stage 1' || c.subtype === 'Stage 2')
+          );
+          if (idx !== -1) {
+            const card = player.discard.splice(idx, 1)[0];
+            player.hand.push(card);
+            picked++;
+          }
+        }
+        GameEngine.addLog(next, `🎣 Reel In! Dark Slowbro retrieved ${picked} card(s) from the discard pile!`, 'action');
       }
       pokemon.powerUsedThisTurn = true;
     }

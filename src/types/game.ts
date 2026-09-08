@@ -119,6 +119,8 @@ export interface InPlayCard {
   powerDisabledUntilTurn?: number;
   toxicCounter?: number;
   powerUsedThisTurn?: boolean;
+  /** Set by Ditto's Transform: the card Ditto is currently copying. */
+  transformedInto?: Card;
   /**
    * Independent poison track (official TCG rules): Poisoned/Toxic coexists with
    * Asleep/Paralyzed/Confused. Cleared by retreat, evolution, Full Heal, or benching.
