@@ -2150,9 +2150,15 @@ export class GameEngine {
       const baseCost = attack.cost.filter(c => c === 'Water').length;
       const extraWater = Math.max(0, Math.min(2, waterEnergies - baseCost));
       baseDamage += extraWater * 10;
-      // Enhancer intensity: damage-proportional with baseline 10 (lowest Water Gun base = Poliwag/Lapras).
-      // Always set so higher-base Pokémon (Vaporeon 30, Omastar 20) render stronger even at base cost.
-      fxIntensity = 1.0 + Math.max(0, baseDamage - 10) * 0.01;
+      if (attackName === 'hydro pump') {
+        // Blastoise Hydro Pump: dedicated twin-cannon FX, intensity scales with bonus Water Energy.
+        // Base (40 dmg) → 1.0; +1 Water (50) → 1.1; +2 Water (60) → 1.2.
+        fxIntensity = 1.0 + extraWater * 0.1;
+      } else {
+        // Enhancer intensity: damage-proportional with baseline 10 (lowest Water Gun base = Poliwag/Lapras).
+        // Always set so higher-base Pokémon (Vaporeon 30, Omastar 20) render stronger even at base cost.
+        fxIntensity = 1.0 + Math.max(0, baseDamage - 10) * 0.01;
+      }
       if (extraWater > 0) {
         GameEngine.addLog(next, `💧 Extra Water Energy: +${extraWater * 10} damage (${baseDamage} total)!`, 'action');
       }

@@ -30,6 +30,7 @@ export interface ActiveFX {
     | 'thunder_punch'
     | 'flamethrower_blaze'
     | 'water_gun_stream'
+    | 'hydro_pump_cannons'
     | 'ice_beam_frost'
     | 'star_freeze'
     | 'blizzard_storm'
@@ -332,6 +333,8 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
 
   // 5. Water & Ice
   if (name.includes('waterfall')) return 'waterfall_surf';
+  // Blastoise fires Hydro Pump through the twin water cannons on its shell — dedicated FX.
+  if (name.includes('hydro pump') && pkm.includes('blastoise')) return 'hydro_pump_cannons';
   if (name.includes('hydro pump') || name.includes('water gun') || name.includes('surf') || name.includes('tsunami') || name.includes('hydro') || name.includes('aqua')) return 'water_gun_stream';
   if (name.includes('bubblebeam')) return 'bubblebeam';
   if (name.includes('bubble')) return 'bubble_gentle';
@@ -1846,6 +1849,185 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <svg width={Math.round(40 * wi)} height={Math.round(30 * wi)} viewBox="0 0 40 30">
               <ellipse cx="20" cy="15" rx={16 * wi} ry={8 * wi} fill="#bae6fd" opacity={0.2 + (wi - 1) * 0.15} />
               <ellipse cx="14" cy="12" rx={10 * wi} ry={5 * wi} fill="#e0f2fe" opacity={0.15 + (wi - 1) * 0.1} />
+            </svg>
+          </div>
+        </div>
+        );
+      })()}
+
+      {/* 13b. HYDRO PUMP CANNONS (Blastoise-exclusive — twin shell-cannon volley)
+          TOMA-style: two dense water jets fire UPWARD from Blastoise's twin back cannons
+          (±33° outward splay per stock reference), converge on the target above with muzzle-flash bursts,
+          scatter heavy spray and land in a wide splash.
+          Intensity scales with bonus Water Energy: base 40 dmg → wi 1.0, +2 Water → 1.2. */}
+      {fx.type === 'hydro_pump_cannons' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        return (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Left cannon barrel — bottom-left, ~33° outward splay per stock reference:
+              stepped socket neck (two rings) → straight uniform barrel → open elliptical bore */}
+          <div className="absolute bottom-1 left-8" style={{ transform: 'rotate(-33deg)', transformOrigin: '50% 100%' }}>
+            <svg width={Math.round(44 * wi)} height={Math.round(76 * wi)} viewBox="0 0 44 76">
+              {/* Stepped neck: thin pipe segments rising out of the shell socket */}
+              <path d="M16 76 L16 66 L28 66 L28 76 Z" fill="#94a3b8" opacity="0.95" />
+              <rect x="14.5" y="63" width="15" height="4" rx="2" fill="#cbd5e1" opacity="0.95" />
+              <path d="M14.5 66 L14.5 54 L29.5 54 L29.5 66 Z" fill="#8b98ab" opacity="0.95" />
+              <rect x="13" y="50.5" width="18" height="4.5" rx="2.2" fill="#cbd5e1" opacity="0.95" />
+              {/* Main barrel: straight uniform cylinder with side shading */}
+              <path d="M10 52 L10 14 Q10 11, 13 11 L31 11 Q34 11, 34 14 L34 52 Z" fill="#cbd5e1" opacity="0.98" />
+              <path d="M13.5 50 L13.5 15 L20 15 L20 50 Z" fill="#e2e8f0" opacity="0.75" />
+              <path d="M28 50 L28 15 L32 15 L32 50 Z" fill="#94a3b8" opacity="0.55" />
+              {/* Rim + open bore mouth (dark interior with lit crescent) */}
+              <rect x="9" y="8" width="26" height="6" rx="3" fill="#94a3b8" opacity="0.95" />
+              <ellipse cx="22" cy="8.5" rx="13" ry="5" fill="#94a3b8" opacity="0.95" />
+              <ellipse cx="22" cy="8.5" rx="10.5" ry="3.9" fill="#475569" opacity="0.95" />
+              <ellipse cx="21" cy="8" rx="8" ry="2.7" fill="#64748b" opacity="0.85" />
+              <ellipse cx="23" cy="8.8" rx="6" ry="2.1" fill="#1e293b" opacity="0.9" />
+              <ellipse cx="23.5" cy="9" rx="3" ry="1.1" fill="#0f172a" opacity="0.85" />
+            </svg>
+          </div>
+          {/* Right cannon barrel — bottom-right, ~33° outward splay per stock reference:
+              stepped socket neck (two rings) → straight uniform barrel → open elliptical bore */}
+          <div className="absolute bottom-1 right-8" style={{ transform: 'rotate(33deg)', transformOrigin: '50% 100%' }}>
+            <svg width={Math.round(44 * wi)} height={Math.round(76 * wi)} viewBox="0 0 44 76">
+              {/* Stepped neck: thin pipe segments rising out of the shell socket */}
+              <path d="M16 76 L16 66 L28 66 L28 76 Z" fill="#94a3b8" opacity="0.95" />
+              <rect x="14.5" y="63" width="15" height="4" rx="2" fill="#cbd5e1" opacity="0.95" />
+              <path d="M14.5 66 L14.5 54 L29.5 54 L29.5 66 Z" fill="#8b98ab" opacity="0.95" />
+              <rect x="13" y="50.5" width="18" height="4.5" rx="2.2" fill="#cbd5e1" opacity="0.95" />
+              {/* Main barrel: straight uniform cylinder with side shading */}
+              <path d="M10 52 L10 14 Q10 11, 13 11 L31 11 Q34 11, 34 14 L34 52 Z" fill="#cbd5e1" opacity="0.98" />
+              <path d="M13.5 50 L13.5 15 L20 15 L20 50 Z" fill="#e2e8f0" opacity="0.75" />
+              <path d="M28 50 L28 15 L32 15 L32 50 Z" fill="#94a3b8" opacity="0.55" />
+              {/* Rim + open bore mouth (dark interior with lit crescent) */}
+              <rect x="9" y="8" width="26" height="6" rx="3" fill="#94a3b8" opacity="0.95" />
+              <ellipse cx="22" cy="8.5" rx="13" ry="5" fill="#94a3b8" opacity="0.95" />
+              <ellipse cx="22" cy="8.5" rx="10.5" ry="3.9" fill="#475569" opacity="0.95" />
+              <ellipse cx="21" cy="8" rx="8" ry="2.7" fill="#64748b" opacity="0.85" />
+              <ellipse cx="23" cy="8.8" rx="6" ry="2.1" fill="#1e293b" opacity="0.9" />
+              <ellipse cx="23.5" cy="9" rx="3" ry="1.1" fill="#0f172a" opacity="0.85" />
+            </svg>
+          </div>
+          {/* Left cannon jet — anchored exactly at the tilted muzzle mouth (no inset drift) */}
+          <div className="absolute" style={{ left: `${Math.round(32 - 42.76 * wi)}px`, bottom: `${Math.round(4 + 53.01 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetLeft 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+            <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
+              {/* Initial pressure burst cone at nozzle exit */}
+              <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
+              <path d="M16 100 L28 80 L40 100 Z" fill="#7dd3fc" opacity="0.45" />
+              {/* Main jet body (+30% thickness) */}
+              <path d="M28 96 Q24 70, 26 50 Q28 30, 32 6" fill="none" stroke="url(#hydroCannonGradL)" strokeWidth={23.4 * wi} strokeLinecap="round" opacity="0.92" />
+              <path d="M30 94 Q26 68, 28 48 Q30 28, 34 8" fill="none" stroke="#7dd3fc" strokeWidth={11.7 * wi} strokeLinecap="round" opacity="0.7" />
+              <path d="M26 92 Q24 66, 26 46 Q28 26, 30 10" fill="none" stroke="#e0f2fe" strokeWidth={6.5 * wi} strokeLinecap="round" opacity="0.8" />
+              <defs>
+                <linearGradient id="hydroCannonGradL" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.7" />
+                  <stop offset="50%" stopColor="#38bdf8" />
+                  <stop offset="100%" stopColor="#7dd3fc" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          {/* Right cannon jet — anchored exactly at the tilted muzzle mouth (no inset drift) */}
+          <div className="absolute" style={{ right: `${Math.round(32 - 42.76 * wi)}px`, bottom: `${Math.round(4 + 53.01 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetRight 1.3s cubic-bezier(0.15, 0.8, 0.35, 1) forwards', filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+            <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
+              {/* Initial pressure burst cone at nozzle exit */}
+              <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
+              <path d="M16 100 L28 80 L40 100 Z" fill="#7dd3fc" opacity="0.45" />
+              {/* Main jet body (+30% thickness) */}
+              <path d="M28 96 Q32 70, 30 50 Q28 30, 24 6" fill="none" stroke="url(#hydroCannonGradR)" strokeWidth={23.4 * wi} strokeLinecap="round" opacity="0.92" />
+              <path d="M26 94 Q30 68, 28 48 Q26 28, 22 8" fill="none" stroke="#7dd3fc" strokeWidth={11.7 * wi} strokeLinecap="round" opacity="0.7" />
+              <path d="M30 92 Q32 66, 30 46 Q28 26, 26 10" fill="none" stroke="#e0f2fe" strokeWidth={6.5 * wi} strokeLinecap="round" opacity="0.8" />
+              <defs>
+                <linearGradient id="hydroCannonGradR" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.7" />
+                  <stop offset="50%" stopColor="#38bdf8" />
+                  <stop offset="100%" stopColor="#7dd3fc" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          {/* Muzzle flash — left cannon (double ring + 8-spike burst) */}
+          <div className="absolute" style={{ left: `${Math.round(32 - 40.76 * wi)}px`, bottom: `${Math.round(4 + 30.61 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out forwards', opacity: 0 }}>
+            <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
+              <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
+              <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
+              <circle cx="26" cy="26" r="12" fill="#7dd3fc" opacity="0.65" />
+              <circle cx="26" cy="26" r="7" fill="#bae6fd" opacity="0.8" />
+              <circle cx="26" cy="26" r="3.5" fill="#e0f2fe" opacity="0.95" />
+              <path d="M26 2 L28.5 16 L23.5 16 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M26 50 L28.5 36 L23.5 36 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M2 26 L16 23.5 L16 28.5 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M50 26 L36 23.5 L36 28.5 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M8 8 L18 16 L14 20 Z" fill="#e0f2fe" opacity="0.6" />
+              <path d="M44 8 L34 16 L38 20 Z" fill="#e0f2fe" opacity="0.6" />
+              <path d="M8 44 L18 36 L14 32 Z" fill="#e0f2fe" opacity="0.6" />
+              <path d="M44 44 L34 36 L38 32 Z" fill="#e0f2fe" opacity="0.6" />
+            </svg>
+          </div>
+          {/* Muzzle flash — right cannon (double ring + 8-spike burst) */}
+          <div className="absolute" style={{ right: `${Math.round(32 - 40.76 * wi)}px`, bottom: `${Math.round(4 + 30.61 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.06s forwards', opacity: 0 }}>
+            <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
+              <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
+              <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
+              <circle cx="26" cy="26" r="12" fill="#7dd3fc" opacity="0.65" />
+              <circle cx="26" cy="26" r="7" fill="#bae6fd" opacity="0.8" />
+              <circle cx="26" cy="26" r="3.5" fill="#e0f2fe" opacity="0.95" />
+              <path d="M26 2 L28.5 16 L23.5 16 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M26 50 L28.5 36 L23.5 36 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M2 26 L16 23.5 L16 28.5 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M50 26 L36 23.5 L36 28.5 Z" fill="#bae6fd" opacity="0.85" />
+              <path d="M8 8 L18 16 L14 20 Z" fill="#e0f2fe" opacity="0.6" />
+              <path d="M44 8 L34 16 L38 20 Z" fill="#e0f2fe" opacity="0.6" />
+              <path d="M8 44 L18 36 L14 32 Z" fill="#e0f2fe" opacity="0.6" />
+              <path d="M44 44 L34 36 L38 32 Z" fill="#e0f2fe" opacity="0.6" />
+            </svg>
+          </div>
+          {/* Heavy spray droplets — scatter left */}
+          <div className="absolute top-2 left-4" style={{ animation: 'gbaHydroCannonDrop1 1.3s ease-out 0.2s forwards', opacity: 0 }}>
+            <svg width={Math.round(14 * wi)} height={Math.round(18 * wi)} viewBox="0 0 14 18">
+              <path d="M7 1 Q10.5 7, 10.5 10.5 Q10.5 15, 7 17 Q3.5 15, 3.5 10.5 Q3.5 7, 7 1 Z" fill="#38bdf8" opacity="0.9" />
+              <ellipse cx="5.5" cy="9" rx="1.8" ry="2.4" fill="#bae6fd" opacity="0.7" />
+            </svg>
+          </div>
+          {/* Heavy spray droplets — scatter right */}
+          <div className="absolute top-2 right-4" style={{ animation: 'gbaHydroCannonDrop2 1.3s ease-out 0.3s forwards', opacity: 0 }}>
+            <svg width={Math.round(12 * wi)} height={Math.round(16 * wi)} viewBox="0 0 12 16">
+              <path d="M6 1 Q9 5.5, 9 8.5 Q9 12.5, 6 14.5 Q3 12.5, 3 8.5 Q3 5.5, 6 1 Z" fill="#0ea5e9" opacity="0.85" />
+              <ellipse cx="4.5" cy="7.5" rx="1.5" ry="2" fill="#e0f2fe" opacity="0.6" />
+            </svg>
+          </div>
+          {/* Extra droplets at higher intensity */}
+          {wi > 1.08 && (
+            <div className="absolute top-3" style={{ animation: 'gbaHydroCannonDrop3 1.3s ease-out 0.38s forwards', opacity: 0 }}>
+              <svg width={Math.round(10 * wi)} height={Math.round(14 * wi)} viewBox="0 0 10 14">
+                <path d="M5 1 Q7.5 4.5, 7.5 7 Q7.5 10.5, 5 12 Q2.5 10.5, 2.5 7 Q2.5 4.5, 5 1 Z" fill="#7dd3fc" opacity="0.8" />
+              </svg>
+            </div>
+          )}
+          {/* Convergence impact splash — where both jets meet the target (top) */}
+          <div className="absolute -top-2" style={{ animation: 'gbaHydroCannonImpact 1.3s ease-out 0.45s forwards', opacity: 0 }}>
+            <svg width={Math.round(70 * wi)} height={Math.round(60 * wi)} viewBox="0 0 70 60">
+              <path d="M35 50 Q22 38, 14 24 Q19 34, 25 42" fill="none" stroke="#7dd3fc" strokeWidth={3.5 * wi} strokeLinecap="round" opacity="0.9" />
+              <path d="M35 50 Q42 34, 52 20 Q46 34, 41 42" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} strokeLinecap="round" opacity="0.85" />
+              <path d="M35 50 Q28 40, 20 32" fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} strokeLinecap="round" opacity="0.7" />
+              <path d="M35 50 Q44 38, 52 30" fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} strokeLinecap="round" opacity="0.7" />
+              <circle cx="35" cy="46" r={9 * wi} fill="none" stroke="#e0f2fe" strokeWidth={1.8 * wi} opacity="0.6" />
+              <circle cx="12" cy="18" r={3 * wi} fill="#7dd3fc" opacity="0.8" />
+              <circle cx="54" cy="16" r={2.5 * wi} fill="#38bdf8" opacity="0.75" />
+              <circle cx="28" cy="12" r={2 * wi} fill="#bae6fd" opacity="0.7" />
+              <circle cx="44" cy="10" r={1.8 * wi} fill="#e0f2fe" opacity="0.65" />
+              {wi > 1.1 && <circle cx="8" cy="26" r={2.2 * wi} fill="#38bdf8" opacity="0.7" />}
+              {wi > 1.1 && <circle cx="58" cy="22" r={2 * wi} fill="#7dd3fc" opacity="0.65" />}
+              {wi > 1.18 && <circle cx="22" cy="8" r={2.4 * wi} fill="#bae6fd" opacity="0.6" />}
+              <ellipse cx="35" cy="54" rx={22 * wi} ry={7 * wi} fill="#0ea5e9" opacity="0.3" />
+              <ellipse cx="35" cy="52" rx={14 * wi} ry={5 * wi} fill="#38bdf8" opacity="0.25" />
+            </svg>
+          </div>
+          {/* Dense mist at cannon base */}
+          <div className="absolute bottom-2" style={{ animation: 'gbaWaterMistTrail 1.3s ease-out forwards', opacity: 0 }}>
+            <svg width={Math.round(52 * wi)} height={Math.round(30 * wi)} viewBox="0 0 52 30">
+              <ellipse cx="26" cy="15" rx={22 * wi} ry={10 * wi} fill="#bae6fd" opacity={0.25 + (wi - 1) * 0.15} />
+              <ellipse cx="18" cy="12" rx={13 * wi} ry={6 * wi} fill="#e0f2fe" opacity={0.18 + (wi - 1) * 0.1} />
             </svg>
           </div>
         </div>
