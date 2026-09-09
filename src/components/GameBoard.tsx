@@ -75,16 +75,62 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const [selectedBenchIndex, setSelectedBenchIndex] = useState<number | null>(null);
   const [zoomedCard, setZoomedCard] = useState<Card | null>(null);
   const [zoomedInPlay, setZoomedInPlay] = useState<InPlayCard | null>(null);
+  const zoomedCardRef = useRef<Card | null>(null);
+  const modalJustClosedRef = useRef(0);
+  const openedInspectFromClairvoyance = useRef(false);
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [showEmotes, setShowEmotes] = useState(false);
   const [clairvoyanceDrawerOpen, setClairvoyanceDrawerOpen] = useState(false);
   const [clairvoyanceEverOpened, setClairvoyanceEverOpened] = useState(false);
+  const clairvoyanceDrawerRef = useRef<HTMLDivElement | null>(null);
   const clairvoyanceSwipeX = useRef<number | null>(null);
   const clairvoyanceSwiped = useRef(false);
   const clairScrollRef = useRef<HTMLDivElement | null>(null);
   const clairDragY = useRef<number | null>(null);
   const clairDragStartScroll = useRef(0);
   const clairDragMoved = useRef(false);
+  const handScrollRef = useRef<HTMLDivElement | null>(null);
+  const handScrollJustScrolledRef = useRef(0);
+
+  useEffect(() => {
+    zoomedCardRef.current = zoomedCard;
+  }, [zoomedCard]);
+
+  // Close Clairvoyance sidebar when clicking anywhere outside of it (e.g. game board)
+  // Exception: if the card info modal is open, clicked, or just closed (via X or backdrop),
+  // keep the sidebar open so the player can continue inspecting cards.
+  useEffect(() => {
+    if (!clairvoyanceDrawerOpen) return;
+    const handleOutsideClick = (e: MouseEvent | PointerEvent) => {
+      // 1. If clicking inside the Clairvoyance sidebar drawer, keep it open
+      if (
+        clairvoyanceDrawerRef.current &&
+        clairvoyanceDrawerRef.current.contains(e.target as Node)
+      ) {
+        return;
+      }
+
+      // 2. If a card info modal is currently open, or the click was inside CardZoomModal
+      // (content dialog, close button, or backdrop), or if the modal was just closed
+      // by this interaction, do not treat this as an outside click on the sidebar.
+      if (
+        zoomedCardRef.current !== null ||
+        (e.target as Element)?.closest?.('[data-card-zoom-modal="true"]') ||
+        Date.now() - modalJustClosedRef.current < 350
+      ) {
+        return;
+      }
+
+      setClairvoyanceDrawerOpen(false);
+      openedInspectFromClairvoyance.current = false;
+    };
+    document.addEventListener('pointerdown', handleOutsideClick);
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('pointerdown', handleOutsideClick);
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, [clairvoyanceDrawerOpen]);
   const [opponentEmote, setOpponentEmote] = useState<string | null>(null);
   const [activeFXList, setActiveFXList] = useState<ActiveFX[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
@@ -1678,7 +1724,26 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     return Array.from(groupMap.values());
   })();
 
-  const handleInspect = (card: Card, inPlay?: InPlayCard) => {
+  const maxCpuHandStack = groupedCpuHand.reduce((max, g) => Math.max(max, g.count), 0);
+  const clairDrawerWidthClass =
+    maxCpuHandStack >= 3
+      ? 'w-[120px] md:w-[138px]'
+      : maxCpuHandStack === 2
+      ? 'w-[114px] md:w-[130px]'
+      : 'w-[108px] md:w-[124px]';
+
+  const clairDrawerTranslateClosedClass =
+    maxCpuHandStack >= 3
+      ? '-translate-x-[120px] md:-translate-x-[138px]'
+      : maxCpuHandStack === 2
+      ? '-translate-x-[114px] md:-translate-x-[130px]'
+      : '-translate-x-[108px] md:-translate-x-[124px]';
+
+  const handleInspect = (card: Card, inPlay?: InPlayCard, fromClairvoyance = false) => {
+    if (fromClairvoyance) {
+      openedInspectFromClairvoyance.current = true;
+    }
+    zoomedCardRef.current = card;
     setZoomedCard(card);
     setZoomedInPlay(inPlay || null);
   };
@@ -1807,9 +1872,62 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     }
   };
 
-  // POINTER & TOUCH DRAG CONTROLLERS
+  // POINTER & TOUCH DRAG CONTROLLERS (Supports Drag-Pull Horizontal Scroll & Drag-to-Play)
+  const handleHandContainerPointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    if ((e.target as HTMLElement).closest('[data-hand-card="true"]')) return;
+
+    const startX = e.clientX;
+    const startScrollLeft = handScrollRef.current ? handScrollRef.current.scrollLeft : 0;
+    let hasScrolled = false;
+    let lastMoveX = startX;
+    let lastMoveTime = Date.now();
+    let velocityX = 0;
+
+    const onPointerMove = (moveEv: PointerEvent) => {
+      const dx = moveEv.clientX - startX;
+      if (Math.abs(dx) > 4) {
+        hasScrolled = true;
+        if (handScrollRef.current) {
+          handScrollRef.current.scrollLeft = startScrollLeft - dx / (handScale || 1);
+        }
+        const now = Date.now();
+        const dt = now - lastMoveTime;
+        if (dt > 10) {
+          velocityX = (moveEv.clientX - lastMoveX) / dt;
+          lastMoveX = moveEv.clientX;
+          lastMoveTime = now;
+        }
+      }
+    };
+
+    const onPointerUp = () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerUp);
+
+      if (hasScrolled) {
+        handScrollJustScrolledRef.current = Date.now();
+        if (Math.abs(velocityX) > 0.2 && handScrollRef.current) {
+          let v = (velocityX * 16) / (handScale || 1);
+          const decay = () => {
+            if (!handScrollRef.current || Math.abs(v) < 0.5) return;
+            handScrollRef.current.scrollLeft -= v;
+            v *= 0.92;
+            requestAnimationFrame(decay);
+          };
+          requestAnimationFrame(decay);
+        }
+      }
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
+  };
+
   const handleCardPointerDown = (e: React.PointerEvent, card: Card, handIndex: number) => {
-    if (isTurnLocked || (!isPlayerTurn && !isInitialSetup)) return;
+    if (isTurnLocked) return;
     if (e.button !== 0 && e.pointerType === 'mouse') return;
 
     const startX = e.clientX;
@@ -1818,10 +1936,50 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const rect = targetEl.getBoundingClientRect();
     const initialCenterX = rect.left + rect.width / 2;
     const initialCenterY = rect.top + rect.height / 2;
+    const startScrollLeft = handScrollRef.current ? handScrollRef.current.scrollLeft : 0;
+    const canPlayCard = Boolean(isPlayerTurn || isInitialSetup);
+
+    let gestureMode: 'undecided' | 'scroll' | 'drag' = 'undecided';
+    let hasScrolled = false;
+    let lastMoveX = startX;
+    let lastMoveTime = Date.now();
+    let velocityX = 0;
 
     const onPointerMove = (moveEv: PointerEvent) => {
-      const dist = Math.hypot(moveEv.clientX - startX, moveEv.clientY - startY);
-      if (dist > 5) {
+      const dx = moveEv.clientX - startX;
+      const dy = moveEv.clientY - startY;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+      const dist = Math.hypot(dx, dy);
+
+      if (gestureMode === 'undecided') {
+        if (dist > 6) {
+          // If movement is predominantly horizontal or downward (or card playing is not allowed), scroll hand
+          if (absDx > absDy || dy > 0 || !canPlayCard) {
+            gestureMode = 'scroll';
+            hasScrolled = true;
+          } else if (dy < -6 && canPlayCard) {
+            gestureMode = 'drag';
+          }
+        }
+      }
+
+      if (gestureMode === 'scroll') {
+        hasScrolled = true;
+        if (handScrollRef.current) {
+          handScrollRef.current.scrollLeft = startScrollLeft - dx / (handScale || 1);
+        }
+        const now = Date.now();
+        const dt = now - lastMoveTime;
+        if (dt > 10) {
+          velocityX = (moveEv.clientX - lastMoveX) / dt;
+          lastMoveX = moveEv.clientX;
+          lastMoveTime = now;
+        }
+        return;
+      }
+
+      if (gestureMode === 'drag') {
         setDraggingCard({
           card,
           handIndex,
@@ -1869,13 +2027,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       window.removeEventListener('pointerup', onPointerUp);
       window.removeEventListener('pointercancel', onPointerUp);
 
+      // If this gesture was used to drag-pull scroll the hand, completely suppress selection and drops
+      if (gestureMode === 'scroll' || hasScrolled) {
+        handScrollJustScrolledRef.current = Date.now();
+        setDraggingCard(null);
+        setHoveredDropTarget(null);
+
+        // Apply smooth momentum decay if flicked
+        if (Math.abs(velocityX) > 0.2 && handScrollRef.current) {
+          let v = (velocityX * 16) / (handScale || 1);
+          const decay = () => {
+            if (!handScrollRef.current || Math.abs(v) < 0.5) return;
+            handScrollRef.current.scrollLeft -= v;
+            v *= 0.92;
+            requestAnimationFrame(decay);
+          };
+          requestAnimationFrame(decay);
+        }
+        return;
+      }
+
       // Instantly clear dragging preview and hover target indicators
       setDraggingCard(null);
       setHoveredDropTarget(null);
 
       const dist = Math.hypot(upEv.clientX - startX, upEv.clientY - startY);
       if (dist <= 6) {
-        handleHandCardClick(handIndex);
+        if (canPlayCard && Date.now() - handScrollJustScrolledRef.current > 300) {
+          handleHandCardClick(handIndex);
+        }
         return;
       }
 
@@ -3125,7 +3305,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       'reel in',
       'healing wind',
       'transform',
-      'clairvoyance'
+      'clairvoyance',
+      'strikes back',
+      'transparency'
     ];
     return passives.includes(norm);
   };
@@ -3143,6 +3325,60 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     });
   };
 
+  // Clairvoyance dragger/toggle drag-pull open/close controller (swipe right to open, swipe left to close, tap to toggle)
+  const handleClairvoyanceTogglePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    const startX = e.clientX;
+    const startY = e.clientY;
+    let hasMoved = false;
+
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      /* noop */
+    }
+
+    const onPointerMove = (moveEv: PointerEvent) => {
+      const dx = moveEv.clientX - startX;
+      if (Math.abs(dx) > 10) {
+        hasMoved = true;
+      }
+    };
+
+    const onPointerUp = (upEv: PointerEvent) => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerCancel);
+
+      const dx = upEv.clientX - startX;
+      const dy = Math.abs(upEv.clientY - startY);
+
+      // Swipe right to open
+      if (dx > 15 && dy < 80) {
+        setClairvoyanceDrawerOpen(true);
+        setClairvoyanceEverOpened(true);
+      } else if (dx < -15 && dy < 80) {
+        // Swipe left to close
+        setClairvoyanceDrawerOpen(false);
+      } else if (!hasMoved && Math.abs(dx) < 10) {
+        // Tap/click to toggle
+        const next = !clairvoyanceDrawerOpen;
+        setClairvoyanceDrawerOpen(next);
+        if (next) setClairvoyanceEverOpened(true);
+      }
+    };
+
+    const onPointerCancel = () => {
+      window.removeEventListener('pointermove', onPointerMove);
+      window.removeEventListener('pointerup', onPointerUp);
+      window.removeEventListener('pointercancel', onPointerCancel);
+    };
+
+    window.addEventListener('pointermove', onPointerMove);
+    window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerCancel);
+  };
+
   const handleDiscardFossil = (instanceId: string) => {
     if (!isPlayerTurn || isTurnLocked) return;
     sounds.playCardDraw();
@@ -3157,6 +3393,34 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     // Stare's shutdown lasts through the opponent's next turn, so this can be true on a turn the
     // player is otherwise allowed to use the power.
     if (GameEngine.isPowerDisabled(inPlay, state.turn)) return;
+
+    if (inPlay.status === 'Asleep' || inPlay.status === 'Paralyzed' || inPlay.status === 'Confused') {
+      const statusLabel = inPlay.status;
+      setActionBanner({
+        text: lang === 'tr'
+          ? `${inPlay.card.name} ${statusLabel} durumunda olduğu için Pokémon Gücünü kullanamaz!`
+          : `${inPlay.card.name} is ${statusLabel} and cannot use its Pokémon Power!`,
+        type: 'info'
+      });
+      setTimeout(() => setActionBanner(null), 2500);
+      return;
+    }
+
+    // Muk's Toxic Gas check
+    const allCards = [player.active, ...player.bench, cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
+    const isToxicGasActive = allCards.some(
+      p => p.card.name === 'Muk' && (p.card.power?.name === 'Toxic Gas' || p.card.pokemonPower?.name === 'Toxic Gas') && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' && !GameEngine.isPowerDisabled(p, state.turn)
+    );
+    if (isToxicGasActive && inPlay.card.name !== 'Muk') {
+      setActionBanner({
+        text: lang === 'tr'
+          ? "Muk'un Toxic Gas yeteneği devrede! Pokémon Güçleri kullanılamaz!"
+          : "Muk's Toxic Gas is active! Pokémon Powers cannot be used!",
+        type: 'info'
+      });
+      setTimeout(() => setActionBanner(null), 2500);
+      return;
+    }
 
     const normPower = power.name.toLowerCase().trim();
 
@@ -4471,19 +4735,37 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         </div>
       </div>
 
+      {/* Clairvoyance Backdrop to close on click outside */}
+      {isClairvoyanceActive() && cpu.hand.length > 0 && clairvoyanceDrawerOpen && !zoomedCard && (
+        <div
+          className="fixed inset-0 z-30"
+          onClick={() => {
+            if (Date.now() - modalJustClosedRef.current < 350) return;
+            setClairvoyanceDrawerOpen(false);
+            openedInspectFromClairvoyance.current = false;
+          }}
+        />
+      )}
+
       {/* Clairvoyance Left Sidebar Drawer (Omanyte) */}
       {isClairvoyanceActive() && cpu.hand.length > 0 && (
-        <div className={`fixed left-0 top-1 md:top-1.5 z-40 flex items-start transition-transform duration-300 ease-in-out ${
-          clairvoyanceDrawerOpen ? 'translate-x-0' : '-translate-x-[108px] md:-translate-x-[124px]'
+        <div
+          ref={clairvoyanceDrawerRef}
+          className={`fixed left-0 top-1 md:top-1.5 z-40 flex items-start transition-transform duration-300 ease-in-out ${
+          clairvoyanceDrawerOpen ? 'translate-x-0' : clairDrawerTranslateClosedClass
         }`}>
           <div
-            className="w-[108px] md:w-[124px] bg-purple-950/90 backdrop-blur-md border-r border-b border-purple-500/40 rounded-br-xl shadow-2xl flex flex-col overflow-hidden"
+            className={`${clairDrawerWidthClass} bg-purple-950/90 backdrop-blur-md border-r border-b border-purple-500/40 rounded-br-xl shadow-2xl flex flex-col overflow-hidden`}
             style={{ maxHeight: 'calc(100vh - 12px)', touchAction: 'pan-y' }}
-            onPointerDown={(e) => { clairvoyanceSwipeX.current = e.clientX; clairvoyanceSwiped.current = false; }}
+            onPointerDown={(e) => {
+              if ((e.target as HTMLElement).closest('.clairvoyance-scrollbar')) return;
+              clairvoyanceSwipeX.current = e.clientX;
+              clairvoyanceSwiped.current = false;
+            }}
             onPointerUp={(e) => {
               if (clairvoyanceSwipeX.current !== null) {
                 const dx = e.clientX - clairvoyanceSwipeX.current;
-                if (dx < -35) setClairvoyanceDrawerOpen(false);
+                if (dx < -25) setClairvoyanceDrawerOpen(false);
                 if (Math.abs(dx) > 10) clairvoyanceSwiped.current = true;
               }
               clairvoyanceSwipeX.current = null;
@@ -4499,24 +4781,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 8px threshold so a plain tap still opens the inspect modal without false triggers. */}
             <div
               ref={clairScrollRef}
-              className="flex-1 overflow-y-auto p-1.5 flex flex-col gap-1.5 max-h-[558px] md:max-h-[646px] [scrollbar-width:thin] [scrollbar-color:rgba(168,85,247,0.5)_transparent]"
-              style={{ touchAction: 'none', overscrollBehavior: 'contain' }}
+              className="flex-1 overflow-y-auto pl-1.5 pr-1.5 py-1.5 flex flex-col gap-1.5 max-h-[558px] md:max-h-[646px] clairvoyance-scrollbar"
+              style={{ touchAction: 'pan-y', overscrollBehavior: 'contain' }}
               onPointerDown={(e) => {
                 clairDragY.current = e.clientY;
                 clairDragStartScroll.current = clairScrollRef.current?.scrollTop ?? 0;
                 clairDragMoved.current = false;
-                try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* noop */ }
+                clairvoyanceSwiped.current = false;
               }}
               onPointerMove={(e) => {
                 if (clairDragY.current === null || !clairScrollRef.current) return;
                 const dy = clairDragY.current - e.clientY;
                 if (Math.abs(dy) > 8) {
                   clairDragMoved.current = true;
+                  try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* noop */ }
                   clairScrollRef.current.scrollTop = clairDragStartScroll.current + dy;
                 }
               }}
-              onPointerUp={() => { clairDragY.current = null; }}
-              onPointerCancel={() => { clairDragY.current = null; }}
+              onPointerUp={(e) => {
+                if (clairDragY.current !== null) {
+                  try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* noop */ }
+                }
+                clairDragY.current = null;
+              }}
+              onPointerCancel={(e) => {
+                if (clairDragY.current !== null) {
+                  try { e.currentTarget.releasePointerCapture(e.pointerId); } catch { /* noop */ }
+                }
+                clairDragY.current = null;
+              }}
             >
               {groupedCpuHand.map((group, gIdx) => {
                 const stackLayers = Math.min(group.count, 3);
@@ -4524,22 +4817,40 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 return (
                   <div
                     key={`clair-drawer-${cardKey}-${gIdx}`}
-                    className="flex-shrink-0 relative cursor-pointer select-none"
-                    onClick={() => {
+                    className="flex-shrink-0 flex flex-col items-center group/cardstack relative cursor-pointer select-none"
+                    style={{
+                      paddingRight: group.count > 1 ? `${(stackLayers - 1) * 5}px` : '0px',
+                      paddingTop: group.count > 1 ? `${(stackLayers - 1) * 2.5}px` : '0px',
+                    }}
+                    onPointerDown={() => {
+                      clairDragMoved.current = false;
+                      clairvoyanceSwiped.current = false;
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
                       // Suppress inspect when the pointer gesture was a vertical drag or a horizontal drawer swipe
-                      if (!clairDragMoved.current && !clairvoyanceSwiped.current) handleInspect(group.card);
+                      if (!clairDragMoved.current && !clairvoyanceSwiped.current) handleInspect(group.card, undefined, true);
                     }}
                   >
-                    {/* Under-cards of the stack — absolutely positioned so the row height stays constant */}
-                    {Array.from({ length: stackLayers - 1 }).map((_, li) => {
-                      const depth = stackLayers - 1 - li;
+                    {/* Under-cards in the staggered deck stack (straight, clean parallel alignment matching Hand) */}
+                    {Array.from({ length: stackLayers - 1 }).map((_, layerIdx) => {
+                      const depth = stackLayers - 1 - layerIdx; // 1, 2
+                      const offsetX = depth * 5;
+                      const offsetY = (stackLayers - 1 - depth) * 2.5;
+
                       return (
                         <div
                           key={depth}
-                          className="absolute inset-0 pointer-events-none"
-                          style={{ transform: `translate(${depth * 3}px, ${depth * 2}px)`, zIndex: depth, opacity: 0.88 - depth * 0.07 }}
+                          className="absolute pointer-events-none transition-all duration-300 ease-out"
+                          style={{
+                            top: `${offsetY}px`,
+                            left: `${offsetX}px`,
+                            width: `calc(100% - ${(stackLayers - 1) * 5}px)`,
+                            zIndex: depth,
+                            opacity: Math.max(0.72, 0.92 - depth * 0.08),
+                          }}
                         >
-                          <div className="w-full h-full aspect-[600/825] rounded-lg overflow-hidden border border-[#c79808] bg-slate-900">
+                          <div className="w-full aspect-[600/825] rounded-lg overflow-hidden border border-[#c79808] bg-slate-900 shadow-sm">
                             <img
                               src={group.card.originalImageUrl || group.card.image || `/cards/${group.card.number}.jpg`}
                               alt={group.card.name}
@@ -4550,8 +4861,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                         </div>
                       );
                     })}
+
                     {/* Top interactive card */}
-                    <div className="relative w-full aspect-[600/825] rounded-lg overflow-hidden border border-[#c79808] shadow-md bg-slate-900" style={{ zIndex: 10 }}>
+                    <div
+                      className="relative w-full aspect-[600/825] rounded-lg overflow-hidden border border-[#c79808] shadow-md bg-slate-900 transition-transform duration-200"
+                      style={{
+                        zIndex: 10,
+                        marginTop: group.count > 1 ? `${(stackLayers - 1) * 2.5}px` : '0px',
+                      }}
+                    >
                       <img
                         src={group.card.originalImageUrl || group.card.image || `/cards/${group.card.number}.jpg`}
                         alt={group.card.name}
@@ -4559,13 +4877,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                         className="w-full h-full object-fill pointer-events-none"
                       />
                     </div>
+
                     {/* Compact golden count badge — identical styling to the player's hand stack badge */}
                     {group.count > 1 && (
                       <div
-                        className="absolute -top-1.5 -right-1.5 bg-gradient-to-br from-amber-400 to-yellow-300 text-slate-950 font-black text-[9px] h-4 min-w-4 px-1 rounded-full border-2 border-slate-950 shadow-lg flex items-center justify-center gap-0.5 z-30 pointer-events-none"
+                        className="absolute -top-1.5 -right-1.5 bg-gradient-to-br from-amber-400 to-yellow-300 text-slate-950 font-black text-[10px] h-4.5 min-w-4.5 px-1 rounded-full border-2 border-slate-950 shadow-lg flex items-center justify-center gap-0.5 z-30 pointer-events-none transition-transform group-hover/cardstack:scale-110"
                         title={`${group.count} adet ${group.card.name}`}
                       >
-                        <span className="text-[7px] font-bold opacity-75">×</span>
+                        <span className="text-[8px] font-bold opacity-75">×</span>
                         <span className="font-black leading-none">{group.count}</span>
                       </div>
                     )}
@@ -4573,28 +4892,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 );
               })}
             </div>
+            {/* Bottom containment frame for unified aesthetic across all card counts */}
+            <div className="py-1 px-2 border-t border-purple-500/40 bg-purple-950/95 flex items-center justify-center shrink-0 shadow-[0_-2px_6px_rgba(0,0,0,0.3)]">
+              <div className="w-6 h-0.5 bg-purple-400/50 rounded-full" />
+            </div>
           </div>
           <button
-            onPointerDown={(e) => { clairvoyanceSwipeX.current = e.clientX; }}
-            onPointerUp={(e) => {
-              if (clairvoyanceSwipeX.current !== null) {
-                const dx = e.clientX - clairvoyanceSwipeX.current;
-                if (Math.abs(dx) < 10) {
-                  const next = !clairvoyanceDrawerOpen;
-                  setClairvoyanceDrawerOpen(next);
-                  if (next) setClairvoyanceEverOpened(true);
-                } else if (dx > 20) {
-                  setClairvoyanceDrawerOpen(true);
-                  setClairvoyanceEverOpened(true);
-                } else if (dx < -20) {
-                  setClairvoyanceDrawerOpen(false);
-                }
-              }
-              clairvoyanceSwipeX.current = null;
-            }}
-            className={`self-center bg-purple-900/90 border border-l-0 border-purple-500/50 rounded-r-lg px-0.5 py-2 text-[11px] text-purple-200 hover:bg-purple-700/90 shadow-lg transition-all cursor-pointer ${
+            onPointerDown={handleClairvoyanceTogglePointerDown}
+            className={`self-center bg-purple-900/90 border border-l-0 border-purple-500/50 rounded-r-lg px-1 py-2.5 text-[12px] text-purple-200 hover:bg-purple-700/90 shadow-lg transition-all cursor-pointer touch-none select-none ${
               !clairvoyanceEverOpened ? 'clairvoyance-grabber-glow' : ''
             }`}
+            style={{ touchAction: 'none' }}
             title="Clairvoyance - Opponent's Hand"
           >
             🔮
@@ -5103,27 +5411,46 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
                 if (pokemonsWithPower.length === 0 && inPlayDollsAndFossils.length === 0) return null;
 
+                // Check if Muk's Toxic Gas is active
+                const allInPlayForToxic = [player.active, ...player.bench, cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
+                const isToxicGasInPlay = allInPlayForToxic.some(
+                  p => p.card.name === 'Muk' && (p.card.power?.name === 'Toxic Gas' || p.card.pokemonPower?.name === 'Toxic Gas') && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' && !GameEngine.isPowerDisabled(p, state.turn)
+                );
+
                 // Group and deduplicate duplicate powers by power.name
-                const uniquePowersMap = new Map<string, { inPlay: InPlayCard; power: any; count: number; canUse: boolean; isPassive: boolean; isDisabled: boolean }>();
+                const uniquePowersMap = new Map<string, {
+                  inPlay: InPlayCard;
+                  power: any;
+                  count: number;
+                  canUse: boolean;
+                  isPassive: boolean;
+                  isDisabled: boolean;
+                  isToxicGasSilenced: boolean;
+                  statusCondition?: 'Confused' | 'Asleep' | 'Paralyzed';
+                }>();
+
                 pokemonsWithPower.forEach(inPlay => {
                   const power = inPlay.card.power || inPlay.card.pokemonPower;
                   if (!power) return;
                   const isPassive = isPassivePower(power.name);
                   const isAsleepOrParalyzedOrConfused = inPlay.status === 'Asleep' || inPlay.status === 'Paralyzed' || inPlay.status === 'Confused';
-                  // Dark Arbok's Stare silences a Pokémon Power for a whole round. The button has
-                  // to say so rather than sit there looking usable - the engine already refuses it.
-                  const isDisabled = GameEngine.isPowerDisabled(inPlay, state.turn);
+                  const isStareDisabled = GameEngine.isPowerDisabled(inPlay, state.turn);
+                  const isToxicGasSilenced = isToxicGasInPlay && inPlay.card.name !== 'Muk';
+                  const isDisabled = isStareDisabled || isToxicGasSilenced;
                   const canUse = Boolean(isPlayerTurn && !inPlay.powerUsedThisTurn && !isAsleepOrParalyzedOrConfused && !isDisabled);
+                  const statusCondition = isAsleepOrParalyzedOrConfused ? (inPlay.status as 'Confused' | 'Asleep' | 'Paralyzed') : undefined;
 
                   const existing = uniquePowersMap.get(power.name);
                   if (!existing) {
-                    uniquePowersMap.set(power.name, { inPlay, power, count: 1, canUse, isPassive, isDisabled });
+                    uniquePowersMap.set(power.name, { inPlay, power, count: 1, canUse, isPassive, isDisabled, isToxicGasSilenced, statusCondition });
                   } else {
                     existing.count++;
                     if (!existing.canUse && canUse) {
                       existing.inPlay = inPlay;
                       existing.canUse = true;
                       existing.isDisabled = isDisabled;
+                      existing.isToxicGasSilenced = isToxicGasSilenced;
+                      existing.statusCondition = undefined;
                     }
                   }
                 });
@@ -5140,7 +5467,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     </div>
 
                     {/* Render unique Pokemon Powers */}
-                    {uniquePowers.map(({ inPlay, power, count, canUse, isPassive, isDisabled }) => {
+                    {uniquePowers.map(({ inPlay, power, count, canUse, isPassive, isDisabled, isToxicGasSilenced, statusCondition }) => {
                       return (
                         <div
                           key={power.name}
@@ -5168,9 +5495,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                               {isDisabled ? (
                                 <span
                                   className="text-[9px] font-bold text-fuchsia-200 bg-fuchsia-950/70 px-1.5 py-0.5 rounded border border-fuchsia-700/60 flex items-center gap-0.5 whitespace-nowrap"
-                                  title={lang === 'tr' ? "Rakibin Dark Arbok'unun Stare yeteneği bu gücü rakibin sonraki turu bitene kadar kapattı" : "Shut down by the opponent's Dark Arbok Stare until the end of their next turn"}
+                                  title={isToxicGasSilenced
+                                    ? (lang === 'tr' ? "Muk'un Toxic Gas yeteneği bu Pokémon Gücünü kapattı" : "Shut down by Muk's Toxic Gas")
+                                    : (lang === 'tr' ? "Rakibin Dark Arbok'unun Stare yeteneği bu gücü rakibin sonraki turu bitene kadar kapattı" : "Shut down by the opponent's Dark Arbok Stare until the end of their next turn")
+                                  }
                                 >
-                                  👁️ {lang === 'tr' ? 'Devre Dışı' : 'Shut Down'}
+                                  {isToxicGasSilenced ? '🚫' : '👁️'} {isToxicGasSilenced ? 'Toxic Gas' : (lang === 'tr' ? 'Devre Dışı' : 'Shut Down')}
                                 </span>
                               ) : isPassive ? (
                                 <span className="text-[9px] font-semibold text-purple-300 bg-purple-950/60 px-1.5 py-0.5 rounded border border-purple-800/40">
@@ -5180,11 +5510,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                                 <span className="text-[9px] font-semibold text-gray-400 bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700">
                                   {lang === 'tr' ? 'Kullanıldı' : 'Used'}
                                 </span>
+                              ) : !canUse && statusCondition ? (
+                                <span
+                                  className="text-[9px] font-bold text-amber-300 bg-amber-950/70 px-1.5 py-0.5 rounded border border-amber-700/60 flex items-center gap-0.5 whitespace-nowrap"
+                                  title={lang === 'tr' ? `${inPlay.card.name} ${statusCondition} durumunda olduğu için bu güç kullanılamaz` : `${inPlay.card.name} is ${statusCondition} and cannot use this power`}
+                                >
+                                  {statusCondition === 'Confused' ? '😵' : statusCondition === 'Asleep' ? '💤' : '⚡'} {statusCondition}
+                                </span>
                               ) : (
                                 <button
                                   disabled={!canUse}
                                   onClick={() => handleActivatePokemonPower(inPlay, power)}
-                                  className="bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 disabled:opacity-40 text-slate-950 font-black text-[10px] px-2.5 py-0.5 rounded-lg shadow transition active:scale-95 cursor-pointer flex items-center gap-1 whitespace-nowrap"
+                                  className={`font-black text-[10px] px-2.5 py-0.5 rounded-lg shadow transition active:scale-95 flex items-center gap-1 whitespace-nowrap ${
+                                    canUse
+                                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 cursor-pointer'
+                                      : 'bg-slate-800 text-gray-500 border border-slate-700 opacity-40 cursor-not-allowed pointer-events-none'
+                                  }`}
                                 >
                                   <Sparkles className="w-2.5 h-2.5" />
                                   <span>{lang === 'tr' ? 'Gücü Kullan' : 'Use Power'}</span>
@@ -5528,8 +5869,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         </div>
 
         <div
-          className="flex gap-3 overflow-x-auto pt-4 pb-2.5 px-2 touch-pan-x select-none items-end transition-transform duration-200"
-          style={{ zoom: handScale }}
+          ref={handScrollRef}
+          onPointerDown={handleHandContainerPointerDown}
+          className="flex gap-3 overflow-x-auto pt-4 pb-2.5 px-2 touch-pan-x select-none items-end transition-transform duration-200 cursor-grab active:cursor-grabbing"
+          style={{ zoom: handScale, overscrollBehaviorX: 'contain' }}
         >
           {groupedHand.map((group, gIdx) => {
             const isBasic = group.card.supertype === 'Pokemon' && group.card.subtype === 'Basic';
@@ -5543,6 +5886,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 className="flex-shrink-0 flex flex-col items-center group/cardstack relative"
               >
                 <div
+                  data-hand-card="true"
                   onPointerDown={(e) => handleCardPointerDown(e, group.card, activeHandIdx)}
                   className="touch-none cursor-grab active:cursor-grabbing relative transition-transform duration-200"
                   style={{
@@ -5609,7 +5953,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
                 {isInitialSetup && isBasic && (
                   <button
-                    onClick={() => handleSetStartingActive(activeHandIdx)}
+                    onClick={(e) => {
+                      if (Date.now() - handScrollJustScrolledRef.current < 300) {
+                        e.stopPropagation();
+                        return;
+                      }
+                      handleSetStartingActive(activeHandIdx);
+                    }}
                     className="mt-1.5 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-bold text-[10px] px-2.5 py-0.5 rounded-md shadow hover:shadow-lg transition z-20"
                   >
                     {t.setActiveShort}
@@ -6471,6 +6821,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         card={zoomedCard}
         inPlayCard={zoomedInPlay}
         onClose={() => {
+          modalJustClosedRef.current = Date.now();
+          zoomedCardRef.current = null;
           setZoomedCard(null);
           setZoomedInPlay(null);
         }}

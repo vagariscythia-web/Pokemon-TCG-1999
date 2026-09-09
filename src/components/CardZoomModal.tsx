@@ -32,6 +32,7 @@ export const CardZoomModal: React.FC<CardZoomModalProps> = ({ card, inPlayCard, 
 
   return (
     <div
+      data-card-zoom-modal="true"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in"
       onClick={forceSelection ? undefined : onClose}
     >

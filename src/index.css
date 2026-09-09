@@ -56,6 +56,27 @@ html, body {
   background: rgba(234, 179, 8, 0.8);
 }
 
+/* Clairvoyance sidebar slim scrollbar (~30% narrower than 5px default) */
+.clairvoyance-scrollbar::-webkit-scrollbar {
+  width: 3.5px;
+}
+.clairvoyance-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.clairvoyance-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.45);
+  border-radius: 9999px;
+}
+.clairvoyance-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(168, 85, 247, 0.8);
+}
+@supports not selector(::-webkit-scrollbar) {
+  .clairvoyance-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(168, 85, 247, 0.45) transparent;
+  }
+}
+
 /* Safe Area & Mobile Device Adaptations (iPhone 13 Pro Max, iPad, Galaxy Tab) */
 :root {
   --sat: env(safe-area-inset-top, 0px);

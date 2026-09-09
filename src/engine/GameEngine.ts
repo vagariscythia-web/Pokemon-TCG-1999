@@ -436,6 +436,7 @@ export class GameEngine {
       }
     };
     const player = next[playerId];
+    const opponent = next[playerId === 'player' ? 'cpu' : 'player'];
     const card = directCard || player.hand[handIndex];
 
     if (!card || card.supertype !== 'Energy') return next;
@@ -450,7 +451,13 @@ export class GameEngine {
 
     if (!target) return next;
 
-    const hasRainDance = [player.active, ...player.bench].some(
+    const isMukInPlay = [player.active, ...player.bench, opponent.active, ...opponent.bench].some(
+      p => p && p.card.name === 'Muk' &&
+        (p.card.power?.name === 'Toxic Gas' || p.card.pokemonPower?.name === 'Toxic Gas') &&
+        p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' &&
+        !GameEngine.isPowerDisabled(p, next.turn)
+    );
+    const hasRainDance = !isMukInPlay && [player.active, ...player.bench].some(
       p => p && (p.card.power?.name === 'Rain Dance' || p.card.pokemonPower?.name === 'Rain Dance') &&
       p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' &&
       !GameEngine.isPowerDisabled(p, next.turn)
@@ -1122,6 +1129,7 @@ export class GameEngine {
 
         player.bench.push(oldActive);
         player.active = newActive;
+        GameEngine.pruneAttackBlocks(next);
         GameEngine.addLog(next, `${player.name} switched ${oldActive.card.name} with ${newActive.card.name}!`, 'action');
       }
     } else if (card.name === 'Gust of Wind') {
@@ -1149,6 +1157,7 @@ export class GameEngine {
 
         opponent.bench.push(oldActive);
         opponent.active = newActive;
+        GameEngine.pruneAttackBlocks(next);
         GameEngine.addLog(next, `💨 Gust of Wind forced ${opponent.name}'s ${newActive.card.name} into the Active position!`, 'action');
       }
     } else if (card.name === 'Energy Removal') {
