@@ -77,6 +77,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const [zoomedInPlay, setZoomedInPlay] = useState<InPlayCard | null>(null);
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [showEmotes, setShowEmotes] = useState(false);
+  const [clairvoyanceDrawerOpen, setClairvoyanceDrawerOpen] = useState(false);
+  const clairvoyanceSwipeX = useRef<number | null>(null);
   const [opponentEmote, setOpponentEmote] = useState<string | null>(null);
   const [activeFXList, setActiveFXList] = useState<ActiveFX[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
@@ -4299,18 +4301,6 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           </div>
         </div>
 
-        {/* Clairvoyance: Show opponent's hand face-up when Omanyte's power is active */}
-        {isClairvoyanceActive() && cpu.hand.length > 0 && (
-          <div className="flex items-center gap-1 px-2 py-1 bg-purple-900/30 border border-purple-500/40 rounded-lg flex-wrap">
-            <span className="text-[9px] text-purple-300 font-bold mr-1">🔮 Clairvoyance:</span>
-            {cpu.hand.map((card, i) => (
-              <div key={`clair-${i}`} className="w-14 h-8 rounded border border-purple-400/50 bg-slate-800 flex items-center justify-center overflow-hidden" title={card.name}>
-                <span className="text-[7px] text-purple-200 text-center leading-tight px-0.5">{card.name}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
         {/* Turn Status Announcement */}
         <div className="text-center">
           {isInitialSetup ? (
@@ -4446,6 +4436,44 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Clairvoyance Left Sidebar Drawer (Omanyte) */}
+      {isClairvoyanceActive() && cpu.hand.length > 0 && (
+        <div className={`fixed left-0 top-1 md:top-1.5 z-40 flex items-start transition-transform duration-300 ease-in-out ${
+          clairvoyanceDrawerOpen ? 'translate-x-0' : '-translate-x-36'
+        }`}>
+          <div
+            className="w-36 bg-purple-950/90 backdrop-blur-md border-r border-b border-purple-500/40 rounded-br-xl shadow-2xl flex flex-col overflow-hidden"
+            style={{ maxHeight: 'calc(100vh - 12px)', touchAction: 'pan-y' }}
+            onPointerDown={(e) => { clairvoyanceSwipeX.current = e.clientX; }}
+            onPointerUp={(e) => {
+              if (clairvoyanceSwipeX.current !== null && e.clientX - clairvoyanceSwipeX.current < -35) {
+                setClairvoyanceDrawerOpen(false);
+              }
+              clairvoyanceSwipeX.current = null;
+            }}
+          >
+            <div className="px-2 py-1.5 border-b border-purple-500/30 flex items-center justify-between">
+              <span className="text-[10px] font-bold text-purple-300">🔮 Clairvoyance</span>
+              <span className="text-[9px] text-purple-400">({cpu.hand.length})</span>
+            </div>
+            <div className="flex-1 overflow-y-auto p-1.5 flex flex-col gap-1.5">
+              {cpu.hand.map((card, i) => (
+                <div key={`clair-drawer-${i}`} className="flex-shrink-0">
+                  <CardView card={card} size="sm" isSelected={false} onClick={() => {}} onInspect={() => handleInspect(card)} showInspectIcon={false} />
+                </div>
+              ))}
+            </div>
+          </div>
+          <button
+            onClick={() => setClairvoyanceDrawerOpen(!clairvoyanceDrawerOpen)}
+            className="self-center bg-purple-900/90 border border-l-0 border-purple-500/50 rounded-r-lg px-0.5 py-2 text-[11px] text-purple-200 hover:bg-purple-700/90 shadow-lg transition-all cursor-pointer"
+            title="Clairvoyance - Opponent's Hand"
+          >
+            🔮
+          </button>
+        </div>
+      )}
 
       {/* Prominent Action Toast Banner */}
       {actionBanner && (
