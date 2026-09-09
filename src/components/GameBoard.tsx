@@ -78,7 +78,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const [isAiThinking, setIsAiThinking] = useState(false);
   const [showEmotes, setShowEmotes] = useState(false);
   const [clairvoyanceDrawerOpen, setClairvoyanceDrawerOpen] = useState(false);
+  const [clairvoyanceEverOpened, setClairvoyanceEverOpened] = useState(false);
   const clairvoyanceSwipeX = useRef<number | null>(null);
+  const clairvoyanceSwiped = useRef(false);
   const [opponentEmote, setOpponentEmote] = useState<string | null>(null);
   const [activeFXList, setActiveFXList] = useState<ActiveFX[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
@@ -4440,15 +4442,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       {/* Clairvoyance Left Sidebar Drawer (Omanyte) */}
       {isClairvoyanceActive() && cpu.hand.length > 0 && (
         <div className={`fixed left-0 top-1 md:top-1.5 z-40 flex items-start transition-transform duration-300 ease-in-out ${
-          clairvoyanceDrawerOpen ? 'translate-x-0' : '-translate-x-36'
+          clairvoyanceDrawerOpen ? 'translate-x-0' : '-translate-x-[108px] md:-translate-x-[124px]'
         }`}>
           <div
-            className="w-36 bg-purple-950/90 backdrop-blur-md border-r border-b border-purple-500/40 rounded-br-xl shadow-2xl flex flex-col overflow-hidden"
+            className="w-[108px] md:w-[124px] bg-purple-950/90 backdrop-blur-md border-r border-b border-purple-500/40 rounded-br-xl shadow-2xl flex flex-col overflow-hidden"
             style={{ maxHeight: 'calc(100vh - 12px)', touchAction: 'pan-y' }}
-            onPointerDown={(e) => { clairvoyanceSwipeX.current = e.clientX; }}
+            onPointerDown={(e) => { clairvoyanceSwipeX.current = e.clientX; clairvoyanceSwiped.current = false; }}
             onPointerUp={(e) => {
-              if (clairvoyanceSwipeX.current !== null && e.clientX - clairvoyanceSwipeX.current < -35) {
-                setClairvoyanceDrawerOpen(false);
+              if (clairvoyanceSwipeX.current !== null) {
+                const dx = e.clientX - clairvoyanceSwipeX.current;
+                if (dx < -35) setClairvoyanceDrawerOpen(false);
+                if (Math.abs(dx) > 10) clairvoyanceSwiped.current = true;
               }
               clairvoyanceSwipeX.current = null;
             }}
@@ -4459,15 +4463,37 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             </div>
             <div className="flex-1 overflow-y-auto p-1.5 flex flex-col gap-1.5">
               {cpu.hand.map((card, i) => (
-                <div key={`clair-drawer-${i}`} className="flex-shrink-0">
-                  <CardView card={card} size="sm" isSelected={false} onClick={() => {}} onInspect={() => handleInspect(card)} showInspectIcon={false} />
+                <div
+                  key={`clair-drawer-${i}`}
+                  className="flex-shrink-0 cursor-pointer"
+                  onClick={() => { if (!clairvoyanceSwiped.current) handleInspect(card); }}
+                >
+                  <CardView card={card} size="sm" isSelected={false} onClick={() => {}} onInspect={() => {}} showInspectIcon={false} />
                 </div>
               ))}
             </div>
           </div>
           <button
-            onClick={() => setClairvoyanceDrawerOpen(!clairvoyanceDrawerOpen)}
-            className="self-center bg-purple-900/90 border border-l-0 border-purple-500/50 rounded-r-lg px-0.5 py-2 text-[11px] text-purple-200 hover:bg-purple-700/90 shadow-lg transition-all cursor-pointer"
+            onPointerDown={(e) => { clairvoyanceSwipeX.current = e.clientX; }}
+            onPointerUp={(e) => {
+              if (clairvoyanceSwipeX.current !== null) {
+                const dx = e.clientX - clairvoyanceSwipeX.current;
+                if (Math.abs(dx) < 10) {
+                  const next = !clairvoyanceDrawerOpen;
+                  setClairvoyanceDrawerOpen(next);
+                  if (next) setClairvoyanceEverOpened(true);
+                } else if (dx > 20) {
+                  setClairvoyanceDrawerOpen(true);
+                  setClairvoyanceEverOpened(true);
+                } else if (dx < -20) {
+                  setClairvoyanceDrawerOpen(false);
+                }
+              }
+              clairvoyanceSwipeX.current = null;
+            }}
+            className={`self-center bg-purple-900/90 border border-l-0 border-purple-500/50 rounded-r-lg px-0.5 py-2 text-[11px] text-purple-200 hover:bg-purple-700/90 shadow-lg transition-all cursor-pointer ${
+              !clairvoyanceEverOpened ? 'clairvoyance-grabber-glow' : ''
+            }`}
             title="Clairvoyance - Opponent's Hand"
           >
             🔮

@@ -30,6 +30,16 @@ html, body {
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Clairvoyance grabber attention glow — pulses every 3s until the user opens the drawer once */
+@keyframes clairvoyanceGlow {
+  0%, 55%, 100% { box-shadow: 0 0 3px rgba(192, 132, 252, 0.15); }
+  70% { box-shadow: 0 0 14px rgba(192, 132, 252, 0.95), 0 0 30px rgba(168, 85, 247, 0.55); }
+  85% { box-shadow: 0 0 6px rgba(192, 132, 252, 0.35); }
+}
+.clairvoyance-grabber-glow {
+  animation: clairvoyanceGlow 3s ease-in-out infinite;
+}
+
 /* Custom scrollbars */
 ::-webkit-scrollbar {
   width: 5px;
