@@ -470,6 +470,63 @@ interface SingleFXProps {
   lang?: Language;
 }
 
+/**
+ * Returns the total animation duration (ms) for a given FX type.
+ * Used both by SingleFX to self-remove after the animation completes AND by
+ * GameBoard to delay knockout / damage-resolution until the visual finishes.
+ */
+export const getFXDuration = (type: ActiveFX['type']): number => {
+  switch (type) {
+    case 'poison_tick':
+      return 1600;
+    case 'hydro_pump_cannons':
+      return 2500; // shell 1.9s + jets 0.3s+1.4s + impact 0.9s+1.3s ≈ 2.2s + buffer
+    case 'solar_beam_charge_blast':
+      return 2200;
+    case 'selfdestruct_shockwave':
+      return 2100;
+    case 'blizzard_storm':
+      return 2000;
+    case 'seismic_slam':
+      return 1900;
+    case 'hyper_beam_laser':
+      return 1900;
+    case 'star_freeze':
+      return 1800;
+    case 'water_gun_stream':
+      return 1600;
+    case 'flamethrower_blaze':
+      return 1600;
+    case 'flamethrower_stream':
+      return 1600;
+    case 'ice_beam_frost':
+      return 1600;
+    case 'fire_blast_star':
+      return 1700;
+    case 'fire_spin_vortex':
+      return 1700;
+    case 'dragon_rage':
+      return 1700;
+    case 'bubblebeam':
+      return 1500;
+    case 'drill_peck_spiral':
+      return 1500;
+    case 'pin_missile_volley':
+      return 1500;
+    case 'whirlwind_cyclone':
+      return 1500;
+    case 'smokescreen_cloud':
+      return 1500;
+    case 'sludge_bomb':
+      return 1500;
+    case 'smog_haze':
+      return 1500;
+    default:
+      return 1300;
+  }
+};
+
+
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
   const delayMs = fx.delayMs ?? 0;
   const [started, setStarted] = useState(delayMs === 0);
@@ -486,8 +543,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
   }, [delayMs]);
 
   useEffect(() => {
-    // poison_tick animations run ~1.4s; give them enough time before removing
-    const base = fx.type === 'poison_tick' ? 1600 : 1300;
+    const base = getFXDuration(fx.type);
     const timer = setTimeout(() => {
       onComplete();
     }, base + delayMs);
@@ -1965,23 +2021,84 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </svg>
             </div>
           )}
-          {/* Convergence impact splash — where both jets meet the target (top) */}
+          {/* Convergence impact splash — where both jets meet the target (top).
+              Redesigned: layered burst with a white-hot pressure core, radiating water
+              spokes, arcing splash curls, airborne mist particles and a landing pool —
+              reads as pressurized water striking the target and exploding off it. */}
           <div className="absolute -top-2" style={{ animation: 'gbaHydroCannonImpact 1.3s ease-out 0.9s forwards', opacity: 0 }}>
-            <svg width={Math.round(70 * wi)} height={Math.round(60 * wi)} viewBox="0 0 70 60">
-              <path d="M35 50 Q22 38, 14 24 Q19 34, 25 42" fill="none" stroke="#7dd3fc" strokeWidth={3.5 * wi} strokeLinecap="round" opacity="0.9" />
-              <path d="M35 50 Q42 34, 52 20 Q46 34, 41 42" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} strokeLinecap="round" opacity="0.85" />
-              <path d="M35 50 Q28 40, 20 32" fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} strokeLinecap="round" opacity="0.7" />
-              <path d="M35 50 Q44 38, 52 30" fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} strokeLinecap="round" opacity="0.7" />
-              <circle cx="35" cy="46" r={9 * wi} fill="none" stroke="#e0f2fe" strokeWidth={1.8 * wi} opacity="0.6" />
-              <circle cx="12" cy="18" r={3 * wi} fill="#7dd3fc" opacity="0.8" />
-              <circle cx="54" cy="16" r={2.5 * wi} fill="#38bdf8" opacity="0.75" />
-              <circle cx="28" cy="12" r={2 * wi} fill="#bae6fd" opacity="0.7" />
-              <circle cx="44" cy="10" r={1.8 * wi} fill="#e0f2fe" opacity="0.65" />
-              {wi > 1.1 && <circle cx="8" cy="26" r={2.2 * wi} fill="#38bdf8" opacity="0.7" />}
-              {wi > 1.1 && <circle cx="58" cy="22" r={2 * wi} fill="#7dd3fc" opacity="0.65" />}
-              {wi > 1.18 && <circle cx="22" cy="8" r={2.4 * wi} fill="#bae6fd" opacity="0.6" />}
-              <ellipse cx="35" cy="54" rx={22 * wi} ry={7 * wi} fill="#0ea5e9" opacity="0.3" />
-              <ellipse cx="35" cy="52" rx={14 * wi} ry={5 * wi} fill="#38bdf8" opacity="0.25" />
+            <svg width={Math.round(84 * wi)} height={Math.round(72 * wi)} viewBox="0 0 84 72">
+              <circle cx="42" cy="40" r={13 * wi} fill="#e0f2fe" opacity="0.9" />
+              <circle cx="42" cy="40" r={8 * wi} fill="#bae6fd" opacity="0.95" />
+              <circle cx="42" cy="40" r={4.5 * wi} fill="#ffffff" opacity="0.9" />
+              <path d="M42 40 L42 10" stroke="#7dd3fc" strokeWidth={3 * wi} strokeLinecap="round" opacity="0.85" />
+              <path d="M42 40 L18 22" stroke="#38bdf8" strokeWidth={2.8 * wi} strokeLinecap="round" opacity="0.8" />
+              <path d="M42 40 L66 22" stroke="#38bdf8" strokeWidth={2.8 * wi} strokeLinecap="round" opacity="0.8" />
+              <path d="M42 40 L12 40" stroke="#7dd3fc" strokeWidth={2.6 * wi} strokeLinecap="round" opacity="0.75" />
+              <path d="M42 40 L72 40" stroke="#7dd3fc" strokeWidth={2.6 * wi} strokeLinecap="round" opacity="0.75" />
+              <path d="M42 40 L22 58" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.6" />
+              <path d="M42 40 L62 58" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.6" />
+              <path d="M42 40 L42 66" stroke="#e0f2fe" strokeWidth={2 * wi} strokeLinecap="round" opacity="0.55" />
+              <path d="M42 40 Q28 30, 16 16 Q24 28, 32 36" fill="none" stroke="#7dd3fc" strokeWidth={3 * wi} strokeLinecap="round" opacity="0.85" />
+              <path d="M42 40 Q56 28, 70 14 Q60 28, 50 36" fill="none" stroke="#38bdf8" strokeWidth={3 * wi} strokeLinecap="round" opacity="0.8" />
+              <path d="M42 40 Q32 34, 22 24" fill="none" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.65" />
+              <path d="M42 40 Q54 32, 64 26" fill="none" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.65" />
+              <circle cx="14" cy="12" r={3.2 * wi} fill="#7dd3fc" opacity="0.85" />
+              <circle cx="68" cy="10" r={2.8 * wi} fill="#38bdf8" opacity="0.8" />
+              <circle cx="32" cy="6" r={2.4 * wi} fill="#bae6fd" opacity="0.75" />
+              <circle cx="54" cy="8" r={2 * wi} fill="#e0f2fe" opacity="0.7" />
+              <circle cx="6" cy="30" r={2.4 * wi} fill="#38bdf8" opacity="0.7" />
+              <circle cx="78" cy="28" r={2.2 * wi} fill="#7dd3fc" opacity="0.7" />
+              {wi > 1.1 && <circle cx="10" cy="48" r={2.6 * wi} fill="#38bdf8" opacity="0.65" />}
+              {wi > 1.1 && <circle cx="74" cy="46" r={2.4 * wi} fill="#7dd3fc" opacity="0.6" />}
+              {wi > 1.18 && <circle cx="24" cy="2" r={2.8 * wi} fill="#bae6fd" opacity="0.6" />}
+              {wi > 1.18 && <circle cx="60" cy="4" r={2.2 * wi} fill="#e0f2fe" opacity="0.55" />}
+              <ellipse cx="42" cy="66" rx={26 * wi} ry={6 * wi} fill="#0ea5e9" opacity="0.3" />
+              <ellipse cx="42" cy="64" rx={17 * wi} ry={4.5 * wi} fill="#38bdf8" opacity="0.25" />
+            </svg>
+          </div>
+          {/* Expanding pressure ring — shockwave of pressurized water hitting the target */}
+          <div className="absolute -top-2" style={{ animation: 'gbaHydroImpactRing 0.9s ease-out 0.95s forwards', opacity: 0 }}>
+            <svg width={Math.round(90 * wi)} height={Math.round(70 * wi)} viewBox="0 0 90 70">
+              <ellipse cx="45" cy="35" rx="38" ry="26" fill="none" stroke="#7dd3fc" strokeWidth={2.5 * wi} opacity="0.7" />
+              <ellipse cx="45" cy="35" rx="30" ry="20" fill="none" stroke="#bae6fd" strokeWidth={1.8 * wi} opacity="0.5" />
+              <ellipse cx="45" cy="35" rx="22" ry="15" fill="none" stroke="#e0f2fe" strokeWidth={1.2 * wi} opacity="0.4" />
+            </svg>
+          </div>
+          {/* Ricochet droplets — water bouncing off the target and falling outward */}
+          <div className="absolute top-1 left-6" style={{ animation: 'gbaHydroImpactScatter1 1.1s ease-out 1.0s forwards', opacity: 0 }}>
+            <svg width={Math.round(12 * wi)} height={Math.round(16 * wi)} viewBox="0 0 12 16">
+              <path d="M6 1 Q9 5.5, 9 8.5 Q9 12.5, 6 14.5 Q3 12.5, 3 8.5 Q3 5.5, 6 1 Z" fill="#38bdf8" opacity="0.9" />
+              <ellipse cx="4.5" cy="7.5" rx="1.5" ry="2" fill="#bae6fd" opacity="0.65" />
+            </svg>
+          </div>
+          <div className="absolute top-1 right-6" style={{ animation: 'gbaHydroImpactScatter2 1.1s ease-out 1.06s forwards', opacity: 0 }}>
+            <svg width={Math.round(11 * wi)} height={Math.round(15 * wi)} viewBox="0 0 10 14">
+              <path d="M5 1 Q7.5 4.5, 7.5 7 Q7.5 10.5, 5 12 Q2.5 10.5, 2.5 7 Q2.5 4.5, 5 1 Z" fill="#0ea5e9" opacity="0.85" />
+              <ellipse cx="4" cy="6.5" rx="1.2" ry="1.7" fill="#e0f2fe" opacity="0.6" />
+            </svg>
+          </div>
+          <div className="absolute top-0" style={{ animation: 'gbaHydroImpactScatter3 1.1s ease-out 1.12s forwards', opacity: 0 }}>
+            <svg width={Math.round(9 * wi)} height={Math.round(13 * wi)} viewBox="0 0 8 12">
+              <path d="M4 1 Q6 3.5, 6 6 Q6 9, 4 10.5 Q2 9, 2 6 Q2 3.5, 4 1 Z" fill="#7dd3fc" opacity="0.8" />
+            </svg>
+          </div>
+          {wi > 1.1 && (
+            <div className="absolute top-2 left-1" style={{ animation: 'gbaHydroImpactScatter2 1.1s ease-out 1.16s forwards', opacity: 0 }}>
+              <svg width={Math.round(10 * wi)} height={Math.round(14 * wi)} viewBox="0 0 10 14">
+                <path d="M5 1 Q7.5 4.5, 7.5 7 Q7.5 10.5, 5 12 Q2.5 10.5, 2.5 7 Q2.5 4.5, 5 1 Z" fill="#bae6fd" opacity="0.75" />
+              </svg>
+            </div>
+          )}
+          {/* Foam pool — churned white water collecting at the base of the impact */}
+          <div className="absolute -top-1" style={{ animation: 'gbaHydroImpactFoam 1.0s ease-out 1.05s forwards', opacity: 0 }}>
+            <svg width={Math.round(64 * wi)} height={Math.round(24 * wi)} viewBox="0 0 64 24">
+              <ellipse cx="32" cy="14" rx={28 * wi} ry={7 * wi} fill="#e0f2fe" opacity="0.55" />
+              <ellipse cx="32" cy="12" rx={20 * wi} ry={5 * wi} fill="#bae6fd" opacity="0.45" />
+              <ellipse cx="24" cy="10" rx={8 * wi} ry={3 * wi} fill="#ffffff" opacity="0.4" />
+              <ellipse cx="42" cy="11" rx={6 * wi} ry={2.5 * wi} fill="#ffffff" opacity="0.35" />
+              <circle cx="14" cy="8" r={2 * wi} fill="#e0f2fe" opacity="0.6" />
+              <circle cx="50" cy="9" r={1.8 * wi} fill="#bae6fd" opacity="0.55" />
+              <circle cx="32" cy="6" r={1.5 * wi} fill="#ffffff" opacity="0.5" />
             </svg>
           </div>
           {/* Dense mist at cannon base */}

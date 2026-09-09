@@ -7,11 +7,17 @@
 
 ## 2. External Scratchpad & State Persistence (CRITICAL)
 * Never rely on internal or "mental" memory across compactions or interruptions; LLM internal state is completely stateless.
-* Primary Scratchpad Path: Always create and maintain the scratchpad directly in the workspace root as `.task_state.md`. Do NOT attempt to create subdirectories (like `.cline/`) unless they already physically exist on disk.
-* Skip Threshold: Skip this scratchpad for single-file, 1-turn trivial edits (e.g., typos, simple CSS tweaks).
+* Primary Scratchpad Path: Always create and maintain the scratchpad directly in the workspace root as `.task_state.md`. Do NOT attempt to create subdirectories (such as `.cline/`) unless they already physically exist on disk.
+* Scope & Skip Threshold:
+  - Skip this scratchpad ONLY for non-structural, single-file changes with zero dependencies (e.g., typos, changing a single hardcoded constant, updating a comment, or tweaking an isolated config flag).
+  - The scratchpad is strictly MANDATORY whenever a task involves:
+    1. Changes across multiple files or components,
+    2. Modifying state management, database schemas, or API contracts,
+    3. UI/layout restructuring, styling/CSS changes, or DOM modifications,
+    4. Complex algorithms or refactors that require multi-step reasoning before execution.
 * Git Safety: NEVER commit `.task_state.md` to the repository. Ensure it is listed in `.git/info/exclude` or `.gitignore`.
 * File Immutability: NEVER modify, overwrite, or delete `.clinerules` under any circumstances unless explicitly commanded by the user.
-* Total Size Limit: Keep this file concise (<120 lines total).
+* Total Size Limit: Keep this file concise (<150-180 lines total).
 * File Structure:
   1. Current Objective (1 sentence)
   2. Planned Sub-steps (checklist: `[x]` done, `[ ]` pending)
@@ -20,12 +26,16 @@
   5. Blockers & Failed Attempts: Document terminal errors or discarded solutions to prevent infinite retry loops.
   6. In-Flight Logic & Thinking Draft (ONLY for complex logic/refactors):
      - Active Hypothesis: What is being solved, tested, or optimized right now?
-     - Core Logic Skeleton (up to 35 lines max):
+     - Core Logic Skeleton (up to 45-50 lines max):
        * Input/Output & State Mapping: Target signatures, payload shapes, and legacy-to-new variable mappings (`oldVar -> newVar`).
        * Step-by-Step Flow: Control flow with micro-progress markers (`[DONE]`, `[IN-PROGRESS]`, `[PENDING]`), branching logic, and critical edge cases before touching source code.
-       * Dense Expressions: Exact 1-2 line critical snippets allowed verbatim (e.g., complex regex, mathematical formulas, bitwise operations, reduce/filter logic).
+       * Dense Expressions: Exact 3-5 line critical snippets allowed verbatim (e.g., complex regex, mathematical formulas, bitwise operations, reduce/filter logic). Do not paste full function bodies.
        * Invariants & Side Effects: Non-obvious assumptions (e.g., "timestamps must be UTC ms", "must not mutate input array") and downstream side effects/events that must be triggered.
      - Noise Filter: DO NOT paste full file imports, large raw types, full UI/JSX markup, or console loggers. Preserve dense algorithmic intent only.
+* Pre-Thinking Flush (Prevent Thinking Token Loss):
+  - NEVER spend extended thinking cycles planning the entire implementation upfront before touching disk.
+  - Phase 1 (Initial Flush): Spend roughly 60-90 seconds on initial high-level intent and architecture, then IMMEDIATELY perform a tool call to write sections 1, 2, and 3 to `.task_state.md`.
+  - Phase 2 (Execution Planning): Before touching code for any specific sub-step, update sections 4, 5, and 6 strictly for that active [IN-PROGRESS] target.
 * Enforcement Timing & Churn Prevention:
   - You MUST write or update sections 4, 5, and 6 in the scratchpad BEFORE generating or modifying code in actual source files.
   - Tool Failure Escape Hatch: If writing to the scratchpad triggers a file system or tool execution error, DO NOT retry the identical tool call. Fall back to project root `.task_state.md` immediately or ask the user for confirmation.

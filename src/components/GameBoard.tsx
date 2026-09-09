@@ -10,7 +10,7 @@ import { GameLog } from './GameLog';
 import { InGameChat } from './InGameChat';
 import { ChatMessage } from '../types/multiplayer';
 import { VictoryModal } from './VictoryModal';
-import { BattleFXOverlay, ActiveFX, getSpecificAttackFX, isSelfTargetingMove } from './BattleFXOverlay';
+import { BattleFXOverlay, ActiveFX, getSpecificAttackFX, isSelfTargetingMove, getFXDuration } from './BattleFXOverlay';
 import { sounds } from './SoundManager';
 import { EnergyOrb } from './EnergyOrb';
 import { net } from '../network/MultiplayerManager';
@@ -964,6 +964,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           hasExecutedCpuAttack = true;
           sounds.playAttackHit();
           setActionBanner({ text: `⚔️ Opponent's ${cpuActive.card.name} used ${attackToUse.name}!`, type: 'attack' });
+          const cpuFxType = getSpecificAttackFX(attackToUse, cpuActive.card);
 
           setState(prev => {
             if (!prev.cpu.active || !prev.player.active) return prev;
@@ -1125,7 +1126,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               }
               return current;
             });
-          }, 1400);
+          }, getFXDuration(cpuFxType) + 200);
         };
 
         if (coinCount > 0 || mode === 'until_tails') {
@@ -3601,42 +3602,53 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const playerKoIsFromTick = next.player.active &&
         playerTicks.some(t => t.instanceId === next.player.active!.instanceId);
 
+      // The knockout banner must not appear while the attack animation is still playing.
+      // Delay it by the FX duration (plus multi-hit beat stagger) so the hit visually
+      // lands before the fainted state is revealed.
+      const koBeatCount = atkRes?.multiHitCount ?? 1;
+      const koStaggerMs = fxType === 'stone_barrage_single' ? Math.max(0, koBeatCount - 1) * 380 : 0;
+      const koAnimDelay = getFXDuration(isBlocked ? 'barrier' : fxType) + koStaggerMs;
+
       if (next.player.active && next.player.active.currentHp <= 0 && !playerKoIsFromTick) {
         setWithheldTicks([]);
-        setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
-        setKnockoutAnimationActive(true);
         setTimeout(() => {
-          setActiveFXList([]);
-          setIsPoisonSequenceActive(false);
-          setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-          setActionBanner(null);
-          setKnockoutAnimationActive(false);
-          setIsTurnLocked(false);
-        }, 1300);
-      } else if (next.cpu.active && next.cpu.active.currentHp <= 0 && !cpuKoIsFromTick) {
-        setWithheldTicks([]);
-        setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
-        setKnockoutAnimationActive(true);
-        setTimeout(() => {
-          setActiveFXList([]);
-          setIsPoisonSequenceActive(false);
-          if (next.cpu.bench.length > 0) {
-            setAscendingCpuBenchIdx(0);
-            setTimeout(() => {
-              setActiveFXList([]);
-              setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-              setAscendingCpuBenchIdx(null);
-              setActionBanner(null);
-              setKnockoutAnimationActive(false);
-              setIsTurnLocked(false);
-            }, 650);
-          } else {
+          setActionBanner({ text: `💀 ${next.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          setTimeout(() => {
+            setActiveFXList([]);
+            setIsPoisonSequenceActive(false);
             setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
             setActionBanner(null);
             setKnockoutAnimationActive(false);
             setIsTurnLocked(false);
-          }
-        }, 1300);
+          }, 1300);
+        }, koAnimDelay);
+      } else if (next.cpu.active && next.cpu.active.currentHp <= 0 && !cpuKoIsFromTick) {
+        setWithheldTicks([]);
+        setTimeout(() => {
+          setActionBanner({ text: `💀 Opponent's ${next.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          setTimeout(() => {
+            setActiveFXList([]);
+            setIsPoisonSequenceActive(false);
+            if (next.cpu.bench.length > 0) {
+              setAscendingCpuBenchIdx(0);
+              setTimeout(() => {
+                setActiveFXList([]);
+                setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                setAscendingCpuBenchIdx(null);
+                setActionBanner(null);
+                setKnockoutAnimationActive(false);
+                setIsTurnLocked(false);
+              }, 650);
+            } else {
+              setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+              setActionBanner(null);
+              setKnockoutAnimationActive(false);
+              setIsTurnLocked(false);
+            }
+          }, 1300);
+        }, koAnimDelay);
       } else {
         // Dynamic timeout: multi-hit moves (Stone Barrage with many heads) stagger beats at
         // 380ms intervals. The unlock must wait for the LAST beat to finish its animation
@@ -3648,7 +3660,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         const lastBeatStart = isStoneBarrageFx
           ? Math.max(0, beatCount - 1) * staggerMs
           : 0;
-        const animDuration = isStoneBarrageFx ? 900 : 1300;
+        const animDuration = isStoneBarrageFx ? 900 : getFXDuration(isBlocked ? 'barrier' : fxType);
         const unlockDelay = Math.max(1800, lastBeatStart + animDuration + 300);
         setTimeout(() => {
           setActionBanner(null);
