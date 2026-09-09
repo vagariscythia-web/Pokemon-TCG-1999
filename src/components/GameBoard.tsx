@@ -81,6 +81,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const [clairvoyanceEverOpened, setClairvoyanceEverOpened] = useState(false);
   const clairvoyanceSwipeX = useRef<number | null>(null);
   const clairvoyanceSwiped = useRef(false);
+  const clairScrollRef = useRef<HTMLDivElement | null>(null);
+  const clairDragY = useRef<number | null>(null);
+  const clairDragStartScroll = useRef(0);
+  const clairDragMoved = useRef(false);
   const [opponentEmote, setOpponentEmote] = useState<string | null>(null);
   const [activeFXList, setActiveFXList] = useState<ActiveFX[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
@@ -1656,6 +1660,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
     // 3. Return groups strictly in stable order
     return updatedOrder.map(key => groupMap.get(key)!).filter(Boolean);
+  })();
+
+  // Group identical cards in the opponent's hand for the Clairvoyance drawer so duplicates
+  // render as a single stacked entry with a count badge (mirrors the player's own hand).
+  const groupedCpuHand: { card: Card; count: number }[] = (() => {
+    const groupMap = new Map<string, { card: Card; count: number }>();
+    cpu.hand.forEach((c) => {
+      const key = c.id || c.name;
+      const existing = groupMap.get(key);
+      if (existing) {
+        existing.count += 1;
+      } else {
+        groupMap.set(key, { card: c, count: 1 });
+      }
+    });
+    return Array.from(groupMap.values());
   })();
 
   const handleInspect = (card: Card, inPlay?: InPlayCard) => {
@@ -4473,16 +4493,85 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               <span className="text-[10px] font-bold text-purple-300">🔮 Clairvoyance</span>
               <span className="text-[9px] text-purple-400">({cpu.hand.length})</span>
             </div>
-            <div className="flex-1 overflow-y-auto p-1.5 flex flex-col gap-1.5">
-              {cpu.hand.map((card, i) => (
-                <div
-                  key={`clair-drawer-${i}`}
-                  className="flex-shrink-0 cursor-pointer"
-                  onClick={() => { if (!clairvoyanceSwiped.current) handleInspect(card); }}
-                >
-                  <CardView card={card} size="sm" isSelected={false} onClick={() => {}} onInspect={() => {}} showInspectIcon={false} />
-                </div>
-              ))}
+            {/* Scrollable card list — capped at exactly 4 stacked rows to prevent overflow
+                (base: 4×132px rows + 3×6px gaps + 12px padding = 558px; md: 4×154px + 18 + 12 = 646px).
+                Beyond 4 entries, wheel scroll works natively; drag/pull scroll is JS-driven with an
+                8px threshold so a plain tap still opens the inspect modal without false triggers. */}
+            <div
+              ref={clairScrollRef}
+              className="flex-1 overflow-y-auto p-1.5 flex flex-col gap-1.5 max-h-[558px] md:max-h-[646px] [scrollbar-width:thin] [scrollbar-color:rgba(168,85,247,0.5)_transparent]"
+              style={{ touchAction: 'none', overscrollBehavior: 'contain' }}
+              onPointerDown={(e) => {
+                clairDragY.current = e.clientY;
+                clairDragStartScroll.current = clairScrollRef.current?.scrollTop ?? 0;
+                clairDragMoved.current = false;
+                try { e.currentTarget.setPointerCapture(e.pointerId); } catch { /* noop */ }
+              }}
+              onPointerMove={(e) => {
+                if (clairDragY.current === null || !clairScrollRef.current) return;
+                const dy = clairDragY.current - e.clientY;
+                if (Math.abs(dy) > 8) {
+                  clairDragMoved.current = true;
+                  clairScrollRef.current.scrollTop = clairDragStartScroll.current + dy;
+                }
+              }}
+              onPointerUp={() => { clairDragY.current = null; }}
+              onPointerCancel={() => { clairDragY.current = null; }}
+            >
+              {groupedCpuHand.map((group, gIdx) => {
+                const stackLayers = Math.min(group.count, 3);
+                const cardKey = group.card.id || group.card.name;
+                return (
+                  <div
+                    key={`clair-drawer-${cardKey}-${gIdx}`}
+                    className="flex-shrink-0 relative cursor-pointer select-none"
+                    onClick={() => {
+                      // Suppress inspect when the pointer gesture was a vertical drag or a horizontal drawer swipe
+                      if (!clairDragMoved.current && !clairvoyanceSwiped.current) handleInspect(group.card);
+                    }}
+                  >
+                    {/* Under-cards of the stack — absolutely positioned so the row height stays constant */}
+                    {Array.from({ length: stackLayers - 1 }).map((_, li) => {
+                      const depth = stackLayers - 1 - li;
+                      return (
+                        <div
+                          key={depth}
+                          className="absolute inset-0 pointer-events-none"
+                          style={{ transform: `translate(${depth * 3}px, ${depth * 2}px)`, zIndex: depth, opacity: 0.88 - depth * 0.07 }}
+                        >
+                          <div className="w-full h-full aspect-[600/825] rounded-lg overflow-hidden border border-[#c79808] bg-slate-900">
+                            <img
+                              src={group.card.originalImageUrl || group.card.image || `/cards/${group.card.number}.jpg`}
+                              alt={group.card.name}
+                              draggable={false}
+                              className="w-full h-full object-fill pointer-events-none"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {/* Top interactive card */}
+                    <div className="relative w-full aspect-[600/825] rounded-lg overflow-hidden border border-[#c79808] shadow-md bg-slate-900" style={{ zIndex: 10 }}>
+                      <img
+                        src={group.card.originalImageUrl || group.card.image || `/cards/${group.card.number}.jpg`}
+                        alt={group.card.name}
+                        draggable={false}
+                        className="w-full h-full object-fill pointer-events-none"
+                      />
+                    </div>
+                    {/* Compact golden count badge — identical styling to the player's hand stack badge */}
+                    {group.count > 1 && (
+                      <div
+                        className="absolute -top-1.5 -right-1.5 bg-gradient-to-br from-amber-400 to-yellow-300 text-slate-950 font-black text-[9px] h-4 min-w-4 px-1 rounded-full border-2 border-slate-950 shadow-lg flex items-center justify-center gap-0.5 z-30 pointer-events-none"
+                        title={`${group.count} adet ${group.card.name}`}
+                      >
+                        <span className="text-[7px] font-bold opacity-75">×</span>
+                        <span className="font-black leading-none">{group.count}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
           <button
