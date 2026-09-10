@@ -146,6 +146,21 @@ export class GameEngine {
       const cpuBasic = state.cpu.hand.splice(cpuBasicIdx, 1)[0];
       state.cpu.active = GameEngine.createInPlayCard(cpuBasic);
       GameEngine.addLog(state, `${state.cpu.name} placed ${cpuBasic.name} as Active Pokémon.`, 'ai');
+
+      // Parity: Place remaining Basic Pokémon from opening hand onto the CPU Bench (up to 5)
+      let benchedCount = 0;
+      let i = 0;
+      while (i < state.cpu.hand.length && benchedCount < 5) {
+        const c = state.cpu.hand[i];
+        if (c.supertype === 'Pokemon' && c.subtype === 'Basic') {
+          const bCard = state.cpu.hand.splice(i, 1)[0];
+          state.cpu.bench.push(GameEngine.createInPlayCard(bCard));
+          GameEngine.addLog(state, `${state.cpu.name} placed ${bCard.name} on the Bench during setup.`, 'ai');
+          benchedCount++;
+        } else {
+          i++;
+        }
+      }
     }
 
     return state;
@@ -332,33 +347,12 @@ export class GameEngine {
     };
     const player = next.player;
     const card = player.hand[handIndex];
-    const isBasicPkmn = (card?.supertype === 'Pokemon' && card?.subtype === 'Basic') || card?.name === 'Mysterious Fossil' || card?.name === 'Clefairy Doll';
+    // Official Rule: Only true Basic Pokémon can be chosen as the starting Active Pokémon
+    const isBasicPkmn = card?.supertype === 'Pokemon' && card?.subtype === 'Basic';
     if (!card || !isBasicPkmn) return next;
 
     player.hand.splice(handIndex, 1);
-    if (card.name === 'Mysterious Fossil' || card.name === 'Clefairy Doll') {
-      const mockCard: Card = {
-        ...card,
-        id: `${card.id}_inplay_${Math.random()}`,
-        number: card.number,
-        name: card.name,
-        supertype: 'Pokemon',
-        subtype: 'Basic',
-        types: ['Colorless'],
-        hp: 10,
-        retreatCost: 0,
-        rarity: card.rarity,
-        set: card.set,
-        image: card.image,
-        originalImageUrl: card.originalImageUrl || card.image,
-        attacks: []
-      };
-      const inPlay = GameEngine.createInPlayCard(mockCard);
-      inPlay.isClefairyDoll = true;
-      player.active = inPlay;
-    } else {
-      player.active = GameEngine.createInPlayCard(card);
-    }
+    player.active = GameEngine.createInPlayCard(card);
     GameEngine.addLog(next, `You placed ${card.name} as your Active Pokémon.`, 'action');
 
     if (next.cpu.active) {
@@ -2184,6 +2178,7 @@ export class GameEngine {
       const heads = (c1 ? 1 : 0) + (c2 ? 1 : 0) + (c3 ? 1 : 0) + (c4 ? 1 : 0);
       const multiplier = attack.damage || (attackName === 'spike cannon' ? 20 : 10);
       baseDamage = heads * multiplier;
+      fxIntensity = 1.0 + heads * 0.1;
       GameEngine.addLog(next, `Flipped 4 coins: ${heads} HEADS (${baseDamage} damage)!`, 'action');
       multiHitCount = heads;
       multiHitSequence = [c1, c2, c3, c4];
@@ -2302,9 +2297,11 @@ export class GameEngine {
     } else if (attackName === 'stomp') {
       if (primaryFlip) {
         baseDamage = 30;
+        fxIntensity = 1.15;
         GameEngine.addLog(next, `⚡ Stomp: HEADS! +10 damage (30 damage total)!`, 'action');
       } else {
         baseDamage = 20;
+        fxIntensity = 1.0;
       }
     } else if (attackName === 'quick attack') {
       if (primaryFlip) {
@@ -2314,6 +2311,7 @@ export class GameEngine {
     } else if (attackName === 'rampage') {
       const extra = Math.floor(attacker.damage / 10) * 10;
       baseDamage = 20 + extra;
+      fxIntensity = 1.0 + Math.max(0, baseDamage - 20) * 0.01;
       GameEngine.addLog(next, `💢 Rampage dealt ${baseDamage} damage (+${extra} from damage taken)!`, 'action');
     } else if (attackName === 'tail strike' || attackName === 'anger' || attackName === 'knock down') {
       if (primaryFlip) {

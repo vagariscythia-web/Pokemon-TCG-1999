@@ -965,6 +965,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         else if (step.card.name === 'Gust of Wind') triggerFX('gust', 'player');
         else if (step.card.name.includes('Energy Removal')) triggerFX('energy_removal', 'player');
         else if (step.card.name === 'PlusPower') triggerFX('pluspower', 'cpu');
+        else if (step.card.name === 'Switch') sounds.playCardDraw();
         setState(prev => GameEngine.playTrainer(prev, 'cpu', -1, { targetBenchIndex: step.benchIndex }, step.card));
         setTimeout(executeNextStep, 1500);
       } else if (step.type === 'ATTACK') {
@@ -1687,8 +1688,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const isPlayerParalyzed = player.active?.status === 'Paralyzed';
   const isPlayerAsleep = player.active?.status === 'Asleep';
 
-  // Mulligan detection: ONLY during initial setup
-  const playerBasicsInHand = player.hand.filter(c => (c.supertype === 'Pokemon' && c.subtype === 'Basic') || c.name === 'Mysterious Fossil' || c.name === 'Clefairy Doll');
+  // Mulligan detection: ONLY during initial setup - ONLY true Basic Pokémon count!
+  const playerBasicsInHand = player.hand.filter(c => c.supertype === 'Pokemon' && c.subtype === 'Basic');
   const showMulligan = isInitialSetup && playerBasicsInHand.length === 0;
   const selectedCard = selectedHandIndex !== null ? player.hand[selectedHandIndex] : null;
 
@@ -1868,9 +1869,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const isBasic = (card.supertype === 'Pokemon' && card.subtype === 'Basic') || card.name === 'Mysterious Fossil' || card.name === 'Clefairy Doll';
     if (!isBasic) return;
 
-    // If starting active has not been set yet, set active!
+    // If starting active has not been set yet, set active! (Only true Basic Pokémon can be starting active)
     if (isInitialSetup) {
-      handleSetStartingActive(handIdx);
+      if (card.supertype === 'Pokemon' && card.subtype === 'Basic') {
+        handleSetStartingActive(handIdx);
+      }
       return;
     }
 
@@ -2097,13 +2100,18 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       })();
 
       if (isDroppedOnActive) {
-        const isBasic = (card.supertype === 'Pokemon' && card.subtype === 'Basic') || card.name === 'Mysterious Fossil' || card.name === 'Clefairy Doll';
-        if (isBasic) {
-          if (isInitialSetup || !player.active) {
+        const isTrueBasic = card.supertype === 'Pokemon' && card.subtype === 'Basic';
+        const isPlayableAsBasic = isTrueBasic || card.name === 'Mysterious Fossil' || card.name === 'Clefairy Doll';
+        if (isInitialSetup) {
+          if (isTrueBasic) {
             handleSetStartingActive(handIndex);
             setDraggingCard(null);
             return;
           }
+        } else if (!player.active && isPlayableAsBasic) {
+          handleSetStartingActive(handIndex);
+          setDraggingCard(null);
+          return;
         } else if (card.supertype === 'Energy' && player.active) {
           executeDirectAttachEnergy(handIndex, player.active.instanceId, true, 0);
           setDraggingCard(null);
@@ -2316,7 +2324,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
   const handleSetStartingActive = (index: number) => {
     const card = player.hand[index];
-    const isBasic = (card?.supertype === 'Pokemon' && card?.subtype === 'Basic') || card?.name === 'Mysterious Fossil' || card?.name === 'Clefairy Doll';
+    // Official Rule: Starting active Pokémon MUST be a true Basic Pokémon (Mysterious Fossil & Clefairy Doll cannot be opening active)
+    const isBasic = card?.supertype === 'Pokemon' && card?.subtype === 'Basic';
     if (card && isBasic) {
       sounds.playCardDraw();
       const next = GameEngine.selectStartingActive(state, index);
@@ -5088,7 +5097,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     if (selectedHandIndex !== null && isInitialSetup) handleSetStartingActive(selectedHandIndex);
                   }}
                   className={`w-[128px] sm:w-[142px] md:w-[166px] lg:w-[184px] aspect-[600/825] border-2 border-dashed border-yellow-400 bg-yellow-500/10 rounded-xl flex flex-col items-center justify-center text-xs text-yellow-300 animate-pulse cursor-pointer p-2 text-center transition-all duration-200 ${
-                    draggingCard?.isDragActive && ((draggingCard.card.supertype === 'Pokemon' && draggingCard.card.subtype === 'Basic') || draggingCard.card.name === 'Mysterious Fossil' || draggingCard.card.name === 'Clefairy Doll')
+                    draggingCard?.isDragActive && (isInitialSetup
+                      ? (draggingCard.card.supertype === 'Pokemon' && draggingCard.card.subtype === 'Basic')
+                      : ((draggingCard.card.supertype === 'Pokemon' && draggingCard.card.subtype === 'Basic') || draggingCard.card.name === 'Mysterious Fossil' || draggingCard.card.name === 'Clefairy Doll'))
                       ? 'ring-4 ring-yellow-400/80 bg-yellow-500/20 shadow-[0_0_25px_rgba(250,204,21,0.6)] scale-102'
                       : ''
                   }`}

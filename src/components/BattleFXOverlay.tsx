@@ -153,10 +153,63 @@ export interface ActiveFX {
     | 'marowak_bonemerang'
     | 'nidoking_thrash_fury'
     | 'kingler_crabhammer'
+    | 'krabby_irongrip'
     | 'primeape_tantrum_rampage'
     | 'rhydon_horn_drill'
     | 'exeggutor_big_eggsplosion'
-    | 'butterfree_mega_drain';
+    | 'butterfree_mega_drain'
+    | 'ninetales_fire_blast'
+    | 'hyper_beam_annihilation'
+    | 'fearow_drill_peck'
+    | 'venomoth_venom_powder'
+    | 'rapidash_flame_stomp'
+    | 'graveler_rock_throw'
+    | 'jolteon_pin_missile'
+    | 'dark_gyarados_ice_beam'
+    | 'arbok_poison_fang'
+    | 'golbat_leech_life'
+    | 'dark_blastoise_hydrocannon'
+    | 'dark_charizard_fireball'
+    | 'farfetchd_leek_slap'
+    | 'cubone_bone_strike'
+    | 'bulbasaur_leech_seed'
+    | 'squirtle_shell_defense'
+    | 'pikachu_thunder_jolt'
+    | 'charmander_ember_flame'
+    | 'ekans_wrap_constrict'
+    | 'sandshrew_sand_attack'
+    | 'caterpie_string_shot'
+    | 'weedle_poison_sting'
+    | 'zubat_supersonic'
+    | 'gastly_sleeping_gas'
+    | 'rattata_quick_attack'
+    | 'rattata_gnaw_bite'
+    | 'pidgey_whirlwind'
+    | 'meowth_pay_day'
+    | 'meowth_coin_hurl'
+    | 'spearow_peck'
+    | 'spearow_mirror_move'
+    | 'poliwag_water_gun'
+    | 'geodude_stone_barrage'
+    | 'vulpix_confuse_ray'
+    | 'oddish_stun_spore'
+    | 'oddish_sprout'
+    | 'jigglypuff_lullaby'
+    | 'jigglypuff_pound'
+    | 'clefairy_metronome'
+    | 'clefairy_sing'
+    | 'abra_psyshock'
+    | 'abra_vanish'
+    | 'drowzee_pound'
+    | 'drowzee_confuse_ray'
+    | 'drowzee_nightmare'
+    | 'snorlax_body_slam'
+    | 'lickitung_tongue_wrap'
+    | 'lickitung_supersonic'
+    | 'kangaskhan_comet_punch'
+    | 'kangaskhan_fetch'
+    | 'tauros_stomp'
+    | 'tauros_rampage';
   target: 'player' | 'cpu';
   /**
    * Which slot of `target` this beat belongs to. Attacks that name their own victim (Stare) or
@@ -237,6 +290,86 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   const name = attack.name.toLowerCase().trim();
   const pkm = pokemonCard.name.toLowerCase();
 
+  // 0. BATCH 16: BASIC POKÉMON (GROUP A & GROUP B) SIGNATURE DISPATCHES
+  // Rattata: Quick Attack & Incisor Gnaw / Bite
+  if (pkm.includes('rattata')) {
+    if (name.includes('quick attack')) return 'rattata_quick_attack';
+    if (name.includes('bite') || name.includes('gnaw')) return 'rattata_gnaw_bite';
+  }
+  // Pidgey: Whirlwind
+  if ((pkm.includes('pidgey') || pkm.includes('pidgeotto')) && name.includes('whirlwind')) {
+    return 'pidgey_whirlwind';
+  }
+  // Meowth: Pay Day & Coin Hurl
+  if (pkm.includes('meowth')) {
+    if (name.includes('pay day') || name.includes('payday')) return 'meowth_pay_day';
+    if (name.includes('coin hurl') || name.includes('coin')) return 'meowth_coin_hurl';
+  }
+  // Spearow: Peck & Mirror Move
+  if (pkm.includes('spearow')) {
+    if (name.includes('peck')) return 'spearow_peck';
+    if (name.includes('mirror move')) return 'spearow_mirror_move';
+  }
+  // Poliwag, Poliwhirl & Poliwrath: Belly Spiral Water Gun
+  if ((pkm.includes('poliwag') || pkm.includes('poliwhirl') || pkm.includes('poliwrath')) && name.includes('water gun')) {
+    return 'poliwag_water_gun';
+  }
+  // Geodude: Stone Barrage
+  if (pkm.includes('geodude') && (name.includes('stone barrage') || name.includes('rock throw') || name.includes('barrage'))) {
+    return 'geodude_stone_barrage';
+  }
+  // Vulpix: Confuse Ray (Mystical Kitsunebi Fox-Fire)
+  if (pkm.includes('vulpix') && (name.includes('confuse ray') || name.includes('confusion ray') || name.includes('foxfire'))) {
+    return 'vulpix_confuse_ray';
+  }
+  // Oddish: Stun Spore & Sprout
+  if (pkm.includes('oddish')) {
+    if (name.includes('stun spore') || name.includes('spore')) return 'oddish_stun_spore';
+    if (name.includes('sprout')) return 'oddish_sprout';
+  }
+
+  // 0b. BATCH 17: BASIC POKÉMON (GROUP C & GROUP D) SIGNATURE DISPATCHES
+  // Jigglypuff: Lullaby & Pound
+  if (pkm.includes('jigglypuff')) {
+    if (name.includes('lullaby')) return 'jigglypuff_lullaby';
+    if (name.includes('pound')) return 'jigglypuff_pound';
+  }
+  // Clefairy: Metronome & Sing
+  if (pkm.includes('clefairy')) {
+    if (name.includes('metronome')) return 'clefairy_metronome';
+    if (name.includes('sing')) return 'clefairy_sing';
+  }
+  // Abra: Psyshock & Vanish
+  if (pkm.includes('abra')) {
+    if (name.includes('psyshock')) return 'abra_psyshock';
+    if (name.includes('vanish') || name.includes('teleport')) return 'abra_vanish';
+  }
+  // Drowzee: Pound, Confuse Ray & Nightmare
+  if (pkm.includes('drowzee')) {
+    if (name.includes('pound')) return 'drowzee_pound';
+    if (name.includes('confuse ray') || name.includes('confusion')) return 'drowzee_confuse_ray';
+    if (name.includes('nightmare')) return 'drowzee_nightmare';
+  }
+  // Snorlax: Body Slam
+  if (pkm.includes('snorlax')) {
+    if (name.includes('body slam') || name.includes('slam')) return 'snorlax_body_slam';
+  }
+  // Lickitung: Tongue Wrap & Supersonic
+  if (pkm.includes('lickitung')) {
+    if (name.includes('tongue wrap') || name.includes('tongue')) return 'lickitung_tongue_wrap';
+    if (name.includes('supersonic')) return 'lickitung_supersonic';
+  }
+  // Kangaskhan: Comet Punch & Fetch
+  if (pkm.includes('kangaskhan')) {
+    if (name.includes('comet punch')) return 'kangaskhan_comet_punch';
+    if (name.includes('fetch')) return 'kangaskhan_fetch';
+  }
+  // Tauros: Stomp & Rampage
+  if (pkm.includes('tauros')) {
+    if (name.includes('rampage')) return 'tauros_rampage';
+    if (name.includes('stomp')) return 'tauros_stomp';
+  }
+
   // Bite: Ekans/Arbok get jaw-teeth variant; Super Fang gets dedicated guillotine incisors; others keep star-fang
   if (name.includes('super fang') || (pkm.includes('raticate') && name.includes('fang'))) return 'super_fang_guillotine';
   if ((name === 'bite' || name.includes('bite') || name.includes('fang') || name === 'hyper fang')) {
@@ -254,8 +387,8 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('thunderpunch') || name.includes('thunder punch')) return 'thunder_punch';
   // Blizzard vs Freeze-Dry distinction
   if (name.includes('blizzard')) return 'blizzard_storm';
-  // Crabhammer: Kingler gets claw-hammer variant
-  if (name.includes('crabhammer') || name.includes('crab hammer')) return 'crab_hammer_slam';
+  // Crabhammer: Kingler gets dedicated Crabhammer variant
+  if (name.includes('crabhammer') || name.includes('crab hammer')) return 'kingler_crabhammer';
   // Horn Attack: Goldeen gets single-horn thrust
   if (name.includes('horn attack')) {
     if (pkm.includes('goldeen') || pkm.includes('seaking')) return 'horn_thrust';
@@ -277,9 +410,9 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     if (pkm.includes('ponyta') || pkm.includes('rapidash')) return 'kick_smash';
     return 'kick_strike';
   }
-  // Irongrip: Krabby gets claw pinch
+  // Irongrip: Krabby gets dedicated Iron Grip variant
   if (name.includes('irongrip') || name.includes('iron grip')) {
-    if (pkm.includes('krabby') || pkm.includes('kingler')) return 'claw_pinch';
+    if (pkm.includes('krabby') || pkm.includes('kingler')) return 'krabby_irongrip';
     return 'punch';
   }
   // Pound: Drowzee gets palm strike instead of boxing glove
@@ -326,7 +459,10 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   // whole opposing Bench being swallowed, which is exactly what its text does. Sharing the
   // Poison Sting animation made the bench damage invisible.
   if (name.includes('poison vapor')) return 'poison_vapor';
-  if (name.includes('poison sting') || name.includes('poison fang') || name.includes('spit poison')) return 'poison_sting';
+  if ((name.includes('poison fang') || name.includes('terror strike')) && pkm.includes('arbok')) return 'arbok_poison_fang';
+  if (name.includes('poison sting') && (pkm.includes('weedle') || pkm.includes('kakuna') || pkm.includes('beedrill') || pkm.includes('sandslash'))) return 'weedle_poison_sting';
+  if (name.includes('poison sting')) return 'weedle_poison_sting';
+  if (name.includes('poison fang') || name.includes('spit poison')) return 'poison_sting';
   if (name === 'poison gas' || name.includes('poison gas')) return 'poison_gas';
   if (name === 'foul gas' || name.includes('foul gas')) return 'foul_gas';
   if (name === 'stun gas' || name.includes('stun gas')) return 'stun_gas';
@@ -335,30 +471,37 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name === 'lullaby' || name.includes('lullaby') || name === 'sing' || name.includes('sing')) return 'sing_lullaby';
   if (name.includes('sludge')) return 'muk_sludge_deluge';
   if (name.includes('smog')) return 'weezing_toxic_smog';
+  if (name.includes('destiny bond') && (pkm.includes('gastly') || pkm.includes('haunter') || pkm.includes('gengar'))) return 'gastly_sleeping_gas';
   if (name.includes('destiny bond')) return 'destiny_bond_curse';
   if (name.includes('dark mind')) return 'gengar_dark_mind';
   if (name.includes('nightmare')) return 'nightmare_spook';
+  if ((name.includes('sleeping gas') || name.includes('lick')) && (pkm.includes('gastly') || pkm.includes('haunter'))) return 'gastly_sleeping_gas';
   if (name.includes('lick')) return 'lick_tongue';
   if (name.includes('meditate')) return 'meditate_zen';
 
   // 2. Spores, Powders & Showers
+  if (name.includes('venom powder') || (pkm.includes('venomoth') && name.includes('powder'))) return 'venomoth_venom_powder';
   if (name.includes('poison powder') || name.includes('poisonpowder') || name.includes('toxic powder') || name.includes('venom powder')) return 'poisonpowder_shower';
   if (name.includes('sleep powder') || name.includes('sleeppowder') || name.includes('lullaby powder') || name.includes('spore') || name.includes('afternoon nap')) return 'sleep_powder_drift';
 
   // 3. Electric & Shocks
   if (name.includes('chain lightning') || (pkm.includes('electrode') && name.includes('lightning'))) return 'electrode_chain_lightning';
   if (name.includes('gigashock') || (pkm.includes('raichu') && name.includes('shock'))) return 'raichu_gigashock';
+  if ((name.includes('thunder jolt') || name.includes('spark') || name.includes('gnaw')) && pkm.includes('pikachu')) return 'pikachu_thunder_jolt';
+  if (name.includes('thunder jolt')) return 'pikachu_thunder_jolt';
   if (name === 'thunder' || (name.includes('thunder') && !name.includes('wave') && !name.includes('shock') && !name.includes('punch'))) return 'heavy_thunder_strike';
   if (name.includes('thunder wave') || name.includes('thunderwave') || name.includes('thundershock') || name.includes('thunder') || name.includes('spark') || name.includes('shock') || name.includes('bolt')) return 'thunder_wave';
 
   // 4. Fire Streams & Blazes — diversified per-move
-  if (name.includes('fire blast')) return 'fire_blast_star';
+  if (name.includes('fire blast')) return 'ninetales_fire_blast';
   if (name.includes('fire spin')) return 'fire_spin_vortex';
   if (name.includes('fire punch')) return 'fire_punch_blaze';
   if (name.includes('flame pillar')) return 'flame_pillar';
   if (name.includes('wildfire')) return 'wildfire_scorch';
+  if ((name.includes('continuous fireball') || name.includes('fireball')) && pkm.includes('charizard')) return 'dark_charizard_fireball';
   if (name.includes('continuous fireball') || name.includes('fireball')) return 'fireball_barrage';
   if (name.includes('playing with fire')) return 'playing_with_fire';
+  if ((name.includes('ember') || name.includes('fire tail')) && pkm.includes('charmander')) return 'charmander_ember_flame';
   if (name.includes('ember')) return 'ember_spark';
   if (name.includes('flame tail') || name.includes('fire tail')) return 'flame_tail_whip';
   if (name.includes('flamethrower')) return 'flamethrower_stream';
@@ -374,6 +517,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('bubble')) return 'bubble_gentle';
   if (name.includes('star freeze') || name.includes('freeze star')) return 'star_freeze';
   if (name.includes('aurora beam')) return 'dewgong_aurora_beam';
+  if (name.includes('ice beam') && pkm.includes('gyarados')) return 'dark_gyarados_ice_beam';
   if (name.includes('ice beam') || name.includes('blizzard') || name.includes('freeze') || name.includes('frost')) return 'ice_beam_frost';
 
   // 6. Psychic & Mind
@@ -389,8 +533,13 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('solar beam') || name.includes('solarbeam')) return 'solar_beam_charge_blast';
   if (name.includes('petal')) return 'vileplume_petal_dance';
   if (name.includes('mega drain')) return 'butterfree_mega_drain';
-  if (name.includes('leech seed') || name.includes('vine whip') || name.includes('razor leaf') || name.includes('absorb') || name.includes('giga drain')) return 'leech_seed_vines';
-  if (name.includes('string shot') || name.includes('web') || name.includes('wrap') || name.includes('constrict') || name.includes('bind')) return 'string_shot_cocoon';
+  if (name.includes('leech seed')) return 'bulbasaur_leech_seed';
+  if (name.includes('vine whip') || name.includes('razor leaf') || name.includes('absorb') || name.includes('giga drain')) return 'leech_seed_vines';
+  if ((name.includes('wrap') || name.includes('constrict') || name.includes('spit poison')) && (pkm.includes('ekans') || pkm.includes('arbok') || pkm.includes('dratini'))) return 'ekans_wrap_constrict';
+  if (name.includes('wrap') || name.includes('constrict')) return 'ekans_wrap_constrict';
+  if (name.includes('string shot') && (pkm.includes('caterpie') || pkm.includes('metapod'))) return 'caterpie_string_shot';
+  if (name.includes('string shot')) return 'caterpie_string_shot';
+  if (name.includes('web') || name.includes('bind')) return 'string_shot_cocoon';
 
   // 8. Martial Arts, Slashing, Punching
   if (name.includes('sharp sickle') || (name.includes('absorb') && pkm.includes('kabutops'))) return 'kabutops_sickle_slash';
@@ -403,6 +552,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('seismic toss')) return 'seismic_toss_machamp';
   if (name.includes('slam') && (pkm.includes('dragonite') || pkm.includes('dragonair'))) return 'dragonite_slam';
   if (name.includes('earthquake') && (pkm.includes('dugtrio') || pkm.includes('diglett'))) return 'dugtrio_earthquake';
+  if (name.includes('rock throw')) return 'graveler_rock_throw';
   if (name.includes('seismic toss') || name.includes('slam') || name.includes('body slam') || name.includes('rock slide') || name.includes('fissure') || name.includes('earthquake') || name.includes('dig') || name.includes('pot smash')) return 'seismic_slam';
   // Clamp: Cloyster gets anatomical shell-clamp; others keep guillotine blade
   if (name.includes('clamp')) {
@@ -414,6 +564,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
 
   // 9. Projectiles & Flight
   if (name.includes('horn drill')) return 'rhydon_horn_drill';
+  if (name.includes('drill peck')) return 'fearow_drill_peck';
   if (name.includes('drill peck') || name.includes('peck') || name.includes('drill run')) return 'drill_peck_spiral';
   // Spike Cannon: Cloyster fires anatomical shell spikes; others keep generic pin volley
   if (name.includes('spike cannon')) {
@@ -421,8 +572,10 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     return 'pin_missile_volley';
   }
   if (name.includes('twineedle')) return 'beedrill_twineedle';
+  if (name.includes('pin missile') && (pkm.includes('jolteon') || pkm.includes('eevee'))) return 'jolteon_pin_missile';
   if (name.includes('pin missile')) return 'pin_missile_volley';
   if (name.includes('sand attack') || name.includes('sand-attack')) {
+    if (pkm.includes('sandshrew') || pkm.includes('sandslash')) return 'sandshrew_sand_attack';
     if (pkm.includes('eevee')) return 'sand_attack_dust';
     return 'sand_attack_throw';
   }
@@ -435,7 +588,8 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('big eggsplosion') || name.includes('eggsplosion')) return 'exeggutor_big_eggsplosion';
   if (name.includes('selfdestruct') || name.includes('explosion') || name.includes('mass explosion')) return 'selfdestruct_shockwave';
   if (name.includes('hyper beam') && pkm.includes('golduck')) return 'hyper_beam_ice';
-  if (name.includes('hyper beam') || name.includes('energy bomb') || name.includes('speed ball') || name.includes('sonicboom')) return 'hyper_beam_laser';
+  if (name.includes('hyper beam')) return 'hyper_beam_annihilation';
+  if (name.includes('energy bomb') || name.includes('speed ball') || name.includes('sonicboom')) return 'hyper_beam_laser';
   if (name.includes('horn attack') || name.includes('horn hazard')) return 'horn_gore';
 
   // 10. Dragon, Charge & Physical
@@ -447,22 +601,28 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if ((name.includes('take down') || name.includes('double-edge')) && (pokemonCard.types?.[0] === 'Fire')) return 'fire_take_down';
   if ((name.includes('flail') || name.includes('flop')) && (pokemonCard.types?.[0] === 'Water')) return 'fish_flail';
   if (name === 'slap' && (pkm.includes('staryu') || pkm.includes('starmie'))) return 'starfish_slap';
+  if (name.includes('leek slap') || (pkm.includes('farfetch') && (name.includes('slap') || name.includes('smash') || name.includes('pot smash')))) return 'farfetchd_leek_slap';
+  if ((name.includes('bone') || name.includes('rage') || name.includes('snivel')) && pkm.includes('cubone')) return 'cubone_bone_strike';
+  if (name.includes('bone club')) return 'cubone_bone_strike';
 
   // 10b. Generic physical charge (remaining body-slam style moves)
+  if (name.includes('stomp') && (pkm.includes('rapidash') || pkm.includes('ponyta'))) return 'rapidash_flame_stomp';
   if (name.includes('tantrum')) return 'primeape_tantrum_rampage';
   if (name.includes('thrash') && pkm.includes('nidoking')) return 'nidoking_thrash_fury';
-  if (name.includes('headbutt') || name.includes('ram') || name.includes('take down') || name.includes('double-edge') || name.includes('quick attack') || name.includes('flail') || name.includes('thrash') || name.includes('pounce') || name.includes('knock back') || name.includes('knock down') || name.includes('fury attack') || name.includes('tail slap') || name.includes('tail strike') || name.includes('giant tail') || name.includes('rolling tackle') || name.includes('rocket tackle') || name.includes('flop') || name.includes('leek slap') || name.includes('slap') || name.includes('frenzied attack')) return 'physical_charge';
+  if (name.includes('headbutt') || name.includes('ram') || name.includes('take down') || name.includes('double-edge') || name.includes('quick attack') || name.includes('flail') || name.includes('thrash') || name.includes('pounce') || name.includes('knock back') || name.includes('knock down') || name.includes('fury attack') || name.includes('tail slap') || name.includes('tail strike') || name.includes('giant tail') || name.includes('rolling tackle') || name.includes('rocket tackle') || name.includes('flop') || name.includes('slap') || name.includes('frenzied attack')) return 'physical_charge';
 
   // 11. Defensive, Healing & Buff
+  if ((name.includes('withdraw') || name.includes('shell attack') || name.includes('hide in shell')) && (pkm.includes('squirtle') || pkm.includes('wartortle') || pkm.includes('blastoise') || pkm.includes('shellder'))) return 'squirtle_shell_defense';
   if (name.includes('harden') || name.includes('withdraw') || name.includes('minimize') || name.includes('stiffen') || name.includes('scrunch') || name.includes('hide in shell') || name.includes('shell attack') || name.includes('mirror shell') || name === 'barrier') return 'defensive_harden';
   if (name.includes('recover') || name.includes('spacing out') || name.includes('rapid evolution')) return 'recover_heal';
   if (name.includes('swords dance')) {
     if (pkm.includes('scyther')) return 'scyther_blade_dance';
     return 'swords_dance_buff';
   }
-  if (name.includes('supersonic')) return 'supersonic_waves';
+  if (name.includes('supersonic')) return 'zubat_supersonic';
   if (name.includes('avalanche')) return 'golem_avalanche';
   if (name.includes('bonemerang')) return 'marowak_bonemerang';
+  if (name.includes('leech life') && (pkm.includes('golbat') || pkm.includes('zubat'))) return 'golbat_leech_life';
   if (name.includes('leech life')) return 'drain_life';
 
   // 12. Additional poison / misc mappings
@@ -478,7 +638,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('continuous fireball') || name.includes('fireball')) return 'fireball_barrage';
   if (name.includes('playing with fire')) return 'playing_with_fire';
   if (name.includes('do the wave')) return 'wigglytuff_do_the_wave';
-  if (name.includes('hydrocannon')) return 'water_gun_stream';
+  if (name.includes('hydrocannon')) return 'dark_blastoise_hydrocannon';
   if (name.includes('metronome') || name.includes('mirror move') || name.includes('teleport') || name.includes('headache') || name.includes('transform attack') || name.includes('conversion')) return 'psychic_distortion';
   if (name.includes('third eye') || name.includes('prophecy')) return 'meditate_zen';
   if (name.includes('fascinate') || name.includes('boyfriends') || name.includes('lure') || name.includes('snivel') || name.includes('call for family') || name.includes('call for friend')) return 'sing_lullaby';
@@ -623,7 +783,11 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'nidoking_thrash_fury':
       return 1750;
     case 'kingler_crabhammer':
+    case 'crab_hammer_slam':
       return 1650;
+    case 'krabby_irongrip':
+    case 'claw_pinch':
+      return 1400;
     case 'primeape_tantrum_rampage':
       return 1700;
     case 'rhydon_horn_drill':
@@ -632,6 +796,109 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1850;
     case 'butterfree_mega_drain':
       return 1700;
+    case 'ninetales_fire_blast':
+      return 1800;
+    case 'hyper_beam_annihilation':
+      return 1950;
+    case 'fearow_drill_peck':
+      return 1550;
+    case 'venomoth_venom_powder':
+      return 1700;
+    case 'rapidash_flame_stomp':
+      return 1650;
+    case 'graveler_rock_throw':
+      return 1600;
+    case 'jolteon_pin_missile':
+      return 1750;
+    case 'dark_gyarados_ice_beam':
+      return 1750;
+    case 'arbok_poison_fang':
+      return 1650;
+    case 'golbat_leech_life':
+      return 1700;
+    case 'dark_blastoise_hydrocannon':
+      return 1800;
+    case 'dark_charizard_fireball':
+      return 1850;
+    case 'farfetchd_leek_slap':
+      return 1550;
+    case 'cubone_bone_strike':
+      return 1650;
+    case 'bulbasaur_leech_seed':
+      return 1750;
+    case 'squirtle_shell_defense':
+      return 1600;
+    case 'pikachu_thunder_jolt':
+      return 1650;
+    case 'charmander_ember_flame':
+      return 1600;
+    case 'ekans_wrap_constrict':
+      return 1750;
+    case 'sandshrew_sand_attack':
+      return 1550;
+    case 'caterpie_string_shot':
+      return 1650;
+    case 'weedle_poison_sting':
+      return 1550;
+    case 'zubat_supersonic':
+      return 1600;
+    case 'gastly_sleeping_gas':
+      return 1700;
+    case 'rattata_quick_attack':
+      return 1550;
+    case 'rattata_gnaw_bite':
+      return 1500;
+    case 'pidgey_whirlwind':
+      return 1650;
+    case 'meowth_pay_day':
+    case 'meowth_coin_hurl':
+      return 1650;
+    case 'spearow_peck':
+      return 1550;
+    case 'spearow_mirror_move':
+      return 1650;
+    case 'poliwag_water_gun':
+      return 1650;
+    case 'geodude_stone_barrage':
+      return 1700;
+    case 'vulpix_confuse_ray':
+      return 1700;
+    case 'oddish_stun_spore':
+      return 1650;
+    case 'oddish_sprout':
+      return 1600;
+    case 'jigglypuff_lullaby':
+      return 1750;
+    case 'jigglypuff_pound':
+      return 1100;
+    case 'clefairy_metronome':
+      return 1800;
+    case 'clefairy_sing':
+      return 1650;
+    case 'abra_psyshock':
+      return 1600;
+    case 'abra_vanish':
+      return 1300;
+    case 'drowzee_pound':
+      return 1200;
+    case 'drowzee_confuse_ray':
+      return 1700;
+    case 'drowzee_nightmare':
+      return 1650;
+    case 'snorlax_body_slam':
+      return 1850;
+    case 'lickitung_tongue_wrap':
+      return 1750;
+    case 'lickitung_supersonic':
+      return 1650;
+    case 'kangaskhan_comet_punch':
+      return 1300;
+    case 'kangaskhan_fetch':
+      return 1200;
+    case 'tauros_stomp':
+      return 1600;
+    case 'tauros_rampage':
+      return 1800;
     case 'bubblebeam':
       return 1500;
     case 'drill_peck_spiral':
@@ -5346,46 +5613,35 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       )}
 
       {/* 20z. KINGLER CRABHAMMER (Kingler Lv. 27 — 40 DMG Massive Hydraulic Crustacean Pincer Slam) */}
-      {fx.type === 'kingler_crabhammer' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Gigantic Hypertrophied Crustacean Pincer Claw */}
-          <div
-            className="absolute flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaCrabhammerPincerCock 1.65s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
-          >
-            <svg width="150" height="150" viewBox="0 0 150 150" className="drop-shadow-[0_0_35px_#ea580c]">
-              <defs>
-                <linearGradient id="kinglerClawGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#f97316" />
-                  <stop offset="45%" stopColor="#ea580c" />
-                  <stop offset="100%" stopColor="#9a3412" />
-                </linearGradient>
-              </defs>
-              {/* Massive bulbous crab pincer arm */}
-              <path
-                d="M40 120 Q60 70, 85 50 Q110 30, 130 55 Q115 85, 95 95 Q75 130, 40 120 Z"
-                fill="url(#kinglerClawGrad)"
-                stroke="#ffffff"
-                strokeWidth="2.5"
+      {(fx.type === 'kingler_crabhammer' || fx.type === 'crab_hammer_slam') && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Gigantic Hypertrophied Crustacean Pincer Claw (<= 60% Card Width) */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-30"
+              style={{ animation: 'gbaCrabhammerPincerCock 1.65s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+            >
+              <img
+                src="/assets/Kingler_Crabhammer_Claw.png"
+                alt="Kingler Crabhammer"
+                className="max-w-[76px] max-h-[88px] object-contain drop-shadow-[0_0_20px_#ea580c] drop-shadow-[0_0_28px_rgba(2,132,199,0.7)]"
               />
-              {/* Pincer tooth cutter */}
-              <polygon points="90,48 105,75 80,68" fill="#fef08a" stroke="#78350f" strokeWidth="1.5" />
-              <polygon points="110,60 95,85 118,80" fill="#fef08a" stroke="#78350f" strokeWidth="1.5" />
-            </svg>
-          </div>
+            </div>
 
-          {/* Vertical Seawater Geyser Eruption */}
-          <div
-            className="absolute flex items-center justify-center z-25"
-            style={{ animation: 'gbaCrabhammerGeyserSplash 1.65s cubic-bezier(0.1, 0.9, 0.2, 1) forwards' }}
-          >
-            <svg width="140" height="160" viewBox="0 0 140 160">
-              <path d="M30 160 Q70 10, 110 160 Z" fill="#38bdf8" opacity="0.85" className="drop-shadow-[0_0_20px_#0284c7]" />
-              <path d="M50 160 Q70 30, 90 160 Z" fill="#ffffff" opacity="0.9" />
-            </svg>
+            {/* Vertical Seawater Geyser Eruption */}
+            <div
+              className="absolute flex items-center justify-center z-25"
+              style={{ animation: 'gbaCrabhammerGeyserSplash 1.65s cubic-bezier(0.1, 0.9, 0.2, 1) forwards' }}
+            >
+              <svg width={Math.round(120 * wi)} height={Math.round(140 * wi)} viewBox="0 0 140 160">
+                <path d="M30 160 Q70 10, 110 160 Z" fill="#38bdf8" opacity="0.85" className="drop-shadow-[0_0_20px_#0284c7]" />
+                <path d="M50 160 Q70 30, 90 160 Z" fill="#ffffff" opacity="0.9" />
+              </svg>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* 20aa. PRIMEAPE TANTRUM (Primeape Lv. 35 — Uncontrollable Furious Rage Flurry & Steam Vents) */}
       {fx.type === 'primeape_tantrum_rampage' && (
@@ -5519,6 +5775,2356 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
+      {/* 20ae. NINETALES FIRE BLAST (Ninetales Lv. 32 — Daimonji Kanji Star Flame) */}
+      {fx.type === 'ninetales_fire_blast' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Scorched Earth Rune Floor */}
+          <div
+            className="absolute w-36 h-36 rounded-full flex items-center justify-center pointer-events-none z-10"
+            style={{ animation: 'gbaFireBlastScorchRune 1.8s ease-out forwards' }}
+          >
+            <div className="w-full h-full rounded-full border border-orange-500/40 bg-radial from-orange-600/30 via-red-600/20 to-transparent blur-xs" />
+          </div>
+
+          {/* Incandescent Daimonji '大' Kanji Flame Crest */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaFireBlastDaimonjiKanji 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <svg width="150" height="150" viewBox="0 0 150 150" className="drop-shadow-[0_0_30px_#ea580c]">
+              <defs>
+                <linearGradient id="ninetalesDaimonjiGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#ffffff" />
+                  <stop offset="25%" stopColor="#fef08a" />
+                  <stop offset="60%" stopColor="#f97316" />
+                  <stop offset="100%" stopColor="#dc2626" />
+                </linearGradient>
+                <filter id="daimonjiGlow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              {/* Horizontal Bar */}
+              <path d="M 25 55 Q 75 50 125 55" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
+              {/* Vertical Spine */}
+              <path d="M 75 15 L 75 80" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
+              {/* Sweeping Left Leg */}
+              <path d="M 75 60 Q 55 95 25 135" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
+              {/* Sweeping Right Leg */}
+              <path d="M 75 60 Q 95 95 125 135" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
+              {/* Inner White-Hot Flame Core */}
+              <path d="M 35 55 L 115 55" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.9" />
+              <path d="M 75 25 L 75 75" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.9" />
+              <path d="M 75 60 Q 60 90 35 125" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.85" />
+              <path d="M 75 60 Q 90 90 115 125" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.85" />
+              {/* Nexus Blast Core */}
+              <circle cx="75" cy="58" r="16" fill="#ffffff" className="drop-shadow-[0_0_20px_#facc15]" />
+            </svg>
+          </div>
+
+          {/* Expanding Flame Shockwave Ring */}
+          <div
+            className="absolute w-28 h-28 rounded-full border-orange-400 pointer-events-none z-20"
+            style={{ animation: 'gbaFireBlastKanjiShockwave 1.8s ease-out forwards' }}
+          />
+
+          {/* Radiating Volcanic Ember Spark Shower */}
+          {[
+            { x: '-38px', y: '-35px' }, { x: '38px', y: '-35px' },
+            { x: '-48px', y: '25px' }, { x: '48px', y: '25px' },
+            { x: '0px', y: '-48px' }, { x: '0px', y: '48px' },
+            { x: '-42px', y: '-8px' }, { x: '42px', y: '-8px' }
+          ].map((p, i) => (
+            <div
+              key={`fb-ember-${i}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                '--eb-x': p.x,
+                '--eb-y': p.y,
+                animation: `gbaFireBlastEmberShower 1.8s ease-out ${0.2 + i * 0.05}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <svg width="12" height="12" viewBox="0 0 12 12">
+                <polygon points="6,0 7.5,4.5 12,6 7.5,7.5 6,12 4.5,7.5 0,6 4.5,4.5" fill={i % 2 === 0 ? '#fef08a' : '#f97316'} />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20af. HYPER BEAM ANNIHILATION (Dragonair Lv. 33 / Golduck Lv. 27 — High-Density Ion Mega Laser) */}
+      {fx.type === 'hyper_beam_annihilation' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Blinding Screen Glare Flash */}
+          <div
+            className="absolute inset-0 bg-white/60 pointer-events-none z-20 rounded-xl"
+            style={{ animation: 'gbaHyperBeamScreenGlare 1.95s ease-in-out forwards' }}
+          />
+
+          {/* Converging Particle Accelerator Charge Orb */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaHyperBeamChargeCore 1.95s cubic-bezier(0.2, 0.8, 0.2, 1) forwards' }}
+          >
+            <div className="w-24 h-24 rounded-full bg-radial from-white via-cyan-300 to-transparent flex items-center justify-center">
+              <div className="w-14 h-14 rounded-full bg-cyan-100 border-2 border-white shadow-[0_0_25px_#38bdf8]" />
+            </div>
+          </div>
+
+          {/* Colossal 64px Thick High-Density Mega Laser Beam */}
+          <div
+            className="absolute w-[240px] h-16 flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaHyperBeamMegaBlast 1.95s cubic-bezier(0.12, 0.9, 0.25, 1) forwards' }}
+          >
+            <svg width="240" height="64" viewBox="0 0 240 64">
+              <defs>
+                <linearGradient id="hyperBeamBeamGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.4" />
+                  <stop offset="30%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="70%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.8" />
+                </linearGradient>
+              </defs>
+              {/* Outer Plasma Corona */}
+              <rect x="0" y="8" width="240" height="48" rx="24" fill="url(#hyperBeamBeamGrad)" opacity="0.4" className="drop-shadow-[0_0_20px_#38bdf8]" />
+              {/* Main Particle Core */}
+              <rect x="10" y="16" width="220" height="32" rx="16" fill="#38bdf8" opacity="0.85" />
+              {/* White-Hot Disintegration Spine */}
+              <rect x="20" y="24" width="200" height="16" rx="8" fill="#ffffff" className="drop-shadow-[0_0_15px_#ffffff]" />
+            </svg>
+          </div>
+
+          {/* Expanding Oval Compression Shock Rings */}
+          {[0, 1, 2].map(i => (
+            <div
+              key={`hb-shock-${i}`}
+              className="absolute w-28 h-20 rounded-full border-2 border-cyan-300 pointer-events-none z-30"
+              style={{
+                animation: `gbaHyperBeamShockRing 1.95s ease-out ${0.35 + i * 0.15}s forwards`,
+                opacity: 0
+              }}
+            />
+          ))}
+
+          {/* Disintegration Sparks */}
+          {[
+            { x: '-40px', y: '-28px' }, { x: '40px', y: '-28px' },
+            { x: '-50px', y: '28px' }, { x: '50px', y: '28px' },
+            { x: '-20px', y: '-35px' }, { x: '20px', y: '35px' }
+          ].map((p, i) => (
+            <div
+              key={`hb-spark-${i}`}
+              className="absolute pointer-events-none z-40"
+              style={{
+                '--hb-x': p.x,
+                '--hb-y': p.y,
+                animation: `gbaHyperBeamVaporizeSparks 1.95s ease-out ${0.4 + i * 0.06}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-2.5 h-2.5 rounded-full bg-cyan-200 shadow-[0_0_10px_#ffffff]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20ag. FEAROW DRILL PECK (Fearow Lv. 27 — Aerodynamic Corkscrew Beak Dive) */}
+      {fx.type === 'fearow_drill_peck' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Aerodynamic Spiral Corkscrew Wind Tunnel */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-20"
+            style={{ animation: 'gbaFearowVortexCone 1.55s ease-out forwards' }}
+          >
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <path
+                d="M 70 20 C 100 20, 120 45, 120 70 C 120 100, 95 120, 70 120 C 40 120, 20 95, 20 70 C 20 48, 42 32, 65 32 C 88 32, 105 48, 105 68 C 105 88, 88 105, 70 105 C 52 105, 38 90, 38 72"
+                fill="none" stroke="#bae6fd" strokeWidth="3" strokeDasharray="8,6" opacity="0.75"
+              />
+              <circle cx="70" cy="70" r="48" fill="none" stroke="#e0f2fe" strokeWidth="1.5" opacity="0.5" />
+            </svg>
+          </div>
+
+          {/* Authentic 1999 Ken Sugimori Fearow Spearhead Beak Dive */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaFearowBeakDrill 1.55s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Fearow_DrillPeck_Beak.png"
+              alt="Fearow Drill Peck"
+              className="w-36 h-36 object-contain drop-shadow-[0_0_25px_#f59e0b]"
+            />
+          </div>
+
+          {/* Kinetic Radial Puncture Sparks */}
+          {[
+            { x: '-32px', y: '-28px' }, { x: '32px', y: '-28px' },
+            { x: '-38px', y: '22px' }, { x: '38px', y: '22px' },
+            { x: '0px', y: '-36px' }, { x: '0px', y: '36px' }
+          ].map((p, i) => (
+            <div
+              key={`fp-spark-${i}`}
+              className="absolute pointer-events-none z-40"
+              style={{
+                '--dp-x': p.x,
+                '--dp-y': p.y,
+                animation: `gbaFearowDrillSparks 1.55s ease-out ${0.35 + i * 0.05}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-[0_0_10px_#f59e0b]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20ah. VENOMOTH VENOM POWDER (Venomoth Lv. 28 — Dual Poison & Hypnotic Confusion Spores) */}
+      {fx.type === 'venomoth_venom_powder' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Trance Optical Distortion Overlay */}
+          <div
+            className="absolute inset-0 rounded-xl pointer-events-none z-10"
+            style={{ animation: 'gbaVenomothTranceDistort 1.7s ease-in-out forwards' }}
+          />
+
+          {/* Billowing Iridescent Toxic Spore Cloud */}
+          <div
+            className="absolute inset-0 rounded-xl pointer-events-none z-20"
+            style={{
+              animation: 'gbaVenomothPollenCloud 1.7s ease-in-out forwards',
+              background: 'radial-gradient(circle, rgba(216,180,254,0.45) 0%, rgba(168,85,247,0.4) 45%, rgba(132,204,22,0.3) 80%, transparent 100%)'
+            }}
+          />
+
+          {/* Hypnotic Psy-Confusion Concentric Ripple Rings */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaVenomothConfusionRipples 1.7s ease-out forwards' }}
+          >
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="#facc15" strokeWidth="2.5" strokeDasharray="10,6" opacity="0.8" />
+              <circle cx="60" cy="60" r="35" fill="none" stroke="#e879f9" strokeWidth="2" strokeDasharray="6,4" opacity="0.85" />
+              <circle cx="60" cy="60" r="18" fill="none" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+            </svg>
+          </div>
+
+          {/* Floating Lepidopteran Wing Scales & Spore Crystals */}
+          {[
+            { x: '-30px', y: '-25px' }, { x: '30px', y: '-20px' },
+            { x: '-20px', y: '30px' }, { x: '25px', y: '25px' },
+            { x: '0px', y: '-35px' }, { x: '-40px', y: '5px' }
+          ].map((p, i) => (
+            <div
+              key={`vm-scale-${i}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                left: `calc(50% + ${p.x})`,
+                top: `calc(50% + ${p.y})`,
+                animation: `gbaVenomothLepidopteraScale 1.7s ease-out ${0.15 + i * 0.12}s forwards`,
+                opacity: 0
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 14 14">
+                <polygon points="7,0 14,7 7,14 0,7" fill={i % 2 === 0 ? '#d8b4fe' : '#fef08a'} opacity="0.85" className="drop-shadow-[0_0_8px_#c084fc]" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20ai. RAPIDASH FLAME STOMP (Rapidash Lv. 33 — Equine Mane Fire & Heavy Hoofprint Quake) */}
+      {fx.type === 'rapidash_flame_stomp' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Scorched Molten Ground Fissure Fractures */}
+          <div className="absolute flex items-center justify-center pointer-events-none z-15" style={{ animation: 'gbaRapidashGroundFissures 1.65s ease-out forwards' }}>
+            <svg width="130" height="130" viewBox="0 0 130 130">
+              <path d="M 65 65 L 35 30 M 65 65 L 95 30 M 65 65 L 25 90 M 65 65 L 105 90 M 65 65 L 65 115" stroke="#ea580c" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+              <path d="M 65 65 L 45 40 M 65 65 L 85 40" stroke="#fef08a" strokeWidth="1.5" strokeLinecap="round" opacity="0.9" />
+            </svg>
+          </div>
+
+          {/* Rearing Fiery Equine Hooves Slam */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaRapidashHoofLunge 1.65s cubic-bezier(0.18, 1, 0.32, 1) forwards' }}
+          >
+            <svg width="120" height="100" viewBox="0 0 120 100" className="drop-shadow-[0_0_25px_#f97316]">
+              {/* Left Hoof */}
+              <ellipse cx="40" cy="50" rx="18" ry="14" fill="#451a03" stroke="#f97316" strokeWidth="2.5" />
+              <path d="M 28 48 C 28 35, 52 35, 52 48" fill="none" stroke="#fef08a" strokeWidth="3" strokeLinecap="round" />
+              {/* Right Hoof */}
+              <ellipse cx="80" cy="50" rx="18" ry="14" fill="#451a03" stroke="#f97316" strokeWidth="2.5" />
+              <path d="M 68 48 C 68 35, 92 35, 92 48" fill="none" stroke="#fef08a" strokeWidth="3" strokeLinecap="round" />
+              {/* Flaming Fetlock Flares */}
+              <path d="M 30 40 Q 40 15 50 35 Q 40 25 30 40 Z" fill="#f97316" />
+              <path d="M 70 40 Q 80 15 90 35 Q 80 25 70 40 Z" fill="#f97316" />
+            </svg>
+          </div>
+
+          {/* Glowing Molten Hoofprint Scorch Marks */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-20"
+            style={{ animation: 'gbaRapidashHoofPrintScorch 1.65s ease-out forwards' }}
+          >
+            <div className="w-28 h-16 flex justify-between px-2">
+              <div className="w-10 h-10 rounded-full border-2 border-orange-400 bg-orange-600/40 blur-xs" />
+              <div className="w-10 h-10 rounded-full border-2 border-orange-400 bg-orange-600/40 blur-xs" />
+            </div>
+          </div>
+
+          {/* Galloping Sparks Eruption */}
+          {[
+            { x: '-35px', y: '-30px' }, { x: '35px', y: '-30px' },
+            { x: '-45px', y: '15px' }, { x: '45px', y: '15px' }
+          ].map((p, i) => (
+            <div
+              key={`rp-ember-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--rh-x': p.x,
+                '--rh-y': p.y,
+                animation: `gbaRapidashEmberErupt 1.65s ease-out ${0.4 + i * 0.08}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-200 shadow-[0_0_12px_#ea580c]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20aj. GRAVELER ROCK THROW (Graveler Lv. 29 — Heavy Polygonal Granite Ballistic Monolith) */}
+      {fx.type === 'graveler_rock_throw' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Incoming Ballistic Granite Boulder */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaGravelerMegaboulder 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}
+          >
+            <svg width="85" height="85" viewBox="0 0 85 85" className="drop-shadow-[0_0_20px_#78350f]">
+              <polygon points="42,5 72,25 78,60 50,80 18,72 8,35" fill="#78716c" stroke="#44403c" strokeWidth="3" />
+              <polygon points="42,5 72,25 50,45 25,32" fill="#a8a29e" opacity="0.6" />
+              <polygon points="50,45 78,60 50,80" fill="#57534e" opacity="0.8" />
+              <line x1="25" y1="32" x2="18" y2="72" stroke="#292524" strokeWidth="2" />
+            </svg>
+          </div>
+
+          {/* Violent Impact Shattering Rock Shards */}
+          {[
+            { x: '-38px', y: '-35px', r: '-120deg' },
+            { x: '42px', y: '-30px', r: '140deg' },
+            { x: '-45px', y: '25px', r: '180deg' },
+            { x: '45px', y: '30px', r: '-90deg' },
+            { x: '0px', y: '-45px', r: '45deg' },
+            { x: '0px', y: '45px', r: '-45deg' }
+          ].map((s, i) => (
+            <div
+              key={`gv-shard-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--rs-x': s.x,
+                '--rs-y': s.y,
+                '--rs-r': s.r,
+                animation: `gbaGravelerRockShard 1.6s ease-out ${0.42 + i * 0.04}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <svg width="22" height="22" viewBox="0 0 22 22">
+                <polygon points="11,2 20,9 15,19 4,16 2,8" fill="#a8a29e" stroke="#44403c" strokeWidth="1.5" />
+              </svg>
+            </div>
+          ))}
+
+          {/* Dense Earthen Dust Shockwave Puff */}
+          <div
+            className="absolute w-36 h-28 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaGravelerDustPuff 1.6s ease-out forwards',
+              background: 'radial-gradient(ellipse, rgba(180,83,9,0.35) 0%, rgba(120,53,15,0.4) 50%, transparent 80%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20ak. JOLTEON PIN MISSILE (Jolteon Lv. 29 — 4-Volley High-Voltage Fur Needle Barrage) */}
+      {fx.type === 'jolteon_pin_missile' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Volley 1: Top-Left to Center */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaJolteonMissileSalvo1 1.75s ease-out forwards' }}>
+            <svg width="35" height="50" viewBox="0 0 35 50" className="drop-shadow-[0_0_12px_#fde047]">
+              <polygon points="17,0 23,40 17,50 11,40" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+            </svg>
+          </div>
+
+          {/* Volley 2: Top-Right to Center */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaJolteonMissileSalvo2 1.75s ease-out forwards' }}>
+            <svg width="35" height="50" viewBox="0 0 35 50" className="drop-shadow-[0_0_12px_#fde047]">
+              <polygon points="17,0 23,40 17,50 11,40" fill="#fef08a" stroke="#ca8a04" strokeWidth="1.5" />
+            </svg>
+          </div>
+
+          {/* Volley 3: Bottom-Left to Center */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaJolteonMissileSalvo3 1.75s ease-out forwards' }}>
+            <svg width="35" height="50" viewBox="0 0 35 50" className="drop-shadow-[0_0_14px_#38bdf8]">
+              <polygon points="17,0 23,40 17,50 11,40" fill="#bae6fd" stroke="#0284c7" strokeWidth="1.5" />
+            </svg>
+          </div>
+
+          {/* Volley 4: Bottom-Right to Center */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaJolteonMissileSalvo4 1.75s ease-out forwards' }}>
+            <svg width="35" height="50" viewBox="0 0 35 50" className="drop-shadow-[0_0_16px_#fde047]">
+              <polygon points="17,0 23,40 17,50 11,40" fill="#ffffff" stroke="#eab308" strokeWidth="2" />
+            </svg>
+          </div>
+
+          {/* Electric Arc Burst at Center */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaJolteonElectricArcBurst 1.75s ease-out forwards' }}
+          >
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <path d="M 50 10 L 45 45 L 75 40 L 40 90 L 52 55 L 25 60 Z" fill="#fde047" stroke="#ffffff" strokeWidth="2" className="drop-shadow-[0_0_18px_#fde047]" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20al. DARK GYARADOS ICE BEAM (Dark Gyarados Lv. 31 — Glacial Sub-Zero Laser & Solid Ice Encapsulation) */}
+      {fx.type === 'dark_gyarados_ice_beam' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Full-Card Solid Cryogenic Ice Block Encapsulation */}
+          <div
+            className="absolute inset-0 rounded-2xl border-2 border-cyan-200/90 pointer-events-none z-25 flex items-center justify-center"
+            style={{
+              animation: 'gbaDarkGyaradosSolidIceBlock 1.75s ease-out forwards',
+              background: 'radial-gradient(ellipse at center, rgba(186,230,253,0.3) 0%, rgba(56,189,248,0.4) 60%, rgba(2,132,199,0.5) 100%)',
+              backdropFilter: 'blur(3px)'
+            }}
+          >
+            {/* Frozen Crystalline Frost Fractures */}
+            <svg width="100%" height="100%" viewBox="0 0 140 200" className="absolute inset-0" style={{ animation: 'gbaDarkGyaradosIceFracture 1.75s ease-out forwards' }}>
+              <path d="M 10 20 L 50 60 L 90 40 L 130 80 M 50 60 L 40 120 L 80 150 M 40 120 L 15 170 M 80 150 L 120 180" fill="none" stroke="#ffffff" strokeWidth="2" opacity="0.9" />
+              <path d="M 50 60 L 70 80 L 110 70" fill="none" stroke="#e0f2fe" strokeWidth="1.5" opacity="0.75" />
+            </svg>
+          </div>
+
+          {/* Sub-Zero Glacial Laser Jet */}
+          <div
+            className="absolute w-[220px] h-12 flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaDarkGyaradosGlacialLaser 1.75s cubic-bezier(0.12, 0.9, 0.25, 1) forwards' }}
+          >
+            <div className="w-full h-8 rounded-full bg-cyan-300/80 shadow-[0_0_25px_#38bdf8] flex items-center justify-center">
+              <div className="w-[90%] h-3 rounded-full bg-white shadow-[0_0_12px_#ffffff]" />
+            </div>
+          </div>
+
+          {/* Sub-Zero Blizzard Fog Mist at Base */}
+          <div
+            className="absolute bottom-0 w-full h-16 pointer-events-none z-20"
+            style={{
+              animation: 'gbaDarkGyaradosBlizzardVapor 1.75s ease-out forwards',
+              background: 'radial-gradient(ellipse at bottom, rgba(224,242,254,0.6) 0%, rgba(186,230,253,0.3) 50%, transparent 90%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20am. ARBOK POISON FANG (Arbok Lv. 27 / Dark Arbok — Menacing Cobra Hood & Piercing Viper Fangs) */}
+      {fx.type === 'arbok_poison_fang' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1999 Ken Sugimori Arbok Poison Fang Cobra Maw */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaArbokViperFangs 1.65s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Arbok_PoisonFang_Maw.png"
+              alt="Arbok Poison Fang"
+              className="w-48 h-48 object-contain drop-shadow-[0_0_30px_#7e22ce]"
+            />
+          </div>
+
+          {/* High-Pressure Corrosive Venom Spurt Streams */}
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaArbokVenomSpurtL 1.65s ease-out forwards' }}>
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="7" fill="#84cc16" className="drop-shadow-[0_0_10px_#a3e635]" />
+              <circle cx="10" cy="28" r="4" fill="#a855f7" />
+            </svg>
+          </div>
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaArbokVenomSpurtR 1.65s ease-out forwards' }}>
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="7" fill="#84cc16" className="drop-shadow-[0_0_10px_#a3e635]" />
+              <circle cx="30" cy="28" r="4" fill="#a855f7" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20an. GOLBAT LEECH LIFE (Golbat Lv. 29 — Vampiric Wing Swoop & Vitality Siphon) */}
+      {fx.type === 'golbat_leech_life' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1999 Ken Sugimori Golbat Leech Life Maw */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaGolbatVampireDive 1.7s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Golbat_LeechLife_Maw.png"
+              alt="Golbat Leech Life"
+              className="w-48 h-48 object-contain drop-shadow-[0_0_30px_#312e81]"
+            />
+          </div>
+
+          {/* Siphoned Crimson Vitality Orbs */}
+          {[
+            { x: '-28px', y: '-35px' }, { x: '28px', y: '-35px' },
+            { x: '-20px', y: '25px' }, { x: '20px', y: '25px' }
+          ].map((p, i) => (
+            <div
+              key={`gb-orb-${i}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                '--vs-x': p.x,
+                '--vs-y': p.y,
+                animation: `gbaGolbatVitalityOrbSiphon 1.7s cubic-bezier(0.2, 0.8, 0.25, 1) ${0.35 + i * 0.1}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-5 h-5 rounded-full bg-rose-500 shadow-[0_0_15px_#ef4444] flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-white" />
+              </div>
+            </div>
+          ))}
+
+          {/* Recovery Emerald Aura Pulse */}
+          <div
+            className="absolute w-28 h-28 rounded-full pointer-events-none z-25"
+            style={{
+              animation: 'gbaGolbatHealAuraPulse 1.7s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(74,222,128,0.4) 0%, rgba(34,197,94,0.3) 50%, transparent 80%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20ao. DARK BLASTOISE HYDROCANNON (Dark Blastoise Lv. 28 — Gunmetal Twin Artillery & Concussion Hydro Geyser) */}
+      {fx.type === 'dark_blastoise_hydrocannon' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Gunmetal Twin Artillery Cannons */}
+          <div
+            className="absolute top-2 w-full flex justify-between px-6 pointer-events-none z-25"
+            style={{ animation: 'gbaDarkBlastoiseGunmetalCannons 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            {/* Left Cannon */}
+            <div className="w-10 h-18 bg-slate-800 border-2 border-slate-600 rounded-b-md shadow-[0_0_15px_rgba(0,0,0,0.8)] flex flex-col items-center">
+              <div className="w-full h-3 bg-amber-600/80 mt-1" />
+              <div className="w-8 h-8 rounded-full border border-slate-500 mt-2 bg-slate-900" />
+            </div>
+            {/* Right Cannon */}
+            <div className="w-10 h-18 bg-slate-800 border-2 border-slate-600 rounded-b-md shadow-[0_0_15px_rgba(0,0,0,0.8)] flex flex-col items-center">
+              <div className="w-full h-3 bg-amber-600/80 mt-1" />
+              <div className="w-8 h-8 rounded-full border border-slate-500 mt-2 bg-slate-900" />
+            </div>
+          </div>
+
+          {/* Twin Muzzle Blast Detonations */}
+          <div className="absolute top-12 w-full flex justify-between px-8 pointer-events-none z-30">
+            <div className="w-12 h-12 rounded-full bg-cyan-200 shadow-[0_0_25px_#38bdf8]" style={{ animation: 'gbaDarkBlastoiseMuzzleBlast 1.8s ease-out forwards' }} />
+            <div className="w-12 h-12 rounded-full bg-cyan-200 shadow-[0_0_25px_#38bdf8]" style={{ animation: 'gbaDarkBlastoiseMuzzleBlast 1.8s ease-out forwards' }} />
+          </div>
+
+          {/* High-Velocity Compressed Hydro Mortar Shells */}
+          <div className="absolute flex items-center justify-center pointer-events-none z-35" style={{ animation: 'gbaDarkBlastoiseHydroShell 1.8s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
+            <div className="w-16 h-16 rounded-full bg-radial from-white via-cyan-400 to-blue-700 shadow-[0_0_30px_#0284c7]" />
+          </div>
+
+          {/* Massive Vertical Concussion Hydro Geyser */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaDarkBlastoiseConcussionGeyser 1.8s ease-out forwards' }}
+          >
+            <svg width="150" height="200" viewBox="0 0 150 200">
+              <path d="M 40 180 Q 20 90 50 20 Q 75 5 100 20 Q 130 90 110 180 Z" fill="url(#darkBlastoiseGeyserGrad)" opacity="0.85" className="drop-shadow-[0_0_25px_#38bdf8]" />
+              <path d="M 55 170 Q 40 90 65 35 Q 75 20 85 35 Q 110 90 95 170 Z" fill="#ffffff" opacity="0.75" />
+              <defs>
+                <linearGradient id="darkBlastoiseGeyserGrad" x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stopColor="#0f172a" />
+                  <stop offset="30%" stopColor="#0284c7" />
+                  <stop offset="70%" stopColor="#38bdf8" />
+                  <stop offset="100%" stopColor="#e0f2fe" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20ap. DARK CHARIZARD CONTINUOUS FIREBALL (Dark Charizard Lv. 38 — Triple Volcanic Magma Bombardment) */}
+      {fx.type === 'dark_charizard_fireball' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Fireball 1: Left Salvo */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaDarkFireball1 1.85s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
+            <svg width="45" height="45" viewBox="0 0 45 45" className="drop-shadow-[0_0_20px_#ea580c]">
+              <circle cx="22" cy="22" r="18" fill="#7f1d1d" stroke="#f97316" strokeWidth="2.5" />
+              <circle cx="22" cy="22" r="10" fill="#ea580c" />
+              <circle cx="20" cy="20" r="4" fill="#ffffff" />
+            </svg>
+          </div>
+
+          {/* Fireball 2: Right Salvo */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaDarkFireball2 1.85s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
+            <svg width="45" height="45" viewBox="0 0 45 45" className="drop-shadow-[0_0_20px_#dc2626]">
+              <circle cx="22" cy="22" r="18" fill="#450a0a" stroke="#ef4444" strokeWidth="2.5" />
+              <circle cx="22" cy="22" r="10" fill="#f97316" />
+              <circle cx="20" cy="20" r="4" fill="#ffffff" />
+            </svg>
+          </div>
+
+          {/* Fireball 3: Heavy Center Meteor */}
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaDarkFireball3 1.85s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
+            <svg width="60" height="60" viewBox="0 0 60 60" className="drop-shadow-[0_0_30px_#f97316]">
+              <circle cx="30" cy="30" r="26" fill="#991b1b" stroke="#fef08a" strokeWidth="3" />
+              <circle cx="30" cy="30" r="16" fill="#f97316" />
+              <circle cx="28" cy="28" r="7" fill="#ffffff" />
+            </svg>
+          </div>
+
+          {/* Concussive Crater Blast */}
+          <div
+            className="absolute w-36 h-36 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaDarkFireballCraterBurst 1.85s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(234,88,12,0.5) 0%, rgba(185,28,28,0.4) 50%, rgba(15,23,42,0.3) 80%, transparent 100%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20aq. FARFETCH'D LEEK SLAP (Farfetch'd Lv. 20 — 1996 Ken Sugimori Scallion Leek Strike) */}
+      {fx.type === 'farfetchd_leek_slap' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Farfetch'd Leek Weapon */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaFarfetchdLeekSwoop 1.55s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Farfetchd_Leek_Weapon.png"
+              alt="Farfetchd Leek Weapon"
+              className="w-40 h-40 object-contain drop-shadow-[0_0_25px_#22c55e]"
+            />
+          </div>
+
+          {/* Aerodynamic Emerald/White Wind Slash Trails */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaFarfetchdLeekSlashMarks 1.55s ease-out forwards' }}
+          >
+            <svg width="140" height="140" viewBox="0 0 140 140">
+              <path d="M 20 25 L 120 115" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" opacity="0.9" />
+              <path d="M 35 15 L 125 95" stroke="#4ade80" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+              <path d="M 15 45 L 105 125" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+            </svg>
+          </div>
+
+          {/* Scattered Vegetable Fiber Sparks */}
+          {[
+            { x: '-35px', y: '-30px', rot: '45deg' }, { x: '35px', y: '-30px', rot: '-35deg' },
+            { x: '-40px', y: '25px', rot: '60deg' }, { x: '40px', y: '25px', rot: '-60deg' },
+            { x: '0px', y: '-42px', rot: '15deg' }, { x: '0px', y: '42px', rot: '-15deg' },
+            { x: '-25px', y: '0px', rot: '90deg' }, { x: '25px', y: '0px', rot: '-90deg' }
+          ].map((p, i) => (
+            <div
+              key={`ff-fiber-${i}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                '--ff-x': p.x,
+                '--ff-y': p.y,
+                animation: `gbaFarfetchdLeafFibers 1.55s ease-out ${0.38 + i * 0.04}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div
+                className="w-3 h-1 bg-lime-400 rounded shadow-[0_0_8px_#84cc16]"
+                style={{ transform: `rotate(${p.rot})` }}
+              />
+            </div>
+          ))}
+
+          {/* Concussive Impact Shockwave Ring */}
+          <div
+            className="absolute w-32 h-32 rounded-full border-2 border-emerald-300 pointer-events-none z-25"
+            style={{ animation: 'gbaFarfetchdImpactWave 1.55s ease-out forwards' }}
+          />
+        </div>
+      )}
+
+      {/* 20ar. CUBONE BONE STRIKE (Cubone Lv. 13 — 1996 Ken Sugimori Heavy Bone Club Smash) */}
+      {fx.type === 'cubone_bone_strike' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Dinosaur Bone Club */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaCuboneBoneSmash 1.65s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Cubone_Bone_Club.png"
+              alt="Cubone Bone Club"
+              className="w-44 h-44 object-contain drop-shadow-[0_0_25px_#ca8a04]"
+            />
+          </div>
+
+          {/* Radial Ground Tremor Fissures */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+            style={{ animation: 'gbaCuboneGroundCracks 1.65s ease-out forwards' }}
+          >
+            <svg width="150" height="150" viewBox="0 0 150 150">
+              <path d="M 75 75 L 30 50 M 75 75 L 120 45 M 75 75 L 35 110 M 75 75 L 115 115 M 75 75 L 75 135 M 75 75 L 75 15"
+                stroke="#a16207" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+            </svg>
+          </div>
+
+          {/* Earthen Dust Cloud Expansion */}
+          <div
+            className="absolute w-36 h-36 rounded-full pointer-events-none z-15"
+            style={{
+              animation: 'gbaCuboneDustRing 1.65s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(202,138,4,0.4) 0%, rgba(161,98,7,0.3) 50%, transparent 80%)'
+            }}
+          />
+
+          {/* Flying Bone Splinter Shards */}
+          {[
+            { x: '-38px', y: '-32px' }, { x: '38px', y: '-32px' },
+            { x: '-45px', y: '18px' }, { x: '45px', y: '18px' },
+            { x: '-15px', y: '-45px' }, { x: '15px', y: '45px' }
+          ].map((p, i) => (
+            <div
+              key={`cb-shard-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--cb-x': p.x,
+                '--cb-y': p.y,
+                animation: `gbaCuboneBoneShards 1.65s ease-out ${0.4 + i * 0.05}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-2.5 h-2.5 bg-amber-100 border border-amber-600 rounded-sm shadow-[0_0_6px_#ca8a04]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20as. BULBASAUR LEECH SEED (Bulbasaur Lv. 13 — 1996 Ken Sugimori Spiked Seed Pod & Tendril Drain) */}
+      {fx.type === 'bulbasaur_leech_seed' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Spiked Seed Pod */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaBulbasaurSeedImplant 1.75s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Bulbasaur_Leech_Seed_Pod.png"
+              alt="Bulbasaur Leech Seed Pod"
+              className="w-36 h-36 object-contain drop-shadow-[0_0_25px_#15803d]"
+            />
+          </div>
+
+          {/* Sprouting Coiled Vine Tendrils */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaBulbasaurTendrilClasp 1.75s ease-out forwards' }}
+          >
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              <path d="M 80 80 Q 50 30 20 40 Q 10 70 30 90" fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 80 80 Q 110 30 140 40 Q 150 70 130 90" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" />
+              <path d="M 80 80 Q 50 130 30 120 Q 20 150 50 150" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" />
+              <path d="M 80 80 Q 110 130 130 120 Q 140 150 110 150" fill="none" stroke="#15803d" strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {/* Siphoned Emerald & Ruby Vitality Orbs */}
+          {[
+            { x: '-32px', y: '-30px' }, { x: '32px', y: '-30px' },
+            { x: '-22px', y: '30px' }, { x: '22px', y: '30px' }
+          ].map((p, i) => (
+            <div
+              key={`bs-orb-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--bs-x': p.x,
+                '--bs-y': p.y,
+                animation: `gbaBulbasaurLifeSiphon 1.75s cubic-bezier(0.2, 0.8, 0.25, 1) ${0.55 + i * 0.1}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-5 h-5 rounded-full bg-emerald-400 border border-white shadow-[0_0_15px_#22c55e] flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-rose-400" />
+              </div>
+            </div>
+          ))}
+
+          {/* Drained Target Healing Aura Ripple */}
+          <div
+            className="absolute w-32 h-32 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaBulbasaurDrainRipple 1.75s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(34,197,94,0.35) 0%, rgba(21,128,61,0.2) 60%, transparent 80%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20at. SQUIRTLE SHELL DEFENSE (Squirtle Lv. 8 — 1996 Ken Sugimori Turtle Shell Withdraw & Reflect) */}
+      {fx.type === 'squirtle_shell_defense' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Smooth Turtle Shell */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaSquirtleShellSnap 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Squirtle_Turtle_Shell.png"
+              alt="Squirtle Turtle Shell"
+              className="w-44 h-44 object-contain drop-shadow-[0_0_30px_#0284c7]"
+            />
+          </div>
+
+          {/* Prismatic Deflective Shimmer Barrier */}
+          <div
+            className="absolute w-40 h-40 rounded-full border-2 border-cyan-200 pointer-events-none z-35"
+            style={{
+              animation: 'gbaSquirtleReflectShimmer 1.6s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(224,242,254,0.4) 0%, rgba(56,189,248,0.3) 50%, transparent 75%)'
+            }}
+          />
+
+          {/* Deflected Water Splash Droplets */}
+          {[
+            { x: '-42px', y: '-35px' }, { x: '42px', y: '-35px' },
+            { x: '-48px', y: '15px' }, { x: '48px', y: '15px' },
+            { x: '-25px', y: '40px' }, { x: '25px', y: '40px' }
+          ].map((p, i) => (
+            <div
+              key={`sq-drop-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--sq-x': p.x,
+                '--sq-y': p.y,
+                animation: `gbaSquirtleDeflectSplash 1.6s ease-out ${0.42 + i * 0.06}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-3.5 h-3.5 rounded-full bg-cyan-300 border border-white shadow-[0_0_10px_#38bdf8]" />
+            </div>
+          ))}
+
+          {/* Expanding Hydro Protective Concussion Ring */}
+          <div
+            className="absolute w-44 h-44 rounded-full border border-sky-300 pointer-events-none z-20"
+            style={{ animation: 'gbaSquirtleShieldRings 1.6s ease-out forwards' }}
+          />
+        </div>
+      )}
+
+      {/* 20au. PIKACHU THUNDER JOLT (Pikachu Lv. 12/14 — 1996 Ken Sugimori Chubby Pikachu Spark & Mega Thunder Jolt) */}
+      {fx.type === 'pikachu_thunder_jolt' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Chubby Pikachu Stance */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaPikachuChargePose 1.65s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Pikachu_Spark_Cheeks.png"
+              alt="Pikachu Spark Cheeks"
+              className="w-44 h-44 object-contain drop-shadow-[0_0_25px_#eab308]"
+            />
+          </div>
+
+          {/* High-Voltage Forked Zigzag Lightning Detonation */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaPikachuThunderBolts 1.65s ease-out forwards' }}
+          >
+            <svg width="150" height="150" viewBox="0 0 150 150">
+              <path d="M 75 10 L 60 55 L 90 65 L 50 115 L 80 120 L 40 145" fill="none" stroke="#fde047" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_15px_#eab308]" />
+              <path d="M 75 10 L 60 55 L 90 65 L 50 115 L 80 120 L 40 145" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M 75 40 L 110 30 L 95 65 L 135 80" fill="none" stroke="#facc15" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M 75 75 L 30 70 L 45 95 L 15 110" fill="none" stroke="#facc15" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+
+          {/* Expanding Spherical Ion Shockwave Rings */}
+          <div
+            className="absolute w-44 h-44 rounded-full border-2 border-yellow-300 pointer-events-none z-25"
+            style={{ animation: 'gbaPikachuShockwaveRings 1.65s ease-out forwards' }}
+          />
+
+          {/* Crackling High-Voltage Electric Sparks */}
+          {[
+            { x: '-38px', y: '-35px' }, { x: '38px', y: '-35px' },
+            { x: '-42px', y: '25px' }, { x: '42px', y: '25px' },
+            { x: '-15px', y: '-45px' }, { x: '15px', y: '45px' }
+          ].map((p, i) => (
+            <div
+              key={`pk-spark-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--pk-x': p.x,
+                '--pk-y': p.y,
+                animation: `gbaPikachuElectricSparks 1.65s ease-out ${0.4 + i * 0.05}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-3 h-3 bg-yellow-200 rotate-45 border border-white shadow-[0_0_10px_#facc15]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20av. CHARMANDER EMBER FLAME (Charmander Lv. 10 — 1996 Ken Sugimori Teardrop Tail Flame & Incandescent Ember Burst) */}
+      {fx.type === 'charmander_ember_flame' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Charmander Tail Flame */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaCharmanderTailSweep 1.6s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Charmander_Tail_Flame.png"
+              alt="Charmander Tail Flame"
+              className="w-40 h-40 object-contain drop-shadow-[0_0_30px_#ea580c]"
+            />
+          </div>
+
+          {/* Triple Staggered Incandescent Ember Projectiles */}
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaCharmanderEmber1 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
+            <div className="w-7 h-7 rounded-full bg-radial from-white via-amber-400 to-red-600 shadow-[0_0_15px_#f97316]" />
+          </div>
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaCharmanderEmber2 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
+            <div className="w-6 h-6 rounded-full bg-radial from-white via-yellow-300 to-orange-600 shadow-[0_0_12px_#ea580c]" />
+          </div>
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaCharmanderEmber3 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
+            <div className="w-8 h-8 rounded-full bg-radial from-white via-orange-400 to-rose-700 shadow-[0_0_18px_#dc2626]" />
+          </div>
+
+          {/* Scorched Ground Magma Aura Patch */}
+          <div
+            className="absolute w-36 h-36 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaCharmanderScorchPatch 1.6s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(249,115,22,0.5) 0%, rgba(220,38,38,0.3) 55%, transparent 80%)'
+            }}
+          />
+
+          {/* Floating Carbon Cinders */}
+          {[
+            { x: '-30px', y: '-35px' }, { x: '30px', y: '-35px' },
+            { x: '-20px', y: '25px' }, { x: '20px', y: '25px' }
+          ].map((p, i) => (
+            <div
+              key={`cm-cind-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--cm-x': p.x,
+                '--cm-y': p.y,
+                animation: `gbaCharmanderCinders 1.6s ease-out ${0.45 + i * 0.08}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#f59e0b]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20aw. EKANS WRAP CONSTRICT (Ekans Lv. 10 — 1996 Ken Sugimori Coiled Serpent Wrap & Venom Fang Strike) */}
+      {fx.type === 'ekans_wrap_constrict' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Coiled Ekans Serpent */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaEkansConstrictCoil 1.75s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Ekans_Coiled_Serpent.png"
+              alt="Ekans Coiled Serpent"
+              className="w-48 h-48 object-contain drop-shadow-[0_0_30px_#9333ea]"
+            />
+          </div>
+
+          {/* Tri-Wave Crushing Compression Pulse Rings */}
+          <div
+            className="absolute w-44 h-44 rounded-full border-2 border-purple-400 pointer-events-none z-25"
+            style={{ animation: 'gbaEkansCrushPulse 1.75s ease-out forwards' }}
+          />
+
+          {/* Dual Corrosive Venom Spurt Droplets */}
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaEkansVenomSpurtL 1.75s ease-out forwards' }}>
+            <svg width="35" height="35" viewBox="0 0 35 35">
+              <circle cx="17" cy="17" r="6" fill="#a855f7" className="drop-shadow-[0_0_8px_#c084fc]" />
+              <circle cx="10" cy="22" r="3" fill="#ec4899" />
+            </svg>
+          </div>
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaEkansVenomSpurtR 1.75s ease-out forwards' }}>
+            <svg width="35" height="35" viewBox="0 0 35 35">
+              <circle cx="17" cy="17" r="6" fill="#a855f7" className="drop-shadow-[0_0_8px_#c084fc]" />
+              <circle cx="24" cy="22" r="3" fill="#ec4899" />
+            </svg>
+          </div>
+
+          {/* Eerie Purple Constriction Shimmer Aura */}
+          <div
+            className="absolute w-40 h-40 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaEkansAuraConstrict 1.75s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(126,34,206,0.3) 50%, transparent 80%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20ax. SANDSHREW SAND ATTACK (Sandshrew Lv. 12 — 1996 Ken Sugimori Digging Claws & Blinding Sand Blast) */}
+      {fx.type === 'sandshrew_sand_attack' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Digging Claw Arm */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaSandshrewClawSwipe 1.55s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Sandshrew_Digging_Claws.png"
+              alt="Sandshrew Digging Claws"
+              className="w-40 h-40 object-contain drop-shadow-[0_0_25px_#d97706]"
+            />
+          </div>
+
+          {/* Conical Swirling Desert Sand Blast */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaSandshrewSandBlast 1.55s ease-out forwards' }}
+          >
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              <path d="M 20 80 Q 80 20 140 60 Q 150 110 80 130 Q 30 130 20 80 Z" fill="url(#sandBlastGrad)" opacity="0.85" />
+              <defs>
+                <radialGradient id="sandBlastGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.9" />
+                  <stop offset="60%" stopColor="#d97706" stopOpacity="0.75" />
+                  <stop offset="100%" stopColor="#92400e" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+
+          {/* Flying Abrasive Sand Pellets */}
+          {[
+            { x: '-45px', y: '-35px', s: 3 }, { x: '45px', y: '-35px', s: 4 },
+            { x: '-50px', y: '20px', s: 3.5 }, { x: '50px', y: '20px', s: 3 },
+            { x: '-20px', y: '-45px', s: 2.5 }, { x: '20px', y: '45px', s: 4 },
+            { x: '-30px', y: '40px', s: 3 }, { x: '30px', y: '-40px', s: 2.5 }
+          ].map((p, i) => (
+            <div
+              key={`ss-grit-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--ss-x': p.x,
+                '--ss-y': p.y,
+                animation: `gbaSandshrewGritPellets 1.55s ease-out ${0.35 + i * 0.04}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div
+                className="rounded-full bg-amber-200 border border-amber-600 shadow-[0_0_6px_#b45309]"
+                style={{ width: `${p.s}px`, height: `${p.s}px` }}
+              />
+            </div>
+          ))}
+
+          {/* Blinding Sandstorm Accuracy Reduction Haze */}
+          <div
+            className="absolute inset-0 pointer-events-none z-20 backdrop-blur-[2.5px]"
+            style={{
+              animation: 'gbaSandshrewBlindingHaze 1.55s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(217,119,6,0.35) 0%, rgba(180,83,9,0.25) 60%, transparent 85%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20ay. CATERPIE STRING SHOT (Caterpie Lv. 13 — 1996 Ken Sugimori Osmeterium Head & Sticky Silk Jet) */}
+      {fx.type === 'caterpie_string_shot' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Caterpie Head with Red-Orange Osmeterium */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaCaterpieHeadPop 1.65s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Caterpie_Head_Osmeterium.png"
+              alt="Caterpie Head Osmeterium"
+              className="w-40 h-40 object-contain drop-shadow-[0_0_25px_#22c55e]"
+            />
+          </div>
+
+          {/* High-Velocity Swirling Silk Strand Jets */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaCaterpieSilkJet 1.65s ease-out forwards' }}
+          >
+            <svg width="150" height="150" viewBox="0 0 150 150">
+              <path d="M 20 130 Q 50 80 80 70 Q 120 60 140 20" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" className="drop-shadow-[0_0_10px_#e0f2fe]" />
+              <path d="M 30 140 Q 60 100 90 85 Q 130 70 145 35" fill="none" stroke="#e0f2fe" strokeWidth="2.5" strokeLinecap="round" />
+              <path d="M 10 115 Q 40 70 70 60 Q 110 50 130 10" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {/* Criss-Cross Silk Cocoon Web Wrap */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaCaterpieCocoonWrap 1.65s ease-out forwards' }}
+          >
+            <svg width="150" height="150" viewBox="0 0 150 150">
+              <line x1="20" y1="20" x2="130" y2="130" stroke="#f8fafc" strokeWidth="3" strokeDasharray="6,4" opacity="0.85" />
+              <line x1="130" y1="20" x2="20" y2="130" stroke="#f8fafc" strokeWidth="3" strokeDasharray="6,4" opacity="0.85" />
+              <line x1="10" y1="75" x2="140" y2="75" stroke="#e2e8f0" strokeWidth="2.5" strokeDasharray="8,5" opacity="0.8" />
+              <line x1="75" y1="10" x2="75" y2="140" stroke="#e2e8f0" strokeWidth="2.5" strokeDasharray="8,5" opacity="0.8" />
+            </svg>
+          </div>
+
+          {/* Scattered Viscous Silk Droplets */}
+          {[
+            { x: '-35px', y: '-32px' }, { x: '35px', y: '-32px' },
+            { x: '-42px', y: '25px' }, { x: '42px', y: '25px' },
+            { x: '0px', y: '-40px' }, { x: '0px', y: '40px' }
+          ].map((p, i) => (
+            <div
+              key={`cp-silk-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--cp-x': p.x,
+                '--cp-y': p.y,
+                animation: `gbaCaterpieSilkDrops 1.65s ease-out ${0.38 + i * 0.05}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-2.5 h-2.5 rounded-full bg-white border border-slate-200 shadow-[0_0_8px_#ffffff]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20az. WEEDLE POISON STING (Weedle Lv. 12 — 1996 Ken Sugimori Poison Horn Dive & Acid Spurt) */}
+      {fx.type === 'weedle_poison_sting' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1996 Ken Sugimori Weedle Head & Stinger */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaWeedleStingerDive 1.55s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Weedle_Poison_Stinger.png"
+              alt="Weedle Poison Stinger"
+              className="w-40 h-40 object-contain drop-shadow-[0_0_25px_#a855f7]"
+            />
+          </div>
+
+          {/* High-Pressure Corrosive Phosphor Venom Spurts */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaWeedlePoisonSpurt 1.55s ease-out forwards' }}
+          >
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="14" fill="#a855f7" className="drop-shadow-[0_0_15px_#c084fc]" />
+              <circle cx="60" cy="60" r="7" fill="#84cc16" />
+              <circle cx="45" cy="40" r="4" fill="#a855f7" />
+              <circle cx="75" cy="40" r="4" fill="#a855f7" />
+              <circle cx="35" cy="70" r="3.5" fill="#84cc16" />
+              <circle cx="85" cy="70" r="3.5" fill="#84cc16" />
+            </svg>
+          </div>
+
+          {/* Toxic Intoxication Purple Vignette Pulse */}
+          <div
+            className="absolute w-44 h-44 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaWeedlePoisonVignette 1.55s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(168,85,247,0.45) 0%, rgba(126,34,206,0.3) 55%, transparent 80%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20ba. ZUBAT SUPERSONIC (Zubat Lv. 10 — Concentric Ultrasonic Echolocation Rings & Trance Warp) */}
+      {fx.type === 'zubat_supersonic' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Triple Concentric High-Frequency Sonic Wave Rings */}
+          <div
+            className="absolute w-24 h-24 rounded-full border-2 border-cyan-300 pointer-events-none z-30"
+            style={{ animation: 'gbaZubatSonicRings1 1.6s ease-out forwards' }}
+          />
+          <div
+            className="absolute w-24 h-24 rounded-full border-2 border-indigo-400 pointer-events-none z-30"
+            style={{ animation: 'gbaZubatSonicRings2 1.6s ease-out 0.15s forwards' }}
+          />
+          <div
+            className="absolute w-24 h-24 rounded-full border-2 border-teal-200 pointer-events-none z-30"
+            style={{ animation: 'gbaZubatSonicRings3 1.6s ease-out 0.3s forwards' }}
+          />
+
+          {/* Frequency Oscillation Sound Bar Waves */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaZubatFrequencyBars 1.6s ease-out forwards' }}
+          >
+            <svg width="140" height="80" viewBox="0 0 140 80">
+              <path d="M 10 40 Q 30 10 50 40 Q 70 70 90 40 Q 110 10 130 40" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" className="drop-shadow-[0_0_12px_#38bdf8]" />
+              <path d="M 20 40 Q 40 20 60 40 Q 80 60 100 40 Q 120 20 140 40" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+            </svg>
+          </div>
+
+          {/* Optical Confusion Trance Blur */}
+          <div
+            className="absolute inset-0 pointer-events-none z-20 backdrop-blur-[3px]"
+            style={{
+              animation: 'gbaZubatConfusionDistort 1.6s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(99,102,241,0.2) 60%, transparent 85%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20bb. GASTLY SLEEPING GAS (Gastly Lv. 8 — Swirling Spectral Ectoplasm & Hypnotic Sleep Spores) */}
+      {fx.type === 'gastly_sleeping_gas' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Swirling Spectral Ectoplasmic Gas Cloud */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaGastlySleepGasCloud 1.7s ease-out forwards' }}
+          >
+            <svg width="160" height="160" viewBox="0 0 160 160">
+              <circle cx="80" cy="80" r="55" fill="url(#gastlyGasGrad)" opacity="0.85" className="drop-shadow-[0_0_25px_#7c3aed]" />
+              <circle cx="65" cy="65" r="30" fill="#2e1065" opacity="0.9" />
+              {/* Gastly Triangular Hypnotic Eyes */}
+              <polygon points="50,55 68,60 55,70" fill="#ffffff" />
+              <polygon points="80,60 98,55 93,70" fill="#ffffff" />
+              <defs>
+                <radialGradient id="gastlyGasGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#1e1b4b" />
+                  <stop offset="50%" stopColor="#6b21a8" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#c084fc" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+
+          {/* Floating Dream Motes with Subtle Zzz Drift */}
+          {[
+            { x: '-32px', y: '-35px' }, { x: '32px', y: '-35px' },
+            { x: '-25px', y: '25px' }, { x: '25px', y: '25px' }
+          ].map((p, i) => (
+            <div
+              key={`gs-mote-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--gs-x': p.x,
+                '--gs-y': p.y,
+                animation: `gbaGastlyDreamMotes 1.7s ease-out ${0.4 + i * 0.08}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-4 h-4 rounded-full bg-violet-300 border border-white shadow-[0_0_12px_#c084fc] flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-indigo-900" />
+              </div>
+            </div>
+          ))}
+
+          {/* Deep Somnolence Hypnotic Pulse */}
+          <div
+            className="absolute w-44 h-44 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaGastlyMistPulse 1.7s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(124,58,237,0.4) 0%, rgba(91,33,182,0.3) 55%, transparent 80%)'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20bc. RATTATA QUICK ATTACK (Compact High-Velocity Diagonal Zigzag Flash) */}
+      {fx.type === 'rattata_quick_attack' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Lightning Speed Zigzag Slash Line (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaRattataZigZagTrail 1.55s cubic-bezier(0.1, 0.9, 0.2, 1) forwards' }}
+          >
+            <svg width="72" height="72" viewBox="0 0 72 72">
+              <polyline
+                points="10,62 30,36 44,46 64,10"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="4.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="drop-shadow-[0_0_10px_#fde047]"
+              />
+              <polyline
+                points="10,62 30,36 44,46 64,10"
+                fill="none"
+                stroke="#facc15"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
+
+          {/* High-Impact Starburst */}
+          <div className="absolute flex items-center justify-center pointer-events-none z-35">
+            <svg width="48" height="48" viewBox="0 0 48 48" className="animate-ping" style={{ animationDuration: '0.7s' }}>
+              <polygon points="24,4 29,19 44,24 29,29 24,44 19,29 4,24 19,19" fill="#ffffff" className="drop-shadow-[0_0_12px_#ffffff]" />
+              <polygon points="24,10 27,21 38,24 27,27 24,38 21,27 10,24 21,21" fill="#fef08a" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bd. RATTATA GNAW / BITE (Dedicated Rodent Buck Incisor Crunch) */}
+      {fx.type === 'rattata_gnaw_bite' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Upper Buck Incisors (Compact) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaRattataIncisorTop 1.5s ease-out forwards' }}
+          >
+            <svg width="48" height="32" viewBox="0 0 48 32">
+              <path
+                d="M 8 3 L 40 3 C 40 3 38 24 36 27 C 34 30 26 30 25 27 L 24 6 L 23 27 C 22 30 14 30 12 27 C 10 24 8 3 8 3 Z"
+                fill="#fef3c7"
+                stroke="#78350f"
+                strokeWidth="2.5"
+                strokeLinejoin="round"
+                className="drop-shadow-[0_0_8px_#fbbf24]"
+              />
+              <line x1="24" y1="6" x2="24" y2="28" stroke="#b45309" strokeWidth="1.8" />
+              <path d="M 13 8 L 14 20" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
+              <path d="M 34 8 L 35 20" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
+            </svg>
+          </div>
+
+          {/* Lower Buck Incisors */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaRattataIncisorBottom 1.5s ease-out forwards' }}
+          >
+            <svg width="42" height="26" viewBox="0 0 42 26">
+              <path
+                d="M 9 23 L 33 23 C 33 23 32 6 30 4 C 28 2 22 2 21 4 L 21 20 L 20 4 C 19 2 13 2 11 4 C 9 6 9 23 9 23 Z"
+                fill="#fffbeb"
+                stroke="#78350f"
+                strokeWidth="2"
+                strokeLinejoin="round"
+              />
+              <line x1="21" y1="4" x2="21" y2="21" stroke="#b45309" strokeWidth="1.5" />
+            </svg>
+          </div>
+
+          {/* Comic Crunch Sparkles */}
+          {[
+            { x: '-16px', y: '-8px' }, { x: '16px', y: '-8px' },
+            { x: '0px', y: '12px' }
+          ].map((p, i) => (
+            <div
+              key={`rt-spark-${i}`}
+              className="absolute pointer-events-none z-35 animate-ping"
+              style={{
+                transform: `translate(${p.x}, ${p.y})`,
+                animationDuration: '0.5s',
+                animationDelay: '0.35s'
+              }}
+            >
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-[0_0_8px_#f59e0b]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20be. PIDGEY WHIRLWIND (Ascending Funnel & Authentic Ken Sugimori Down-Feathers) */}
+      {fx.type === 'pidgey_whirlwind' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Swirling Aerodynamic Funnel (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-25 flex items-center justify-center"
+            style={{ animation: 'gbaPidgeyVortexCone 1.65s ease-out forwards' }}
+          >
+            <svg width="74" height="74" viewBox="0 0 74 74">
+              <ellipse cx="37" cy="37" rx="33" ry="17" fill="none" stroke="#bae6fd" strokeWidth="2.5" strokeDasharray="8 4" className="drop-shadow-[0_0_10px_#38bdf8]" />
+              <ellipse cx="37" cy="37" rx="22" ry="11" fill="none" stroke="#e0f2fe" strokeWidth="2" strokeDasharray="6 3" />
+              <ellipse cx="37" cy="37" rx="12" ry="5" fill="none" stroke="#ffffff" strokeWidth="1.5" />
+            </svg>
+          </div>
+
+          {/* 4 Fluttering Down-Feathers */}
+          {[
+            { fx: '-18px', fy: '-12px', fr: '120deg', delay: 0.1 },
+            { fx: '18px', fy: '-15px', fr: '-110deg', delay: 0.2 },
+            { fx: '-14px', fy: '14px', fr: '160deg', delay: 0.25 },
+            { fx: '14px', fy: '12px', fr: '-150deg', delay: 0.35 }
+          ].map((f, i) => (
+            <div
+              key={`pidgey-feather-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--p-fx': f.fx,
+                '--p-fy': f.fy,
+                '--p-fr': f.fr,
+                animation: `gbaPidgeyFeatherDrift 1.65s cubic-bezier(0.2, 0.8, 0.4, 1) ${f.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <svg width="18" height="24" viewBox="0 0 34 48">
+                <path
+                  d="M 17 4 C 8 16, 4 32, 17 44 C 30 32, 26 16, 17 4 Z"
+                  fill="#fef3c7"
+                  stroke="#78350f"
+                  strokeWidth="2.2"
+                  className="drop-shadow-[0_0_6px_#fde68a]"
+                />
+                <path d="M 17 12 C 12 22, 10 32, 17 42 Z" fill="#d97706" opacity="0.35" />
+                <line x1="17" y1="4" x2="17" y2="46" stroke="#92400e" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20bf. MEOWTH PAY DAY (3D Koban Gold Coin Flip & Shimmer Shockwave) */}
+      {fx.type === 'meowth_pay_day' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Tumbling 3D Authentic Japanese Koban Gold Coin (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaMeowthKobanToss 1.65s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <svg width="36" height="50" viewBox="0 0 80 110" className="drop-shadow-[0_0_14px_#fbbf24]">
+              <rect x="6" y="6" width="68" height="98" rx="34" ry="34" fill="url(#meowthKobanGradMini)" stroke="#78350f" strokeWidth="3.5" />
+              <line x1="20" y1="26" x2="60" y2="26" stroke="#b45309" strokeWidth="3" strokeLinecap="round" />
+              <line x1="14" y1="36" x2="66" y2="36" stroke="#b45309" strokeWidth="3" strokeLinecap="round" />
+              <line x1="14" y1="74" x2="66" y2="74" stroke="#b45309" strokeWidth="3" strokeLinecap="round" />
+              <line x1="20" y1="84" x2="60" y2="84" stroke="#b45309" strokeWidth="3" strokeLinecap="round" />
+              <rect x="28" y="46" width="24" height="18" rx="3" fill="#fbbf24" stroke="#78350f" strokeWidth="2.5" />
+              <line x1="33" y1="55" x2="47" y2="55" stroke="#78350f" strokeWidth="2.5" />
+              <line x1="40" y1="49" x2="40" y2="61" stroke="#78350f" strokeWidth="2.5" />
+              <path d="M 20 16 Q 40 10 60 16" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" fill="none" opacity="0.85" />
+              <defs>
+                <linearGradient id="meowthKobanGradMini" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#fef08a" />
+                  <stop offset="50%" stopColor="#f59e0b" />
+                  <stop offset="100%" stopColor="#d97706" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          {/* Golden Impact Wave Ring */}
+          <div
+            className="absolute w-20 h-20 rounded-full border-2 border-amber-300 pointer-events-none z-25"
+            style={{ animation: 'gbaMeowthCoinRing 1.65s ease-out 0.45s forwards', opacity: 0 }}
+          />
+
+          {/* Radiating Golden Shimmer Diamonds */}
+          {[
+            { x: '-20px', y: '-16px' }, { x: '20px', y: '-16px' },
+            { x: '-18px', y: '16px' }, { x: '18px', y: '16px' }
+          ].map((p, i) => (
+            <div
+              key={`meowth-spark-${i}`}
+              className="absolute pointer-events-none z-35 animate-ping"
+              style={{
+                transform: `translate(${p.x}, ${p.y})`,
+                animationDuration: '0.6s',
+                animationDelay: `${0.5 + i * 0.06}s`
+              }}
+            >
+              <div className="w-2.5 h-2.5 rotate-45 bg-amber-200 border border-white shadow-[0_0_8px_#fbbf24]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20bg. MEOWTH COIN HURL (Rapid-Fire Volley of Koban Coins) */}
+      {fx.type === 'meowth_coin_hurl' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {[
+            { ox: '-28px', oy: '-24px', tx: '-10px', ty: '-10px', delay: 0.1 },
+            { ox: '28px', oy: '-20px', tx: '10px', ty: '-6px', delay: 0.25 },
+            { ox: '-22px', oy: '22px', tx: '-8px', ty: '8px', delay: 0.4 },
+            { ox: '22px', oy: '18px', tx: '8px', ty: '6px', delay: 0.55 }
+          ].map((c, i) => (
+            <div
+              key={`coin-hurl-${i}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                '--c-ox': c.ox,
+                '--c-oy': c.oy,
+                '--c-tx': c.tx,
+                '--c-ty': c.ty,
+                animation: `gbaMeowthCoinHurl 1.65s cubic-bezier(0.2, 0.8, 0.3, 1) ${c.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <svg width="24" height="34" viewBox="0 0 80 110" className="drop-shadow-[0_0_10px_#fde047]">
+                <rect x="6" y="6" width="68" height="98" rx="34" ry="34" fill="#fbbf24" stroke="#78350f" strokeWidth="4" />
+                <line x1="20" y1="36" x2="60" y2="36" stroke="#b45309" strokeWidth="3.5" />
+                <line x1="20" y1="74" x2="60" y2="74" stroke="#b45309" strokeWidth="3.5" />
+                <rect x="30" y="48" width="20" height="14" rx="2" fill="#fef08a" stroke="#78350f" strokeWidth="2.5" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20bh. SPEAROW PECK (Rapid-Fire Triple Spearhead Beak Thrust) */}
+      {fx.type === 'spearow_peck' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Sharp Darting Spearhead Beak (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaSpearowTriplePeck 1.55s cubic-bezier(0.2, 1, 0.3, 1) forwards' }}
+          >
+            <svg width="44" height="44" viewBox="0 0 85 85" className="drop-shadow-[0_0_12px_#f59e0b]">
+              <polygon points="10,75 75,10 65,5 20,40" fill="#f97316" stroke="#78350f" strokeWidth="4" strokeLinejoin="round" />
+              <polygon points="10,75 55,55 35,70" fill="#fbbf24" stroke="#78350f" strokeWidth="3" strokeLinejoin="round" />
+              <line x1="20" y1="65" x2="68" y2="16" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+            </svg>
+          </div>
+
+          {/* Kinetic Puncture Wind Ripples */}
+          <div className="absolute flex items-center justify-center pointer-events-none z-25">
+            <svg width="48" height="48" viewBox="0 0 110 110" className="animate-ping" style={{ animationDuration: '0.5s' }}>
+              <polygon points="55,15 70,45 100,55 70,65 55,95 40,65 10,55 40,45" fill="none" stroke="#facc15" strokeWidth="4" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bi. SPEAROW MIRROR MOVE (Hexagonal Prismatic Reflection Barrier) */}
+      {fx.type === 'spearow_mirror_move' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Prismatic Hexagonal Mirror Shield (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaSpearowMirrorGleam 1.65s ease-out forwards' }}
+          >
+            <svg width="74" height="74" viewBox="0 0 160 160">
+              <polygon
+                points="80,15 140,45 140,115 80,145 20,115 20,45"
+                fill="url(#mirrorGlassGradMini)"
+                stroke="#ffffff"
+                strokeWidth="4"
+                className="drop-shadow-[0_0_16px_#c084fc]"
+                opacity="0.9"
+              />
+              <line x1="80" y1="15" x2="80" y2="145" stroke="#ffffff" strokeWidth="2" opacity="0.6" />
+              <line x1="20" y1="45" x2="140" y2="115" stroke="#ffffff" strokeWidth="2" opacity="0.6" />
+              <line x1="20" y1="115" x2="140" y2="45" stroke="#ffffff" strokeWidth="2" opacity="0.6" />
+              <path d="M 35 55 L 75 25 L 125 75 L 85 105 Z" fill="#ffffff" opacity="0.35" />
+              <defs>
+                <linearGradient id="mirrorGlassGradMini" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#93c5fd" stopOpacity="0.85" />
+                  <stop offset="35%" stopColor="#c084fc" stopOpacity="0.75" />
+                  <stop offset="70%" stopColor="#f472b6" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.9" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bj. POLIWAG & POLIWHIRL WATER GUN (Focused Pressurized Water Jet & Intensity Scaling) */}
+      {fx.type === 'poliwag_water_gun' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Compact Belly Spiral Focusing Emitter Lens (<= 60% Card Width) */}
+            <div
+              className="absolute -left-2 pointer-events-none z-25 flex items-center justify-center"
+              style={{ animation: 'gbaPoliwagBellySpiral 1.65s cubic-bezier(0.1, 0.9, 0.2, 1) forwards' }}
+            >
+              <svg width="38" height="38" viewBox="0 0 75 75">
+                <circle cx="37" cy="37" r="32" fill="#f0f9ff" stroke="#0284c7" strokeWidth="3" className="drop-shadow-[0_0_8px_#0284c7]" />
+                <path
+                  d="M 37 37 Q 42 37 42 32 Q 42 25 32 25 Q 22 25 22 37 Q 22 52 37 52 Q 57 52 57 32 Q 57 15 37 15 Q 15 15 15 37 Q 15 62 37 62"
+                  fill="none"
+                  stroke="#0f172a"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+
+            {/* Focused Pressurized High-Velocity Water Jet Stream (scaled with wi) */}
+            <div
+              className="absolute pointer-events-none z-30 flex items-center justify-center"
+              style={{ animation: 'gbaPoliwagJetStream 1.65s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            >
+              <svg
+                width={Math.round(66 * Math.min(1.45, wi))}
+                height={Math.round(22 * Math.min(1.45, wi))}
+                viewBox="0 0 66 22"
+                style={{ filter: `drop-shadow(0 0 ${Math.round(5 + (wi - 1) * 8)}px #0ea5e9)` }}
+              >
+                {/* Cylindrical pressurized water bullet */}
+                <path
+                  d="M 2 11 Q 20 6, 44 8 L 64 11 L 44 14 Q 20 16, 2 11 Z"
+                  fill="url(#poliJetGradMini)"
+                  stroke="#0284c7"
+                  strokeWidth={1.8 * wi}
+                />
+                {/* Core white speed beam */}
+                <line x1="6" y1="11" x2="58" y2="11" stroke="#e0f2fe" strokeWidth={1.6 * wi} strokeLinecap="round" opacity="0.9" />
+                <defs>
+                  <linearGradient id="poliJetGradMini" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#0284c7" stopOpacity="0.8" />
+                    <stop offset="50%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#7dd3fc" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            {/* Directional Forward Impact Splash Crown (NOT lawn sprinkler dots) */}
+            <div
+              className="absolute right-1"
+              style={{ animation: 'gbaWaterSplashImpact 1.2s ease-out 0.35s forwards', opacity: 0 }}
+            >
+              <svg width={Math.round(36 * wi)} height={Math.round(30 * wi)} viewBox="0 0 36 30">
+                <path d="M 18 26 Q 11 16, 6 6 Q 10 13, 14 20" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} strokeLinecap="round" opacity="0.9" />
+                <path d="M 18 26 Q 23 14, 30 4 Q 26 13, 22 20" fill="none" stroke="#38bdf8" strokeWidth={2 * wi} strokeLinecap="round" opacity="0.85" />
+                <path d="M 18 26 Q 18 13, 18 3" fill="none" stroke="#e0f2fe" strokeWidth={1.8 * wi} strokeLinecap="round" opacity="0.9" />
+                <circle cx="6" cy="5" r={1.8 * wi} fill="#bae6fd" />
+                <circle cx="30" cy="4" r={1.6 * wi} fill="#38bdf8" />
+                <circle cx="18" cy="2" r={1.4 * wi} fill="#e0f2fe" />
+                {wi > 1.15 && <circle cx="12" cy="9" r={1.5 * wi} fill="#7dd3fc" />}
+                {wi > 1.28 && <circle cx="24" cy="8" r={1.4 * wi} fill="#bae6fd" />}
+              </svg>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* 20bk. GEODUDE STONE BARRAGE (Sequential Granite Boulder Volley & Ground Tremor) */}
+      {fx.type === 'geodude_stone_barrage' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* 3 Sequential Falling Boulders (<= 60% Card Width) */}
+          {[
+            { bx: '-18px', br: '25deg', delay: 0.1 },
+            { bx: '16px', br: '-30deg', delay: 0.3 },
+            { bx: '0px', br: '60deg', delay: 0.5 }
+          ].map((b, i) => (
+            <div
+              key={`geo-boulder-${i}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                '--gb-x': b.bx,
+                '--gb-r': b.br,
+                animation: `gbaGeodudeBoulderFall 1.7s cubic-bezier(0.2, 0.8, 0.4, 1) ${b.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <svg width="34" height="34" viewBox="0 0 75 75" className="drop-shadow-[0_0_10px_#78716c]">
+                <polygon
+                  points="20,10 55,15 70,40 58,68 25,65 10,42"
+                  fill="#64748b"
+                  stroke="#1e293b"
+                  strokeWidth="4"
+                  strokeLinejoin="round"
+                />
+                <polygon points="20,10 40,35 25,65 10,42" fill="#78716c" opacity="0.6" />
+                <polygon points="55,15 70,40 40,35" fill="#475569" />
+                <polygon points="20,10 40,35 55,15" fill="#94a3b8" />
+                <polyline points="20,10 55,15 70,40" fill="none" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+            </div>
+          ))}
+
+          {/* Earth Dust Shockwave */}
+          <div
+            className="absolute w-18 h-18 rounded-full border-2 border-stone-400 pointer-events-none z-20"
+            style={{ animation: 'gbaGeodudeDustShockwave 1.7s ease-out 0.5s forwards', opacity: 0 }}
+          />
+        </div>
+      )}
+
+      {/* 20bl. VULPIX CONFUSE RAY (Mystical Kitsunebi Fox-Fire Orbit & Hypnotic Waves) */}
+      {fx.type === 'vulpix_confuse_ray' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Revolving Kitsunebi Fox-Fire Tri-Wisp Formation (<= 60% Card Width) */}
+          <div
+            className="absolute w-20 h-20 pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaVulpixFoxFireOrbit 1.7s cubic-bezier(0.15, 0.85, 0.3, 1) forwards' }}
+          >
+            {[0, 120, 240].map((deg, i) => (
+              <div
+                key={`foxfire-${i}`}
+                className="absolute pointer-events-none"
+                style={{ transform: `rotate(${deg}deg) translate(26px) rotate(-${deg}deg)` }}
+              >
+                <svg width="20" height="26" viewBox="0 0 45 55" className="drop-shadow-[0_0_10px_#f97316]">
+                  <path
+                    d="M 22 4 C 10 18, 5 32, 22 52 C 40 32, 35 18, 22 4 Z"
+                    fill="#ea580c"
+                    stroke="#7c2d12"
+                    strokeWidth="2.5"
+                  />
+                  <path
+                    d="M 22 14 C 14 24, 10 34, 22 46 C 34 34, 30 24, 22 14 Z"
+                    fill="#fef08a"
+                  />
+                  <path d="M 22 4 Q 28 0 32 6" stroke="#c084fc" strokeWidth="3" fill="none" strokeLinecap="round" />
+                </svg>
+              </div>
+            ))}
+          </div>
+
+          {/* Hypnotic Concentric Confusion Pulse */}
+          <div
+            className="absolute w-20 h-20 rounded-full pointer-events-none z-20"
+            style={{
+              animation: 'gbaVulpixHypnoWave 1.7s ease-out 0.4s forwards',
+              background: 'radial-gradient(circle, rgba(236,72,153,0.3) 0%, rgba(168,85,247,0.2) 50%, transparent 75%)',
+              opacity: 0
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20bm. ODDISH STUN SPORE (Leafy Bulb Shake & Electrostatic Golden Spore Shower) */}
+      {fx.type === 'oddish_stun_spore' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Shaking 5-Lobed Leaf Bulb (<= 60% Card Width) */}
+          <div
+            className="absolute -top-5 pointer-events-none z-25"
+            style={{ animation: 'gbaOddishBulbShake 1.65s ease-in-out forwards' }}
+          >
+            <svg width="48" height="38" viewBox="0 0 110 90">
+              <ellipse cx="55" cy="30" rx="14" ry="28" fill="#16a34a" stroke="#14532d" strokeWidth="3" />
+              <ellipse cx="32" cy="40" rx="12" ry="24" fill="#22c55e" stroke="#14532d" strokeWidth="3" transform="rotate(-25 32 40)" />
+              <ellipse cx="78" cy="40" rx="12" ry="24" fill="#22c55e" stroke="#14532d" strokeWidth="3" transform="rotate(25 78 40)" />
+              <ellipse cx="18" cy="55" rx="10" ry="20" fill="#4ade80" stroke="#14532d" strokeWidth="3" transform="rotate(-50 18 55)" />
+              <ellipse cx="92" cy="55" rx="10" ry="20" fill="#4ade80" stroke="#14532d" strokeWidth="3" transform="rotate(50 92 55)" />
+            </svg>
+          </div>
+
+          {/* Drifting Golden Electrostatic Spores */}
+          {[
+            { ox: '-18px', dx: '-6px', delay: 0.15 },
+            { ox: '-8px', dx: '4px', delay: 0.2 },
+            { ox: '6px', dx: '-5px', delay: 0.25 },
+            { ox: '16px', dx: '6px', delay: 0.3 },
+            { ox: '-12px', dx: '8px', delay: 0.35 },
+            { ox: '10px', dx: '-10px', delay: 0.4 }
+          ].map((s, i) => (
+            <div
+              key={`oddish-spore-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--os-ox': s.ox,
+                '--os-dx': s.dx,
+                animation: `gbaOddishSporeFall 1.65s cubic-bezier(0.2, 0.7, 0.4, 1) ${s.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div className="w-2 h-2 rounded-full bg-yellow-300 border border-white shadow-[0_0_6px_#facc15] flex items-center justify-center">
+                <div className="w-0.5 h-0.5 rounded-full bg-amber-500" />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20bn. ODDISH SPROUT (Botanical Emergence & Radiant Nature Seedling) */}
+      {fx.type === 'oddish_sprout' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Emerging Seedling (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaOddishSproutRise 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+          >
+            <svg width="42" height="42" viewBox="0 0 90 90" className="drop-shadow-[0_0_12px_#4ade80]">
+              <ellipse cx="45" cy="75" rx="35" ry="10" fill="#78350f" stroke="#451a03" strokeWidth="3" />
+              <path d="M 45 75 Q 43 55 45 40" stroke="#16a34a" strokeWidth="5.5" strokeLinecap="round" fill="none" />
+              <path d="M 45 42 C 30 35, 20 45, 22 52 C 28 55, 42 50, 45 42 Z" fill="#4ade80" stroke="#14532d" strokeWidth="2.5" />
+              <path d="M 45 42 C 60 35, 70 45, 68 52 C 62 55, 48 50, 45 42 Z" fill="#22c55e" stroke="#14532d" strokeWidth="2.5" />
+              <circle cx="28" cy="45" r="3" fill="#ffffff" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bo. JIGGLYPUFF LULLABY (Floating Watercolor Notes, Sleep Runes & Fairy Dream Dust) */}
+      {fx.type === 'jigglypuff_lullaby' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Main Watercolor Musical Notes & Microphone (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaJigglypuffLullabyNotes 1.75s cubic-bezier(0.2, 0.8, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Jigglypuff_Lullaby_Notes.png"
+              alt="Jigglypuff Lullaby"
+              className="max-w-[70px] max-h-[70px] object-contain drop-shadow-[0_0_12px_rgba(244,114,182,0.85)]"
+            />
+          </div>
+
+          {/* Floating Pastel Eighth Notes */}
+          {[
+            { note: '♪', color: '#f472b6', x: '-22px', y: '-10px', delay: 0.2 },
+            { note: '♫', color: '#38bdf8', x: '24px', y: '-18px', delay: 0.4 },
+            { note: '♪', color: '#fef08a', x: '18px', y: '16px', delay: 0.6 }
+          ].map((n, i) => (
+            <div
+              key={`jigg-note-${i}`}
+              className="absolute text-lg font-bold pointer-events-none z-35 select-none"
+              style={{
+                color: n.color,
+                left: `calc(50% + ${n.x})`,
+                top: `calc(50% + ${n.y})`,
+                filter: `drop-shadow(0 0 6px ${n.color})`,
+                animation: `gbaJigglypuffLullabyNotes 1.6s ease-in-out ${n.delay}s forwards`,
+                opacity: 0
+              }}
+            >
+              {n.note}
+            </div>
+          ))}
+
+          {/* Drifting "Zzz" Sleep Runes */}
+          {[
+            { dx: '-14px', delay: 0.35, size: 'text-xs' },
+            { dx: '6px', delay: 0.55, size: 'text-sm' },
+            { dx: '18px', delay: 0.75, size: 'text-base' }
+          ].map((z, i) => (
+            <div
+              key={`jigg-zzz-${i}`}
+              className={`absolute font-black tracking-widest text-purple-200 pointer-events-none z-40 select-none ${z.size}`}
+              style={{
+                '--zzz-dx': z.dx,
+                animation: `gbaJigglypuffSleepZzz 1.7s ease-out ${z.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              Z
+            </div>
+          ))}
+
+          {/* Soft Fairy Dust Sleep Halo */}
+          <div
+            className="absolute w-20 h-20 rounded-full pointer-events-none z-20"
+            style={{
+              background: 'radial-gradient(circle, rgba(244,114,182,0.35) 0%, rgba(56,189,248,0.2) 50%, transparent 75%)',
+              animation: 'gbaClefairySingPulse 1.75s ease-out forwards'
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20bp. JIGGLYPUFF POUND (Cute Puffy Slap & Pink Comic Starburst) */}
+      {fx.type === 'jigglypuff_pound' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaJigglypuffPound 1.1s cubic-bezier(0.18, 0.9, 0.3, 1) forwards' }}
+          >
+            <svg width="48" height="48" viewBox="0 0 70 70" className="drop-shadow-[0_0_12px_#f43f5e]">
+              <circle cx="35" cy="35" r="24" fill="#fbcfe8" stroke="#f43f5e" strokeWidth="3" />
+              <ellipse cx="35" cy="40" rx="10" ry="7" fill="#fb7185" />
+              <circle cx="25" cy="27" r="4" fill="#fb7185" />
+              <circle cx="35" cy="23" r="4.5" fill="#fb7185" />
+              <circle cx="45" cy="27" r="4" fill="#fb7185" />
+            </svg>
+          </div>
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaGuillotineFlash 1.1s ease-out 0.25s forwards', opacity: 0 }}>
+            <svg width="60" height="60" viewBox="0 0 60 60">
+              <polygon points="30,5 37,22 55,22 41,34 46,51 30,41 14,51 19,34 5,22 23,22" fill="#fda4af" stroke="#e11d48" strokeWidth="2" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bq. CLEFAIRY METRONOME (Wagging Metronome Finger & Cosmic Twinkle Burst) */}
+      {fx.type === 'clefairy_metronome' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Main Wagging Metronome Finger (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaClefairyMetronomeWag 1.8s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards' }}
+          >
+            <img
+              src="/assets/Clefairy_Metronome_Finger.png"
+              alt="Clefairy Metronome"
+              className="max-w-[68px] max-h-[68px] object-contain drop-shadow-[0_0_14px_rgba(236,72,153,0.9)]"
+            />
+          </div>
+
+          {/* Rhythmic Cosmic Starlight Bursts radiating from fingertip */}
+          {[
+            { sx: '-18px', sy: '-24px', color: '#ec4899', delay: 0.25 },
+            { sx: '20px', sy: '-22px', color: '#a855f7', delay: 0.55 },
+            { sx: '-14px', sy: '-28px', color: '#38bdf8', delay: 0.85 },
+            { sx: '16px', sy: '-26px', color: '#fef08a', delay: 1.15 },
+            { sx: '0px', sy: '-34px', color: '#ffffff', delay: 1.45 }
+          ].map((s, i) => (
+            <div
+              key={`clef-star-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--star-x': s.sx,
+                '--star-y': s.sy,
+                '--star-color': s.color,
+                animation: `gbaClefairyCosmicTwinkle 1.6s ease-out ${s.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path d="M12,2 L14.5,9.5 L22,12 L14.5,14.5 L12,22 L9.5,14.5 L2,12 L9.5,9.5 Z" fill={s.color} stroke="#ffffff" strokeWidth="1" />
+              </svg>
+            </div>
+          ))}
+
+          {/* Harmonic Cosmic Starlight Ripple Ring */}
+          <div
+            className="absolute w-20 h-20 rounded-full border border-pink-300 pointer-events-none z-20"
+            style={{
+              animation: 'gbaClefairySingPulse 1.8s ease-out 0.4s forwards',
+              boxShadow: '0 0 16px #ec4899',
+              opacity: 0
+            }}
+          />
+        </div>
+      )}
+
+      {/* 20br. CLEFAIRY SING (Melodic Starlight Arcs & Lullaby Pulse) */}
+      {fx.type === 'clefairy_sing' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute w-20 h-20 rounded-full pointer-events-none z-25"
+            style={{
+              background: 'radial-gradient(circle, rgba(236,72,153,0.3) 0%, rgba(168,85,247,0.2) 50%, transparent 75%)',
+              animation: 'gbaClefairySingPulse 1.65s ease-out forwards'
+            }}
+          />
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaJigglypuffLullabyNotes 1.65s ease-in-out forwards' }}>
+            <svg width="40" height="50" viewBox="0 0 50 65" className="drop-shadow-[0_0_12px_#ec4899]">
+              <path
+                d="M 28 8 C 24 8, 20 16, 20 28 C 20 40, 32 44, 32 52 C 32 58, 26 62, 20 60 C 15 58, 14 52, 17 48"
+                fill="none"
+                stroke="#f472b6"
+                strokeWidth="4"
+                strokeLinecap="round"
+              />
+              <line x1="28" y1="4" x2="28" y2="58" stroke="#fbcfe8" strokeWidth="3" strokeLinecap="round" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bs. ABRA PSYSHOCK (Concentric Telekinetic Shockwave & Psychic Distortion) */}
+      {fx.type === 'abra_psyshock' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute w-18 h-18 rounded-full border-2 border-purple-400 pointer-events-none z-25"
+            style={{ animation: 'gbaAbraTelekinesisRings 1.6s cubic-bezier(0.15, 0.85, 0.35, 1) forwards' }}
+          />
+          <div
+            className="absolute w-14 h-14 rounded-full border-2 border-pink-400 pointer-events-none z-26"
+            style={{ animation: 'gbaAbraTelekinesisRings 1.6s cubic-bezier(0.15, 0.85, 0.35, 1) 0.2s forwards', opacity: 0 }}
+          />
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaAbraPsyshockPulse 1.6s cubic-bezier(0.15, 0.85, 0.35, 1) forwards' }}
+          >
+            <svg width="58" height="58" viewBox="0 0 80 80" className="drop-shadow-[0_0_16px_#a855f7]">
+              <circle cx="40" cy="40" r="18" fill="url(#abraPsiGradMini)" stroke="#c084fc" strokeWidth="2.5" />
+              <ellipse cx="40" cy="40" rx="14" ry="7" fill="#ffffff" opacity="0.9" />
+              <circle cx="40" cy="40" r="5" fill="#7e22ce" />
+              <path d="M 40 18 L 36 6 L 44 8 Z" fill="#d946ef" />
+              <path d="M 40 62 L 44 74 L 36 72 Z" fill="#d946ef" />
+              <path d="M 18 40 L 6 44 L 8 36 Z" fill="#c084fc" />
+              <path d="M 62 40 L 74 36 L 72 44 Z" fill="#c084fc" />
+              <defs>
+                <radialGradient id="abraPsiGradMini" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#f472b6" />
+                  <stop offset="60%" stopColor="#a855f7" />
+                  <stop offset="100%" stopColor="#6b21a8" />
+                </radialGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bt. ABRA VANISH (Psychic Shimmer & Teleport Dissolve) */}
+      {fx.type === 'abra_vanish' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaAbraVanish 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards' }}
+          >
+            <div className="w-14 h-14 rounded-full bg-purple-500/80 border-2 border-white flex items-center justify-center shadow-[0_0_20px_#a855f7]">
+              <div className="w-6 h-6 rounded-full bg-white animate-ping" />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 20bu. DROWZEE POUND (Hypnotic Palm Strike & Psychic Impact) */}
+      {fx.type === 'drowzee_pound' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaDrowzeePalmStrike 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+          >
+            <svg width="54" height="54" viewBox="0 0 70 70" className="drop-shadow-[0_0_14px_#a855f7]">
+              <ellipse cx="35" cy="42" rx="18" ry="16" fill="#eab308" stroke="#713f12" strokeWidth="3" />
+              <path
+                d="M 35 42 Q 38 42 38 39 Q 38 35 34 35 Q 30 35 30 42 Q 30 47 36 47 Q 42 47 42 40"
+                fill="none"
+                stroke="#6b21a8"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              />
+              <ellipse cx="20" cy="25" rx="5" ry="9" fill="#eab308" stroke="#713f12" strokeWidth="2.5" transform="rotate(-20 20 25)" />
+              <ellipse cx="29" cy="20" rx="5" ry="10" fill="#eab308" stroke="#713f12" strokeWidth="2.5" transform="rotate(-6 29 20)" />
+              <ellipse cx="40" cy="20" rx="5" ry="10" fill="#eab308" stroke="#713f12" strokeWidth="2.5" transform="rotate(6 40 20)" />
+              <ellipse cx="50" cy="25" rx="5" ry="9" fill="#eab308" stroke="#713f12" strokeWidth="2.5" transform="rotate(20 50 25)" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bv. DROWZEE CONFUSE RAY (Revolving Hypnotic Spirals & Chromatic Wave) */}
+      {fx.type === 'drowzee_confuse_ray' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaDrowzeeHypnoRay 1.7s cubic-bezier(0.2, 0.8, 0.3, 1) forwards' }}
+          >
+            <svg width="60" height="60" viewBox="0 0 60 60" className="drop-shadow-[0_0_14px_#d946ef]">
+              <path d={CONFUSE_SPIRAL_BASE} fill="none" stroke="#d946ef" strokeWidth="3" strokeLinecap="round" />
+              <path d={CONFUSE_SPIRAL_BASE} fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" opacity="0.75" transform="rotate(180 26 26)" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bw. DROWZEE NIGHTMARE (Dark Dream Haze & Eerie Shadow Eyes) */}
+      {fx.type === 'drowzee_nightmare' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute w-20 h-20 pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaDrowzeeNightmareHaze 1.65s ease-in-out forwards' }}
+          >
+            <svg width="64" height="64" viewBox="0 0 80 80" className="drop-shadow-[0_0_16px_#581c87]">
+              <circle cx="40" cy="40" r="28" fill="#3b0764" opacity="0.75" />
+              <circle cx="28" cy="34" r="16" fill="#581c87" opacity="0.8" />
+              <circle cx="52" cy="36" r="18" fill="#581c87" opacity="0.8" />
+              <path d="M 24 38 Q 30 32 36 38 Q 30 42 24 38 Z" fill="#f43f5e" />
+              <path d="M 44 38 Q 50 32 56 38 Q 50 42 44 38 Z" fill="#f43f5e" />
+              <circle cx="30" cy="38" r="2" fill="#ffffff" />
+              <circle cx="50" cy="38" r="2" fill="#ffffff" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20bx. SNORLAX BODY SLAM (Massive Gravity Drop, Ground Dust & Paralysis Burst) */}
+      {fx.type === 'snorlax_body_slam' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Leaping Crushing Snorlax Silhouette (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaSnorlaxBodySlamCrush 1.85s cubic-bezier(0.25, 0.1, 0.25, 1) forwards' }}
+          >
+            <img
+              src="/assets/Snorlax_Body_Slam.png"
+              alt="Snorlax Body Slam"
+              className="max-w-[74px] max-h-[74px] object-contain drop-shadow-[0_0_14px_rgba(30,41,59,0.85)]"
+            />
+          </div>
+
+          {/* Heavy Ground Dust Plumes blowing outward */}
+          <div
+            className="absolute bottom-2 pointer-events-none z-25"
+            style={{
+              '--dust-x': '-18px',
+              animation: 'gbaSnorlaxGroundDust 1.5s ease-out 0.8s forwards',
+              opacity: 0
+            } as React.CSSProperties}
+          >
+            <div className="w-8 h-8 rounded-full bg-stone-400/80" />
+          </div>
+          <div
+            className="absolute bottom-2 pointer-events-none z-25"
+            style={{
+              '--dust-x': '18px',
+              animation: 'gbaSnorlaxGroundDust 1.5s ease-out 0.8s forwards',
+              opacity: 0
+            } as React.CSSProperties}
+          >
+            <div className="w-8 h-8 rounded-full bg-stone-400/80" />
+          </div>
+
+          {/* Massive Comic Impact Starburst */}
+          <div
+            className="absolute pointer-events-none z-35"
+            style={{ animation: 'gbaGuillotineFlash 1.2s ease-out 0.85s forwards', opacity: 0 }}
+          >
+            <svg width="68" height="68" viewBox="0 0 80 80">
+              <polygon
+                points="40,5 48,28 72,20 56,38 75,55 52,56 48,78 36,60 18,72 26,50 5,42 24,30 12,12 32,20"
+                fill="#f59e0b"
+                stroke="#dc2626"
+                strokeWidth="2.5"
+              />
+            </svg>
+          </div>
+
+          {/* Yellow Paralysis Lightning Sparks on Impact */}
+          {[
+            { x: '-16px', y: '-10px', delay: 0.9 },
+            { x: '18px', y: '-8px', delay: 0.95 },
+            { x: '0px', y: '16px', delay: 1.0 }
+          ].map((sp, i) => (
+            <div
+              key={`snor-spark-${i}`}
+              className="absolute pointer-events-none z-40"
+              style={{
+                left: `calc(50% + ${sp.x})`,
+                top: `calc(50% + ${sp.y})`,
+                animation: `gbaLickitungParalysisSpark 0.9s ease-out ${sp.delay}s forwards`,
+                opacity: 0
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_#facc15]">
+                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="#facc15" stroke="#ca8a04" strokeWidth="1.5" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20by. LICKITUNG TONGUE WRAP (Broad Spatula Tongue Lash & Paralysis Constriction) */}
+      {fx.type === 'lickitung_tongue_wrap' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Main Spatula Tongue Lash Illustration (<= 60% Card Width) */}
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{ animation: 'gbaLickitungTongueWrapLash 1.75s cubic-bezier(0.16, 0.9, 0.28, 1) forwards' }}
+          >
+            <img
+              src="/assets/Lickitung_Tongue_Wrap.png"
+              alt="Lickitung Tongue Wrap"
+              className="max-w-[76px] max-h-[76px] object-contain drop-shadow-[0_0_12px_rgba(244,63,94,0.85)]"
+            />
+          </div>
+
+          {/* Constricting Saliva & Elastic Wrap Rings around Victim Card */}
+          <div
+            className="absolute w-18 h-18 rounded-full border-2 border-pink-400 pointer-events-none z-25"
+            style={{
+              animation: 'gbaAbraTelekinesisRings 1.5s ease-out 0.4s forwards',
+              boxShadow: '0 0 12px #f43f5e',
+              opacity: 0
+            }}
+          />
+
+          {/* Crackling Yellow Paralysis Arcs */}
+          {[
+            { x: '-16px', y: '-14px', delay: 0.4 },
+            { x: '16px', y: '12px', delay: 0.6 },
+            { x: '-8px', y: '18px', delay: 0.8 },
+            { x: '12px', y: '-16px', delay: 1.0 }
+          ].map((p, i) => (
+            <div
+              key={`licki-para-${i}`}
+              className="absolute pointer-events-none z-40"
+              style={{
+                left: `calc(50% + ${p.x})`,
+                top: `calc(50% + ${p.y})`,
+                animation: `gbaLickitungParalysisSpark 1.2s ease-out ${p.delay}s forwards`,
+                opacity: 0
+              }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_#facc15]">
+                <polygon points="13,2 3,14 12,14 11,22 21,10 12,10" fill="#fde047" stroke="#eab308" strokeWidth="1.5" />
+              </svg>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20bz. LICKITUNG SUPERSONIC (Golden Concentric Supersonic Sound Rings) */}
+      {fx.type === 'lickitung_supersonic' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {[0, 0.25, 0.5, 0.75].map((del, i) => (
+            <div
+              key={`licki-sound-${i}`}
+              className="absolute w-18 h-18 rounded-full border-2 border-yellow-400 pointer-events-none z-30"
+              style={{
+                animation: `gbaLickitungSupersonicRings 1.65s ease-out ${del}s forwards`,
+                opacity: 0
+              }}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* 20ca. KANGASKHAN COMET PUNCH (Rapid Sequential Boxing Flurry & Comet Trails) */}
+      {fx.type === 'kangaskhan_comet_punch' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        const isMirrored = Boolean(fx.mirrored);
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Punching Glove with Flaming Comet Trail (<= 60% Card Width) */}
+            <div
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--kp-ox': isMirrored ? '26px' : '-26px',
+                '--kp-oy': isMirrored ? '-14px' : '16px',
+                '--kp-rot': isMirrored ? '15deg' : '-15deg',
+                animation: 'gbaKangaskhanCometPunch 1.3s cubic-bezier(0.18, 0.9, 0.3, 1) forwards'
+              } as React.CSSProperties}
+            >
+              <svg width="52" height="52" viewBox="0 0 70 70" className="drop-shadow-[0_0_12px_#f97316]">
+                <path d="M 12 35 Q 26 28 42 35" stroke="#fbbf24" strokeWidth="4" strokeLinecap="round" opacity="0.8" />
+                <path d="M 8 42 Q 24 38 40 42" stroke="#f97316" strokeWidth="5" strokeLinecap="round" opacity="0.7" />
+                <circle cx="46" cy="35" r="16" fill="#ea580c" stroke="#7c2d12" strokeWidth="2.5" />
+                <ellipse cx="40" cy="26" rx="6" ry="5" fill="#f97316" stroke="#7c2d12" strokeWidth="2" />
+                <circle cx="50" cy="31" r="3" fill="#ffffff" opacity="0.9" />
+              </svg>
+            </div>
+
+            {/* Comic Impact Stars */}
+            <div
+              className="absolute pointer-events-none z-30"
+              style={{ animation: 'gbaGuillotineFlash 1.1s ease-out 0.28s forwards', opacity: 0 }}
+            >
+              <svg width={Math.round(54 * wi)} height={Math.round(54 * wi)} viewBox="0 0 60 60">
+                <polygon points="30,5 37,22 55,22 41,34 46,51 30,41 14,51 19,34 5,22 23,22" fill="#fde047" stroke="#ea580c" strokeWidth="2" />
+              </svg>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* 20cb. KANGASKHAN FETCH (Maternal Pouch Sparkle & Draw Indicator) */}
+      {fx.type === 'kangaskhan_fetch' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaKangaskhanFetch 1.2s cubic-bezier(0.18, 0.9, 0.3, 1) forwards' }}
+          >
+            <svg width="46" height="46" viewBox="0 0 60 60" className="drop-shadow-[0_0_12px_#facc15]">
+              <path d="M 12 24 C 12 44, 48 44, 48 24 Z" fill="#d97706" stroke="#78350f" strokeWidth="3" />
+              <line x1="12" y1="24" x2="48" y2="24" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" />
+              <rect x="22" y="10" width="16" height="22" rx="2" fill="#fef08a" stroke="#ca8a04" strokeWidth="2" />
+              <polygon points="30,14 32,19 37,19 33,22 35,27 30,24 25,27 27,22 23,19 28,19" fill="#f59e0b" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20cc. TAUROS STOMP (Heavy Hoof Impact & Ground Fissures) */}
+      {fx.type === 'tauros_stomp' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Cloven Hooves Slamming Down (<= 60% Card Width) */}
+            <div
+              className="absolute pointer-events-none z-30 flex items-center justify-center"
+              style={{ animation: 'gbaTaurosHoofImpact 1.6s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            >
+              <img
+                src="/assets/Tauros_Hoof_Stomp.png"
+                alt="Tauros Stomp"
+                className="max-w-[70px] max-h-[70px] object-contain drop-shadow-[0_0_14px_rgba(180,83,9,0.85)]"
+              />
+            </div>
+
+            {/* Ground Fissure Cracks */}
+            <div
+              className="absolute bottom-2 pointer-events-none z-25"
+              style={{ animation: 'gbaGeodudeDustShockwave 1.5s ease-out 0.5s forwards', opacity: 0 }}
+            >
+              <svg width={Math.round(62 * wi)} height="32" viewBox="0 0 70 35">
+                <path d="M 35 15 L 20 28 L 8 32 M 35 15 L 48 26 L 62 30 M 35 15 L 35 32" stroke="#78350f" strokeWidth={2.5 * wi} strokeLinecap="round" fill="none" />
+                <path d="M 28 20 L 22 14 M 42 22 L 50 18" stroke="#b45309" strokeWidth={1.8 * wi} strokeLinecap="round" fill="none" />
+              </svg>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* 20cd. TAUROS RAMPAGE (Furious Multi-Stomp Barrage & Rage Sparks) */}
+      {fx.type === 'tauros_rampage' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Alternating Stomping Cloven Hooves (<= 60% Card Width) */}
+            <div
+              className="absolute pointer-events-none z-30 flex items-center justify-center"
+              style={{ animation: 'gbaTaurosRampageFrenzy 1.8s ease-in-out forwards' }}
+            >
+              <img
+                src="/assets/Tauros_Hoof_Stomp.png"
+                alt="Tauros Rampage"
+                className="max-w-[74px] max-h-[74px] object-contain drop-shadow-[0_0_16px_rgba(220,38,38,0.9)]"
+              />
+            </div>
+
+            {/* Deep Ground Fissures */}
+            <div
+              className="absolute bottom-1 pointer-events-none z-25"
+              style={{ animation: 'gbaGeodudeDustShockwave 1.7s ease-out 0.3s forwards', opacity: 0 }}
+            >
+              <svg width={Math.round(68 * wi)} height="36" viewBox="0 0 70 35">
+                <path d="M 35 12 L 18 26 L 5 32 M 35 12 L 52 25 L 65 30 M 35 12 L 35 34" stroke="#991b1b" strokeWidth={3 * wi} strokeLinecap="round" fill="none" />
+              </svg>
+            </div>
+
+            {/* Red Rage Aura Sparks */}
+            {[
+              { x: '-18px', y: '-16px', delay: 0.2 },
+              { x: '18px', y: '-12px', delay: 0.4 },
+              { x: '-12px', y: '12px', delay: 0.6 },
+              { x: '14px', y: '16px', delay: 0.8 },
+              { x: '0px', y: '-22px', delay: 1.0 }
+            ].map((r, i) => (
+              <div
+                key={`tauros-rage-${i}`}
+                className="absolute pointer-events-none z-35"
+                style={{
+                  left: `calc(50% + ${r.x})`,
+                  top: `calc(50% + ${r.y})`,
+                  animation: `gbaLickitungParalysisSpark 1.1s ease-out ${r.delay}s forwards`,
+                  opacity: 0
+                }}
+              >
+                <div className="w-2.5 h-2.5 rotate-45 bg-red-500 border border-yellow-300 shadow-[0_0_8px_#ef4444]" />
+              </div>
+            ))}
+          </div>
+        );
+      })()}
+
       {/* 20. GUILLOTINE (GBA-style blade dropping with impact flash) */}
       {fx.type === 'guillotine_snap' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
@@ -5563,75 +8169,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20b. CRABHAMMER (Kingler - giant claw slamming down) */}
-      {fx.type === 'crab_hammer_slam' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Giant Kingler claw - detailed SVG with shell plating, bumps, serrations */}
-          <div className="absolute" style={{ animation: 'gbaCrabHammerSlam 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
-            <svg width="110" height="92" viewBox="0 0 110 92" className="drop-shadow-[0_0_18px_#dc2626]">
-              <defs>
-                <linearGradient id="kgClawG" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ef4444" />
-                  <stop offset="45%" stopColor="#dc2626" />
-                  <stop offset="100%" stopColor="#991b1b" />
-                </linearGradient>
-                <linearGradient id="kgShellG" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#f87171" />
-                  <stop offset="100%" stopColor="#b91c1c" />
-                </linearGradient>
-              </defs>
-              {/* Arm segment */}
-              <path d="M6 22 Q12 14, 20 16 Q27 18, 28 25 Q27 32, 20 32 Q12 30, 6 22 Z" fill="#ef4444" stroke="#991b1b" strokeWidth="2" />
-              <ellipse cx="17" cy="24" rx="5" ry="6" fill="none" stroke="#fca5a5" strokeWidth="1" opacity="0.5" />
-              {/* Main palm - large bulbous claw with characteristic bumps */}
-              <path d="M24 12 Q38 4, 56 6 Q74 8, 84 20 Q92 32, 90 46 Q88 58, 78 64 Q66 70, 52 66 Q38 62, 32 50 Q26 38, 24 12 Z" fill="url(#kgClawG)" stroke="#7f1d1d" strokeWidth="2.5" />
-              {/* Shell plate ridges */}
-              <path d="M34 16 Q48 10, 64 12" fill="none" stroke="#fca5a5" strokeWidth="1.5" opacity="0.5" />
-              <path d="M32 28 Q48 22, 68 24" fill="none" stroke="#fca5a5" strokeWidth="1.2" opacity="0.45" />
-              <path d="M34 42 Q50 36, 70 38" fill="none" stroke="#fca5a5" strokeWidth="1" opacity="0.35" />
-              <path d="M36 54 Q52 50, 68 52" fill="none" stroke="#fca5a5" strokeWidth="0.8" opacity="0.3" />
-              {/* Kingler's characteristic top spikes */}
-              <path d="M38 8 Q41 2, 45 5 Q47 9, 43 11 Z" fill="#ef4444" stroke="#b91c1c" strokeWidth="1.2" />
-              <path d="M54 5 Q58 0, 62 3 Q63 7, 58 9 Z" fill="#ef4444" stroke="#b91c1c" strokeWidth="1.2" />
-              <path d="M70 12 Q74 6, 78 9 Q78 14, 74 15 Z" fill="#ef4444" stroke="#b91c1c" strokeWidth="1.2" />
-              {/* Shell texture dots */}
-              <circle cx="42" cy="24" r="2.5" fill="#fca5a5" opacity="0.3" />
-              <circle cx="58" cy="18" r="2" fill="#fca5a5" opacity="0.25" />
-              <circle cx="68" cy="32" r="2.5" fill="#fca5a5" opacity="0.3" />
-              <circle cx="48" cy="38" r="2" fill="#fca5a5" opacity="0.25" />
-              {/* Inner mouth gap */}
-              <path d="M56 58 Q62 62, 70 62 Q78 62, 82 58 Q80 64, 72 66 Q64 66, 58 62 Z" fill="#fecaca" stroke="#b91c1c" strokeWidth="1" opacity="0.8" />
-              {/* LOWER FINGER (base/anvil) */}
-              <path d="M72 60 Q80 64, 90 66 Q98 68, 104 64 Q108 60, 106 55 Q100 58, 92 60 Q84 62, 76 58 Z" fill="url(#kgShellG)" stroke="#7f1d1d" strokeWidth="2" />
-              {/* Lower finger serrations */}
-              <path d="M82 62 L84 58 L86 62 M90 61 L92 57 L94 61" fill="none" stroke="#7f1d1d" strokeWidth="1.5" strokeLinejoin="round" />
-              {/* UPPER FINGER (hammer face) */}
-              <path d="M40 56 Q46 64, 54 70 Q62 76, 72 74 Q80 72, 78 66 Q72 70, 62 70 Q52 68, 44 58 Z" fill="#dc2626" stroke="#7f1d1d" strokeWidth="2" />
-              {/* Upper finger serrations */}
-              <path d="M48 64 L50 69 L52 64 M56 67 L58 72 L60 67 M64 69 L66 74 L68 69" fill="none" stroke="#7f1d1d" strokeWidth="1.8" strokeLinejoin="round" />
-              {/* Finger joint */}
-              <circle cx="72" cy="60" r="4.5" fill="#fca5a5" stroke="#b91c1c" strokeWidth="2" />
-              <circle cx="72" cy="60" r="2" fill="#fecaca" opacity="0.6" />
-            </svg>
-          </div>
-          {/* Impact shockwave ring */}
-          <div className="absolute w-20 h-20 rounded-full border-3 border-orange-300/80" style={{ animation: 'gbaCrabHammerImpact 1.2s ease-out 0.45s forwards', opacity: 0 }} />
-          {/* Impact sparks */}
-          <div className="absolute flex gap-2" style={{ animation: 'gbaCrabHammerImpact 1.2s ease-out 0.5s forwards', opacity: 0 }}>
-            <span className="text-lg text-orange-300 select-none drop-shadow-[0_0_8px_#fdba74]">✦</span>
-            <span className="text-sm text-yellow-200 select-none drop-shadow-[0_0_6px_#fef08a] -mt-2">✧</span>
-            <span className="text-lg text-orange-300 select-none drop-shadow-[0_0_8px_#fdba74]">✦</span>
-          </div>
-          {/* Ground crack debris on impact */}
-          <div className="absolute mt-12" style={{ animation: 'gbaCrabHammerImpact 1.2s ease-out 0.55s forwards', opacity: 0 }}>
-            <svg width="64" height="22" viewBox="0 0 64 22">
-              <path d="M32 2 L27 8 L30 12 L25 18" fill="none" stroke="#92400e" strokeWidth="2" strokeLinecap="round" opacity="0.7" />
-              <path d="M32 2 L37 9 L34 14 L39 20" fill="none" stroke="#78350f" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-              <path d="M32 4 L28 6 M32 4 L36 7" fill="none" stroke="#a16207" strokeWidth="1" strokeLinecap="round" opacity="0.5" />
-            </svg>
-          </div>
-        </div>
-      )}
+      {/* 20b. CRABHAMMER (Handled above in kingler_crabhammer) */}
 
       {/* 20c. COBRA STARE (Dark Arbok) - the reference illustration materializes through a
            GBA-style grainy dissolve. The light drains, static coalesces into the image, holds
@@ -8728,82 +11266,39 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 50d. CLAW PINCH (Krabby/Kingler - anatomical crab claw grabbing & squeezing) */}
-      {fx.type === 'claw_pinch' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Whole claw unit slides in from left, then upper finger rotates shut */}
-          <div className="absolute" style={{ animation: 'gbaClawGripApproach 1.3s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
-            <svg width="100" height="72" viewBox="0 0 100 72" className="drop-shadow-[0_0_12px_#ea580c]">
-              <defs>
-                <linearGradient id="krabbyClawGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#f97316" />
-                  <stop offset="50%" stopColor="#ea580c" />
-                  <stop offset="100%" stopColor="#c2410c" />
-                </linearGradient>
-                <linearGradient id="krabbyFingerGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#ea580c" />
-                  <stop offset="100%" stopColor="#9a3412" />
-                </linearGradient>
-              </defs>
-              {/* Arm segment */}
-              <path d="M2 38 Q6 32, 14 30 Q20 28, 24 32 Q26 36, 24 42 Q20 46, 14 44 Q6 42, 2 38 Z" fill="#f97316" stroke="#c2410c" strokeWidth="1.5" />
-              {/* Arm segment joint ring */}
-              <ellipse cx="14" cy="37" rx="5" ry="6" fill="none" stroke="#fdba74" strokeWidth="1" opacity="0.5" />
-              {/* Palm / Manus - bulky base */}
-              <path d="M22 24 Q32 18, 44 20 Q54 22, 58 30 Q60 38, 56 46 Q50 54, 38 52 Q28 50, 24 42 Q22 34, 22 24 Z" fill="url(#krabbyClawGrad)" stroke="#9a3412" strokeWidth="2" />
-              {/* Palm ridge details */}
-              <path d="M30 26 Q38 22, 46 24" fill="none" stroke="#fdba74" strokeWidth="1.2" opacity="0.6" />
-              <path d="M28 34 Q36 30, 48 32" fill="none" stroke="#fdba74" strokeWidth="1" opacity="0.5" />
-              <path d="M30 44 Q40 40, 50 42" fill="none" stroke="#fdba74" strokeWidth="1" opacity="0.4" />
-              {/* Palm bump texture */}
-              <circle cx="38" cy="36" r="4" fill="#f97316" stroke="#c2410c" strokeWidth="1" opacity="0.6" />
-              <circle cx="46" cy="28" r="2.5" fill="#fb923c" opacity="0.4" />
-              {/* LOWER FINGER (fixed, larger) - extends right with serrated inner edge */}
-              <path d="M54 40 Q62 44, 72 44 Q82 44, 92 40 Q96 37, 94 34 Q88 37, 78 40 Q68 42, 58 38 Z" fill="url(#krabbyFingerGrad)" stroke="#9a3412" strokeWidth="1.5" />
-              {/* Lower finger serrations (inner/top edge) */}
-              <path d="M64 41 L66 37 L68 41 M72 40 L74 36 L76 40 M80 39 L82 35 L84 39" fill="none" stroke="#7c2d12" strokeWidth="1.3" strokeLinejoin="round" />
-              {/* Lower finger tip */}
-              <path d="M92 38 Q96 35, 98 37 Q96 40, 93 40 Z" fill="#c2410c" stroke="#7c2d12" strokeWidth="1" />
-              {/* UPPER FINGER (movable, smaller) - rotates to close around joint */}
-              <g style={{ animation: 'gbaClawFingerClose 1.3s cubic-bezier(0.3, 0.8, 0.2, 1) forwards', transformOrigin: '55px 34px' }}>
-                <path d="M55 28 Q62 22, 70 22 Q78 22, 84 25 Q88 28, 86 31 Q80 28, 72 27 Q64 27, 57 30 Z" fill="#ea580c" stroke="#9a3412" strokeWidth="1.5" />
-                {/* Upper finger serrations (inner/bottom edge) */}
-                <path d="M63 28 L65 32 L67 28 M71 27 L73 31 L75 27" fill="none" stroke="#7c2d12" strokeWidth="1.3" strokeLinejoin="round" />
-                {/* Upper finger tip (pointed) */}
-                <path d="M84 26 Q88 24, 90 27 Q88 30, 85 29 Z" fill="#c2410c" stroke="#7c2d12" strokeWidth="1" />
-              </g>
-              {/* Joint circle at pivot */}
-              <circle cx="55" cy="34" r="3.5" fill="#fdba74" stroke="#c2410c" strokeWidth="1.5" />
-            </svg>
+      {/* 50d. KRABBY IRON GRIP (Krabby Lv. 20 — Pincer Clamp & Squeeze Impact) */}
+      {(fx.type === 'krabby_irongrip' || fx.type === 'claw_pinch') && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Krabby Clamping Pincer (<= 60% Card Width) */}
+            <div
+              className="absolute pointer-events-none z-30 flex items-center justify-center"
+              style={{ animation: 'gbaClawGripApproach 1.4s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            >
+              <img
+                src="/assets/Krabby_Irongrip_Claw.png"
+                alt="Krabby Iron Grip"
+                className="max-w-[68px] max-h-[76px] object-contain drop-shadow-[0_0_14px_#ea580c] drop-shadow-[0_0_20px_rgba(234,88,12,0.6)]"
+              />
+            </div>
+            {/* Impact Clamp Sparks / Squeeze Burst */}
+            <div
+              className="absolute pointer-events-none z-35"
+              style={{ animation: 'gbaClawImpactBurst 1.4s ease-out 0.45s forwards', opacity: 0 }}
+            >
+              <svg width={Math.round(48 * wi)} height={Math.round(48 * wi)} viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="12" fill="#fff7ed" opacity="0.75" />
+                <circle cx="24" cy="24" r="6" fill="#ffffff" opacity="0.9" />
+                <line x1="6" y1="24" x2="16" y2="24" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="32" y1="24" x2="42" y2="24" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="24" y1="6" x2="24" y2="16" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="24" y1="32" x2="24" y2="42" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+            </div>
           </div>
-          {/* Squeeze impact burst when claw clamps shut */}
-          <div className="absolute" style={{ animation: 'gbaClawImpactBurst 1.3s ease-out 0.7s forwards', opacity: 0 }}>
-            <svg width="42" height="42" viewBox="0 0 42 42">
-              <circle cx="21" cy="21" r="9" fill="#fff7ed" opacity="0.6" />
-              <circle cx="21" cy="21" r="4" fill="#ffffff" opacity="0.7" />
-              <g stroke="#fb923c" strokeWidth="2" strokeLinecap="round" opacity="0.85">
-                <line x1="21" y1="3" x2="21" y2="9" />
-                <line x1="21" y1="33" x2="21" y2="39" />
-                <line x1="3" y1="21" x2="9" y2="21" />
-                <line x1="33" y1="21" x2="39" y2="21" />
-                <line x1="8" y1="8" x2="12" y2="12" />
-                <line x1="30" y1="30" x2="34" y2="34" />
-              </g>
-            </svg>
-          </div>
-          {/* Squeeze pressure lines radiating outward */}
-          <div className="absolute" style={{ animation: 'gbaClawSqueezeLines 1.3s ease-out 0.75s forwards', opacity: 0 }}>
-            <svg width="72" height="72" viewBox="0 0 72 72">
-              <line x1="6" y1="36" x2="18" y2="36" stroke="#fdba74" strokeWidth="2" strokeLinecap="round" />
-              <line x1="54" y1="36" x2="66" y2="36" stroke="#fdba74" strokeWidth="2" strokeLinecap="round" />
-              <line x1="36" y1="6" x2="36" y2="16" stroke="#fdba74" strokeWidth="1.5" strokeLinecap="round" />
-              <line x1="36" y1="56" x2="36" y2="66" stroke="#fdba74" strokeWidth="1.5" strokeLinecap="round" />
-              <line x1="12" y1="12" x2="19" y2="19" stroke="#fed7aa" strokeWidth="1.5" strokeLinecap="round" />
-              <line x1="53" y1="53" x2="60" y2="60" stroke="#fed7aa" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* 50e. PALM STRIKE (Drowzee/Hypno - open palm) */}
       {fx.type === 'palm_strike' && (

@@ -88,16 +88,17 @@ export class AIPlayer {
       }
     }
 
-    // 1. Evolve (only if turn > 1 and turnsInPlay >= 1)
+    // 1. Evolve (only if turn > 1 and turnsInPlay >= 1 - allows evolving multiple different Pokémon per turn)
     if (state.turn > 1) {
       const evolutionsInHand = cpu.hand
         .map((c, i) => ({ card: c, handIndex: i }))
         .filter(x => x.card.supertype === 'Pokemon' && x.card.evolvesFrom);
 
       const allCpuPokemon = [simulatedActive, ...simulatedBench].filter(p => p && p.turnsInPlay >= 1);
+      const evolvedInstancesThisTurn = new Set<string>();
 
       for (const evo of evolutionsInHand) {
-        const match = allCpuPokemon.find(p => p.card.name === evo.card.evolvesFrom);
+        const match = allCpuPokemon.find(p => p.card.name === evo.card.evolvesFrom && !evolvedInstancesThisTurn.has(p.instanceId));
         if (match) {
           steps.push({
             type: 'EVOLVE',
@@ -105,20 +106,20 @@ export class AIPlayer {
             targetInstanceId: match.instanceId,
             description: `Opponent evolved ${match.card.name} into ${evo.card.name}!`
           });
+          evolvedInstancesThisTurn.add(match.instanceId);
           match.card = evo.card;
           match.currentHp = Math.min(evo.card.hp || 50, match.currentHp + Math.max(0, (evo.card.hp || 50) - (match.card.hp || 50)));
-          break;
         }
       }
     }
 
-    // 2. Bench Basics
+    // 2. Bench Basics (bench all eligible basics up to 5 bench limit, matching Player capabilities)
     const basicsInHand = cpu.hand
       .map((c, i) => ({ card: c, handIndex: i }))
       .filter(x => x.card.supertype === 'Pokemon' && x.card.subtype === 'Basic');
 
-    if (simulatedBench.length < 5 && basicsInHand.length > 0) {
-      const basic = basicsInHand[0];
+    for (const basic of basicsInHand) {
+      if (simulatedBench.length >= 5) break;
       steps.push({
         type: 'BENCH',
         card: basic.card,
@@ -266,6 +267,38 @@ export class AIPlayer {
               card: cpu.hand[oakIdx],
               description: `📖 Opponent played Professor Oak to draw 7 fresh cards!`
             });
+          }
+        }
+
+        // E. Switch (if active is Asleep/Paralyzed or low HP and viable bench exists):
+        if (steps.filter(s => s.type === 'TRAINER').length === 0) {
+          const switchIdx = cpu.hand.findIndex(c => c.name === 'Switch');
+          if (switchIdx !== -1 && simulatedBench.length > 0) {
+            const isStuck = simulatedActive.status === 'Asleep' || simulatedActive.status === 'Paralyzed';
+            const isLowHp = simulatedActive.currentHp <= 30 && simulatedActive.damage >= 30;
+            if (isStuck || isLowHp) {
+              let bestBenchIdx = 0;
+              let bestScore = -999;
+              simulatedBench.forEach((b, idx) => {
+                let score = b.currentHp;
+                if (b.card.attacks?.some(a => GameEngine.canPayAttackCost(b, a))) score += 50;
+                if (score > bestScore) {
+                  bestScore = score;
+                  bestBenchIdx = idx;
+                }
+              });
+              steps.push({
+                type: 'TRAINER',
+                card: cpu.hand[switchIdx],
+                benchIndex: bestBenchIdx,
+                description: `🔄 Opponent played Switch, sending out ${simulatedBench[bestBenchIdx].card.name}!`
+              });
+              const oldActive = simulatedActive;
+              oldActive.status = 'None';
+              oldActive.poisonType = undefined;
+              simulatedActive = simulatedBench.splice(bestBenchIdx, 1)[0];
+              simulatedBench.push(oldActive);
+            }
           }
         }
       }
