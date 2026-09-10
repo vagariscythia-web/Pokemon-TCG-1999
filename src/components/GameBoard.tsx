@@ -499,7 +499,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     pokemonName?: string,
     isSelfTarget?: boolean,
     slot?: 'active' | 'bench',
-    benchIndex?: number
+    benchIndex?: number,
+    attackerType?: string
   ) => {
     const fx: ActiveFX = {
       id: Math.random().toString(36).substring(2, 9),
@@ -510,6 +511,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       isResistance,
       isBlocked,
       pokemonName,
+      attackerType,
       isSelfTarget,
       slot,
       benchIndex,
@@ -537,6 +539,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     isResistance?: boolean;
     isBlocked?: boolean;
     attackerName: string;
+    attackerType?: string;
     selfTarget?: boolean;
     result?: AttackResult;
   }) => {
@@ -573,12 +576,27 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       slot: onBench ? 'bench' : 'active',
       benchIndex: onBench ? spec.result?.damageTargetBenchIndex : undefined,
       pokemonName: spec.attackerName,
+      attackerType: spec.attackerType,
       isSelfTarget: spec.selfTarget,
       intensity: moveIntensity,
       ...over
     });
 
-    if (isStoneBarrage) {
+    if (spec.fxType === 'doubleslap') {
+      // Doubleslap is a single choreographed 2-slap sequence (spanning the full animation duration).
+      // Rendering one unified beat preserves the 2-strike structure without overlapping ghost hits.
+      const hits = spec.result?.multiHitSequence ?? [true, true];
+      const anyHit = hits.some(h => h);
+      beats.push(baseBeat({
+        damageText: spec.damageText,
+        isWeakness: spec.isWeakness,
+        isResistance: spec.isResistance,
+        isBlocked: spec.isBlocked,
+        shake: anyHit && !spec.selfTarget,
+        whiffed: !anyHit,
+        multiHitSequence: hits
+      }));
+    } else if (isStoneBarrage) {
       const heads = spec.result?.multiHitCount ?? 0;
       if (heads === 0) {
         // First coin was tails → zero damage. Legacy triple-rock volley, whiffed (no impact FX).
@@ -1079,6 +1097,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 isResistance: isResist,
                 isBlocked,
                 attackerName: prev.cpu.active?.card.name || '',
+                attackerType: prev.cpu.active?.card.types?.[0],
                 selfTarget,
                 result: atkRes
               });
@@ -1440,6 +1459,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   isWeakness: atkRes?.isWeakness,
                   isResistance: atkRes?.isResistance,
                   attackerName,
+                  attackerType: updated.cpu.active?.card.types?.[0],
                   selfTarget,
                   result: atkRes
                 });
@@ -3861,6 +3881,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           isResistance: isResist,
           isBlocked,
           attackerName: player.active!.card.name,
+          attackerType: player.active!.card.types?.[0],
           selfTarget,
           result: atkRes
         });
@@ -4054,6 +4075,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         isResistance: isResist,
         isBlocked,
         attackerName: player.active.card.name,
+        attackerType: player.active.card.types?.[0],
         selfTarget,
         result: atkRes
       });
