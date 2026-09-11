@@ -144,6 +144,8 @@ export interface ActiveFX {
     | 'haunter_dream_eater'
     | 'hypno_hypnotic_pendulum'
     | 'weezing_toxic_smog'
+    | 'koffing_foul_gas'
+    | 'pinsir_guillotine'
     | 'magmar_smog'
     | 'golem_avalanche'
     | 'wigglytuff_do_the_wave'
@@ -390,8 +392,9 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('blizzard')) return 'blizzard_storm';
   // Crabhammer: Kingler gets dedicated Crabhammer variant
   if (name.includes('crabhammer') || name.includes('crab hammer')) return 'kingler_crabhammer';
-  // Horn Attack: Goldeen gets single-horn thrust
+  // Horn Attack: Rhydon/Rhyhorn get drill bore; Goldeen gets single-horn thrust
   if (name.includes('horn attack')) {
+    if (pkm.includes('rhydon') || pkm.includes('rhyhorn')) return 'rhydon_horn_drill';
     if (pkm.includes('goldeen') || pkm.includes('seaking')) return 'horn_thrust';
     if (pkm.includes('nidoran')) return 'nidoran_horn_charge';
     return 'horn_gore';
@@ -411,8 +414,9 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     if (pkm.includes('ponyta') || pkm.includes('rapidash')) return 'kick_smash';
     return 'kick_strike';
   }
-  // Irongrip: Krabby gets dedicated Iron Grip variant
+  // Irongrip: Pinsir gets dedicated vice-clamp; Krabby gets claw clamp
   if (name.includes('irongrip') || name.includes('iron grip')) {
+    if (pkm.includes('pinsir')) return 'pinsir_guillotine';
     if (pkm.includes('krabby') || pkm.includes('kingler')) return 'krabby_irongrip';
     return 'punch';
   }
@@ -464,9 +468,15 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('poison sting') && (pkm.includes('weedle') || pkm.includes('kakuna') || pkm.includes('beedrill') || pkm.includes('sandslash'))) return 'weedle_poison_sting';
   if (name.includes('poison sting')) return 'weedle_poison_sting';
   if (name.includes('poison fang') || name.includes('spit poison')) return 'poison_sting';
-  if (name === 'poison gas' || name.includes('poison gas')) return 'poison_gas';
-  if (name === 'foul gas' || name.includes('foul gas')) return 'foul_gas';
-  if (name === 'stun gas' || name.includes('stun gas')) return 'stun_gas';
+  if (name === 'poison gas' || name.includes('poison gas')) {
+    if (pkm.includes('koffing')) return 'koffing_foul_gas';
+    return 'poison_gas';
+  }
+  if (name === 'foul gas' || name.includes('foul gas')) return 'koffing_foul_gas';
+  if (name === 'stun gas' || name.includes('stun gas')) {
+    if (pkm.includes('weezing')) return 'weezing_toxic_smog';
+    return 'stun_gas';
+  }
   if (name === 'foul odor' || name.includes('foul odor')) return 'foul_odor';
   if (name === 'stun spore' || name.includes('stun spore')) return 'stun_spore';
   if (name === 'lullaby' || name.includes('lullaby') || name === 'sing' || name.includes('sing')) return 'sing_lullaby';
@@ -475,10 +485,14 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     if (pkm.includes('magmar')) return 'magmar_smog';
     return 'weezing_toxic_smog';
   }
+  if (pkm.includes('weezing') && (name.includes('mass explosion') || name.includes('selfdestruct'))) return 'weezing_toxic_smog';
   if (name.includes('destiny bond') && (pkm.includes('gastly') || pkm.includes('haunter') || pkm.includes('gengar'))) return 'gastly_sleeping_gas';
   if (name.includes('destiny bond')) return 'destiny_bond_curse';
   if (name.includes('dark mind')) return 'gengar_dark_mind';
-  if (name.includes('nightmare')) return 'nightmare_spook';
+  if (name.includes('nightmare')) {
+    if (pkm.includes('haunter') || pkm.includes('gastly')) return 'haunter_dream_eater';
+    return 'nightmare_spook';
+  }
   if ((name.includes('sleeping gas') || name.includes('lick')) && (pkm.includes('gastly') || pkm.includes('haunter'))) return 'gastly_sleeping_gas';
   if (name.includes('lick')) return 'lick_tongue';
   if (name.includes('meditate')) return 'meditate_zen';
@@ -564,10 +578,11 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     return 'guillotine_snap';
   }
   if (name.includes('crabhammer')) return 'kingler_crabhammer';
-  if (name.includes('guillotine') || name.includes('vice grip') || name.includes('vise grip')) return 'guillotine_snap';
+  if (name.includes('guillotine') || (pkm.includes('pinsir') && (name.includes('vice') || name.includes('vise') || name.includes('grip') || name.includes('snap')))) return 'pinsir_guillotine';
+  if (name.includes('vice grip') || name.includes('vise grip')) return 'guillotine_snap';
 
   // 9. Projectiles & Flight
-  if (name.includes('horn drill')) return 'rhydon_horn_drill';
+  if (name.includes('horn drill') || (pkm.includes('rhydon') && name.includes('drill'))) return 'rhydon_horn_drill';
   if (name.includes('drill peck')) return 'fearow_drill_peck';
   if (name.includes('drill peck') || name.includes('peck') || name.includes('drill run')) return 'drill_peck_spiral';
   // Spike Cannon: Cloyster fires anatomical shell spikes; others keep generic pin volley
@@ -768,6 +783,10 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1700;
     case 'weezing_toxic_smog':
       return 1700;
+    case 'koffing_foul_gas':
+      return 1650;
+    case 'pinsir_guillotine':
+      return 1450;
     case 'magmar_smog':
       return 1650;
     case 'golem_avalanche':
@@ -3840,39 +3859,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 17. PSYBEAM KALEIDOSCOPE (Alakazam Lv. 42 / Kadabra — Mind-Bending Sacred Mandala & Refraction Beams) */}
       {fx.type === 'psybeam_kaleidoscope' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Prismatic Rotating Sacred Mandala Core */}
+          {/* Authentic Ken Sugimori Alakazam Telekinetic Bending Spoons */}
           <div
             className="absolute flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaPsybeamMandalaSpin 1.65s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+            style={{ animation: 'gbaAlakazamSpoonsResonance 1.65s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
           >
-            <svg width="150" height="150" viewBox="0 0 150 150" className="drop-shadow-[0_0_30px_#f43f5e]">
-              <defs>
-                <linearGradient id="psybeamRainbow" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#f43f5e" />
-                  <stop offset="25%" stopColor="#a855f7" />
-                  <stop offset="50%" stopColor="#38bdf8" />
-                  <stop offset="75%" stopColor="#34d399" />
-                  <stop offset="100%" stopColor="#fbbf24" />
-                </linearGradient>
-              </defs>
-              {/* Outer 8-Point Sacred Octagram */}
-              <polygon
-                points="75,5 92,52 145,52 102,82 118,130 75,100 32,130 48,82 5,52 58,52"
-                fill="none"
-                stroke="url(#psybeamRainbow)"
-                strokeWidth="3"
-              />
-              {/* Rotated Inner Octagram */}
-              <polygon
-                points="75,20 88,58 128,58 96,82 108,120 75,98 42,120 54,82 22,58 62,58"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="2"
-                opacity="0.85"
-              />
-              <circle cx="75" cy="75" r="22" fill="#ffffff" opacity="0.95" className="drop-shadow-[0_0_12px_#38bdf8]" />
-              <circle cx="75" cy="75" r="10" fill="#f43f5e" />
-            </svg>
+            <img
+              src="/assets/Alakazam_Psychic_Spoons.png"
+              alt="Alakazam Psychic Spoons"
+              className="w-20 h-20 object-contain pointer-events-none drop-shadow-[0_0_24px_#c084fc]"
+            />
           </div>
 
           {/* 8-Way Prismatic Refraction Rays */}
@@ -4888,82 +4884,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             }}
           />
 
-          {/* Gengar Malevolent Specter Visage */}
+          {/* Authentic Ken Sugimori Gengar Shadow Specter */}
           <div
             className="absolute flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaDarkMindGengarManifest 1.8s cubic-bezier(0.15, 0.85, 0.25, 1) forwards' }}
           >
-            <svg width="150" height="130" viewBox="0 0 150 130" className="drop-shadow-[0_0_30px_#9333ea]">
-              <defs>
-                <linearGradient id="gengarBodyGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#4c1d95" />
-                  <stop offset="60%" stopColor="#2e1065" />
-                  <stop offset="100%" stopColor="#0f0728" />
-                </linearGradient>
-                <radialGradient id="gengarEyeGlow" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="40%" stopColor="#f43f5e" />
-                  <stop offset="100%" stopColor="#dc2626" />
-                </radialGradient>
-              </defs>
-              {/* Spiked shadow body outline */}
-              <path
-                d="M75 10 L88 30 L108 22 L112 40 L135 42 L125 65 L145 80 L125 95 L115 115 L75 120 L35 115 L25 95 L5 80 L25 65 L15 42 L38 40 L42 22 L62 30 Z"
-                fill="url(#gengarBodyGrad)"
-                stroke="#a855f7"
-                strokeWidth="2.5"
-                strokeLinejoin="round"
-              />
-              {/* Glowing Sinister Red Eyes */}
-              <polygon points="45,45 62,55 48,60" fill="url(#gengarEyeGlow)" className="drop-shadow-[0_0_12px_#ef4444]" />
-              <polygon points="105,45 88,55 102,60" fill="url(#gengarEyeGlow)" className="drop-shadow-[0_0_12px_#ef4444]" />
-              {/* Slit pupils */}
-              <line x1="53" y1="48" x2="55" y2="58" stroke="#ffffff" strokeWidth="1.5" />
-              <line x1="97" y1="48" x2="95" y2="58" stroke="#ffffff" strokeWidth="1.5" />
-              {/* Wide Wicked Fanged Grin */}
-              <path
-                d="M38 78 Q75 108 112 78 Q75 92 38 78 Z"
-                fill="#f8fafc"
-                stroke="#1e1b4b"
-                strokeWidth="2"
-              />
-              {/* Tooth dividers */}
-              <line x1="52" y1="81" x2="52" y2="87" stroke="#1e1b4b" strokeWidth="1.5" />
-              <line x1="63" y1="83" x2="63" y2="91" stroke="#1e1b4b" strokeWidth="1.5" />
-              <line x1="75" y1="84" x2="75" y2="93" stroke="#1e1b4b" strokeWidth="1.5" />
-              <line x1="87" y1="83" x2="87" y2="91" stroke="#1e1b4b" strokeWidth="1.5" />
-              <line x1="98" y1="81" x2="98" y2="87" stroke="#1e1b4b" strokeWidth="1.5" />
-            </svg>
-          </div>
-
-          {/* Left Claw Hand Reaching */}
-          <div
-            className="absolute left-2 flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaDarkMindShadowHandLeft 1.8s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
-          >
-            <svg width="70" height="70" viewBox="0 0 70 70">
-              <path
-                d="M10 50 Q25 40 45 42 Q58 30 65 32 Q52 45 60 48 Q48 55 52 62 Q35 55 10 50 Z"
-                fill="#2e1065"
-                stroke="#a855f7"
-                strokeWidth="2"
-              />
-            </svg>
-          </div>
-
-          {/* Right Claw Hand Reaching */}
-          <div
-            className="absolute right-2 flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaDarkMindShadowHandRight 1.8s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
-          >
-            <svg width="70" height="70" viewBox="0 0 70 70">
-              <path
-                d="M60 50 Q45 40 25 42 Q12 30 5 32 Q18 45 10 48 Q22 55 18 62 Q35 55 60 50 Z"
-                fill="#2e1065"
-                stroke="#a855f7"
-                strokeWidth="2"
-              />
-            </svg>
+            <img
+              src="/assets/Gengar_Dark_Mind.png"
+              alt="Gengar Dark Mind"
+              className="w-20 h-20 object-contain pointer-events-none drop-shadow-[0_0_24px_#9333ea]"
+            />
           </div>
 
           {/* Bench Psychic Distortion Pulse Rings */}
@@ -5080,36 +5010,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div className="w-64 h-3 rounded-full bg-gradient-to-r from-transparent via-white to-amber-300 shadow-[0_0_25px_#f59e0b] border-y border-amber-200" />
           </div>
 
-          {/* Machoke/Machamp Muscular Knife-Hand (Shuto-Uchi) */}
+          {/* Authentic Ken Sugimori Machamp 4-Armed Karate Strike */}
           <div
             className="absolute flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaKarateChopHandBlade 1.55s cubic-bezier(0.15, 0.9, 0.25, 1) forwards' }}
           >
-            <svg width="130" height="130" viewBox="0 0 130 130" className="drop-shadow-[0_0_24px_#f59e0b]">
-              <defs>
-                <linearGradient id="machampChopGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#cbd5e1" />
-                  <stop offset="40%" stopColor="#64748b" />
-                  <stop offset="85%" stopColor="#334155" />
-                  <stop offset="100%" stopColor="#1e293b" />
-                </linearGradient>
-              </defs>
-              {/* Muscular wrist and rigid knife-hand blade */}
-              <path
-                d="M20 95 L45 80 L55 55 L75 25 Q82 18, 90 22 L115 50 Q120 58, 112 68 L85 92 L55 110 L25 105 Z"
-                fill="url(#machampChopGrad)"
-                stroke="#f8fafc"
-                strokeWidth="2.5"
-                strokeLinejoin="round"
-              />
-              {/* Extended blade fingers */}
-              <path d="M75 25 L95 48" stroke="#94a3b8" strokeWidth="2" />
-              <path d="M85 30 L102 54" stroke="#94a3b8" strokeWidth="2" />
-              {/* Taut thumb folded against palm */}
-              <path d="M55 55 Q68 50, 72 65 Q62 70, 52 65 Z" fill="#475569" stroke="#f8fafc" strokeWidth="1.5" />
-              {/* Impact kinetic edge highlight */}
-              <path d="M75 25 Q82 18, 90 22 L115 50 Q120 58, 112 68" stroke="#fde047" strokeWidth="3" fill="none" className="drop-shadow-[0_0_8px_#fde047]" />
-            </svg>
+            <img
+              src="/assets/Machamp_Karate_Chop.png"
+              alt="Machamp Karate Chop"
+              className="w-20 h-20 object-contain pointer-events-none drop-shadow-[0_0_24px_#f59e0b]"
+            />
           </div>
 
           {/* Radial Impact Shockwave */}
@@ -5138,37 +5048,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 20o. HAUNTER DREAM EATER (Haunter Lv. 22 — Ethereal Slumber Essence Extraction & Phantom Devour) */}
       {fx.type === 'haunter_dream_eater' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Haunter's Floating Ethereal Phantom Maw */}
+          {/* Haunter's Ethereal Spectral Manifestation (Sugimori 1996 Official Artwork) */}
           <div
-            className="absolute top-2 flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaDreamEaterHaunterMaw 1.8s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaDreamEaterHaunterManifest 1.8s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
           >
-            <svg width="130" height="90" viewBox="0 0 130 90" className="drop-shadow-[0_0_25px_#9333ea]">
-              <defs>
-                <linearGradient id="haunterMawGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#6b21a8" />
-                  <stop offset="60%" stopColor="#3b0764" />
-                  <stop offset="100%" stopColor="#1e1b4b" />
-                </linearGradient>
-              </defs>
-              {/* Haunter triangular spiked face with gaping mouth */}
-              <path
-                d="M65 5 L85 22 L115 15 L105 38 L125 50 L95 62 L65 85 L35 62 L5 50 L25 38 L15 15 L45 22 Z"
-                fill="url(#haunterMawGrad)"
-                stroke="#c084fc"
-                strokeWidth="2"
-              />
-              {/* Triangular glowing spectral eyes */}
-              <polygon points="45,28 58,35 48,42" fill="#ffffff" className="drop-shadow-[0_0_8px_#ffffff]" />
-              <polygon points="85,28 72,35 82,42" fill="#ffffff" className="drop-shadow-[0_0_8px_#ffffff]" />
-              {/* Giant unhinged devour maw */}
-              <ellipse cx="65" cy="55" rx="28" ry="14" fill="#0f0728" stroke="#f43f5e" strokeWidth="2" />
-              {/* Sharp phantom fangs */}
-              <polygon points="50,44 54,52 58,44" fill="#ffffff" />
-              <polygon points="72,44 76,52 80,44" fill="#ffffff" />
-              <polygon points="55,66 59,58 63,66" fill="#ffffff" />
-              <polygon points="67,66 71,58 75,66" fill="#ffffff" />
-            </svg>
+            <img
+              src="/assets/Haunter_Dream_Eater.png"
+              alt="Haunter Dream Eater"
+              className="w-20 h-20 object-contain drop-shadow-[0_0_24px_rgba(168,85,247,0.95)]"
+            />
           </div>
 
           {/* Siphoning Soul Energy Funnel */}
@@ -5361,6 +5250,17 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 20q. WEEZING TOXIC SMOG (Weezing Lv. 27 — Dual-Chimney Volcanic Bilious Smog Plumes) */}
       {fx.type === 'weezing_toxic_smog' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Weezing Dual-Body Floating Manifestation (Sugimori 1996 Official Artwork) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaWeezingToxicSmogManifest 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+          >
+            <img
+              src="/assets/Weezing_Toxic_Smog.png"
+              alt="Weezing Toxic Smog"
+              className="w-20 h-20 object-contain drop-shadow-[0_0_26px_rgba(147,51,234,0.9)]"
+            />
+          </div>
           {/* Left Smog Plume Eruption (Yellowish-Green Sulfur Mist) */}
           <div
             className="absolute left-2 flex items-center justify-center pointer-events-none z-25"
@@ -5840,29 +5740,19 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20ab. RHYDON HORN DRILL (Rhydon / Nidorino — 50 DMG High-Torque Spiral Impalement Bore) */}
+      {/* 20ab. RHYDON HORN DRILL (Rhydon Lv. 48 — 50 DMG High-Torque Spiral Impalement Bore) */}
       {fx.type === 'rhydon_horn_drill' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Massive Spinning Diamond-Tipped Drill Horn */}
+          {/* High-Torque Spinning Chiseled Rock Horn Drill (Sugimori 1996 Official Artwork) */}
           <div
             className="absolute flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaHornDrillBore 1.65s cubic-bezier(0.15, 0.85, 0.25, 1) forwards' }}
           >
-            <svg width="140" height="70" viewBox="0 0 140 70" className="drop-shadow-[0_0_28px_#f59e0b]">
-              <defs>
-                <linearGradient id="rhydonHornGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#64748b" />
-                  <stop offset="40%" stopColor="#e2e8f0" />
-                  <stop offset="85%" stopColor="#fef08a" />
-                  <stop offset="100%" stopColor="#ffffff" />
-                </linearGradient>
-              </defs>
-              <polygon points="10,15 130,35 10,55" fill="url(#rhydonHornGrad)" stroke="#475569" strokeWidth="2" />
-              {/* Spiral drill threading grooves */}
-              <path d="M30 18 Q50 35, 30 52" fill="none" stroke="#334155" strokeWidth="2.5" />
-              <path d="M60 23 Q80 35, 60 47" fill="none" stroke="#334155" strokeWidth="2.5" />
-              <path d="M90 28 Q105 35, 90 42" fill="none" stroke="#334155" strokeWidth="2.5" />
-            </svg>
+            <img
+              src="/assets/Rhydon_Horn_Drill.png"
+              alt="Rhydon Horn Drill"
+              className="w-20 h-20 object-contain drop-shadow-[0_0_24px_rgba(245,158,11,0.95)]"
+            />
           </div>
 
           {/* Friction Spark Shower at Impact Point */}
@@ -5871,6 +5761,102 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             style={{ animation: 'gbaHornDrillSparks 1.65s ease-out forwards' }}
           >
             <div className="w-24 h-24 rounded-full border-4 border-amber-300 shadow-[0_0_25px_#ea580c]" />
+          </div>
+        </div>
+      )}
+
+      {/* 20ab-1. KOFFING FOUL GAS / POISON GAS (Koffing Lv. 13 — Floating Toxic Gas Mine with Sulfur Plumes) */}
+      {fx.type === 'koffing_foul_gas' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Koffing Gas Mine Body Floating & Squeezing */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaKoffingFoulGasFloat 1.65s cubic-bezier(0.15, 0.85, 0.25, 1) forwards' }}
+          >
+            <img
+              src="/assets/Koffing_Foul_Gas.png"
+              alt="Koffing Foul Gas"
+              className="w-20 h-20 object-contain drop-shadow-[0_0_24px_rgba(132,204,22,0.9)]"
+            />
+          </div>
+
+          {/* Billowing Sulfur & Acidic Gas Clouds */}
+          <div
+            className="absolute pointer-events-none z-20"
+            style={{ animation: 'gbaPoisonGasCloud 1.4s ease-out forwards' }}
+          >
+            <div className="w-28 h-20 rounded-full bg-gradient-to-tr from-purple-950/90 via-purple-700/80 to-lime-500/60 blur-[3px] shadow-[0_0_24px_rgba(163,230,53,0.6)]" />
+          </div>
+          <div
+            className="absolute pointer-events-none z-20 mt-2 ml-4"
+            style={{ animation: 'gbaPoisonGasCloud2 1.4s ease-out 0.15s forwards', opacity: 0 }}
+          >
+            <div className="w-22 h-16 rounded-full bg-gradient-to-bl from-lime-600/70 via-purple-800/70 to-fuchsia-600/50 blur-[2px]" />
+          </div>
+
+          {/* Rising Caustic Droplets */}
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="absolute z-35"
+              style={{
+                left: `${30 + (i % 2) * 35}%`,
+                bottom: `${20 + i * 14}%`,
+                animation: `gbaWeezingBubbleRise 1.35s ease-out ${0.2 + i * 0.15}s forwards`,
+                opacity: 0,
+              }}
+            >
+              <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-lime-400 to-yellow-200 border border-white/80 shadow-[0_0_10px_#a3e635]" />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20ab-2. PINSIR GUILLOTINE / IRONGRIP (Pinsir Lv. 24 — Ken Sugimori Stag-Beetle Pincer Vice Crunch) */}
+      {fx.type === 'pinsir_guillotine' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Left Pincer Horn (Snaps inward from left) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaPinsirHornClampLeft 1.45s cubic-bezier(0.2, 0.85, 0.25, 1) forwards' }}
+          >
+            <img
+              src="/assets/Pinsir_Horn_Left.png"
+              alt="Pinsir Left Horn"
+              className="w-16 h-24 object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]"
+            />
+          </div>
+
+          {/* Right Pincer Horn (Snaps inward from right) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaPinsirHornClampRight 1.45s cubic-bezier(0.2, 0.85, 0.25, 1) forwards' }}
+          >
+            <img
+              src="/assets/Pinsir_Horn_Right.png"
+              alt="Pinsir Right Horn"
+              className="w-16 h-24 object-contain drop-shadow-[0_4px_12px_rgba(0,0,0,0.65)]"
+            />
+          </div>
+
+          {/* Violent Vice Crunch Impact Slash Lines */}
+          <div
+            className="absolute flex items-center justify-center z-35"
+            style={{ animation: 'gbaGuillotineImpactSlash 1.15s ease-out 0.36s forwards', opacity: 0 }}
+          >
+            <svg width="80" height="80" viewBox="0 0 80 80">
+              <line x1="10" y1="40" x2="70" y2="40" stroke="#ef4444" strokeWidth="3.5" strokeLinecap="round" opacity="0.95" />
+              <line x1="20" y1="20" x2="60" y2="60" stroke="#fca5a5" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+              <line x1="20" y1="60" x2="60" y2="20" stroke="#fca5a5" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
+            </svg>
+          </div>
+
+          {/* Impact Vice Flash */}
+          <div
+            className="absolute flex items-center justify-center z-35"
+            style={{ animation: 'gbaGuillotineFlash 1.15s ease-out 0.36s forwards', opacity: 0 }}
+          >
+            <div className="w-20 h-20 rounded-full bg-red-400/50 blur-sm shadow-[0_0_30px_#ef4444]" />
           </div>
         </div>
       )}
