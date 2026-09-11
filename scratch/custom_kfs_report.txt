@@ -1,0 +1,311 @@
+=== Arbok Poison Fang ===
+  [gbaArbokViperFangs]: 5 stops
+    0%: transform: translateY(-40px) scale(0.4); opacity: 0;
+    30%: transform: translateY(-10px) scale(1.1); opacity: 1;
+    45%: transform: translateY(0px) scale(1.15); opacity: 1; filter: drop-shadow(0 0 18px #a855f7);
+    70%: transform: translateY(2px) scale(1.05); opacity: 0.9;
+    100%: transform: translateY(10px) scale(0.8); opacity: 0;
+  [gbaArbokVenomSpurtL]: 3 stops
+    42%: transform: translate(0, 0) scale(0.2); opacity: 0;
+    55%: transform: translate(-20px, 15px) scale(1.1); opacity: 1; filter: drop-shadow(0 0 14px #84cc16);
+    100%: transform: translate(-38px, 35px) scale(0.6); opacity: 0;
+  [gbaArbokVenomSpurtR]: 3 stops
+    42%: transform: translate(0, 0) scale(0.2); opacity: 0;
+    55%: transform: translate(20px, 15px) scale(1.1); opacity: 1; filter: drop-shadow(0 0 14px #84cc16);
+    100%: transform: translate(38px, 35px) scale(0.6); opacity: 0;
+=== Golbat Leech Life ===
+  [gbaGolbatVampireDive]: 5 stops
+    0%: transform: translate(0px, -60px) scale(0.4) rotate(0deg); opacity: 0;
+    25%: transform: translate(0px, -15px) scale(1.15) rotate(-5deg); opacity: 1; filter: drop-shadow(0 0 20px #6366f1);
+    45%: transform: translate(0px, 0px) scale(1.1) rotate(0deg); opacity: 1;
+    75%: transform: translate(0px, -10px) scale(0.95) rotate(5deg); opacity: 0.7;
+    100%: transform: translate(0px, -45px) scale(0.5) rotate(0deg); opacity: 0;
+  [gbaGolbatVitalityOrbSiphon]: 3 stops
+    35%: transform: translate(0, 0) scale(0.2); opacity: 0;
+    50%: opacity: 1; filter: drop-shadow(0 0 16px #ef4444);
+    100%: transform: translate(var(--vs-x, 24px), var(--vs-y, -35px)) scale(1.2); opacity: 0;
+  [gbaGolbatHealAuraPulse]: 3 stops
+    50%: transform: scale(0.3); opacity: 0;
+    70%: transform: scale(1.1); opacity: 0.9; filter: drop-shadow(0 0 18px #22c55e);
+    100%: transform: scale(1.5); opacity: 0;
+=== Farfetchd Leek Slap ===
+  [gbaFarfetchdLeekSwoop]: 7 stops
+    0%: transform: translate(60px, -80px) rotate(-65deg) scale(0.6); opacity: 0;
+    20%: transform: translate(30px, -40px) rotate(-45deg) scale(1.1); opacity: 1;
+    38%: transform: translate(-10px, 10px) rotate(15deg) scale(1.2); opacity: 1;
+    44%: transform: translate(5px, -5px) rotate(-5deg) scale(1.15);
+    50%: transform: translate(-5px, 5px) rotate(5deg) scale(1.1);
+    75%: transform: translate(0px, 0px) rotate(0deg) scale(1); opacity: 1;
+    100%: transform: translate(-30px, 40px) rotate(30deg) scale(0.85); opacity: 0;
+  [gbaFarfetchdLeekSlashMarks]: 4 stops
+    35%: opacity: 0; transform: scale(0.7) rotate(-15deg);
+    40%: opacity: 1; transform: scale(1.15) rotate(0deg);
+    65%: opacity: 0.9; transform: scale(1) rotate(5deg);
+    100%: opacity: 0; transform: scale(1.25) rotate(10deg);
+  [gbaFarfetchdImpactWave]: 4 stops
+    36%: transform: scale(0.3); opacity: 0;
+    42%: transform: scale(0.8); opacity: 0.95;
+    75%: transform: scale(1.35); opacity: 0.5;
+    100%: transform: scale(1.7); opacity: 0;
+=== Weedle Poison Sting ===
+  [gbaWeedleStingerDive]: 5 stops
+    0%: transform: translate(65px, -70px) scale(0.4) rotate(35deg); opacity: 0;
+    25%: transform: translate(-10px, 12px) scale(1.18) rotate(-12deg); opacity: 1;
+    38%: transform: translate(0px, 0px) scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 28px #a855f7);
+    70%: transform: translate(-4px, 4px) scale(1) rotate(-3deg); opacity: 1;
+    100%: transform: translate(-40px, 50px) scale(0.65) rotate(-25deg); opacity: 0;
+  [gbaWeedlePoisonSpurt]: 4 stops
+    32%: transform: scale(0.2) rotate(-20deg); opacity: 0;
+    42%: transform: scale(1.3) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 18px #c084fc);
+    70%: transform: scale(1.1) rotate(0deg); opacity: 0.85;
+    100%: transform: scale(1.6) rotate(30deg); opacity: 0;
+  [gbaWeedlePoisonVignette]: 4 stops
+    30%: opacity: 0; transform: scale(0.6);
+    45%: opacity: 1; transform: scale(1.05);
+    80%: opacity: 0.85; transform: scale(1.25);
+    100%: opacity: 0; transform: scale(1.45);
+=== Caterpie String Shot ===
+  [gbaCaterpieHeadPop]: 5 stops
+    0%: transform: translateY(60px) scale(0.4) rotate(-10deg); opacity: 0;
+    20%: transform: translateY(-8px) scale(1.1) rotate(4deg); opacity: 1;
+    30%: transform: translateY(0px) scale(1) rotate(0deg); opacity: 1;
+    75%: transform: translateY(-2px) scale(1) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 25px #22c55e);
+    100%: transform: translateY(45px) scale(0.6) rotate(8deg); opacity: 0;
+  [gbaCaterpieSilkJet]: 4 stops
+    25%: transform: scale(0.2) translate(-30px, 40px); opacity: 0;
+    40%: transform: scale(1.05) translate(0, 0); opacity: 1;
+    75%: transform: scale(1) translate(0, 0); opacity: 0.95; filter: drop-shadow(0 0 16px #ffffff);
+    100%: transform: scale(1.15) translate(10px, -15px); opacity: 0;
+  [gbaCaterpieCocoonWrap]: 4 stops
+    35%: transform: scale(0.5) rotate(-20deg); opacity: 0;
+    50%: transform: scale(1.1) rotate(5deg); opacity: 1;
+    75%: transform: scale(1) rotate(0deg); opacity: 0.9;
+    100%: transform: scale(1.2) rotate(10deg); opacity: 0;
+=== Bulbasaur Leech Seed ===
+  [gbaBulbasaurSeedImplant]: 7 stops
+    0%: transform: translate(-80px, -80px) rotate(-45deg) scale(0.4); opacity: 0;
+    30%: transform: translate(-20px, -30px) rotate(-15deg) scale(1.1); opacity: 1;
+    45%: transform: translate(0px, 0px) rotate(0deg) scale(1.2); opacity: 1;
+    50%: transform: translate(3px, -3px) rotate(5deg) scale(1.15);
+    55%: transform: translate(-2px, 2px) rotate(-4deg) scale(1.1);
+    80%: transform: translate(0px, 0px) rotate(0deg) scale(1.05); opacity: 1;
+    100%: transform: translate(0px, 10px) rotate(0deg) scale(0.9); opacity: 0;
+  [gbaBulbasaurTendrilClasp]: 4 stops
+    45%: opacity: 0; transform: scale(0.5);
+    55%: opacity: 1; transform: scale(1.1);
+    80%: opacity: 0.95; transform: scale(1);
+    100%: opacity: 0; transform: scale(1.05);
+  [gbaBulbasaurDrainRipple]: 4 stops
+    48%: opacity: 0; transform: scale(0.4);
+    56%: opacity: 0.8; transform: scale(0.9);
+    85%: opacity: 0.4; transform: scale(1.35);
+    100%: opacity: 0; transform: scale(1.65);
+  [gbaBulbasaurLifeSiphon]: 4 stops
+    0%: opacity: 0; transform: translate(0, 0) scale(0.5);
+    20%: opacity: 1; transform: translate(var(--bs-x), var(--bs-y)) scale(1.2);
+    60%: opacity: 0.9; transform: translate(calc(var(--bs-x) * 1.5), calc(var(--bs-y) * 1.5 - 20px)) scale(1);
+    100%: opacity: 0; transform: translate(calc(var(--bs-x) * 2), calc(var(--bs-y) * 2 - 50px)) scale(0.4);
+=== Squirtle Shell Defense ===
+  [gbaSquirtleShellSnap]: 7 stops
+    0%: transform: scale(0.2) rotate(-360deg); opacity: 0;
+    30%: transform: scale(1.15) rotate(0deg); opacity: 1;
+    42%: transform: scale(1) rotate(0deg); opacity: 1;
+    46%: transform: scale(1.08) rotate(-3deg);
+    52%: transform: scale(0.98) rotate(2deg);
+    80%: transform: scale(1) rotate(0deg); opacity: 1;
+    100%: transform: scale(0.7) rotate(15deg); opacity: 0;
+  [gbaSquirtleShieldRings]: 4 stops
+    40%: opacity: 0; transform: scale(0.5);
+    48%: opacity: 0.85; transform: scale(1.1);
+    80%: opacity: 0.4; transform: scale(1.4);
+    100%: opacity: 0; transform: scale(1.75);
+  [gbaSquirtleDeflectSplash]: 4 stops
+    0%: opacity: 0; transform: translate(0, 0) scale(0.4);
+    20%: opacity: 1; transform: translate(calc(var(--sq-x) * 0.5), calc(var(--sq-y) * 0.5)) scale(1.2);
+    65%: opacity: 0.85; transform: translate(var(--sq-x), var(--sq-y)) scale(1);
+    100%: opacity: 0; transform: translate(calc(var(--sq-x) * 1.4), calc(var(--sq-y) * 1.4 + 15px)) scale(0.5);
+=== Pikachu Thunder Jolt ===
+  [gbaPikachuChargePose]: 7 stops
+    0%: transform: scale(0.4) translateY(30px); opacity: 0;
+    25%: transform: scale(1.15) translateY(-5px); opacity: 1; filter: drop-shadow(0 0 20px #eab308);
+    40%: transform: scale(1.25) translateY(0px); opacity: 1; filter: drop-shadow(0 0 35px #facc15);
+    48%: transform: scale(1.18) translate(3px, -2px);
+    54%: transform: scale(1.22) translate(-3px, 2px);
+    80%: transform: scale(1.05) translateY(0px); opacity: 1;
+    100%: transform: scale(0.8) translateY(20px); opacity: 0;
+  [gbaPikachuThunderBolts]: 4 stops
+    36%: opacity: 0; transform: scale(0.3);
+    42%: opacity: 1; transform: scale(1.2);
+    65%: opacity: 0.9; transform: scale(1);
+    100%: opacity: 0; transform: scale(1.35);
+  [gbaPikachuElectricSparks]: 4 stops
+    0%: opacity: 0; transform: translate(0, 0) scale(0.3);
+    20%: opacity: 1; transform: translate(calc(var(--pk-x) * 0.5), calc(var(--pk-y) * 0.5)) scale(1.2);
+    65%: opacity: 0.85; transform: translate(var(--pk-x), var(--pk-y)) scale(1);
+    100%: opacity: 0; transform: translate(calc(var(--pk-x) * 1.4), calc(var(--pk-y) * 1.4)) scale(0.5);
+=== Ekans Wrap Constrict ===
+  [gbaEkansConstrictCoil]: 7 stops
+    0%: transform: scale(0.3) rotate(-90deg); opacity: 0;
+    25%: transform: scale(1.15) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 25px #9333ea);
+    42%: transform: scale(0.95) rotate(5deg); opacity: 1; filter: drop-shadow(0 0 35px #a855f7);
+    48%: transform: scale(1.08) rotate(-3deg);
+    56%: transform: scale(0.92) rotate(4deg);
+    80%: transform: scale(1) rotate(0deg); opacity: 1;
+    100%: transform: scale(0.6) rotate(30deg); opacity: 0;
+  [gbaEkansCrushPulse]: 4 stops
+    40%: transform: scale(0.4); opacity: 0;
+    46%: transform: scale(1); opacity: 0.9;
+    75%: transform: scale(1.35); opacity: 0.4;
+    100%: transform: scale(1.7); opacity: 0;
+  [gbaEkansAuraConstrict]: 4 stops
+    42%: transform: scale(0.5); opacity: 0;
+    50%: transform: scale(1.05); opacity: 0.85;
+    80%: transform: scale(1.35); opacity: 0.45;
+    100%: transform: scale(1.65); opacity: 0;
+=== Beedrill Twineedle ===
+  [gbaBeedrillLancesThrust]: 7 stops
+    0%: transform: translate(50px, -40px) scale(0.4) rotate(15deg); opacity: 0;
+    20%: transform: translate(15px, -12px) scale(0.95) rotate(5deg); opacity: 0.9;
+    35%: transform: translate(-8px, 6px) scale(1.15) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 20px #fef08a) drop-shadow(0 0 35px #eab308);
+    50%: transform: translate(-2px, 2px) scale(1.08) rotate(-2deg); opacity: 0.95;
+    65%: transform: translate(-15px, 12px) scale(1.22) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 25px #ffffff);
+    85%: transform: translate(-5px, 4px) scale(1.05); opacity: 0.6;
+    100%: transform: translate(15px, -10px) scale(0.85); opacity: 0;
+  [gbaBeedrillPiercingRing]: 4 stops
+    30%: transform: scale(0.2); opacity: 0;
+    45%: transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 15px #facc15);
+    70%: transform: scale(1.6); opacity: 0.7;
+    100%: transform: scale(2.1); opacity: 0;
+  [gbaBeedrillSparks]: 4 stops
+    32%: transform: scale(0.2) rotate(0deg); opacity: 0;
+    48%: transform: scale(1.35) rotate(45deg); opacity: 1; filter: drop-shadow(0 0 15px #fde047);
+    75%: transform: scale(1.75) rotate(90deg); opacity: 0.65;
+    100%: transform: scale(2.2) rotate(135deg); opacity: 0;
+=== Dugtrio Earthquake ===
+  [gbaDugtrioErupt]: 6 stops
+    0%: transform: translateY(60px) scale(0.4); opacity: 0;
+    22%: transform: translateY(15px) scale(0.95); opacity: 0.9;
+    40%: transform: translateY(-5px) scale(1.2); opacity: 1; filter: drop-shadow(0 0 25px #a16207) drop-shadow(0 0 40px #78350f);
+    65%: transform: translateY(0px) scale(1.15); opacity: 0.95;
+    85%: transform: translateY(10px) scale(1.0); opacity: 0.6;
+    100%: transform: translateY(30px) scale(0.8); opacity: 0;
+  [gbaDugtrioFaultLine]: 4 stops
+    35%: transform: scale(0.1); opacity: 0;
+    48%: transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 20px #ea580c);
+    75%: transform: scale(1.3); opacity: 0.85;
+    100%: transform: scale(1.45); opacity: 0;
+  [gbaDugtrioQuakeRocks]: 4 stops
+    38%: transform: scale(0.3) rotate(0deg); opacity: 0;
+    52%: transform: scale(1.3) rotate(30deg); opacity: 1; filter: drop-shadow(0 0 15px #78350f);
+    78%: transform: scale(1.6) rotate(60deg); opacity: 0.7;
+    100%: transform: scale(1.9) rotate(90deg); opacity: 0;
+=== Victreebel Acid Melt ===
+  [gbaVictreebelSugimoriErupt]: 5 stops
+    0%: transform: translate(-45px, -35px) scale(0.4) rotate(-15deg); opacity: 0;
+    25%: transform: translate(-10px, -15px) scale(1.05) rotate(-5deg); opacity: 0.95; filter: drop-shadow(0 0 20px rgba(163, 230, 53, 0.7));
+    45%: transform: translate(0px, 0px) scale(1.2) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 30px #84cc16) drop-shadow(0 0 45px #bef264);
+    72%: transform: translate(5px, 5px) scale(1.12) rotate(2deg); opacity: 0.85;
+    100%: transform: translate(20px, 20px) scale(0.9) rotate(5deg); opacity: 0;
+  [gbaAcidDelugeStream]: 5 stops
+    0%: transform: translateY(-50px) scaleY(0.2) scaleX(0.5); opacity: 0;
+    22%: transform: translateY(-15px) scaleY(0.8) scaleX(1); opacity: 0.9;
+    40%: transform: translateY(5px) scaleY(1.15) scaleX(1.1); opacity: 1; filter: drop-shadow(0 0 25px #84cc16) drop-shadow(0 0 40px #a3e635);
+    70%: transform: translateY(15px) scaleY(1.2) scaleX(1.05); opacity: 0.85;
+    100%: transform: translateY(30px) scaleY(1.0) scaleX(0.9); opacity: 0;
+  [gbaAcidSludgeDrip]: 4 stops
+    30%: transform: translateY(-20px) scaleY(0.4); opacity: 0;
+    50%: transform: translateY(10px) scaleY(1.1); opacity: 0.95;
+    80%: transform: translateY(35px) scaleY(1.35); opacity: 0.8; filter: drop-shadow(0 0 10px #65a30d);
+    100%: transform: translateY(55px) scaleY(1.5); opacity: 0;
+=== Raticate Super Fang ===
+  [gbaRaticateSugimoriLunge]: 6 stops
+    0%: transform: scale(0.35) translate(-35px, -20px) rotate(-15deg); opacity: 0;
+    22%: transform: scale(1.05) translate(0px, 0px) rotate(-2deg); opacity: 0.95; filter: drop-shadow(0 0 15px rgba(254, 240, 138, 0.7));
+    40%: transform: scale(1.3) translate(0px, 0px) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 35px #facc15);
+    62%: transform: scale(1.22) translate(0px, 0px); opacity: 0.95;
+    82%: transform: scale(1.05) translate(10px, 10px); opacity: 0.55;
+    100%: transform: scale(0.85) translate(25px, 20px); opacity: 0;
+  [gbaSuperFangUpperJaw]: 6 stops
+    0%: transform: translateY(-70px) scale(1.3); opacity: 0;
+    25%: transform: translateY(-40px) scale(1.15); opacity: 0.85;
+    42%: transform: translateY(0px) scale(1.0); opacity: 1; filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 30px #fef08a);
+    68%: transform: translateY(0px) scale(1.0); opacity: 1;
+    85%: transform: translateY(-5px) scale(0.95); opacity: 0.6;
+    100%: transform: translateY(-20px) scale(0.8); opacity: 0;
+  [gbaSuperFangLowerJaw]: 6 stops
+    0%: transform: translateY(70px) scale(1.3); opacity: 0;
+    25%: transform: translateY(40px) scale(1.15); opacity: 0.85;
+    42%: transform: translateY(0px) scale(1.0); opacity: 1; filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 30px #fef08a);
+    68%: transform: translateY(0px) scale(1.0); opacity: 1;
+    85%: transform: translateY(5px) scale(0.95); opacity: 0.6;
+    100%: transform: translateY(20px) scale(0.8); opacity: 0;
+=== Clefairy Metronome ===
+  [gbaClefairyMetronomeWag]: 7 stops
+    0%: opacity: 0; transform: rotate(0deg) scale(0.7); transform-origin: 50% 90%;
+    15%: opacity: 1; transform: rotate(-22deg) scale(1); transform-origin: 50% 90%; filter: drop-shadow(0 0 8px #ec4899);
+    38%: transform: rotate(22deg) scale(1.04); transform-origin: 50% 90%; filter: drop-shadow(0 0 12px #a855f7);
+    60%: transform: rotate(-16deg) scale(1.02); transform-origin: 50% 90%; filter: drop-shadow(0 0 14px #38bdf8);
+    80%: transform: rotate(14deg) scale(1); transform-origin: 50% 90%; filter: drop-shadow(0 0 12px #fef08a);
+    92%: opacity: 1; transform: rotate(0deg) scale(1.08); transform-origin: 50% 90%; filter: drop-shadow(0 0 18px #ffffff);
+    100%: opacity: 0; transform: rotate(0deg) scale(1.15); transform-origin: 50% 90%;
+  [gbaClefairySingPulse]: 4 stops
+    0%: opacity: 0; transform: scale(0.3);
+    35%: opacity: 0.9; transform: scale(0.85); filter: drop-shadow(0 0 12px #f472b6);
+    70%: opacity: 0.8; transform: scale(1.1); filter: drop-shadow(0 0 14px #a855f7);
+    100%: opacity: 0; transform: scale(1.25);
+=== Jigglypuff Lullaby ===
+  [gbaJigglypuffLullabyNotes]: 5 stops
+    0%: opacity: 0; transform: translateY(12px) scale(0.7) rotate(-5deg); filter: drop-shadow(0 0 4px rgba(244, 114, 182, 0.4));
+    25%: opacity: 1; transform: translateY(-4px) scale(1) rotate(3deg); filter: drop-shadow(0 0 10px #f472b6);
+    50%: transform: translateY(2px) scale(1.04) rotate(-3deg); filter: drop-shadow(0 0 14px #38bdf8);
+    75%: opacity: 0.95; transform: translateY(-6px) scale(1.02) rotate(2deg); filter: drop-shadow(0 0 12px #fef08a);
+    100%: opacity: 0; transform: translateY(-16px) scale(0.9) rotate(-4deg); filter: drop-shadow(0 0 4px transparent);
+  [gbaJigglypuffSleepZzz]: 4 stops
+    0%: opacity: 0; transform: translate(0px, 0px) scale(0.5);
+    30%: opacity: 0.95; transform: translate(calc(var(--zzz-dx, 6px) * 0.5), -12px) scale(0.85);
+    70%: opacity: 0.9; transform: translate(var(--zzz-dx, 6px), -28px) scale(1.05); filter: drop-shadow(0 0 6px #c084fc);
+    100%: opacity: 0; transform: translate(calc(var(--zzz-dx, 6px) * 1.4), -42px) scale(1.15);
+=== Snorlax Body Slam ===
+  [gbaSnorlaxBodySlamCrush]: 7 stops
+    0%: opacity: 0; transform: translateY(-44px) scale(0.75, 1.15);
+    25%: opacity: 1; transform: translateY(-48px) scale(0.85, 1.05); filter: drop-shadow(0 0 8px #475569);
+    48%: transform: translateY(-40px) scale(0.9, 1);
+    60%: /* Crush impact frame */ opacity: 1; transform: translateY(4px) scale(1.22, 0.72); filter: drop-shadow(0 0 16px #f59e0b);
+    72%: transform: translateY(0px) scale(1.05, 0.95);
+    88%: opacity: 0.95; transform: translateY(2px) scale(1);
+    100%: opacity: 0; transform: translateY(6px) scale(0.9);
+  [gbaSnorlaxGroundDust]: 4 stops
+    0%: opacity: 0; transform: scale(0.2);
+    40%: opacity: 0.95; transform: scale(0.9) translate(var(--dust-x, 16px), 0); filter: drop-shadow(0 0 8px #a8a29e);
+    75%: opacity: 0.8; transform: scale(1.15) translate(calc(var(--dust-x, 16px) * 1.5), -4px);
+    100%: opacity: 0; transform: scale(1.3) translate(calc(var(--dust-x, 16px) * 1.8), -8px);
+=== Lickitung Tongue Wrap ===
+  [gbaLickitungTongueWrapLash]: 5 stops
+    0%: opacity: 0; transform: translate(-30px, 20px) scale(0.5) rotate(-25deg);
+    30%: opacity: 1; transform: translate(0px, 0px) scale(1.05) rotate(0deg); filter: drop-shadow(0 0 12px #f43f5e);
+    55%: transform: scale(1.08) rotate(4deg); filter: drop-shadow(0 0 16px #eab308);
+    75%: opacity: 0.95; transform: scale(1.02) rotate(-2deg);
+    100%: opacity: 0; transform: translate(12px, -8px) scale(0.9);
+=== Staryu Slap ===
+  [gbaStarfishSlapSpin]: 6 stops
+    0%: transform: translateX(-65px) translateY(-18px) rotate(0deg) scale(0.35); opacity: 0;
+    22%: transform: translateX(-20px) translateY(-6px) rotate(320deg) scale(1.12); opacity: 1; filter: drop-shadow(0 0 14px #38bdf8);
+    40%: transform: translateX(0px) translateY(0px) rotate(720deg) scale(1.22); opacity: 1; filter: drop-shadow(0 0 20px #f59e0b) drop-shadow(0 0 10px #ef4444);
+    60%: transform: translateX(8px) translateY(4px) rotate(840deg) scale(1.05); opacity: 0.9;
+    82%: transform: translateX(18px) translateY(10px) rotate(920deg) scale(0.9); opacity: 0.6;
+    100%: transform: translateX(30px) translateY(18px) rotate(1000deg) scale(0.6); opacity: 0;
+  [gbaStarfishSlapImpactFlash]: 4 stops
+    35%: opacity: 0;
+    40%: opacity: 0.45; background-color: rgba(186, 230, 253, 0.4);
+    60%: opacity: 0.2; background-color: rgba(56, 189, 248, 0.2);
+    100%: opacity: 0;
+=== Magikarp Flail ===
+  [gbaMagikarpFlailHop]: 8 stops
+    0%: transform: translateY(24px) scale(0.55) rotate(-35deg); opacity: 0;
+    14%: transform: translateY(-24px) scale(1.02) rotate(28deg); opacity: 1;
+    28%: transform: translateY(6px) scale(1.10) rotate(-28deg); opacity: 1; filter: brightness(1.25) drop-shadow(0 0 14px #38bdf8);
+    42%: transform: translateY(-28px) scale(1.04) rotate(32deg); opacity: 1;
+    56%: transform: translateY(6px) scale(1.10) rotate(-24deg); opacity: 1; filter: brightness(1.25) drop-shadow(0 0 14px #38bdf8);
+    70%: transform: translateY(-18px) scale(1.02) rotate(22deg); opacity: 1;
+    85%: transform: translateY(4px) scale(0.98) rotate(-12deg); opacity: 0.95;
+    100%: transform: translateY(22px) scale(0.65) rotate(0deg); opacity: 0;

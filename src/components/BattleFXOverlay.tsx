@@ -144,6 +144,7 @@ export interface ActiveFX {
     | 'haunter_dream_eater'
     | 'hypno_hypnotic_pendulum'
     | 'weezing_toxic_smog'
+    | 'magmar_smog'
     | 'golem_avalanche'
     | 'wigglytuff_do_the_wave'
     | 'vileplume_petal_dance'
@@ -470,7 +471,10 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name === 'stun spore' || name.includes('stun spore')) return 'stun_spore';
   if (name === 'lullaby' || name.includes('lullaby') || name === 'sing' || name.includes('sing')) return 'sing_lullaby';
   if (name.includes('sludge')) return 'muk_sludge_deluge';
-  if (name.includes('smog')) return 'weezing_toxic_smog';
+  if (name.includes('smog')) {
+    if (pkm.includes('magmar')) return 'magmar_smog';
+    return 'weezing_toxic_smog';
+  }
   if (name.includes('destiny bond') && (pkm.includes('gastly') || pkm.includes('haunter') || pkm.includes('gengar'))) return 'gastly_sleeping_gas';
   if (name.includes('destiny bond')) return 'destiny_bond_curse';
   if (name.includes('dark mind')) return 'gengar_dark_mind';
@@ -764,6 +768,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1700;
     case 'weezing_toxic_smog':
       return 1700;
+    case 'magmar_smog':
+      return 1650;
     case 'golem_avalanche':
       return 1800;
     case 'psybeam_kaleidoscope':
@@ -1085,27 +1091,55 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           </div>
         </>
       )}
-      {/* 1. GASTLY SLEEPING GAS */}
+      {/* 1. SLEEPING GAS (Gastly / Gengar / Drowzee — Hypnotic Twilight Mist Vortex & Luminous Dream Motes) */}
       {fx.type === 'sleeping_gas' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Swirling Hypnotic Deep Indigo/Purple Gas Vortex */}
           <div
-            className="absolute flex items-center justify-center"
-            style={{ animation: 'gbaSleepingGasSwirl 1.2s ease-out forwards' }}
+            className="absolute flex items-center justify-center z-25"
+            style={{ animation: 'gbaSleepingGasSwirl 1.35s ease-out forwards' }}
           >
-            <div className="w-28 h-28 rounded-full bg-gradient-to-tr from-indigo-950/95 via-purple-900/85 to-indigo-600/80 blur-sm flex items-center justify-center shadow-[0_0_30px_#818cf8]">
-              <span className="text-4xl animate-spin" style={{ animationDuration: '6s' }}>🌀</span>
-            </div>
-          </div>
-          <div
-            className="absolute flex items-center justify-center -top-3 right-2"
-            style={{ animation: 'gbaSleepZzzFloat 1.15s ease-out 0.1s forwards' }}
-          >
-            <div className="flex items-center gap-1.5 bg-indigo-950/90 border-2 border-indigo-400 px-2.5 py-1 rounded-full shadow-2xl">
-              <span className="text-lg select-none">🌙</span>
-              <span className="text-base font-black text-indigo-300 tracking-widest font-mono">Zzz</span>
+            <div className="relative w-32 h-32 flex items-center justify-center">
+              {/* Center Somnolent Void Core */}
+              <div className="w-26 h-26 rounded-full bg-gradient-to-tr from-indigo-950/95 via-purple-900/85 to-indigo-600/75 blur-[4px] shadow-[0_0_30px_#818cf8]" />
+              {/* Counter-rotating celestial halo */}
+              <div className="absolute inset-2 rounded-full border border-indigo-400/40 shadow-[0_0_15px_rgba(129,140,248,0.5)] animate-spin" style={{ animationDuration: '4s' }} />
+              <div className="absolute inset-6 rounded-full bg-gradient-to-bl from-purple-600/50 via-indigo-800/40 to-transparent blur-[2px]" />
             </div>
           </div>
 
+          {/* Floating Luminous Dream Motes */}
+          {[
+            { x: '-28px', y: '-30px', delay: 0.1 },
+            { x: '30px', y: '-26px', delay: 0.22 },
+            { x: '-20px', y: '24px', delay: 0.35 },
+            { x: '24px', y: '28px', delay: 0.48 }
+          ].map((mote, idx) => (
+            <div
+              key={`sg-mote-${idx}`}
+              className="absolute z-35"
+              style={{
+                transform: `translate(${mote.x}, ${mote.y})`,
+                animation: `gbaGastlyDreamMotes 1.35s ease-out ${mote.delay}s forwards`,
+                opacity: 0,
+              }}
+            >
+              <div className="w-3 h-3 rounded-full bg-indigo-200 border border-white shadow-[0_0_10px_#818cf8] flex items-center justify-center">
+                <span className="text-[7px] font-bold text-indigo-900 font-mono">z</span>
+              </div>
+            </div>
+          ))}
+
+          {/* Rising Sleep Zzz Rune Banner */}
+          <div
+            className="absolute flex items-center justify-center -top-3 right-2 z-40"
+            style={{ animation: 'gbaSleepZzzFloat 1.25s ease-out 0.15s forwards' }}
+          >
+            <div className="flex items-center gap-1.5 bg-indigo-950/90 border border-indigo-400/70 px-3 py-1 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.6)] backdrop-blur-sm">
+              <span className="text-xs text-indigo-300 select-none">✦</span>
+              <span className="text-xs font-black text-indigo-200 tracking-widest font-mono">Zzz...</span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -1184,13 +1218,17 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="absolute w-28 h-28 rounded-full border-4 border-fuchsia-500/95 flex items-center justify-center shadow-[0_0_28px_#d946ef]"
             style={{ animation: 'gbaPsyshockRing2 1.15s ease-out forwards' }}
           >
-            <span className="text-3xl text-fuchsia-300 animate-spin" style={{ animationDuration: '1.5s' }}>🌀</span>
+            <svg width="36" height="36" viewBox="0 0 36 36" className="animate-spin text-fuchsia-300 drop-shadow-[0_0_10px_#f472b6]" style={{ animationDuration: '1.2s' }}>
+              <path d="M18 4 A14 14 0 0 1 32 18 A14 14 0 0 1 20 32 A12 12 0 0 1 8 20 A10 10 0 0 1 18 10 A8 8 0 0 1 26 18 A6 6 0 0 1 20 24 A4 4 0 0 1 16 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+            </svg>
           </div>
           <div
             className="absolute w-20 h-20 rounded-full border-4 border-purple-400/90 bg-purple-950/70 backdrop-blur-sm flex items-center justify-center shadow-[0_0_35px_#a855f7]"
             style={{ animation: 'gbaPsyshockRing3 1.15s ease-out forwards' }}
           >
-            <span className="text-2xl text-yellow-300 font-black animate-ping">⚡</span>
+            <svg width="28" height="28" viewBox="0 0 28 28" className="animate-ping drop-shadow-[0_0_12px_#fde047]">
+              <path d="M14 2 L17 11 L26 14 L17 17 L14 26 L11 17 L2 14 L11 11 Z" fill="#fde047" />
+            </svg>
           </div>
           <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/20 via-purple-600/25 to-fuchsia-500/20 rounded-3xl animate-pulse" />
         </div>
@@ -1553,7 +1591,15 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             style={{ animation: 'gbaSilkWrapSpiral 1.2s ease-out forwards' }}
           >
             <div className="w-32 h-32 rounded-full border-4 border-dashed border-white/90 shadow-[0_0_25px_#ffffff] flex items-center justify-center">
-              <span className="text-4xl filter drop-shadow-[0_0_15px_#e2e8f0]">🕸️</span>
+              <svg width="56" height="56" viewBox="0 0 56 56" className="drop-shadow-[0_0_12px_#ffffff]">
+                <line x1="28" y1="2" x2="28" y2="54" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+                <line x1="2" y1="28" x2="54" y2="28" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+                <line x1="10" y1="10" x2="46" y2="46" stroke="#ffffff" strokeWidth="1.5" opacity="0.85" />
+                <line x1="10" y1="46" x2="46" y2="10" stroke="#ffffff" strokeWidth="1.5" opacity="0.85" />
+                <polygon points="28,10 41,15 46,28 41,41 28,46 15,41 10,28 15,15" fill="none" stroke="#f1f5f9" strokeWidth="1.5" opacity="0.8" />
+                <polygon points="28,18 35,21 38,28 35,35 28,38 21,35 18,28 21,21" fill="none" stroke="#ffffff" strokeWidth="1.2" opacity="0.9" />
+                <circle cx="28" cy="28" r="3" fill="#ffffff" />
+              </svg>
             </div>
             <div className="absolute w-24 h-24 rounded-full border-2 border-slate-200 animate-spin" style={{ animationDuration: '1.2s' }} />
           </div>
@@ -1871,28 +1917,66 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 8. POISON GAS / FOUL GAS */}
+      {/* 8. POISON GAS / FOUL GAS (Koffing/Weezing — Volumetric Corrosive Purple Gas Clouds with Rising Caustic Droplets) */}
       {(fx.type === 'poison_gas' || fx.type === 'foul_gas') && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Main Billowing Noxious Cloud — Primary Left Plume */}
           <div
-            className="absolute flex flex-col items-center"
-            style={{ animation: 'gbaPoisonGasCloud 1.2s ease-out forwards' }}
+            className="absolute"
+            style={{ animation: 'gbaPoisonGasCloud 1.35s ease-out forwards' }}
           >
-            <div className="flex gap-2">
-              <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-purple-950/90 to-fuchsia-600/80 blur-sm flex items-center justify-center shadow-[0_0_20px_#c084fc]">
-                <span className="text-2xl animate-pulse">☠️</span>
-              </div>
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-950/90 to-purple-500/80 blur-sm -ml-4 -mt-2 shadow-[0_0_15px_#a855f7]">
-                <span className="text-lg opacity-80">🫧</span>
-              </div>
+            <div className="relative w-32 h-24 flex items-center justify-center">
+              {/* Deep corrosive violet core */}
+              <div className="w-28 h-18 rounded-full bg-gradient-to-tr from-purple-950/95 via-purple-800/85 to-fuchsia-600/70 blur-[3px] shadow-[0_0_24px_rgba(168,85,247,0.65)]" />
+              {/* Billowing noxious lobe */}
+              <div className="absolute -top-2 left-2 w-18 h-14 rounded-full bg-gradient-to-bl from-purple-600/80 via-violet-700/65 to-fuchsia-500/50 blur-[2px]" />
+              {/* Caustic sulfur-tinted bottom edge */}
+              <div className="absolute -bottom-1 right-2 w-16 h-12 rounded-full bg-gradient-to-tl from-purple-900/90 via-lime-900/40 to-purple-700/50 blur-[3px]" />
             </div>
           </div>
+
+          {/* Secondary Counter-Rolling Toxic Wisp */}
+          <div
+            className="absolute mt-3"
+            style={{ animation: 'gbaPoisonGasCloud2 1.35s ease-out 0.15s forwards', opacity: 0 }}
+          >
+            <div className="relative w-26 h-18 flex items-center justify-center">
+              <div className="w-22 h-14 rounded-full bg-gradient-to-l from-violet-950/90 via-purple-700/75 to-purple-600/60 blur-[3px] shadow-[0_0_18px_rgba(147,51,234,0.5)]" />
+              <div className="absolute -top-1 -right-2 w-14 h-10 rounded-full bg-purple-500/55 blur-[2px]" />
+            </div>
+          </div>
+
+          {/* Rising Micro Toxic Bubbles / Acidic Droplets */}
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={`pg-b-${i}`}
+              className="absolute z-35"
+              style={{
+                left: `${36 + (i % 2) * 26}%`,
+                bottom: `${22 + i * 14}%`,
+                animation: `gbaWeezingBubbleRise 1.35s ease-out ${0.15 + i * 0.12}s forwards`,
+                opacity: 0,
+              }}
+            >
+              <div
+                className="rounded-full blur-[0.3px]"
+                style={{
+                  width: `${4 + (i % 3) * 2}px`,
+                  height: `${4 + (i % 3) * 2}px`,
+                  background: i % 2 === 0 ? 'rgba(192,132,252,0.9)' : 'rgba(216,180,254,0.85)',
+                  boxShadow: '0 0 8px #a855f7',
+                }}
+              />
+            </div>
+          ))}
+
+          {/* Ambient Poison Vignette Pulse */}
           <div
             className="absolute inset-0 rounded-xl"
             style={{
-              animation: 'gbaPoisonGasHazePulse 1.2s ease-in-out forwards',
+              animation: 'gbaPoisonGasHazePulse 1.35s ease-in-out forwards',
               opacity: 0,
-              background: 'radial-gradient(ellipse at 50% 55%, rgba(147,51,234,0.22) 0%, rgba(88,28,135,0.16) 50%, rgba(30,10,60,0.10) 80%, transparent 100%)'
+              background: 'radial-gradient(ellipse at 50% 55%, rgba(147,51,234,0.26) 0%, rgba(88,28,135,0.18) 50%, rgba(30,10,60,0.12) 80%, transparent 100%)'
             }}
           />
         </div>
@@ -2401,7 +2485,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 boxShadow: '0 0 35px #ea580c'
               }}
             >
-              <span className="select-none" style={{ fontSize: '48px' }}>🔥</span>
+              <svg width="68" height="78" viewBox="0 0 68 78" className="drop-shadow-[0_0_20px_#facc15]">
+                {/* Outer flame silhouette */}
+                <path d="M34 2 C38 18, 56 26, 56 46 C56 62, 45 74, 34 76 C23 74, 12 62, 12 46 C12 30, 24 22, 28 14 C30 18, 33 22, 34 2 Z" fill="#ea580c" opacity="0.95" />
+                {/* Mid incandescent core */}
+                <path d="M34 16 C38 28, 48 35, 48 50 C48 62, 41 68, 34 70 C27 68, 20 62, 20 50 C20 38, 28 32, 31 25 Z" fill="#f97316" />
+                {/* Hot yellow center */}
+                <path d="M34 32 C37 40, 42 45, 42 54 C42 62, 38 65, 34 66 C30 65, 26 62, 26 54 C26 46, 31 42, 32 37 Z" fill="#fef08a" />
+              </svg>
             </div>
           </div>
         </div>
@@ -3472,7 +3563,19 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           </div>
           {/* Central ice crystal forming */}
           <div className="absolute" style={{ animation: 'gbaIceCrystalGrow 1.2s ease-out 0.2s forwards', opacity: 0 }}>
-            <span className="text-4xl select-none drop-shadow-[0_0_15px_#67e8f9]">❄️</span>
+            <svg width="48" height="48" viewBox="0 0 48 48" className="drop-shadow-[0_0_18px_#38bdf8]">
+              {/* 3 intersecting axes with diamond crystal spikes */}
+              <line x1="24" y1="3" x2="24" y2="45" stroke="#e0f2fe" strokeWidth="2.5" strokeLinecap="round" />
+              <line x1="6" y1="13.5" x2="42" y2="34.5" stroke="#e0f2fe" strokeWidth="2.5" strokeLinecap="round" />
+              <line x1="6" y1="34.5" x2="42" y2="13.5" stroke="#e0f2fe" strokeWidth="2.5" strokeLinecap="round" />
+              {/* Central crystal star */}
+              <polygon points="24,18 28,24 24,30 20,24" fill="#38bdf8" opacity="0.9" />
+              <circle cx="24" cy="24" r="3" fill="#ffffff" />
+              {/* Branch barbs */}
+              <path d="M24 10 L20 14 M24 10 L28 14 M24 38 L20 34 M24 38 L28 34" stroke="#cffafe" strokeWidth="2" strokeLinecap="round" />
+              <path d="M12 17 L12 22 M12 17 L17 18 M36 31 L36 26 M36 31 L31 30" stroke="#cffafe" strokeWidth="2" strokeLinecap="round" />
+              <path d="M12 31 L17 30 M12 31 L12 26 M36 17 L31 18 M36 17 L36 22" stroke="#cffafe" strokeWidth="2" strokeLinecap="round" />
+            </svg>
           </div>
           {/* Wind streaks */}
           <div className="absolute w-24 h-0.5 bg-gradient-to-r from-transparent via-cyan-300/70 to-transparent rounded-full -rotate-12" style={{ animation: 'gbaBlizzardWindStreak 1.25s linear forwards' }} />
@@ -3506,80 +3609,21 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             }}
           />
 
-          {/* Starmie's Celestial Dual-Star Geometry (10-point Decagram: Gold rear star + Purple front star + Ruby core) */}
+          {/* Authentic Ken Sugimori 1996 Starmie (Dual-purple star decagram, <= 60% Card Width) */}
           <div
-            className="absolute z-20 pointer-events-none"
-            style={{ animation: 'gbaStarFreezeStarLock 1.8s cubic-bezier(0.18, 0.85, 0.3, 1) forwards' }}
+            className="absolute z-20 pointer-events-none flex items-center justify-center"
+            style={{ animation: 'gbaStarmieCelestialSpin 1.85s cubic-bezier(0.16, 0.92, 0.25, 1) forwards' }}
           >
-            <svg width="108" height="108" viewBox="0 0 100 100" className="overflow-visible drop-shadow-[0_0_18px_rgba(56,189,248,0.8)]">
-              <defs>
-                {/* Gold rear star gradient */}
-                <linearGradient id="starmieGoldGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#fef08a" />
-                  <stop offset="40%" stopColor="#eab308" />
-                  <stop offset="100%" stopColor="#a16207" />
-                </linearGradient>
-                {/* Purple front star gradient */}
-                <linearGradient id="starmiePurpleGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#e879f9" />
-                  <stop offset="45%" stopColor="#a855f7" />
-                  <stop offset="100%" stopColor="#6b21a8" />
-                </linearGradient>
-                {/* Ruby core gem gradient */}
-                <radialGradient id="starmieRubyGrad" cx="35%" cy="35%" r="65%">
-                  <stop offset="0%" stopColor="#fca5a5" />
-                  <stop offset="35%" stopColor="#ef4444" />
-                  <stop offset="75%" stopColor="#b91c1c" />
-                  <stop offset="100%" stopColor="#7f1d1d" />
-                </radialGradient>
-                {/* Ice Star Prism gradient */}
-                <linearGradient id="starIceGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="30%" stopColor="#cffafe" />
-                  <stop offset="70%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#0284c7" />
-                </linearGradient>
-              </defs>
-
-              {/* Rear 5-point gold star (rotated 36deg) */}
-              <polygon
-                points="50,4 61,37 96,37 67,58 78,92 50,71 22,92 33,58 4,37 39,37"
-                transform="rotate(36 50 50)"
-                fill="url(#starmieGoldGrad)"
-                stroke="#ca8a04"
-                strokeWidth="1.2"
-                opacity="0.92"
-              />
-
-              {/* Front 5-point royal purple star */}
-              <polygon
-                points="50,5 61,38 95,38 67,58 78,91 50,71 22,91 33,58 5,38 39,38"
-                fill="url(#starmiePurpleGrad)"
-                stroke="#581c87"
-                strokeWidth="1.4"
-              />
-
-              {/* Central golden octagonal ring casing */}
-              <polygon
-                points="50,34 61,39 66,50 61,61 50,66 39,61 34,50 39,39"
-                fill="url(#starmieGoldGrad)"
-                stroke="#854d0e"
-                strokeWidth="1.2"
-                className="drop-shadow-[0_0_6px_#facc15]"
-              />
-
-              {/* Glowing red ruby core gem */}
-              <circle
-                cx="50"
-                cy="50"
-                r="10"
-                fill="url(#starmieRubyGrad)"
-                stroke="#991b1b"
-                strokeWidth="1"
-                className="drop-shadow-[0_0_10px_#ef4444]"
-              />
-              <ellipse cx="47" cy="46" rx="3.5" ry="2" fill="#ffffff" opacity="0.85" />
-            </svg>
+            <img
+              src="/assets/Starmie_Star_Freeze.png"
+              alt="Starmie Star Freeze"
+              className="w-20 h-20 object-contain drop-shadow-[0_0_18px_rgba(56,189,248,0.85)] drop-shadow-[0_0_28px_rgba(168,85,247,0.6)] filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] select-none pointer-events-none"
+            />
+            {/* Pulsing ruby core laser flare synchronized with freeze lock */}
+            <div
+              className="absolute w-5 h-5 rounded-full bg-red-500/85 blur-[2px] drop-shadow-[0_0_14px_#ef4444]"
+              style={{ animation: 'gbaStarmieCorePulse 1.85s ease-in-out forwards' }}
+            />
           </div>
 
           {/* Central Pulsing Cosmic Energy Ring from Gem */}
@@ -3861,10 +3905,23 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="flex flex-col items-center gap-1"
             style={{ animation: 'gbaVineLashSnap 1.2s ease-out forwards' }}
           >
-            <span className="text-5xl select-none filter drop-shadow-[0_0_16px_#22c55e]">🌿</span>
+            <svg width="68" height="68" viewBox="0 0 68 68" className="drop-shadow-[0_0_20px_#22c55e]">
+              {/* Thorny vine stem 1 */}
+              <path d="M14 60 Q24 40, 34 34 Q48 26, 56 8" fill="none" stroke="#22c55e" strokeWidth="4" strokeLinecap="round" />
+              {/* Thorny vine stem 2 */}
+              <path d="M10 46 Q28 36, 40 42 Q52 48, 58 38" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" />
+              {/* Vine thorns & leaflets */}
+              <polygon points="34,34 38,28 32,30" fill="#84cc16" />
+              <polygon points="46,24 52,20 48,26" fill="#84cc16" />
+              <polygon points="22,44 16,40 20,48" fill="#4ade80" />
+              <polygon points="40,42 46,46 42,40" fill="#84cc16" />
+              {/* Emerald bio-spores */}
+              <circle cx="56" cy="8" r="3.5" fill="#bef264" />
+              <circle cx="34" cy="34" r="2.5" fill="#bef264" />
+            </svg>
             <div className="flex gap-2">
-              <span className="text-2xl text-emerald-400 animate-ping">🌱</span>
-              <span className="text-2xl text-green-300 animate-ping" style={{ animationDelay: '0.15s' }}>✨</span>
+              <span className="text-xl text-emerald-300 animate-ping">✦</span>
+              <span className="text-xl text-green-300 animate-ping" style={{ animationDelay: '0.15s' }}>✦</span>
             </div>
           </div>
           <div
@@ -5219,39 +5276,151 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
+      {/* 20p. MAGMAR VOLCANIC SMOG (Magmar Fossil #39 — Pyroclastic Soot, Volcanic Heat Core & Floating Cinders) */}
+      {fx.type === 'magmar_smog' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Ambient Volcanic Heat Core Glow */}
+          <div
+            className="absolute flex items-center justify-center z-15"
+            style={{ animation: 'gbaMagmarHeatCore 1.65s ease-out forwards' }}
+          >
+            <div className="w-36 h-32 rounded-full bg-gradient-to-tr from-red-600/40 via-orange-500/50 to-amber-400/40 blur-2xl shadow-[0_0_35px_rgba(249,115,22,0.65)]" />
+          </div>
+
+          {/* Plume 1: Primary Volcanic Charcoal & Dark Ash Billow (drifts right and upward) */}
+          <div
+            className="absolute flex items-center justify-center z-25"
+            style={{ animation: 'gbaMagmarSmogPlume1 1.65s cubic-bezier(0.16, 0.85, 0.3, 1) forwards' }}
+          >
+            <div className="relative w-28 h-20 flex items-center justify-center">
+              {/* Dark volcanic soot cloud base */}
+              <div className="w-24 h-16 rounded-full bg-gradient-to-r from-stone-900/90 via-stone-800/85 to-neutral-700/75 blur-[3px] shadow-[0_0_20px_rgba(30,30,30,0.7)]" />
+              {/* Warm amber rim light from inner magma heat */}
+              <div className="absolute -top-2 left-2 w-16 h-12 rounded-full bg-gradient-to-br from-orange-600/60 via-stone-800/70 to-neutral-700/50 blur-[2px]" />
+              <div className="absolute -bottom-1 right-2 w-14 h-10 rounded-full bg-gradient-to-tl from-stone-900/90 to-amber-700/40 blur-[3px]" />
+            </div>
+          </div>
+
+          {/* Plume 2: Counter-Swirling Pyric Soot Plume (drifts left and upward) */}
+          <div
+            className="absolute flex items-center justify-center z-24"
+            style={{ animation: 'gbaMagmarSmogPlume2 1.65s cubic-bezier(0.16, 0.85, 0.3, 1) 0.12s forwards', opacity: 0 }}
+          >
+            <div className="relative w-26 h-18 flex items-center justify-center">
+              <div className="w-22 h-16 rounded-full bg-gradient-to-l from-stone-900/85 via-zinc-800/80 to-stone-700/70 blur-[3px] shadow-[0_0_18px_rgba(40,40,40,0.6)]" />
+              <div className="absolute -top-1 -right-2 w-14 h-10 rounded-full bg-gradient-to-bl from-red-700/50 via-stone-800/70 to-zinc-700/50 blur-[2px]" />
+            </div>
+          </div>
+
+          {/* Plume 3: High-altitude Wispy Ash Billow */}
+          <div
+            className="absolute flex items-center justify-center z-22"
+            style={{ animation: 'gbaMagmarSmogPlume3 1.65s ease-out 0.22s forwards', opacity: 0 }}
+          >
+            <div className="w-32 h-22 rounded-full bg-gradient-to-t from-stone-800/70 via-stone-700/50 to-neutral-600/40 blur-[4px]" />
+          </div>
+
+          {/* Dynamic Rising Volcanic Cinder / Ember Sparks (Aerodynamic Sine Drift) */}
+          {[
+            { anim: 'gbaMagmarEmberDrift1', delay: 0.15, left: '38%', bottom: '25%', size: 4, color: '#f97316', shadow: '#ef4444' },
+            { anim: 'gbaMagmarEmberDrift2', delay: 0.28, left: '52%', bottom: '22%', size: 5, color: '#fbbf24', shadow: '#f97316' },
+            { anim: 'gbaMagmarEmberDrift3', delay: 0.40, left: '44%', bottom: '30%', size: 3.5, color: '#ea580c', shadow: '#dc2626' },
+            { anim: 'gbaMagmarEmberDrift1', delay: 0.55, left: '58%', bottom: '28%', size: 4.5, color: '#f59e0b', shadow: '#ea580c' },
+            { anim: 'gbaMagmarEmberDrift2', delay: 0.68, left: '34%', bottom: '20%', size: 3, color: '#f97316', shadow: '#ef4444' },
+          ].map((spark, idx) => (
+            <div
+              key={idx}
+              className="absolute z-35"
+              style={{
+                left: spark.left,
+                bottom: spark.bottom,
+                animation: `${spark.anim} 1.3s ease-out ${spark.delay}s forwards`,
+                opacity: 0,
+              }}
+            >
+              <div
+                className="rounded-full blur-[0.3px]"
+                style={{
+                  width: `${spark.size}px`,
+                  height: `${spark.size}px`,
+                  backgroundColor: spark.color,
+                  boxShadow: `0 0 8px ${spark.shadow}, 0 0 12px ${spark.color}`,
+                }}
+              />
+            </div>
+          ))}
+
+          {/* Obscuring Volcanic Haze Veil */}
+          <div
+            className="absolute inset-0 rounded-lg bg-stone-900/25 pointer-events-none z-10"
+            style={{ animation: 'gbaSmokescreenFade 1.65s ease-out forwards' }}
+          />
+        </div>
+      )}
+
       {/* 20q. WEEZING TOXIC SMOG (Weezing Lv. 27 — Dual-Chimney Volcanic Bilious Smog Plumes) */}
       {fx.type === 'weezing_toxic_smog' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Left Smog Plume Eruption (Yellowish-Green Sulfur) */}
+          {/* Left Smog Plume Eruption (Yellowish-Green Sulfur Mist) */}
           <div
-            className="absolute left-4 flex items-center justify-center pointer-events-none z-25"
+            className="absolute left-2 flex items-center justify-center pointer-events-none z-25"
             style={{ animation: 'gbaWeezingSmogEruptLeft 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
           >
-            <svg width="120" height="120" viewBox="0 0 120 120" className="drop-shadow-[0_0_25px_#84cc16]">
-              <circle cx="50" cy="70" r="32" fill="#65a30d" opacity="0.75" />
-              <circle cx="70" cy="50" r="28" fill="#a3e635" opacity="0.85" />
-              <circle cx="40" cy="40" r="25" fill="#facc15" opacity="0.65" />
-            </svg>
+            <div className="relative w-24 h-24 flex items-center justify-center">
+              {/* Dense sulfur core */}
+              <div className="w-20 h-14 rounded-full bg-gradient-to-tr from-lime-700/80 via-yellow-600/70 to-lime-500/60 blur-[3px] shadow-[0_0_20px_rgba(132,204,22,0.6)]" />
+              {/* Billowing sulfur puff */}
+              <div className="absolute -top-2 -right-1 w-14 h-12 rounded-full bg-gradient-to-br from-lime-500/70 via-yellow-400/60 to-emerald-600/50 blur-[2px]" />
+              {/* Lower dense puff */}
+              <div className="absolute -bottom-2 -left-1 w-12 h-10 rounded-full bg-gradient-to-t from-lime-800/80 via-lime-600/60 to-yellow-500/40 blur-[2px]" />
+            </div>
           </div>
 
           {/* Right Smog Plume Eruption (Deep Purple Noxious Haze) */}
           <div
-            className="absolute right-4 flex items-center justify-center pointer-events-none z-25"
+            className="absolute right-2 flex items-center justify-center pointer-events-none z-25"
             style={{ animation: 'gbaWeezingSmogEruptRight 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
           >
-            <svg width="120" height="120" viewBox="0 0 120 120" className="drop-shadow-[0_0_25px_#9333ea]">
-              <circle cx="70" cy="70" r="32" fill="#581c87" opacity="0.75" />
-              <circle cx="50" cy="50" r="28" fill="#9333ea" opacity="0.85" />
-              <circle cx="80" cy="40" r="25" fill="#c084fc" opacity="0.65" />
-            </svg>
+            <div className="relative w-24 h-24 flex items-center justify-center">
+              {/* Deep corrosive violet core */}
+              <div className="w-20 h-14 rounded-full bg-gradient-to-tl from-purple-950/90 via-purple-700/80 to-fuchsia-600/60 blur-[3px] shadow-[0_0_22px_rgba(147,51,234,0.6)]" />
+              {/* Billowing noxious wisp */}
+              <div className="absolute -top-2 -left-1 w-14 h-12 rounded-full bg-gradient-to-bl from-purple-600/75 via-purple-500/60 to-fuchsia-400/50 blur-[2px]" />
+              {/* Lower dense vapor */}
+              <div className="absolute -bottom-2 -right-1 w-12 h-10 rounded-full bg-gradient-to-t from-purple-900/85 via-indigo-900/70 to-purple-600/40 blur-[2px]" />
+            </div>
           </div>
+
+          {/* Micro rising bubbles / toxic spritz droplets */}
+          {[0, 1, 2, 3].map((i) => (
+            <div
+              key={i}
+              className="absolute z-30"
+              style={{
+                left: `${35 + (i % 2) * 28}%`,
+                bottom: `${20 + i * 12}%`,
+                animation: `gbaWeezingBubbleRise 1.4s ease-out ${0.2 + i * 0.15}s forwards`,
+                opacity: 0,
+              }}
+            >
+              <div
+                className="rounded-full blur-[0.4px]"
+                style={{
+                  width: `${4 + (i % 3) * 2}px`,
+                  height: `${4 + (i % 3) * 2}px`,
+                  background: i % 2 === 0 ? 'rgba(163,230,53,0.85)' : 'rgba(192,132,252,0.85)',
+                  boxShadow: i % 2 === 0 ? '0 0 6px #84cc16' : '0 0 6px #a855f7',
+                }}
+              />
+            </div>
+          ))}
 
           {/* Swirling Smothering Toxic Cloud Blanket */}
           <div
             className="absolute flex items-center justify-center z-20"
             style={{ animation: 'gbaWeezingNoxiousCloud 1.7s ease-out forwards' }}
           >
-            <div className="w-44 h-44 rounded-full bg-gradient-to-tr from-purple-900/60 via-lime-900/50 to-purple-800/60 blur-xl shadow-[0_0_40px_#7e22ce]" />
+            <div className="w-40 h-36 rounded-full bg-gradient-to-tr from-purple-900/50 via-lime-900/40 to-purple-800/50 blur-2xl shadow-[0_0_40px_rgba(126,34,206,0.55)]" />
           </div>
         </div>
       )}
@@ -5714,12 +5883,11 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="absolute flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaEggsplosionBombDrop1 1.85s ease-in-out forwards' }}
           >
-            <svg width="50" height="60" viewBox="0 0 50 60" className="drop-shadow-[0_0_20px_#facc15]">
-              <ellipse cx="25" cy="30" rx="22" ry="26" fill="#78350f" stroke="#fde047" strokeWidth="2" />
-              <circle cx="18" cy="24" r="3" fill="#451a03" />
-              <circle cx="32" cy="24" r="3" fill="#451a03" />
-              <circle cx="25" cy="35" r="3.5" fill="#451a03" />
-            </svg>
+            <img
+              src="/assets/Exeggutor_Coconut_Bomb.png"
+              alt="Exeggutor Coconut Bomb 1"
+              className="w-14 h-14 object-contain pointer-events-none drop-shadow-[0_0_18px_#facc15]"
+            />
           </div>
 
           {/* Falling Coconut Bomb 2 */}
@@ -5727,12 +5895,11 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="absolute flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaEggsplosionBombDrop2 1.85s ease-in-out forwards' }}
           >
-            <svg width="50" height="60" viewBox="0 0 50 60" className="drop-shadow-[0_0_20px_#eab308]">
-              <ellipse cx="25" cy="30" rx="22" ry="26" fill="#854d0e" stroke="#fde047" strokeWidth="2" />
-              <circle cx="18" cy="24" r="3" fill="#451a03" />
-              <circle cx="32" cy="24" r="3" fill="#451a03" />
-              <circle cx="25" cy="35" r="3.5" fill="#451a03" />
-            </svg>
+            <img
+              src="/assets/Exeggutor_Coconut_Bomb.png"
+              alt="Exeggutor Coconut Bomb 2"
+              className="w-14 h-14 object-contain pointer-events-none drop-shadow-[0_0_18px_#eab308]"
+            />
           </div>
 
           {/* Falling Coconut Bomb 3 */}
@@ -5740,12 +5907,19 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="absolute flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaEggsplosionBombDrop3 1.85s ease-in-out forwards' }}
           >
-            <svg width="55" height="65" viewBox="0 0 55 65" className="drop-shadow-[0_0_25px_#f59e0b]">
-              <ellipse cx="27" cy="32" rx="24" ry="28" fill="#713f12" stroke="#fef08a" strokeWidth="2.5" />
-              <circle cx="20" cy="26" r="3.5" fill="#451a03" />
-              <circle cx="34" cy="26" r="3.5" fill="#451a03" />
-              <circle cx="27" cy="38" r="4" fill="#451a03" />
-            </svg>
+            <img
+              src="/assets/Exeggutor_Coconut_Bomb.png"
+              alt="Exeggutor Coconut Bomb 3"
+              className="w-16 h-16 object-contain pointer-events-none drop-shadow-[0_0_24px_#f59e0b]"
+            />
+          </div>
+
+          {/* Center Detonation Burst Flash on impact */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-20"
+            style={{ animation: 'gbaEggsplosionDetonationFlash 1.85s ease-out forwards', opacity: 0 }}
+          >
+            <div className="w-24 h-24 rounded-full bg-radial from-amber-100 via-amber-400 to-transparent blur-[3px]" />
           </div>
         </div>
       )}
@@ -7008,20 +7182,21 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
             style={{ animation: 'gbaGastlySleepGasCloud 1.7s ease-out forwards' }}
           >
-            <svg width="160" height="160" viewBox="0 0 160 160">
-              <circle cx="80" cy="80" r="55" fill="url(#gastlyGasGrad)" opacity="0.85" className="drop-shadow-[0_0_25px_#7c3aed]" />
-              <circle cx="65" cy="65" r="30" fill="#2e1065" opacity="0.9" />
-              {/* Gastly Triangular Hypnotic Eyes */}
-              <polygon points="50,55 68,60 55,70" fill="#ffffff" />
-              <polygon points="80,60 98,55 93,70" fill="#ffffff" />
-              <defs>
-                <radialGradient id="gastlyGasGrad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#1e1b4b" />
-                  <stop offset="50%" stopColor="#6b21a8" stopOpacity="0.8" />
-                  <stop offset="100%" stopColor="#c084fc" stopOpacity="0" />
-                </radialGradient>
-              </defs>
-            </svg>
+            <div className="relative w-36 h-36 flex items-center justify-center">
+              {/* Multi-layered ectoplasm shroud */}
+              <div className="w-32 h-32 rounded-full bg-gradient-to-tr from-indigo-950/95 via-purple-900/90 to-fuchsia-700/60 blur-[6px] shadow-[0_0_35px_#7c3aed]" />
+              <div className="absolute w-24 h-24 rounded-full bg-gradient-to-bl from-purple-950/90 via-violet-900/80 to-indigo-950/90 blur-[3px]" />
+              <div className="absolute inset-4 rounded-full border border-purple-400/30 blur-[1px]" />
+              {/* Glowing Gastly Spectral Eyes */}
+              <div className="absolute flex items-center gap-4 -mt-2">
+                <div className="w-5 h-6 rounded-full bg-white shadow-[0_0_12px_#ffffff] rotate-12 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-purple-950" />
+                </div>
+                <div className="w-5 h-6 rounded-full bg-white shadow-[0_0_12px_#ffffff] -rotate-12 flex items-center justify-center">
+                  <div className="w-2 h-2 rounded-full bg-purple-950" />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Floating Dream Motes with Subtle Zzz Drift */}
@@ -7039,8 +7214,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 opacity: 0
               } as React.CSSProperties}
             >
-              <div className="w-4 h-4 rounded-full bg-violet-300 border border-white shadow-[0_0_12px_#c084fc] flex items-center justify-center">
-                <div className="w-1.5 h-1.5 rounded-full bg-indigo-900" />
+              <div className="w-3.5 h-3.5 rounded-full bg-violet-300 border border-white shadow-[0_0_12px_#c084fc] flex items-center justify-center">
+                <span className="text-[7px] font-black text-purple-950 font-mono">z</span>
               </div>
             </div>
           ))}
@@ -7584,25 +7759,35 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             />
           </div>
 
-          {/* Floating Pastel Eighth Notes */}
+          {/* Floating Pastel Musical Note SVGs */}
           {[
-            { note: '♪', color: '#f472b6', x: '-22px', y: '-10px', delay: 0.2 },
-            { note: '♫', color: '#38bdf8', x: '24px', y: '-18px', delay: 0.4 },
-            { note: '♪', color: '#fef08a', x: '18px', y: '16px', delay: 0.6 }
+            { isBeamed: false, color: '#f472b6', x: '-24px', y: '-12px', delay: 0.2 },
+            { isBeamed: true,  color: '#38bdf8', x: '26px',  y: '-20px', delay: 0.4 },
+            { isBeamed: false, color: '#fef08a', x: '18px',  y: '18px',  delay: 0.6 }
           ].map((n, i) => (
             <div
               key={`jigg-note-${i}`}
-              className="absolute text-lg font-bold pointer-events-none z-35 select-none"
+              className="absolute pointer-events-none z-35 select-none"
               style={{
-                color: n.color,
                 left: `calc(50% + ${n.x})`,
                 top: `calc(50% + ${n.y})`,
-                filter: `drop-shadow(0 0 6px ${n.color})`,
+                filter: `drop-shadow(0 0 8px ${n.color})`,
                 animation: `gbaJigglypuffLullabyNotes 1.6s ease-in-out ${n.delay}s forwards`,
                 opacity: 0
               }}
             >
-              {n.note}
+              {n.isBeamed ? (
+                /* Beamed pair note SVG */
+                <svg width="24" height="22" viewBox="0 0 24 22" fill={n.color}>
+                  <path d="M7 4h12v3H7z" />
+                  <path d="M5 13a4 3 0 1 0 4 3V4H7v10.5A3.5 3.5 0 0 0 5 13zm12-2a4 3 0 1 0 4 3V4h-2v8.5a3.5 3.5 0 0 0-2-1.5z" />
+                </svg>
+              ) : (
+                /* Single eighth note SVG */
+                <svg width="18" height="22" viewBox="0 0 18 22" fill={n.color}>
+                  <path d="M5 14a4 3 0 1 0 4 3V6c2 1 4 3 4 5V9c-1-2-3-4-5-5H7v11.5A3.5 3.5 0 0 0 5 14z" />
+                </svg>
+              )}
             </div>
           ))}
 
@@ -8259,12 +8444,31 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {fx.type === 'pin_missile_volley' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
           <div
-            className="flex gap-2"
+            className="flex items-center gap-3"
             style={{ animation: 'gbaPinDartBarrage 1.15s ease-out forwards' }}
           >
-            <span className="text-3xl text-lime-400">📍</span>
-            <span className="text-3xl text-yellow-300 -mt-2">📍</span>
-            <span className="text-3xl text-lime-400 mt-2">📍</span>
+            {[
+              { rot: '-12deg', y: '4px', fill: '#a3e635', glow: '#65a30d' },
+              { rot: '0deg',   y: '-6px', fill: '#facc15', glow: '#ca8a04' },
+              { rot: '12deg',  y: '6px', fill: '#a3e635', glow: '#65a30d' }
+            ].map((p, idx) => (
+              <div
+                key={`pin-${idx}`}
+                style={{
+                  transform: `translateY(${p.y}) rotate(${p.rot})`,
+                  filter: `drop-shadow(0 0 10px ${p.fill}) drop-shadow(0 0 18px ${p.glow})`
+                }}
+              >
+                <svg width="22" height="48" viewBox="0 0 22 48">
+                  {/* Glowing needle dart body */}
+                  <polygon points="11,2 14,32 16,36 11,46 6,36 8,32" fill={p.fill} />
+                  {/* Central luster highlight */}
+                  <line x1="11" y1="4" x2="11" y2="38" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" opacity="0.9" />
+                  {/* Speed fins */}
+                  <polygon points="11,36 17,42 14,46 11,44 8,46 5,42" fill={p.glow} opacity="0.8" />
+                </svg>
+              </div>
+            ))}
           </div>
         </div>
       )}
@@ -8342,7 +8546,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
           {!fx.whiffed && (
-            <div className="absolute text-3xl select-none" style={{ animation: 'gbaVenomSplash 0.9s ease-out 0.35s forwards', opacity: 0 }}>💥</div>
+            <div className="absolute flex items-center justify-center" style={{ animation: 'gbaVenomSplash 0.9s ease-out 0.35s forwards', opacity: 0 }}>
+              <svg width="44" height="44" viewBox="0 0 44 44" className="drop-shadow-[0_0_14px_#c084fc]">
+                <polygon points="22,2 26,16 40,14 29,24 36,38 22,29 8,38 15,24 4,14 18,16" fill="#facc15" stroke="#f59e0b" strokeWidth="1.5" />
+                <polygon points="22,8 24,17 33,16 26,22 30,31 22,26 14,31 18,22 11,16 20,17" fill="#ffffff" />
+              </svg>
+            </div>
           )}
         </div>
       )}
@@ -8495,10 +8704,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
           <div className="absolute -left-2 bottom-0" style={{ animation: 'gbaSandOriginPuff 1.2s ease-out forwards', opacity: 0 }}>
-            <svg width="40" height="20" viewBox="0 0 40 20">
-              <ellipse cx="20" cy="14" rx="16" ry="5" fill="#d6a35c" opacity="0.4" />
-              <ellipse cx="12" cy="10" rx="8" ry="4" fill="#e0b878" opacity="0.35" />
-            </svg>
+            <div className="w-10 h-5 rounded-full bg-gradient-to-r from-amber-600/50 via-yellow-600/40 to-amber-700/30 blur-[2px]" />
           </div>
         </div>
       )}
@@ -8507,12 +8713,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {fx.type === 'sand_attack_dust' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           <div className="absolute" style={{ animation: 'gbaDustCloudPuff 1.25s ease-out forwards' }}>
-            <svg width="100" height="70" viewBox="0 0 100 70">
-              <ellipse cx="50" cy="40" rx="42" ry="22" fill="#d6a35c" opacity="0.45" />
-              <ellipse cx="32" cy="32" rx="22" ry="14" fill="#e0b878" opacity="0.5" />
-              <ellipse cx="68" cy="30" rx="20" ry="13" fill="#c2884a" opacity="0.45" />
-              <ellipse cx="50" cy="22" rx="16" ry="10" fill="#ead9b0" opacity="0.5" />
-            </svg>
+            <div className="relative w-28 h-18 flex items-center justify-center">
+              <div className="w-26 h-16 rounded-full bg-gradient-to-r from-amber-700/60 via-amber-600/55 to-yellow-600/45 blur-[3px] shadow-[0_0_18px_rgba(214,163,92,0.4)]" />
+              <div className="absolute -top-2 left-2 w-16 h-12 rounded-full bg-gradient-to-br from-yellow-500/50 via-amber-400/40 to-amber-700/30 blur-[2px]" />
+              <div className="absolute -bottom-1 right-2 w-14 h-10 rounded-full bg-amber-800/50 blur-[2px]" />
+              <div className="absolute inset-0 rounded-full bg-amber-500/20 blur-lg" />
+            </div>
           </div>
           <div className="absolute" style={{ animation: 'gbaDustSwirl 1.25s ease-in-out 0.2s forwards', opacity: 0 }}>
             <svg width="80" height="50" viewBox="0 0 80 50">
@@ -9017,21 +9223,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           </div>
           {/* Impact splatter on landing */}
           <div className="absolute" style={{ animation: 'gbaSludgeImpactSplat 1.3s ease-out 0.5s forwards', opacity: 0 }}>
-            <svg width="90" height="50" viewBox="0 0 90 50">
-              {/* Main splat pool */}
-              <ellipse cx="45" cy="34" rx="32" ry="12" fill="#581c87" opacity="0.8" />
-              <ellipse cx="45" cy="32" rx="26" ry="10" fill="#6b21a8" opacity="0.7" />
-              <ellipse cx="45" cy="30" rx="18" ry="7" fill="#7e22ce" opacity="0.6" />
-              {/* Splatter blobs flying outward */}
-              <ellipse cx="20" cy="24" rx="7" ry="5" fill="#6b21a8" opacity="0.8" />
-              <ellipse cx="70" cy="22" rx="8" ry="6" fill="#7e22ce" opacity="0.75" />
-              <ellipse cx="35" cy="16" rx="5" ry="4" fill="#9333ea" opacity="0.7" />
-              <ellipse cx="58" cy="14" rx="6" ry="4" fill="#6b21a8" opacity="0.65" />
-              {/* Drip strings hanging */}
-              <path d="M30 20 Q28 12, 30 6" fill="none" stroke="#6b21a8" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
-              <path d="M60 18 Q62 10, 60 4" fill="none" stroke="#7e22ce" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-              <path d="M45 24 Q44 16, 46 10" fill="none" stroke="#581c87" strokeWidth="3" strokeLinecap="round" opacity="0.65" />
-            </svg>
+            <div className="relative w-32 h-20 flex items-center justify-center">
+              {/* Main splat pool with soft Gaussian blur */}
+              <div className="w-28 h-12 rounded-full bg-gradient-to-r from-purple-950/90 via-purple-900/85 to-indigo-950/80 blur-[2px] shadow-[0_0_18px_rgba(107,33,168,0.7)]" />
+              <div className="absolute -top-2 left-3 w-10 h-7 rounded-full bg-purple-700/80 blur-[1px]" />
+              <div className="absolute -top-1 right-4 w-12 h-8 rounded-full bg-fuchsia-800/75 blur-[1px]" />
+              <div className="absolute -bottom-2 right-6 w-8 h-6 rounded-full bg-purple-900/80 blur-[1px]" />
+              <div className="absolute -bottom-1 left-5 w-7 h-5 rounded-full bg-violet-800/75 blur-[1px]" />
+              {/* Viscous core sheen */}
+              <div className="absolute w-16 h-5 rounded-full bg-gradient-to-r from-fuchsia-500/50 via-purple-400/40 to-transparent blur-[1px]" />
+            </div>
           </div>
           {/* Dripping viscous drops falling from splat */}
           <div className="absolute -bottom-3" style={{ animation: 'gbaSludgeDripFall 1.3s ease-in 0.7s forwards', opacity: 0 }}>
@@ -9162,34 +9363,32 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Main smog cloud - drifts right */}
           <div className="absolute" style={{ animation: 'gbaSmogCloudDrift1 1.25s ease-out forwards' }}>
-            <svg width="80" height="50" viewBox="0 0 80 50">
-              <ellipse cx="40" cy="30" rx="32" ry="16" fill="#4b5563" opacity="0.5" />
-              <ellipse cx="28" cy="24" rx="20" ry="12" fill="#6b7280" opacity="0.45" />
-              <ellipse cx="52" cy="22" rx="18" ry="10" fill="#374151" opacity="0.4" />
-              <ellipse cx="40" cy="18" rx="14" ry="8" fill="#9ca3af" opacity="0.3" />
-            </svg>
+            <div className="relative w-28 h-18 flex items-center justify-center">
+              <div className="w-24 h-14 rounded-full bg-gradient-to-r from-gray-700/80 via-gray-600/70 to-gray-500/60 blur-[3px] shadow-[0_0_16px_rgba(75,85,99,0.5)]" />
+              <div className="absolute -top-2 -left-2 w-16 h-11 rounded-full bg-gradient-to-br from-gray-600/70 via-gray-500/60 to-gray-700/40 blur-[2px]" />
+              <div className="absolute -bottom-1 -right-2 w-14 h-10 rounded-full bg-gray-600/60 blur-[2px]" />
+            </div>
           </div>
           {/* Secondary smog puff - drifts left, lower */}
           <div className="absolute mt-4" style={{ animation: 'gbaSmogCloudDrift2 1.25s ease-out 0.15s forwards', opacity: 0 }}>
-            <svg width="60" height="40" viewBox="0 0 60 40">
-              <ellipse cx="30" cy="24" rx="24" ry="12" fill="#374151" opacity="0.45" />
-              <ellipse cx="20" cy="18" rx="15" ry="9" fill="#4b5563" opacity="0.4" />
-              <ellipse cx="42" cy="16" rx="12" ry="8" fill="#6b7280" opacity="0.35" />
-            </svg>
+            <div className="relative w-22 h-14 flex items-center justify-center">
+              <div className="w-20 h-12 rounded-full bg-gradient-to-l from-gray-800/80 via-gray-600/70 to-gray-700/50 blur-[3px] shadow-[0_0_12px_rgba(55,65,81,0.4)]" />
+              <div className="absolute -top-1 -right-1 w-12 h-8 rounded-full bg-gray-500/50 blur-[2px]" />
+            </div>
           </div>
           {/* Toxic purple wisps within smog */}
           <div className="absolute" style={{ animation: 'gbaSmogToxicWisp 1.25s ease-out 0.25s forwards', opacity: 0 }}>
             <svg width="50" height="30" viewBox="0 0 50 30">
-              <path d="M8 20 Q15 12, 25 16 Q35 20, 42 14" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
-              <path d="M12 25 Q22 18, 32 22 Q40 25, 46 20" fill="none" stroke="#c084fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+              <path d="M8 20 Q15 12, 25 16 Q35 20, 42 14" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+              <path d="M12 25 Q22 18, 32 22 Q40 25, 46 20" fill="none" stroke="#c084fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
             </svg>
           </div>
           {/* Small smoke particles rising */}
           <div className="absolute -top-2" style={{ animation: 'gbaSmogParticleRise 1.25s ease-out 0.3s forwards', opacity: 0 }}>
-            <div className="w-3 h-3 rounded-full bg-gray-500/40 blur-[1px]" />
+            <div className="w-3 h-3 rounded-full bg-gray-400/50 blur-[1px] shadow-[0_0_6px_rgba(156,163,175,0.5)]" />
           </div>
           <div className="absolute -top-1 left-6" style={{ animation: 'gbaSmogParticleRise 1.25s ease-out 0.45s forwards', opacity: 0 }}>
-            <div className="w-2 h-2 rounded-full bg-gray-600/35 blur-[1px]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-gray-500/45 blur-[1px]" />
           </div>
         </div>
       )}
@@ -9322,14 +9521,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 33. STUN GAS (GBA-style yellow paralytic gas cloud with electric sparks) */}
       {fx.type === 'stun_gas' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Main gas cloud */}
+          {/* Main gas cloud - diffused paralytic ion mist */}
           <div className="absolute" style={{ animation: 'gbaStunGasCloudForm 1.25s ease-out forwards' }}>
-            <svg width="70" height="50" viewBox="0 0 70 50">
-              <ellipse cx="35" cy="28" rx="28" ry="14" fill="#eab308" opacity="0.25" />
-              <ellipse cx="25" cy="22" rx="18" ry="10" fill="#facc15" opacity="0.3" />
-              <ellipse cx="45" cy="20" rx="16" ry="9" fill="#fde047" opacity="0.25" />
-              <ellipse cx="35" cy="16" rx="12" ry="7" fill="#fef9c3" opacity="0.2" />
-            </svg>
+            <div className="relative w-28 h-20 flex items-center justify-center">
+              <div className="w-24 h-16 rounded-full bg-gradient-to-r from-yellow-500/40 via-amber-400/45 to-yellow-300/35 blur-[3px] shadow-[0_0_20px_rgba(234,179,8,0.4)]" />
+              <div className="absolute -top-2 left-1 w-16 h-12 rounded-full bg-gradient-to-br from-yellow-300/45 via-yellow-200/35 to-amber-400/25 blur-[2px]" />
+              <div className="absolute -bottom-1 right-2 w-14 h-10 rounded-full bg-amber-500/35 blur-[2px]" />
+              <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg" />
+            </div>
           </div>
           {/* Paralysis electric sparks within gas */}
           <div className="absolute" style={{ animation: 'gbaStunSpark1 1.25s ease-out 0.2s forwards', opacity: 0 }}>
@@ -9345,12 +9544,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           {/* Rising gas wisps */}
           <div className="absolute -top-2" style={{ animation: 'gbaStunGasRise 1.25s ease-out 0.15s forwards', opacity: 0 }}>
             <svg width="30" height="24" viewBox="0 0 30 24">
-              <path d="M8 20 Q12 12, 15 16 Q18 8, 22 14" fill="none" stroke="#fde047" strokeWidth="2" strokeLinecap="round" opacity="0.5" />
+              <path d="M8 20 Q12 12, 15 16 Q18 8, 22 14" fill="none" stroke="#fde047" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
             </svg>
           </div>
           {/* Numbness wobble circles */}
           <div className="absolute" style={{ animation: 'gbaStunNumbRing 1.25s ease-out 0.3s forwards', opacity: 0 }}>
-            <div className="w-16 h-16 rounded-full border border-yellow-400/40" />
+            <div className="w-16 h-16 rounded-full border border-yellow-400/40 shadow-[0_0_10px_rgba(250,204,21,0.3)]" />
           </div>
         </div>
       )}
@@ -9423,10 +9622,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         <div className="absolute inset-0 pointer-events-none z-40 overflow-visible">
           {/* Rising toxic haze at base */}
           <div className="absolute inset-x-0 bottom-1 flex justify-center" style={{ animation: 'gbaPoisonHazeRise 1.25s ease-out forwards', opacity: 0 }}>
-            <svg width="90" height="34" viewBox="0 0 90 34">
-              <ellipse cx="45" cy="26" rx="40" ry="7" fill="#a855f7" opacity="0.25" />
-              <path d="M15 26 Q22 14, 32 22 Q40 8, 50 18 Q58 6, 66 16 Q74 10, 78 22" fill="none" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-            </svg>
+            <div className="relative w-28 h-10 flex items-center justify-center">
+              <div className="w-24 h-6 rounded-full bg-purple-500/30 blur-[3px] shadow-[0_0_12px_rgba(168,85,247,0.4)]" />
+              <svg width="90" height="34" viewBox="0 0 90 34" className="absolute">
+                <path d="M15 26 Q22 14, 32 22 Q40 8, 50 18 Q58 6, 66 16 Q74 10, 78 22" fill="none" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+              </svg>
+            </div>
           </div>
           {/* Powder particles with drift physics — each grain sways on its own sine path,
               falls at a different speed and turbulence phase, so the shower reads as a real
@@ -10103,58 +10304,24 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
 
 
-      {/* 41f. CLOYSTER CLAMP (anatomical bivalve: two spiked shell halves slam shut on the target).
-            Cloyster's shell is purple-gray with jagged outward spikes and a toothed lip; the two
-            halves arc in from above and below and clamp together with a squeeze burst. */}
+      {/* 41f. CLOYSTER CLAMP (Sugimori Bivalve Body — Hydraulic Vice Clamp) */}
       {fx.type === 'cloyster_clamp' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Upper shell half — arcs down */}
-          <div className="absolute" style={{ animation: 'gbaCloysterClampUpper 1.2s cubic-bezier(0.3, 0.8, 0.2, 1) forwards' }}>
-            <svg width="96" height="56" viewBox="0 0 96 56" className="drop-shadow-[0_0_14px_#7c3aed]">
-              <defs>
-                <linearGradient id="clShellTop" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#8b5cf6" />
-                  <stop offset="55%" stopColor="#6d28d9" />
-                  <stop offset="100%" stopColor="#4c1d95" />
-                </linearGradient>
-              </defs>
-              {/* Dome */}
-              <path d="M6 50 Q10 18, 48 10 Q86 18, 90 50 Z" fill="url(#clShellTop)" stroke="#3b0764" strokeWidth="2" />
-              {/* Jagged spikes on top ridge */}
-              <path d="M20 22 L24 10 L28 21 Z" fill="#a78bfa" stroke="#6d28d9" strokeWidth="1" />
-              <path d="M40 14 L45 3 L50 13 Z" fill="#a78bfa" stroke="#6d28d9" strokeWidth="1" />
-              <path d="M60 15 L66 5 L70 16 Z" fill="#a78bfa" stroke="#6d28d9" strokeWidth="1" />
-              <path d="M76 24 L82 13 L85 25 Z" fill="#a78bfa" stroke="#6d28d9" strokeWidth="1" />
-              {/* Shell ridges */}
-              <path d="M14 40 Q48 26, 82 40" fill="none" stroke="#a78bfa" strokeWidth="1.5" opacity="0.5" />
-              <path d="M18 32 Q48 20, 78 32" fill="none" stroke="#c4b5fd" strokeWidth="1" opacity="0.4" />
-              {/* Toothed lip (inner edge) */}
-              <path d="M8 50 L16 45 L24 50 L32 45 L40 50 L48 45 L56 50 L64 45 L72 50 L80 45 L88 50" fill="none" stroke="#ede9fe" strokeWidth="2" strokeLinejoin="round" />
-            </svg>
+          {/* Authentic Cloyster Bivalve Body executing hydraulic clamp */}
+          <div className="absolute" style={{ animation: 'gbaCloysterClampMaw 1.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
+            <img
+              src="/assets/Cloyster_Clamp_Maw.png"
+              alt="Cloyster Clamp Maw"
+              className="w-20 h-20 object-contain pointer-events-none drop-shadow-[0_0_18px_#7c3aed]"
+            />
           </div>
-          {/* Lower shell half — arcs up */}
-          <div className="absolute" style={{ animation: 'gbaCloysterClampLower 1.2s cubic-bezier(0.3, 0.8, 0.2, 1) forwards' }}>
-            <svg width="96" height="48" viewBox="0 0 96 48" className="drop-shadow-[0_0_14px_#7c3aed]">
-              <defs>
-                <linearGradient id="clShellBot" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stopColor="#7c3aed" />
-                  <stop offset="55%" stopColor="#5b21b6" />
-                  <stop offset="100%" stopColor="#3b0764" />
-                </linearGradient>
-              </defs>
-              {/* Inverted dome */}
-              <path d="M6 6 Q10 38, 48 44 Q86 38, 90 6 Z" fill="url(#clShellBot)" stroke="#3b0764" strokeWidth="2" />
-              {/* Downward spikes */}
-              <path d="M24 34 L28 45 L32 33 Z" fill="#a78bfa" stroke="#6d28d9" strokeWidth="1" />
-              <path d="M44 38 L48 47 L52 38 Z" fill="#a78bfa" stroke="#6d28d9" strokeWidth="1" />
-              <path d="M64 33 L68 44 L72 32 Z" fill="#a78bfa" stroke="#6d28d9" strokeWidth="1" />
-              {/* Toothed lip (inner edge) */}
-              <path d="M8 6 L16 11 L24 6 L32 11 L40 6 L48 11 L56 6 L64 11 L72 6 L80 11 L88 6" fill="none" stroke="#ede9fe" strokeWidth="2" strokeLinejoin="round" />
-            </svg>
+          {/* Pearl horn energy flash at center apex */}
+          <div className="absolute" style={{ animation: 'gbaCloysterHornPulse 1.25s ease-out forwards', opacity: 0 }}>
+            <div className="w-12 h-12 rounded-full bg-radial from-violet-100 via-indigo-300 to-transparent blur-[2px] opacity-90" />
           </div>
           {/* Squeeze impact burst when the halves clamp shut */}
           {!fx.whiffed && (
-            <div className="absolute" style={{ animation: 'gbaCloysterClampBurst 1.2s ease-out 0.62s forwards', opacity: 0 }}>
+            <div className="absolute" style={{ animation: 'gbaCloysterClampBurst 1.2s ease-out 0.52s forwards', opacity: 0 }}>
               <svg width="70" height="70" viewBox="0 0 70 70">
                 {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map(deg => (
                   <line key={`cl-burst-${deg}`} x1="35" y1="35" x2="35" y2="10"
@@ -10167,8 +10334,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           )}
           {/* Purple pressure shockwave ring */}
           {!fx.whiffed && (
-            <div className="absolute" style={{ animation: 'gbaCloysterClampRing 1.2s ease-out 0.68s forwards', opacity: 0 }}>
-              <div className="w-24 h-24 rounded-full border-2 border-violet-300/70" />
+            <div className="absolute" style={{ animation: 'gbaCloysterClampRing 1.2s ease-out 0.55s forwards', opacity: 0 }}>
+              <div className="w-24 h-24 rounded-full border-2 border-violet-300/70 shadow-[0_0_15px_#7c3aed]" />
             </div>
           )}
         </div>
@@ -10665,8 +10832,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="flex items-center justify-center"
             style={{ animation: 'gbaWingSwoopSlash 1.15s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
           >
-            <span className="text-5xl select-none filter drop-shadow-[0_0_15px_#93c5fd]">🦅</span>
-            <div className="absolute text-2xl text-sky-300 animate-ping">💨</div>
+            <svg width="86" height="86" viewBox="0 0 86 86" className="drop-shadow-[0_0_24px_#38bdf8]">
+              {/* Wind crescent blade 1 */}
+              <path d="M12 74 Q32 38, 74 12 Q48 42, 22 72 Z" fill="#7dd3fc" stroke="#bae6fd" strokeWidth="1.5" />
+              {/* Wind crescent blade 2 */}
+              <path d="M14 14 Q42 36, 72 74 Q42 50, 20 20 Z" fill="#38bdf8" stroke="#ffffff" strokeWidth="1.5" opacity="0.85" />
+              {/* Central slipstream flash */}
+              <line x1="8" y1="43" x2="78" y2="43" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
+            </svg>
           </div>
         </div>
       )}
@@ -10678,9 +10851,20 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="flex flex-col items-center gap-1"
             style={{ animation: 'gbaSwordsDanceSpinUp 1.2s ease-out forwards' }}
           >
-            <span className="text-4xl select-none filter drop-shadow-[0_0_14px_#f59e0b]">⚔️</span>
+            <svg width="68" height="68" viewBox="0 0 68 68" className="drop-shadow-[0_0_20px_#f59e0b]">
+              {/* Sword 1: diagonal top-left to bottom-right */}
+              <line x1="12" y1="12" x2="56" y2="56" stroke="#fef08a" strokeWidth="3" strokeLinecap="round" />
+              <line x1="10" y1="10" x2="16" y2="16" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+              <line x1="48" y1="42" x2="42" y2="48" stroke="#f59e0b" strokeWidth="4" strokeLinecap="round" />
+              <circle cx="58" cy="58" r="3" fill="#f59e0b" />
+              {/* Sword 2: diagonal top-right to bottom-left */}
+              <line x1="56" y1="12" x2="12" y2="56" stroke="#fef08a" strokeWidth="3" strokeLinecap="round" />
+              <line x1="58" y1="10" x2="52" y2="16" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+              <line x1="20" y1="42" x2="26" y2="48" stroke="#f59e0b" strokeWidth="4" strokeLinecap="round" />
+              <circle cx="10" cy="58" r="3" fill="#f59e0b" />
+            </svg>
             <div className="w-20 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent rounded-full animate-pulse" />
-            <span className="text-xl text-amber-300 animate-ping">✨</span>
+            <span className="text-xl text-amber-300 animate-ping">✦</span>
           </div>
         </div>
       )}
@@ -10889,31 +11073,19 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Left scythe arm sweeping in */}
           <div className="absolute" style={{ animation: 'gbaScytherBladeLeft 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
-            <svg width="64" height="70" viewBox="0 0 64 70">
-              {/* Curved scythe blade matching Scyther illustration */}
-              <path d="M58 6 Q30 10, 16 30 Q8 44, 10 62 Q16 48, 28 38 Q44 24, 60 14 Z" fill="url(#scyBladeGradL)" stroke="#365314" strokeWidth="1.5" strokeLinejoin="round" />
-              {/* Sharp edge highlight */}
-              <path d="M56 8 Q32 14, 20 32 Q13 44, 13 56" fill="none" stroke="#fefce8" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
-              <defs>
-                <linearGradient id="scyBladeGradL" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#bef264" />
-                  <stop offset="100%" stopColor="#fef9c3" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <img
+              src="/assets/Scyther_Scythe_Blade.png"
+              alt="Scyther Blade Left"
+              className="w-16 h-16 object-contain pointer-events-none drop-shadow-[0_0_14px_#a3e635]"
+            />
           </div>
           {/* Right scythe arm sweeping in (mirrored) */}
           <div className="absolute" style={{ animation: 'gbaScytherBladeRight 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) 0.1s forwards', opacity: 0 }}>
-            <svg width="64" height="70" viewBox="0 0 64 70" style={{ transform: 'scaleX(-1)' }}>
-              <path d="M58 6 Q30 10, 16 30 Q8 44, 10 62 Q16 48, 28 38 Q44 24, 60 14 Z" fill="url(#scyBladeGradR)" stroke="#365314" strokeWidth="1.5" strokeLinejoin="round" />
-              <path d="M56 8 Q32 14, 20 32 Q13 44, 13 56" fill="none" stroke="#fefce8" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
-              <defs>
-                <linearGradient id="scyBladeGradR" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#bef264" />
-                  <stop offset="100%" stopColor="#fef9c3" />
-                </linearGradient>
-              </defs>
-            </svg>
+            <img
+              src="/assets/Scyther_Scythe_Blade.png"
+              alt="Scyther Blade Right"
+              className="w-16 h-16 object-contain pointer-events-none -scale-x-100 drop-shadow-[0_0_14px_#a3e635]"
+            />
           </div>
           {/* Crossing slash flash at center */}
           <div className="absolute" style={{ animation: 'gbaScytherSlashFlash 1.2s ease-out 0.35s forwards', opacity: 0 }}>
@@ -10950,14 +11122,20 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           </div>
           {/* Confusion stars orbiting target */}
           <div className="absolute" style={{ animation: 'gbaSupersonicConfuse 1.25s linear 0.3s forwards', opacity: 0 }}>
-            <span className="text-xl text-yellow-300 select-none drop-shadow-[0_0_8px_#fde047]">💫</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" className="drop-shadow-[0_0_10px_#fde047]">
+              <polygon points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8" fill="#fde047" stroke="#eab308" strokeWidth="1" />
+            </svg>
           </div>
           <div className="absolute" style={{ animation: 'gbaSupersonicConfuse2 1.25s linear 0.4s forwards', opacity: 0 }}>
-            <span className="text-sm text-purple-300 select-none drop-shadow-[0_0_6px_#a78bfa]">⭐</span>
+            <svg width="18" height="18" viewBox="0 0 18 18" className="drop-shadow-[0_0_8px_#c084fc]">
+              <polygon points="9,1 11,6 17,7 12,11 14,17 9,13 4,17 6,11 1,7 7,6" fill="#c084fc" stroke="#a855f7" strokeWidth="1" />
+            </svg>
           </div>
           {/* Musical note particles */}
           <div className="absolute -top-4" style={{ animation: 'gbaSupersonicNoteFloat 1.25s ease-out 0.2s forwards', opacity: 0 }}>
-            <span className="text-lg text-violet-300 select-none">♪</span>
+            <svg width="16" height="20" viewBox="0 0 18 22" fill="#c4b5fd" className="drop-shadow-[0_0_6px_#a78bfa]">
+              <path d="M5 14a4 3 0 1 0 4 3V6c2 1 4 3 4 5V9c-1-2-3-4-5-5H7v11.5A3.5 3.5 0 0 0 5 14z" />
+            </svg>
           </div>
         </div>
       )}
@@ -11402,53 +11580,33 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
 
-          {/* Surging Draconic Energy Silhouette (Gyarados wrathful dragon maw) */}
+          {/* Authentic 1996 Ken Sugimori Gyarados Roaring Dragon Maw (<= 60% Card Width) */}
           <div
-            className="absolute z-30 pointer-events-none"
-            style={{ animation: 'gbaDragonRageMaw 1.75s cubic-bezier(0.15, 0.9, 0.28, 1) forwards' }}
+            className="absolute z-30 pointer-events-none flex items-center justify-center"
+            style={{ animation: 'gbaGyaradosDragonRage 1.75s cubic-bezier(0.16, 0.9, 0.25, 1) forwards' }}
           >
-            <svg width="110" height="110" viewBox="0 0 120 120" className="overflow-visible drop-shadow-[0_0_24px_#4f46e5]">
-              <defs>
-                <linearGradient id="dragonRageHeadGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#c7d2fe" />
-                  <stop offset="30%" stopColor="#6366f1" />
-                  <stop offset="70%" stopColor="#3730a3" />
-                  <stop offset="100%" stopColor="#1e1b4b" />
-                </linearGradient>
-              </defs>
-
-              {/* Upper dragon skull and sweeping horns */}
-              <path
-                d="M15 35 Q30 15, 60 8 Q90 15, 105 35 Q115 15, 118 5 Q108 28, 102 45 Q110 52, 112 65 Q95 62, 88 56 Q80 72, 60 74 Q40 72, 32 56 Q25 62, 8 65 Q10 52, 18 45 Q12 28, 2 5 Q5 15, 15 35 Z"
-                fill="url(#dragonRageHeadGrad)"
-                stroke="#a5b4fc"
-                strokeWidth="2.5"
+            <div className="relative w-20 h-20 flex items-center justify-center">
+              <img
+                src="/assets/Gyarados_Dragon_Rage.png"
+                alt="Gyarados Dragon Rage"
+                className="w-full h-full object-contain drop-shadow-[0_0_18px_rgba(79,70,229,0.85)] drop-shadow-[0_0_28px_rgba(56,189,248,0.65)] filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)] select-none pointer-events-none"
               />
-
-              {/* Roaring lower dragon jaw */}
-              <path
-                d="M32 68 Q60 102, 88 68 Q60 84, 32 68 Z"
-                fill="#312e81"
-                stroke="#6366f1"
-                strokeWidth="2"
+              {/* Draconic plasma orb charging in open mouth/throat (positioned at Gyarados mouth coordinates) */}
+              <div
+                className="absolute w-4 h-4 rounded-full bg-cyan-300/90 blur-[1.5px] shadow-[0_0_12px_#38bdf8]"
+                style={{
+                  top: '56%',
+                  left: '28%',
+                  transform: 'translate(-50%, -50%)',
+                  animation: 'gbaGyaradosThroatCharge 1.75s ease-in-out forwards'
+                }}
               />
-
-              {/* Razor draconic fangs */}
-              <polygon points="40,54 44,66 48,54" fill="#ffffff" />
-              <polygon points="72,54 76,66 80,54" fill="#ffffff" />
-              <polygon points="56,56 60,70 64,56" fill="#ffffff" />
-              <polygon points="46,80 50,70 54,78" fill="#ffffff" />
-              <polygon points="66,78 70,70 74,80" fill="#ffffff" />
-
-              {/* Furious glowing cyan draconic eyes */}
-              <polygon points="36,36 48,32 44,40" fill="#38bdf8" className="drop-shadow-[0_0_12px_#38bdf8]" />
-              <polygon points="84,36 72,32 76,40" fill="#38bdf8" className="drop-shadow-[0_0_12px_#38bdf8]" />
-            </svg>
+            </div>
           </div>
 
           {/* Spiraling dual dragon breath torrents */}
           <div
-            className="absolute z-25 pointer-events-none"
+            className="absolute z-35 pointer-events-none"
             style={{ animation: 'gbaDragonRageBreath1 1.75s ease-out forwards' }}
           >
             <svg width="130" height="40" viewBox="0 0 130 40">
@@ -11470,7 +11628,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
           <div
-            className="absolute z-25 pointer-events-none"
+            className="absolute z-35 pointer-events-none"
             style={{ animation: 'gbaDragonRageBreath2 1.75s ease-out forwards' }}
           >
             <svg width="130" height="40" viewBox="0 0 130 40">

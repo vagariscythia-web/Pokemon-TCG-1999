@@ -1,0 +1,110 @@
+Total non-img FX: 170
+Pokemon-specific SVG moves: 105
+
+FX Name                        | Pokemon                   | SVGs  | Comment
+==============================================================================================================
+psyshock_waves                 | abra                      | 2     | 3. ABRA PSYSHOCK
+doubleslap                     | poliwhirl                 | 1     | 
+string_shot_cocoon             | dratini                   | 1     | 5. DRATINI WRAP / STRING SHOT COCOON
+poison_sting                   | weedle, ekans             | 4     | 7. POISON STING (Weedle/Ekans - venomous needle stinger, GBA-style)
+toxic_corrosion                | nidoking                  | 2     | 7c. TOXIC CORROSION (Nidoking Lv. 48 — Double-Poison Corrosive Venom G
+poison_vapor                   | arbok                     | 4     | 7b. POISON VAPOR (Dark Arbok) - a venom mist that rolls off the Active
+heavy_thunder_strike           | raichu                    | 2     | 11c. HEAVY THUNDER STRIKE (Raichu Lv. 40 — 60 DMG Celestial Thunder Bo
+flamethrower_stream            | charmeleon, arcanine, mag | 3     | 12a0. FLAMETHROWER STREAM (Arcanine/Charmeleon/Magmar/Flareon Flamethr
+ember_spark                    | charmander, ponyta        | 3     | 12a. EMBER SPARK (Charmander, Ponyta — rising flame with visible fire 
+flare_burst                    | growlithe                 | 3     | 12b. FLARE BURST (Growlithe — quick organic flash of flame tongues, GB
+flame_tail_whip                | charmander, ponyta        | 3     | 12c. FLAME TAIL WHIP (Ponyta Flame Tail / Charmander Fire Tail — arcin
+fire_blast_star                | ninetales                 | 3     | 12d. FIRE BLAST STAR (Ninetales — GBA だいもんじ: the kanji 'fire' characte
+fire_spin_vortex               | charizard                 | 1     | 12e. FIRE SPIN VORTEX (Charizard Lv. 76 — 100 DMG Infernal Firestorm C
+fire_punch_blaze               | magmar                    | 3     | 12f. FIRE PUNCH BLAZE (Magmar Fire Punch — fire-wreathed fist lunge wi
+flame_pillar                   | rapidash                  | 2     | 12g. FLAME PILLAR (Dark Rapidash — vertical fire column erupting from 
+wildfire_scorch                | moltres                   | 4     | 12h. WILDFIRE SCORCH (Moltres — expanding legendary heat wave, no dire
+fireball_barrage               | charmeleon, charizard     | 3     | 12i. FIREBALL BARRAGE (Dark Charizard Continuous Fireball / Dark Charm
+playing_with_fire              | flareon                   | 2     | 12j. PLAYING WITH FIRE (Dark Flareon — mischievous flickering flames d
+bubblebeam                     | gyarados                  | 6     | 14. BUBBLEBEAM (Gyarados 40 dmg — dense, fast, high-impact GBA bubble 
+bubble_gentle                  | squirtle                  | 6     | 14b. BUBBLE (Squirtle — original gentle rising iridescent bubbles)
+blizzard_storm                 | articuno                  | 1     | 15b. BLIZZARD STORM (Articuno - icy wind + snow particles wrapping aro
+solar_beam_charge_blast        | venusaur                  | 2     | 16. SOLAR BEAM (Venusaur Lv. 67 — 60 DMG Planetary Solar Cannon)
+psybeam_kaleidoscope           | abra, kadabra, alakazam   | 2     | 17. PSYBEAM KALEIDOSCOPE (Alakazam Lv. 42 / Kadabra — Mind-Bending Sac
+vine_whip_lash                 | ivysaur                   | 5     | 18b. VINE WHIP LASH (Ivysaur - whip-crack vine arcs)
+seismic_toss_machamp           | machamp                   | 2     | 19b. SEISMIC TOSS (Machamp Lv. 67 — 60 DMG 4-Armed Tectonic Upheaval)
+dragonite_slam                 | dragonite                 | 3     | 19c. DRAGONITE SLAM (Dragonite Lv. 45 — 40x DMG Heavy Draconic Tail Qu
+mega_punch_nidoqueen           | nidoqueen                 | 3     | 20b. MEGA PUNCH (Nidoqueen Lv. 43 — 50 DMG Armored Royal Kinetic Fist)
+pidgeot_hurricane              | pidgeot                   | 3     | 20c. PIDGEOT HURRICANE (Pidgeot Lv. 40 — Stratospheric Cyclone & Card 
+submission_grapple             | machoke                   | 2     | 20d. MACHOKE SUBMISSION (Machoke Lv. 40 — 60 DMG Brutal Judo Submissio
+raichu_gigashock               | raichu                    | 4     | 20g. RAICHU GIGASHOCK (Raichu Fossil Lv. 45 — 30 DMG Active Strike + 3
+electrode_chain_lightning      | electrode                 | 2     | 20j. ELECTRODE CHAIN LIGHTNING (Electrode Lv. 40/42 — Multi-Target Sph
+vaporeon_hydro_pump            | vaporeon                  | 1     | 20k. VAPOREON HYDRO PUMP (Vaporeon Lv. 42 — 50+ DMG Aquatic Tidal Mael
+gengar_dark_mind               | gengar, hypno             | 2     | 20l. GENGAR DARK MIND (Gengar Lv. 38 / Hypno — Spectral Abyssal Specte
+muk_sludge_deluge              | muk                       | 2     | 20m. MUK SLUDGE DELUGE (Muk Lv. 34 — Thick Viscous Purple/Green Toxic 
+machamp_karate_chop            | machoke, machamp          | 2     | 20n. MACHAMP KARATE CHOP (Machoke Lv. 40 / Machamp — High-Velocity Mar
+haunter_dream_eater            | haunter                   | 2     | 20o. HAUNTER DREAM EATER (Haunter Lv. 22 — Ethereal Slumber Essence Ex
+hypno_hypnotic_pendulum        | hypno                     | 1     | 20p. HYPNO HYPNOTIC PENDULUM (Hypno Lv. 36 — Oscillating Harmonic Tran
+golem_avalanche                | golem                     | 3     | 20r. GOLEM AVALANCHE (Golem Lv. 36 — 60 DMG Bedrock Tremor, Mountain S
+wigglytuff_do_the_wave         | wigglytuff                | 2     | 20s. WIGGLYTUFF DO THE WAVE (Wigglytuff Lv. 36 — Stadium Rhythm Pulse 
+vileplume_petal_dance          | vileplume                 | 3     | 20t. VILEPLUME PETAL DANCE (Vileplume Lv. 35 — Razor Petal Vortex Cycl
+poliwrath_whirlpool_vortex     | poliwrath                 | 1     | 20u. POLIWRATH WHIRLPOOL (Poliwrath Lv. 48 — Deep Oceanic Energy-Strip
+dewgong_aurora_beam            | dewgong                   | 2     | 20v. DEWGONG AURORA BEAM (Dewgong Lv. 42 — Undulating Glacial Aurora C
+kabutops_sickle_slash          | kabuto, kabutops          | 2     | 20w. KABUTOPS SHARP SICKLE & ABSORB (Kabutops Lv. 30 — Prehistoric X-S
+marowak_bonemerang             | marowak                   | 1     | 20x. MAROWAK BONEMERANG (Marowak Lv. 26 — Dual-Pass 3D Spinning Bone T
+nidoking_thrash_fury           | nidoking                  | 2     | 20y. NIDOKING THRASH (Nidoking Lv. 48 — Berserk Rampage Tremor & Tripl
+primeape_tantrum_rampage       | primeape                  | 2     | 20aa. PRIMEAPE TANTRUM (Primeape Lv. 35 — Uncontrollable Furious Rage 
+rhydon_horn_drill              | nidorino, rhydon          | 1     | 20ab. RHYDON HORN DRILL (Rhydon / Nidorino — 50 DMG High-Torque Spiral
+exeggutor_big_eggsplosion      | exeggutor                 | 3     | 20ac. EXEGGUATOR BIG EGGSPLOSION (Exeggutor Lv. 35 — Multi-Coconut Aer
+butterfree_mega_drain          | butterfree                | 1     | 20ad. BUTTERFREE MEGA DRAIN (Butterfree Lv. 37 — Lepidopteran Wing Sca
+ninetales_fire_blast           | ninetales                 | 1     | 20ae. NINETALES FIRE BLAST (Ninetales Lv. 32 — Daimonji Kanji Star Fla
+hyper_beam_annihilation        | golduck, dragonair        | 1     | 20af. HYPER BEAM ANNIHILATION (Dragonair Lv. 33 / Golduck Lv. 27 — Hig
+venomoth_venom_powder          | venomoth, hypno           | 2     | 20ah. VENOMOTH VENOM POWDER (Venomoth Lv. 28 — Dual Poison & Hypnotic 
+rapidash_flame_stomp           | rapidash                  | 2     | 20ai. RAPIDASH FLAME STOMP (Rapidash Lv. 33 — Equine Mane Fire & Heavy
+graveler_rock_throw            | graveler                  | 2     | 20aj. GRAVELER ROCK THROW (Graveler Lv. 29 — Heavy Polygonal Granite B
+jolteon_pin_missile            | jolteon                   | 5     | 20ak. JOLTEON PIN MISSILE (Jolteon Lv. 29 — 4-Volley High-Voltage Fur 
+dark_gyarados_ice_beam         | gyarados                  | 1     | 20al. DARK GYARADOS ICE BEAM (Dark Gyarados Lv. 31 — Glacial Sub-Zero 
+dark_blastoise_hydrocannon     | blastoise                 | 1     | 20ao. DARK BLASTOISE HYDROCANNON (Dark Blastoise Lv. 28 — Gunmetal Twi
+dark_charizard_fireball        | charizard                 | 3     | 20ap. DARK CHARIZARD CONTINUOUS FIREBALL (Dark Charizard Lv. 38 — Trip
+zubat_supersonic               | zubat                     | 1     | 20ba. ZUBAT SUPERSONIC (Zubat Lv. 10 — Concentric Ultrasonic Echolocat
+rattata_quick_attack           | rattata                   | 2     | 20bc. RATTATA QUICK ATTACK (Compact High-Velocity Diagonal Zigzag Flas
+rattata_gnaw_bite              | rattata                   | 2     | 20bd. RATTATA GNAW / BITE (Dedicated Rodent Buck Incisor Crunch)
+pidgey_whirlwind               | pidgey                    | 2     | 20be. PIDGEY WHIRLWIND (Ascending Funnel & Authentic Ken Sugimori Down
+meowth_pay_day                 | meowth                    | 1     | 20bf. MEOWTH PAY DAY (3D Koban Gold Coin Flip & Shimmer Shockwave)
+meowth_coin_hurl               | meowth                    | 1     | 20bg. MEOWTH COIN HURL (Rapid-Fire Volley of Koban Coins)
+spearow_peck                   | spearow                   | 2     | 20bh. SPEAROW PECK (Rapid-Fire Triple Spearhead Beak Thrust)
+spearow_mirror_move            | spearow                   | 1     | 20bi. SPEAROW MIRROR MOVE (Hexagonal Prismatic Reflection Barrier)
+poliwag_water_gun              | poliwag, poliwhirl        | 3     | 20bj. POLIWAG & POLIWHIRL WATER GUN (Focused Pressurized Water Jet & I
+geodude_stone_barrage          | geodude                   | 1     | 20bk. GEODUDE STONE BARRAGE (Sequential Granite Boulder Volley & Groun
+vulpix_confuse_ray             | vulpix, hypno             | 1     | 20bl. VULPIX CONFUSE RAY (Mystical Kitsunebi Fox-Fire Orbit & Hypnotic
+oddish_stun_spore              | oddish                    | 1     | 20bm. ODDISH STUN SPORE (Leafy Bulb Shake & Electrostatic Golden Spore
+oddish_sprout                  | oddish                    | 1     | 20bn. ODDISH SPROUT (Botanical Emergence & Radiant Nature Seedling)
+jigglypuff_pound               | jigglypuff                | 2     | 20bp. JIGGLYPUFF POUND (Cute Puffy Slap & Pink Comic Starburst)
+clefairy_sing                  | clefairy                  | 1     | 20br. CLEFAIRY SING (Melodic Starlight Arcs & Lullaby Pulse)
+abra_psyshock                  | abra                      | 1     | 20bs. ABRA PSYSHOCK (Concentric Telekinetic Shockwave & Psychic Distor
+drowzee_pound                  | drowzee, hypno            | 1     | 20bu. DROWZEE POUND (Hypnotic Palm Strike & Psychic Impact)
+drowzee_confuse_ray            | drowzee, hypno            | 1     | 20bv. DROWZEE CONFUSE RAY (Revolving Hypnotic Spirals & Chromatic Wave
+drowzee_nightmare              | drowzee                   | 1     | 20bw. DROWZEE NIGHTMARE (Dark Dream Haze & Eerie Shadow Eyes)
+kangaskhan_comet_punch         | kangaskhan                | 2     | 20ca. KANGASKHAN COMET PUNCH (Rapid Sequential Boxing Flurry & Comet T
+kangaskhan_fetch               | kangaskhan                | 1     | 20cb. KANGASKHAN FETCH (Maternal Pouch Sparkle & Draw Indicator)
+bat_wing_flap                  | golbat                    | 4     | 22a. BAT WING FLAP (Flitter - Golbat's wing strike)
+water_vortex                   | poliwrath                 | 2     | 22b. WATER VORTEX (Whirlpool - Poliwrath Lv. 48 — 40 DMG + Energy Disc
+sand_attack_throw              | sandshrew                 | 1     | 23b. SAND ATTACK THROW (Sandshrew - sand grains hurled at target)
+sand_attack_dust               | eevee                     | 1     | 23c. SAND ATTACK DUST (Eevee - blinding dust cloud over target)
+confuse_ray_spiral             | vulpix, alakazam, drowzee | 1     | 26b. CONFUSE RAY (Vulpix, Alakazam, Drowzee, Lapras - GBA-style spinni
+super_psy_blast                | abra, kadabra             | 2     | 26c. SUPER PSY BLAST (Kadabra - signature high-impact telekinetic spoo
+sludge_bomb                    | muk                       | 1     | 28. SLUDGE BOMB (Muk — GBA-style viscous purple sludge lob, thick and 
+nasty_goo                      | grimer                    | 3     | 28b. NASTY GOO (Grimer - GBA-style dripping sticky goo splatter)
+sticky_hands_grab              | grimer                    | 3     | 28c. STICKY HANDS (Grimer — GBA-style stretching sticky arms reaching 
+fire_take_down                 | arcanine                  | 2     | 41a. FIRE TAKE DOWN (Arcanine Lv. 45 — 80 DMG Infernal Cataclysm Tackl
+quick_attack_dash              | rattata, eevee, vaporeon  | 3     | 41c. QUICK ATTACK DASH (Eevee / Vaporeon / Rattata) - High-speed zigza
+mud_slap_throw                 | diglett, geodude          | 3     | 41d. MUD SLAP THROW (Diglett / Geodude) - Mud clod hurled with dirt sp
+cloyster_clamp                 | cloyster                  | 3     | 41f. CLOYSTER CLAMP (anatomical bivalve: two spiked shell halves slam 
+cloyster_spike_cannon          | cloyster                  | 3     | 41g. CLOYSTER SPIKE CANNON (anatomical shell spikes fired like artille
+waterfall_surf                 | seaking                   | 3     | 41h. WATERFALL SURF (Seaking — a rising, cresting wave cascade; delibe
+stone_barrage_single           | geodude                   | 1     | 44a. STONE BARRAGE SINGLE ROCK (Geodude — one small rock per heads, se
+big_boulder                    | graveler                  | 1     | 44b. BIG BOULDER (Graveler Rock Throw — one large boulder with a heavy
+avalanche_cascade              | golem                     | 3     | 44c. AVALANCHE CASCADE (Golem Avalanche — massive boulders tumbling fr
+tail_wag                       | eevee                     | 3     | 46d. TAIL WAG (Eevee - playful bushy tail swaying side to side with mo
+agility_dash                   | raichu, rapidash          | 4     | 46e. AGILITY DASH (Rapidash / Raichu - blinding speed streaks and afte
+stomp_hoof                     | ponyta, rapidash          | 3     | 46h. STOMP HOOF (Ponyta/Rapidash - flaming hoof slamming down from abo
+scyther_blade_dance            | scyther                   | 3     | 46c. SCYTHER BLADE DANCE (Scyther Swords Dance - scythe-arm crossing s
+supersonic_waves               | zubat                     | 5     | 46b. SUPERSONIC WAVES (Zubat Supersonic - GBA-style concentric sound a
+hyper_beam_ice                 | golduck                   | 4     | 48b. HYPER BEAM ICE (Golduck — ice-blue charged beam, GBA-style)
+nidoran_horn_charge            | nidoran                   | 2     | 49b. NIDORAN HORN CHARGE (Nidoran♂/♀ - pink poison horn thrust)
+kick_smash                     | ponyta, rapidash          | 2     | 50c. KICK SMASH (Ponyta/Rapidash - flaming hoof slam)

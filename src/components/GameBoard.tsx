@@ -1900,6 +1900,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     if (e.button !== 0 && e.pointerType === 'mouse') return;
     if ((e.target as HTMLElement).closest('[data-hand-card="true"]')) return;
 
+    // Only enable drag-pull scroll if hand actually has scrollable overflow
+    const canScrollHand = Boolean(
+      handScrollRef.current &&
+      handScrollRef.current.scrollWidth > handScrollRef.current.clientWidth + 8
+    );
+    if (!canScrollHand) return;
+
     const startX = e.clientX;
     const startScrollLeft = handScrollRef.current ? handScrollRef.current.scrollLeft : 0;
     let hasScrolled = false;
@@ -1961,6 +1968,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const initialCenterY = rect.top + rect.height / 2;
     const startScrollLeft = handScrollRef.current ? handScrollRef.current.scrollLeft : 0;
     const canPlayCard = Boolean(isPlayerTurn || isInitialSetup);
+    const canScrollHand = Boolean(
+      handScrollRef.current &&
+      handScrollRef.current.scrollWidth > handScrollRef.current.clientWidth + 8
+    );
 
     let gestureMode: 'undecided' | 'scroll' | 'drag' = 'undecided';
     let hasScrolled = false;
@@ -1976,13 +1987,23 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const dist = Math.hypot(dx, dy);
 
       if (gestureMode === 'undecided') {
-        if (dist > 6) {
-          // If movement is predominantly horizontal or downward (or card playing is not allowed), scroll hand
-          if (absDx > absDy || dy > 0 || !canPlayCard) {
-            gestureMode = 'scroll';
-            hasScrolled = true;
-          } else if (dy < -6 && canPlayCard) {
+        if (!canScrollHand) {
+          // Hand cards fit comfortably on screen: No horizontal scroll needed or possible.
+          // Immediate zero-barrier card drag as soon as pointer starts moving.
+          if (dist > 4 && canPlayCard) {
             gestureMode = 'drag';
+          }
+        } else {
+          // Hand has horizontal scroll overflow:
+          // 1. Any upward movement (lifting card towards game board / arena) engages card drag immediately
+          if (canPlayCard && dy < -5) {
+            gestureMode = 'drag';
+          } else if (dist > 6) {
+            // 2. Only horizontal slides or downward movements engage hand scroll
+            if (absDx > absDy * 0.8 || dy > 0 || !canPlayCard) {
+              gestureMode = 'scroll';
+              hasScrolled = true;
+            }
           }
         }
       }

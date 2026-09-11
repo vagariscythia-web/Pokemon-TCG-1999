@@ -1,0 +1,318 @@
+Total FX blocks found: 204
+
+=== CRITERIA 1: CONTAINS EMOJIS / ICONS ===
+FX: bite -> Emojis: ['✧ (U+2727)']
+FX: psyshock_waves -> Emojis: ['🌀 (U+1F300)', '⚡ (U+26A1)']
+FX: string_shot_cocoon -> Emojis: ['️ (U+FE0F)', '🕸 (U+1F578)']
+FX: flamethrower_blaze -> Emojis: ['🔥 (U+1F525)']
+FX: flame_tail_whip -> Emojis: ['も (U+3082)', 'じ (U+3058)', 'ん (U+3093)', '大 (U+5927)', 'い (U+3044)', 'だ (U+3060)']
+FX: fire_blast_star -> Emojis: ['も (U+3082)', 'じ (U+3058)', 'ん (U+3093)', '大 (U+5927)', 'い (U+3044)', 'だ (U+3060)']
+FX: blizzard_storm -> Emojis: ['️ (U+FE0F)', '❄ (U+2744)']
+FX: leech_seed_vines -> Emojis: ['🌿 (U+1F33F)', '🌱 (U+1F331)', '✨ (U+2728)']
+FX: ninetales_fire_blast -> Emojis: ['大 (U+5927)']
+FX: jigglypuff_lullaby -> Emojis: ['♫ (U+266B)', '♪ (U+266A)']
+FX: pin_missile_volley -> Emojis: ['📍 (U+1F4CD)']
+FX: bat_wing_flap -> Emojis: ['💥 (U+1F4A5)']
+FX: wing_slash -> Emojis: ['🦅 (U+1F985)', '💨 (U+1F4A8)']
+FX: swords_dance_buff -> Emojis: ['⚔ (U+2694)', '️ (U+FE0F)', '✨ (U+2728)']
+FX: tail_wag -> Emojis: ['✧ (U+2727)']
+FX: agility_dash -> Emojis: ['✧ (U+2727)']
+FX: dizziness_swirl -> Emojis: ['★ (U+2605)', '✨ (U+2728)', '✧ (U+2727)']
+FX: supersonic_waves -> Emojis: ['⭐ (U+2B50)', '💫 (U+1F4AB)', '♪ (U+266A)']
+FX: horn_gore -> Emojis: ['♀ (U+2640)', '♂ (U+2642)']
+FX: palm_strike -> Emojis: ['✧ (U+2727)']
+
+=== CRITERIA 2: USES IMAGES (<img) ===
+
+FX: hitmonchan_jab
+  Images: ['/assets/Hitmonchan_Jab.png']
+  Anims: {'gbaHitmonchanImpactStar', 'gbaHitmonchanJab', 'gbaHitmonchanWindStreaks'}
+    - gbaHitmonchanImpactStar: 5 stops (0%, 25%, 50%, 75%, 100%...) | blur: False
+    - gbaHitmonchanJab: 24 stops (0%, 40%, 18%, 10%, 36%, 15%, 25%...) | blur: False
+    - gbaHitmonchanWindStreaks: 5 stops (0%, 20%, 55%, 80%, 100%...) | blur: False
+
+FX: hitmonchan_special_punch
+  Images: ['/assets/Hitmonchan_SpecialPunch.png']
+  Anims: {'gbaHitmonchanScreenShake', 'gbaHitmonchanImpactStar', 'gbaHitmonchanSpecialPunch', 'gbaPunchSpeedLines', 'gbaExplosionRing'}
+    - gbaHitmonchanScreenShake: 9 stops (0%, 10%, 20%, 30%, 40%, 50%, 60%...) | blur: False
+    - gbaHitmonchanImpactStar: 5 stops (0%, 25%, 50%, 75%, 100%...) | blur: False
+    - gbaHitmonchanSpecialPunch: 27 stops (0%, 48%, 22%, 8%, 44%, 19%, 18%...) | blur: False
+    - gbaPunchSpeedLines: 4 stops (0%, 25%, 50%, 100%...) | blur: False
+    - gbaExplosionRing: 4 stops (0%, 30%, 60%, 100%...) | blur: False
+
+FX: thunder_punch
+  Images: ['/assets/ThunderPunch_Fist.png']
+  Anims: {'gbaThunderPunchApproach', 'gbaThunderPunchCamouflage', 'gbaThunderPunchAura', 'gbaThunderPunchRing', 'gbaThunderPunchSpark', 'gbaElectricFlicker', 'gbaThunderPunchGlow'}
+    - gbaThunderPunchApproach: 27 stops (0%, 42%, 20%, 8%, 38%, 17%, 20%...) | blur: False
+    - gbaThunderPunchCamouflage: 5 stops (0%, 18%, 45%, 75%, 100%...) | blur: False
+    - gbaThunderPunchAura: 4 stops (0%, 25%, 60%, 100%...) | blur: False
+    - gbaThunderPunchRing: 4 stops (0%, 30%, 65%, 100%...) | blur: False
+    - gbaThunderPunchSpark: 4 stops (0%, 30%, 60%, 100%...) | blur: False
+    - gbaElectricFlicker: 9 stops (0%, 10%, 20%, 30%, 45%, 55%, 70%...) | blur: False
+    - gbaThunderPunchGlow: 4 stops (0%, 45%, 78%, 100%...) | blur: False
+
+FX: super_fang_guillotine
+  Images: ['/assets/Raticate_SuperFang_Jaws.png']
+  Anims: {'gbaSuperFangUpperJaw', 'gbaSuperFangVignette', 'gbaRaticateSugimoriLunge', 'gbaSuperFangLowerJaw', 'gbaSuperFangCleaveFissure', 'gbaSuperFangSparks'}
+    - gbaSuperFangUpperJaw: 6 stops (0%, 25%, 42%, 68%, 85%, 100%...) | blur: False
+    - gbaSuperFangVignette: 5 stops (0%, 20%, 45%, 75%, 100%...) | blur: False
+    - gbaRaticateSugimoriLunge: 6 stops (0%, 22%, 40%, 62%, 82%, 100%...) | blur: False
+    - gbaSuperFangLowerJaw: 6 stops (0%, 25%, 42%, 68%, 85%, 100%...) | blur: False
+    - gbaSuperFangCleaveFissure: 5 stops (0%, 40%, 45%, 72%, 100%...) | blur: False
+    - gbaSuperFangSparks: 5 stops (0%, 42%, 52%, 78%, 100%...) | blur: False
+
+FX: victreebel_acid_melt
+  Images: ['/assets/Victreebel_Acid_Maw.png']
+  Anims: {'gbaAcidDelugeStream', 'gbaAcidCorrosionMist', 'gbaAcidSludgeDrip', 'gbaVictreebelSugimoriErupt', 'gbaAcidSizzlingBubbles'}
+    - gbaAcidDelugeStream: 5 stops (0%, 22%, 40%, 70%, 100%...) | blur: False
+    - gbaAcidCorrosionMist: 4 stops (0%, 30%, 70%, 100%...) | blur: True
+    - gbaAcidSludgeDrip: 5 stops (0%, 30%, 50%, 80%, 100%...) | blur: False
+    - gbaVictreebelSugimoriErupt: 5 stops (0%, 25%, 45%, 72%, 100%...) | blur: False
+    - gbaAcidSizzlingBubbles: 5 stops (0%, 35%, 55%, 80%, 100%...) | blur: False
+
+FX: beedrill_twineedle
+  Images: ['/assets/Beedrill_Twineedle_Lances.png']
+  Anims: {'gbaBeedrillSparks', 'gbaBeedrillPiercingRing', 'gbaBeedrillLancesThrust'}
+    - gbaBeedrillSparks: 5 stops (0%, 32%, 48%, 75%, 100%...) | blur: False
+    - gbaBeedrillPiercingRing: 5 stops (0%, 30%, 45%, 70%, 100%...) | blur: False
+    - gbaBeedrillLancesThrust: 7 stops (0%, 20%, 35%, 50%, 65%, 85%, 100%...) | blur: False
+
+FX: dugtrio_earthquake
+  Images: ['/assets/Dugtrio_Earthquake_Trio.png']
+  Anims: {'gbaDugtrioQuakeRocks', 'gbaDugtrioFaultLine', 'gbaDugtrioErupt'}
+    - gbaDugtrioQuakeRocks: 5 stops (0%, 38%, 52%, 78%, 100%...) | blur: False
+    - gbaDugtrioFaultLine: 5 stops (0%, 35%, 48%, 75%, 100%...) | blur: False
+    - gbaDugtrioErupt: 6 stops (0%, 22%, 40%, 65%, 85%, 100%...) | blur: False
+
+FX: fearow_drill_peck
+  Images: ['/assets/Fearow_DrillPeck_Beak.png']
+  Anims: {'gbaFearowBeakDrill', 'gbaFearowVortexCone', 'gbaFearowDrillSparks'}
+    - gbaFearowBeakDrill: 8 stops (0%, 16%, 30%, 42%, 54%, 68%, 82%...) | blur: True
+    - gbaFearowVortexCone: 4 stops (0%, 30%, 70%, 100%...) | blur: False
+    - gbaFearowDrillSparks: 3 stops (0%, 40%, 100%...) | blur: False
+
+FX: arbok_poison_fang
+  Images: ['/assets/Arbok_PoisonFang_Maw.png']
+  Anims: {'gbaArbokVenomSpurtR', 'gbaArbokVenomSpurtL', 'gbaArbokViperFangs'}
+    - gbaArbokVenomSpurtR: 4 stops (0%, 42%, 55%, 100%...) | blur: False
+    - gbaArbokVenomSpurtL: 4 stops (0%, 42%, 55%, 100%...) | blur: False
+    - gbaArbokViperFangs: 5 stops (0%, 30%, 45%, 70%, 100%...) | blur: False
+
+FX: golbat_leech_life
+  Images: ['/assets/Golbat_LeechLife_Maw.png']
+  Anims: {'gbaGolbatHealAuraPulse', 'gbaGolbatVampireDive', 'gbaGolbatVitalityOrbSiphon'}
+    - gbaGolbatHealAuraPulse: 4 stops (0%, 50%, 70%, 100%...) | blur: False
+    - gbaGolbatVampireDive: 5 stops (0%, 25%, 45%, 75%, 100%...) | blur: False
+    - gbaGolbatVitalityOrbSiphon: 4 stops (0%, 35%, 50%, 100%...) | blur: False
+
+FX: farfetchd_leek_slap
+  Images: ['/assets/Farfetchd_Leek_Weapon.png']
+  Anims: {'gbaFarfetchdLeekSwoop', 'gbaFarfetchdLeekSlashMarks', 'gbaFarfetchdLeafFibers', 'gbaFarfetchdImpactWave'}
+    - gbaFarfetchdLeekSwoop: 7 stops (0%, 20%, 38%, 44%, 50%, 75%, 100%...) | blur: False
+    - gbaFarfetchdLeekSlashMarks: 5 stops (0%, 35%, 40%, 65%, 100%...) | blur: False
+    - gbaFarfetchdLeafFibers: 4 stops (0%, 15%, 60%, 100%...) | blur: False
+    - gbaFarfetchdImpactWave: 5 stops (0%, 36%, 42%, 75%, 100%...) | blur: False
+
+FX: cubone_bone_strike
+  Images: ['/assets/Cubone_Bone_Club.png']
+  Anims: {'gbaCuboneBoneShards', 'gbaCuboneGroundCracks', 'gbaCuboneBoneSmash', 'gbaCuboneDustRing'}
+    - gbaCuboneBoneShards: 4 stops (0%, 20%, 65%, 100%...) | blur: False
+    - gbaCuboneGroundCracks: 5 stops (0%, 40%, 45%, 75%, 100%...) | blur: False
+    - gbaCuboneBoneSmash: 8 stops (0%, 18%, 32%, 44%, 54%, 66%, 80%...) | blur: True
+    - gbaCuboneDustRing: 5 stops (0%, 40%, 46%, 80%, 100%...) | blur: False
+
+FX: bulbasaur_leech_seed
+  Images: ['/assets/Bulbasaur_Leech_Seed_Pod.png']
+  Anims: {'gbaBulbasaurSeedImplant', 'gbaBulbasaurDrainRipple', 'gbaBulbasaurTendrilClasp', 'gbaBulbasaurLifeSiphon'}
+    - gbaBulbasaurSeedImplant: 7 stops (0%, 30%, 45%, 50%, 55%, 80%, 100%...) | blur: False
+    - gbaBulbasaurDrainRipple: 5 stops (0%, 48%, 56%, 85%, 100%...) | blur: False
+    - gbaBulbasaurTendrilClasp: 5 stops (0%, 45%, 55%, 80%, 100%...) | blur: False
+    - gbaBulbasaurLifeSiphon: 4 stops (0%, 20%, 60%, 100%...) | blur: False
+
+FX: squirtle_shell_defense
+  Images: ['/assets/Squirtle_Turtle_Shell.png']
+  Anims: {'gbaSquirtleDeflectSplash', 'gbaSquirtleShellSnap', 'gbaSquirtleShieldRings', 'gbaSquirtleReflectShimmer'}
+    - gbaSquirtleDeflectSplash: 4 stops (0%, 20%, 65%, 100%...) | blur: False
+    - gbaSquirtleShellSnap: 7 stops (0%, 30%, 42%, 46%, 52%, 80%, 100%...) | blur: False
+    - gbaSquirtleShieldRings: 5 stops (0%, 40%, 48%, 80%, 100%...) | blur: False
+    - gbaSquirtleReflectShimmer: 5 stops (0%, 38%, 44%, 75%, 100%...) | blur: False
+
+FX: pikachu_thunder_jolt
+  Images: ['/assets/Pikachu_Spark_Cheeks.png']
+  Anims: {'gbaPikachuElectricSparks', 'gbaPikachuThunderBolts', 'gbaPikachuChargePose', 'gbaPikachuShockwaveRings'}
+    - gbaPikachuElectricSparks: 4 stops (0%, 20%, 65%, 100%...) | blur: False
+    - gbaPikachuThunderBolts: 5 stops (0%, 36%, 42%, 65%, 100%...) | blur: False
+    - gbaPikachuChargePose: 7 stops (0%, 25%, 40%, 48%, 54%, 80%, 100%...) | blur: False
+    - gbaPikachuShockwaveRings: 5 stops (0%, 38%, 46%, 75%, 100%...) | blur: False
+
+FX: charmander_ember_flame
+  Images: ['/assets/Charmander_Tail_Flame.png']
+  Anims: {'gbaCharmanderScorchPatch', 'gbaCharmanderCinders', 'gbaCharmanderEmber3', 'gbaCharmanderEmber2', 'gbaCharmanderTailSweep', 'gbaCharmanderEmber1'}
+    - gbaCharmanderScorchPatch: 5 stops (0%, 40%, 48%, 80%, 100%...) | blur: False
+    - gbaCharmanderCinders: 4 stops (0%, 20%, 65%, 100%...) | blur: False
+    - gbaCharmanderEmber3: 6 stops (0%, 24%, 40%, 54%, 75%, 100%...) | blur: True
+    - gbaCharmanderEmber2: 6 stops (0%, 28%, 46%, 60%, 80%, 100%...) | blur: True
+    - gbaCharmanderTailSweep: 9 stops (0%, 14%, 28%, 38%, 48%, 62%, 78%...) | blur: True
+    - gbaCharmanderEmber1: 6 stops (0%, 25%, 42%, 55%, 75%, 100%...) | blur: True
+
+FX: ekans_wrap_constrict
+  Images: ['/assets/Ekans_Coiled_Serpent.png']
+  Anims: {'gbaEkansConstrictCoil', 'gbaEkansVenomSpurtL', 'gbaEkansVenomSpurtR', 'gbaEkansCrushPulse', 'gbaEkansAuraConstrict'}
+    - gbaEkansConstrictCoil: 7 stops (0%, 25%, 42%, 48%, 56%, 80%, 100%...) | blur: False
+    - gbaEkansVenomSpurtL: 5 stops (0%, 42%, 52%, 80%, 100%...) | blur: False
+    - gbaEkansVenomSpurtR: 5 stops (0%, 42%, 52%, 80%, 100%...) | blur: False
+    - gbaEkansCrushPulse: 5 stops (0%, 40%, 46%, 75%, 100%...) | blur: False
+    - gbaEkansAuraConstrict: 5 stops (0%, 42%, 50%, 80%, 100%...) | blur: False
+
+FX: sandshrew_sand_attack
+  Images: ['/assets/Sandshrew_Digging_Claws.png']
+  Anims: {'gbaSandshrewGritPellets', 'gbaSandshrewBlindingHaze', 'gbaSandshrewClawSwipe', 'gbaSandshrewSandBlast'}
+    - gbaSandshrewGritPellets: 4 stops (0%, 20%, 65%, 100%...) | blur: False
+    - gbaSandshrewBlindingHaze: 5 stops (0%, 35%, 45%, 80%, 100%...) | blur: False
+    - gbaSandshrewClawSwipe: 8 stops (0%, 16%, 30%, 42%, 56%, 72%, 86%...) | blur: True
+    - gbaSandshrewSandBlast: 5 stops (0%, 32%, 42%, 75%, 100%...) | blur: False
+
+FX: caterpie_string_shot
+  Images: ['/assets/Caterpie_Head_Osmeterium.png']
+  Anims: {'gbaCaterpieCocoonWrap', 'gbaCaterpieSilkDrops', 'gbaCaterpieSilkJet', 'gbaCaterpieHeadPop'}
+    - gbaCaterpieCocoonWrap: 5 stops (0%, 35%, 50%, 75%, 100%...) | blur: False
+    - gbaCaterpieSilkDrops: 4 stops (0%, 25%, 70%, 100%...) | blur: False
+    - gbaCaterpieSilkJet: 5 stops (0%, 25%, 40%, 75%, 100%...) | blur: False
+    - gbaCaterpieHeadPop: 5 stops (0%, 20%, 30%, 75%, 100%...) | blur: False
+
+FX: weedle_poison_sting
+  Images: ['/assets/Weedle_Poison_Stinger.png']
+  Anims: {'gbaWeedlePoisonSpurt', 'gbaWeedlePoisonVignette', 'gbaWeedleStingerDive'}
+    - gbaWeedlePoisonSpurt: 5 stops (0%, 32%, 42%, 70%, 100%...) | blur: False
+    - gbaWeedlePoisonVignette: 5 stops (0%, 30%, 45%, 80%, 100%...) | blur: False
+    - gbaWeedleStingerDive: 5 stops (0%, 25%, 38%, 70%, 100%...) | blur: False
+
+FX: jigglypuff_lullaby
+  Images: ['/assets/Jigglypuff_Lullaby_Notes.png']
+  Anims: {'gbaJigglypuffLullabyNotes', 'gbaJigglypuffSleepZzz', 'gbaClefairySingPulse'}
+    - gbaJigglypuffLullabyNotes: 5 stops (0%, 25%, 50%, 75%, 100%...) | blur: False
+    - gbaJigglypuffSleepZzz: 4 stops (0%, 30%, 70%, 100%...) | blur: False
+    - gbaClefairySingPulse: 4 stops (0%, 35%, 70%, 100%...) | blur: False
+
+FX: clefairy_metronome
+  Images: ['/assets/Clefairy_Metronome_Finger.png']
+  Anims: {'gbaClefairySingPulse', 'gbaClefairyMetronomeWag', 'gbaClefairyCosmicTwinkle'}
+    - gbaClefairySingPulse: 4 stops (0%, 35%, 70%, 100%...) | blur: False
+    - gbaClefairyMetronomeWag: 21 stops (0%, 50%, 90%, 15%, 50%, 90%, 38%...) | blur: False
+    - gbaClefairyCosmicTwinkle: 4 stops (0%, 40%, 75%, 100%...) | blur: False
+
+FX: snorlax_body_slam
+  Images: ['/assets/Snorlax_Body_Slam.png']
+  Anims: {'gbaSnorlaxGroundDust', 'gbaSnorlaxBodySlamCrush', 'gbaGuillotineFlash', 'gbaLickitungParalysisSpark'}
+    - gbaSnorlaxGroundDust: 4 stops (0%, 40%, 75%, 100%...) | blur: False
+    - gbaSnorlaxBodySlamCrush: 7 stops (0%, 25%, 48%, 60%, 72%, 88%, 100%...) | blur: False
+    - gbaGuillotineFlash: 5 stops (0%, 25%, 50%, 75%, 100%...) | blur: False
+    - gbaLickitungParalysisSpark: 5 stops (0%, 30%, 60%, 80%, 100%...) | blur: False
+
+FX: lickitung_tongue_wrap
+  Images: ['/assets/Lickitung_Tongue_Wrap.png']
+  Anims: {'gbaLickitungTongueWrapLash', 'gbaAbraTelekinesisRings', 'gbaLickitungParalysisSpark'}
+    - gbaLickitungTongueWrapLash: 5 stops (0%, 30%, 55%, 75%, 100%...) | blur: False
+    - gbaAbraTelekinesisRings: 4 stops (0%, 40%, 80%, 100%...) | blur: False
+    - gbaLickitungParalysisSpark: 5 stops (0%, 30%, 60%, 80%, 100%...) | blur: False
+
+FX: cobra_stare
+  Images: ['/assets/dark_arbok_stare.png', '/assets/dark_arbok_stare.png']
+  Anims: {'gbaStareMaterialize', 'gbaStareDissolveOut', 'gbaCobraAfterimage', 'gbaCobraDread', 'gbaStarePulse'}
+    - gbaStareMaterialize: 5 stops (0%, 25%, 50%, 75%, 100%...) | blur: False
+    - gbaStareDissolveOut: 3 stops (0%, 40%, 100%...) | blur: False
+    - gbaCobraAfterimage: 5 stops (0%, 52%, 64%, 84%, 100%...) | blur: False
+    - gbaCobraDread: 5 stops (0%, 15%, 40%, 70%, 100%...) | blur: False
+    - gbaStarePulse: 3 stops (0%, 100%, 50%...) | blur: False
+
+FX: potion
+  Images: ['/assets/Potion.png']
+  Anims: {'gbaPotionCardHolo', 'gbaGrainyFadeOut'}
+    - gbaPotionCardHolo: 5 stops (0%, 25%, 55%, 75%, 100%...) | blur: True
+    - gbaGrainyFadeOut: 5 stops (0%, 40%, 60%, 80%, 100%...) | blur: False
+
+FX: super_potion
+  Images: ['/assets/Super_Potion.png']
+  Anims: {'gbaGrainyFadeOut', 'gbaSuperPotionCardHolo'}
+    - gbaGrainyFadeOut: 5 stops (0%, 40%, 60%, 80%, 100%...) | blur: False
+    - gbaSuperPotionCardHolo: 5 stops (0%, 25%, 55%, 75%, 100%...) | blur: True
+
+FX: pluspower
+  Images: ['/assets/PlusPower.png']
+  Anims: {'gbaPlusPowerAura', 'gbaTrainerSparkle', 'gbaTrainerLabelFade', 'gbaPlusPowerWash', 'gbaPlusPowerIconPop'}
+    - gbaPlusPowerAura: 5 stops (0%, 20%, 45%, 70%, 100%...) | blur: False
+    - gbaTrainerSparkle: 4 stops (0%, 30%, 65%, 100%...) | blur: False
+    - gbaTrainerLabelFade: 4 stops (0%, 25%, 75%, 100%...) | blur: False
+    - gbaPlusPowerWash: 8 stops (0%, 65%, 25%, 15%, 60%, 12%, 100%...) | blur: False
+    - gbaPlusPowerIconPop: 6 stops (0%, 18%, 30%, 48%, 72%, 100%...) | blur: False
+
+FX: starfish_slap
+  Images: ['/assets/Staryu_Slap.png']
+  Anims: {'gbaStarfishSlapSplash', 'gbaStarfishSlapRing2', 'gbaStarfishSlapSpin', 'gbaStaryuCoreFlash', 'gbaStarfishSlapRing', 'gbaStarfishSlapImpactFlash'}
+    - gbaStarfishSlapSplash: 4 stops (0%, 35%, 65%, 100%...) | blur: False
+    - gbaStarfishSlapRing2: 4 stops (0%, 45%, 80%, 100%...) | blur: False
+    - gbaStarfishSlapSpin: 6 stops (0%, 22%, 40%, 60%, 82%, 100%...) | blur: False
+    - gbaStaryuCoreFlash: 6 stops (0%, 25%, 38%, 48%, 70%, 100%...) | blur: False
+    - gbaStarfishSlapRing: 4 stops (0%, 35%, 70%, 100%...) | blur: False
+    - gbaStarfishSlapImpactFlash: 5 stops (0%, 35%, 40%, 60%, 100%...) | blur: False
+
+FX: fish_flail
+  Images: ['/assets/Magikarp_Flail.png']
+  Anims: {'gbaMagikarpSplashRing2', 'gbaMagikarpFlailHop', 'gbaMagikarpSplashRing1', 'gbaMagikarpWaterDrop'}
+    - gbaMagikarpSplashRing2: 5 stops (0%, 53%, 56%, 80%, 100%...) | blur: False
+    - gbaMagikarpFlailHop: 8 stops (0%, 14%, 28%, 42%, 56%, 70%, 85%...) | blur: False
+    - gbaMagikarpSplashRing1: 5 stops (0%, 25%, 28%, 52%, 100%...) | blur: False
+    - gbaMagikarpWaterDrop: 3 stops (0%, 35%, 100%...) | blur: False
+
+=== CRITERIA 3: CRUDE UNBLURRED SVG CIRCLES/ELLIPSES ===
+FX: poison_vapor_bench -> large circles: [18], large ellipses: []
+FX: heavy_thunder_strike -> large circles: [], large ellipses: [60, 42, 24]
+FX: ember_spark -> large circles: [], large ellipses: [26, 18]
+FX: fire_punch_blaze -> large circles: [22, 14], large ellipses: []
+FX: fireball_barrage -> large circles: [18], large ellipses: []
+FX: bubblebeam -> large circles: [18, 18, 14, 14], large ellipses: []
+FX: bubble_gentle -> large circles: [15, 15], large ellipses: []
+FX: ice_beam_frost -> large circles: [], large ellipses: [30, 18]
+FX: psybeam_kaleidoscope -> large circles: [22], large ellipses: []
+FX: seismic_slam -> large circles: [], large ellipses: [28, 16]
+FX: seismic_toss_machamp -> large circles: [], large ellipses: [64, 46, 30, 16]
+FX: dragonite_slam -> large circles: [], large ellipses: [65, 42, 65, 45, 25]
+FX: mega_punch_nidoqueen -> large circles: [48, 28], large ellipses: [36]
+FX: pidgeot_hurricane -> large circles: [], large ellipses: [35, 26, 18, 35, 26, 18, 65, 75]
+FX: submission_grapple -> large circles: [14, 14, 62, 50, 38, 18], large ellipses: [25]
+FX: super_fang_guillotine -> large circles: [14], large ellipses: []
+FX: raichu_gigashock -> large circles: [22], large ellipses: []
+FX: beedrill_twineedle -> large circles: [45, 60, 16], large ellipses: []
+FX: dugtrio_earthquake -> large circles: [14], large ellipses: [35]
+FX: electrode_chain_lightning -> large circles: [42, 32, 18], large ellipses: []
+FX: vaporeon_hydro_pump -> large circles: [], large ellipses: [45, 48, 45]
+FX: haunter_dream_eater -> large circles: [], large ellipses: [28]
+FX: hypno_hypnotic_pendulum -> large circles: [20, 13], large ellipses: []
+FX: wigglytuff_do_the_wave -> large circles: [48, 32, 16], large ellipses: []
+FX: primeape_tantrum_rampage -> large circles: [22, 20, 24, 21], large ellipses: []
+FX: exeggutor_big_eggsplosion -> large circles: [], large ellipses: [22, 22, 24]
+FX: fearow_drill_peck -> large circles: [48], large ellipses: []
+FX: venomoth_venom_powder -> large circles: [50, 35, 18], large ellipses: []
+FX: dark_charizard_fireball -> large circles: [18, 18, 26, 16], large ellipses: []
+FX: weedle_poison_sting -> large circles: [14], large ellipses: []
+FX: pidgey_whirlwind -> large circles: [], large ellipses: [33, 22]
+FX: oddish_sprout -> large circles: [], large ellipses: [35]
+FX: jigglypuff_pound -> large circles: [24], large ellipses: []
+FX: abra_psyshock -> large circles: [18], large ellipses: []
+FX: drowzee_pound -> large circles: [], large ellipses: [18]
+FX: drowzee_nightmare -> large circles: [28, 16, 18], large ellipses: []
+FX: water_vortex -> large circles: [24, 54, 38], large ellipses: []
+FX: whirlwind_cyclone -> large circles: [], large ellipses: [30, 21]
+FX: selfdestruct_shockwave -> large circles: [30, 16], large ellipses: [30, 22, 24, 16]
+FX: nasty_goo -> large circles: [], large ellipses: [18, 28]
+FX: sticky_hands_grab -> large circles: [], large ellipses: [18]
+FX: gust -> large circles: [], large ellipses: [29, 20]
+FX: physical_charge -> large circles: [], large ellipses: [20]
+FX: mud_slap_throw -> large circles: [], large ellipses: [22]
+FX: waterfall_surf -> large circles: [], large ellipses: [42, 16]
+FX: rock_barrage -> large circles: [], large ellipses: [16]
+FX: avalanche_cascade -> large circles: [], large ellipses: [38, 22, 18]
+FX: dizziness_swirl -> large circles: [], large ellipses: [20]
+FX: hyper_beam_laser -> large circles: [14], large ellipses: []
+FX: hyper_beam_ice -> large circles: [15], large ellipses: []
+FX: destiny_bond_curse / nightmare_spook -> large circles: [], large ellipses: [30, 23]

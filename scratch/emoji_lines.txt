@@ -1,0 +1,21 @@
+Line 1221: found ['🌀'] -> <span className="text-3xl text-fuchsia-300 animate-spin" style={{ animationDurat
+Line 1227: found ['⚡'] -> <span className="text-2xl text-yellow-300 font-black animate-ping">⚡</span>
+Line 1590: found ['🕸'] -> <span className="text-4xl filter drop-shadow-[0_0_15px_#e2e8f0]">🕸️</span>
+Line 2476: found ['🔥'] -> <span className="select-none" style={{ fontSize: '48px' }}>🔥</span>
+Line 3547: found ['❄'] -> <span className="text-4xl select-none drop-shadow-[0_0_15px_#67e8f9]">❄️</span>
+Line 3936: found ['🌿'] -> <span className="text-5xl select-none filter drop-shadow-[0_0_16px_#22c55e]">🌿</
+Line 3938: found ['🌱'] -> <span className="text-2xl text-emerald-400 animate-ping">🌱</span>
+Line 7774: found ['♪'] -> { note: '♪', color: '#f472b6', x: '-22px', y: '-10px', delay: 0.2 },
+Line 7775: found ['♫'] -> { note: '♫', color: '#38bdf8', x: '24px', y: '-18px', delay: 0.4 },
+Line 7776: found ['♪'] -> { note: '♪', color: '#fef08a', x: '18px', y: '16px', delay: 0.6 }
+Line 8450: found ['📍'] -> <span className="text-3xl text-lime-400">📍</span>
+Line 8451: found ['📍'] -> <span className="text-3xl text-yellow-300 -mt-2">📍</span>
+Line 8452: found ['📍'] -> <span className="text-3xl text-lime-400 mt-2">📍</span>
+Line 8530: found ['💥'] -> <div className="absolute text-3xl select-none" style={{ animation: 'gbaVenomSpla
+Line 10845: found ['🦅'] -> <span className="text-5xl select-none filter drop-shadow-[0_0_15px_#93c5fd]">🦅</
+Line 10846: found ['💨'] -> <div className="absolute text-2xl text-sky-300 animate-ping">💨</div>
+Line 10858: found ['⚔'] -> <span className="text-4xl select-none filter drop-shadow-[0_0_14px_#f59e0b]">⚔️<
+Line 11130: found ['💫'] -> <span className="text-xl text-yellow-300 select-none drop-shadow-[0_0_8px_#fde04
+Line 11133: found ['⭐'] -> <span className="text-sm text-purple-300 select-none drop-shadow-[0_0_6px_#a78bf
+Line 11137: found ['♪'] -> <span className="text-lg text-violet-300 select-none">♪</span>
+Line 11328: found ['♀', '♂'] -> {/* 49b. NIDORAN HORN CHARGE (Nidoran♂/♀ - pink poison horn thrust) */}
