@@ -2063,6 +2063,9 @@ export class GameEngine {
     let multiHitCount: number | undefined;
     /** Per-coin results so the UI can show a beat per coin (whiffed on tails). */
     let multiHitSequence: boolean[] | undefined;
+    /** Single-coin effect failure flag (Tails on Withdraw, Clamp, etc.) to drive rapid whiff FX. */
+    let isWhiffed = false;
+    let coinFlipSuccess: boolean | undefined = undefined;
 
     /**
      * Stare names its own victim: "Choose 1 of your opponent's Pokémon. This attack does 10
@@ -2192,6 +2195,7 @@ export class GameEngine {
       // empty coin list for it, so consuming one here would fall through to
       // Math.random() and silently randomise damage that is supposed to be fixed.
       primaryFlip = (coinResults && coinResults[coinIdx] !== undefined) ? coinResults[coinIdx++] : (Math.random() >= 0.5);
+      coinFlipSuccess = primaryFlip;
     }
     // Anything else flips no coin, so primaryFlip stays true. This matters: roughly
     // twenty effects below are written as `attackName === 'x' && primaryFlip`, and for
@@ -2207,6 +2211,7 @@ export class GameEngine {
     if (isFailOnTails) {
       if (!primaryFlip) {
         baseDamage = 0;
+        isWhiffed = true;
         GameEngine.addLog(next, `Coin flip: TAILS! ${attack.name} failed (0 damage, does nothing).`, 'action');
       } else {
         if (attackName === 'clamp') {
@@ -2574,7 +2579,9 @@ export class GameEngine {
       fxIntensity,
       multiHitCount,
       multiHitSequence,
-      swordsDanceBoosted: swordsDanceWasActive
+      swordsDanceBoosted: swordsDanceWasActive,
+      whiffed: isWhiffed,
+      coinFlipSuccess
     };
 
     GameEngine.addLog(next, `⚔️ ${attackerPlayer.name}'s ${attacker.card.name} used ${attack.name} for ${finalDamage} damage! (${damageTarget.card.name}: ${damageTarget.currentHp}/${damageTarget.card.hp} HP remaining)`, 'damage');
@@ -2731,6 +2738,8 @@ export class GameEngine {
         attacker.preventDamageNextTurn = true;
         GameEngine.addLog(next, `🛡️ ${attack.name}: HEADS! ${attacker.card.name} will prevent all damage done to it during opponent's next turn!`, 'status');
       } else {
+        isWhiffed = true;
+        if (next.lastAttackResult) next.lastAttackResult.whiffed = true;
         GameEngine.addLog(next, `Coin flip: TAILS! ${attack.name} failed to protect ${attacker.card.name}.`, 'action');
       }
     }

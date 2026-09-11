@@ -521,6 +521,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setActiveFXList([fx]);
   };
 
+  useEffect(() => {
+    (window as any).__triggerFX = triggerFX;
+    return () => {
+      delete (window as any).__triggerFX;
+    };
+  }, []);
+
   /**
    * Everything the engine reported about a resolved attack, turned into animation beats.
    *
@@ -642,17 +649,23 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         }));
       });
     } else {
-      // Legacy path: moves that only report multiHitCount (no per-coin sequence) still land one
-      // hit beat per heads; single-hit moves collapse to exactly one beat as before.
+      // Legacy / single-hit path: moves that only report multiHitCount (no per-coin sequence)
+      // still land one hit beat per heads; single-hit moves collapse to exactly one beat as before.
+      const isWhiffed = Boolean(spec.result?.whiffed);
       const multiHit = spec.result?.multiHitCount ?? 0;
       const beatCount = Math.max(1, multiHit);
       for (let i = 0; i < beatCount; i++) {
         beats.push(baseBeat({
-          damageText: i === 0 ? spec.damageText : undefined,
+          damageText: i === 0
+            ? (isWhiffed
+                ? (spec.selfTarget ? (lang === 'tr' ? 'BAŞARISIZ' : 'FAILED') : (lang === 'tr' ? 'ISKALADI' : 'MISSED'))
+                : spec.damageText)
+            : undefined,
           isWeakness: i === 0 ? spec.isWeakness : undefined,
           isResistance: i === 0 ? spec.isResistance : undefined,
           isBlocked: i === 0 ? spec.isBlocked : undefined,
-          shake: !spec.selfTarget,
+          shake: !spec.selfTarget && !isWhiffed,
+          whiffed: isWhiffed,
           powerDisabledName: i === 0 ? spec.result?.powerDisabledName : undefined,
           mirrored: i % 2 === 1,
           swordsDanceBoosted: i === 0 ? spec.result?.swordsDanceBoosted : undefined,
@@ -1035,6 +1048,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           setActionBanner({ text: `⚔️ Opponent's ${cpuActive.card.name} used ${attackToUse.name}!`, type: 'attack' });
           const cpuFxType = getSpecificAttackFX(attackToUse, cpuActive.card);
 
+          let cpuAtkRes: AttackResult | undefined;
           setState(prev => {
             if (!prev.cpu.active || !prev.player.active) return prev;
             const fxType = getSpecificAttackFX(attackToUse, prev.cpu.active.card);
@@ -1073,6 +1087,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             if (cpuTicks.length > 0) setWithheldTicks(cpuTicks);
 
             const atkRes = next.lastAttackResult;
+            cpuAtkRes = atkRes;
             const attackerType = prev.cpu.active!.card.types?.[0];
             const isWeak = atkRes ? atkRes.isWeakness : (prev.player.active?.card.weakness?.type === attackerType);
             const isResist = atkRes ? atkRes.isResistance : (prev.player.active?.card.resistance?.type === attackerType);
@@ -1196,7 +1211,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               }
               return current;
             });
-          }, getFXDuration(cpuFxType) + 200);
+          }, (cpuAtkRes?.whiffed ? 700 : getFXDuration(cpuFxType)) + 200);
         };
 
         if (coinCount > 0 || mode === 'until_tails') {
@@ -3942,7 +3957,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       // lands before the fainted state is revealed.
       const koBeatCount = atkRes?.multiHitCount ?? 1;
       const koStaggerMs = fxType === 'stone_barrage_single' ? Math.max(0, koBeatCount - 1) * 380 : 0;
-      const koAnimDelay = getFXDuration(isBlocked ? 'barrier' : fxType) + koStaggerMs;
+      const baseDuration = atkRes?.whiffed ? 700 : getFXDuration(isBlocked ? 'barrier' : fxType);
+      const koAnimDelay = baseDuration + koStaggerMs;
 
       if (next.player.active && next.player.active.currentHp <= 0 && !playerKoIsFromTick) {
         setWithheldTicks([]);
@@ -3995,8 +4011,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         const lastBeatStart = isStoneBarrageFx
           ? Math.max(0, beatCount - 1) * staggerMs
           : 0;
-        const animDuration = isStoneBarrageFx ? 900 : getFXDuration(isBlocked ? 'barrier' : fxType);
-        const unlockDelay = Math.max(1800, lastBeatStart + animDuration + 300);
+        const animDuration = isStoneBarrageFx
+          ? 900
+          : (atkRes?.whiffed ? 700 : getFXDuration(isBlocked ? 'barrier' : fxType));
+        const unlockDelay = atkRes?.whiffed ? 950 : Math.max(1800, lastBeatStart + animDuration + 300);
         setTimeout(() => {
           setActionBanner(null);
           // Commit the held-back poison damage in the same frame its FX starts, then let the
@@ -5025,10 +5043,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     isTargetable={!!selectedCard && selectedCard.supertype === 'Trainer' && OPPONENT_TARGET_TRAINERS.includes(selectedCard.name)}
                     onClick={() => handleOpponentInPlayClick(b, true)}
                     onInspect={() => handleInspect(b.card, b)}
-                  />
-                  {/* A move that picked a Benched Pokémon (Stare) or swept the whole Bench
-                      (Poison Vapor) has to animate on that card, not on the Active one. */}
-                  <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="cpu" slot="bench" benchIndex={bIdx} lang={lang} />
+                  >
+                    {/* A move that picked a Benched Pokémon (Stare) or swept the whole Bench
+                        (Poison Vapor) has to animate on that card, not on the Active one. */}
+                    <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="cpu" slot="bench" benchIndex={bIdx} lang={lang} />
+                  </CardView>
                 </div>
               ))}
               {Array.from({ length: 5 - cpu.bench.length }).map((_, i) => (
@@ -5067,13 +5086,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     isTargetable={!!selectedCard && selectedCard.supertype === 'Trainer' && OPPONENT_TARGET_TRAINERS.includes(selectedCard.name)}
                     onClick={() => handleOpponentInPlayClick(cpu.active!, false)}
                     onInspect={() => handleInspect(cpu.active!.card, cpu.active!)}
-                  />
+                  >
+                    <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="cpu" slot="active" lang={lang} />
+                  </CardView>
                 ) : (
                   <div className="w-[128px] sm:w-[142px] md:w-[166px] lg:w-[184px] aspect-[600/825] border-2 border-dashed border-blue-400/40 rounded-xl flex flex-col items-center justify-center text-xs text-blue-300 animate-pulse p-2 text-center">
                     <span>{t.waitingOpponentActive}</span>
                   </div>
                 )}
-                <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="cpu" slot="active" lang={lang} />
               </div>
             </div>
 
@@ -5109,8 +5129,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     isDescending={descendingPlayerActive}
                     onClick={() => handleInPlayClick(player.active!, false)}
                     onInspect={() => handleInspect(player.active!.card, player.active!)}
-                  />
-                  <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="player" slot="active" lang={lang} />
+                  >
+                    <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="player" slot="active" lang={lang} />
+                  </CardView>
                 </div>
               ) : (
                 <div
@@ -5178,10 +5199,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       showInspectIcon={true}
                       onClick={() => handleInPlayClick(b, true)}
                       onInspect={() => handleInspect(b.card, b)}
-                    />
-                    {/* Beats that name this exact Benched Pokémon (Stare's pick, Poison Vapor's
-                        sweep) land here instead of on the Active card. */}
-                    <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="player" slot="bench" benchIndex={bIdx} lang={lang} />
+                    >
+                      {/* Beats that name this exact Benched Pokémon (Stare's pick, Poison Vapor's
+                          sweep) land here instead of on the Active card. */}
+                      <BattleFXOverlay fxList={activeFXList} onFXComplete={removeFX} targetFilter="player" slot="bench" benchIndex={bIdx} lang={lang} />
+                    </CardView>
                   </div>
                   {(isRetreatMode || isSelectReplacement) && (
                     <button

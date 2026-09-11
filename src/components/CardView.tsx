@@ -15,6 +15,7 @@ interface CardViewProps {
   showInspectIcon?: boolean;
   onClick?: () => void;
   onInspect?: () => void;
+  children?: React.ReactNode;
 }
 
 export const CardView: React.FC<CardViewProps> = ({
@@ -29,7 +30,8 @@ export const CardView: React.FC<CardViewProps> = ({
   isDescending = false,
   showInspectIcon = true,
   onClick,
-  onInspect
+  onInspect,
+  children
 }) => {
   const currentCard = card || inPlayCard?.card;
   if (!currentCard) return null;
@@ -140,7 +142,7 @@ export const CardView: React.FC<CardViewProps> = ({
 
       {/* 2. THE CARD ITSELF - REFINED VINTAGE BORDER (-10%) WITH CLEAN ZOOM-IN ELEVATION */}
       <div
-        className={`w-full aspect-[600/825] p-[1.2px] sm:p-[2px] md:p-[2.5px] bg-[#f5cb39] rounded-xl overflow-hidden transition-all duration-200 border border-[#c79808] ${
+        className={`w-full aspect-[600/825] p-[1.2px] sm:p-[2px] md:p-[2.5px] bg-[#f5cb39] rounded-xl transition-all duration-200 border border-[#c79808] ${
           isAscending
             ? 'scale-105 shadow-2xl z-20'
             : isZeroHp || isFainted
@@ -189,6 +191,9 @@ export const CardView: React.FC<CardViewProps> = ({
             <ZoomIn className="w-3.5 h-3.5" />
           </button>
         )}
+
+        {/* Dynamic Card-Anchored Overlays (BattleFX, card block blur, animations) */}
+        {children}
       </div>
 
       {/* 3. BOTTOM TRAY (BELOW CARD): 100% TRANSPARENT FLOATING ATTACHED ENERGY SYMBOLS */}

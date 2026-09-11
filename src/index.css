@@ -843,6 +843,25 @@ html, body {
   100% { transform: translate(-50px, -35px) scale(0.6); opacity: 0; }
 }
 
+/* Card-Targeting In-Play Block Overlay (Targets the Pokémon card dynamically, leaving top HP bar and bottom energy tray 100% crisp & unblurred) */
+.card-fx-block-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 0.75rem; /* rounded-xl matches vintage card */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* AMNESIA MIND WIPE (Poliwhirl - Ethereal Frosted Memory Erasure) */
+@keyframes gbaAmnesiaMindWipeCardBlur {
+  0%   { opacity: 0; backdrop-filter: blur(0px); }
+  18%  { opacity: 0.9; backdrop-filter: blur(2.5px); }
+  42%  { opacity: 1; backdrop-filter: blur(3.5px); filter: brightness(1.08) saturate(1.15); }
+  68%  { opacity: 0.9; backdrop-filter: blur(3.0px); }
+  85%  { opacity: 0.45; backdrop-filter: blur(1.5px); }
+  100% { opacity: 0; backdrop-filter: blur(0px); filter: none; }
+}
+
 /* GBA DRAGON RAGE (Gyarados — Draconic Wrath, Azure Maw & Energy Torrent) */
 @keyframes gbaDragonRageAura {
   0%   { opacity: 0; backdrop-filter: blur(0px); }
@@ -3468,22 +3487,22 @@ html, body {
 }
 @keyframes gbaRaticateSugimoriLunge {
   0%   { transform: scale(0.35) translate(-45px, -30px) rotate(-18deg); filter: blur(5px); opacity: 0; }
-  16%  { transform: scale(1.05) translate(-15px, -10px) rotate(-5deg); filter: blur(1.5px) drop-shadow(0 0 15px rgba(254, 240, 138, 0.7)); opacity: 0.95; }
-  28%  { transform: scale(1.32) translate(0px, 0px) rotate(0deg); filter: blur(0) drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 45px #facc15) brightness(1.35); opacity: 1; }
-  42%  { transform: scale(1.28) translate(3px, -2px) rotate(2deg); filter: drop-shadow(0 0 35px #f59e0b); opacity: 1; }
-  56%  { transform: scale(1.24) translate(-2px, 2px) rotate(-2deg); opacity: 0.95; }
-  72%  { transform: scale(1.15) translate(8px, 6px); opacity: 0.85; }
-  86%  { transform: scale(1.0) translate(18px, 14px); filter: blur(2px); opacity: 0.5; }
-  100% { transform: scale(0.8) translate(30px, 25px); filter: blur(5px); opacity: 0; }
+  16%  { transform: scale(0.95) translate(-15px, -10px) rotate(-5deg); filter: blur(1.5px) drop-shadow(0 0 15px rgba(254, 240, 138, 0.7)); opacity: 0.95; }
+  28%  { transform: scale(1.04) translate(0px, 0px) rotate(0deg); filter: blur(0) drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 45px #facc15) brightness(1.35); opacity: 1; }
+  42%  { transform: scale(1.02) translate(3px, -2px) rotate(2deg); filter: drop-shadow(0 0 35px #f59e0b); opacity: 1; }
+  56%  { transform: scale(1.00) translate(-2px, 2px) rotate(-2deg); opacity: 0.95; }
+  72%  { transform: scale(0.95) translate(8px, 6px); opacity: 0.85; }
+  86%  { transform: scale(0.85) translate(18px, 14px); filter: blur(2px); opacity: 0.5; }
+  100% { transform: scale(0.7) translate(30px, 25px); filter: blur(5px); opacity: 0; }
 }
 
 /* VICTREEBEL LV. 42 ACID (50 DMG Carnivorous Pitcher Acid Torrent & Visceral Melt) */
 @keyframes gbaVictreebelSugimoriErupt {
   0%   { transform: translate(-45px, -35px) scale(0.4) rotate(-15deg); opacity: 0; }
-  25%  { transform: translate(-10px, -15px) scale(1.05) rotate(-5deg); opacity: 0.95; filter: drop-shadow(0 0 20px rgba(163, 230, 53, 0.7)); }
-  45%  { transform: translate(0px, 0px) scale(1.2) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 30px #84cc16) drop-shadow(0 0 45px #bef264); }
-  72%  { transform: translate(5px, 5px) scale(1.12) rotate(2deg); opacity: 0.85; }
-  100% { transform: translate(20px, 20px) scale(0.9) rotate(5deg); opacity: 0; }
+  25%  { transform: translate(-10px, -15px) scale(0.92) rotate(-5deg); opacity: 0.95; filter: drop-shadow(0 0 20px rgba(163, 230, 53, 0.7)); }
+  45%  { transform: translate(0px, 0px) scale(1.04) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 30px #84cc16) drop-shadow(0 0 45px #bef264); }
+  72%  { transform: translate(5px, 5px) scale(0.98) rotate(2deg); opacity: 0.85; }
+  100% { transform: translate(20px, 20px) scale(0.8) rotate(5deg); opacity: 0; }
 }
 @keyframes gbaAcidDelugeStream {
   0%   { transform: translateY(-50px) scaleY(0.2) scaleX(0.5); opacity: 0; }
@@ -3555,12 +3574,12 @@ html, body {
 /* BEEDRILL LV. 32 TWINEEDLE (Twin Lance High-Speed Drill Thrust) */
 @keyframes gbaBeedrillLancesThrust {
   0%   { transform: translate(50px, -40px) scale(0.4) rotate(15deg); opacity: 0; }
-  20%  { transform: translate(15px, -12px) scale(0.95) rotate(5deg); opacity: 0.9; }
-  35%  { transform: translate(-8px, 6px) scale(1.15) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 20px #fef08a) drop-shadow(0 0 35px #eab308); }
-  50%  { transform: translate(-2px, 2px) scale(1.08) rotate(-2deg); opacity: 0.95; }
-  65%  { transform: translate(-15px, 12px) scale(1.22) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 25px #ffffff); }
-  85%  { transform: translate(-5px, 4px) scale(1.05); opacity: 0.6; }
-  100% { transform: translate(15px, -10px) scale(0.85); opacity: 0; }
+  20%  { transform: translate(15px, -12px) scale(0.88) rotate(5deg); opacity: 0.9; }
+  35%  { transform: translate(-8px, 6px) scale(1.02) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 20px #fef08a) drop-shadow(0 0 35px #eab308); }
+  50%  { transform: translate(-2px, 2px) scale(0.96) rotate(-2deg); opacity: 0.95; }
+  65%  { transform: translate(-15px, 12px) scale(1.04) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 25px #ffffff); }
+  85%  { transform: translate(-5px, 4px) scale(0.92); opacity: 0.6; }
+  100% { transform: translate(15px, -10px) scale(0.75); opacity: 0; }
 }
 @keyframes gbaBeedrillPiercingRing {
   0%, 30% { transform: scale(0.2); opacity: 0; }
@@ -3578,11 +3597,11 @@ html, body {
 /* DUGTRIO LV. 36 EARTHQUAKE (60 DMG Subterranean Mole Upheaval & Tectonic Quake) */
 @keyframes gbaDugtrioErupt {
   0%   { transform: translateY(60px) scale(0.4); opacity: 0; }
-  22%  { transform: translateY(15px) scale(0.95); opacity: 0.9; }
-  40%  { transform: translateY(-5px) scale(1.2); opacity: 1; filter: drop-shadow(0 0 25px #a16207) drop-shadow(0 0 40px #78350f); }
-  65%  { transform: translateY(0px) scale(1.15); opacity: 0.95; }
-  85%  { transform: translateY(10px) scale(1.0); opacity: 0.6; }
-  100% { transform: translateY(30px) scale(0.8); opacity: 0; }
+  22%  { transform: translateY(15px) scale(0.88); opacity: 0.9; }
+  40%  { transform: translateY(-5px) scale(1.04); opacity: 1; filter: drop-shadow(0 0 25px #a16207) drop-shadow(0 0 40px #78350f); }
+  65%  { transform: translateY(0px) scale(1.01); opacity: 0.95; }
+  85%  { transform: translateY(10px) scale(0.92); opacity: 0.6; }
+  100% { transform: translateY(30px) scale(0.75); opacity: 0; }
 }
 @keyframes gbaDugtrioFaultLine {
   0%, 35% { transform: scale(0.1); opacity: 0; }
@@ -4913,14 +4932,14 @@ html, body {
 
 /* Eerie hypnotic card blur overlay for Confuse Ray (undulating dreamlike focus warping) */
 @keyframes gbaConfuseCardBlur {
-  0%   { opacity: 0; backdrop-filter: blur(0px); filter: hue-rotate(0deg); }
-  15%  { opacity: 0.9; backdrop-filter: blur(2.5px); filter: hue-rotate(15deg); }
-  30%  { opacity: 1; backdrop-filter: blur(4.5px); filter: hue-rotate(35deg) brightness(1.15); }
-  45%  { opacity: 0.85; backdrop-filter: blur(2.8px); filter: hue-rotate(20deg) brightness(0.95); }
-  60%  { opacity: 1; backdrop-filter: blur(5.0px); filter: hue-rotate(-25deg) brightness(1.2); }
-  75%  { opacity: 0.8; backdrop-filter: blur(3.2px); filter: hue-rotate(-10deg); }
-  88%  { opacity: 0.45; backdrop-filter: blur(1.5px); filter: hue-rotate(0deg); }
-  100% { opacity: 0; backdrop-filter: blur(0px); filter: none; }
+  0%   { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); filter: hue-rotate(0deg); }
+  15%  { opacity: 0.9; backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); filter: hue-rotate(15deg); }
+  30%  { opacity: 1; backdrop-filter: blur(4.5px); -webkit-backdrop-filter: blur(4.5px); filter: hue-rotate(35deg) brightness(1.15); }
+  45%  { opacity: 0.85; backdrop-filter: blur(3.0px); -webkit-backdrop-filter: blur(3.0px); filter: hue-rotate(20deg) brightness(0.95); }
+  60%  { opacity: 1; backdrop-filter: blur(5.0px); -webkit-backdrop-filter: blur(5.0px); filter: hue-rotate(-25deg) brightness(1.2); }
+  75%  { opacity: 0.8; backdrop-filter: blur(3.5px); -webkit-backdrop-filter: blur(3.5px); filter: hue-rotate(-10deg); }
+  88%  { opacity: 0.45; backdrop-filter: blur(1.8px); -webkit-backdrop-filter: blur(1.8px); filter: hue-rotate(0deg); }
+  100% { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); filter: none; }
 }
 
 /* PSYBEAM */
@@ -5883,41 +5902,41 @@ html, body {
   }
   16% {
     /* High-velocity supersonic dive */
-    transform: translate(25px, -22px) rotate(42deg) scale(1.02);
+    transform: translate(25px, -22px) rotate(42deg) scale(0.92);
     filter: blur(1.5px) drop-shadow(0 0 20px #fbbf24);
     opacity: 0.95;
   }
   30% {
     /* First drilling impact */
-    transform: translate(0px, 0px) rotate(35deg) scale(1.22);
+    transform: translate(0px, 0px) rotate(35deg) scale(1.04);
     filter: blur(0px) drop-shadow(0 0 30px #f59e0b) brightness(1.3);
     opacity: 1;
   }
   42% {
     /* High-RPM drilling chatter 1 */
-    transform: translate(-3px, 3px) rotate(25deg) scale(1.18);
+    transform: translate(-3px, 3px) rotate(25deg) scale(1.02);
     filter: drop-shadow(0 0 25px #fbbf24);
     opacity: 1;
   }
   54% {
     /* High-RPM drilling chatter 2 */
-    transform: translate(2px, -2px) rotate(45deg) scale(1.24);
+    transform: translate(2px, -2px) rotate(45deg) scale(1.04);
     filter: drop-shadow(0 0 35px #f59e0b) brightness(1.25);
     opacity: 1;
   }
   68% {
     /* Vortex bore push */
-    transform: translate(-6px, 6px) rotate(30deg) scale(1.12);
+    transform: translate(-6px, 6px) rotate(30deg) scale(0.98);
     opacity: 0.95;
   }
   82% {
     /* Recoil disengage */
-    transform: translate(-16px, 16px) rotate(20deg) scale(0.95);
+    transform: translate(-16px, 16px) rotate(20deg) scale(0.88);
     filter: blur(1.5px);
     opacity: 0.65;
   }
   100% {
-    transform: translate(-32px, 32px) rotate(10deg) scale(0.7);
+    transform: translate(-32px, 32px) rotate(10deg) scale(0.65);
     filter: blur(4px);
     opacity: 0;
   }
@@ -6085,49 +6104,49 @@ html, body {
     opacity: 0;
   }
   14% {
-    transform: translateY(-40px) scale(0.85) rotate(-6deg);
+    transform: translateY(-40px) scale(0.82) rotate(-6deg);
     filter: blur(2px);
     opacity: 0.9;
   }
   26% {
     /* VIOLENT VIPER STRIKE LUNGE */
-    transform: translateY(12px) scale(1.25, 0.95) rotate(4deg);
+    transform: translateY(12px) scale(1.02, 0.96) rotate(4deg);
     filter: blur(0) drop-shadow(0 0 25px #a855f7) brightness(1.25);
     opacity: 1;
   }
   36% {
     /* CLAMP SHUT! Fang puncture deep impact with venom flash */
-    transform: translateY(6px) scale(1.3, 1.05) rotate(0deg);
+    transform: translateY(6px) scale(1.05, 1.02) rotate(0deg);
     filter: drop-shadow(0 0 35px #c084fc) drop-shadow(0 0 50px #84cc16) brightness(1.35);
     opacity: 1;
   }
   46% {
     /* Puncture shudder / biting tremor 1 */
-    transform: translateY(2px) translateX(-3px) scale(1.22);
+    transform: translateY(2px) translateX(-3px) scale(1.02);
     filter: drop-shadow(0 0 30px #a855f7);
     opacity: 1;
   }
   56% {
     /* Puncture shudder / biting tremor 2 with venom pump */
-    transform: translateY(8px) translateX(3px) scale(1.24);
+    transform: translateY(8px) translateX(3px) scale(1.04);
     filter: drop-shadow(0 0 28px #84cc16);
     opacity: 1;
   }
   68% {
     /* Fang disengage recoil bounce */
-    transform: translateY(-8px) scale(1.12) rotate(-4deg);
+    transform: translateY(-8px) scale(0.95) rotate(-4deg);
     filter: blur(1px);
     opacity: 0.9;
   }
   82% {
     /* S-curve hiss retract */
-    transform: translateY(-24px) scale(0.95) rotate(6deg);
+    transform: translateY(-24px) scale(0.82) rotate(6deg);
     filter: blur(2px);
     opacity: 0.6;
   }
   100% {
     /* Shadow fade out */
-    transform: translateY(-45px) scale(0.7) rotate(10deg);
+    transform: translateY(-45px) scale(0.65) rotate(10deg);
     filter: blur(5px);
     opacity: 0;
   }
@@ -6195,43 +6214,43 @@ html, body {
     opacity: 0;
   }
   16% {
-    transform: translate(0px, -25px) scale(1.1) rotate(-4deg);
+    transform: translate(0px, -25px) scale(0.92) rotate(-4deg);
     filter: blur(2px) drop-shadow(0 0 20px #6366f1);
     opacity: 0.95;
   }
   28% {
     /* SAVAGE FANG LATCH-ON (Puncture clamp onto target!) */
-    transform: translate(0px, 10px) scale(1.32, 1.05) rotate(0deg);
+    transform: translate(0px, 10px) scale(1.04, 1.01) rotate(0deg);
     filter: blur(0) drop-shadow(0 0 35px #ef4444) drop-shadow(0 0 50px #818cf8) brightness(1.35);
     opacity: 1;
   }
   38% {
     /* Life siphon suction pulse 1 */
-    transform: translate(-3px, 6px) scale(1.36, 0.98) rotate(3deg);
+    transform: translate(-3px, 6px) scale(1.05, 0.98) rotate(3deg);
     filter: drop-shadow(0 0 40px #ef4444);
     opacity: 1;
   }
   48% {
     /* Life siphon suction pulse 2 */
-    transform: translate(3px, 8px) scale(1.3, 1.02) rotate(-3deg);
+    transform: translate(3px, 8px) scale(1.03, 1.01) rotate(-3deg);
     filter: drop-shadow(0 0 38px #dc2626);
     opacity: 1;
   }
   60% {
     /* Life siphon suction pulse 3 - emerald vitality surge */
-    transform: translate(0px, 4px) scale(1.26) rotate(0deg);
+    transform: translate(0px, 4px) scale(1.02) rotate(0deg);
     filter: drop-shadow(0 0 35px #22c55e);
     opacity: 1;
   }
   74% {
     /* Disengage flap recoil */
-    transform: translate(0px, -18px) scale(1.1) rotate(4deg);
+    transform: translate(0px, -18px) scale(0.94) rotate(4deg);
     filter: blur(1.5px);
     opacity: 0.85;
   }
   88% {
     /* Ascending retreat swoop */
-    transform: translate(0px, -50px) scale(0.85) rotate(-6deg);
+    transform: translate(0px, -50px) scale(0.78) rotate(-6deg);
     filter: blur(3.5px);
     opacity: 0.45;
   }
@@ -6684,7 +6703,32 @@ html, body {
   }
 }
 
-/* Squirtle Shell Defense */
+/* Shell Defense Whiff / Tails Wobble (Brief failed shell tuck & clack) */
+@keyframes gbaShellWhiffWobble {
+  0% {
+    transform: scale(0.35) rotate(-15deg);
+    opacity: 0;
+  }
+  22% {
+    transform: scale(0.95) rotate(12deg);
+    opacity: 0.9;
+    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.45));
+  }
+  45% {
+    transform: scale(0.92) rotate(-10deg) translateY(3px);
+    opacity: 0.8;
+  }
+  70% {
+    transform: scale(0.75) rotate(6deg) translateY(6px);
+    opacity: 0.45;
+  }
+  100% {
+    transform: scale(0.45) rotate(0deg) translateY(12px);
+    opacity: 0;
+  }
+}
+
+/* Squirtle Shell Defense (Controlled <= 60% card boundary spin) */
 @keyframes gbaSquirtleShellSnap {
   0% {
     transform: scale(0.2) rotate(-420deg);
@@ -6692,48 +6736,48 @@ html, body {
     opacity: 0;
   }
   16% {
-    transform: scale(1.15) rotate(-60deg);
-    filter: blur(1.5px) drop-shadow(0 0 20px #0284c7);
+    transform: scale(0.95) rotate(-60deg);
+    filter: blur(1.5px) drop-shadow(0 0 16px #0284c7);
     opacity: 0.95;
   }
   28% {
     /* HIGH-SPEED SPIN DEFENSE BEGINS */
-    transform: scale(1.25) rotate(360deg);
-    filter: blur(0) drop-shadow(0 0 30px #38bdf8) drop-shadow(0 0 45px #ffffff) brightness(1.3);
+    transform: scale(1.02) rotate(360deg);
+    filter: blur(0) drop-shadow(0 0 20px #38bdf8) drop-shadow(0 0 30px #ffffff) brightness(1.25);
     opacity: 1;
   }
   40% {
     /* Deflection impact clang 1 */
-    transform: scale(1.3, 1.15) rotate(720deg) translate(-4px, 3px);
-    filter: drop-shadow(0 0 35px #0284c7) brightness(1.35);
+    transform: scale(1.05, 0.98) rotate(720deg) translate(-3px, 2px);
+    filter: drop-shadow(0 0 24px #0284c7) brightness(1.3);
     opacity: 1;
   }
   52% {
     /* Deflection impact clang 2 */
-    transform: scale(1.25, 1.2) rotate(1080deg) translate(4px, -3px);
-    filter: drop-shadow(0 0 30px #38bdf8);
+    transform: scale(1.02, 1.04) rotate(1080deg) translate(3px, -2px);
+    filter: drop-shadow(0 0 20px #38bdf8);
     opacity: 1;
   }
   66% {
     /* Spin speed deceleration with aquatic barrier shimmer */
-    transform: scale(1.15) rotate(1360deg) translate(0, 0);
-    filter: drop-shadow(0 0 25px #0284c7);
+    transform: scale(0.98) rotate(1360deg) translate(0, 0);
+    filter: drop-shadow(0 0 18px #0284c7);
     opacity: 0.95;
   }
   80% {
     /* Resilient shell pop upright */
-    transform: scale(1.05) rotate(1440deg);
+    transform: scale(0.95) rotate(1440deg);
     opacity: 0.85;
   }
   92% {
     /* Shell disengage bounce */
-    transform: scale(0.9) rotate(1455deg) translateY(-8px);
+    transform: scale(0.8) rotate(1455deg) translateY(-6px);
     filter: blur(2px);
     opacity: 0.5;
   }
   100% {
     /* Pop back out */
-    transform: scale(0.65) rotate(1470deg) translateY(10px);
+    transform: scale(0.55) rotate(1470deg) translateY(8px);
     filter: blur(4px);
     opacity: 0;
   }
@@ -6949,55 +6993,55 @@ html, body {
   }
 }
 
-/* Charmander Ember Flame — 1996 Ken Sugimori Teardrop Tail Flame & Kinetic Ember Discharge */
+/* Charmander Ember Flame — 1996 Ken Sugimori Teardrop Tail Flame (Controlled <= 60% card boundary) */
 @keyframes gbaCharmanderTailSweep {
   0% {
-    transform: translate(-85px, 80px) rotate(-55deg) scale(0.35);
-    filter: blur(6px) brightness(1.4) drop-shadow(0 0 10px #ea580c);
+    transform: translate(-45px, 40px) rotate(-55deg) scale(0.35);
+    filter: blur(4px) brightness(1.3) drop-shadow(0 0 10px #ea580c);
     opacity: 0;
   }
   14% {
-    transform: translate(-45px, 42px) rotate(-30deg) scale(0.95);
-    filter: blur(2px) brightness(1.2) drop-shadow(0 0 20px #f97316);
+    transform: translate(-25px, 22px) rotate(-30deg) scale(0.85);
+    filter: blur(1.5px) brightness(1.2) drop-shadow(0 0 16px #f97316);
     opacity: 0.95;
   }
   28% {
-    transform: translate(-10px, 12px) rotate(-8deg) scale(1.18);
-    filter: blur(0px) brightness(1.1) drop-shadow(0 0 28px #ea580c) drop-shadow(0 0 45px #fbbf24);
+    transform: translate(-5px, 6px) rotate(-8deg) scale(0.98);
+    filter: blur(0px) brightness(1.1) drop-shadow(0 0 20px #ea580c) drop-shadow(0 0 30px #fbbf24);
     opacity: 1;
   }
   38% {
     /* Peak searing whip across target */
-    transform: translate(6px, -4px) rotate(14deg) scale(1.28);
-    filter: drop-shadow(0 0 35px #ea580c) drop-shadow(0 0 55px #f59e0b) brightness(1.3);
+    transform: translate(3px, -2px) rotate(14deg) scale(1.04);
+    filter: drop-shadow(0 0 24px #ea580c) drop-shadow(0 0 35px #f59e0b) brightness(1.25);
     opacity: 1;
   }
   48% {
     /* Kinetic discharge recoil & flame tongue ripple */
-    transform: translate(2px, -8px) rotate(8deg) scale(1.22);
-    filter: drop-shadow(0 0 30px #f97316) brightness(1.2);
+    transform: translate(1px, -4px) rotate(8deg) scale(1.02);
+    filter: drop-shadow(0 0 20px #f97316) brightness(1.15);
     opacity: 1;
   }
   62% {
     /* Heat dissipation follow-through */
-    transform: translate(-4px, -12px) rotate(2deg) scale(1.12);
-    filter: drop-shadow(0 0 22px #ea580c);
+    transform: translate(-2px, -6px) rotate(2deg) scale(0.96);
+    filter: drop-shadow(0 0 16px #ea580c);
     opacity: 0.95;
   }
   78% {
     /* Smoky ease-out with subtle dissolve */
-    transform: translate(8px, -20px) rotate(8deg) scale(1.02);
-    filter: blur(1.5px) drop-shadow(0 0 16px rgba(234, 88, 12, 0.6));
+    transform: translate(4px, -10px) rotate(8deg) scale(0.88);
+    filter: blur(1.5px) drop-shadow(0 0 12px rgba(234, 88, 12, 0.6));
     opacity: 0.65;
   }
   90% {
-    transform: translate(22px, -28px) rotate(18deg) scale(0.88);
-    filter: blur(3.5px);
+    transform: translate(12px, -15px) rotate(18deg) scale(0.75);
+    filter: blur(3px);
     opacity: 0.25;
   }
   100% {
-    transform: translate(35px, -36px) rotate(26deg) scale(0.7);
-    filter: blur(6px);
+    transform: translate(18px, -20px) rotate(26deg) scale(0.6);
+    filter: blur(4px);
     opacity: 0;
   }
 }
@@ -7281,6 +7325,74 @@ html, body {
   }
 }
 
+/* Ekans Spit Poison / Poison Sting — dual serpent venom needle ejection and puncture impact */
+@keyframes gbaEkansPoisonDarts {
+  0% {
+    transform: translate(65px, -60px) rotate(220deg) scale(0.4);
+    opacity: 0;
+    filter: blur(4px) drop-shadow(0 0 10px #c084fc);
+  }
+  24% {
+    transform: translate(25px, -20px) rotate(220deg) scale(1.15);
+    opacity: 1;
+    filter: blur(1px) drop-shadow(0 0 18px #c084fc);
+  }
+  38% {
+    transform: translate(0px, 0px) rotate(220deg) scale(1.0);
+    opacity: 1;
+    filter: none drop-shadow(0 0 25px #a855f7);
+  }
+  44% {
+    transform: translate(-3px, 2px) rotate(222deg) scale(1.04);
+    opacity: 0.95;
+  }
+  50% {
+    transform: translate(2px, -2px) rotate(218deg) scale(0.98);
+    opacity: 0.95;
+  }
+  68% {
+    transform: translate(0px, 0px) rotate(220deg) scale(0.92);
+    opacity: 0.75;
+  }
+  85% {
+    transform: translate(-5px, 8px) rotate(220deg) scale(0.7);
+    opacity: 0.35;
+  }
+  100% {
+    transform: translate(-12px, 16px) rotate(220deg) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* Dratini Serpentine Dragon Tail Wrap */
+@keyframes gbaDratiniTailWrap {
+  0% {
+    transform: scale(0.4) rotate(-30deg);
+    opacity: 0;
+  }
+  22% {
+    transform: scale(1.05) rotate(10deg);
+    opacity: 0.95;
+  }
+  42% {
+    transform: scale(0.92) rotate(-5deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 20px #38bdf8);
+  }
+  65% {
+    transform: scale(1.0) rotate(5deg);
+    opacity: 0.9;
+  }
+  82% {
+    transform: scale(1.18) rotate(15deg);
+    opacity: 0.45;
+  }
+  100% {
+    transform: scale(1.35) rotate(25deg);
+    opacity: 0;
+  }
+}
+
 /* Sandshrew Sand Attack */
 @keyframes gbaSandshrewClawSwipe {
   0% {
@@ -7532,58 +7644,58 @@ html, body {
   }
 }
 
-/* 2. Weedle Poison Sting */
+/* 2. Weedle Poison Sting (Controlled <= 60% card boundary dive) */
 @keyframes gbaWeedleStingerDive {
   0% {
-    transform: translate(70px, -75px) scale(0.4) rotate(45deg);
-    filter: blur(6px);
+    transform: translate(35px, -38px) scale(0.4) rotate(45deg);
+    filter: blur(4px);
     opacity: 0;
   }
   14% {
-    transform: translate(30px, -35px) scale(0.9) rotate(38deg);
-    filter: blur(2px);
+    transform: translate(16px, -18px) scale(0.85) rotate(38deg);
+    filter: blur(1.5px);
     opacity: 0.9;
   }
   24% {
     /* RAPID THRUST 1 (Piercing jab!) */
-    transform: translate(-16px, 14px) scale(1.25) rotate(22deg);
-    filter: blur(0) drop-shadow(0 0 24px #a855f7) brightness(1.3);
+    transform: translate(-8px, 8px) scale(1.02) rotate(22deg);
+    filter: blur(0) drop-shadow(0 0 18px #a855f7) brightness(1.25);
     opacity: 1;
   }
   34% {
     /* Rapid spring recoil */
-    transform: translate(8px, -8px) scale(1.05) rotate(30deg);
+    transform: translate(4px, -4px) scale(0.95) rotate(30deg);
     filter: blur(1px);
     opacity: 1;
   }
   44% {
     /* RAPID THRUST 2 (Deep toxic puncture strike!) */
-    transform: translate(-22px, 20px) scale(1.35) rotate(18deg);
-    filter: drop-shadow(0 0 35px #c084fc) drop-shadow(0 0 45px #84cc16) brightness(1.4);
+    transform: translate(-12px, 10px) scale(1.04) rotate(18deg);
+    filter: drop-shadow(0 0 24px #c084fc) drop-shadow(0 0 30px #84cc16) brightness(1.3);
     opacity: 1;
   }
   56% {
     /* Toxic vibration shudder */
-    transform: translate(-18px, 16px) scale(1.28) rotate(20deg);
-    filter: drop-shadow(0 0 28px #a855f7);
+    transform: translate(-9px, 8px) scale(1.02) rotate(20deg);
+    filter: drop-shadow(0 0 20px #a855f7);
     opacity: 1;
   }
   68% {
     /* Retract with venom dripping line */
-    transform: translate(-2px, 0px) scale(1.1) rotate(28deg);
+    transform: translate(-1px, 0px) scale(0.95) rotate(28deg);
     filter: blur(1.5px);
     opacity: 0.85;
   }
   84% {
     /* Upward flutter retreat */
-    transform: translate(25px, -28px) scale(0.85) rotate(35deg);
-    filter: blur(3px);
+    transform: translate(14px, -15px) scale(0.8) rotate(35deg);
+    filter: blur(2.5px);
     opacity: 0.5;
   }
   100% {
     /* Disappear */
-    transform: translate(50px, -55px) scale(0.6) rotate(40deg);
-    filter: blur(6px);
+    transform: translate(26px, -28px) scale(0.55) rotate(40deg);
+    filter: blur(4px);
     opacity: 0;
   }
 }

@@ -240,6 +240,13 @@ export interface AttackResult {
    * the normal and mirrored slash simultaneously (X-shape) to convey the double strike.
    */
   swordsDanceBoosted?: boolean;
+  /**
+   * True when an attack or defense move's coin flip failed (Tails) or whiffed.
+   * Prompts the UI to play a rapid, subdued whiff animation instead of the full triumphant sequence.
+   */
+  whiffed?: boolean;
+  /** Coin flip outcome for single-coin moves (true = heads, false = tails). */
+  coinFlipSuccess?: boolean;
 }
 
 /** One Benched Pokémon damaged as a secondary effect of an attack. */
