@@ -1,0 +1,91 @@
+=== STEP 2673 ===
+Talimatınız doğrultusunda **önce 1. maddedeki hareketsiz keyframe düzenlemeleri** tamamlandı, ardından **2. maddedeki stok görsel adayları için üretim prompt'ları** hazırlandı:
+## 2. Stok Görsel Eklenecek Öncelikli Adaylar & Üretim Prompt'ları
+Şu anda kodda en ilkel SVG vektörleriyle çizilen ve stok görselle en yüksek seviyeye çıkacak **en kritik 3 aday** için hazır şablonlar:
+### Aday
+### Aday C: Scyther — Blade Dance / Slash (`scyther_blade_dance`)
+Bu üç adaydan hangisiyle başlamak isterseniz, görseli oluşturup `public/assets/raw/` içerisine bıraktığınızda hemen entegrasyonu gerçekleştirebilirim.
+
+=== STEP 2903 ===
+Bulguları ve salt SVG yerine **Ken Sugimori stok görseli** entegre edilebilecek en güçlü adayları aşağıda detaylandırdım:
+- **Neden Stok Görsel?**: Koffing'in kurukafa-kemik amblemli sırıtan gaz mayını yüzü ikoniktir.
+- **Neden Stok Görsel?**: Jungle Rhydon'ın 50 vuran imza saldırısıdır.
+- **Neden Stok Görsel?**: Jungle Pinsir'in boynuzları anatomik bir mengenedir, mekanik giyotin yerine böcek boynuzları çok daha otantiktir.
+2. **Adım 2**: Ardından stok görsel adayları arasından (örneğin **Gengar**, **Machamp** veya **Alakazam** gibi) hangileriyle devam etmek istersen, sırayla prompt ve görsel değerlendirmelerine başlayalım.
+
+=== STEP 2946 ===
+### Adım 2: Stok Görsel Adayları ve Üretim Seçimi
+Şimdi Ken Sugimori suluboya stok görsel dönüşümüne geçebiliriz. İncelemelerimize göre en yüksek görsel/nostaljik etkiyi yaratacak ilk 3 aday:
+Bu 3 adaydan hangileriyle başlayalım? Seçtiğin aday(lar) için en otantik Sugimori çıktısını verecek prompt önerilerini hemen sunabilirim.
+
+=== STEP 3228 ===
+Stok görsel adayları ve animasyon/efekt geliştirme sürecinden önce, Basic Pokemon'ların move animasyonlarını geliştirmeye odaklanmıştık hatırladığım kadarıyla. O tarafta uygun Pokemon'ların listesini çıkartıp onay istiyordun bir iki gün öncesine kadar. Ondan bahsediyorum. O sürece kaldığımız yerden devam edebilir miyiz?
+
+=== STEP 3246 ===
+1413: <USER_REQUEST> Kingler için verilen komutu girdiğimde ekteki gibi bir görsel üretti. Direkt referanstaki görselden ekstr
+1417: <USER_REQUEST> Son düzenleme prompt'u ardından ekteki görseli üretti. Kıskaç aynı kaldı, açısı değişti, ama ucuna eklene
+1424: <USER_REQUEST> Referans görsel ile birlikte mi bu prompt'u vermeliyim? </USER_REQUEST> <ADDITIONAL_METADATA> The current
+1426: <USER_REQUEST> Peki bu stok görseli, sağ 45 derecelik açılı pespektiften resmettirdikten sonra, kolu/pençeyi oradan çıka
+1428: <USER_REQUEST> Perspektifi doğru algılıyor (görsel ekte), ama kıskacın hatlarını, detaylarını bozuyor. </USER_REQUEST> <
+3037: <USER_REQUEST> İlk aşamada üretilen görseller sırasıyla ekte. Değerlendirmelere geçelim. </USER_REQUEST> <ADDITIONAL_MET
+3041: <USER_REQUEST> Referans görsel ile bu şekilde (ekte) bir sonuç verdi. Diğer bir sorum da, şu an yalnızca Koffing için gö
+3098: <USER_REQUEST> Böyle bir görsel çıktı verdi, ama ellerinin uçları insan tırnaklarına benziyor sanki, bir de istediğim mo
+3100: <USER_REQUEST> Peki böyle bir görsel (ekte) buldum, el çizdirmek yerine, direkt bunu kullanabilir miyiz? </USER_REQUEST>
+3108: <USER_REQUEST> Önceki task execution'u durdurdum, çünkü senden görsel/durum analizi istemiştim, ama gördüğüm kadarıyla d
+3114: <USER_REQUEST> Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl 
+3116: <USER_REQUEST> Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl 
+3118: <USER_REQUEST> Tavsiyen üzerine, doğrudan bu görseli "Weezing_raw_edited" adıyla "raw" klasörüne ekledim. Şimdi 5'li set
+3223: <USER_REQUEST> Stok görsel adayları ve animasyon/efekt geliştirme sürecinden önce, Basic Pokemon'ların move animasyonlar
+
+=== STEP 3252 ===
+### 1. Görsellerin Hazırlanması ve Kırpılması
+Stok görsel adayları ve animasyon/efekt geliştirme sürecinden önce, Basic Pokemon'ların move animasyonlarını geliştirmeye odaklanmıştık hatırladığım kadarıyla. O tar
+
+=== STEP 3356 ===
+2. Böyle bir görsel çıktı verdi, ama ellerinin uçları insan tırnaklarına benziyor sanki, bir de istediğim morlukta değil, çok soluk bir mor renk bu.
+3. Peki böyle bir görsel (ekte) buldum, el çizdirmek yerine, direkt bunu kullanabilir miyiz?
+4. Önceki task execution'u durdurdum, çünkü senden görsel/durum analizi istemiştim, ama gördüğüm kadarıyla direkt implementasyon adımına geçtin sanki. Prompt şu şekildeydi: "Peki böyle bir görsel (ekte) buldum, el çizdirmek yerine, direkt bunu kullanabilir miyiz?"
+6. Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl bir prompt girmem gerekli?
+7. Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl bir prompt girmem gerekli?
+8. Tavsiyen üzerine, doğrudan bu görseli "Weezing_raw_edited" adıyla "raw" klasörüne ekledim. Şimdi 5'li set için implementasyona başlayabilirsin.
+9. Stok görsel adayları ve animasyon/efekt geliştirme sürecinden önce, Basic Pokemon'ların move animasyonlarını geliştirmeye odaklanmıştık hatırladığım kadarıyla. O tarafta uygun Pokemon'ların listesini çıkartıp onay istiyordun bir iki gün öncesine kadar. Ondan bahsediyorum. O sürece kaldığımız yerden devam edebilir miyiz?
+
+=== STEP 3658 ===
+1. Peki böyle bir görsel (ekte) buldum, el çizdirmek yerine, direkt bunu kullanabilir miyiz?
+2. Önceki task execution'u durdurdum, çünkü senden görsel/durum analizi istemiştim, ama gördüğüm kadarıyla direkt implementasyon adımına geçtin sanki. Prompt şu şekildeydi: "Peki böyle bir görsel (ekte) buldum, el çizdirmek yerine, direkt bunu kullanabilir miyiz?"
+4. Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl bir prompt girmem gerekli?
+5. Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl bir prompt girmem gerekli?
+6. Tavsiyen üzerine, doğrudan bu görseli "Weezing_raw_edited" adıyla "raw" klasörüne ekledim. Şimdi 5'li set için implementasyona başlayabilirsin.
+7. Stok görsel adayları ve animasyon/efekt geliştirme sürecinden önce, Basic Pokemon'ların move animasyonlarını geliştirmeye odaklanmıştık hatırladığım kadarıyla. O tarafta uygun Pokemon'ların listesini çıkartıp onay istiyordun bir iki gün öncesine kadar. Ondan bahsediyorum. O sürece kaldığımız yerden devam edebilir miyiz?
+
+=== STEP 5959 ===
+"Starmie_Star_Freeze.png" dosyasında yer alan Starmie görseli, orijinal Keiji Kinebuchi çizimini tam olarak yansıtmıyor. Buradaki görselde sanki kum rengi Staryu'nun üzerine binmiş mor bir Starmie var gibi görünüyor. Ancak Starmie ekteki görselde olduğu gibi, bütünüyle mor iç ve dış kol katmanlarına
+İyi güzel de ben senden son prompt'ta Starmie'nin rengine ve ana hatlarıyla neye benzediğine dair referans olarak eklediğim görseli doğrudan animasyona implement etmeni istemedim ki. Çünkü o görsel animasyonda yer alacak estetiğe sahip değil. Bu tip eylemlere girişmeden önce, eğer açıkça bir görseli
+Gyarados "dragon rage" için de mevcut salt SVG animasyon yerine, benzer bir stok görselli animasyon metodu uygulanabilir mi? Yalnız öncesinde üretilecek görsel için verilecek prompt'u bana sun.
+Önceki turlardaki genel kapsamlı animasyon/efekt kontrolünün bir benzerini daha gerçekleştirmeni istiyorum. Ayrıca az önceki Gyarados veya Starmie örneklerinde olduğu gibi, salt SVG yerine stok görselin de dahil edilebileceği animasyon/efekt adayları hangileri olabilir, buna dair de incelemelerde bu
+Üçü için sırayla oluşturulan görselleri ekte bulabilirsin. İlerlemeden evvel, bu görsellerin animasyon için uygunluklarını değerlendir. Uygun değillerse, prompt'ları uygun görsel ürettirecek şekilde yeniden düzenle.
+Sadece Exeggutor için düzenlemeye gittim. Ama ikinci prompt'ta üretilen görsel de yine ekteki gibi alakasız bir şekilde çizildi.
+Böyle bir görsel çıktı verdi, ama ellerinin uçları insan tırnaklarına benziyor sanki, bir de istediğim morlukta değil, çok soluk bir mor renk bu.
+Peki böyle bir görsel (ekte) buldum, el çizdirmek yerine, direkt bunu kullanabilir miyiz?
+Önceki task execution'u durdurdum, çünkü senden görsel/durum analizi istemiştim, ama gördüğüm kadarıyla direkt implementasyon adımına geçtin sanki. Prompt şu şekildeydi: "Peki böyle bir görsel (ekte) buldum, el çizdirmek yerine, direkt bunu kullanabilir miyiz?"
+Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl bir prompt girmem gerekli?
+Çıktı pek istediğim gibi olmadı. Direkt bu görseli referans vererek bir çıktı almayı denemek için, nasıl bir prompt girmem gerekli?
+Tavsiyen üzerine, doğrudan bu görseli "Weezing_raw_edited" adıyla "raw" klasörüne ekledim. Şimdi 5'li set için implementasyona başlayabilirsin.
+Stok görsel adayları ve animasyon/efekt geliştirme sürecinden önce, Basic Pokemon'ların move animasyonlarını geliştirmeye odaklanmıştık hatırladığım kadarıyla. O tarafta uygun Pokemon'ların listesini çıkartıp onay istiyordun bir iki gün öncesine kadar. Ondan bahsediyorum. O sürece kaldığımız yerden 
+
+=== STEP 5963 ===
+Stok görsel adayları ve animasyon/efekt geliştirme sürecinden önce, Basic Pokemon'ların move animasyonlarını geliştirmeye odaklanmıştık hatırladığım kadarıyla. O tarafta uygun Pokemon'ların listesini çıkartıp onay istiyordun bir iki gün öncesine kadar. Ondan bahsediyorum. O sürece kaldığımız yerden devam edebilir miyiz?
+
+=== STEP 6593 ===
+Devam edelim, ama öncesinde bu grupların orijinal listelenmelerinde stok görsele uygunluklarına dair tespitler yapıldı mı? Yapıldıysa, bu kısmın es geçilmedeiğinden emin olmak istedim.
+
+=== STEP 6637 ===
+7: Aslında **Step 3228 – 3282** aralığında, Base / Jungle / Fossil setlerindeki **Basic Pokémon'ların jenerik (`tackle`, `punch`, `scratch`, `physical_charge` vb.) vuruşlardan arındırılması** için bir aday listesi çıkarmış ve başlama aşamasına gelmiştik. 
+9: Fakat tam o turda (Step 3283) çalışmaya başlarken, oyundaki oynanışı, kalkan mekaniklerini ve görsel standartları doğrudan etkileyen bir dizi acil problem ortaya çıktı ve öncelik zorunlu olarak bu kritik düzeltmelere kaydı:
+13: 2. **Weedle / Ekans Görsel Çakışması (Step 3984):** 
+14:    Ekans'ın *Poison Sting* saldırısında Weedle stok görselinin belirmesi hatası düzeltildi; tüm hamle-tür eşleşmeleri tarandı.
+16:    Wartortle *Withdraw* animasyonundaki stok görselin aş
+48: Bu 29 Pokémon'u, ihtiyaç duydukları animasyon tarzına ve stok görsele uygunluklarına göre iki ana gruba ayırabiliriz:
+50: #### Grup A: Stok Görsele (Dekupe Çizim) Çok Uygun Olanlar
+55:    - *Fikir:* Akordeon/yay gibi öne doğru uzayan ikonik çizgili elastik bacak stok görseli.
+

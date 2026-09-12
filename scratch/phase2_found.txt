@@ -1,0 +1,141 @@
+=== Emojis in BattleFXOverlay.tsx ===
+Line 1516: ['✦'] -> <span className="text-xs text-indigo-300 select-none">✦</span>
+Line 1546: ['✦'] -> <span className="text-4xl text-yellow-200 select-none drop-shadow-[0_0_15px_#fef08a]">✦</span>
+Line 1547: ['✧'] -> <span className="absolute text-2xl text-white select-none drop-shadow-[0_0_10px_#ffffff]" style={{ a
+Line 1580: ['✦'] -> <span className="text-3xl text-yellow-100 select-none drop-shadow-[0_0_12px_#fef9c3]">✦</span>
+Line 1762: ['✦'] -> ✦
+Line 1908: ['✦'] -> ✦
+Line 2665: ['✦'] -> <span className="text-lg text-yellow-300 select-none">✦</span>
+Line 2668: ['✦'] -> <span className="text-sm text-yellow-200 select-none">✦</span>
+Line 2671: ['✦'] -> <span className="text-xs text-amber-200 select-none">✦</span>
+Line 2840: ['✦'] -> <span className="text-lg text-yellow-200 select-none drop-shadow-[0_0_8px_#fef08a]">✦</span>
+Line 2843: ['✦'] -> <span className="text-sm text-yellow-300 select-none drop-shadow-[0_0_6px_#fde047]">✦</span>
+Line 2846: ['✦'] -> <span className="text-xs text-amber-200 select-none drop-shadow-[0_0_5px_#fde047]">✦</span>
+Line 2849: ['✦'] -> <span className="text-sm text-yellow-200 select-none drop-shadow-[0_0_6px_#fef08a]">✦</span>
+Line 4210: ['✦'] -> <span className="text-sm text-cyan-100 select-none drop-shadow-[0_0_8px_#67e8f9]">✦</span>
+Line 4213: ['✦'] -> <span className="text-xs text-white select-none drop-shadow-[0_0_8px_#a5f3fc]">✦</span>
+Line 4216: ['✦'] -> <span className="text-sm text-sky-200 select-none drop-shadow-[0_0_8px_#38bdf8]">✦</span>
+Line 4219: ['✦'] -> <span className="text-xs text-cyan-200 select-none drop-shadow-[0_0_6px_#cffafe]">✦</span>
+Line 4418: ['✦'] -> <span className="text-xl text-emerald-300 animate-ping">✦</span>
+Line 4419: ['✦'] -> <span className="text-xl text-green-300 animate-ping" style={{ animationDelay: '0.15s' }}>✦</span>
+Line 5588: ['✦'] -> <span className="text-xs text-indigo-900 font-bold select-none">✦</span>
+Line 5671: ['✦'] -> <span className="text-amber-300 drop-shadow-[0_0_8px_#fde047] text-lg select-none">✦</span>
+Line 9324: ['✦'] -> <span className="text-xl text-white select-none drop-shadow-[0_0_10px_#ffffff]">✦</span>
+Line 9920: ['✦'] -> <span className="text-sm text-fuchsia-200 select-none drop-shadow-[0_0_6px_#c084fc]">✦</span>
+Line 9923: ['✦'] -> <span className="text-xs text-violet-200 select-none drop-shadow-[0_0_6px_#a855f7]">✦</span>
+Line 9991: ['✦'] -> ✦
+Line 10421: ['✦'] -> <span className="text-xs text-pink-200 select-none">✦</span>
+Line 10657: ['✦'] -> <span className="text-sm text-purple-300 animate-ping">✦</span>
+Line 10658: ['✦'] -> <span className="text-xs text-emerald-300 animate-ping" style={{ animationDelay: '0.2s' }}>✦</span>
+Line 10659: ['✦'] -> <span className="text-sm text-violet-200 animate-ping" style={{ animationDelay: '0.4s' }}>✦</span>
+Line 10694: ['✦'] -> <span className="text-sm text-yellow-300 animate-ping">✦</span>
+Line 10695: ['✦'] -> <span className="text-xs text-emerald-300 animate-ping" style={{ animationDelay: '0.2s' }}>✦</span>
+Line 10696: ['✦'] -> <span className="text-sm text-red-300 animate-ping" style={{ animationDelay: '0.4s' }}>✦</span>
+Line 10807: ['✦'] -> <span className="text-xs text-amber-200 select-none">✦</span>
+Line 10810: ['✦'] -> <span className="text-[10px] text-yellow-300 select-none">✦</span>
+Line 10882: ['✦'] -> <span className="absolute text-2xl text-yellow-200 select-none">✦</span>
+Line 11553: ['✦'] -> <span className="text-sm text-slate-200 select-none">✦</span>
+Line 11556: ['✦'] -> <span className="text-xs text-slate-300 select-none">✦</span>
+Line 11579: ['✦'] -> <span className="text-lg text-emerald-300 select-none drop-shadow-[0_0_8px_#6ee7b7]">✦</span>
+Line 11582: ['✦'] -> <span className="text-sm text-green-200 select-none drop-shadow-[0_0_6px_#4ade80]">✦</span>
+Line 11585: ['✦'] -> <span className="text-base text-emerald-200 select-none drop-shadow-[0_0_6px_#34d399]">✦</span>
+Line 11935: ['✦'] -> <span className="text-xl text-amber-300 animate-ping">✦</span>
+Line 11967: ['✦'] -> <span className="text-lg text-yellow-200 select-none drop-shadow-[0_0_6px_#fde047]">✦</span>
+Line 11970: ['✧'] -> <span className="text-sm text-amber-200 select-none drop-shadow-[0_0_6px_#fbbf24]">✧</span>
+Line 12006: ['✦'] -> <span className="text-sm text-yellow-300 select-none drop-shadow-[0_0_8px_#fde047]">✦</span>
+Line 12009: ['✧'] -> <span className="text-xs text-amber-200 select-none drop-shadow-[0_0_6px_#fbbf24]">✧</span>
+Line 12059: ['★'] -> <span className="text-lg text-yellow-300 select-none drop-shadow-[0_0_8px_#fde047]">★</span>
+Line 12063: ['✦'] -> <span className="text-sm text-amber-200 select-none drop-shadow-[0_0_6px_#fbbf24]">✦</span>
+Line 12067: ['✧'] -> <span className="text-xs text-yellow-100 select-none drop-shadow-[0_0_5px_#fef3c7]">✧</span>
+Line 12078: ['✨'] -> <span className="text-xs text-yellow-200 select-none">✨</span>
+Line 12081: ['✨'] -> <span className="text-xs text-amber-100 select-none">✨</span>
+Line 12168: ['✦'] -> <span className="text-xl text-lime-300 select-none drop-shadow-[0_0_10px_#a3e635]">✦</span>
+Line 12399: ['♂', '♀'] -> {/* 49b. NIDORAN HORN CHARGE (Nidoran♂/♀ - pink poison horn thrust) */}
+Line 12480: ['✦'] -> <span className="text-2xl text-orange-200 select-none drop-shadow-[0_0_10px_#fdba74]">✦</span>
+Line 12566: ['✧'] -> <span className="text-xl text-yellow-100 select-none drop-shadow-[0_0_10px_#fef9c3]">✧</span>
+Line 12758: ['✦'] -> <span className="text-sm text-cyan-200 drop-shadow-[0_0_8px_#38bdf8] select-none">✦</span>
+Line 13174: ['✦'] -> <span className="text-pink-200 text-lg select-none drop-shadow-[0_0_8px_#f472b6]">✦</span>
+Line 13184: ['💬'] -> <span className="text-stone-400 text-base select-none">💬 ?</span>
+Line 13424: ['✦'] -> <span className="text-cyan-100 text-base select-none drop-shadow-[0_0_8px_#38bdf8]">✦</span>
+Line 13591: ['⚡'] -> <span className="text-yellow-200 text-lg font-black select-none drop-shadow-[0_0_10px_#facc15]">⚡</s
+Line 13652: ['⚡'] -> <span className="text-yellow-300 text-xl font-bold select-none drop-shadow-[0_0_12px_#38bdf8]">⚡</sp
+Line 13667: ['⚡'] -> <span className="text-yellow-300 text-xl font-bold select-none drop-shadow-[0_0_12px_#38bdf8]">⚡</sp
+Line 13908: ['✦'] -> <span className="text-fuchsia-200 text-lg select-none drop-shadow-[0_0_10px_#d946ef]">✦</span>
+Line 13985: ['✦'] -> ✦
+Line 14185: ['✦'] -> ✦
+Line 14501: ['🍃'] -> 🍃
+Line 14585: ['⚡'] -> ⚡
+Line 14833: ['✦'] -> ✦
+Line 14850: ['💨'] -> 💨
+Line 15277: ['✦'] -> ✦
+Line 15297: ['★'] -> ★
+Line 15464: ['✦'] -> ✦
+
+=== Zapdos, Shellder, Venonat in BattleFXOverlay.tsx ===
+Line 227: | 'zapdos_thunderbolt'
+Line 228: | 'zapdos_thunderstorm'
+Line 240: | 'venonat_stun_spore'
+Line 241: | 'venonat_leech_life'
+Line 244: | 'shellder_hide_in_shell'
+Line 245: | 'shellder_supersonic'
+Line 440: // 0f. BATCH 20: LEGENDARY BIRDS TRIO (ARTICUNO, ZAPDOS, MOLTRES) SIGNATURE DISPATCHES
+Line 446: // Zapdos: Thunder, Thunderbolt & Thunderstorm
+Line 447: if (pkm.includes('zapdos')) {
+Line 448: if (name.includes('thunderstorm')) return 'zapdos_thunderstorm';
+Line 449: if (name.includes('thunderbolt') || name.includes('thunder')) return 'zapdos_thunderbolt';
+Line 488: // Venonat: Stun Spore & Leech Life
+Line 489: if (pkm.includes('venonat')) {
+Line 490: if (name.includes('stun spore') || name.includes('spore')) return 'venonat_stun_spore';
+Line 491: if (name.includes('leech life')) return 'venonat_leech_life';
+Line 501: // Shellder: Hide in Shell & Supersonic
+Line 502: if (pkm.includes('shellder')) {
+Line 503: if (name.includes('hide in shell') || name.includes('shell')) return 'shellder_hide_in_shell';
+Line 504: if (name.includes('supersonic')) return 'shellder_supersonic';
+Line 1141: case 'zapdos_thunderbolt':
+Line 1143: case 'zapdos_thunderstorm':
+Line 1167: case 'venonat_stun_spore':
+Line 1169: case 'venonat_leech_life':
+Line 1175: case 'shellder_hide_in_shell':
+Line 1177: case 'shellder_supersonic':
+Line 13505: {/* 62. ZAPDOS THUNDERBOLT & THUNDER (Zapdos — Colossal Sky Lightning Pillar & Ground Electric Burst
+Line 13506: {fx.type === 'zapdos_thunderbolt' && (
+Line 13519: style={{ animation: 'gbaZapdosLightningPillar 1.6s cubic-bezier(0.18, 0.9, 0.28, 1) forwards' }}
+Line 13547: style={{ animation: 'gbaZapdosElectricDischarge 1.1s ease-out 0.28s forwards', opacity: 0 }}
+Line 13597: {/* 63. ZAPDOS THUNDERSTORM (Zapdos — Multi-Branch Sky Lightning & Bench Chain Arcs) */}
+Line 13598: {fx.type === 'zapdos_thunderstorm' && (
+Line 13611: style={{ animation: 'gbaZapdosMultiForkStrike 1.6s ease-out forwards' }}
+Line 13646: animation: 'gbaZapdosBenchSparkTravel 1.1s ease-out 0.4s forwards',
+Line 13660: animation: 'gbaZapdosBenchSparkTravel 1.1s ease-out 0.4s forwards',
+Line 14508: BATCH 23: FUNGAL SPORES, INSECT VITALITY & HYPNOSIS (VENONAT, PARAS, EXEGGCUTE)
+Line 14511: {/* 1. VENONAT: STUN SPORE (Ruby Compound Eye Flare & Golden Electrostatic Bug Dust) */}
+Line 14512: {fx.type === 'venonat_stun_spore' && (
+Line 14517: style={{ animation: 'gbaVenonatRubyEyesGlow 1.65s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+Line 14521: <radialGradient id="venonatRubyEyeGrad" cx="40%" cy="35%" r="65%">
+Line 14531: <ellipse cx="36" cy="46" rx="28" ry="34" fill="url(#venonatRubyEyeGrad)" stroke="#fecdd3" strokeWidt
+Line 14537: <ellipse cx="80" cy="46" rx="28" ry="34" fill="url(#venonatRubyEyeGrad)" stroke="#fecdd3" strokeWidt
+Line 14554: key={`venonat-dust-${idx}`}
+Line 14562: animation: `gbaVenonatStunDust 1.0s ease-out ${dust.delay} forwards`,
+Line 14575: key={`venonat-spk-${idx}`}
+Line 14581: animation: `gbaVenonatParalysisSpark 0.65s ease-out ${spk.delay} forwards`,
+Line 14591: {/* 2. VENONAT: LEECH LIFE (Insect Mandibles & Bioluminescent Bio-Drain Stream) */}
+Line 14592: {fx.type === 'venonat_leech_life' && (
+Line 14597: style={{ animation: 'gbaVenonatMandibleLatch 1.6s cubic-bezier(0.18, 0.95, 0.3, 1) forwards' }}
+Line 14633: key={`venonat-bio-${idx}`}
+Line 14641: animation: `gbaVenonatBioDrainStream 0.85s cubic-bezier(0.2, 0.8, 0.4, 1) ${bio.delay} forwards`,
+Line 14782: BATCH 24: SEA & TIDAL BIO-STOCKS (SHELLDER, HORSEA, TENTACOOL)
+Line 14785: {/* 1. SHELLDER: HIDE IN SHELL (Stock Bivalve Shell Snap & Protection Glints) */}
+Line 14786: {fx.type === 'shellder_hide_in_shell' && (
+Line 14788: {/* Shellder Stock Clam Image */}
+Line 14790: src="/assets/Shellder_Shell.png"
+Line 14791: alt="Shellder Shell"
+Line 14797: ? 'gbaShellderWhiffSlip 1.45s cubic-bezier(0.25, 0.8, 0.3, 1) forwards'
+Line 14798: : 'gbaShellderShellPeek 1.55s cubic-bezier(0.18, 0.92, 0.3, 1) forwards'
+Line 14808: animation: 'gbaShellderShieldGlint 1.1s ease-out 0.45s forwards',
+Line 14821: key={`shellder-glint-${idx}`}
+Line 14856: {/* 2. SHELLDER: SUPERSONIC (Stock Shell & Expanding Concentric Sound Waves) */}
+Line 14857: {fx.type === 'shellder_supersonic' && (
+Line 14859: {/* Shellder Stock Clam Image */}
+Line 14861: src="/assets/Shellder_Shell.png"
+Line 14862: alt="Shellder Supersonic"
+Line 14866: style={{ animation: 'gbaShellderShellPeek 1.6s cubic-bezier(0.18, 0.92, 0.3, 1) forwards' }}
+Line 14873: style={{ animation: 'gbaShellderSonicBeam 1.6s ease-out forwards' }}

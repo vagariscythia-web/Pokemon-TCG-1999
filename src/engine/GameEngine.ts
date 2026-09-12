@@ -1955,9 +1955,22 @@ export class GameEngine {
      * the choice modal (benchTargetIndex); the AI and any caller that does not pass a choice
      * keep the previous default so nothing else changes for them.
      */
-    const pickBenchIndex = (list: InPlayCard[], fallback: 'first' | 'random' = 'first'): number => {
+    const pickBenchIndex = (list: InPlayCard[], fallback: 'first' | 'random' = 'first', amount = 10): number => {
       const chosen = effectChoices?.benchTargetIndex;
       if (chosen !== undefined && Number.isInteger(chosen) && chosen >= 0 && chosen < list.length) return chosen;
+      if (attackerPlayer.id === 'cpu' && list.length > 0) {
+        const koIdx = list.findIndex(b => b && b.currentHp > 0 && b.currentHp <= amount);
+        if (koIdx !== -1) return koIdx;
+        let bestIdx = 0;
+        let minHp = 999;
+        list.forEach((b, idx) => {
+          if (b && b.currentHp > 0 && b.currentHp < minHp) {
+            minHp = b.currentHp;
+            bestIdx = idx;
+          }
+        });
+        return bestIdx;
+      }
       return fallback === 'random' ? Math.floor(Math.random() * list.length) : 0;
     };
 
@@ -2530,9 +2543,11 @@ export class GameEngine {
     }
 
     if (damageTarget.preventDamageNextTurn || damageTarget.preventAllEffectsNextTurn) {
-      finalDamage = 0;
-      GameEngine.addLog(next, `🛡️ ${damageTarget.card.name} protected itself and prevented all attack damage!`, 'status');
-    } else if (damageTarget.hardenActiveNextTurn && finalDamage <= 30) {
+      if (finalDamage > 0) {
+        finalDamage = 0;
+        GameEngine.addLog(next, `🛡️ ${damageTarget.card.name} protected itself and prevented all attack damage!`, 'status');
+      }
+    } else if (damageTarget.hardenActiveNextTurn && finalDamage > 0 && finalDamage <= 30) {
       finalDamage = 0;
       GameEngine.addLog(next, `🪨 ${damageTarget.card.name}'s Harden prevented all damage (30 or less damage)!`, 'status');
     }
@@ -2716,10 +2731,11 @@ export class GameEngine {
 
     // Flame Pillar (Dark Rapidash) - "choose 1 of them"
     if (attackName === 'flame pillar' && defenderPlayer.bench.length > 0) {
-      const target = defenderPlayer.bench[pickBenchIndex(defenderPlayer.bench)];
-      target.damage += 10;
-      target.currentHp = Math.max(0, (target.card.hp || 0) - target.damage);
-      GameEngine.addLog(next, `🔥 Flame Pillar dealt 10 damage to ${target.card.name} on the Bench!`, 'damage');
+      const bIdx = pickBenchIndex(defenderPlayer.bench, 'first', 10);
+      const target = defenderPlayer.bench[bIdx];
+      const dealt = hitBench(target, 10);
+      recordBenchHit(defenderPlayer.id, target, bIdx, dealt);
+      GameEngine.addLog(next, `🔥 Flame Pillar dealt ${dealt} damage to ${target.card.name} on the Bench!`, 'damage');
     }
 
     // Rocket Tackle (Dark Blastoise)
@@ -2746,36 +2762,50 @@ export class GameEngine {
 
     // Hurricane (Pidgeot)
     if (attackName === 'hurricane' && defender.currentHp > 0) {
-      defenderPlayer.hand.push(defender.card, ...defender.attachedEnergy, ...defender.evolutionHistory);
-      defender.attachedEnergy = [];
-      defender.evolutionHistory = [];
-      if (defenderPlayer.bench.length > 0) {
-        defenderPlayer.active = defenderPlayer.bench.shift()!;
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Hurricane!`, 'status');
       } else {
-        defenderPlayer.active = null;
+        defenderPlayer.hand.push(defender.card, ...defender.attachedEnergy, ...defender.evolutionHistory);
+        defender.attachedEnergy = [];
+        defender.evolutionHistory = [];
+        if (defenderPlayer.bench.length > 0) {
+          defenderPlayer.active = defenderPlayer.bench.shift()!;
+        } else {
+          defenderPlayer.active = null;
+        }
+        GameEngine.addLog(next, `🌪️ Hurricane! Returned ${defender.card.name} and all attached cards to ${defenderPlayer.name}'s hand!`, 'action');
       }
-      GameEngine.addLog(next, `🌪️ Hurricane! Returned ${defender.card.name} and all attached cards to ${defenderPlayer.name}'s hand!`, 'action');
     }
 
     // Fling (Dark Machamp)
     if (attackName === 'fling' && defenderPlayer.bench.length > 0) {
-      defenderPlayer.deck.push(defender.card, ...defender.attachedEnergy, ...defender.evolutionHistory);
-      defenderPlayer.deck = GameEngine.shuffle(defenderPlayer.deck);
-      defenderPlayer.active = defenderPlayer.bench.shift()!;
-      GameEngine.addLog(next, `🤾 Fling! Shuffled ${defender.card.name} and all attached cards into ${defenderPlayer.name}'s deck!`, 'action');
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Fling!`, 'status');
+      } else {
+        defenderPlayer.deck.push(defender.card, ...defender.attachedEnergy, ...defender.evolutionHistory);
+        defenderPlayer.deck = GameEngine.shuffle(defenderPlayer.deck);
+        defenderPlayer.active = defenderPlayer.bench.shift()!;
+        GameEngine.addLog(next, `🤾 Fling! Shuffled ${defender.card.name} and all attached cards into ${defenderPlayer.name}'s deck!`, 'action');
+      }
     }
 
     // Drag Off / Knock Back / Fascinate - "choose 1 of your opponent's Benched Pokémon"
     if ((attackName === 'drag off' || attackName === 'knock back' || (attackName === 'fascinate' && primaryFlip)) && defenderPlayer.bench.length > 0) {
-      const oldActive = defender;
-      defenderPlayer.active = defenderPlayer.bench.splice(pickBenchIndex(defenderPlayer.bench), 1)[0];
-      defenderPlayer.bench.push(oldActive);
-      GameEngine.addLog(next, `🔄 ${attack.name} switched ${oldActive.card.name} with ${defenderPlayer.active.card.name}!`, 'action');
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented ${attack.name}!`, 'status');
+      } else {
+        const oldActive = defender;
+        defenderPlayer.active = defenderPlayer.bench.splice(pickBenchIndex(defenderPlayer.bench), 1)[0];
+        defenderPlayer.bench.push(oldActive);
+        GameEngine.addLog(next, `🔄 ${attack.name} switched ${oldActive.card.name} with ${defenderPlayer.active.card.name}!`, 'action');
+      }
     }
 
     // Stun Gas (Dark Weezing)
     if (attackName === 'stun gas') {
-      if (primaryFlip) {
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Stun Gas!`, 'status');
+      } else if (primaryFlip) {
         defender.poisonType = 'Poisoned';
         GameEngine.addLog(next, `☠️ Stun Gas: HEADS! ${defender.card.name} is now Poisoned!`, 'status');
       } else {
@@ -2796,7 +2826,9 @@ export class GameEngine {
     }
 
     // Sludge Punch / Poison Claws / Poison Gas / Psybeam / Sticky Hands
-    if (attackName === 'sludge punch' || (attackName === 'poison claws' && primaryFlip)) {
+    if (defender.preventAllEffectsNextTurn && (attackName === 'sludge punch' || attackName === 'poison claws' || attackName === 'poison gas' || attackName === 'psybeam' || attackName === 'sticky hands')) {
+      GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented the attack effect!`, 'status');
+    } else if (attackName === 'sludge punch' || (attackName === 'poison claws' && primaryFlip)) {
       defender.poisonType = 'Poisoned';
       GameEngine.addLog(next, `☠️ ${defender.card.name} is now Poisoned!`, 'status');
     } else if (attackName === 'poison gas') {
@@ -2842,7 +2874,9 @@ export class GameEngine {
     // 2. Pidgeot & Pidgeotto - Whirlwind ("switch the Defending Pokémon with 1 of your
     // opponent's Benched Pokémon" - the attacker chooses, it is not a random pick)
     if (attackName === 'whirlwind') {
-      if (defenderPlayer.bench.length > 0 && defenderPlayer.active) {
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Whirlwind!`, 'status');
+      } else if (defenderPlayer.bench.length > 0 && defenderPlayer.active) {
         const oldDefender = defenderPlayer.active;
         const newDefender = defenderPlayer.bench.splice(pickBenchIndex(defenderPlayer.bench, 'random'), 1)[0];
         oldDefender.status = 'None';
@@ -2857,7 +2891,9 @@ export class GameEngine {
     // came up heads. The move had no implementation at all, so the board asked for a
     // flip that changed nothing and the defending Pokémon never moved.
     if (attackName === 'terror strike' && primaryFlip) {
-      if (defenderPlayer.bench.length > 0 && defenderPlayer.active) {
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Terror Strike!`, 'status');
+      } else if (defenderPlayer.bench.length > 0 && defenderPlayer.active) {
         const oldDefender = defenderPlayer.active;
         const newDefender = defenderPlayer.bench.splice(pickBenchIndex(defenderPlayer.bench, 'random'), 1)[0];
         oldDefender.status = 'None';
@@ -2935,7 +2971,9 @@ export class GameEngine {
     // 8. Hyper Beam (Dragonair, Golduck) & Whirlpool (Poliwrath, Dark Vaporeon)
     // "choose 1 of them and discard it" - the attacker picks which Energy goes.
     if (attackName === 'hyper beam' || (attackName === 'whirlpool' && primaryFlip)) {
-      if (defender.attachedEnergy.length > 0) {
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented energy discard!`, 'status');
+      } else if (defender.attachedEnergy.length > 0) {
         const removed = GameEngine.discardAttachedEnergy(defender, effectChoices?.defenderEnergyIndex)!;
         defenderPlayer.discard.push(removed);
         GameEngine.addLog(next, `💫 ${attack.name}: Discarded ${removed.name} from ${defender.card.name}!`, 'action');
@@ -3023,6 +3061,7 @@ export class GameEngine {
       if (psychicIdx !== -1) {
         attackerPlayer.discard.push(attacker.attachedEnergy.splice(psychicIdx, 1)[0]);
         attacker.preventDamageNextTurn = true;
+        attacker.preventAllEffectsNextTurn = true;
         GameEngine.addLog(next, `🛡️ Mewtwo formed a Barrier! Discarded 1 Psychic Energy to prevent all damage and effects next turn.`, 'status');
       }
     }
@@ -3030,27 +3069,29 @@ export class GameEngine {
     // 15. Raichu - Gigashock (10 damage to up to 3 benched Pokemon)
     if (attackName === 'gigashock' && defenderPlayer.bench.length > 0) {
       const targets = defenderPlayer.bench.slice(0, 3);
-      targets.forEach(b => {
-        b.damage += 10;
-        b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+      targets.forEach((b, bIdx) => {
+        const dealt = hitBench(b, 10);
+        recordBenchHit(defenderPlayer.id, b, bIdx, dealt);
       });
       GameEngine.addLog(next, `⚡ Gigashock dealt 10 damage to ${targets.length} benched Pokémon!`, 'damage');
     }
 
     // 16. Gengar - Dark Mind / Pikachu - Spark ("choose 1 of them")
     if ((attackName === 'dark mind' || attackName === 'spark') && defenderPlayer.bench.length > 0) {
-      const b = defenderPlayer.bench[pickBenchIndex(defenderPlayer.bench)];
-      b.damage += 10;
-      b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
-      GameEngine.addLog(next, `⚡ ${attack.name} dealt 10 damage to benched ${b.card.name}!`, 'damage');
+      const bIdx = pickBenchIndex(defenderPlayer.bench, 'first', 10);
+      const b = defenderPlayer.bench[bIdx];
+      const dealt = hitBench(b, 10);
+      recordBenchHit(defenderPlayer.id, b, bIdx, dealt);
+      GameEngine.addLog(next, `⚡ ${attack.name} dealt ${dealt} damage to benched ${b.card.name}!`, 'damage');
     }
 
     // 17. Hitmonlee - Stretch Kick ("choose 1 of them")
     if (attackName === 'stretch kick' && defenderPlayer.bench.length > 0) {
-      const b = defenderPlayer.bench[pickBenchIndex(defenderPlayer.bench)];
-      b.damage += 20;
-      b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
-      GameEngine.addLog(next, `🥋 Stretch Kick dealt 20 damage to benched ${b.card.name}!`, 'damage');
+      const bIdx = pickBenchIndex(defenderPlayer.bench, 'first', 20);
+      const b = defenderPlayer.bench[bIdx];
+      const dealt = hitBench(b, 20);
+      recordBenchHit(defenderPlayer.id, b, bIdx, dealt);
+      GameEngine.addLog(next, `🥋 Stretch Kick dealt ${dealt} damage to benched ${b.card.name}!`, 'damage');
     }
 
     // 18. Electrode - Chain Lightning
@@ -3107,9 +3148,13 @@ export class GameEngine {
 
     // 24. Poliwhirl - Amnesia
     if (attackName === 'amnesia') {
-      const targetAttack = effectChoices?.amnesiaTarget || defender.card.attacks?.[0]?.name || '';
-      GameEngine.applyAmnesiaBlock(defender, targetAttack, attack.name, next.turn);
-      GameEngine.addLog(next, `⏳ Amnesia: ${defender.card.name} cannot use ${targetAttack} during the opponent's next turn!`, 'status');
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Amnesia!`, 'status');
+      } else {
+        const targetAttack = effectChoices?.amnesiaTarget || defender.card.attacks?.[0]?.name || '';
+        GameEngine.applyAmnesiaBlock(defender, targetAttack, attack.name, next.turn);
+        GameEngine.addLog(next, `⏳ Amnesia: ${defender.card.name} cannot use ${targetAttack} during the opponent's next turn!`, 'status');
+      }
     }
 
     // 24b. Clefairy/Clefable - Metronome
@@ -3155,14 +3200,22 @@ export class GameEngine {
     //     - so the whole move is off, side effects included, and the mark is tied to both
     //     Active Pokémon ("Benching either Pokémon ends this effect").
     if ((attackName === 'tail wag' || attackName === 'leer') && primaryFlip) {
-      GameEngine.applyAttackBlock(defender, attack.name, attacker.instanceId, next.turn);
-      GameEngine.addLog(next, `✨ ${attack.name}: HEADS! ${defender.card.name} cannot attack next turn!`, 'status');
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented ${attack.name}!`, 'status');
+      } else {
+        GameEngine.applyAttackBlock(defender, attack.name, attacker.instanceId, next.turn);
+        GameEngine.addLog(next, `✨ ${attack.name}: HEADS! ${defender.card.name} cannot attack next turn!`, 'status');
+      }
     }
 
     // 29. Victreebel - Acid
     if (attackName === 'acid' && primaryFlip) {
-      defender.preventRetreatNextTurn = true;
-      GameEngine.addLog(next, `🧪 Acid: HEADS! ${defender.card.name} cannot retreat next turn!`, 'status');
+      if (defender.preventAllEffectsNextTurn) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Acid!`, 'status');
+      } else {
+        defender.preventRetreatNextTurn = true;
+        GameEngine.addLog(next, `🧪 Acid: HEADS! ${defender.card.name} cannot retreat next turn!`, 'status');
+      }
     }
 
     // 7. Raichu / Pidgeot - Agility
@@ -3419,7 +3472,16 @@ export class GameEngine {
     // further up. Without this exclusion the branch below matched on the word
     // "Paralyzed" in its text and overwrote both outcomes with Paralyzed, which made the
     // coin look like it decided nothing.
-    if (attackName !== 'stun gas' && (attackText.includes('paralyzed') || attackName === 'thundershock' || attackName === 'thunder wave' || attackName === 'psyshock' || attackName === 'string shot' || attackName === 'ice beam' || attackName === 'star freeze' || attackName === 'bubble')) {
+    if (defender.preventAllEffectsNextTurn) {
+      if (attackName !== 'stun gas' && (attackText.includes('paralyzed') || attackText.includes('poisoned') || attackText.includes('asleep') || attackText.includes('confused') ||
+          attackName === 'thundershock' || attackName === 'thunder wave' || attackName === 'psyshock' || attackName === 'string shot' ||
+          attackName === 'ice beam' || attackName === 'star freeze' || attackName === 'bubble' || attackName === 'toxic' ||
+          attackName === 'poison sting' || attackName === 'poisonpowder' || attackName === 'poison vapor' || attackName === 'sludge punch' ||
+          attackName === 'jellyfish sting' || attackName === 'poison fang' || attackName === 'hypnosis' || attackName === 'sleep powder' ||
+          attackName === 'sing' || attackName === 'lullaby' || attackName === 'confuse ray' || attackName === 'foul gas' || attackName === 'venom powder')) {
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented status conditions!`, 'status');
+      }
+    } else if (attackName !== 'stun gas' && (attackText.includes('paralyzed') || attackName === 'thundershock' || attackName === 'thunder wave' || attackName === 'psyshock' || attackName === 'string shot' || attackName === 'ice beam' || attackName === 'star freeze' || attackName === 'bubble')) {
       if (attackText.includes('flip a coin') || attackName === 'thundershock' || attackName === 'bubble' || attackName === 'ice beam' || attackName === 'star freeze') {
         if (primaryFlip) {
           defender.status = 'Paralyzed';
@@ -3994,6 +4056,7 @@ export class GameEngine {
       discardHandIndex?: number;
       chosenDeckIndex?: number;
       targetInstanceId?: string;
+      sourceInstanceId?: string;
       coinResults?: boolean[];
     }
   ): GameState {
@@ -4186,30 +4249,69 @@ export class GameEngine {
 
     // 9. Damage Swap (Alakazam)
     else if (normPower === 'damage swap') {
-      const source = [player.active, ...player.bench].find(p => p && p.damage >= 10);
-      const target = [player.active, ...player.bench].find(p => p && p.instanceId !== source?.instanceId && p.currentHp > 10);
-      if (source && target && source.damage >= 10) {
-        source.damage -= 10;
-        source.currentHp = (source.card.hp || 50) - source.damage;
+      const allMine = [player.active, ...player.bench].filter(Boolean) as InPlayCard[];
+      let source: InPlayCard | undefined;
+      let target: InPlayCard | undefined;
+
+      if (params?.sourceInstanceId) {
+        source = allMine.find(p => p.instanceId === params.sourceInstanceId && p.damage >= 10);
+      }
+      if (!source) {
+        source = allMine.find(p => p.damage >= 10);
+      }
+
+      if (params?.targetInstanceId && source) {
+        target = allMine.find(p => p.instanceId === params.targetInstanceId && p.instanceId !== source?.instanceId && p.currentHp > 10);
+      }
+      if (!target && source) {
+        target = allMine.find(p => p.instanceId !== source?.instanceId && p.currentHp > 10);
+      }
+
+      if (source && target && source.damage >= 10 && target.currentHp > 10) {
+        source.damage = Math.max(0, source.damage - 10);
+        source.currentHp = Math.min(source.card.hp || 50, (source.card.hp || 50) - source.damage);
         target.damage += 10;
-        target.currentHp = (target.card.hp || 50) - target.damage;
-        GameEngine.addLog(next, `✨ ${powerName}! Moved 1 damage counter from ${source.card.name} to ${target.card.name}!`, 'action');
+        target.currentHp = Math.max(0, (target.card.hp || 50) - target.damage);
+        GameEngine.addLog(next, `✨ Damage Swap! Moved 1 damage counter from ${source.card.name} to ${target.card.name}!`, 'action');
       } else {
-        GameEngine.addLog(next, `Cannot use ${powerName}: No valid damage counters to move without knocking out Pokémon.`, 'system');
+        GameEngine.addLog(next, `Cannot use Damage Swap: No valid damage counters to move without knocking out Pokémon.`, 'system');
       }
     }
 
     // 10. Curse (Gengar)
     else if (normPower === 'curse') {
-      const oppDamaged = [opponent.active, ...opponent.bench].find(p => p && p.damage >= 10);
-      const oppTarget = [opponent.active, ...opponent.bench].find(p => p && p.instanceId !== oppDamaged?.instanceId);
-      if (oppDamaged && oppTarget) {
-        oppDamaged.damage -= 10;
-        oppDamaged.currentHp = (oppDamaged.card.hp || 50) - oppDamaged.damage;
-        oppTarget.damage += 10;
-        oppTarget.currentHp = Math.max(0, (oppTarget.card.hp || 50) - oppTarget.damage);
-        GameEngine.addLog(next, `👻 Curse! Moved 1 damage counter from opponent's ${oppDamaged.card.name} to ${oppTarget.card.name}!`, 'action');
+      const allOpp = [opponent.active, ...opponent.bench].filter(Boolean) as InPlayCard[];
+      let source: InPlayCard | undefined;
+      let target: InPlayCard | undefined;
+
+      if (params?.sourceInstanceId) {
+        source = allOpp.find(p => p.instanceId === params.sourceInstanceId && p.damage >= 10);
+      }
+      if (!source) {
+        source = allOpp.find(p => p.damage >= 10);
+      }
+
+      if (params?.targetInstanceId && source) {
+        target = allOpp.find(p => p.instanceId === params.targetInstanceId && p.instanceId !== source?.instanceId);
+      }
+      if (!target && source) {
+        target = allOpp.find(p => p.instanceId !== source?.instanceId);
+      }
+
+      if (source && target) {
+        source.damage = Math.max(0, source.damage - 10);
+        source.currentHp = Math.min(source.card.hp || 50, (source.card.hp || 50) - source.damage);
+        target.damage += 10;
+        target.currentHp = Math.max(0, (target.card.hp || 50) - target.damage);
+        GameEngine.addLog(next, `👻 Curse! Moved 1 damage counter from ${opponent.name}'s ${source.card.name} to ${target.card.name}!`, 'action');
         pokemon.powerUsedThisTurn = true;
+
+        if (target.currentHp <= 0) {
+          next.pendingKnockout = { faintedName: target.card.name, isPlayer: playerId !== 'player' };
+          GameEngine.addLog(next, `💀 ${target.card.name} was Knocked Out by Curse!`, 'damage');
+        }
+      } else {
+        GameEngine.addLog(next, `Cannot use Curse: Requires at least 1 damaged opponent Pokémon and another Pokémon to transfer to.`, 'system');
       }
     }
 
@@ -4276,13 +4378,21 @@ export class GameEngine {
 
     // 15. Strange Behavior (Slowbro - Fossil)
     else if (normPower === 'strange behavior') {
-      const otherDamaged = [player.active, ...player.bench].find(p => p && p.instanceId !== pokemon.instanceId && p.damage >= 10);
-      if (otherDamaged && pokemon.currentHp > 10) {
-        otherDamaged.damage -= 10;
-        otherDamaged.currentHp = (otherDamaged.card.hp || 50) - otherDamaged.damage;
+      const allMine = [player.active, ...player.bench].filter(Boolean) as InPlayCard[];
+      let source: InPlayCard | undefined;
+      if (params?.sourceInstanceId) {
+        source = allMine.find(p => p.instanceId === params.sourceInstanceId && p.instanceId !== pokemon.instanceId && p.damage >= 10);
+      }
+      if (!source) {
+        source = allMine.find(p => p.instanceId !== pokemon.instanceId && p.damage >= 10);
+      }
+
+      if (source && pokemon.currentHp > 10) {
+        source.damage = Math.max(0, source.damage - 10);
+        source.currentHp = Math.min(source.card.hp || 50, (source.card.hp || 50) - source.damage);
         pokemon.damage += 10;
-        pokemon.currentHp = (pokemon.card.hp || 60) - pokemon.damage;
-        GameEngine.addLog(next, `🧠 Strange Behavior! Moved 10 damage from ${otherDamaged.card.name} to Slowbro!`, 'action');
+        pokemon.currentHp = Math.max(0, (pokemon.card.hp || 60) - pokemon.damage);
+        GameEngine.addLog(next, `🧠 Strange Behavior! Moved 10 damage from ${source.card.name} to Slowbro!`, 'action');
       } else {
         GameEngine.addLog(next, `Cannot use Strange Behavior: No damage to move or moving damage would Knock Out Slowbro.`, 'system');
       }

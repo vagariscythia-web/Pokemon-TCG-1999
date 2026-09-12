@@ -1,0 +1,6 @@
+Line 535: bite -> return 'bite';
+Line 576: punch -> return 'punch';
+Line 581: punch -> return 'punch';
+Line 586: punch -> return 'punch';
+Line 590: punch -> return 'punch';
+Line 838: tackle -> return 'tackle';

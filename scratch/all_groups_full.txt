@@ -1,0 +1,75 @@
+Genel ilerleme planımız (Roadmap) ve Basic Pokémon hamlelerinin jenerikten arındırılması sürecinde **nereden gelip şu an tam olarak hangi noktada olduğumuzun** kapsamlı özeti aşağıdadır:
+
+---
+
+### 1. Tamamlanan Kilometre Taşları (Nereden Geldik?)
+
+1. **Evrimleşmiş (Stage 1 / Stage 2) İkonik Pokémon'lar:**
+   - Charizard, Blastoise, Venusaur, Gengar, Alakazam, Machamp, Gyarados, Scyther, Cloyster, Exeggutor, Pinsir, Rhydon, Weezing vb. tüm büyük Pokémon'ların Ken Sugimori imza stok görselleri ve GBA efektleri tamamlandı.
+2. **Genel Altyapı ve Mekanik İyileştirmeleri:**
+   - Kaba emoji ve statik görsel kalıntılarının tamamen temizlenmesi.
+   - Enerji tepsisine taşan blur sorununu çözen dinamik kart-odaklı overlay mimarisi.
+   - Yazı-tura kayıplarında (Tails) özel **Whiff (Iska) mekaniği** ve küçülme efektleri.
+   - **Altın Ölçeklendirme Kuralı:** Normal vuruşlarda kart genişliğinin **~%68.1'i (108–124px)**, Whiff durumunda **~%54.5'i (80–88px)** standardı tüm sisteme yayıldı.
+   - *Stiffen* / *Withdraw* savunma kalkanı ayrıştırmaları ve Gengar *Curse* / *Dark Mind* mekanik düzeltmeleri.
+3. **Quick Attack & Süpersonik Faz Revizyonu:**
+   - Vaporeon, Jolteon, Flareon, Eevee ve Rattata için ses duvarı / rüzgar akımlı yeni ivmelenme modeli kuruldu.
+4. **Basic Pokémon İkonik Hamleleri — Faz 1 (Salt SVG Paketi):**
+   - **Doduo:** *Fury Attack* (Alternatif ikiz gaga darbeleri, tüy süzülüşü).
+   - **Magnemite:** *Magnetism* & *Thunder Wave* (Kırmızı/Mavi çift at nalı mıknatıs, manyetik akı elipsleri, elektrik arkları).
+   - **Porygon:** *Conversion 1 & 2* (3D dönen tel kafes poligon, siber lazer tarayıcı, dijital veri pikselleri).
+5. **Basic Pokémon İkonik Hamleleri — Faz 2 (Stok Görsel Paketi - Az Önce Tamamlanan):**
+   - **Chansey:** *Scrunch* (Yumurta formu büzülme, ışımalı koruma kalkanı, sevimli ışıltılar).
+   - **Hitmonlee:** *Stretch Kick* (Yatay akordeon yay uzaması, kinetik darbe yıldızı).
+   - **Hitmonlee:** *High Jump Kick* (Gökyüzünden inen hava dropkick'i, zemin şok dalgası).
+
+---
+
+### 2. Şu An Neredeyiz? (Mevcut Durum Özeti)
+
+Base, Jungle ve Fossil setlerindeki toplam **75 Basic Pokémon** baz alındığında:
+
+* ✅ **51 Basic Pokémon (%68):** Tamamen kendilerine özgü, karakteristik animasyonlara kavuştu ve jenerik vuruşlardan arındırıldı.
+* ⏳ **24 Basic Pokémon (%32):** Halen temel/jenerik vuruşları (`tackle`, `headbutt`, `scratch`, `confuse_ray` vb.) paylaşıyor ve henüz kendilerine has imza animasyon paketleri uygulanmadı.
+
+---
+
+### 3. Önümüzdeki Yol Haritası: Kalan 24 Basic Pokémon'un Gruplandırılması
+
+Kalan 24 Pokémon'u tematik olarak 4 mantıklı gruba ayırıp aynı titizlikle ilerleyebiliriz:
+
+#### Grup A: Efsaneviler ve Ağır Psişikler (6 Pokémon)
+* **Mewtwo:** *Psychic* (Psişik aura küresi / nöron dalgası), *Barrier* (Prizmatik tam kalkan).
+* **Articuno:** *Blizzard* (Dondurucu kar fırtınası / buz kristalleri), *Freeze Dry*.
+* **Zapdos:** *Thunder* / *Thunderbolt* / *Thunderstorm* (Devasa dikey şimşek kolonları).
+* **Moltres:** *Wildfire* (Alev girdabı), *Dive Bomb* (Alevli pike dalışı).
+* **Ditto:** *Transform Attack* (Jölemsi şekil değiştirme / mor amorf dalgalanma).
+* **Mr. Mime:** *Meditate* (Meditasyon enerjisi / görünmez bariyer).
+
+#### Grup B: Zehir, Balçık ve Mağara Grubu (6 Pokémon)
+* **Grimer:** *Nasty Goo* (Yapışkan mor balçık fırlatma), *Minimize* (Küçülme kaçışı).
+* **Zubat:** *Leech Life* (Kan emme ısırığı), *Supersonic* (Ses dalgası konileri).
+* **Tangela:** *Bind* (Sarmaşık dolama / boğma).
+* **Venonat:** *Leech Life*, *Stun Spore*.
+* **Paras:** *Spore* (Mantar sporu bulutu).
+* **Exeggcute:** *Hypnosis* (Hipnoz spiralleri).
+
+#### Grup C: Su, Buz ve Deniz Canlıları (6 Pokémon)
+* **Lapras:** *Water Gun* / *Confuse Ray* (Özel buzlu su dalgası).
+* **Psyduck:** *Headache* (Kafasını tutarak zonklama ve psişik patlama), *Dizziness*.
+* **Shellder:** *Hide in Shell* (Kabuğuna saklanma / kapak kapanması).
+* **Seel:** *Headbutt* (Buzlu kafa darbesi).
+* **Horsea:** *Smokescreen* (Mürekkep püskürtme).
+* **Tentacool:** *Acid* (Asit damlacıkları).
+
+#### Grup D: Dövüş, Elektrik ve Komedi/Karakter Grubu (6 Pokémon)
+* **Mankey:** *Anger* (Kızgınlık damarı / öfke alevleri), *Mischief*.
+* **Slowpoke:** *Spacing Out* (Boş boş bakma / soru işaretleri), *Afternoon Nap* (Uyuma zzz baloncukları).
+* **Electabuzz:** *Thunderpunch* (Elektrikli yumruk), *Thundershock*.
+* **Voltorb:** *Speed Ball* (Yüksek hızlı yuvarlanma).
+* **Jynx:** *Doubleslap* (Buzlu tokat serisi).
+* **Growlithe:** *Flare* (Ateş sıçraması).
+
+---
+
+Şu an projenin omurgası, derleme mimarisi ve animasyon motoru son derece stabil çalışıyor. Dilediğiniz gruptan başlayarak yol haritamızı adım adım tamamlayabiliriz! Hangi gruptan devam edelim?

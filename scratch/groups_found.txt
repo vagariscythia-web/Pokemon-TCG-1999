@@ -1,0 +1,9 @@
+Grup 1: En Acil Olanlar**, **Grup 2: `w-20` Sabit Kalanlar**, **Grup 3: Eski Ara Boyutlar**, **Grup 4: Dik
+Grup 1)
+Grup A (Efsaneviler ve Ağır Psişikler)** için kapsamlı uygulama planını hazırladım: [implementation_plan.m
+Grup A — Paket 1 (Efsanevi Kuş Üçlüsü: Articuno, Zapdos, Moltres)** imza animasyonları ve efekt motoru ent
+Grup A** kapsamındaki her iki paket ve Scyther düzeltmesi eksiksiz tamamlandı:
+Grup B (Zehir, Balçık, Doğa ve Mağara Grubu)** için uygulama planı hazırlandı: [implementation_plan.md](fi
+Grup C (Deniz ve Su Canlıları)** bünyesindeki en güçlü 3 adayımız (**Shellder**, **Horsea** ve **Tentacool
+Grup C2 (Psyduck, Lapras, Seel)** için planlanan özel kinetik ve usulsel SVG hamle animasyonlarının implem
+Grup A (Doğrudan Stok Görsel):** *Shellder* (açılıp kapanan dilli kabuk), *Horsea* (mürekkep sıkan boru ağ

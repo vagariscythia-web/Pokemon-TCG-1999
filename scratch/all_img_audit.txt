@@ -1,0 +1,60 @@
+Total img tags: 58
+
+L 1440 | FX:doubleslap               | Img:unknown                      | Whiff:False | Sizes:['w-[0_4px_12px_rgba(0,0,0,0.35)]', "width: '60%'", "height: 'auto'"] | FILE NOT FOUND
+L 1585 | FX:doubleslap               | Img:unknown                      | Whiff:False | Sizes:['w-[0_4px_12px_rgba(0,0,0,0.35)]', "width: '60%'", "height: 'auto'"] | FILE NOT FOUND
+L 2308 | FX:hitmonchan_jab           | Img:Hitmonchan_Jab.png           | Whiff:False | Sizes:['w-[0_0_18px_#ec4899]', "width: '30%'", "height: 'auto'"] | Canvas:981x886 BBox:981x886 Fill:100.0%
+L 2348 | FX:hitmonchan_special_punch | Img:Hitmonchan_SpecialPunch.png  | Whiff:False | Sizes:['w-[0_0_18px_#ec4899]', "width: '60%'", "height: 'auto'"] | Canvas:634x568 BBox:634x568 Fill:100.0%
+L 2528 | FX:thunder_punch            | Img:ThunderPunch_Fist.png        | Whiff:False | Sizes:['w-[0_0_22px_#facc15]', "width: '60%'", "height: 'auto'"] | Canvas:400x321 BBox:400x321 Fill:100.0%
+L 3298 | FX:hydro_pump_cannons       | Img:blastoise-hydro-cannon.png   | Whiff:False | Sizes:["width: '100%'", "height: 'auto'"] | Canvas:1024x559 BBox:951x498 Fill:82.7%
+L 3877 | FX:star_freeze              | Img:Starmie_Star_Freeze.png      | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_18px_rgba(56,189,248,0.85)]', 'w-[0_0_28px_rgba(168,85,247,0.6)]', 'w-[0_4px_10px_rgba(0,0,0,0.5)]', 'w-5', 'h-5', 'w-[0_0_14px_#ef4444]'] | Canvas:1080x1080 BBox:861x865 Fill:63.9%
+L 4108 | FX:psybeam_kaleidoscope     | Img:Alakazam_Psychic_Spoons.png  | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_24px_#c084fc]'] | Canvas:1080x1080 BBox:607x805 Fill:41.9%
+L 4696 | FX:super_fang_guillotine    | Img:Raticate_SuperFang_Jaws.png  | Whiff:False | Sizes:['w-[0_0_24px_rgba(254,240,138,0.85)]', 'w-[0_8px_16px_rgba(0,0,0,0.5)]', "width: '92px'", "height: 'auto'"] | Canvas:1024x1024 BBox:1004x1024 Fill:98.0%
+L 4799 | FX:victreebel_acid_melt     | Img:Victreebel_Acid_Maw.png      | Whiff:False | Sizes:['w-[0_0_28px_rgba(163,230,53,0.9)]', 'w-[0_8px_18px_rgba(0,0,0,0.5)]', "width: '102px'", "height: 'auto'"] | Canvas:789x779 BBox:789x779 Fill:100.0%
+L 4961 | FX:beedrill_twineedle       | Img:Beedrill_Twineedle_Lances.png | Whiff:False | Sizes:['w-[0_0_24px_rgba(254,240,138,0.85)]', 'w-[0_6px_14px_rgba(0,0,0,0.4)]', "width: '100px'", "height: 'auto'"] | Canvas:1024x1024 BBox:981x967 Fill:90.5%
+L 5007 | FX:dugtrio_earthquake       | Img:Dugtrio_Earthquake_Trio.png  | Whiff:False | Sizes:['w-[0_0_24px_rgba(234,88,12,0.85)]', 'w-[0_8px_16px_rgba(0,0,0,0.5)]', "width: '100px'", "height: 'auto'"] | Canvas:1024x1024 BBox:942x807 Fill:72.5%
+L 5139 | FX:gengar_dark_mind         | Img:Gengar_Dark_Mind.png         | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_24px_#9333ea]'] | Canvas:2048x2048 BBox:1550x1374 Fill:50.8%
+L 5265 | FX:machamp_karate_chop      | Img:Machamp_Karate_Chop.png      | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_24px_#f59e0b]'] | Canvas:1080x1080 BBox:972x1080 Fill:90.0%
+L 5303 | FX:haunter_dream_eater      | Img:Haunter_Dream_Eater.png      | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_24px_rgba(168,85,247,0.95)]'] | Canvas:1528x1528 BBox:1442x1512 Fill:93.4%
+L 5508 | FX:weezing_toxic_smog       | Img:Weezing_Toxic_Smog.png       | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_26px_rgba(147,51,234,0.9)]'] | Canvas:1177x1177 BBox:1177x1086 Fill:92.3%
+L 5955 | FX:kingler_crabhammer       | Img:Kingler_Crabhammer_Claw.png  | Whiff:False | Sizes:['w-[76px]', 'h-[88px]', 'w-[0_0_20px_#ea580c]', 'w-[0_0_28px_rgba(2,132,199,0.7)]'] | Canvas:692x800 BBox:677x785 Fill:96.0%
+L 6012 | FX:rhydon_horn_drill        | Img:Rhydon_Horn_Drill.png        | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_24px_rgba(245,158,11,0.95)]'] | Canvas:1024x1024 BBox:828x813 Fill:64.2%
+L 6037 | FX:koffing_foul_gas         | Img:Koffing_Foul_Gas.png         | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_24px_rgba(132,204,22,0.9)]'] | Canvas:1080x1080 BBox:796x722 Fill:49.3%
+L 6084 | FX:pinsir_guillotine        | Img:Pinsir_Horn_Left.png         | Whiff:False | Sizes:['w-16', 'h-24', 'w-[0_4px_12px_rgba(0,0,0,0.65)]'] | Canvas:540x1080 BBox:293x775 Fill:38.9%
+L 6096 | FX:pinsir_guillotine        | Img:Pinsir_Horn_Right.png        | Whiff:False | Sizes:['w-16', 'h-24', 'w-[0_4px_12px_rgba(0,0,0,0.65)]'] | Canvas:540x1080 BBox:292x776 Fill:38.9%
+L 6133 | FX:exeggutor_big_eggsplosion | Img:Exeggutor_Coconut_Bomb.png   | Whiff:False | Sizes:['w-14', 'h-14', 'w-[0_0_18px_#facc15]'] | Canvas:1080x1080 BBox:766x691 Fill:45.4%
+L 6145 | FX:exeggutor_big_eggsplosion | Img:Exeggutor_Coconut_Bomb.png   | Whiff:False | Sizes:['w-14', 'h-14', 'w-[0_0_18px_#eab308]'] | Canvas:1080x1080 BBox:766x691 Fill:45.4%
+L 6157 | FX:exeggutor_big_eggsplosion | Img:Exeggutor_Coconut_Bomb.png   | Whiff:False | Sizes:['w-16', 'h-16', 'w-[0_0_24px_#f59e0b]'] | Canvas:1080x1080 BBox:766x691 Fill:45.4%
+L 6378 | FX:fearow_drill_peck        | Img:Fearow_DrillPeck_Beak.png    | Whiff:True  | Sizes:['w-[78px]', 'h-[78px]', 'w-[98px]', 'h-[98px]', 'w-[0_0_20px_#f59e0b]'] | Canvas:1024x1024 BBox:1024x1024 Fill:100.0%
+L 6687 | FX:arbok_poison_fang        | Img:Arbok_PoisonFang_Maw.png     | Whiff:True  | Sizes:['w-[105px]', 'h-[105px]', 'w-[130px]', 'h-[130px]', 'w-[0_0_20px_#7e22ce]'] | Canvas:1024x1024 BBox:855x932 Fill:76.0%
+L 6718 | FX:golbat_leech_life        | Img:Golbat_LeechLife_Maw.png     | Whiff:True  | Sizes:['w-[105px]', 'h-[105px]', 'w-[130px]', 'h-[130px]', 'w-[0_0_20px_#312e81]'] | Canvas:1024x1024 BBox:965x781 Fill:71.9%
+L 6858 | FX:farfetchd_leek_slap      | Img:Farfetchd_Leek_Weapon.png    | Whiff:False | Sizes:['w-[110px]', 'h-[110px]', 'w-[0_0_16px_#22c55e]'] | Canvas:1024x1024 BBox:766x710 Fill:51.9%
+L 6917 | FX:cubone_bone_strike       | Img:Cubone_Bone_Club.png         | Whiff:False | Sizes:['w-[120px]', 'h-[120px]', 'w-[0_0_16px_#ca8a04]'] | Canvas:1024x1024 BBox:873x417 Fill:34.7%
+L 6974 | FX:bulbasaur_leech_seed     | Img:Bulbasaur_Leech_Seed_Pod.png | Whiff:False | Sizes:['w-[98px]', 'h-[98px]', 'w-[0_0_16px_#15803d]'] | Canvas:1024x1024 BBox:468x838 Fill:37.4%
+L 7035 | FX:squirtle_shell_defense   | Img:Squirtle_Turtle_Shell.png    | Whiff:False | Sizes:['w-24', 'h-24', 'w-[0_0_16px_rgba(56,189,248,0.6)]'] | Canvas:1024x1024 BBox:1023x1023 Fill:99.8%
+L 7048 | FX:squirtle_shell_defense   | Img:Squirtle_Turtle_Shell.png    | Whiff:False | Sizes:['w-[120px]', 'h-[120px]', 'w-[0_0_24px_#0284c7]'] | Canvas:1024x1024 BBox:1023x1023 Fill:99.8%
+L 7102 | FX:pikachu_thunder_jolt     | Img:Pikachu_Spark_Cheeks.png     | Whiff:False | Sizes:['w-[120px]', 'h-[120px]', 'w-[0_0_18px_#eab308]'] | Canvas:1024x1024 BBox:1024x1024 Fill:100.0%
+L 7158 | FX:charmander_ember_flame   | Img:Charmander_Tail_Flame.png    | Whiff:False | Sizes:['w-[110px]', 'h-[110px]', 'w-[0_0_20px_#ea580c]'] | Canvas:1024x1024 BBox:397x860 Fill:32.6%
+L 7214 | FX:ekans_wrap_constrict     | Img:Ekans_Coiled_Serpent.png     | Whiff:False | Sizes:['w-[130px]', 'h-[130px]', 'w-[0_0_20px_#9333ea]'] | Canvas:1024x1024 BBox:825x861 Fill:67.7%
+L 7366 | FX:sandshrew_sand_attack    | Img:Sandshrew_Digging_Claws.png  | Whiff:False | Sizes:['w-[110px]', 'h-[110px]', 'w-[0_0_18px_#d97706]'] | Canvas:1024x1024 BBox:698x711 Fill:47.3%
+L 7433 | FX:caterpie_string_shot     | Img:Caterpie_Head_Osmeterium.png | Whiff:False | Sizes:['w-[110px]', 'h-[110px]', 'w-[0_0_18px_#22c55e]'] | Canvas:1024x1024 BBox:1005x1017 Fill:97.5%
+L 7495 | FX:weedle_poison_sting      | Img:Weedle_Poison_Stinger.png    | Whiff:False | Sizes:['w-[110px]', 'h-[110px]', 'w-[0_0_18px_#a855f7]'] | Canvas:1024x1024 BBox:1016x1018 Fill:98.6%
+L 7671 | FX:rattata_quick_attack     | Img:Rattata_Quick_Sprint.png     | Whiff:False | Sizes:['w-[106px]', 'h-[72px]', 'w-[0_0_16px_rgba(250,204,21,0.7)]', 'w-[0_0_8px_rgba(255,255,255,0.9)]'] | Canvas:1080x581 BBox:1080x558 Fill:96.0%
+L 8335 | FX:jigglypuff_lullaby       | Img:Jigglypuff_Lullaby_Notes.png | Whiff:False | Sizes:['w-[70px]', 'h-[70px]', 'w-[0_0_12px_rgba(244,114,182,0.85)]'] | Canvas:1024x1024 BBox:853x869 Fill:70.7%
+L 8435 | FX:clefairy_metronome       | Img:Clefairy_Metronome_Finger.png | Whiff:False | Sizes:['w-[68px]', 'h-[68px]', 'w-[0_0_14px_rgba(236,72,153,0.9)]'] | Canvas:1024x1024 BBox:827x808 Fill:63.7%
+L 8641 | FX:snorlax_body_slam        | Img:Snorlax_Body_Slam.png        | Whiff:False | Sizes:['w-[74px]', 'h-[74px]', 'w-[0_0_14px_rgba(30,41,59,0.85)]'] | Canvas:1024x1024 BBox:953x829 Fill:75.3%
+L 8717 | FX:lickitung_tongue_wrap    | Img:Lickitung_Tongue_Wrap.png    | Whiff:False | Sizes:['w-[76px]', 'h-[76px]', 'w-[0_0_12px_rgba(244,63,94,0.85)]'] | Canvas:1024x1024 BBox:928x644 Fill:57.0%
+L 8840 | FX:tauros_stomp             | Img:Tauros_Hoof_Stomp.png        | Whiff:False | Sizes:['w-[70px]', 'h-[70px]', 'w-[0_0_14px_rgba(180,83,9,0.85)]'] | Canvas:1024x1024 BBox:913x863 Fill:75.1%
+L 8871 | FX:tauros_rampage           | Img:Tauros_Hoof_Stomp.png        | Whiff:False | Sizes:['w-[74px]', 'h-[74px]', 'w-[0_0_16px_rgba(220,38,38,0.9)]'] | Canvas:1024x1024 BBox:913x863 Fill:75.1%
+L 8981 | FX:cobra_stare              | Img:dark_arbok_stare.png         | Whiff:False | Sizes:["width: '60%'", "height: 'auto'"]  | Canvas:349x324 BBox:349x324 Fill:100.0%
+L 9002 | FX:cobra_stare              | Img:dark_arbok_stare.png         | Whiff:False | Sizes:["width: '60%'", "height: 'auto'"]  | Canvas:349x324 BBox:349x324 Fill:100.0%
+L10354 | FX:potion                   | Img:Potion.png                   | Whiff:False | Sizes:['w-[0_0_18px_#a78bfa]']            | Canvas:1284x1284 BBox:1284x1284 Fill:100.0%
+L10391 | FX:super_potion             | Img:Super_Potion.png             | Whiff:False | Sizes:['w-[0_0_18px_#fbbf24]']            | Canvas:320x320 BBox:187x272 Fill:49.7%
+L10512 | FX:pluspower                | Img:PlusPower.png                | Whiff:False | Sizes:['w-16', 'w-20', 'w-24', 'w-[0_0_10px_#f59e0b]'] | Canvas:318x168 BBox:318x168 Fill:100.0%
+L10719 | FX:starfish_slap            | Img:Staryu_Slap.png              | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_16px_rgba(56,189,248,0.75)]', 'w-[0_4px_8px_rgba(0,0,0,0.4)]', 'w-5', 'h-5', 'w-[0_0_12px_#ef4444]'] | Canvas:1024x1024 BBox:1024x1024 Fill:100.0%
+L10833 | FX:quick_attack_dash        | Img:Eevee_Quick_Dash.png         | Whiff:False | Sizes:['w-[108px]', 'h-[76px]', 'w-[0_0_18px_rgba(255,255,255,0.85)]', 'w-[0_0_8px_rgba(147,197,253,0.6)]'] | Canvas:955x728 BBox:932x705 Fill:94.5%
+L10987 | FX:fish_flail               | Img:Magikarp_Flail.png           | Whiff:False | Sizes:['w-[0_6px_16px_rgba(0,0,0,0.35)]', 'w-[0_0_12px_#38bdf8]', "width: '76px'", "height: 'auto'"] | Canvas:847x920 BBox:813x887 Fill:92.5%
+L11041 | FX:cloyster_clamp           | Img:Cloyster_Clamp_Maw.png       | Whiff:True  | Sizes:['w-[88px]', 'h-[88px]', 'w-[110px]', 'h-[110px]', 'w-[0_0_18px_#7c3aed]', 'w-12', 'h-12'] | Canvas:1080x1080 BBox:1000x814 Fill:69.8%
+L11805 | FX:scyther_blade_dance      | Img:Scyther_Scythe_Blade.png     | Whiff:True  | Sizes:['w-[80px]', 'h-[56px]', 'w-[108px]', 'h-[76px]', 'w-[0_0_18px_#a3e635]', 'w-[0_0_28px_rgba(163,230,53,0.7)]'] | Canvas:739x519 BBox:708x488 Fill:90.1%
+L11813 | FX:scyther_blade_dance      | Img:Scyther_Scythe_Blade.png     | Whiff:True  | Sizes:['w-[80px]', 'h-[56px]', 'w-[108px]', 'h-[76px]', 'w-[0_0_18px_#a3e635]', 'w-[0_0_28px_rgba(163,230,53,0.7)]'] | Canvas:739x519 BBox:708x488 Fill:90.1%
+L12188 | FX:krabby_irongrip          | Img:Krabby_Irongrip_Claw.png     | Whiff:False | Sizes:['w-[68px]', 'h-[76px]', 'w-[0_0_14px_#ea580c]', 'w-[0_0_20px_rgba(234,88,12,0.6)]'] | Canvas:549x653 BBox:534x638 Fill:95.0%
+L12329 | FX:dragon_rage              | Img:Gyarados_Dragon_Rage.png     | Whiff:False | Sizes:['w-20', 'h-20', 'w-[0_0_18px_rgba(79,70,229,0.85)]', 'w-[0_0_28px_rgba(56,189,248,0.65)]', 'w-[0_4px_10px_rgba(0,0,0,0.6)]', 'w-4', 'h-4', 'w-[0_0_12px_#38bdf8]'] | Canvas:1080x1080 BBox:861x1038 Fill:76.6%

@@ -238,6 +238,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     inPlay: InPlayCard;
     powerName: string;
   } | null>(null);
+  const [damageSwapModal, setDamageSwapModal] = useState<{
+    isOpen: boolean;
+    powerName: string;
+    powerInstanceId: string;
+    step: 'source' | 'target';
+    sourceInstanceId?: string;
+    sourceName?: string;
+  } | null>(null);
   const [actionBanner, setActionBanner] = useState<{ text: string; type: 'attack' | 'info' | 'knockout' } | null>(null);
   const [isTurnLocked, setIsTurnLocked] = useState(false);
   // Between-turns Poison/Toxic damage is committed to the engine state atomically with the
@@ -724,10 +732,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     moveFxType: ActiveFX['type'],
     selfHit: ConfusionSelfHit,
     attackerName: string,
-    intensity?: number
+    intensity?: number,
+    isSelfTarget?: boolean
   ) => {
     const uid = () => Math.random().toString(36).substring(2, 9);
-    const defender: 'player' | 'cpu' = selfHit.target === 'player' ? 'cpu' : 'player';
+    // Self-buff/defense moves (Withdraw, Harden, Barrier, Minimize, Spacing Out, etc.) never target the opponent.
+    // Even when failing / whiffing under confusion, the attempt belongs on the attacker's own card!
+    const moveTarget: 'player' | 'cpu' = isSelfTarget
+      ? selfHit.target
+      : (selfHit.target === 'player' ? 'cpu' : 'player');
     setActiveFXList([
       {
         id: uid(),
@@ -740,11 +753,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       {
         id: uid(),
         type: moveFxType,
-        target: defender,
+        target: moveTarget,
         pokemonName: attackerName,
         delayMs: CONFUSION_MOVE_FX_DELAY_MS,
         whiffed: true,
-        intensity
+        intensity,
+        isSelfTarget
       }
     ]);
   };
@@ -1095,16 +1109,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             // A shield on the Active Pokémon must not turn a Stare that picked the Bench into a
             // "BLOCKED" beat - look at the card the engine says was struck.
             const struck = atkRes?.damageTarget === 'bench' ? prev.player.bench[atkRes.damageTargetBenchIndex ?? -1] : prev.player.active;
-            const isBlocked = calculatedDmg === 0 && Boolean(struck?.preventDamageNextTurn || struck?.preventAllEffectsNextTurn || struck?.hardenActiveNextTurn);
-
             const selfTarget = isSelfTargetingMove(attackToUse.name);
+            const baseDmg = attackToUse.damage || 0;
+            const struckIsMrMime = Boolean(struck?.card.name.toLowerCase().includes('mr. mime') || struck?.card.name.toLowerCase().includes('mr mime'));
+            const hasDamageShield = Boolean(struck?.preventDamageNextTurn || struck?.preventAllEffectsNextTurn || (struck?.hardenActiveNextTurn && baseDmg <= 30) || (struckIsMrMime && baseDmg >= 30));
+            const hasEffectShield = Boolean(struck?.preventAllEffectsNextTurn);
+            const isBlocked = !selfTarget && (
+              (baseDmg > 0 && calculatedDmg === 0 && hasDamageShield) ||
+              (baseDmg === 0 && hasEffectShield)
+            );
             // A confused CPU attacker that rolled TAILS hit itself, not the player's Pokémon.
             if (atkRes?.confusionSelfHit) {
               const confusionIntensity = (prev.cpu.active!.card.name.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
-              triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, prev.cpu.active!.card.name, confusionIntensity);
+              triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, prev.cpu.active!.card.name, confusionIntensity, selfTarget);
             } else {
               playAttackFX({
-                fxType: isBlocked ? 'barrier' : fxType,
+                fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
                 target: selfTarget ? 'cpu' : 'player',
                 damageText: isBlocked
                   ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
@@ -1462,18 +1482,30 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             // opponent that rolled TAILS strikes itself, so the impact belongs on its own card.
             if (atk) {
               const atkRes = resolved.lastAttackResult;
+              const selfTarget = isSelfTargetingMove(atk.name);
               if (atkRes?.confusionSelfHit) {
                 const confusionIntensity = (attackerName.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
-                triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, attackerName, confusionIntensity);
+                triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, attackerName, confusionIntensity, selfTarget);
               } else {
-                const selfTarget = isSelfTargetingMove(atk.name);
                 const dealtDmg = atkRes ? atkRes.damage : (atk.damage || 0);
+                const struck = atkRes?.damageTarget === 'bench' ? updated.player.bench[atkRes.damageTargetBenchIndex ?? -1] : updated.player.active;
+                const baseDmg = atk.damage || 0;
+                const struckIsMrMime = Boolean(struck?.card.name.toLowerCase().includes('mr. mime') || struck?.card.name.toLowerCase().includes('mr mime'));
+                const hasDamageShield = Boolean(struck?.preventDamageNextTurn || struck?.preventAllEffectsNextTurn || (struck?.hardenActiveNextTurn && baseDmg <= 30) || (struckIsMrMime && baseDmg >= 30));
+                const hasEffectShield = Boolean(struck?.preventAllEffectsNextTurn);
+                const isBlocked = !selfTarget && (
+                  (baseDmg > 0 && dealtDmg === 0 && hasDamageShield) ||
+                  (baseDmg === 0 && hasEffectShield)
+                );
                 playAttackFX({
-                  fxType,
+                  fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
                   target: selfTarget ? 'cpu' : 'player',
-                  damageText: selfTarget ? atk.name : (dealtDmg > 0 ? `-${dealtDmg} ${t.dmgText}` : t.effectText),
+                  damageText: isBlocked
+                    ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
+                    : selfTarget ? atk.name : (dealtDmg > 0 ? `-${dealtDmg} ${t.dmgText}` : t.effectText),
                   isWeakness: atkRes?.isWeakness,
                   isResistance: atkRes?.isResistance,
+                  isBlocked,
                   attackerName,
                   attackerType: updated.cpu.active?.card.types?.[0],
                   selfTarget,
@@ -3568,6 +3600,163 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       return;
     }
 
+    // 4. Curse (Gengar)
+    if (normPower === 'curse') {
+      const allOpp = [cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
+      if (allOpp.length < 2) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Curse için rakipte en az 2 Pokémon olmalı!' : 'Curse requires at least 2 opponent Pokémon in play!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+      const damagedOpp = allOpp.filter(p => p.damage >= 10);
+      if (damagedOpp.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Hasarlı rakip Pokémon bulunmuyor!' : 'No damaged opponent Pokémon found!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+
+      // If exactly 2 opponents and exactly 1 has damage, there is only 1 possible path!
+      if (allOpp.length === 2 && damagedOpp.length === 1) {
+        const source = damagedOpp[0];
+        const target = allOpp.find(p => p.instanceId !== source.instanceId)!;
+        executePowerActivation(inPlay.instanceId, power.name, {
+          sourceInstanceId: source.instanceId,
+          targetInstanceId: target.instanceId
+        });
+        return;
+      }
+
+      // If only 1 opponent is damaged, source is fixed, but target needs to be chosen:
+      if (damagedOpp.length === 1) {
+        const source = damagedOpp[0];
+        setDamageSwapModal({
+          isOpen: true,
+          powerName: power.name,
+          powerInstanceId: inPlay.instanceId,
+          step: 'target',
+          sourceInstanceId: source.instanceId,
+          sourceName: source.card.name
+        });
+        return;
+      }
+
+      // If multiple opponents are damaged, player chooses source first:
+      setDamageSwapModal({
+        isOpen: true,
+        powerName: power.name,
+        powerInstanceId: inPlay.instanceId,
+        step: 'source'
+      });
+      return;
+    }
+
+    // 5. Damage Swap (Alakazam)
+    if (normPower === 'damage swap') {
+      const allMine = [player.active, ...player.bench].filter(Boolean) as InPlayCard[];
+      if (allMine.length < 2) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Damage Swap için en az 2 Pokémonunuz olmalı!' : 'Damage Swap requires at least 2 Pokémon in play!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+      const damagedMine = allMine.filter(p => p.damage >= 10);
+      if (damagedMine.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Hasarlı Pokémonunuz bulunmuyor!' : 'No damaged Pokémon found!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+      const validTargets = allMine.filter(p => p.currentHp > 10);
+      if (validTargets.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Hasar aktarılacak güvenli (HP > 10) Pokémon yok!' : 'No valid target Pokémon with HP > 10!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+
+      if (allMine.length === 2 && damagedMine.length === 1) {
+        const source = damagedMine[0];
+        const target = allMine.find(p => p.instanceId !== source.instanceId);
+        if (target && target.currentHp > 10) {
+          executePowerActivation(inPlay.instanceId, power.name, {
+            sourceInstanceId: source.instanceId,
+            targetInstanceId: target.instanceId
+          });
+          return;
+        }
+      }
+
+      if (damagedMine.length === 1) {
+        const source = damagedMine[0];
+        setDamageSwapModal({
+          isOpen: true,
+          powerName: power.name,
+          powerInstanceId: inPlay.instanceId,
+          step: 'target',
+          sourceInstanceId: source.instanceId,
+          sourceName: source.card.name
+        });
+        return;
+      }
+
+      setDamageSwapModal({
+        isOpen: true,
+        powerName: power.name,
+        powerInstanceId: inPlay.instanceId,
+        step: 'source'
+      });
+      return;
+    }
+
+    // 6. Strange Behavior (Slowbro)
+    if (normPower === 'strange behavior') {
+      if (inPlay.currentHp <= 10) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Slowbro nakavt olacağı için hasar alamaz (HP ≤ 10)!' : 'Slowbro cannot take damage (HP ≤ 10)!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+      const otherDamaged = [player.active, ...player.bench].filter(Boolean).filter(p => p!.instanceId !== inPlay.instanceId && p!.damage >= 10) as InPlayCard[];
+      if (otherDamaged.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Hasarlı başka Pokémon bulunmuyor!' : 'No other damaged Pokémon found!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+
+      if (otherDamaged.length === 1) {
+        executePowerActivation(inPlay.instanceId, power.name, {
+          sourceInstanceId: otherDamaged[0].instanceId,
+          targetInstanceId: inPlay.instanceId
+        });
+        return;
+      }
+
+      setDamageSwapModal({
+        isOpen: true,
+        powerName: power.name,
+        powerInstanceId: inPlay.instanceId,
+        step: 'source'
+      });
+      return;
+    }
+
     // Direct powers
     executePowerActivation(inPlay.instanceId, power.name);
   };
@@ -3579,6 +3768,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       discardHandIndex?: number;
       chosenDeckIndex?: number;
       targetInstanceId?: string;
+      sourceInstanceId?: string;
       coinResults?: boolean[];
     }
   ) => {
@@ -3586,6 +3776,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const next = GameEngine.executePokemonPower(state, 'player', instanceId, powerName, params);
     setState(next);
     setPowerDiscardModal(null);
+    setDamageSwapModal(null);
   };
 
   const handleExecuteEnergyRetrieval = (
@@ -3907,17 +4098,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       // The card that was actually struck - Stare can pick a Benched one, and a shield on the
       // Active Pokémon has no business turning that hit into a "BLOCKED" beat.
       const struck = atkRes?.damageTarget === 'bench' ? cpu.bench[atkRes.damageTargetBenchIndex ?? -1] : cpu.active;
-      const isBlocked = calculatedDmg === 0 && Boolean(struck?.preventDamageNextTurn || struck?.preventAllEffectsNextTurn || struck?.hardenActiveNextTurn);
+      const selfTarget = isSelfTargetingMove(attack.name);
+      const baseDmg = attack.damage || 0;
+      const struckIsMrMime = Boolean(struck?.card.name.toLowerCase().includes('mr. mime') || struck?.card.name.toLowerCase().includes('mr mime'));
+      const hasDamageShield = Boolean(struck?.preventDamageNextTurn || struck?.preventAllEffectsNextTurn || (struck?.hardenActiveNextTurn && baseDmg <= 30) || (struckIsMrMime && baseDmg >= 30));
+      const hasEffectShield = Boolean(struck?.preventAllEffectsNextTurn);
+      const isBlocked = !selfTarget && (
+        (baseDmg > 0 && calculatedDmg === 0 && hasDamageShield) ||
+        (baseDmg === 0 && hasEffectShield)
+      );
 
       setActionBanner({ text: `⚔️ Your ${player.active!.card.name} used ${attack.name}!`, type: 'attack' });
-      const selfTarget = isSelfTargetingMove(attack.name);
       // A confused attacker that rolled TAILS hit itself, so the impact belongs on its own card.
       if (atkRes?.confusionSelfHit) {
         const confusionIntensity = (player.active!.card.name.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
-        triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active!.card.name, confusionIntensity);
+        triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active!.card.name, confusionIntensity, selfTarget);
       } else {
         playAttackFX({
-          fxType: isBlocked ? 'barrier' : fxType,
+          fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
           target: selfTarget ? 'player' : 'cpu',
           damageText: isBlocked
             ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
@@ -4104,17 +4302,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const isResist = atkRes ? atkRes.isResistance : (cpu.active?.card.resistance?.type === attackerType);
     const calculatedDmg = atkRes ? atkRes.damage : (attack?.damage || 0);
     const struck = atkRes?.damageTarget === 'bench' ? cpu.bench[atkRes.damageTargetBenchIndex ?? -1] : cpu.active;
-    const isBlocked = calculatedDmg === 0 && Boolean(struck?.preventDamageNextTurn || struck?.preventAllEffectsNextTurn || struck?.hardenActiveNextTurn);
+    const selfTarget = attack ? isSelfTargetingMove(attack.name) : false;
+    const baseDmg = attack?.damage || 0;
+    const struckIsMrMime = Boolean(struck?.card.name.toLowerCase().includes('mr. mime') || struck?.card.name.toLowerCase().includes('mr mime'));
+    const hasDamageShield = Boolean(struck?.preventDamageNextTurn || struck?.preventAllEffectsNextTurn || (struck?.hardenActiveNextTurn && baseDmg <= 30) || (struckIsMrMime && baseDmg >= 30));
+    const hasEffectShield = Boolean(struck?.preventAllEffectsNextTurn);
+    const isBlocked = !selfTarget && (
+      (baseDmg > 0 && calculatedDmg === 0 && hasDamageShield) ||
+      (baseDmg === 0 && hasEffectShield)
+    );
 
     setActionBanner({ text: `⚔️ Your ${player.active.card.name} used ${attack?.name}!`, type: 'attack' });
-    const selfTarget = attack ? isSelfTargetingMove(attack.name) : false;
     // A confused attacker that rolled TAILS hit itself, so the impact belongs on its own card.
     if (atkRes?.confusionSelfHit) {
       const confusionIntensity = (player.active.card.name.includes('Onix') && fxType === 'big_boulder') ? 0.4 : undefined;
-      triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active.card.name, confusionIntensity);
+      triggerConfusionSelfHit(fxType, atkRes.confusionSelfHit, player.active.card.name, confusionIntensity, selfTarget);
     } else {
       playAttackFX({
-        fxType: isBlocked ? 'barrier' : fxType,
+        fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
         target: selfTarget ? 'player' : 'cpu',
         damageText: isBlocked
           ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
@@ -6821,6 +7026,148 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           </div>
         </div>
       )}
+
+      {/* DAMAGE COUNTER TRANSFER MODAL (Curse / Damage Swap / Strange Behavior) */}
+      {damageSwapModal && damageSwapModal.isOpen && (() => {
+        const isCurse = damageSwapModal.powerName.toLowerCase() === 'curse';
+        const isSwap = damageSwapModal.powerName.toLowerCase() === 'damage swap';
+        const isSlowbro = damageSwapModal.powerName.toLowerCase() === 'strange behavior';
+
+        const candidatePool: InPlayCard[] = isCurse
+          ? ([cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[])
+          : ([player.active, ...player.bench].filter(Boolean) as InPlayCard[]);
+
+        let displayCards: InPlayCard[] = [];
+        if (damageSwapModal.step === 'source') {
+          if (isSlowbro) {
+            displayCards = candidatePool.filter(p => p.instanceId !== damageSwapModal.powerInstanceId && p.damage >= 10);
+          } else {
+            displayCards = candidatePool.filter(p => p.damage >= 10);
+          }
+        } else {
+          // step === 'target'
+          if (isSwap) {
+            displayCards = candidatePool.filter(p => p.instanceId !== damageSwapModal.sourceInstanceId && p.currentHp > 10);
+          } else {
+            displayCards = candidatePool.filter(p => p.instanceId !== damageSwapModal.sourceInstanceId);
+          }
+        }
+
+        const onCardClick = (p: InPlayCard) => {
+          if (damageSwapModal.step === 'source') {
+            if (isSlowbro) {
+              executePowerActivation(damageSwapModal.powerInstanceId, damageSwapModal.powerName, {
+                sourceInstanceId: p.instanceId,
+                targetInstanceId: damageSwapModal.powerInstanceId
+              });
+              return;
+            }
+
+            const remainingTargets = candidatePool.filter(target => {
+              if (target.instanceId === p.instanceId) return false;
+              if (isSwap && target.currentHp <= 10) return false;
+              return true;
+            });
+
+            if (remainingTargets.length === 1) {
+              executePowerActivation(damageSwapModal.powerInstanceId, damageSwapModal.powerName, {
+                sourceInstanceId: p.instanceId,
+                targetInstanceId: remainingTargets[0].instanceId
+              });
+            } else if (remainingTargets.length > 1) {
+              setDamageSwapModal({
+                ...damageSwapModal,
+                step: 'target',
+                sourceInstanceId: p.instanceId,
+                sourceName: p.card.name
+              });
+            }
+          } else {
+            executePowerActivation(damageSwapModal.powerInstanceId, damageSwapModal.powerName, {
+              sourceInstanceId: damageSwapModal.sourceInstanceId,
+              targetInstanceId: p.instanceId
+            });
+          }
+        };
+
+        const modalTitle = isCurse
+          ? (damageSwapModal.step === 'source'
+              ? (lang === 'tr' ? '👻 Curse: Hasar Sayacı Alınacak Pokémon' : '👻 Curse: Choose Pokémon to Take Damage From')
+              : (lang === 'tr' ? '👻 Curse: Hasar Sayacının Aktarılacağı Pokémon' : '👻 Curse: Choose Pokémon to Receive Damage'))
+          : isSwap
+          ? (damageSwapModal.step === 'source'
+              ? (lang === 'tr' ? '✨ Damage Swap: Hasar Sayacı Alınacak Pokémon' : '✨ Damage Swap: Choose Pokémon to Take Damage From')
+              : (lang === 'tr' ? '✨ Damage Swap: Hasar Sayacının Aktarılacağı Pokémon' : '✨ Damage Swap: Choose Pokémon to Receive Damage'))
+          : (lang === 'tr' ? '🧠 Strange Behavior: İyileştirilecek Pokémon' : '🧠 Strange Behavior: Choose Pokémon to Heal');
+
+        const modalDesc = isCurse
+          ? (damageSwapModal.step === 'source'
+              ? (lang === 'tr' ? 'Üzerinden 1 hasar sayacı (10 hasar) alınacak rakip Pokémonu seçin:' : 'Choose which opponent Pokémon loses 1 damage counter (10 damage):')
+              : (lang === 'tr' ? `${damageSwapModal.sourceName || 'Seçilen Pokémon'} üzerinden alınan hasar sayacının aktarılacağı rakip Pokémonu seçin (Nakavt edebilir):` : `Choose which opponent Pokémon receives the damage counter taken from ${damageSwapModal.sourceName || 'selected Pokémon'} (can Knock Out):`))
+          : isSwap
+          ? (damageSwapModal.step === 'source'
+              ? (lang === 'tr' ? 'Üzerinden 1 hasar sayacı alınacak dost Pokémonu seçin:' : 'Choose which of your Pokémon loses 1 damage counter:')
+              : (lang === 'tr' ? `${damageSwapModal.sourceName || 'Seçilen Pokémon'} üzerinden alınan hasar sayacının aktarılacağı dost Pokémonu seçin (Nakavt olamaz):` : `Choose which of your Pokémon receives the damage counter (cannot Knock Out):`))
+          : (lang === 'tr' ? 'Slowbro üzerine 10 hasar aktararak iyileştirmek istediğiniz Pokémonu seçin:' : 'Choose which Pokémon transfers 10 damage to Slowbro:');
+
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 safe-area-padding animate-fade-in">
+            <div className="bg-slate-900 border-2 border-purple-500/80 rounded-3xl p-5 max-w-2xl w-full text-white shadow-2xl flex flex-col items-center">
+              <h3 className="text-base sm:text-lg font-black text-purple-300 mb-1 text-center">
+                {modalTitle}
+              </h3>
+              <p className="text-[11px] sm:text-xs text-gray-300 mb-4 text-center max-w-xl leading-snug">
+                {modalDesc}
+              </p>
+
+              <div className="w-full mb-4">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 justify-items-center max-h-64 overflow-y-auto p-1">
+                  {displayCards.map(p => (
+                    <button
+                      key={p.instanceId}
+                      onClick={() => onCardClick(p)}
+                      className="bg-slate-800 hover:bg-slate-700 p-2.5 rounded-2xl border-2 border-purple-500/40 hover:border-purple-300 flex flex-col items-center gap-1.5 transition active:scale-95 text-center group cursor-pointer w-full"
+                    >
+                      <div className="w-16 sm:w-20 aspect-[600/825] rounded-lg overflow-hidden shadow-lg relative">
+                        <img
+                          src={p.card.originalImageUrl || p.card.image || `/cards/${p.card.number}.jpg`}
+                          alt={p.card.name}
+                          className="w-full h-full object-fill pointer-events-none"
+                        />
+                        {p.damage > 0 && (
+                          <div className="absolute top-1 right-1 bg-red-600/90 text-white font-mono font-bold text-[9px] px-1 rounded shadow">
+                            -{p.damage}
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[11px] font-bold text-gray-200 truncate w-full group-hover:text-white">
+                        {p.card.name}
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-400 font-semibold">
+                        {p.currentHp}/{p.card.hp} HP
+                      </span>
+                      {p.damage > 0 && (
+                        <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/40">
+                          {p.damage / 10} {lang === 'tr' ? 'Sayaç' : 'Counter'}
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex justify-end pt-2 border-t border-slate-800 w-full">
+                <button
+                  onClick={() => setDamageSwapModal(null)}
+                  className="bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-bold px-6 py-2 rounded-xl border border-slate-700 active:scale-95"
+                >
+                  {t.cancel}
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Modals */}
       <CoinFlipModal

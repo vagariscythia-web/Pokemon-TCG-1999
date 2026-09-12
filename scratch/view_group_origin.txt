@@ -1,0 +1,113 @@
+=== STEP 5801 (PLANNER_RESPONSE) ===
+Tüm stok görsel hamlelerinin önem sırasına göre (**Grup 1: En Acil Olanlar**, **Grup 2: `w-20` Sabit Kalanlar**, **Grup 3: Eski Ara Boyutlar**, **Grup 4: Dikey/Dar Görseller**) yeni ~%68.1 kart standardına yükseltilmesi, saydam kenar paylarının güvenli kırpılması ve whiff mekanizmalarının eklenmesi için detaylı uygulama planı hazırlandı:
+
+👉 [implementation_plan.md](file:///C:/Users/KaanS/.gemini/antigravity-ide/brain/1e42f570-45b8-41a4-97c7-966a155cceda/implementation_plan.md)
+
+Planı onaylıyorsanız hemen uygulamaya geçebilirim.
+
+=== STEP 5924 (PLANNER_RESPONSE) ===
+Haklısınız; incelediğimde **Scyther'ın "Swords Dance"** (`scyther_blade_dance`) animasyonunun önceki ölçeklendirme revizyonunda gözden kaçtığını ve eski küçük boyutta kaldığını tespit ettim. 
+
+Kılıç kol stok görselinin bu kadar ufak görünmesinin **iki temel sebebi** vardı:
+
+1. **Görsel Tuvalindeki Boşluklar:** `public/assets/Scyther_Scythe_Blade.png` dosyası 1080×1080 piksel boyutunda bir tuvalin ortasında yer alıyordu ve çevresinde çok geniş şeffaf boşluklar bulunuyordu (gerçek bıçak alanı yaklaşık 708×488 pikseldi).
+2. **Eski CSS Kapsayıcı Sınıfı:** `BattleFXOverlay.tsx` içerisinde boyutlandırma hala eski `w-16 h-16` (64px) olarak kalmıştı. 64px'lik bir kutu içine 1080p'lik boşluklu görsel sığdırıldığında, ekrandaki gerçek bıçak boyutu yalnızca **~42 piksel** (kart genişliğinin ancak %26'sı) kadar minyatür görünüyordu.
+
+---
+
+### Yapılan Düzenlemeler
+
+1. **Görselin Sıkı Kırpılması (Bounding Box Optimization):**
+   - [`public/assets/Scyther_Scythe_Blade.png`](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/public/assets/Scyther_Scythe_Blade.png) görselinin dışındaki gereksiz şeffaf alanlar 16px güvenlik payıyla kırpılarak tuval **1080×1080'den 739×519'a** getirildi. Orijinal dosya `public/assets/raw/` altına yedeklendi.
+
+2. **Yeni Standart Ölçeklendirme ([BattleFXOverlay.tsx](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx)):**
+   - **Standart vuruş boyutu:** Hem sol hem sağ kılıç kolu `w-16 h-16` (64px)'dan **`w-[108px] h-[76px]`** (~%68.1 kart oranı) seviyesine çıkarıldı. Böylece ekrandaki görünür bıçak boyutu ~42px'den 108px'e yükseldi (**+%157 görsel büyüme**).
+   - **Whiff (ıskalama) durumu:** Whiff anında kollar otomatik olarak **`w-[80px] h-[56px]`** (~%54.5 kart oranı) boyutuna küçülecek şekilde dinamikleştirildi ve kutlama kıvılcımları gizlendi.
+   - **Merkez Çarpraz Kesişme Efekti:** Ortad
+<truncated 351 bytes>
+rlandı:
+
+| Hareket / Efekt | Kullanılan Stok Görsel | Eski Boyut | Yeni Standart Boyut | Whiff Boyutu |
+| :--- | :--- | :--- | :--- | :--- |
+| **Scyther (Swords Dance)** | `Scyther_Scythe_Blade.png` | `w-16 h-16` (64px) | **`w-[108px] h-[76px]`** | `w-[80px] h-[56px]` |
+| **Beedrill (Poison Sting)** | `Beedrill_Stinger.png` | `w-16 h-16` (64px) | **`w-[108px] h-[76px]`** | `w-[80px] h-[56px]` |
+| **Pidgeotto (Whirlwind)** | `Pidgeotto_Wing.png` | `w-16 h-16` (64px) | **`w-[110px] h-[76px]`** | `w-[82px] h-[56px]` |
+| **Electabuzz (Thunderpunch)** | `Electabuzz_Thunder_Fist.png` | `w-20 h-20` (80px) | **`w-[108px] h-[96px]`** | `w-[80px] h-[72px]` |
+| **Dragonite (Slam)** | `Dragonite_Tail.png` | `w-20 h-20` (80px) | **`w-[112px] h-[92px]`** | `w-[82px] h-[68px]` |
+| **Gengar (Dark Mind)** | `Gengar_Dark_Mind.png` | `w-20 h-20` (80px) | **`w-[112px] h-[100px]`** | `w-[80px] h-[72px]` |
+| **Machamp (Karate Chop)** | `Machamp_Karate_Chop.png` | `w-20 h-20` (80px) | **`w-[110px] h-[118px]`** | `w-[80px] h-[86px]` |
+| **Haunter (Dream Eater)** | `Haunter_Dream_Eater.png` | `w-20 h-20` (80px) | **`w-[110px] h-[115px]`** | `w-[78px] h-[82px]` |
+| **Weezing (Toxic Smog)** | `Weezing_Toxic_Smog.png` | `w-20 h-20` (80px) | **`w-[114px] h-[106px]`** | `w-[84px] h-[78px]` |
+| **Rhydon (Horn Drill)** | `Rhydon_Horn_Drill.png` | `w-20 h-20` (80px) | **`w-[110px] h-[108px]`** | `w-[78px] h-[76px]` |
+| **Starmie (Star Freeze)** | `Starmie_Star_Freeze.png` | `w-20 h-20` (80px) | **`w-[108px] h-[108px]`** | `w-[78px] h-[78px]` |
+| **Staryu (Starfish Slap)** | `Staryu_Slap.png` | `w-20 h-20` (80px) | **`w-[106px] h-[106px]`** | `w-[76px] h-[76px]` |
+| **Gyarados (Dragon Rage)** | `Gyarados_Dragon_Rage.png` | `w-20 h-20` (80px) | **`w-[108px] h-[108px]`** | `w-[78px] h-[78px]` |
+
+---
+
+### Doğrulama
+- Proje derlemesi (`npm run build`) 0 hata ile tamamlandı.
+- Dev sunucusu `http://localhost:3000/` üzerinde çalışmaya devam ediyor. 
+
+Scyther'ın Swords Dance animasyonunu ve dilediğiniz diğer animasyonları test edebilirsiniz.
+
+=== STEP 5925 (USER_INPUT) ===
+<USER_REQUEST>
+En son basic Pokemon'ların move animasyonlarını jeneriklikten arındırma, stok görasele uygun olanları tespit etmeye çalışıyorduk, ama yarım kalmıştı. Ancak tam nerede kaldığımızı da hatırlayamıyorum. En son neler yaptık, nerelere odaklanmamız gerekli, kısa bir özet ve analiz çıkartabilir misin?
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-09-12T15:03:49+03:00.
+
+The user's current state is as follows:
+Other open documents:
+- c:\Users\KaanS\.gemini\antigravity\scratch\pokemon-tcg-1999_demo\src\index.css (LANGUAGE_CSS)
+- c:\Users\KaanS\.gemini\antigravity\scratch\pokemon-tcg-1999_demo\src\components\CardView.tsx (LANGUAGE_TSX)
+- c:\Users\KaanS\.gemini\antigravity\scratch\pokemon-tcg-1999_demo\scratch\inspect_all_moves.py (LANGUAGE_PYTHON)
+- c:\Users\KaanS\.gemini\antigravity\scratch\pokemon-tcg-1999_demo\scratch\audit_dust_spores.py (LANGUAGE_PYTHON)
+- c:\Users\KaanS\.gemini\antigravity\scratch\pokemon-tcg-1999_demo\scratch\list_gas_fx.py (LANGUAGE_PYTHON)
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Gemini 3.8 Flash (High). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>
+
+=== STEP 6002 (PLANNER_RESPONSE) ===
+Hafızanızı tazelemek adına sürecin başından bugüne kadar olan serüveni, nerede durakladığımızı, araya giren kritik sistemik düzeltmeleri ve önümüzdeki Basic Pokémon yol haritasını detaylı bir şekilde derledim:
+
+---
+
+### 1. Nereden Geldik ve Neden Ara Verildi? (Zaman Tüneli)
+
+Aslında **Step 3228 – 3282** aralığında, Base / Jungle / Fossil setlerindeki **Basic Pokémon'ların jenerik (`tackle`, `punch`, `scratch`, `physical_charge` vb.) vuruşlardan arındırılması** için bir aday listesi çıkarmış ve başlama aşamasına gelmiştik. 
+
+Fakat tam o turda (Step 3283) çalışmaya başlarken, oyundaki oynanışı, kalkan mekaniklerini ve görsel standartları doğrudan etkileyen bir dizi acil problem ortaya çıktı ve öncelik zorunlu olarak bu kritik düzeltmelere kaydı:
+
+1. **Kart Blok & Blur Efektleri (Step 3283 – 4066):** 
+   Poliwhirl *Amnesia* ve Vulpix *Confuse Ray* üzerinde tespit ettiğiniz buzlu cam / blur sınır sorunları çözülürken, kart blok efektlerinin sınırları, enerji kartı eklendiğindeki dikey konum kaymaları ve 11 adet blur keyframe'i baştan aşağı hizalandı.
+2. **Weedle / Ekans Görsel Çakışması (Step 3984):** 
+   Ekans'ın *Poison Sting* saldırısında Weedle stok görselinin belirmesi hatası düzeltildi; tüm hamle-tür eşleşmeleri tarandı.
+3. **Kart Ölçeklendirme Altın Standardının Belirlenmesi (Step 4212 – 4626):** 
+   Wartortle *Withdraw* animasyonundaki stok görselin aşırı büyük/küçük kalması üzerine yapılan incelemede, projenin görsel standardı netleştirildi: **Normal vuruşta ~%68.1 (100–116px), Whiff (ıska) durumunda ~%54.5 (74–86px).**
+4. **Savunma Mekanikleri & Motor Düzeltmeleri (Step 4871 – 4933):** 
+   Kakuna *Stiffen*'ın, Wartortle *Withdraw* gibi kendini korumaya yönelik (self-buff) hamleleri engellemesi motor hatası giderildi; Hasar Kalkanı (`preventDamageNextTurn`) ile Etki Kalkanı (`preventAllEffectsNextTurn`) birbirinden ayrıldı.
+5. **Gengar "Curse" & "Dark Mind" İnteraktif Se
+<truncated 4373 bytes>
+*Porygon (*Conversion 1 & 2*, *Psybeam*):** Hedef veya kendi kartı üzerinde dönen 3D tel kafes (wireframe) poligon matrisi ve dijital veri pikselleşmesi.
+3. **Magnemite (*Magnetism*, *Thunder Wave*):** U şeklindeki mıknatıslarından fırlayan mavi-kırmızı manyetik çekim dalgaları ve halkasal statik elektrik.
+4. **Psyduck (*Headache*, *Dizziness*):** İki eliyle kafasını tuttuğu an beliren konsantrik mor/sarı psişik baş ağrısı halkaları ve yayılan psişik migren şoku.
+5. **Slowpoke (*Spacing Out*, *Afternoon Nap*):** Kafasının üstünde beliren dalgın soru işaretleri, boş bakış dalgaları ve uyku "Zzz" baloncukları ile can yenileme.
+6. **Mewtwo (*Barrier*, *Psychic*):** Prizmatik altıgen parıldayan psişik güç kalkanı ve hedef kartı yerçekimiyle ezen koyu mor telekinezi girdabı.
+7. **Voltorb (*Speed Ball*, *Tackle*):** Yüksek hızda dönerek kartın üzerinden yuvarlanıp geçen elektrikli küre hücumu.
+8. **Tangela (*Bind*):** Hedef kartı dört bir yandan saran kalın koyu mavi sarmaşık düğümleri ve sıkıştırma sarsıntısı.
+9. **Efsanevi Kuşlar (Articuno, Zapdos, Moltres):** *Blizzard* (ekranı kaplayan buz fırtınası), *Thunderstorm* (gökten inen çoklu şimşekler) ve *Wildfire* (tüm zemini saran akkor alev denizi).
+
+---
+
+### 5. Nasıl İlerleyelim?
+
+Bu analize göre çalışmayı 3'erli veya 4'erli paketler halinde ele alabiliriz:
+
+* **Seçenek 1 (Hemen Kodlamaya Başlama - Salt SVG Paketi):** Görsel üretimi/dekupe ile vakit kaybetmeden doğrudan hayata geçirebileceğimiz **Doduo (Fury Attack), Magnemite (Magnetism/Thunder Wave) ve Porygon (Conversion)** üçlüsüyle başlayabiliriz.
+* **Seçenek 2 (Stok Görsel Odaklı Paket):** Eğer karakter uzuvları barındıran animasyonlara öncelik vermek isterseniz, **Hitmonlee (uzayan bacak) veya Chansey (büzülme/Double-edge)** için size referans prompt hazırlayabilirim; siz dekupeyi hazırlarken ben de CSS/SVG motor altyapısını kurarım.
+
+Hangi grup veya hangi Pokémon'larla bu etaba start verelim?
+

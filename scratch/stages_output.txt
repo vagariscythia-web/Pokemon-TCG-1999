@@ -1,0 +1,142 @@
+Index 86 PLANNER RESPONSE:
+Geri bildirimleriniz son derece yerinde ve isabetli. Belirttiğiniz üç temel konuyu kapsayan detaylı teknik plan [implementation_plan.md](file:///C:/Users/KaanS/.gemini/antigravity-ide/brain/1e42f570-45b8-41a4-97c7-966a155cceda/implementation_plan.md) dokümanında hazırlandı:
+
+---
+
+### Planlanan Çözümler ve İyileştirmeler:
+
+#### 1. Psyduck "Fury Swipes" (Pençe Karmaşasının Çözümü & Estetik Revizyon)
+* **Problem:** Önceki turdaki ham SVG çizgileri dağınık ve özensiz bir karmaşa yaratmıştı.
+* **Yeni Çözüm:** Orijinal `slash`/`scratch` hamlesinin kanıtlanmış, yumuşak ve pürüzsüz estetiği temel alınıyor. 
+* **3 Bitişik Tırnak:** Tek çizgi yerine, **3 adet yan yana bitişik kavisli ve parlak pençe bıçağı** (`transparent` $\rightarrow$ `#f59e0b` $\rightarrow$ `#fde047` $\rightarrow$ `#ffffff` kanarya sarısı/kehribar gradyanı ve neon kutup ışımasıyla) sol el çaprazı (`gbaClawSlashDiagonal`), ardından seri olarak ayna sağ el çaprazı (`gbaClawSlashDiagonalMirror`) ve merkez bitiriş kesiği olarak staccato ritminde akıcı bir şekilde uygulanacak.
+
+#### 2. Psyduck "Headache" (Yavan Çemberler ve Emoji Yerine Captivating / Çok Katmanlı Sanat)
+* **Problem:** Düz SVG çemberleri ve 🚫, 💢, ⚡ gibi metin emojileri yavan ve tekdüze kalmıştı.
+* **Yeni Çözüm:**
+  1. **Harmonik Beyin Dalgası Salınımları:** Statik daireler yerine, yüksek frekanslı sinüsoidal migren dalgaları (mor `#7c3aed`, ametist `#a855f7` ve parlak sarı `#facc15` geçişli, katmanlı genişleyen rezonans).
+  2. **Sinaptik Şakak Kıvılcımları & Nöral Deşarj:** Şakaklarda çatallanan özel SVG yüksek voltajlı nöral enerji arkları.
+  3. **Kafa İçi Basınç Dalgası:** Kafatasında zonklayan ve patlayarak yayılan yarı saydam psişik EMP küresi.
+  4. **Holografik Trainer Kilit Mührü:** 🚫 emojisi yerine, dönen runik halkalar ve merkezde kilitlenen kristalize psişik baskılama mührü.
+
+#### 3. Confusion Sırasında Self Buff/Defense Hamlelerinin Whiff Hedefi
+* **Problem:** Wartortle gibi bir Pokémon Confused durumdayken atılan yazı-tura "tails" geldiğinde, `triggerConfusionSelfHit` fonksiyonu 20 hasarı saldırgana uyguluyor ancak ikinci beat olan ıskalama (whiff) animasyonunu sabit olarak rakip Pokémon'a yönlendiriyordu.
+* **Düzeltme:**
+  * `triggerConfusionSelfHit` fonksiyonuna `isSelfTarget` parametresi eklenecek.
+  * Eğer hamle `Withdraw`, `Harden`, `Stiffen`, `Scrunch`, `Hide in Shell`, `Minimize`, `Barrier`, `Recover`, `Spacing Out`, `Swords Dance` gibi kendini hedef alan (savunma/buff/iyileştirme) bir hamle ise, **ıskalama animasyonu da rakip yerine Pokémon'un kendi kartı üzerinde oynatılacak.**
+  * Kart veritabanındaki tüm 0-hasarlı ve kendine yönelik hamleler `isSelfTargetingMove` fonksiyonuna dahil edilecek.
+
+---
+
+Uygulamaya geçmem için onay veriyor musunuz?
+==================================================
+Index 175 PLANNER RESPONSE:
+Tespit ettiğimiz kusurların çözümü ve projenin genel görsel kalitesini en üst seviyeye taşımak için izlenebilecek yöntemleri, efekt tekniklerini ve ortaya çıkacak nihai sonucu şöyle özetleyebilirim:
+
+---
+
+### I. Dahil Edilecek Temel Animasyon Metotları ve Efekt Standartları
+
+#### 1. Akışkan ve Kademeli Işık Şeritleri (Tapered Fluid Trails) — *Düz `<line>` Çizgilerine Son*
+* **Yöntem:** Düz SVG `<line>` çubukları tamamen terk edilir. Bunun yerine `rounded-full` kapsüller ve Bezier eğrileriyle (`M... Q... C...`) modellenen, **arkası geniş, ucu sivrilen dinamik hız şeritleri** kullanılır.
+* **Işık Gradyanı:** Şeridin kuyruğu `%0 transparent`, gövdesi canlı element rengi (örneğin Vaporeon için `#38bdf8` turkuaz, Jolteon için `#facc15` elektrik altını), uç çekirdeği ise `%100 #ffffff` akkor beyazdan oluşur.
+* **Optik Derinlik:** Tek bir düz çizgi yerine, birbiri ardına hafif gecikmeyle (staggered delay) fırlayan 3 farklı kalınlıkta ve yarı saydamlıkta kavisli akıntı kullanılır.
+
+#### 2. Çok Katmanlı Sıvı & Vorteks Fiziği (Su Canlıları ve Vaporeon İçin)
+* **Yöntem:** Kesik çizgili (`strokeDasharray`) radar çemberleri ve statik noktalar yerine:
+  * **Katman 1 (Girdap Tabanı):** Koyu okyanus mavisi (`#0369a1`) ve turkuaz geçişli dönen yarı saydam su hunisi.
+  * **Katman 2 (Dinamik Su Tacı):** Darbe anında dışa doğru patlayan 8-10 damlacıklı kavisli sıvı sıçraması (water splash crown).
+  * **Katman 3 (Hava Köpüğü ve Sprey):** Hızla dağılan mikron boyutlu beyaz köpük parçacıkları.
+
+#### 3. Fraktal Benzeri Yüksek Voltaj Plazma Arkları — *Metin Emojilerine Son*
+* **Yöntem:** `⚡` gibi hazır emojiler tamamen temizlenir. Yerine 2 katmanlı çatallanan SVG nöral şimşek arkları yazılır:
+  * İç çekirdek: 2px parlak saf beyaz `#ffffff`.
+  * Dış hale: 6px neon altın sarısı (`#fde047`) veya buz mavisi (`#38bdf8`) yoğun `drop-shadow`.
+  * Temas anında zeminde mikro statik elektrik çatırtıları ve g
+<truncated 1577 bytes>
+çakan çok kollu fraktal şimşekler, kartı anlık aydınlatan akkor beyaz darbe flaşı ve zeminde statik elektrik patlamaları. |
+| **Rattata & Seel (Hız/Boynuz darbeleri)** | Ham kesik çizgiler ve cetvel çentikleri. | **Aerodinamik Rüzgar Kırılması:** Kavisli, yumuşak kenarlı ses dalgası konisi, arkasında bıraktığı ivme çizgileri ve darbede patlayan anime vuruş yıldızları. |
+| **Abra `vanish` & Teleport** | Kartın birden saydamlaşıp yok olması (10 satır). | **Uzay-Zaman Tekilliği:** Kart merkezinde toplanan mor-eflatun ışık vorteksi, kırılan geometrik psişik halkalar ve dağılan simli uzay tozu. |
+| **Oddish `sprout`** | Düz yeşil tek bir dairenin büyüyüp sönmesi. | **Doğal Filizlenme:** Kart tabanından hızla yükselen spiral yeşil doğa aurası, aniden açan parıltılı çift yaprak ve yükselen polen zerreleri. |
+
+---
+
+### III. Nasıl Bir Eylemsel Plan İzleyebiliriz?
+
+Bu dönüşümü kontrollü, temiz ve test edilmiş adımlarla hayata geçirmek için şöyle bir 3 aşamalı yol haritası izleyebiliriz:
+
+* **1. Aşama (Öncelikli — Hız ve Akışkanlık Revizyonu):**
+  * Başta **Vaporeon / Eeveelutions `quick_attack_dash`** olmak üzere, **Rattata** ve **Seel**'deki ham tel çizgileri tamamen kaldırıp; akıcı `tapered` ışık izleri ve hidrodinamik vorteks fiziğiyle baştan tasarlamak.
+* **2. Aşama (Emojilerden Arındırma & Gerçek Plazma/Partikül):**
+  * **Zapdos**, **Shellder**, **Venonat** ve **Dizziness**'taki tüm metin emojilerini temizleyip, yerlerine gerçek çatallanan SVG yıldırımları ve organik duman/spor partikülleri entegre etmek.
+* **3. Aşama (Taslak Kalanları Canlandırma):**
+  * **Abra `vanish`**, **Oddish `sprout`**, **Lickitung `supersonic`** ve **Drowzee `nightmare`** gibi 10-15 satırlık minimalist hamleleri projenin standartlarına yaraşır sinematik bir derinliğe kavuşturmak.
+
+Bu yaklaşım ve aşamalandırma sizin açınızdan uygun mudur? Uygunsa ilk aşamadan (Vaporeon ve hız çizgileri revizyonu) başlayabiliriz.
+==================================================
+Index 197 PLANNER RESPONSE:
+Abra "Psyshock" hakkındaki şüpheniz ve tespitiniz **yine kelimesi kelimesine ve yüzde yüz doğru!** 
+
+Kod tabanındaki `abra_psyshock` (Satır 8764) bloğunu açıp baktığımda tam olarak şunu gördüm:
+
+```svg
+{/* 20bs. ABRA PSYSHOCK */}
+<circle cx="40" cy="40" r="18" fill="url(#abraPsiGradMini)" stroke="#c084fc" strokeWidth="2.5" />
+<ellipse cx="40" cy="40" rx="14" ry="7" fill="#ffffff" opacity="0.9" />
+<circle cx="40" cy="40" r="5" fill="#7e22ce" />
+<path d="M 40 18 L 36 6 L 44 8 Z" fill="#d946ef" />
+<path d="M 40 62 L 44 74 L 36 72 Z" fill="#d946ef" />
+<path d="M 18 40 L 6 44 L 8 36 Z" fill="#c084fc" />
+<path d="M 62 40 L 74 36 L 72 44 Z" fill="#c084fc" />
+```
+
+Burada yapılan şey: Beyaz bir elips göz akı, ortasında mor bir göz bebeği ve etrafında 4 adet kirpik/üçgenle **kelimenin tam anlamıyla bir "çizgi film gözü / nazar boncuğu"** çizilmiş! Ve etrafına sadece 2 adet basit CSS border halkası konulmuş.
+
+---
+
+### Neden Önceki Orijinal `psyshock_waves` Katbekat Daha İyiydi?
+
+Abra'nın ilk başta kullandığı orijinal `psyshock_waves` (Satır 1586) kodunu incelediğimde aradaki uçurum çok net görünüyor:
+1. **Kart Karartma & Optik Derinlik:** Kartın üzerini `backdrop-filter: blur(2.5px)` ile buğulandıran, altın sarısı ve mor geçişli derin bir psişik atmosfer örtüsü (`card-fx-block-overlay`) seriyordu.
+2. **3 Katmanlı Rezonans:** 
+   * Dışta 25px parlamalı kehribar halkası,
+   * Ortada `M18 4 A14 14...` matematiksel eğrisiyle **hızla dönen hipnotik bir Arşimet psişik spirali**,
+   * Merkezde ise patlayan 8 köşeli beyaz/sarı psişik flaş yıldızı.
+3. Bu yapı, ekranda bir "çizgi film çıkartması" değil; gerçek bir **telekinezi şok dalgası ve zihin bükülmesi (psywave)** hissi veriyordu.
+
+Sonradan eklenen kural (`pkm.includes('abra') => 'abra_psyshock'`) maalesef bu kaliteli animasyonu ezerek yerine o kaba göz çizimini getirmiş.
+
+---
+
+### Benzer Şekilde Kaçan Diğer "Çizgi Film / Sahte Göz / İskelet" Kusurları
+
+Abra'daki bu göz tespit
+<truncated 185 bytes>
+8873):**
+   * Mor bir dairenin üzerine kırmızı iki yay çizilerek (`#ef4444`) **kötü adam gözleri** çizilmiş! Eterik bir kabus sisi veya rüya yiyici psişik gölgeler yerine komik bir gülen yüz / şeytan emojisini andırıyor.
+2. **Glare / Leer — `glare_leer` (Satır 11520):**
+   * Düşmana dik dik bakma hissi vermek için doğrudan ekrana sarı renkte iki adet göz yarığı ve kırmızı göz bebekleri çizilmiş.
+3. **Abra — `abra_vanish` (Satır 8799):**
+   * Sadece mor bir halkanın ortasında yanıp sönen (`animate-ping`) beyaz bir noktadan ibaret; hiçbir teleportasyon bükülmesi yok.
+4. **Spearow — `spearow_peck` (Satır 8120):**
+   * Düz bir sarı daire ve ucuna eklenmiş basit bir üçgen gaga.
+5. **Oddish — `oddish_sprout` (Satır 8568):**
+   * İki adet kavisli yeşil yaprak ve bir saptan oluşan 42px'lik düz bir klipart çizimi.
+
+---
+
+### Nasıl Bir Çözüm Uygulayacağız?
+
+Yol haritamıza bu tespitleri de entegre ederek şu net kararları alabiliriz:
+
+1. **Abra `psyshock` İçin:**
+   * O kaba göz çizimi (`abra_psyshock`) tamamen iptal edilecek.
+   * Abra doğrudan o çok beğendiğiniz, dönen psişik spiralli ve 8 köşeli flaş yıldızlı orijinal `psyshock_waves` sistemine geri döndürülecek (arzu ederseniz Abra'ya özel ametist/lavanta tonlarıyla hafifçe zenginleştirilerek).
+2. **Drowzee `nightmare` ve Glare/Leer İçin:**
+   * Çizgi film gözleri silinerek, yerlerine organik psişik karartma sisleri ve hipnotik dalgalar konulacak.
+3. **Aşamalandırma Planımız:**
+   * **1. Aşama:** Vaporeon `quick_attack_dash`, Rattata ve Seel'deki tel çizgilerin kaldırılıp akışkan hidrodinamik/aerodinamik şeritlere dönüştürülmesi + **Abra Psyshock'un orijinal kaliteli haline kavuşturulması**.
+   * **2. Aşama:** Zapdos, Shellder, Venonat'taki emojilerin ve Drowzee'deki göz çizimlerinin temizlenmesi.
+   * **3. Aşama:** Abra Vanish, Oddish Sprout, Lickitung Supersonic gibi taslakların zenginleştirilmesi.
+
+Bu plan dahilinde 1. Aşama ile başlayalım mı?
+==================================================

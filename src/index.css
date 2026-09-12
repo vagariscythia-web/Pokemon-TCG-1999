@@ -1955,45 +1955,69 @@ html, body {
 
 
 
-/* GBA QUICK ATTACK (Blinding Speed Zigzag Dash, Anime Cross-Slashes, Sonic Pierce) */
-@keyframes gbaQuickZigzag {
-  0%   { transform: translateX(-90px) scaleX(0.2) scaleY(0.4); opacity: 0; }
-  20%  { transform: translateX(-30px) scaleX(1.1) scaleY(0.9); opacity: 1; filter: drop-shadow(0 0 16px #ffffff); }
-  45%  { transform: translateX(10px) scaleX(1.3) scaleY(1.0); opacity: 1; }
-  75%  { transform: translateX(60px) scaleX(1.1) scaleY(0.8); opacity: 0.85; }
-  100% { transform: translateX(100px) scaleX(0.3) scaleY(0.3); opacity: 0; }
+/* GBA QUICK ATTACK (Supersonic Sonic Slipstream & Kinetic Impact Suite) */
+@keyframes gbaQuickSlipstream {
+  0%   { transform: scaleX(0.1) translateX(-90px); opacity: 0; }
+  18%  { transform: scaleX(1.3) translateX(-10px); opacity: 1; }
+  40%  { transform: scaleX(1.55) translateX(35px); opacity: 0.85; }
+  65%  { transform: scaleX(1.75) translateX(65px); opacity: 0.4; }
+  100% { transform: scaleX(1.9) translateX(90px); opacity: 0; }
 }
-@keyframes gbaQuickCrossSlash1 {
-  0%, 20% { transform: rotate(-35deg) scaleX(0.1); opacity: 0; }
-  35%     { transform: rotate(-35deg) scaleX(1.15); opacity: 1; filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 8px #94a3b8); }
-  60%     { transform: rotate(-35deg) scaleX(1.25); opacity: 0.7; }
-  100%    { transform: rotate(-35deg) scaleX(1.35); opacity: 0; }
+@keyframes gbaQuickSonicRing {
+  0%, 14% { transform: scale(0.15) scaleX(1.3); opacity: 0; }
+  28%     { transform: scale(0.95) scaleX(1.2); opacity: 1; filter: drop-shadow(0 0 18px #ffffff); }
+  55%     { transform: scale(1.65) scaleX(1.15); opacity: 0.45; }
+  85%     { transform: scale(2.1) scaleX(1.1); opacity: 0; }
+  100%    { transform: scale(2.3); opacity: 0; }
 }
-@keyframes gbaQuickCrossSlash2 {
-  0%, 26% { transform: rotate(35deg) scaleX(0.1); opacity: 0; }
-  40%     { transform: rotate(35deg) scaleX(1.15); opacity: 1; filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 8px #94a3b8); }
-  65%     { transform: rotate(35deg) scaleX(1.25); opacity: 0.7; }
-  100%    { transform: rotate(35deg) scaleX(1.35); opacity: 0; }
+@keyframes gbaQuickKineticBurst {
+  0%, 18% { transform: scale(0.15) rotate(0deg); opacity: 0; }
+  30%     { transform: scale(1.35) rotate(18deg); opacity: 1; filter: drop-shadow(0 0 22px #ffffff); }
+  55%     { transform: scale(1.15) rotate(36deg); opacity: 0.75; }
+  85%     { transform: scale(1.55) rotate(54deg); opacity: 0.2; }
+  100%    { transform: scale(1.7) rotate(70deg); opacity: 0; }
 }
-@keyframes gbaQuickSpeedlines {
-  0%   { transform: scaleX(0.2); opacity: 0; }
-  28%  { transform: scaleX(1.2); opacity: 0.95; filter: drop-shadow(0 0 10px #ffffff); }
-  60%  { transform: scaleX(1.35); opacity: 0.6; }
-  100% { transform: scaleX(1.5); opacity: 0; }
+@keyframes gbaQuickSparkRadial {
+  0%, 22% { transform: scale(0.2); opacity: 0; }
+  32%     { transform: scale(1.2) translate(var(--tw-tx, 0), var(--tw-ty, 0)); opacity: 1; }
+  65%     { transform: scale(0.8) translate(calc(var(--tw-tx, 0) * 1.5), calc(var(--tw-ty, 0) * 1.5)); opacity: 0.5; }
+  100%    { transform: scale(0.2) translate(calc(var(--tw-tx, 0) * 1.8), calc(var(--tw-ty, 0) * 1.8)); opacity: 0; }
 }
-@keyframes gbaQuickSonicBurst {
-  0%, 25% { transform: scale(0.2); opacity: 0; }
-  35%     { transform: scale(1.35) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 20px #ffffff); }
-  65%     { transform: scale(1.1) rotate(35deg); opacity: 0.65; }
-  100%    { transform: scale(1.6) rotate(60deg); opacity: 0; }
+@keyframes gbaEeveePounceSnap {
+  0%   { transform: translate(-85px, -6px) scale(0.68); opacity: 0; filter: blur(3px); }
+  16%  { transform: translate(-40px, -2px) scale(1.05); opacity: 0.95; filter: blur(0px) drop-shadow(0 0 14px rgba(255,255,255,0.8)); }
+  28%  { transform: translate(0px, 0px) scale(1.16, 0.92) rotate(-1.5deg); opacity: 1; filter: drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 12px #93c5fd); }
+  42%  { transform: translate(-16px, 2px) scale(0.95, 1.05) rotate(1deg); opacity: 0.95; }
+  60%  { transform: translate(-10px, 1px) scale(0.98); opacity: 0.75; }
+  85%  { transform: translate(-5px, 0px) scale(0.95); opacity: 0.35; }
+  100% { transform: translate(0px, 0px) scale(0.9); opacity: 0; }
+}
+@keyframes gbaVaporeonSplashRing {
+  0%, 20% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+  32%     { transform: scale(1.25) rotate(45deg); opacity: 0.95; filter: drop-shadow(0 0 16px #38bdf8); }
+  65%     { transform: scale(1.6) rotate(90deg); opacity: 0.4; }
+  100%    { transform: scale(1.9) rotate(135deg); opacity: 0; }
+}
+@keyframes gbaJolteonStaticArcs {
+  0%, 20% { transform: scale(0.2); opacity: 0; }
+  30%     { transform: scale(1.3) rotate(-10deg); opacity: 1; filter: drop-shadow(0 0 18px #facc15); }
+  45%     { transform: scale(1.1) rotate(15deg); opacity: 0.85; }
+  70%     { transform: scale(1.45) rotate(-5deg); opacity: 0.35; }
+  100%    { transform: scale(1.6); opacity: 0; }
+}
+@keyframes gbaFlareonThermalEmber {
+  0%, 20% { transform: scale(0.2); opacity: 0; }
+  32%     { transform: scale(1.35); opacity: 1; filter: drop-shadow(0 0 20px #ef4444); }
+  60%     { transform: scale(1.55); opacity: 0.55; }
+  100%    { transform: scale(1.8); opacity: 0; }
 }
 @keyframes gbaQuickCardSnap {
   0%   { transform: translate(0px, 0px) scale(1) rotate(0deg); }
-  16%  { /* Anticipatory target tension */ transform: translate(1px, -1px) scale(0.995) rotate(-0.3deg); }
-  28%  { /* Sonic wind draft push */ transform: translate(3px, -2px) scale(0.99) rotate(-0.8deg); }
-  35%  { /* SUPERSONIC IMPACT CRUNCH! */ transform: translate(-7px, 4px) scale(1.03, 0.96) rotate(1.8deg); filter: drop-shadow(0 0 12px #ffffff); }
-  44%  { /* Rebound whip snap */ transform: translate(5px, -3px) scale(0.97, 1.02) rotate(-1.4deg); }
-  54%  { /* Secondary shock shudder */ transform: translate(-3px, 2px) scale(1.01) rotate(0.8deg); }
+  14%  { transform: translate(1px, -1px) scale(0.995) rotate(-0.3deg); }
+  24%  { transform: translate(3px, -2px) scale(0.99) rotate(-0.8deg); }
+  30%  { /* SUPERSONIC IMPACT CRUNCH! */ transform: translate(-8px, 4px) scale(1.04, 0.95) rotate(2deg); filter: drop-shadow(0 0 14px #ffffff); }
+  40%  { /* Rebound whip snap */ transform: translate(6px, -3px) scale(0.97, 1.02) rotate(-1.5deg); }
+  52%  { /* Secondary shock shudder */ transform: translate(-3px, 2px) scale(1.01) rotate(0.8deg); }
   66%  { /* High-speed inertia vibration */ transform: translate(2px, -1px) scale(0.995) rotate(-0.4deg); }
   80%  { /* Damped settling ease */ transform: translate(-1px, 0.5px) scale(1) rotate(0.2deg); }
   100% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
@@ -5230,6 +5254,14 @@ html, body {
 }
 
 /* BARRIER */
+@keyframes gbaHexShieldMatrixPulse {
+  0% { transform: scale(0.3); opacity: 0; stroke-dasharray: 60; stroke-dashoffset: 60; }
+  28% { transform: scale(1.08); opacity: 1; stroke-dashoffset: 0; filter: drop-shadow(0 0 16px #fde047) drop-shadow(0 0 28px #eab308); }
+  48% { transform: scale(0.98); opacity: 0.95; filter: drop-shadow(0 0 12px #fde047); }
+  70% { transform: scale(1.03); opacity: 0.85; }
+  100% { transform: scale(1.15); opacity: 0; filter: blur(4px); }
+}
+
 @keyframes gbaBarrierForm {
   0% { transform: scale(0.2); opacity: 0; }
   25% { transform: scale(0.7); opacity: 0.9; }
@@ -5246,6 +5278,14 @@ html, body {
 }
 
 /* DEFENDER */
+@keyframes gbaAegisBucklerPulse {
+  0% { transform: scale(0.3) translateY(8px); opacity: 0; }
+  25% { transform: scale(1.1) translateY(-4px); opacity: 1; filter: drop-shadow(0 0 16px #3b82f6) drop-shadow(0 0 28px #1d4ed8); }
+  50% { transform: scale(0.98) translateY(-2px); opacity: 0.95; }
+  75% { transform: scale(1.04) translateY(-1px); opacity: 0.85; }
+  100% { transform: scale(1.12) translateY(2px); opacity: 0; filter: blur(3px); }
+}
+
 @keyframes gbaDefenderShieldForm {
   0% { transform: scale(0.3) translateY(5px); opacity: 0; }
   30% { transform: scale(0.8) translateY(-2px); opacity: 0.9; }
@@ -7913,28 +7953,38 @@ html, body {
    BASIC POKÉMON BATCH 16 (GROUP A & GROUP B) SIGNATURE ANIMATIONS (COMPACT & FOCUSED <= 60% CARD WIDTH)
    ========================================================================== */
 
-/* 1. RATTATA: Quick Attack (High-Speed Compact Zigzag Flash) */
-@keyframes gbaRattataZigZagTrail {
+/* 1. RATTATA: Quick Attack (High-Speed Sprint Tackle Snap) */
+@keyframes gbaRattataSprintSnap {
   0% {
     opacity: 0;
-    transform: translate(-35px, 24px) scale(0.7) skewX(-15deg);
+    transform: translate(-90px, 4px) scale(0.65);
+    filter: blur(3px);
   }
-  25% {
-    opacity: 1;
-    transform: translate(-18px, -14px) scale(0.95) skewX(15deg);
+  16% {
+    opacity: 0.95;
+    transform: translate(-42px, 2px) scale(1.06);
+    filter: blur(0px) drop-shadow(0 0 14px rgba(255, 255, 255, 0.8));
   }
-  50% {
+  28% {
     opacity: 1;
-    transform: translate(10px, 8px) scale(1) skewX(-10deg);
+    transform: translate(0px, 0px) scale(1.18, 0.92) rotate(-2deg);
+    filter: drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 12px #facc15);
   }
-  75% {
-    opacity: 1;
-    transform: translate(0px, 0px) scale(1.1) skewX(0deg);
-    filter: drop-shadow(0 0 10px #ffffff);
+  42% {
+    opacity: 0.95;
+    transform: translate(-15px, 4px) scale(0.95, 1.05) rotate(1.5deg);
+  }
+  60% {
+    opacity: 0.75;
+    transform: translate(-8px, 2px) scale(0.98);
+  }
+  85% {
+    opacity: 0.35;
+    transform: translate(-4px, 1px) scale(0.95);
   }
   100% {
     opacity: 0;
-    transform: translate(8px, -6px) scale(0.85);
+    transform: translate(0px, 0px) scale(0.9);
   }
 }
 
@@ -8154,44 +8204,116 @@ html, body {
   }
 }
 
-/* 5. POLIWAG & POLIWHIRL: Belly Spiral Water Gun (Focused Pressurized Jet) */
+/* 5. POLIWAG, POLIWHIRL & POLIWRATH: Enhanced Belly Spiral Water Gun */
 @keyframes gbaPoliwagBellySpiral {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) rotate(0deg);
+    filter: drop-shadow(0 0 6px #0284c7);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1.04) rotate(240deg);
+    filter: drop-shadow(0 0 16px #38bdf8) drop-shadow(0 0 24px #0284c7);
+  }
+  30% {
+    /* Peak discharge acceleration & hydrodynamic gleam */
+    opacity: 1;
+    transform: scale(1.0) rotate(540deg);
+    filter: drop-shadow(0 0 20px #7dd3fc) drop-shadow(0 0 30px #0ea5e9) brightness(1.25);
+  }
+  55% {
+    opacity: 0.95;
+    transform: scale(0.98) rotate(900deg);
+    filter: drop-shadow(0 0 14px #38bdf8);
+  }
+  78% {
+    opacity: 0.75;
+    transform: scale(0.92) rotate(1180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.7) rotate(1360deg);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaPoliwagSpiralRings {
   0% {
     opacity: 0;
     transform: scale(0.4) rotate(0deg);
   }
-  30% {
-    opacity: 1;
-    transform: scale(0.9) rotate(360deg);
-    filter: drop-shadow(0 0 12px #38bdf8);
+  25% {
+    opacity: 0.85;
+    transform: scale(1.08) rotate(-180deg);
   }
-  65% {
-    opacity: 0.9;
-    transform: scale(1) rotate(720deg);
+  50% {
+    opacity: 0.7;
+    transform: scale(1.18) rotate(-420deg);
+  }
+  75% {
+    opacity: 0.35;
+    transform: scale(1.25) rotate(-660deg);
   }
   100% {
     opacity: 0;
-    transform: scale(1.08) rotate(1080deg);
+    transform: scale(1.35) rotate(-840deg);
   }
 }
 
-@keyframes gbaPoliwagJetStream {
+@keyframes gbaPoliwagMuzzleFlash {
   0% {
     opacity: 0;
-    transform: scaleX(0.2) scaleY(0.6);
+    transform: scale(0.2);
   }
-  30% {
+  15% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  24% {
     opacity: 1;
-    transform: scaleX(1) scaleY(1);
-    filter: drop-shadow(0 0 12px #0ea5e9);
+    transform: scale(1.3);
+    filter: brightness(1.4);
   }
-  75% {
-    opacity: 0.95;
-    transform: scaleX(1.05) scaleY(1);
+  38% {
+    opacity: 0.7;
+    transform: scale(0.9);
+  }
+  60% {
+    opacity: 0;
+    transform: scale(0.4);
   }
   100% {
     opacity: 0;
-    transform: scaleX(1.1) scaleY(0.8);
+    transform: scale(0.1);
+  }
+}
+
+@keyframes gbaPoliwagWaterStream {
+  0% {
+    opacity: 0;
+    transform: translate(-36px, 3px) scaleX(0.3) scaleY(0.7);
+  }
+  18% {
+    opacity: 0.7;
+    transform: translate(-18px, 1px) scaleX(0.75) scaleY(0.9);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(0px, 0px) scaleX(1.0) scaleY(1.0);
+    filter: drop-shadow(0 0 16px #38bdf8);
+  }
+  52% {
+    opacity: 0.95;
+    transform: translate(12px, -2px) scaleX(1.04) scaleY(1.02);
+  }
+  75% {
+    opacity: 0.75;
+    transform: translate(22px, 0px) scaleX(0.96) scaleY(0.92);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(32px, 3px) scaleX(0.75) scaleY(0.75);
   }
 }
 
@@ -8313,24 +8435,41 @@ html, body {
   }
 }
 
+@keyframes gbaOddishSoilMound {
+  0% { transform: scale(0.3) translateY(10px); opacity: 0; }
+  22% { transform: scale(1.08) translateY(0px); opacity: 0.95; }
+  72% { transform: scale(1) translateY(0px); opacity: 0.9; }
+  100% { transform: scale(0.92) translateY(4px); opacity: 0; }
+}
+
+@keyframes gbaOddishSpiralFlora {
+  0% { transform: rotate(0deg) scale(0.2) translateY(12px); opacity: 0; }
+  35% { transform: rotate(180deg) scale(1.1) translateY(-8px); opacity: 0.9; filter: drop-shadow(0 0 14px #4ade80); }
+  70% { transform: rotate(360deg) scale(1.25) translateY(-22px); opacity: 0.7; }
+  100% { transform: rotate(500deg) scale(1.4) translateY(-34px); opacity: 0; }
+}
+
+@keyframes gbaOddishSproutLeafGrow {
+  0% { transform: scale(0.1) translateY(16px); opacity: 0; }
+  28% { transform: scale(0.7) translateY(6px); opacity: 0.9; }
+  48% { transform: scale(1.2, 0.86) translateY(-4px); opacity: 1; filter: drop-shadow(0 0 16px #22c55e); }
+  66% { transform: scale(0.95, 1.05) translateY(-2px); opacity: 1; }
+  84% { transform: scale(1, 1) translateY(0px); opacity: 0.95; }
+  100% { transform: scale(0.9) translateY(-6px); opacity: 0; }
+}
+
+@keyframes gbaOddishPollenFloat {
+  0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  35% { transform: translate(var(--pol-x, 8px), calc(var(--pol-y, -14px) * 0.5)) scale(1.25); opacity: 1; filter: drop-shadow(0 0 8px #fef08a); }
+  70% { transform: translate(calc(var(--pol-x, 8px) * 1.4), var(--pol-y, -28px)) scale(1); opacity: 0.85; }
+  100% { transform: translate(calc(var(--pol-x, 8px) * 1.8), calc(var(--pol-y, -28px) * 1.5)) scale(0.2); opacity: 0; }
+}
+
 @keyframes gbaOddishSproutRise {
-  0% {
-    opacity: 0;
-    transform: translateY(16px) scale(0.4);
-  }
-  40% {
-    opacity: 1;
-    transform: translateY(-2px) scale(1.05);
-    filter: drop-shadow(0 0 12px #4ade80);
-  }
-  75% {
-    opacity: 0.95;
-    transform: translateY(0px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-4px) scale(0.9);
-  }
+  0% { opacity: 0; transform: translateY(16px) scale(0.4); }
+  40% { opacity: 1; transform: translateY(-2px) scale(1.05); filter: drop-shadow(0 0 12px #4ade80); }
+  75% { opacity: 0.95; transform: translateY(0px) scale(1); }
+  100% { opacity: 0; transform: translateY(-4px) scale(0.9); }
 }
 
 /* ========================================================================= */
@@ -8395,27 +8534,36 @@ html, body {
   }
 }
 
+@keyframes gbaJigglypuffSquashPaw {
+  0% { transform: translateY(-38px) scale(0.5, 1.4) rotate(-15deg); opacity: 0; }
+  25% { transform: translateY(-8px) scale(0.85, 1.2) rotate(-5deg); opacity: 0.95; }
+  42% { transform: translateY(2px) scale(1.36, 0.68) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 16px #f43f5e) drop-shadow(0 0 24px #fb7185); }
+  58% { transform: translateY(-7px) scale(0.88, 1.18) rotate(4deg); opacity: 1; }
+  74% { transform: translateY(-1px) scale(1.08, 0.95) rotate(-2deg); opacity: 0.9; }
+  88% { transform: translateY(-3px) scale(1, 1) rotate(0deg); opacity: 0.75; }
+  100% { transform: translateY(-16px) scale(0.7) rotate(10deg); opacity: 0; }
+}
+
+@keyframes gbaJigglypuffComicBurst {
+  0% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+  35% { transform: scale(1.22) rotate(25deg); opacity: 1; filter: drop-shadow(0 0 16px #fb7185) drop-shadow(0 0 24px #e11d48); }
+  65% { transform: scale(1.38) rotate(40deg); opacity: 0.75; }
+  100% { transform: scale(1.55) rotate(60deg); opacity: 0; }
+}
+
+@keyframes gbaJigglypuffDreamPuff {
+  0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  40% { transform: translate(var(--px, 14px), var(--py, -14px)) scale(1.15); opacity: 0.9; filter: drop-shadow(0 0 8px #fda4af); }
+  75% { transform: translate(calc(var(--px, 14px) * 1.5), calc(var(--py, -14px) * 1.5)) scale(0.9); opacity: 0.65; }
+  100% { transform: translate(calc(var(--px, 14px) * 2), calc(var(--py, -14px) * 2)) scale(0.2); opacity: 0; }
+}
+
 @keyframes gbaJigglypuffPound {
-  0% {
-    opacity: 0;
-    transform: translateY(-24px) scale(0.6);
-  }
-  40% {
-    opacity: 1;
-    transform: translateY(0px) scale(1.15, 0.85);
-    filter: drop-shadow(0 0 10px #f43f5e);
-  }
-  60% {
-    transform: translateY(-4px) scale(0.95, 1.05);
-  }
-  80% {
-    opacity: 0.9;
-    transform: translateY(0px) scale(1);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-8px) scale(0.85);
-  }
+  0% { opacity: 0; transform: translateY(-24px) scale(0.6); }
+  40% { opacity: 1; transform: translateY(0px) scale(1.15, 0.85); filter: drop-shadow(0 0 10px #f43f5e); }
+  60% { transform: translateY(-4px) scale(0.95, 1.05); }
+  80% { opacity: 0.9; transform: translateY(0px) scale(1); }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.85); }
 }
 
 /* 2. CLEFAIRY: Metronome (Precision Pendulum Wag & Cosmic Twinkle Burst) */
@@ -8550,26 +8698,42 @@ html, body {
   }
 }
 
+@keyframes gbaAbraSingularityVortex {
+  0% { transform: scale(0.1) rotate(0deg); opacity: 0; filter: blur(4px) brightness(1.2); }
+  25% { transform: scale(1.1) rotate(180deg); opacity: 0.95; filter: blur(0px) brightness(1.8) drop-shadow(0 0 16px #c084fc); }
+  48% { transform: scale(0.15) rotate(420deg); opacity: 1; filter: brightness(3.5) drop-shadow(0 0 24px #ffffff); }
+  65% { transform: scale(1.4) rotate(540deg); opacity: 0.85; filter: blur(2px) drop-shadow(0 0 20px #a855f7); }
+  100% { transform: scale(2.0) rotate(720deg); opacity: 0; filter: blur(8px); }
+}
+
+@keyframes gbaAbraRuneRingLeft {
+  0% { transform: rotate(0deg) scale(0.4); opacity: 0; }
+  30% { transform: rotate(-120deg) scale(1.05); opacity: 0.9; }
+  55% { transform: rotate(-240deg) scale(0.3); opacity: 1; filter: drop-shadow(0 0 12px #e879f9); }
+  80% { transform: rotate(-360deg) scale(1.3); opacity: 0.5; }
+  100% { transform: rotate(-480deg) scale(1.6); opacity: 0; }
+}
+
+@keyframes gbaAbraRuneRingRight {
+  0% { transform: rotate(0deg) scale(0.4); opacity: 0; }
+  30% { transform: rotate(120deg) scale(1.05); opacity: 0.9; }
+  55% { transform: rotate(240deg) scale(0.3); opacity: 1; filter: drop-shadow(0 0 12px #c084fc); }
+  80% { transform: rotate(360deg) scale(1.3); opacity: 0.5; }
+  100% { transform: rotate(480deg) scale(1.6); opacity: 0; }
+}
+
+@keyframes gbaAbraSpaceDustScatter {
+  0% { transform: translate(0, 0) scale(0.2); opacity: 0; }
+  40% { transform: translate(calc(var(--dust-x, 15px) * 0.5), calc(var(--dust-y, -15px) * 0.5)) scale(1.3); opacity: 1; filter: drop-shadow(0 0 8px #ffffff); }
+  75% { transform: translate(var(--dust-x, 30px), var(--dust-y, -30px)) scale(1); opacity: 0.8; }
+  100% { transform: translate(calc(var(--dust-x, 30px) * 1.3), calc(var(--dust-y, -30px) * 1.3)) scale(0.2); opacity: 0; }
+}
+
 @keyframes gbaAbraVanish {
-  0% {
-    opacity: 1;
-    transform: scale(1);
-    filter: brightness(1);
-  }
-  35% {
-    opacity: 0.9;
-    transform: scale(1.15);
-    filter: brightness(2) drop-shadow(0 0 16px #a855f7);
-  }
-  70% {
-    opacity: 0.6;
-    transform: scale(0.2);
-    filter: brightness(3) drop-shadow(0 0 20px #ffffff);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0);
-  }
+  0% { opacity: 1; transform: scale(1); filter: brightness(1); }
+  35% { opacity: 0.9; transform: scale(1.15); filter: brightness(2) drop-shadow(0 0 16px #a855f7); }
+  70% { opacity: 0.6; transform: scale(0.2); filter: brightness(3) drop-shadow(0 0 20px #ffffff); }
+  100% { opacity: 0; transform: scale(0); }
 }
 
 /* 4. DROWZEE: Palm Strike, Confuse Ray & Nightmare */
@@ -8787,28 +8951,33 @@ html, body {
   }
 }
 
+@keyframes gbaLickitungSonarWave {
+  0% { transform: scale(0.2) rotate(var(--rot, 0deg)); opacity: 0; }
+  25% { transform: scale(0.7) rotate(var(--rot, 0deg)); opacity: 1; filter: drop-shadow(0 0 12px #eab308) drop-shadow(0 0 20px #facc15); }
+  60% { transform: scale(1.15) rotate(var(--rot, 0deg)); opacity: 0.85; filter: drop-shadow(0 0 8px #facc15); }
+  85% { transform: scale(1.4) rotate(var(--rot, 0deg)); opacity: 0.45; }
+  100% { transform: scale(1.65) rotate(var(--rot, 0deg)); opacity: 0; }
+}
+
+@keyframes gbaLickitungSonicPulse {
+  0% { transform: scale(0.3); opacity: 0; }
+  28% { transform: scale(1.05); opacity: 0.95; filter: drop-shadow(0 0 16px #fbbf24); }
+  65% { transform: scale(1.25); opacity: 0.7; }
+  100% { transform: scale(1.52); opacity: 0; }
+}
+
+@keyframes gbaLickitungDizzySpark {
+  0% { transform: translate(0, 0) scale(0.2) rotate(0deg); opacity: 0; }
+  35% { transform: translate(var(--sx, 12px), var(--sy, -12px)) scale(1.2) rotate(120deg); opacity: 1; filter: drop-shadow(0 0 8px #fde047); }
+  70% { transform: translate(calc(var(--sx, 12px) * 1.4), calc(var(--sy, -12px) * 1.4)) scale(1) rotate(240deg); opacity: 0.8; }
+  100% { transform: translate(calc(var(--sx, 12px) * 1.8), calc(var(--sy, -12px) * 1.8)) scale(0.2) rotate(360deg); opacity: 0; }
+}
+
 @keyframes gbaLickitungSupersonicRings {
-  0% {
-    opacity: 0;
-    transform: scale(0.3);
-    border-width: 4px;
-  }
-  35% {
-    opacity: 0.95;
-    transform: scale(0.85);
-    border-width: 3px;
-    filter: drop-shadow(0 0 10px #eab308);
-  }
-  75% {
-    opacity: 0.8;
-    transform: scale(1.15);
-    border-width: 2px;
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.35);
-    border-width: 1px;
-  }
+  0% { opacity: 0; transform: scale(0.3); border-width: 4px; }
+  35% { opacity: 0.95; transform: scale(0.85); border-width: 3px; filter: drop-shadow(0 0 10px #eab308); }
+  75% { opacity: 0.8; transform: scale(1.15); border-width: 2px; }
+  100% { opacity: 0; transform: scale(1.35); border-width: 1px; }
 }
 
 /* 7. KANGASKHAN: Comet Punch & Fetch */
@@ -8920,6 +9089,2277 @@ html, body {
     transform: translate(0px, 8px) scale(0.85);
   }
 }
+
+@keyframes gbaTaurosTectonicFracture {
+  0% { stroke-dashoffset: 140; opacity: 0; }
+  25% { stroke-dashoffset: 0; opacity: 1; filter: drop-shadow(0 0 10px #b45309); }
+  75% { opacity: 0.95; filter: drop-shadow(0 0 6px #78350f); }
+  100% { opacity: 0; filter: none; }
+}
+
+@keyframes gbaTaurosRubbleErupt {
+  0% { transform: translate(0, 0) scale(0.3) rotate(0deg); opacity: 0; }
+  35% { transform: translate(var(--rx, 16px), var(--ry, -24px)) scale(1.2) rotate(180deg); opacity: 1; filter: drop-shadow(0 0 6px #78350f); }
+  65% { transform: translate(calc(var(--rx, 16px) * 1.5), calc(var(--ry, -24px) + 12px)) scale(0.95) rotate(320deg); opacity: 0.85; }
+  100% { transform: translate(calc(var(--rx, 16px) * 1.8), calc(var(--ry, -24px) + 32px)) scale(0.4) rotate(420deg); opacity: 0; }
+}
+
+/* ==========================================================================
+   UNIVERSAL WHIFF / MISSED MOVE INDICATORS (SVG & Move Whiff Physics)
+   ========================================================================== */
+
+/* Organic expanding & dissolving vapor dissipation puff */
+@keyframes gbaWhiffFizzlePuff {
+  0% {
+    opacity: 0;
+    transform: translate(var(--wp-x, 0px), var(--wp-y, 0px)) scale(0.35);
+  }
+  20% {
+    opacity: 0.85;
+    transform: translate(var(--wp-x, 0px), var(--wp-y, 0px)) scale(0.9);
+  }
+  60% {
+    opacity: 0.45;
+    transform: translate(calc(var(--wp-x, 0px) * 1.35), calc(var(--wp-y, 0px) * 1.35 - 5px)) scale(1.18);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--wp-x, 0px) * 1.7), calc(var(--wp-y, 0px) * 1.7 - 9px)) scale(1.35);
+    filter: blur(2.5px);
+  }
+}
+
+/* Glancing deflection ricochet spark */
+@keyframes gbaWhiffGlanceSpark {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3) rotate(var(--sp-rot, 25deg));
+  }
+  25% {
+    opacity: 0.95;
+    transform: translate(var(--sp-dx, 14px), var(--sp-dy, -10px)) scale(1.1) rotate(var(--sp-rot, 25deg));
+  }
+  60% {
+    opacity: 0.55;
+    transform: translate(calc(var(--sp-dx, 14px) * 1.7), calc(var(--sp-dy, -10px) * 1.7)) scale(0.75) rotate(var(--sp-rot, 25deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--sp-dx, 14px) * 2.3), calc(var(--sp-dy, -10px) * 2.3)) scale(0.3) rotate(var(--sp-rot, 25deg));
+  }
+}
+
+/* Faint expanding dissipation ripple */
+@keyframes gbaWhiffDissolveRing {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  25% {
+    opacity: 0.75;
+    transform: scale(0.85);
+  }
+  70% {
+    opacity: 0.3;
+    transform: scale(1.18);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.38);
+    filter: blur(1.5px);
+  }
+}
+
+/* =========================================================================
+   BASIC POKEMON BATCH 1: DODUO, MAGNEMITE, PORYGON
+   ========================================================================= */
+
+/* 1. DODUO: FURY ATTACK (Staccato Dual-Beak Peck Barrage) */
+@keyframes gbaDoduoBeakLeft {
+  0% {
+    opacity: 0;
+    transform: translate(-55px, -45px) rotate(35deg) scale(0.65);
+    filter: blur(2px);
+  }
+  14% {
+    opacity: 1;
+    transform: translate(-10px, -8px) rotate(42deg) scale(1.1);
+    filter: blur(0px);
+  }
+  20% { /* Strike 1 apex */
+    opacity: 1;
+    transform: translate(4px, 4px) rotate(45deg) scale(1.15, 0.9);
+    filter: drop-shadow(0 0 12px #f59e0b) drop-shadow(0 0 6px #ffffff);
+  }
+  28% {
+    opacity: 0.9;
+    transform: translate(-18px, -15px) rotate(38deg) scale(0.95);
+  }
+  48% {
+    opacity: 0.95;
+    transform: translate(-8px, -6px) rotate(42deg) scale(1.05);
+  }
+  56% { /* Strike 2 apex */
+    opacity: 1;
+    transform: translate(6px, 6px) rotate(47deg) scale(1.18, 0.88);
+    filter: drop-shadow(0 0 14px #ea580c) drop-shadow(0 0 8px #ffffff);
+  }
+  68% {
+    opacity: 0.7;
+    transform: translate(-25px, -20px) rotate(35deg) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-60px, -45px) rotate(30deg) scale(0.6);
+  }
+}
+
+@keyframes gbaDoduoBeakRight {
+  0% {
+    opacity: 0;
+    transform: translate(55px, -45px) rotate(-35deg) scale(0.65);
+    filter: blur(2px);
+  }
+  30% {
+    opacity: 0.8;
+    transform: translate(25px, -20px) rotate(-38deg) scale(0.9);
+  }
+  38% { /* Strike 1 apex */
+    opacity: 1;
+    transform: translate(-4px, 4px) rotate(-45deg) scale(1.15, 0.9);
+    filter: drop-shadow(0 0 12px #f59e0b) drop-shadow(0 0 6px #ffffff);
+  }
+  48% {
+    opacity: 0.9;
+    transform: translate(18px, -15px) rotate(-38deg) scale(0.95);
+  }
+  66% {
+    opacity: 0.95;
+    transform: translate(8px, -6px) rotate(-42deg) scale(1.05);
+  }
+  74% { /* Strike 2 final apex */
+    opacity: 1;
+    transform: translate(-6px, 6px) rotate(-47deg) scale(1.22, 0.86);
+    filter: drop-shadow(0 0 16px #ea580c) drop-shadow(0 0 10px #ffffff);
+  }
+  86% {
+    opacity: 0.6;
+    transform: translate(28px, -20px) rotate(-35deg) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(65px, -45px) rotate(-30deg) scale(0.6);
+  }
+}
+
+@keyframes gbaDoduoFeatherFloat {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4) rotate(0deg);
+  }
+  20% {
+    opacity: 0.95;
+    transform: translate(var(--f-dx, 20px), var(--f-dy, -15px)) scale(1) rotate(var(--f-rot, 35deg));
+  }
+  65% {
+    opacity: 0.75;
+    transform: translate(calc(var(--f-dx, 20px) * 1.5), calc(var(--f-dy, -15px) + 25px)) scale(0.85) rotate(calc(var(--f-rot, 35deg) + 45deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--f-dx, 20px) * 1.9), calc(var(--f-dy, -15px) + 55px)) scale(0.5) rotate(calc(var(--f-rot, 35deg) + 90deg));
+  }
+}
+
+@keyframes gbaDoduoCardStaccatoShake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  18% { transform: translate(-4px, 3px) rotate(-1.5deg); }
+  22% { transform: translate(3px, -2px) rotate(1deg); }
+  36% { transform: translate(4px, 3px) rotate(1.5deg); }
+  40% { transform: translate(-3px, -2px) rotate(-1deg); }
+  54% { transform: translate(-5px, 4px) rotate(-2deg); }
+  58% { transform: translate(4px, -3px) rotate(1.5deg); }
+  72% { transform: translate(6px, 4px) rotate(2.5deg); }
+  78% { transform: translate(-4px, -2px) rotate(-1deg); }
+  90% { transform: translate(1px, 1px) rotate(0.5deg); }
+}
+
+/* 2. MAGNEMITE: MAGNETISM & THUNDER WAVE (Horseshoe Magnetic Induction) */
+@keyframes gbaMagnetPulseLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-55px) scale(0.7) rotate(-15deg);
+    filter: blur(2px);
+  }
+  22% {
+    opacity: 1;
+    transform: translateX(-18px) scale(1.05) rotate(-5deg);
+    filter: blur(0px) drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
+  }
+  42% {
+    opacity: 1;
+    transform: translateX(-8px) scale(1.12) rotate(0deg);
+    filter: drop-shadow(0 0 16px #38bdf8) drop-shadow(0 0 8px #ef4444);
+  }
+  68% {
+    opacity: 1;
+    transform: translateX(-12px) scale(1.08) rotate(-2deg);
+    filter: drop-shadow(0 0 18px #facc15);
+  }
+  85% {
+    opacity: 0.6;
+    transform: translateX(-28px) scale(0.9) rotate(-8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-60px) scale(0.7) rotate(-18deg);
+  }
+}
+
+@keyframes gbaMagnetPulseRight {
+  0% {
+    opacity: 0;
+    transform: translateX(55px) scale(0.7) rotate(15deg);
+    filter: blur(2px);
+  }
+  22% {
+    opacity: 1;
+    transform: translateX(18px) scale(1.05) rotate(5deg);
+    filter: blur(0px) drop-shadow(0 0 10px rgba(56, 189, 248, 0.7));
+  }
+  42% {
+    opacity: 1;
+    transform: translateX(8px) scale(1.12) rotate(0deg);
+    filter: drop-shadow(0 0 16px #38bdf8) drop-shadow(0 0 8px #3b82f6);
+  }
+  68% {
+    opacity: 1;
+    transform: translateX(12px) scale(1.08) rotate(2deg);
+    filter: drop-shadow(0 0 18px #facc15);
+  }
+  85% {
+    opacity: 0.6;
+    transform: translateX(28px) scale(0.9) rotate(8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(60px) scale(0.7) rotate(18deg);
+  }
+}
+
+@keyframes gbaMagneticFluxExpand {
+  0% {
+    opacity: 0;
+    transform: scale(0.4, 0.2) rotate(0deg);
+  }
+  30% {
+    opacity: 0.9;
+    transform: scale(1.05, 0.85) rotate(3deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.25, 1.05) rotate(-2deg);
+    filter: drop-shadow(0 0 18px #38bdf8);
+  }
+  85% {
+    opacity: 0.5;
+    transform: scale(1.4, 1.2) rotate(1deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55, 1.35) rotate(0deg);
+  }
+}
+
+@keyframes gbaMagneticHumCardShake {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  15% { transform: translate(-2px, 1px) scale(1.01); }
+  25% { transform: translate(2px, -1px) scale(0.99); }
+  35% { transform: translate(-2px, -1px) scale(1.01); }
+  45% { transform: translate(2px, 1px) scale(1.02); }
+  55% { transform: translate(-3px, 2px) scale(1.02); }
+  65% { transform: translate(3px, -2px) scale(1.01); }
+  75% { transform: translate(-2px, 1px) scale(1.005); }
+  85% { transform: translate(1px, -1px) scale(1.0); }
+}
+
+/* 3. PORYGON: CONVERSION 1 & 2 (3D Wireframe Mesh & Digital Data Recompile) */
+@keyframes gbaPorygonWireframeSpin {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+    filter: blur(4px);
+  }
+  20% {
+    opacity: 0.95;
+    transform: scale(1.05) rotate(70deg);
+    filter: blur(0px) drop-shadow(0 0 14px #06b6d4);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15) rotate(180deg);
+    filter: drop-shadow(0 0 20px #06b6d4) drop-shadow(0 0 10px #ec4899);
+  }
+  75% {
+    opacity: 0.9;
+    transform: scale(1.22) rotate(270deg);
+    filter: drop-shadow(0 0 24px #ec4899) drop-shadow(0 0 12px #3b82f6);
+  }
+  90% {
+    opacity: 0.4;
+    transform: scale(1.35) rotate(330deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(360deg);
+    filter: blur(3px);
+  }
+}
+
+@keyframes gbaPorygonScanLine {
+  0% {
+    opacity: 0;
+    top: 5%;
+  }
+  15% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+    top: 92%;
+  }
+  100% {
+    opacity: 0;
+    top: 98%;
+  }
+}
+
+@keyframes gbaPorygonPixelAscend {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(var(--px-dx, 10px), var(--px-dy, -15px)) scale(1.1);
+  }
+  65% {
+    opacity: 0.75;
+    transform: translate(calc(var(--px-dx, 10px) * 1.5), calc(var(--px-dy, -15px) - 25px)) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--px-dx, 10px) * 2), calc(var(--px-dy, -15px) - 50px)) scale(0.3);
+  }
+}
+
+@keyframes gbaPorygonHexBurst {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  40% {
+    opacity: 0.95;
+    transform: scale(1.1) rotate(15deg);
+    filter: drop-shadow(0 0 20px #22d3ee);
+  }
+  75% {
+    opacity: 0.6;
+    transform: scale(1.35) rotate(30deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6) rotate(45deg);
+    filter: blur(2px);
+  }
+}
+
+/* =========================================================================
+   BASIC POKEMON BATCH 2: CHANSEY & HITMONLEE (AUTHENTIC STOCK ART)
+   ========================================================================= */
+
+/* 1. CHANSEY: SCRUNCH (Defensive Ball Squish & Radiant Oval Shield) */
+@keyframes gbaChanseyScrunchSquish {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) translateY(15px);
+    filter: blur(2px);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.12, 0.88) translateY(-4px);
+    filter: blur(0px) drop-shadow(0 0 12px rgba(244, 114, 182, 0.6));
+  }
+  38% { /* Peak endurance squeeze */
+    opacity: 1;
+    transform: scale(0.92, 1.08) translateY(-8px);
+    filter: drop-shadow(0 0 20px #f472b6) drop-shadow(0 0 8px #ffffff);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.06, 0.94) translateY(-2px);
+    filter: drop-shadow(0 0 16px #f472b6);
+  }
+  75% {
+    opacity: 0.95;
+    transform: scale(1.0, 1.0) translateY(0px);
+  }
+  90% {
+    opacity: 0.6;
+    transform: scale(0.95) translateY(5px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.85) translateY(12px);
+  }
+}
+
+@keyframes gbaChanseyScrunchWobble {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(10px);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(1.0) translateY(-2px) rotate(-5deg);
+  }
+  45% {
+    opacity: 0.9;
+    transform: scale(0.95) translateY(2px) rotate(6deg);
+  }
+  65% {
+    opacity: 0.7;
+    transform: scale(0.9) translateY(6px) rotate(-3deg);
+  }
+  85% {
+    opacity: 0.35;
+    transform: scale(0.82) translateY(12px) rotate(1deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.75) translateY(18px);
+  }
+}
+
+@keyframes gbaChanseyShieldRing {
+  0% {
+    opacity: 0;
+    transform: scale(0.4, 0.35);
+  }
+  35% {
+    opacity: 0.95;
+    transform: scale(1.15, 1.05);
+    filter: drop-shadow(0 0 16px #f472b6) drop-shadow(0 0 8px #ffffff);
+  }
+  70% {
+    opacity: 0.6;
+    transform: scale(1.35, 1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.55, 1.45);
+    filter: blur(2px);
+  }
+}
+
+/* 2. HITMONLEE: STRETCH KICK (Horizontal Coiled Spring Thrust) */
+@keyframes gbaHitmonleeStretchThrust {
+  0% {
+    opacity: 0;
+    transform: translateX(-70px) scale(0.65) rotate(-5deg);
+    filter: blur(3px);
+  }
+  18% {
+    opacity: 0.95;
+    transform: translateX(-25px) scale(0.95) rotate(-2deg);
+    filter: blur(0px);
+  }
+  38% { /* Spring punch extension apex */
+    opacity: 1;
+    transform: translateX(12px) scale(1.18, 0.92) rotate(1deg);
+    filter: drop-shadow(0 0 18px rgba(245, 158, 11, 0.85)) drop-shadow(0 0 10px #ffffff);
+  }
+  50% { /* Shudder vibration */
+    opacity: 1;
+    transform: translateX(6px) scale(1.12, 0.96) rotate(-1deg);
+  }
+  68% {
+    opacity: 0.9;
+    transform: translateX(-14px) scale(0.98) rotate(0deg);
+  }
+  86% {
+    opacity: 0.5;
+    transform: translateX(-35px) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-65px) scale(0.7);
+  }
+}
+
+/* 3. HITMONLEE: HIGH JUMP KICK (High-Altitude Aerial Dropkick Plunge) */
+@keyframes gbaHitmonleeHighJumpPlunge {
+  0% {
+    opacity: 0;
+    transform: translate(-45px, -85px) scale(0.55) rotate(-15deg);
+    filter: blur(4px);
+  }
+  22% {
+    opacity: 0.95;
+    transform: translate(-18px, -35px) scale(0.9) rotate(-8deg);
+    filter: blur(0px);
+  }
+  42% { /* Crushing dropkick impact apex */
+    opacity: 1;
+    transform: translate(4px, 12px) scale(1.22, 0.88) rotate(2deg);
+    filter: drop-shadow(0 0 22px #ea580c) drop-shadow(0 0 12px #ffffff);
+  }
+  52% { /* Rebound shudder */
+    opacity: 1;
+    transform: translate(0px, 4px) scale(1.12, 0.95) rotate(-2deg);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(-10px, -15px) scale(0.98) rotate(1deg);
+  }
+  88% {
+    opacity: 0.45;
+    transform: translate(-20px, -45px) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-30px, -70px) scale(0.65);
+  }
+}
+
+@keyframes gbaHitmonleeDropShock {
+  0% {
+    opacity: 0;
+    transform: scale(0.3, 0.2);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.15, 0.75);
+    filter: drop-shadow(0 0 16px #f97316);
+  }
+  65% {
+    opacity: 0.6;
+    transform: scale(1.4, 0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.65, 1.15);
+    filter: blur(2px);
+  }
+}
+
+/* =========================================================================
+   BASIC POKÉMON BATCH 20: LEGENDARY BIRDS TRIO (ARTICUNO, ZAPDOS, MOLTRES)
+   ========================================================================= */
+
+/* 1. ARTICUNO: FREEZE DRY (Instant Cryogenic Flash & Crystalline Ice Block) */
+@keyframes gbaArticunoIceEncase {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) rotate(-4deg);
+    filter: blur(4px);
+  }
+  20% {
+    opacity: 0.95;
+    transform: scale(1.06) rotate(0deg);
+    filter: blur(0px) drop-shadow(0 0 16px #38bdf8);
+  }
+  35% { /* Instant freeze clamp */
+    opacity: 1;
+    transform: scale(0.98) rotate(0deg);
+    filter: drop-shadow(0 0 24px #38bdf8) drop-shadow(0 0 12px #ffffff);
+  }
+  65% {
+    opacity: 0.95;
+    transform: scale(1.0);
+    filter: drop-shadow(0 0 18px #0284c7);
+  }
+  85% {
+    opacity: 0.7;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.08);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaArticunoFrostPulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  30% {
+    opacity: 0.95;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 16px #bae6fd);
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+    filter: blur(3px);
+  }
+}
+
+/* 2. ARTICUNO: BLIZZARD (Howling Full-Card Glacial Storm Vortex) */
+@keyframes gbaArticunoBlizzardVortex {
+  0% {
+    opacity: 0;
+    transform: translate(60px, -40px) rotate(12deg) scale(0.85);
+  }
+  25% {
+    opacity: 0.95;
+    transform: translate(15px, -10px) rotate(4deg) scale(1.05);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-10px, 10px) rotate(-3deg) scale(1.1);
+  }
+  75% {
+    opacity: 0.85;
+    transform: translate(-35px, 25px) rotate(-8deg) scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-65px, 45px) rotate(-15deg) scale(0.9);
+  }
+}
+
+@keyframes gbaArticunoSnowflakeSpin {
+  0% {
+    opacity: 0;
+    transform: translate(var(--s-ox, 40px), var(--s-oy, -30px)) rotate(0deg) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(calc(var(--s-ox, 40px) * 0.4), calc(var(--s-oy, -30px) * 0.4)) rotate(90deg) scale(1.1);
+  }
+  65% {
+    opacity: 0.9;
+    transform: translate(calc(var(--s-ox, 40px) * -0.4), calc(var(--s-oy, -30px) * -0.4)) rotate(240deg) scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--s-ox, 40px) * -1), calc(var(--s-oy, -30px) * -1)) rotate(360deg) scale(0.7);
+  }
+}
+
+/* 3. ZAPDOS: THUNDERBOLT & THUNDER (Colossal Vertical Lightning Pillar) */
+@keyframes gbaZapdosLightningPillar {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.1) translateY(-100px);
+    filter: blur(4px);
+  }
+  15% {
+    opacity: 1;
+    transform: scaleY(1.15) translateY(0px);
+    filter: drop-shadow(0 0 28px #fde047) drop-shadow(0 0 16px #ffffff);
+  }
+  30% { /* Heavy electric jitter */
+    opacity: 1;
+    transform: scaleY(1.0) translateX(-3px);
+  }
+  45% {
+    opacity: 1;
+    transform: scaleY(1.05) translateX(3px);
+    filter: drop-shadow(0 0 22px #facc15);
+  }
+  60% {
+    opacity: 0.9;
+    transform: scaleY(0.98) translateX(-2px);
+  }
+  80% {
+    opacity: 0.5;
+    transform: scaleY(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 0;
+    transform: scaleY(0.7) translateY(30px);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaZapdosElectricDischarge {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 16px #facc15);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+    filter: blur(2px);
+  }
+}
+
+/* 4. ZAPDOS: THUNDERSTORM (Multi-Branch Lightning & Bench Chain Arcs) */
+@keyframes gbaZapdosMultiForkStrike {
+  0% {
+    opacity: 0;
+  }
+  10%, 30%, 55%, 75% {
+    opacity: 1;
+    filter: drop-shadow(0 0 18px #fde047) drop-shadow(0 0 8px #ffffff);
+  }
+  20%, 45%, 65%, 85% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes gbaZapdosBenchSparkTravel {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateX(0px);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.1) translateX(calc(var(--b-dir, 1) * 35px));
+    filter: drop-shadow(0 0 14px #38bdf8);
+  }
+  75% {
+    opacity: 0.8;
+    transform: scale(1.0) translateX(calc(var(--b-dir, 1) * 75px));
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.6) translateX(calc(var(--b-dir, 1) * 110px));
+  }
+}
+
+/* 5. MOLTRES: WILDFIRE (Ascending Spiraling Inferno & Deck Ash Motes) */
+@keyframes gbaMoltresInfernoRise {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.65) rotate(-6deg);
+    filter: blur(3px);
+  }
+  25% {
+    opacity: 0.95;
+    transform: translateY(10px) scale(1.08) rotate(4deg);
+    filter: drop-shadow(0 0 20px #ea580c) drop-shadow(0 0 10px #facc15);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.16) rotate(-3deg);
+    filter: drop-shadow(0 0 28px #ef4444) drop-shadow(0 0 14px #ffffff);
+  }
+  75% {
+    opacity: 0.85;
+    transform: translateY(-25px) scale(1.05) rotate(2deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.85) rotate(-4deg);
+    filter: blur(4px);
+  }
+}
+
+@keyframes gbaMoltresAshDrift {
+  0% {
+    opacity: 0;
+    transform: translate(var(--a-ox, 0px), 30px) scale(0.4);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(calc(var(--a-ox, 0px) + var(--a-drift, 15px)), 0px) scale(1.1);
+    box-shadow: 0 0 10px #f97316;
+  }
+  70% {
+    opacity: 0.7;
+    transform: translate(calc(var(--a-ox, 0px) + var(--a-drift, 15px) * 2), -35px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--a-ox, 0px) + var(--a-drift, 15px) * 3), -70px) scale(0.5);
+  }
+}
+
+/* 6. MOLTRES: DIVE BOMB (Flaming Meteorite Raptor Plunge & Fiery Blast) */
+@keyframes gbaMoltresMeteorPlunge {
+  0% {
+    opacity: 0;
+    transform: translate(-65px, -95px) scale(0.5) rotate(-25deg);
+    filter: blur(5px);
+  }
+  25% {
+    opacity: 0.95;
+    transform: translate(-25px, -35px) scale(0.95) rotate(-12deg);
+    filter: blur(0px);
+  }
+  45% { /* Fiery impact apex */
+    opacity: 1;
+    transform: translate(0px, 8px) scale(1.24) rotate(0deg);
+    filter: drop-shadow(0 0 32px #ea580c) drop-shadow(0 0 16px #ffffff);
+  }
+  58% {
+    opacity: 1;
+    transform: translate(-3px, 2px) scale(1.12) rotate(-3deg);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate(-10px, -15px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-20px, -45px) scale(0.7);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaMoltresEruptionBlast {
+  0% {
+    opacity: 0;
+    transform: scale(0.35);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 24px #ea580c) drop-shadow(0 0 12px #facc15);
+  }
+  70% {
+    opacity: 0.65;
+    transform: scale(1.45);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.75);
+    filter: blur(3px);
+  }
+}
+
+/* =========================================================================
+   BASIC POKÉMON BATCH 21: PSYCHIC TITANS & SHAPESHIFTER (MEWTWO, MR. MIME, DITTO)
+   ========================================================================= */
+
+/* 1. MEWTWO: PSYCHIC (Hyper-Dense Psychokinetic Singularity & Warp Implosion) */
+@keyframes gbaMewtwoPsychicOrb {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+    filter: blur(5px);
+  }
+  20% {
+    opacity: 0.95;
+    transform: scale(1.15) rotate(90deg);
+    filter: drop-shadow(0 0 24px #c026d3) drop-shadow(0 0 12px #ffffff);
+  }
+  45% { /* Core compression & energy focus */
+    opacity: 1;
+    transform: scale(0.85) rotate(180deg);
+    filter: drop-shadow(0 0 32px #9333ea) drop-shadow(0 0 18px #f472b6);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.25) rotate(270deg);
+    filter: drop-shadow(0 0 28px #c026d3);
+  }
+  85% {
+    opacity: 0.8;
+    transform: scale(1.4) rotate(330deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.65) rotate(360deg);
+    filter: blur(3px);
+  }
+}
+
+@keyframes gbaMewtwoPsychicShock {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  30% {
+    opacity: 0.95;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 22px #9333ea);
+  }
+  65% {
+    opacity: 0.7;
+    transform: scale(1.45);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.75);
+    filter: blur(2px);
+  }
+}
+
+/* 2. MEWTWO: BARRIER (Prismatic Hexagonal Crystalline Shield Dome) */
+@keyframes gbaMewtwoBarrierSnap {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) rotate(-3deg);
+    filter: blur(4px);
+  }
+  20% {
+    opacity: 1;
+    transform: scale(1.08) rotate(0deg);
+    filter: drop-shadow(0 0 28px #d946ef) drop-shadow(0 0 16px #ffffff);
+  }
+  35% { /* Lock into crystalline hold */
+    opacity: 1;
+    transform: scale(0.98);
+    filter: drop-shadow(0 0 22px #a855f7);
+  }
+  75% {
+    opacity: 0.92;
+    transform: scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.06);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaMewtwoBarrierRing {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  30% {
+    opacity: 0.9;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 16px #e879f9);
+  }
+  75% {
+    opacity: 0.5;
+    transform: scale(1.38);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* 3. MR. MIME: MEDITATE (Zen Harmonic Frequency & Floating Lotus Auras) */
+@keyframes gbaMrMimeZenRipples {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  30% {
+    opacity: 0.9;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 18px #f472b6);
+  }
+  65% {
+    opacity: 0.65;
+    transform: scale(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.65);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaMrMimeLotusRise {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.1);
+    filter: drop-shadow(0 0 14px #ec4899);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translateY(-22px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-48px) scale(0.65);
+  }
+}
+
+/* 4. MR. MIME: INVISIBLE WALL (Kinetic Glass Impact & Translucent Barrier Ripple) */
+@keyframes gbaMrMimeWallImpact {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+    filter: blur(3px);
+  }
+  18% {
+    opacity: 1;
+    transform: scale(1.04);
+    filter: drop-shadow(0 0 22px #38bdf8) drop-shadow(0 0 12px #ffffff);
+  }
+  35% {
+    opacity: 0.95;
+    transform: scale(0.99);
+  }
+  70% {
+    opacity: 0.8;
+    transform: scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.05);
+    filter: blur(2px);
+  }
+}
+
+/* 5. DITTO: TRANSFORM ATTACK (Amorphous Gelatinous Morph Wave) */
+@keyframes gbaDittoMorphWave {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.6, 1.4);
+    filter: blur(4px);
+  }
+  20% {
+    opacity: 0.95;
+    transform: translateY(-6px) scale(1.25, 0.75);
+    filter: drop-shadow(0 0 20px #c084fc) drop-shadow(0 0 10px #fdf4ff);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(3px) scale(0.85, 1.2);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.15, 0.88);
+    filter: drop-shadow(0 0 26px #a855f7);
+  }
+  80% {
+    opacity: 0.85;
+    transform: translateY(0px) scale(1.0, 1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25, 1.25);
+    filter: blur(2px);
+  }
+}
+
+/* ==========================================================================
+   BATCH 22: TOXIC SLUDGE, CAVE & CONSTRICTION (GRIMER, ZUBAT, TANGELA)
+   ========================================================================== */
+
+/* 1. GRIMER: NASTY GOO (Viscous Toxic Purple Slime Splat & Globule Drip) */
+@keyframes gbaGrimerGooSplat {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.4, 1.5);
+    filter: blur(2px);
+  }
+  22% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.35, 0.65);
+    filter: drop-shadow(0 0 16px #a855f7) drop-shadow(0 0 8px #7e22ce);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(4px) scale(0.95, 1.12);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(8px) scale(1.08, 0.95);
+    filter: drop-shadow(0 0 22px #9333ea);
+  }
+  82% {
+    opacity: 0.9;
+    transform: translateY(14px) scale(1.02, 1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.9, 1.1);
+    filter: blur(4px);
+  }
+}
+
+@keyframes gbaGrimerGooDrip {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scaleY(0.4);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(8px) scaleY(1.2);
+  }
+  70% {
+    opacity: 0.9;
+    transform: translateY(28px) scaleY(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(44px) scaleY(0.8);
+  }
+}
+
+@keyframes gbaGrimerBubblePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  40% {
+    opacity: 0.95;
+    transform: scale(1.2);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+  80% {
+    opacity: 0.8;
+    transform: scale(1.6);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.0);
+    filter: blur(2px);
+  }
+}
+
+/* 2. GRIMER: MINIMIZE (Liquefying Ooze Melt & Defensive Pool Ripple) */
+@keyframes gbaGrimerPuddleMelt {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(1, 1);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(18px) scale(1.45, 0.22);
+    filter: drop-shadow(0 0 18px #9333ea);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(20px) scale(1.6, 0.15);
+    filter: drop-shadow(0 0 24px #c084fc);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(18px) scale(1.4, 0.25);
+  }
+  88% {
+    opacity: 0.9;
+    transform: translateY(6px) scale(1.1, 0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.95, 1.05);
+  }
+}
+
+@keyframes gbaGrimerMeltRipple {
+  0% {
+    opacity: 0;
+    transform: scale(0.6, 0.2);
+  }
+  40% {
+    opacity: 0.85;
+    transform: scale(1.3, 0.4);
+    filter: drop-shadow(0 0 12px #c084fc);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.1, 0.6);
+  }
+}
+
+/* 3. ZUBAT: LEECH LIFE (Vampire Fang Clamp & Vitality Drain Siphon) */
+@keyframes gbaZubatFangTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.85);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.08);
+    filter: drop-shadow(0 0 14px #ef4444) drop-shadow(0 0 6px #ffffff);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.12);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.05);
+  }
+  85% {
+    opacity: 0.8;
+    transform: translateY(-6px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.75);
+  }
+}
+
+@keyframes gbaZubatFangBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.85);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.08);
+    filter: drop-shadow(0 0 14px #ef4444) drop-shadow(0 0 6px #ffffff);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.12);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.05);
+  }
+  85% {
+    opacity: 0.8;
+    transform: translateY(6px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.75);
+  }
+}
+
+@keyframes gbaLifeVitalityOrb {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.5);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(var(--drain-mid-x, -12px), var(--drain-mid-y, -14px)) scale(1.2);
+    filter: drop-shadow(0 0 12px #ef4444) drop-shadow(0 0 6px #fca5a5);
+  }
+  65% {
+    opacity: 0.95;
+    transform: translate(var(--drain-end-x, -36px), var(--drain-end-y, -32px)) scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--drain-dest-x, -58px), var(--drain-dest-y, -50px)) scale(0.4);
+  }
+}
+
+/* 4. TANGELA: BIND (Thick Winding Blue Vines & Squeezing Constriction) */
+@keyframes gbaTangelaVineConstrict {
+  0% {
+    opacity: 0;
+    transform: scale(1.25) rotate(-8deg);
+    filter: blur(3px);
+  }
+  24% {
+    opacity: 1;
+    transform: scale(0.96) rotate(1deg);
+    filter: drop-shadow(0 0 18px #2563eb) drop-shadow(0 0 8px #60a5fa);
+  }
+  42% {
+    opacity: 1;
+    transform: scale(0.92) rotate(-1.5deg);
+    filter: drop-shadow(0 0 24px #1d4ed8);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.94) rotate(0.5deg);
+  }
+  78% {
+    opacity: 0.9;
+    transform: scale(0.97) rotate(-0.5deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15) rotate(4deg);
+    filter: blur(3px);
+  }
+}
+
+@keyframes gbaTangelaSporeErupt {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  35% {
+    opacity: 0.9;
+    transform: translate(var(--vx, 15px), var(--vy, -15px)) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--vx, 15px) * 2), calc(var(--vy, -15px) * 2)) scale(0.6);
+  }
+}
+
+/* ==========================================================================
+   BATCH 23: FUNGAL SPORES, INSECT VITALITY & HYPNOSIS (VENONAT, PARAS, EXEGGCUTE)
+   ========================================================================== */
+
+/* 1. VENONAT: STUN SPORE (Ruby Compound Eye Flare & Golden Electrostatic Bug Dust) */
+@keyframes gbaVenonatRubyEyesGlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+    filter: drop-shadow(0 0 4px #e11d48);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 20px #f43f5e) drop-shadow(0 0 10px #fb7185);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.0);
+    filter: drop-shadow(0 0 25px #fda4af) drop-shadow(0 0 12px #e11d48);
+  }
+  75% {
+    opacity: 0.85;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+    filter: blur(4px);
+  }
+}
+
+@keyframes gbaVenonatStunDust {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(calc(var(--sd-x, 20px) * 0.4), calc(var(--sd-y, -20px) * 0.4)) scale(1.1) rotate(45deg);
+    filter: drop-shadow(0 0 10px #fbbf24);
+  }
+  55% {
+    opacity: 0.95;
+    transform: translate(var(--sd-x, 20px), var(--sd-y, -20px)) scale(1) rotate(120deg);
+    filter: drop-shadow(0 0 14px #f59e0b);
+  }
+  80% {
+    opacity: 0.7;
+    transform: translate(calc(var(--sd-x, 20px) * 1.3), calc(var(--sd-y, -20px) * 1.3 + 8px)) scale(0.85) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--sd-x, 20px) * 1.5), calc(var(--sd-y, -20px) * 1.5 + 18px)) scale(0.4) rotate(240deg);
+  }
+}
+
+@keyframes gbaVenonatParalysisSpark {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.25) rotate(15deg);
+    filter: drop-shadow(0 0 12px #fde047);
+  }
+  60% {
+    opacity: 0.9;
+    transform: scale(0.95) rotate(-10deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.5) rotate(30deg);
+  }
+}
+
+/* 2. VENONAT: LEECH LIFE (Insect Mandible Clamp & Bioluminescent Bio-Drain) */
+@keyframes gbaVenonatMandibleLatch {
+  0% {
+    opacity: 0;
+    transform: scale(1.4) translateY(-14px);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(0.95) translateY(2px);
+    filter: drop-shadow(0 0 14px #a855f7) drop-shadow(0 0 6px #34d399);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1) translateY(0px);
+  }
+  75% {
+    opacity: 0.9;
+    transform: scale(1.02) translateY(-1px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.85) translateY(6px);
+  }
+}
+
+@keyframes gbaVenonatBioDrainStream {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(calc(var(--vb-x, -25px) * 0.3), calc(var(--vb-y, -20px) * 0.3)) scale(1.1);
+    filter: drop-shadow(0 0 12px #34d399) drop-shadow(0 0 6px #a855f7);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate(calc(var(--vb-x, -25px) * 0.7), calc(var(--vb-y, -20px) * 0.7)) scale(1);
+  }
+  85% {
+    opacity: 0.7;
+    transform: translate(var(--vb-x, -50px), var(--vb-y, -40px)) scale(0.7);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--vb-x, -50px) * 1.2), calc(var(--vb-y, -40px) * 1.2)) scale(0.3);
+  }
+}
+
+/* 3. PARAS & PARASECT: SPORE (Tochukaso Mushroom Spore Cloud Eruption & Sleep Motes) */
+@keyframes gbaParasTochukasoErupt {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(1.15) translateY(-6px);
+    filter: drop-shadow(0 0 22px #10b981) drop-shadow(0 0 10px #6ee7b7);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.0) translateY(0px);
+  }
+  78% {
+    opacity: 0.8;
+    transform: scale(1.08) translateY(-3px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25) translateY(-12px);
+    filter: blur(6px);
+  }
+}
+
+@keyframes gbaParasSporeCloud {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(0.95) rotate(45deg);
+    filter: drop-shadow(0 0 18px #34d399);
+  }
+  60% {
+    opacity: 0.8;
+    transform: scale(1.15) rotate(110deg);
+  }
+  85% {
+    opacity: 0.5;
+    transform: scale(1.25) rotate(160deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35) rotate(200deg);
+  }
+}
+
+@keyframes gbaParasSleepZzzFloat {
+  0% {
+    opacity: 0;
+    transform: translate(0, 10px) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(var(--zzz-x, 8px), -12px) scale(1);
+    filter: drop-shadow(0 0 6px #6ee7b7);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(calc(var(--zzz-x, 8px) * 1.5), -28px) scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--zzz-x, 8px) * 2), -44px) scale(0.7);
+  }
+}
+
+/* 4. EXEGGCUTE: HYPNOSIS (Multi-Egg Telepathic Resonant Rings & Hypnotic Trance Spirals) */
+@keyframes gbaExeggcuteHypnoRing {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+    filter: drop-shadow(0 0 4px #d946ef);
+  }
+  28% {
+    opacity: 0.95;
+    transform: scale(0.85) rotate(60deg);
+    filter: drop-shadow(0 0 18px #ec4899) drop-shadow(0 0 8px #c084fc);
+  }
+  65% {
+    opacity: 0.9;
+    transform: scale(1.2) rotate(180deg);
+  }
+  85% {
+    opacity: 0.55;
+    transform: scale(1.35) rotate(260deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(320deg);
+  }
+}
+
+@keyframes gbaExeggcuteSpiralRotate {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(1) rotate(180deg);
+    filter: drop-shadow(0 0 16px #a855f7);
+  }
+  60% {
+    opacity: 0.85;
+    transform: scale(1.1) rotate(420deg);
+  }
+  85% {
+    opacity: 0.5;
+    transform: scale(1.18) rotate(640deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25) rotate(780deg);
+  }
+}
+
+@keyframes gbaExeggcutePsychicPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    filter: drop-shadow(0 0 14px #d946ef);
+  }
+}
+
+/* ==========================================================================
+   BATCH 24: SEA & TIDAL BIO-STOCKS (SHELLDER, HORSEA, TENTACOOL)
+   ========================================================================== */
+
+/* 1. SHELLDER: HIDE IN SHELL & SUPERSONIC */
+@keyframes gbaShellderShellPeek {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(12px);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.08) translateY(-4px);
+    filter: drop-shadow(0 0 16px #c084fc) drop-shadow(0 0 8px #9333ea);
+  }
+  48% {
+    opacity: 1;
+    transform: scale(1) translateY(0px);
+  }
+  62% {
+    /* Tight Shell Clamp Snap */
+    opacity: 1;
+    transform: scale(0.86, 1.14) translateY(3px);
+    filter: drop-shadow(0 0 24px #ec4899) drop-shadow(0 0 12px #a855f7);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(0.96, 1.04) translateY(1px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8) translateY(6px);
+  }
+}
+
+@keyframes gbaShellderShieldGlint {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  40% {
+    opacity: 0.95;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 18px #f472b6) drop-shadow(0 0 10px #c084fc);
+  }
+  70% {
+    opacity: 0.8;
+    transform: scale(1.22);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes gbaShellderWhiffSlip {
+  0% {
+    opacity: 0;
+    transform: scale(0.55) translateY(10px);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  45% {
+    /* Tongue slips / wobbles clumsily */
+    opacity: 1;
+    transform: rotate(-14deg) translateX(-8px) scale(0.95);
+  }
+  68% {
+    opacity: 0.85;
+    transform: rotate(12deg) translateX(6px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(18px) rotate(-6deg) scale(0.75);
+  }
+}
+
+@keyframes gbaShellderSonicBeam {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  30% {
+    opacity: 0.95;
+    transform: scale(0.9) rotate(45deg);
+    filter: drop-shadow(0 0 16px #38bdf8) drop-shadow(0 0 8px #818cf8);
+  }
+  65% {
+    opacity: 0.85;
+    transform: scale(1.25) rotate(90deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(140deg);
+  }
+}
+
+/* 2. HORSEA: SMOKESCREEN (Cylindrical Snout Recoil & Billowing Ink Cloud) */
+@keyframes gbaHorseaSnoutRecoil {
+  0% {
+    opacity: 0;
+    transform: translate(24px, -8px) scale(0.75) rotate(5deg);
+  }
+  20% {
+    /* Leans forward towards opponent card, ready to fire */
+    opacity: 1;
+    transform: translate(0, 0) scale(1.05) rotate(0deg);
+    filter: drop-shadow(0 0 12px #38bdf8) drop-shadow(0 0 6px #0284c7);
+  }
+  35% {
+    /* Snappy backward recoil toward top-right */
+    opacity: 1;
+    transform: translate(12px, -3px) scale(0.95) rotate(3deg);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate(6px, -1px) scale(1) rotate(1deg);
+  }
+  85% {
+    opacity: 0.85;
+    transform: translate(3px, 0px) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(18px, -6px) scale(0.9);
+  }
+}
+
+@keyframes gbaHorseaInkStream {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(calc(var(--ink-x, -40px) * 0.4), calc(var(--ink-y, 20px) * 0.4)) scale(1.15);
+    filter: drop-shadow(0 0 12px #020617);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate(var(--ink-x, -40px), var(--ink-y, 20px)) scale(1);
+  }
+  85% {
+    opacity: 0.7;
+    transform: translate(calc(var(--ink-x, -40px) * 1.3), calc(var(--ink-y, 20px) * 1.3 + 6px)) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--ink-x, -40px) * 1.6), calc(var(--ink-y, 20px) * 1.6 + 14px)) scale(0.35);
+  }
+}
+
+@keyframes gbaHorseaSmokescreenErupt {
+  0% {
+    opacity: 0;
+    transform: translate(18px, -12px) scale(0.25);
+  }
+  22% {
+    opacity: 0.98;
+    transform: translate(0, 0) scale(1.05);
+    filter: drop-shadow(0 0 24px #020617) drop-shadow(0 0 12px #0f172a);
+  }
+  55% {
+    opacity: 0.92;
+    transform: translate(-3px, 2px) scale(1.2);
+    filter: drop-shadow(0 0 30px #090d16);
+  }
+  80% {
+    opacity: 0.65;
+    transform: translate(-6px, -4px) scale(1.32);
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-10px, -8px) scale(1.45);
+    filter: blur(10px);
+  }
+}
+
+@keyframes gbaHorseaMoteDrift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  25% {
+    opacity: 0.95;
+    transform: translate(calc(var(--mote-x, 0px) * 0.4), calc(var(--mote-y, 0px) * 0.4)) scale(1.1);
+  }
+  75% {
+    opacity: 0.75;
+    transform: translate(var(--mote-x, 0px), var(--mote-y, 0px)) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--mote-x, 0px) * 1.35), calc(var(--mote-y, 0px) * 1.35)) scale(0.3);
+  }
+}
+
+/* 3. TENTACOOL: ACID (Jellyfish Bell Float, Triple Gem Flare & Caustic Spray) */
+@keyframes gbaTentacoolDescendFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(-34px) scale(0.72);
+  }
+  24% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.06);
+    filter: drop-shadow(0 0 20px #f43f5e) drop-shadow(0 0 10px #38bdf8);
+  }
+  48% {
+    /* Undulating bell propulsion */
+    opacity: 1;
+    transform: translateY(-5px) scale(0.96, 1.04);
+  }
+  72% {
+    opacity: 0.95;
+    transform: translateY(2px) scale(1.02, 0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.85);
+  }
+}
+
+@keyframes gbaTentacoolGemsGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 6px #e11d48);
+    opacity: 0.85;
+  }
+  50% {
+    filter: drop-shadow(0 0 22px #f43f5e) drop-shadow(0 0 12px #fb7185);
+    opacity: 1;
+  }
+}
+
+@keyframes gbaTentacoolAcidJet {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(calc(var(--aj-x, 0px) * 0.4), calc(var(--aj-y, 35px) * 0.4)) scale(1.2);
+    filter: drop-shadow(0 0 12px #84cc16) drop-shadow(0 0 6px #a855f7);
+  }
+  60% {
+    opacity: 0.95;
+    transform: translate(var(--aj-x, 0px), var(--aj-y, 35px)) scale(1);
+  }
+  85% {
+    opacity: 0.7;
+    transform: translate(calc(var(--aj-x, 0px) * 1.2), calc(var(--aj-y, 35px) * 1.2)) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--aj-x, 0px) * 1.4), calc(var(--aj-y, 35px) * 1.4)) scale(0.4);
+  }
+}
+
+@keyframes gbaTentacoolAcidSplat {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 14px #a3e635);
+  }
+  65% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+    filter: blur(4px);
+  }
+}
+
+/* ==========================================================================
+   BATCH 25: ARCTIC SURGE & PSYCHIC MIGRAINES (PSYDUCK, LAPRAS, SEEL)
+   ========================================================================== */
+
+/* 1. PSYDUCK: REFINED HEADACHE, FURY SWIPES, DIZZINESS */
+@keyframes gbaPsyduckHarmonicRipple {
+  0% {
+    opacity: 0;
+    transform: scale(0.35) rotate(0deg);
+    filter: blur(4px);
+  }
+  20% {
+    opacity: 0.95;
+    transform: scale(0.92) rotate(3deg);
+    filter: drop-shadow(0 0 16px #facc15) drop-shadow(0 0 24px #a855f7);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.08) rotate(-2deg);
+    filter: drop-shadow(0 0 28px #e879f9) drop-shadow(0 0 16px #fde047);
+  }
+  60% {
+    opacity: 0.85;
+    transform: scale(1.22) rotate(1deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.52) rotate(0deg);
+    filter: blur(6px);
+  }
+}
+
+@keyframes gbaPsyduckSynapticDischarge {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.9) translate(0, 0);
+  }
+  15% {
+    opacity: 1;
+    transform: scale(1.15) translate(-3px, 1px);
+    filter: drop-shadow(0 0 12px #fde047) drop-shadow(0 0 6px #ffffff);
+  }
+  40% {
+    opacity: 0.85;
+    transform: scale(0.95) translate(3px, -1px);
+  }
+  65% {
+    opacity: 1;
+    transform: scale(1.12) translate(-2px, -2px);
+    filter: drop-shadow(0 0 16px #facc15);
+  }
+  85% {
+    opacity: 0.7;
+    transform: scale(1.02) translate(1px, 1px);
+  }
+}
+
+@keyframes gbaPsyduckCranialThrob {
+  0% {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 24px #d946ef) drop-shadow(0 0 12px #facc15);
+  }
+  45% {
+    opacity: 0.95;
+    transform: scale(0.96);
+  }
+  70% {
+    opacity: 0.75;
+    transform: scale(1.36);
+    filter: drop-shadow(0 0 32px #a855f7);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.62);
+    filter: blur(8px);
+  }
+}
+
+@keyframes gbaPsyduckTrainerSealLock {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-90deg);
+    filter: blur(6px);
+  }
+  28% {
+    opacity: 0.95;
+    transform: scale(1.16) rotate(6deg);
+    filter: drop-shadow(0 0 20px #ef4444) drop-shadow(0 0 12px #facc15);
+  }
+  38% {
+    opacity: 1;
+    transform: scale(1.0) rotate(0deg);
+  }
+  75% {
+    opacity: 1;
+    transform: scale(1.04) rotate(0deg);
+    filter: drop-shadow(0 0 24px #ef4444) drop-shadow(0 0 16px #fde047);
+  }
+  88% {
+    opacity: 0.6;
+    transform: scale(1.14) rotate(-3deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.36) rotate(5deg);
+    filter: blur(8px);
+  }
+}
+
+@keyframes gbaPsyduckFurySwipesTriple {
+  0% {
+    opacity: 0;
+    transform: translate(-30px, -24px) scale(0.7);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.1);
+    filter: drop-shadow(0 0 18px #facc15);
+  }
+  65% {
+    opacity: 0.9;
+    transform: translate(16px, 12px) scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(30px, 22px) scale(0.85);
+  }
+}
+
+@keyframes gbaPsyduckFurySwipesTripleMirror {
+  0% {
+    opacity: 0;
+    transform: translate(30px, -24px) scale(0.7);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.1);
+    filter: drop-shadow(0 0 18px #facc15);
+  }
+  65% {
+    opacity: 0.9;
+    transform: translate(-16px, 12px) scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-30px, 22px) scale(0.85);
+  }
+}
+
+@keyframes gbaPsyduckDizzyOrbit {
+  0% {
+    transform: rotate(0deg) translateX(38px) rotate(0deg) scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: rotate(180deg) translateX(38px) rotate(-180deg) scale(0.72);
+    opacity: 0.6;
+  }
+  100% {
+    transform: rotate(360deg) translateX(38px) rotate(-360deg) scale(1);
+    opacity: 0.9;
+  }
+}
+
+/* 2. LAPRAS: GLACIAL SURGE (WATER GUN) & AURORA BOREALIS RAY */
+@keyframes gbaLaprasGlacialWave {
+  0% {
+    opacity: 0;
+    transform: translate(-42px, 26px) scale(0.65);
+  }
+  30% {
+    opacity: 0.96;
+    transform: translate(0, 0) scale(1.08);
+    filter: drop-shadow(0 0 22px #38bdf8) drop-shadow(0 0 10px #0284c7);
+  }
+  62% {
+    opacity: 0.88;
+    transform: translate(14px, -6px) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(36px, -16px) scale(0.88);
+  }
+}
+
+@keyframes gbaLaprasIceFloeDrift {
+  0% {
+    opacity: 0;
+    transform: translate(-30px, 20px) rotate(-15deg) scale(0.5);
+  }
+  35% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(10deg) scale(1.1);
+    filter: drop-shadow(0 0 12px #e0f2fe);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(16px, -10px) rotate(25deg) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(32px, -20px) rotate(40deg) scale(0.6);
+  }
+}
+
+@keyframes gbaLaprasAuroraSweep {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-8deg);
+  }
+  30% {
+    opacity: 0.94;
+    transform: scale(1.06) rotate(4deg);
+    filter: drop-shadow(0 0 26px #34d399) drop-shadow(0 0 14px #38bdf8) drop-shadow(0 0 8px #e879f9);
+  }
+  65% {
+    opacity: 0.85;
+    transform: scale(1.22) rotate(-2deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.4) rotate(8deg);
+    filter: blur(8px);
+  }
+}
+
+/* 3. SEEL: ARCTIC HORN DIVE & ICE SHIELD SHATTER */
+@keyframes gbaSeelHornDive {
+  0% {
+    opacity: 0;
+    transform: translate(-36px, -24px) scale(0.6) rotate(-22deg);
+  }
+  24% {
+    /* Lunging horn impact */
+    opacity: 1;
+    transform: translate(0, 0) scale(1.16) rotate(0deg);
+    filter: drop-shadow(0 0 20px #e0f2fe) drop-shadow(0 0 10px #38bdf8);
+  }
+  42% {
+    /* Rebound snap */
+    opacity: 1;
+    transform: translate(-8px, -4px) scale(0.96) rotate(-3deg);
+  }
+  70% {
+    opacity: 0.95;
+    transform: translate(-2px, -1px) scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(12px, 8px) scale(0.85);
+  }
+}
+
+@keyframes gbaSeelIceShatter {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.15) rotate(20deg);
+    filter: drop-shadow(0 0 16px #7dd3fc) drop-shadow(0 0 8px #38bdf8);
+  }
+  70% {
+    opacity: 0.85;
+    transform: scale(1.3) rotate(45deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5) rotate(70deg);
+    filter: blur(4px);
+  }
+}
+
+/* =========================================================================
+   PHASE 4: BASIC POKÉMON (GROUP D & CHARACTER SIGNATURES)
+   1. GROWLITHE: Flare (Anamorphic Thermal Ignition & Fluid Flame Plumes)
+   2. SLOWPOKE: Spacing Out & Afternoon Nap (Question Pops & Dreamy Sleep Bubbles)
+   3. MANKEY: Anger (Iconic 4-Arm Anime Throbbing Anger Cross & Tremor)
+   4. DRATINI: Pound (Serpentine Azure Tail Whip Strike & Azure Wake)
+   5. VOLTORB: Speed Ball (High-Velocity Electro-Sphere Roll & Friction Sparks)
+   ========================================================================= */
+
+/* 1. GROWLITHE: Flare */
+@keyframes gbaGrowlitheFlareCore {
+  0% { transform: scale(0.12); opacity: 0; filter: brightness(2.2) drop-shadow(0 0 10px #fef08a); }
+  14% { transform: scale(1.18); opacity: 1; filter: brightness(1.8) drop-shadow(0 0 32px #f97316); }
+  35% { transform: scale(1.02); opacity: 1; filter: brightness(1.2) drop-shadow(0 0 20px #ef4444); }
+  68% { transform: scale(1.18); opacity: 0.65; }
+  100% { transform: scale(1.32); opacity: 0; }
+}
+
+@keyframes gbaGrowlitheOpticalStreak {
+  0% { transform: scaleX(0.08) scaleY(0.4); opacity: 0; }
+  12% { transform: scaleX(1.35) scaleY(1.3); opacity: 1; filter: drop-shadow(0 0 16px #fef08a); }
+  35% { transform: scaleX(1.7) scaleY(0.7); opacity: 0.8; }
+  65% { transform: scaleX(2.1) scaleY(0.2); opacity: 0.3; }
+  100% { transform: scaleX(2.3) scaleY(0); opacity: 0; }
+}
+
+@keyframes gbaGrowlitheEmberDrift {
+  0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+  18% { transform: translate(calc(var(--emb-x) * 0.35), calc(var(--emb-y) * 0.35)) scale(1.2); opacity: 1; }
+  60% { transform: translate(calc(var(--emb-x) * 0.82), calc(var(--emb-y) * 0.82)) scale(0.9); opacity: 0.85; }
+  100% { transform: translate(var(--emb-x), var(--emb-y)) scale(0.25); opacity: 0; }
+}
+
+@keyframes gbaGrowlitheHeatAura {
+  0% { transform: scale(0.25); opacity: 0; }
+  18% { transform: scale(1.1); opacity: 0.85; }
+  55% { transform: scale(1.3); opacity: 0.45; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* 2. SLOWPOKE: Spacing Out & Afternoon Nap */
+@keyframes gbaSlowpokeQuestionPop {
+  0% { transform: translate(var(--q-x), calc(var(--q-y) + 14px)) scale(0.2) rotate(var(--q-rot)); opacity: 0; }
+  25% { transform: translate(var(--q-x), var(--q-y)) scale(1.28) rotate(var(--q-rot)); opacity: 1; }
+  45% { transform: translate(var(--q-x), var(--q-y)) scale(1) rotate(var(--q-rot)); opacity: 1; }
+  75% { transform: translate(var(--q-x), calc(var(--q-y) - 6px)) scale(1.05) rotate(var(--q-rot)); opacity: 0.88; }
+  100% { transform: translate(var(--q-x), calc(var(--q-y) - 18px)) scale(0.6) rotate(var(--q-rot)); opacity: 0; }
+}
+
+@keyframes gbaSlowpokeDazeRipple {
+  0% { transform: scale(0.2); opacity: 0; }
+  28% { transform: scale(0.9); opacity: 0.75; }
+  70% { transform: scale(1.25); opacity: 0.35; }
+  100% { transform: scale(1.52); opacity: 0; }
+}
+
+@keyframes gbaSlowpokeCardWobble {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(-3deg) translateY(-2px); }
+  45% { transform: rotate(3deg) translateY(-2px); }
+  70% { transform: rotate(-1.5deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes gbaSlowpokeSleepBubble {
+  0% { transform: translate(0, 12px) scale(0.3); opacity: 0; }
+  22% { transform: translate(calc(var(--zb-x) * 0.28), calc(var(--zb-y) * 0.28)) scale(1.15); opacity: 1; }
+  58% { transform: translate(calc(var(--zb-x) * 0.68), calc(var(--zb-y) * 0.68)) scale(1); opacity: 0.9; }
+  100% { transform: translate(var(--zb-x), var(--zb-y)) scale(0.85); opacity: 0; }
+}
+
+@keyframes gbaSlowpokeRestGlow {
+  0% { opacity: 0; transform: scale(0.75); }
+  32% { opacity: 0.85; transform: scale(1.06); }
+  72% { opacity: 0.45; transform: scale(1.16); }
+  100% { opacity: 0; transform: scale(1.26); }
+}
+
+/* 3. MANKEY: Anger */
+@keyframes gbaMankeyAngerVein {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+  16% { transform: translate(-50%, -50%) scale(1.36); opacity: 1; filter: drop-shadow(0 0 16px #ef4444); }
+  34% { transform: translate(-50%, -50%) scale(0.94); opacity: 1; }
+  52% { transform: translate(-50%, -50%) scale(1.28); opacity: 1; }
+  72% { transform: translate(-50%, -50%) scale(1.04); opacity: 0.88; }
+  100% { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
+}
+
+@keyframes gbaMankeyRageTremor {
+  0%, 100% { transform: translate(0, 0); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-3.5px, 2px); }
+  20%, 40%, 60%, 80% { transform: translate(3.5px, -2px); }
+}
+
+@keyframes gbaMankeyRageAura {
+  0% { transform: scale(0.65); opacity: 0; }
+  22% { transform: scale(1.1); opacity: 0.8; }
+  60% { transform: scale(1.2); opacity: 0.5; }
+  100% { transform: scale(1.34); opacity: 0; }
+}
+
+/* 4. DRATINI: Pound (Tail Whip Strike) */
+@keyframes gbaDratiniTailWhip {
+  0% { transform: translate(36px, -36px) rotate(42deg) scale(0.5); opacity: 0; }
+  28% { transform: translate(0px, 0px) rotate(-14deg) scale(1.14); opacity: 1; filter: drop-shadow(0 0 20px #38bdf8); }
+  46% { transform: translate(-8px, 6px) rotate(-18deg) scale(1); opacity: 1; }
+  74% { transform: translate(-18px, 14px) rotate(-24deg) scale(0.88); opacity: 0.65; }
+  100% { transform: translate(-32px, 24px) rotate(-30deg) scale(0.65); opacity: 0; }
+}
+
+@keyframes gbaDratiniTailWake {
+  0% { transform: scale(0.25); opacity: 0; }
+  30% { transform: scale(1.08); opacity: 0.9; }
+  68% { transform: scale(1.38); opacity: 0.45; }
+  100% { transform: scale(1.68); opacity: 0; }
+}
+
+/* 5. VOLTORB: Speed Ball */
+@keyframes gbaVoltorbRollingSphere {
+  0% { transform: translateX(-70px) rotate(0deg) scale(0.65); opacity: 0; }
+  28% { transform: translateX(0px) rotate(360deg) scale(1.16); opacity: 1; filter: drop-shadow(0 0 22px #eab308); }
+  46% { transform: translateX(6px) rotate(420deg) scale(1); opacity: 1; }
+  74% { transform: translateX(14px) rotate(480deg) scale(0.88); opacity: 0.7; }
+  100% { transform: translateX(22px) rotate(540deg) scale(0.65); opacity: 0; }
+}
+
+@keyframes gbaVoltorbFrictionSparks {
+  0% { transform: translate(0, 0) scale(0.2); opacity: 0; }
+  32% { transform: translate(var(--vspk-x), var(--vspk-y)) scale(1.25); opacity: 1; }
+  100% { transform: translate(calc(var(--vspk-x) * 1.8), calc(var(--vspk-y) * 1.8)) scale(0.2); opacity: 0; }
+}
+
+
+
+
+
 
 
 
