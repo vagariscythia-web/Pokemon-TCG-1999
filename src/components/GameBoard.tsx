@@ -257,6 +257,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   // True while a knockout banner + grayscale fainted animation is on screen.
   // Suppresses the watchdog so it cannot race the explicit handler's timer.
   const [knockoutAnimationActive, setKnockoutAnimationActive] = useState(false);
+  // While an attack animation is still playing and the target is already at 0 HP in the engine
+  // state, this holds the fainted visual back so the card doesn't turn grayscale mid-animation.
+  // Cleared the moment the KO banner appears. Also suppresses the watchdog for the same window.
+  const [koVisualHold, setKoVisualHold] = useState<'player' | 'cpu' | null>(null);
   const [activeSidebarTab, setActiveSidebarTab] = useState<'log' | 'chat'>('log');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [unreadChatCount, setUnreadChatCount] = useState(0);
@@ -301,6 +305,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const isAiRunningRef = useRef(false);
   const lastAiTurnRunRef = useRef<number>(-1);
   const isChoosingReplacementRef = useRef(false);
+  // Synchronous guard against double-clicks / rapid move spam.
+  // React's useState is async: two fast clicks can both see isTurnLocked=false
+  // before the state update propagates. A ref update is synchronous and immediate.
+  const attackLockRef = useRef(false);
   // Engaged when CPU attack beats are still on screen at the moment the turn hands back to the
   // player; keeps the turn locked until they drain without re-locking on the player's own FX.
   const playerTurnFxGateRef = useRef(false);
@@ -329,12 +337,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     // Skip while a knockout banner is already showing — the explicit handler
     // (poison-kill or attack-KO) owns the resolveKnockout timing.
     if (knockoutAnimationActive) return;
+    // Skip while the attack FX is still playing on a KO'd target — the explicit
+    // KO handler owns the timing and will reveal the fainted state when ready.
+    if (koVisualHold) return;
 
     const anyPlayerFainted = (state.player.active && state.player.active.currentHp <= 0) || state.player.bench.some(b => b.currentHp <= 0);
     const anyCpuFainted = (state.cpu.active && state.cpu.active.currentHp <= 0) || state.cpu.bench.some(b => b.currentHp <= 0);
 
     // SAFETY NET: If player has no active but has bench Pokemon, force replacement phase
     if (!state.player.active && state.player.bench.length > 0 && state.phase === 'MAIN_PHASE') {
+      attackLockRef.current = false;
       setIsTurnLocked(false);
       setIsAiThinking(false);
       isAiRunningRef.current = false;
@@ -359,6 +371,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         ? state.player.active.card.name
         : state.player.bench.find(b => b.currentHp <= 0)?.card.name || 'Pokémon';
       const wdTicks = statusTicksToShow(state);
+      attackLockRef.current = false;
       setIsTurnLocked(false);
       if (wdTicks.length > 0) {
         setWithheldTicks([]);
@@ -450,7 +463,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     state.phase,
     state.winner,
     isPoisonSequenceActive,
-    knockoutAnimationActive
+    knockoutAnimationActive,
+    koVisualHold
   ]);
 
     // PRELOAD ALL MATCH CARD IMAGES & COIN ASSETS
@@ -486,6 +500,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setActiveFXList([]);
     setIsRetreatMode(false);
     setActionBanner(null);
+    attackLockRef.current = false;
     setIsTurnLocked(false);
     setActiveTrainerOverlay(null);
     setAscendingPlayerBenchIdx(null);
@@ -1063,6 +1078,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           const cpuFxType = getSpecificAttackFX(attackToUse, cpuActive.card);
 
           let cpuAtkRes: AttackResult | undefined;
+          // Capture HP right before the attack lands (poison ticks are already committed by
+          // endTurn at this point, so this is the true pre-attack HP of each Active Pokémon).
+          const preAtkPlayerHp = stateRef.current.player.active?.currentHp ?? 0;
+          const preAtkCpuHp = stateRef.current.cpu.active?.currentHp ?? 0;
           setState(prev => {
             if (!prev.cpu.active || !prev.player.active) return prev;
             const fxType = getSpecificAttackFX(attackToUse, prev.cpu.active.card);
@@ -1141,19 +1160,35 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             return next;
           });
 
+          // Determine whether the CPU's attack ALONE was lethal before consulting ticks.
+          // Normal case: CPU strikes the player's Active. Confusion TAILS: CPU strikes itself.
+          const cpuAttackAloneKilledPlayer = !cpuAtkRes?.confusionSelfHit &&
+            (cpuAtkRes?.damageTarget !== 'bench') &&
+            (cpuAtkRes?.damage ?? 0) > 0 && preAtkPlayerHp > 0 &&
+            (cpuAtkRes!.damage >= preAtkPlayerHp);
+          const cpuAttackAloneKilledCpu = Boolean(cpuAtkRes?.confusionSelfHit) &&
+            (cpuAtkRes?.damage ?? 0) > 0 && preAtkCpuHp > 0 &&
+            (cpuAtkRes!.damage >= preAtkCpuHp);
+
+          // Hold the fainted visual back while the attack FX is still playing.
+          // Target depends on who the attack actually struck.
+          setKoVisualHold(cpuAtkRes?.confusionSelfHit ? 'cpu' : 'player');
+
           // Check if either Pokémon was knocked out from the attack
           setTimeout(() => {
             setState(current => {
+              // Release the visual hold now that the FX has completed.
+              setKoVisualHold(null);
               const playerActiveFainted = current.player.active && current.player.active.currentHp <= 0;
               const cpuActiveFainted = current.cpu.active && current.cpu.active.currentHp <= 0;
 
-              // A fainted Pokémon that still has a matching withheld tick died from endTurn's
-              // poison step, not the CPU's attack. Route it through the else branch so the
-              // sequence is attack FX → poison tick FX → lethal KO banner → resolveKnockout.
+              // A fainted Pokémon that still has a matching withheld tick AND whose HP was NOT
+              // fully eaten by the attack alone died from endTurn's poison step. Route it
+              // through the else branch: attack FX → poison tick FX → lethal KO banner.
               const aiTicks = statusTicksToShow(current);
-              const aiPlayerKoIsFromTick = playerActiveFainted &&
+              const aiPlayerKoIsFromTick = playerActiveFainted && !cpuAttackAloneKilledPlayer &&
                 aiTicks.some(t => t.instanceId === current.player.active!.instanceId);
-              const aiCpuKoIsFromTick = cpuActiveFainted &&
+              const aiCpuKoIsFromTick = cpuActiveFainted && !cpuAttackAloneKilledCpu &&
                 aiTicks.some(t => t.instanceId === current.cpu.active!.instanceId);
 
               if (playerActiveFainted && !aiPlayerKoIsFromTick) {
@@ -1290,10 +1325,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   setState(post => GameEngine.resolveKnockout(post));
                   setActionBanner(null);
                   setKnockoutAnimationActive(false);
+                  attackLockRef.current = false;
                   setIsTurnLocked(false);
                   cleanupAiTurn();
                 }, 1300);
               } else {
+                attackLockRef.current = false;
                 setIsTurnLocked(false);
                 cleanupAiTurn();
               }
@@ -1353,6 +1390,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       setIsTurnLocked(true);
       return;
     }
+    attackLockRef.current = false;
     setIsTurnLocked(false);
   }, [state.turnPlayer, isPoisonSequenceActive, activeFXList]);
 
@@ -1360,6 +1398,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   // so the player can interact with bench Pokemon to choose a replacement.
   useEffect(() => {
     if (state.phase === 'SELECT_BENCH_REPLACEMENT') {
+      attackLockRef.current = false;
       setIsTurnLocked(false);
       setIsAiThinking(false);
       isAiRunningRef.current = false;
@@ -1623,6 +1662,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       setState(post => GameEngine.resolveKnockout(post));
                       setActionBanner(null);
                       setKnockoutAnimationActive(false);
+                      attackLockRef.current = false;
                       setIsTurnLocked(false);
                     }, 1300);
                   }
@@ -1643,6 +1683,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             const ticks = statusTicksToShow(resolved);
             setState(resolved);
             if (ticks.length === 0) {
+              attackLockRef.current = false;
               setIsTurnLocked(false);
               return;
             }
@@ -1672,9 +1713,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     setState(post => GameEngine.resolveKnockout(post));
                     setActionBanner(null);
                     setKnockoutAnimationActive(false);
+                    attackLockRef.current = false;
                     setIsTurnLocked(false);
                   }, 1300);
                 } else {
+                  attackLockRef.current = false;
                   setIsTurnLocked(false);
                 }
               }, 1600);
@@ -1716,12 +1759,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const p = side === 'player' ? player.active : cpu.active;
     if (!p) return undefined;
     const tk = withheldTicks.find(x => x.instanceId === p.instanceId);
-    if (!tk) return p;
-    return {
-      ...p,
-      damage: Math.max(0, p.damage - tk.amount),
-      currentHp: Math.min(p.card.hp || 0, p.currentHp + tk.amount),
-    };
+    let displayed: InPlayCard = p;
+    if (tk) {
+      displayed = {
+        ...p,
+        damage: Math.max(0, p.damage - tk.amount),
+        currentHp: Math.min(p.card.hp || 0, p.currentHp + tk.amount),
+      };
+    }
+    return displayed;
   };
 
   // STRICT INITIAL SETUP: ONLY when in SETUP_ACTIVE phase
@@ -3971,6 +4017,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   };
 
     const handleAttack = (atkIndex: number) => {
+    // Synchronous ref guard: prevents double-click race condition where React hasn't
+    // re-rendered yet and isTurnLocked is still false in the closure.
+    if (attackLockRef.current) return;
     if (!isPlayerTurn || !player.active || player.active.currentHp <= 0 || isPlayerParalyzed || isPlayerAsleep || isTurnLocked) return;
     const attack = player.active.card.attacks?.[atkIndex];
     if (!attack) return;
@@ -3990,6 +4039,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       return;
     }
 
+    attackLockRef.current = true;
     setIsTurnLocked(true);
 
     const atkNameLower = attack.name.toLowerCase();
@@ -4141,13 +4191,24 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       setSelectedHandIndex(null);
       setIsRetreatMode(false);
 
-      // If the fainted Pokémon has a matching withheld tick the lethal damage came
-      // from endTurn's poison/toxic step, NOT from the attack itself. In that case
-      // we must NOT collapse into the immediate-KO branch; fall through to the else
-      // branch which sequences: attack FX → poison tick FX → lethal KO banner.
-      const cpuKoIsFromTick = next.cpu.active &&
+      // Determine whether the attack ALONE was lethal. If the attack damage >= HP before
+      // the attack, it is a direct KO regardless of any concurrent poison ticks.
+      const cpuHpBeforeAtk = state.cpu.active?.currentHp ?? 0;
+      const playerHpBeforeAtk = state.player.active?.currentHp ?? 0;
+      const attackAloneKilledCpu = !atkRes?.confusionSelfHit &&
+        (atkRes?.damageTarget !== 'bench') &&
+        (atkRes?.damage ?? 0) > 0 && cpuHpBeforeAtk > 0 &&
+        (atkRes!.damage >= cpuHpBeforeAtk);
+      const attackAloneKilledPlayer = Boolean(atkRes?.confusionSelfHit) &&
+        (atkRes?.damage ?? 0) > 0 && playerHpBeforeAtk > 0 &&
+        (atkRes!.damage >= playerHpBeforeAtk);
+
+      // If the fainted Pokémon has a matching withheld tick AND the attack alone was NOT
+      // lethal, the killing blow came from endTurn's poison/toxic step. Route through the
+      // else branch: attack FX → poison tick FX → lethal KO banner.
+      const cpuKoIsFromTick = !attackAloneKilledCpu && next.cpu.active &&
         playerTicks.some(t => t.instanceId === next.cpu.active!.instanceId);
-      const playerKoIsFromTick = next.player.active &&
+      const playerKoIsFromTick = !attackAloneKilledPlayer && next.player.active &&
         playerTicks.some(t => t.instanceId === next.player.active!.instanceId);
 
       // The knockout banner must not appear while the attack animation is still playing.
@@ -4160,7 +4221,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
       if (next.player.active && next.player.active.currentHp <= 0 && !playerKoIsFromTick) {
         setWithheldTicks([]);
+        setKoVisualHold('player');
         setTimeout(() => {
+          setKoVisualHold(null);
           setActionBanner({ text: `💀 ${next.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
           setKnockoutAnimationActive(true);
           setTimeout(() => {
@@ -4169,12 +4232,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
             setActionBanner(null);
             setKnockoutAnimationActive(false);
+            attackLockRef.current = false;
             setIsTurnLocked(false);
           }, 1300);
         }, koAnimDelay);
       } else if (next.cpu.active && next.cpu.active.currentHp <= 0 && !cpuKoIsFromTick) {
         setWithheldTicks([]);
+        setKoVisualHold('cpu');
         setTimeout(() => {
+          setKoVisualHold(null);
           setActionBanner({ text: `💀 Opponent's ${next.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
           setKnockoutAnimationActive(true);
           setTimeout(() => {
@@ -4188,12 +4254,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 setAscendingCpuBenchIdx(null);
                 setActionBanner(null);
                 setKnockoutAnimationActive(false);
+                attackLockRef.current = false;
                 setIsTurnLocked(false);
               }, 650);
             } else {
               setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
               setActionBanner(null);
               setKnockoutAnimationActive(false);
+              attackLockRef.current = false;
               setIsTurnLocked(false);
             }
           }, 1300);
@@ -4242,14 +4310,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   setState(post => GameEngine.resolveKnockout(post));
                   setActionBanner(null);
                   setKnockoutAnimationActive(false);
+                  attackLockRef.current = false;
                   setIsTurnLocked(false);
                 }, 1300);
               } else {
+                attackLockRef.current = false;
                 setIsTurnLocked(false);
               }
             }, 1600);
           } else {
             setIsPoisonSequenceActive(false);
+            attackLockRef.current = false;
             setIsTurnLocked(false);
           }
         }, unlockDelay);
@@ -4283,7 +4354,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     coinResults: boolean[] | undefined,
     effectChoices: AttackEffectChoices
   ) => {
-    if (!player.active || !cpu.active) { setIsTurnLocked(false); return; }
+    if (!player.active || !cpu.active) { attackLockRef.current = false; setIsTurnLocked(false); return; }
 
     sounds.playAttackHit();
     const attack = player.active.card.attacks?.[attackIndex];
@@ -4346,50 +4417,75 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setSelectedHandIndex(null);
     setIsRetreatMode(false);
 
-    // Same as performAttack: a fainted Pokémon that still has a matching withheld tick
-    // died from endTurn's poison step, not the attack. Route it through the else branch
-    // so the sequence is attack FX → poison tick FX → lethal KO banner → resolveKnockout.
-    const choiceCpuKoIsFromTick = next.cpu.active &&
+    // Determine whether the attack ALONE was lethal (same logic as performAttack).
+    const choiceCpuHpBefore = state.cpu.active?.currentHp ?? 0;
+    const choicePlayerHpBefore = state.player.active?.currentHp ?? 0;
+    const choiceAttackAloneKilledCpu = !atkRes?.confusionSelfHit &&
+      (atkRes?.damageTarget !== 'bench') &&
+      (atkRes?.damage ?? 0) > 0 && choiceCpuHpBefore > 0 &&
+      (atkRes!.damage >= choiceCpuHpBefore);
+    const choiceAttackAloneKilledPlayer = Boolean(atkRes?.confusionSelfHit) &&
+      (atkRes?.damage ?? 0) > 0 && choicePlayerHpBefore > 0 &&
+      (atkRes!.damage >= choicePlayerHpBefore);
+
+    const choiceCpuKoIsFromTick = !choiceAttackAloneKilledCpu && next.cpu.active &&
       choiceTicks.some(t => t.instanceId === next.cpu.active!.instanceId);
-    const choicePlayerKoIsFromTick = next.player.active &&
+    const choicePlayerKoIsFromTick = !choiceAttackAloneKilledPlayer && next.player.active &&
       choiceTicks.some(t => t.instanceId === next.player.active!.instanceId);
+
+    // The knockout banner must not appear while the attack animation is still playing.
+    const choiceKoBeatCount = atkRes?.multiHitCount ?? 1;
+    const choiceKoStaggerMs = fxType === 'stone_barrage_single' ? Math.max(0, choiceKoBeatCount - 1) * 380 : 0;
+    const choiceBaseDuration = atkRes?.whiffed ? 700 : getFXDuration(isBlocked ? 'barrier' : fxType);
+    const choiceKoAnimDelay = choiceBaseDuration + choiceKoStaggerMs;
 
     if (next.player.active && next.player.active.currentHp <= 0 && !choicePlayerKoIsFromTick) {
       setWithheldTicks([]);
-      setActionBanner({ text: `💀 ${next.player.active.card.name} was Knocked Out!`, type: 'knockout' });
-      setKnockoutAnimationActive(true);
+      setKoVisualHold('player');
       setTimeout(() => {
-        setActiveFXList([]);
-        setIsPoisonSequenceActive(false);
-        setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-        setActionBanner(null);
-        setKnockoutAnimationActive(false);
-        setIsTurnLocked(false);
-      }, 1300);
-    } else if (next.cpu.active && next.cpu.active.currentHp <= 0 && !choiceCpuKoIsFromTick) {
-      setWithheldTicks([]);
-      setActionBanner({ text: `💀 Opponent's ${next.cpu.active.card.name} was Knocked Out!`, type: 'knockout' });
-      setKnockoutAnimationActive(true);
-      setTimeout(() => {
-        setActiveFXList([]);
-        setIsPoisonSequenceActive(false);
-        if (next.cpu.bench.length > 0) {
-          setAscendingCpuBenchIdx(0);
-          setTimeout(() => {
-            setActiveFXList([]);
-            setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
-            setAscendingCpuBenchIdx(null);
-            setActionBanner(null);
-            setKnockoutAnimationActive(false);
-            setIsTurnLocked(false);
-          }, 650);
-        } else {
+        setKoVisualHold(null);
+        setActionBanner({ text: `💀 ${next.player.active!.card.name} was Knocked Out!`, type: 'knockout' });
+        setKnockoutAnimationActive(true);
+        setTimeout(() => {
+          setActiveFXList([]);
+          setIsPoisonSequenceActive(false);
           setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
           setActionBanner(null);
           setKnockoutAnimationActive(false);
+          attackLockRef.current = false;
           setIsTurnLocked(false);
-        }
-      }, 1300);
+        }, 1300);
+      }, choiceKoAnimDelay);
+    } else if (next.cpu.active && next.cpu.active.currentHp <= 0 && !choiceCpuKoIsFromTick) {
+      setWithheldTicks([]);
+      setKoVisualHold('cpu');
+      setTimeout(() => {
+        setKoVisualHold(null);
+        setActionBanner({ text: `💀 Opponent's ${next.cpu.active!.card.name} was Knocked Out!`, type: 'knockout' });
+        setKnockoutAnimationActive(true);
+        setTimeout(() => {
+          setActiveFXList([]);
+          setIsPoisonSequenceActive(false);
+          if (next.cpu.bench.length > 0) {
+            setAscendingCpuBenchIdx(0);
+            setTimeout(() => {
+              setActiveFXList([]);
+              setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+              setAscendingCpuBenchIdx(null);
+              setActionBanner(null);
+              setKnockoutAnimationActive(false);
+              attackLockRef.current = false;
+              setIsTurnLocked(false);
+            }, 650);
+          } else {
+            setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+            setActionBanner(null);
+            setKnockoutAnimationActive(false);
+            attackLockRef.current = false;
+            setIsTurnLocked(false);
+          }
+        }, 1300);
+      }, choiceKoAnimDelay);
     } else {
       setTimeout(() => {
         setActionBanner(null);
@@ -4417,14 +4513,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 setState(post => GameEngine.resolveKnockout(post));
                 setActionBanner(null);
                 setKnockoutAnimationActive(false);
+                attackLockRef.current = false;
                 setIsTurnLocked(false);
               }, 1300);
             } else {
+              attackLockRef.current = false;
               setIsTurnLocked(false);
             }
           }, 1600);
         } else {
           setIsPoisonSequenceActive(false);
+          attackLockRef.current = false;
           setIsTurnLocked(false);
         }
       }, 1800);
@@ -4624,7 +4723,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const handleEffectChoiceSelect = (chosenValue: string | number) => {
     const modal = effectChoiceModal;
     setEffectChoiceModal(prev => ({ ...prev, isOpen: false }));
-    if (!player.active || !cpu.active) { setIsTurnLocked(false); return; }
+    if (!player.active || !cpu.active) { attackLockRef.current = false; setIsTurnLocked(false); return; }
 
     const effectChoices: AttackEffectChoices = {};
     if (modal.mode === 'amnesia') {
@@ -4656,7 +4755,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const handleEffectChoiceCancel = () => {
     const modal = effectChoiceModal;
     setEffectChoiceModal(prev => ({ ...prev, isOpen: false }));
-    if (!player.active || !cpu.active) { setIsTurnLocked(false); return; }
+    if (!player.active || !cpu.active) { attackLockRef.current = false; setIsTurnLocked(false); return; }
     // All three modes resolve with engine defaults when no choice is supplied.
     executeAttackWithChoices(modal.attackIndex, modal.coinResults, {});
   };
@@ -4691,10 +4790,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   };
 
   const handleEndTurn = () => {
+    if (attackLockRef.current) return;
     if (!isPlayerTurn) return;
     if (isTurnLocked || isAiThinking) return;
 
     // Lock UI while the poison tick plays
+    attackLockRef.current = true;
     setIsTurnLocked(true);
 
     const resolved = GameEngine.endTurn(stateRef.current);
@@ -4733,13 +4834,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             setState(post => GameEngine.resolveKnockout(post));
             setActionBanner(null);
             setKnockoutAnimationActive(false);
+            attackLockRef.current = false;
             setIsTurnLocked(false);
           }, 1300);
         } else {
+          attackLockRef.current = false;
           setIsTurnLocked(false);
         }
       }, 1600);
     } else {
+      attackLockRef.current = false;
       setIsTurnLocked(false);
     }
   };
@@ -5288,6 +5392,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     inPlayCard={displayActive('cpu')}
                     size="active"
                     isDescending={descendingCpuActive}
+                    suppressFaintedVisual={koVisualHold === 'cpu'}
                     isTargetable={!!selectedCard && selectedCard.supertype === 'Trainer' && OPPONENT_TARGET_TRAINERS.includes(selectedCard.name)}
                     onClick={() => handleOpponentInPlayClick(cpu.active!, false)}
                     onInspect={() => handleInspect(cpu.active!.card, cpu.active!)}
@@ -5332,6 +5437,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     isSelected={false}
                     isDropHovered={hoveredDropTarget?.type === 'active'}
                     isDescending={descendingPlayerActive}
+                    suppressFaintedVisual={koVisualHold === 'player'}
                     onClick={() => handleInPlayClick(player.active!, false)}
                     onInspect={() => handleInspect(player.active!.card, player.active!)}
                   >

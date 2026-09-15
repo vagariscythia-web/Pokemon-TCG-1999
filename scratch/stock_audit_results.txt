@@ -1,0 +1,431 @@
+=== FULL STOCK ASSET AUDIT ===
+
+[Move: hitmonchan_jab]
+  Asset: Hitmonchan_Jab.png
+    className="select-none pointer-events-none drop-shadow-[0_0_18px_#ec4899]"
+
+[Move: hitmonchan_special_punch]
+  Asset: Hitmonchan_SpecialPunch.png
+    className="select-none pointer-events-none drop-shadow-[0_0_18px_#ec4899]"
+    <div className="w-16 h-16 rounded-full border-2 border-red-400/60" />
+
+[Move: thunder_punch]
+  Asset: ThunderPunch_Fist.png
+    <svg width="52" height="52" viewBox="0 0 52 52" className="drop-shadow-[0_0_14px_#fef08a]">
+    <svg width="36" height="36" viewBox="0 0 36 36" className="drop-shadow-[0_0_10px_#fef9c3]">
+    className="select-none pointer-events-none drop-shadow-[0_0_22px_#facc15]"
+    <div className="w-32 h-32 rounded-full bg-gradient-to-t from-yellow-300 via-amber-200/60 to-transparent blur-md" />
+    <div className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-gradient-to-t from-yellow-100 via-yellow-200/70 to-transparent blur-sm" />
+    <div className="absolute w-32 h-32" style={{ animation: 'gbaThunderPunchAura 0.9s linear 0.1s forwards', opacity: 0 }}>
+    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_#fde047]">
+    <svg width="26" height="44" viewBox="0 0 26 44" className="drop-shadow-[0_0_12px_#fef08a]">
+    <svg width="26" height="44" viewBox="0 0 26 44" className="drop-shadow-[0_0_12px_#fef08a]">
+    <svg width="22" height="38" viewBox="0 0 26 44" className="drop-shadow-[0_0_10px_#fde047]">
+    <svg width="22" height="38" viewBox="0 0 26 44" className="drop-shadow-[0_0_10px_#fde047]">
+    <span className="text-lg text-yellow-200 select-none drop-shadow-[0_0_8px_#fef08a]">✦</span>
+    <span className="text-sm text-yellow-300 select-none drop-shadow-[0_0_6px_#fde047]">✦</span>
+    <span className="text-xs text-amber-200 select-none drop-shadow-[0_0_5px_#fde047]">✦</span>
+    <span className="text-sm text-yellow-200 select-none drop-shadow-[0_0_6px_#fef08a]">✦</span>
+    <div className="absolute w-24 h-24 rounded-full border-3 border-yellow-300/80" style={{ animation: 'gbaThunderPunchRing 0.45s ease-out 0.82s forwards', opacity: 0 }} />
+    <div className="absolute w-16 h-16 rounded-full border-2 border-yellow-100/90" style={{ animation: 'gbaThunderPunchRing 0.4s ease-out 0.88s forwards', opacity: 0 }} />
+
+[Move: hydro_pump_cannons]
+  Asset: blastoise-hydro-cannon.png
+    <div className="absolute" style={{ left: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetLeft 1.4s cubic-bezier(0.15, 0.8, 0.35, 1) 0.3s forwards', opacity: 0, filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+    <div className="absolute" style={{ right: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetRight 1.4s cubic-bezier(0.15, 0.8, 0.35, 1) 0.3s forwards', opacity: 0, filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
+    <div className="absolute" style={{ left: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.35s forwards', opacity: 0 }}>
+    <div className="absolute" style={{ right: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.41s forwards', opacity: 0 }}>
+
+[Move: star_freeze]
+  Asset: Starmie_Star_Freeze.png
+    className="absolute w-32 h-32 rounded-full pointer-events-none z-20"
+    className={`${fx.whiffed ? 'w-[78px] h-[78px]' : 'w-[108px] h-[108px]'} object-contain drop-shadow-[0_0_18px_rgba(56,189,248,0.85)] drop-shadow-[0_0_28px_rgba(168,85,247,0.6)] filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] select-none pointer-events-none`}
+    className="absolute w-5 h-5 rounded-full bg-red-500/85 blur-[2px] drop-shadow-[0_0_14px_#ef4444]"
+    <div className="w-12 h-12 rounded-full border-2 border-cyan-300 shadow-[0_0_20px_#38bdf8] flex items-center justify-center">
+    <div className="w-6 h-6 rounded-full bg-cyan-200/80 blur-[1px] shadow-[0_0_12px_#ffffff]" />
+    <svg width="124" height="124" viewBox="0 0 120 120" className="overflow-visible drop-shadow-[0_0_20px_#38bdf8] drop-shadow-[0_0_10px_#ffffff]">
+    <circle cx="60" cy="60" r="8" fill="#ffffff" className="drop-shadow-[0_0_12px_#ffffff]" />
+    <div className="w-24 h-24 rounded-full border-2 border-cyan-200/80 shadow-[0_0_16px_#67e8f9]" />
+    <span className="text-sm text-cyan-100 select-none drop-shadow-[0_0_8px_#67e8f9]">✦</span>
+    <span className="text-xs text-white select-none drop-shadow-[0_0_8px_#a5f3fc]">✦</span>
+    <span className="text-sm text-sky-200 select-none drop-shadow-[0_0_8px_#38bdf8]">✦</span>
+    <span className="text-xs text-cyan-200 select-none drop-shadow-[0_0_6px_#cffafe]">✦</span>
+
+[Move: psybeam_kaleidoscope]
+  Asset: Alakazam_Psychic_Spoons.png
+    className={`${fx.whiffed ? 'w-[76px] h-[98px]' : 'w-[106px] h-[138px]'} object-contain pointer-events-none drop-shadow-[0_0_24px_#c084fc] drop-shadow-[0_0_36px_rgba(192,132,252,0.6)]`}
+    <svg width="180" height="180" viewBox="0 0 180 180" className="drop-shadow-[0_0_20px_#a855f7]">
+    <div className="w-56 h-3 rounded-full bg-gradient-to-r from-pink-500 via-white to-cyan-400 shadow-[0_0_25px_#38bdf8]" />
+
+[Move: super_fang_guillotine]
+  Asset: Raticate_SuperFang_Jaws.png
+    className="select-none pointer-events-none drop-shadow-[0_0_24px_rgba(254,240,138,0.85)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+    <svg width="120" height="85" viewBox="0 0 120 85" className="drop-shadow-[0_0_24px_#ffffff]">
+    <svg width="120" height="85" viewBox="0 0 120 85" className="drop-shadow-[0_0_24px_#ffffff]">
+
+[Move: victreebel_acid_melt]
+  Asset: Victreebel_Acid_Maw.png
+    className="select-none pointer-events-none drop-shadow-[0_0_28px_rgba(163,230,53,0.9)] drop-shadow-[0_8px_18px_rgba(0,0,0,0.5)]"
+    <svg width="130" height="150" viewBox="0 0 130 150" className="drop-shadow-[0_0_26px_#84cc16]">
+    left: `${xPos}px`,
+    { top: '35%', left: '42%', size: 28, delay: '0.2s' },
+    { top: '55%', left: '30%', size: 34, delay: '0.35s' },
+    { top: '48%', left: '62%', size: 30, delay: '0.25s' },
+    { top: '65%', left: '50%', size: 36, delay: '0.45s' }
+    top: b.top,
+    left: b.left,
+
+[Move: beedrill_twineedle]
+  Asset: Beedrill_Twineedle_Lances.png
+    className="select-none pointer-events-none drop-shadow-[0_0_24px_rgba(254,240,138,0.85)] drop-shadow-[0_6px_14px_rgba(0,0,0,0.4)]"
+
+[Move: dugtrio_earthquake]
+  Asset: Dugtrio_Earthquake_Trio.png
+    className="select-none pointer-events-none drop-shadow-[0_0_24px_rgba(234,88,12,0.85)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+
+[Move: gengar_dark_mind]
+  Asset: Gengar_Dark_Mind.png
+    className={`${fx.whiffed ? 'w-[80px] h-[72px]' : 'w-[112px] h-[100px]'} object-contain pointer-events-none drop-shadow-[0_0_24px_#9333ea] drop-shadow-[0_0_32px_rgba(147,51,234,0.65)]`}
+    <div className="w-32 h-32 rounded-full border-2 border-purple-500/80 shadow-[0_0_25px_#9333ea]" />
+    className="absolute w-3 h-3 rounded-full bg-purple-400 shadow-[0_0_10px_#c084fc] pointer-events-none"
+
+[Move: machamp_karate_chop]
+  Asset: Machamp_Karate_Chop.png
+    <div className="w-64 h-3 rounded-full bg-gradient-to-r from-transparent via-white to-amber-300 shadow-[0_0_25px_#f59e0b] border-y border-amber-200" />
+    className={`${fx.whiffed ? 'w-[80px] h-[86px]' : 'w-[110px] h-[118px]'} object-contain pointer-events-none drop-shadow-[0_0_24px_#f59e0b] drop-shadow-[0_0_32px_rgba(245,158,11,0.6)]`}
+    <div className="w-28 h-28 rounded-full border-4 border-amber-300 shadow-[0_0_24px_#f59e0b]" />
+
+[Move: haunter_dream_eater]
+  Asset: Haunter_Dream_Eater.png
+    className={`${fx.whiffed ? 'w-[78px] h-[82px]' : 'w-[110px] h-[115px]'} object-contain drop-shadow-[0_0_24px_rgba(168,85,247,0.95)] drop-shadow-[0_0_34px_rgba(168,85,247,0.6)]`}
+    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-400 via-purple-300 to-cyan-200 border-2 border-white shadow-[0_0_20px_#f472b6] flex items-center justify-center">
+    className="absolute w-2.5 h-2.5 rounded-full bg-cyan-200 shadow-[0_0_8px_#38bdf8] pointer-events-none"
+
+[Move: weezing_toxic_smog]
+  Asset: Weezing_Toxic_Smog.png
+    className={`${fx.whiffed ? 'w-[84px] h-[78px]' : 'w-[114px] h-[106px]'} object-contain drop-shadow-[0_0_26px_rgba(147,51,234,0.9)] drop-shadow-[0_0_36px_rgba(147,51,234,0.6)]`}
+    <div className="relative w-24 h-24 flex items-center justify-center">
+    <div className="w-20 h-14 rounded-full bg-gradient-to-tr from-lime-700/80 via-yellow-600/70 to-lime-500/60 blur-[3px] shadow-[0_0_20px_rgba(132,204,22,0.6)]" />
+    <div className="absolute -top-2 -right-1 w-14 h-12 rounded-full bg-gradient-to-br from-lime-500/70 via-yellow-400/60 to-emerald-600/50 blur-[2px]" />
+    <div className="relative w-24 h-24 flex items-center justify-center">
+    <div className="w-20 h-14 rounded-full bg-gradient-to-tl from-purple-950/90 via-purple-700/80 to-fuchsia-600/60 blur-[3px] shadow-[0_0_22px_rgba(147,51,234,0.6)]" />
+    left: `${35 + (i % 2) * 28}%`,
+    bottom: `${20 + i * 12}%`,
+    <div className="w-40 h-36 rounded-full bg-gradient-to-tr from-purple-900/50 via-lime-900/40 to-purple-800/50 blur-2xl shadow-[0_0_40px_rgba(126,34,206,0.55)]" />
+
+[Move: nidoking_thrash_fury]
+  Asset: Kingler_Crabhammer_Claw.png
+    <path d="M10 20 L150 20" stroke="#a855f7" strokeWidth="5" strokeLinecap="round" className="drop-shadow-[0_0_16px_#9333ea]" />
+    <path d="M25 40 L160 40" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" className="drop-shadow-[0_0_20px_#c084fc]" />
+    <path d="M10 60 L145 60" stroke="#a855f7" strokeWidth="5" strokeLinecap="round" className="drop-shadow-[0_0_16px_#9333ea]" />
+    <path d="M150 20 L10 20" stroke="#7e22ce" strokeWidth="5" strokeLinecap="round" className="drop-shadow-[0_0_16px_#9333ea]" />
+    <path d="M160 40 L25 40" stroke="#ffffff" strokeWidth="6" strokeLinecap="round" className="drop-shadow-[0_0_20px_#f43f5e]" />
+    <path d="M145 60 L10 60" stroke="#7e22ce" strokeWidth="5" strokeLinecap="round" className="drop-shadow-[0_0_16px_#9333ea]" />
+    className="max-w-[76px] max-h-[88px] object-contain drop-shadow-[0_0_20px_#ea580c] drop-shadow-[0_0_28px_rgba(2,132,199,0.7)]"
+    <path d="M30 160 Q70 10, 110 160 Z" fill="#38bdf8" opacity="0.85" className="drop-shadow-[0_0_20px_#0284c7]" />
+
+[Move: rhydon_horn_drill]
+  Asset: Rhydon_Horn_Drill.png
+    className={`${fx.whiffed ? 'w-[78px] h-[76px]' : 'w-[110px] h-[108px]'} object-contain drop-shadow-[0_0_24px_rgba(245,158,11,0.95)] drop-shadow-[0_0_34px_rgba(234,88,12,0.6)]`}
+    <div className="w-24 h-24 rounded-full border-4 border-amber-300 shadow-[0_0_25px_#ea580c]" />
+
+[Move: koffing_foul_gas]
+  Asset: Koffing_Foul_Gas.png
+    className={`${fx.whiffed ? 'w-[78px] h-[71px]' : 'w-[110px] h-[100px]'} object-contain drop-shadow-[0_0_24px_rgba(132,204,22,0.9)]`}
+    <div className="w-28 h-20 rounded-full bg-gradient-to-tr from-purple-950/90 via-purple-700/80 to-lime-500/60 blur-[3px] shadow-[0_0_24px_rgba(163,230,53,0.6)]" />
+    left: `${30 + (i % 2) * 35}%`,
+    bottom: `${20 + i * 14}%`,
+    <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-lime-400 to-yellow-200 border border-white/80 shadow-[0_0_10px_#a3e635]" />
+
+[Move: pinsir_guillotine]
+  Asset: Pinsir_Horn_Left.png
+  Asset: Pinsir_Horn_Right.png
+    className={`${fx.whiffed ? 'w-[38px] h-[92px]' : 'w-[54px] h-[126px]'} object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] drop-shadow-[0_0_20px_rgba(239,68,68,0.5)]`}
+    className={`${fx.whiffed ? 'w-[38px] h-[92px]' : 'w-[54px] h-[126px]'} object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] drop-shadow-[0_0_20px_rgba(239,68,68,0.5)]`}
+    <div className="w-20 h-20 rounded-full bg-red-400/50 blur-sm shadow-[0_0_30px_#ef4444]" />
+
+[Move: exeggutor_big_eggsplosion]
+  Asset: Exeggutor_Coconut_Bomb.png
+  Asset: Exeggutor_Coconut_Bomb.png
+  Asset: Exeggutor_Coconut_Bomb.png
+    className={`${fx.whiffed ? 'w-[58px] h-[52px]' : 'w-[82px] h-[74px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_#facc15]`}
+    className={`${fx.whiffed ? 'w-[58px] h-[52px]' : 'w-[82px] h-[74px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_#eab308]`}
+    className={`${fx.whiffed ? 'w-[68px] h-[62px]' : 'w-[98px] h-[88px]'} object-contain pointer-events-none drop-shadow-[0_0_24px_#f59e0b]`}
+    <div className="w-24 h-24 rounded-full bg-radial from-amber-100 via-amber-400 to-transparent blur-[3px]" />
+
+[Move: fearow_drill_peck]
+  Asset: Fearow_DrillPeck_Beak.png
+    className={`${fx.whiffed ? 'w-[78px] h-[78px]' : 'w-[98px] h-[98px]'} object-contain drop-shadow-[0_0_20px_#f59e0b]`}
+    <div className="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-[0_0_10px_#f59e0b]" />
+
+[Move: arbok_poison_fang]
+  Asset: Arbok_PoisonFang_Maw.png
+    className={`${fx.whiffed ? 'w-[105px] h-[105px]' : 'w-[130px] h-[130px]'} object-contain drop-shadow-[0_0_20px_#7e22ce]`}
+    <circle cx="20" cy="20" r="7" fill="#84cc16" className="drop-shadow-[0_0_10px_#a3e635]" />
+    <circle cx="20" cy="20" r="7" fill="#84cc16" className="drop-shadow-[0_0_10px_#a3e635]" />
+
+[Move: golbat_leech_life]
+  Asset: Golbat_LeechLife_Maw.png
+    className={`${fx.whiffed ? 'w-[105px] h-[105px]' : 'w-[130px] h-[130px]'} object-contain drop-shadow-[0_0_20px_#312e81]`}
+    <div className="w-5 h-5 rounded-full bg-rose-500 shadow-[0_0_15px_#ef4444] flex items-center justify-center">
+    className="absolute w-28 h-28 rounded-full pointer-events-none z-25"
+
+[Move: farfetchd_leek_slap]
+  Asset: Farfetchd_Leek_Weapon.png
+    className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_16px_#22c55e] select-none pointer-events-none"
+    className="w-3 h-1 bg-lime-400 rounded shadow-[0_0_8px_#84cc16]"
+    className="absolute w-32 h-32 rounded-full border-2 border-emerald-300 pointer-events-none z-25"
+
+[Move: cubone_bone_strike]
+  Asset: Cubone_Bone_Club.png
+    className="w-[120px] h-[120px] object-contain drop-shadow-[0_0_16px_#ca8a04] select-none pointer-events-none"
+    className="absolute w-36 h-36 rounded-full pointer-events-none z-15"
+    <div className="w-2.5 h-2.5 bg-amber-100 border border-amber-600 rounded-sm shadow-[0_0_6px_#ca8a04]" />
+
+[Move: bulbasaur_leech_seed]
+  Asset: Bulbasaur_Leech_Seed_Pod.png
+    className="w-[98px] h-[98px] object-contain drop-shadow-[0_0_16px_#15803d] select-none pointer-events-none"
+    <div className="w-5 h-5 rounded-full bg-emerald-400 border border-white shadow-[0_0_15px_#22c55e] flex items-center justify-center">
+    className="absolute w-32 h-32 rounded-full pointer-events-none z-20"
+
+[Move: squirtle_shell_defense]
+  Asset: Squirtle_Turtle_Shell.png
+  Asset: Squirtle_Turtle_Shell.png
+    className="w-24 h-24 object-contain drop-shadow-[0_0_16px_rgba(56,189,248,0.6)] select-none pointer-events-none"
+    className="w-[120px] h-[120px] object-contain drop-shadow-[0_0_24px_#0284c7] select-none pointer-events-none"
+    className="absolute w-36 h-36 rounded-full border-2 border-cyan-200 pointer-events-none z-35"
+    <div className="w-3 h-3 rounded-full bg-cyan-300 border border-white shadow-[0_0_10px_#38bdf8]" />
+    className="absolute w-[168px] h-[168px] rounded-full border border-sky-300 pointer-events-none z-20"
+
+[Move: pikachu_thunder_jolt]
+  Asset: Pikachu_Spark_Cheeks.png
+    className="w-[120px] h-[120px] object-contain drop-shadow-[0_0_18px_#eab308] select-none pointer-events-none"
+    <path d="M 75 10 L 60 55 L 90 65 L 50 115 L 80 120 L 40 145" fill="none" stroke="#fde047" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="drop-shadow-[0_0_15px_#eab308]" />
+    <div className="w-3 h-3 bg-yellow-200 rotate-45 border border-white shadow-[0_0_10px_#facc15]" />
+
+[Move: charmander_ember_flame]
+  Asset: Charmander_Tail_Flame.png
+    className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_20px_#ea580c] select-none pointer-events-none"
+    <div className="w-7 h-7 rounded-full bg-radial from-white via-amber-400 to-red-600 shadow-[0_0_15px_#f97316]" />
+    <div className="w-6 h-6 rounded-full bg-radial from-white via-yellow-300 to-orange-600 shadow-[0_0_12px_#ea580c]" />
+    <div className="w-8 h-8 rounded-full bg-radial from-white via-orange-400 to-rose-700 shadow-[0_0_18px_#dc2626]" />
+    className="absolute w-36 h-36 rounded-full pointer-events-none z-20"
+    <div className="w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#f59e0b]" />
+
+[Move: ekans_wrap_constrict]
+  Asset: Ekans_Coiled_Serpent.png
+    className="w-[130px] h-[130px] object-contain drop-shadow-[0_0_20px_#9333ea] select-none pointer-events-none"
+    <circle cx="17" cy="17" r="6" fill="#a855f7" className="drop-shadow-[0_0_8px_#c084fc]" />
+    <circle cx="17" cy="17" r="6" fill="#a855f7" className="drop-shadow-[0_0_8px_#c084fc]" />
+    className="absolute w-40 h-40 rounded-full pointer-events-none z-20"
+
+[Move: sandshrew_sand_attack]
+  Asset: Sandshrew_Digging_Claws.png
+    className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_18px_#d97706] select-none pointer-events-none"
+    className="rounded-full bg-amber-200 border border-amber-600 shadow-[0_0_6px_#b45309]"
+
+[Move: caterpie_string_shot]
+  Asset: Caterpie_Head_Osmeterium.png
+    className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_18px_#22c55e] select-none pointer-events-none"
+    <path d="M 20 130 Q 50 80 80 70 Q 120 60 140 20" fill="none" stroke="#ffffff" strokeWidth="4" strokeLinecap="round" className="drop-shadow-[0_0_10px_#e0f2fe]" />
+    <div className="w-2.5 h-2.5 rounded-full bg-white border border-slate-200 shadow-[0_0_8px_#ffffff]" />
+
+[Move: weedle_poison_sting]
+  Asset: Weedle_Poison_Stinger.png
+    className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_18px_#a855f7] select-none pointer-events-none"
+    <circle cx="60" cy="60" r="14" fill="#a855f7" className="drop-shadow-[0_0_15px_#c084fc]" />
+
+[Move: rattata_quick_attack]
+  Asset: Rattata_Quick_Sprint.png
+    className="w-28 h-2 rounded-full"
+    className="w-40 h-3 rounded-full ml-4"
+    className="w-24 h-2 rounded-full -ml-3"
+    <ellipse cx="48" cy="33" rx="40" ry="24" fill="none" stroke="#ffffff" strokeWidth="3.5" className="drop-shadow-[0_0_14px_#ffffff]" />
+    className="max-w-[106px] max-h-[72px] object-contain select-none pointer-events-none drop-shadow-[0_0_16px_rgba(250,204,21,0.7)] drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]"
+    <polygon points="28,2 34,20 54,28 34,36 28,54 22,36 2,28 22,20" fill="#ffffff" className="drop-shadow-[0_0_18px_#ffffff]" />
+
+[Move: jigglypuff_lullaby]
+  Asset: Jigglypuff_Lullaby_Notes.png
+    className="max-w-[70px] max-h-[70px] object-contain drop-shadow-[0_0_12px_rgba(244,114,182,0.85)]"
+    left: `calc(50% + ${n.x})`,
+    top: `calc(50% + ${n.y})`,
+    className="absolute w-20 h-20 rounded-full pointer-events-none z-20"
+
+[Move: clefairy_metronome]
+  Asset: Clefairy_Metronome_Finger.png
+    className="max-w-[68px] max-h-[68px] object-contain drop-shadow-[0_0_14px_rgba(236,72,153,0.9)]"
+    className="absolute w-20 h-20 rounded-full border border-pink-300 pointer-events-none z-20"
+
+[Move: snorlax_body_slam]
+  Asset: Snorlax_Body_Slam.png
+    className="max-w-[74px] max-h-[74px] object-contain drop-shadow-[0_0_14px_rgba(30,41,59,0.85)]"
+    left: `calc(50% + ${sp.x})`,
+    top: `calc(50% + ${sp.y})`,
+    <svg width="18" height="18" viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_#facc15]">
+
+[Move: lickitung_tongue_wrap]
+  Asset: Lickitung_Tongue_Wrap.png
+    className="max-w-[76px] max-h-[76px] object-contain drop-shadow-[0_0_12px_rgba(244,63,94,0.85)]"
+    left: `calc(50% + ${p.x})`,
+    top: `calc(50% + ${p.y})`,
+    <svg width="18" height="18" viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_#facc15]">
+
+[Move: tauros_stomp]
+  Asset: Tauros_Hoof_Stomp.png
+    className="max-w-[70px] max-h-[70px] object-contain drop-shadow-[0_0_14px_rgba(180,83,9,0.85)]"
+
+[Move: tauros_rampage]
+  Asset: Tauros_Hoof_Stomp.png
+    className="max-w-[74px] max-h-[74px] object-contain drop-shadow-[0_0_16px_rgba(220,38,38,0.9)]"
+    left: `calc(50% + ${r.x})`,
+    top: `calc(50% + ${r.y})`,
+    <div className="w-2.5 h-2.5 rotate-45 bg-red-500 border border-yellow-300 shadow-[0_0_8px_#ef4444]" />
+
+[Move: cobra_stare]
+  Asset: dark_arbok_stare.png
+  Asset: dark_arbok_stare.png
+
+[Move: potion]
+  Asset: Potion.png
+    className="object-contain drop-shadow-[0_0_18px_#a78bfa]"
+
+[Move: super_potion]
+  Asset: Super_Potion.png
+    className="object-contain drop-shadow-[0_0_18px_#fbbf24]"
+
+[Move: pluspower]
+  Asset: PlusPower.png
+    className="w-16 sm:w-20 md:w-24 h-auto object-contain drop-shadow-[0_0_10px_#f59e0b] select-none"
+
+[Move: starfish_slap]
+  Asset: Staryu_Slap.png
+    className={`${fx.whiffed ? 'w-[76px] h-[76px]' : 'w-[106px] h-[106px]'} object-contain drop-shadow-[0_0_16px_rgba(56,189,248,0.75)] drop-shadow-[0_0_24px_rgba(56,189,248,0.5)] filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.4)] select-none pointer-events-none`}
+    className="absolute w-5 h-5 rounded-full bg-red-500/80 blur-[2px] drop-shadow-[0_0_12px_#ef4444]"
+    <circle cx="10" cy="34" r="3.5" fill="#38bdf8" className="drop-shadow-[0_0_6px_#38bdf8]" />
+    <circle cx="58" cy="34" r="3.5" fill="#38bdf8" className="drop-shadow-[0_0_6px_#38bdf8]" />
+    <circle cx="34" cy="8" r="3" fill="#bae6fd" className="drop-shadow-[0_0_6px_#7dd3fc]" />
+    <div className="w-20 h-20 rounded-full border-2 border-sky-400/80 shadow-[0_0_12px_#38bdf8]" />
+    <div className="w-14 h-14 rounded-full border border-cyan-200/70 shadow-[0_0_8px_#7dd3fc]" />
+
+[Move: quick_attack_dash]
+  Asset: Eevee_Quick_Dash.png
+    className="w-32 h-2 rounded-full"
+    className="w-28 h-2 rounded-full -ml-3"
+    <ellipse cx="50" cy="35" rx="42" ry="26" fill="none" stroke="#ffffff" strokeWidth="3.5" className="drop-shadow-[0_0_16px_#ffffff]" />
+    className="max-w-[108px] max-h-[76px] object-contain select-none pointer-events-none drop-shadow-[0_0_18px_rgba(255,255,255,0.85)] drop-shadow-[0_0_8px_rgba(147,197,253,0.6)]"
+    className="absolute w-36 h-36 rounded-full"
+    <svg width="110" height="110" viewBox="0 0 110 110" className="overflow-visible drop-shadow-[0_0_18px_#38bdf8]">
+    className="drop-shadow-[0_0_8px_#38bdf8]"
+    className="drop-shadow-[0_0_18px_#facc15]"
+    <circle cx="50" cy="50" r="10" fill="#ffffff" className="drop-shadow-[0_0_10px_#ffffff]" />
+    <circle cx="48" cy="48" r="30" fill="none" stroke="#ef4444" strokeWidth="4.5" className="drop-shadow-[0_0_18px_#ef4444]" />
+    className="drop-shadow-[0_0_8px_#ef4444]"
+    <ellipse cx="40" cy="20" rx="36" ry="16" fill="#ffffff" opacity="0.75" className="drop-shadow-[0_0_16px_#ffffff]" />
+    <polygon points="30,2 36,22 58,30 36,38 30,58 24,38 2,30 24,22" fill="#ffffff" className="drop-shadow-[0_0_20px_#ffffff]" />
+
+[Move: fish_flail]
+  Asset: Magikarp_Flail.png
+    className="select-none pointer-events-none drop-shadow-[0_6px_16px_rgba(0,0,0,0.35)] drop-shadow-[0_0_12px_#38bdf8]"
+    className="absolute w-24 h-24 rounded-full border-4 border-cyan-300 pointer-events-none"
+    className="absolute w-28 h-28 rounded-full border-4 border-sky-400 pointer-events-none"
+    className="absolute w-2.5 h-2.5 rounded-full bg-cyan-100 border border-white shadow-[0_0_8px_#38bdf8] pointer-events-none"
+
+[Move: cloyster_clamp]
+  Asset: Cloyster_Clamp_Maw.png
+    className={`${fx.whiffed ? 'w-[88px] h-[88px]' : 'w-[110px] h-[110px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_#7c3aed]`}
+    <div className="w-24 h-24 rounded-full border-2 border-violet-300/70 shadow-[0_0_15px_#7c3aed]" />
+
+[Move: scyther_blade_dance]
+  Asset: Scyther_Scythe_Blade.png
+  Asset: Scyther_Scythe_Blade.png
+    className={`${fx.whiffed ? 'w-[80px] h-[56px]' : 'w-[108px] h-[76px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_28px_rgba(163,230,53,0.7)]`}
+    className={`${fx.whiffed ? 'w-[80px] h-[56px]' : 'w-[108px] h-[76px]'} object-contain pointer-events-none -scale-x-100 drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_28px_rgba(163,230,53,0.7)]`}
+    <line x1="12" y1="12" x2="76" y2="76" stroke="#fefce8" strokeWidth="4" strokeLinecap="round" opacity="0.95" className="drop-shadow-[0_0_10px_#ffffff]" />
+    <line x1="76" y1="12" x2="12" y2="76" stroke="#bef264" strokeWidth="4" strokeLinecap="round" opacity="0.95" className="drop-shadow-[0_0_14px_#a3e635]" />
+    <span className="text-xl text-lime-300 select-none drop-shadow-[0_0_10px_#a3e635]">✦</span>
+
+[Move: kick_smash]
+  Asset: Krabby_Irongrip_Claw.png
+    <svg width="40" height="50" viewBox="0 0 40 50" className="drop-shadow-[0_0_12px_#f97316]">
+    className="max-w-[68px] max-h-[76px] object-contain drop-shadow-[0_0_14px_#ea580c] drop-shadow-[0_0_20px_rgba(234,88,12,0.6)]"
+
+[Move: dragon_rage]
+  Asset: Gyarados_Dragon_Rage.png
+    className="drop-shadow-[0_0_24px_#6366f1]"
+    <div className={`relative ${fx.whiffed ? 'w-[78px] h-[78px]' : 'w-[108px] h-[108px]'} flex items-center justify-center`}>
+    className="w-full h-full object-contain drop-shadow-[0_0_18px_rgba(79,70,229,0.85)] drop-shadow-[0_0_28px_rgba(56,189,248,0.65)] filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.6)] select-none pointer-events-none"
+    className="absolute w-4 h-4 rounded-full bg-cyan-300/90 blur-[1.5px] shadow-[0_0_12px_#38bdf8]"
+    top: '56%',
+    left: '28%',
+    className="drop-shadow-[0_0_16px_#38bdf8]"
+    className="drop-shadow-[0_0_16px_#6366f1]"
+    <div className="w-24 h-24 rounded-full border-2 border-indigo-400/80 shadow-[0_0_20px_#6366f1]" />
+    <span className="text-sm text-cyan-200 drop-shadow-[0_0_8px_#38bdf8] select-none">✦</span>
+
+[Move: chansey_scrunch]
+  Asset: Chansey_Scrunch.png
+    className={`${fx.whiffed ? 'w-[82px] h-[72px] opacity-75' : 'w-[110px] h-[96px]'} object-contain pointer-events-none drop-shadow-[0_0_16px_rgba(244,114,182,0.85)] drop-shadow-[0_0_26px_rgba(244,114,182,0.5)]`}
+    className="drop-shadow-[0_0_14px_#ec4899]"
+    left: `calc(50% + ${sp.x})`,
+    top: `calc(50% + ${sp.y})`,
+    <span className="text-pink-200 text-lg select-none drop-shadow-[0_0_8px_#f472b6]">✦</span>
+    <svg width="18" height="22" viewBox="0 0 18 22" className="drop-shadow-[0_0_8px_#93c5fd]">
+
+[Move: hitmonlee_stretch_kick]
+  Asset: Hitmonlee_Stretch_Kick.png
+    className={`${fx.whiffed ? 'w-[88px] h-[78px]' : 'w-[124px] h-[110px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_rgba(245,158,11,0.8)] drop-shadow-[0_0_28px_rgba(217,119,6,0.5)]`}
+    <line x1="0" y1="20" x2="110" y2="20" stroke="#fef08a" strokeWidth="2.5" strokeDasharray="16 8" opacity="0.85" className="drop-shadow-[0_0_8px_#fde047]" />
+    <circle cx="30" cy="30" r="22" fill="none" stroke="#fde047" strokeWidth="3" className="drop-shadow-[0_0_12px_#f59e0b]" />
+
+[Move: hitmonlee_high_jump_kick]
+  Asset: Hitmonlee_High_Jump_Kick.png
+    className={`${fx.whiffed ? 'w-[82px] h-[76px]' : 'w-[114px] h-[106px]'} object-contain pointer-events-none drop-shadow-[0_0_20px_#ea580c] drop-shadow-[0_0_30px_rgba(234,88,12,0.6)]`}
+    className="drop-shadow-[0_0_16px_#f97316]"
+    <line x1="65" y1="0" x2="75" y2="100" stroke="#ffffff" strokeWidth="3" opacity="0.95" className="drop-shadow-[0_0_8px_#ffffff]" />
+    <div className="w-1.5 h-4 bg-gradient-to-b from-yellow-200 to-orange-500 rounded-full shadow-[0_0_8px_#f97316]" />
+
+[Move: shellder_hide_in_shell]
+  Asset: Shellder_Shell.png
+    className={`absolute object-contain pointer-events-none z-35 select-none drop-shadow-[0_0_18px_#a855f7] ${
+    fx.whiffed ? 'w-[84px] h-[73px]' : 'w-[112px] h-[97px]'
+    className="absolute w-36 h-36 rounded-full pointer-events-none z-30 border-2 border-fuchsia-300"
+    { top: '15%', left: '20%', delay: '0.5s' },
+    { top: '15%', right: '20%', delay: '0.6s' },
+    { bottom: '20%', left: '25%', delay: '0.7s' },
+    { bottom: '20%', right: '25%', delay: '0.8s' }
+    top: gl.top,
+    left: gl.left,
+    right: gl.right,
+    bottom: gl.bottom,
+    top: '22%',
+    right: '24%',
+    <svg width="28" height="24" viewBox="0 0 28 24" className="drop-shadow-[0_0_6px_#cbd5e1]">
+
+[Move: shellder_supersonic]
+  Asset: Shellder_Shell.png
+    className={`absolute object-contain pointer-events-none z-35 select-none drop-shadow-[0_0_18px_#38bdf8] ${
+    fx.whiffed ? 'w-[84px] h-[73px]' : 'w-[112px] h-[97px]'
+    className="absolute w-36 h-36 pointer-events-none z-30"
+    <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_16px_#38bdf8]">
+
+[Move: horsea_smokescreen]
+  Asset: Horsea_Snout.png
+    fx.whiffed ? 'w-[60px] h-[48px]' : 'w-[80px] h-[64px]'
+    right: '2%',
+    top: '6%',
+    className="w-full h-full object-contain select-none drop-shadow-[0_0_12px_#38bdf8] drop-shadow-[0_0_6px_#0284c7]"
+    right: '16%',
+    top: '20%',
+    fx.whiffed ? 'w-32 h-32' : 'w-48 h-48'
+    className="w-full h-full overflow-visible drop-shadow-[0_0_28px_#020617] drop-shadow-[0_0_14px_#0f172a]"
+    className="absolute pointer-events-none rounded-full bg-slate-900 drop-shadow-[0_0_6px_#020617]"
+
+[Move: tentacool_acid]
+  Asset: Tentacool_Acid.png
+    fx.whiffed ? 'w-[64px] h-[92px]' : 'w-[84px] h-[120px]'
+    top: '4%',
+    className="w-full h-full object-contain select-none drop-shadow-[0_0_20px_#f43f5e] drop-shadow-[0_0_10px_#38bdf8]"
+    top: '16%',
+    top: '42%',
+    className={`absolute rounded-full pointer-events-none z-30 ${fx.whiffed ? 'w-20 h-14' : 'w-28 h-20'}`}
+    top: '64%',

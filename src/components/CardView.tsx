@@ -12,6 +12,8 @@ interface CardViewProps {
   isFainted?: boolean;
   isAscending?: boolean;
   isDescending?: boolean;
+  /** When true, suppresses the grayscale + FAINTED badge even if HP is 0 (attack FX still playing). */
+  suppressFaintedVisual?: boolean;
   showInspectIcon?: boolean;
   onClick?: () => void;
   onInspect?: () => void;
@@ -28,6 +30,7 @@ export const CardView: React.FC<CardViewProps> = ({
   isFainted = false,
   isAscending = false,
   isDescending = false,
+  suppressFaintedVisual = false,
   showInspectIcon = true,
   onClick,
   onInspect,
@@ -83,6 +86,9 @@ export const CardView: React.FC<CardViewProps> = ({
   const currentPips = Math.max(0, Math.ceil(currentHp / 10));
   const hpRatio = maxHp > 0 ? currentHp / maxHp : 1;
   const isZeroHp = inPlayCard && currentHp === 0;
+  // While the attack FX is still animating a lethal hit, suppress the grayscale/FAINTED badge
+  // but still show the real 0 HP value in the text strip.
+  const showFaintedState = isZeroHp && !suppressFaintedVisual;
 
   const pipColor = hpRatio <= 0.25 ? 'bg-red-500 shadow-[0_0_4px_#ef4444]' : hpRatio <= 0.5 ? 'bg-amber-400' : 'bg-yellow-400 shadow-[0_0_4px_#facc15]';
 
@@ -101,10 +107,10 @@ export const CardView: React.FC<CardViewProps> = ({
       {inPlayCard && !isAscending && !isDescending && (
         <div className="w-full flex flex-col items-center mb-1 px-0.5 pointer-events-none select-none bg-transparent">
           <div className="w-full flex items-center justify-between text-[9px] md:text-[10px] font-mono font-black leading-none mb-0.5">
-            <span className={`${isZeroHp ? 'text-red-500 font-black animate-ping' : hpRatio <= 0.25 ? 'text-red-400 animate-pulse' : hpRatio <= 0.5 ? 'text-amber-300' : 'text-yellow-300'}`}>
+            <span className={`${isZeroHp ? 'text-red-500 font-black' + (showFaintedState ? ' animate-ping' : '') : hpRatio <= 0.25 ? 'text-red-400 animate-pulse' : hpRatio <= 0.5 ? 'text-amber-300' : 'text-yellow-300'}`}>
               {isZeroHp ? '0/' + maxHp + ' HP' : currentHp + '/' + maxHp + ' HP'}
             </span>
-            {isZeroHp ? (
+            {showFaintedState ? (
               <span className="text-[8px] font-black uppercase px-1 py-0.2 rounded bg-red-950 text-red-300 border border-red-600 flex items-center gap-0.5">
                 <Skull className="w-2.5 h-2.5" /> FAINTED
               </span>
@@ -145,7 +151,7 @@ export const CardView: React.FC<CardViewProps> = ({
         className={`w-full aspect-[600/825] p-[1.2px] sm:p-[2px] md:p-[2.5px] bg-[#f5cb39] rounded-xl transition-all duration-200 border border-[#c79808] ${
           isAscending
             ? 'scale-105 shadow-2xl z-20'
-            : isZeroHp || isFainted
+            : showFaintedState || isFainted
             ? 'grayscale brightness-75 ring-2 ring-red-600 fainted-pulse'
             : isDropHovered
             ? 'scale-[1.04] shadow-2xl z-20'
@@ -178,7 +184,7 @@ export const CardView: React.FC<CardViewProps> = ({
         </div>
 
         {/* Hover Zoom Inspection Trigger */}
-        {onInspect && !isZeroHp && showInspectIcon && (
+        {onInspect && !showFaintedState && showInspectIcon && (
           <button
             type="button"
             onClick={(e) => {

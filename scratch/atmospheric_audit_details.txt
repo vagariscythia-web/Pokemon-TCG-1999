@@ -1,0 +1,786 @@
+
+======================================================
+ATMOSPHERIC MOVE: sleeping_gas
+======================================================
+Animations: ['gbaSleepingGasSwirl 1.35s ease-out forwards', 'gbaSleepZzzFloat 1.25s ease-out 0.15s forwards']
+
+Keyframe @keyframes gbaSleepZzzFloat:
+@keyframes gbaSleepZzzFloat {
+  0% { transform: translate(-10px, 20px) scale(0.5); opacity: 0; }
+
+Keyframe @keyframes gbaSleepingGasSwirl:
+@keyframes gbaSleepingGasSwirl {
+  0% { transform: translateY(40px) scale(0.4) rotate(-15deg); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'sleeping_gas' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Swirling Hypnotic Deep Indigo/Purple Gas Vortex */}
+            <div
+              className="absolute flex items-center justify-center z-25"
+              style={{ animation: 'gbaSleepingGasSwirl 1.35s ease-out forwards' }}
+            >
+              <div className="relative w-32 h-32 flex items-center justify-center">
+                {/* Center Somnolent Void Core */}
+                <div className="w-26 h-26 rounded-full bg-gradient-to-tr from-indigo-950/95 via-purple-900/85 to-indigo-600/75 blur-[4px] shadow-[0_0_30px_#818cf8]" />
+                {/* Counter-rotating celestial halo */}
+                <div className="absolute inset-2 rounded-full border border-indigo-400/40 shadow-[0_0_15px_rgba(129,140,248,0.5)] animate-spin" style={{ animationDuration: '4s' }} />
+                <div className="absolute inset-6 rounded-full bg-gradient-to-bl from-purple-600/50 via-indigo-800/40 to-transparent blur-[2px]" />
+              </div>
+            </div>
+  
+            {/* Floating Luminous Dream Motes */}
+            {[
+              { x: '-28px', y: '-30px', delay: 0.1 },
+              { x: '30px', y: '-26px', delay: 0.22 },
+              { x: '-20px', y: '24px', delay: 0.35 },
+              { x: '24px', y: '28px', delay: 0.48 }
+            ].map((mote, idx) => (
+              <div
+                key={`sg-mote-${idx}`}
+
+======================================================
+ATMOSPHERIC MOVE: poison_vapor_bench
+======================================================
+Animations: ['gbaVaporBenchPuff 1.1s ease-out forwards', 'gbaVaporBenchWisp 1.1s ease-out 0.15s forwards', 'gbaVaporBenchSpread 1.1s ease-out 0.2s forwards', 'gbaPoisonGasCloud 1.35s ease-out forwards', 'gbaPoisonGasCloud2 1.35s ease-out 0.15s forwards', 'gbaPoisonGasHazePulse 1.35s ease-in-out forwards']
+
+Keyframe @keyframes gbaVaporBenchPuff:
+@keyframes gbaVaporBenchPuff {
+  0% { transform: translateX(-26px) scale(0.25); opacity: 0; }
+
+Keyframe @keyframes gbaPoisonGasCloud:
+@keyframes gbaPoisonGasCloud {
+  0% { transform: translateY(40px) scale(0.35) rotate(-10deg); filter: blur(4px); opacity: 0; }
+
+Keyframe @keyframes gbaVaporBenchWisp:
+@keyframes gbaVaporBenchWisp {
+  0% { transform: translateY(10px) scaleX(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaPoisonGasCloud2:
+@keyframes gbaPoisonGasCloud2 {
+  0% { transform: translateY(35px) scale(0.3) rotate(8deg); filter: blur(4px); opacity: 0; }
+
+Keyframe @keyframes gbaPoisonGasHazePulse:
+@keyframes gbaPoisonGasHazePulse {
+  0% { opacity: 0; }
+
+Keyframe @keyframes gbaVaporBenchSpread:
+@keyframes gbaVaporBenchSpread {
+  0%, 20% { transform: scale(0.25); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'poison_vapor_bench' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            <div className="absolute" style={{ animation: 'gbaVaporBenchPuff 1.1s ease-out forwards', opacity: 0 }}>
+              <svg width="96" height="60" viewBox="0 0 96 60" className="overflow-visible">
+                <path
+                  d="M6 44 C 2 28, 22 18, 38 26 C 46 10, 74 12, 80 28 C 94 30, 94 46, 82 50 C 58 60, 20 58, 6 44 Z"
+                  fill="#3f6212" opacity="0.72"
+                />
+                <path
+                  d="M14 42 C 12 30, 28 24, 40 30 C 50 18, 70 22, 74 34 C 84 38, 80 48, 70 50 C 46 56, 24 52, 14 42 Z"
+                  fill="#7e22ce" opacity="0.45"
+                />
+              </svg>
+            </div>
+            <div className="absolute" style={{ animation: 'gbaVaporBenchWisp 1.1s ease-out 0.15s forwards', opacity: 0 }}>
+              <svg width="60" height="34" viewBox="0 0 60 34" className="overflow-visible">
+                <path d="M4 26 C 10 10, 30 16, 38 8 C 48 0, 58 10, 56 24 Z" fill="#d9f99d" opacity="0.4" />
+              </svg>
+            </div>
+            {/* Mini venom pulse marking the gas reaching this benched Pokémon */}
+            <div className="absolute" style={{ animation: 'gbaVaporBenchSpread 1.1s ease-out 0.2s forwards', opacity: 0 }}>
+              <svg width="48" height="48" viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="18" fill="none" stroke="#a3e635" strokeWidth="2" opacity="0.8" />
+                <circle cx="24" cy="24" r="11" fill="none" stroke="#86efac" strokeWidth="1.5" opacity="0.6" />
+                <circle cx="24" cy="24" r="5" fill="#a3e635" opacity="0.35" />
+
+======================================================
+ATMOSPHERIC MOVE: smokescreen_cloud
+======================================================
+Animations: ['gbaSmokescreenDrift1 1.25s ease-out forwards', 'gbaSmokescreenDrift2 1.25s ease-out 0.15s forwards', 'gbaSmokescreenDrift3 1.25s ease-out 0.3s forwards', 'gbaSmokescreenFade 1.25s ease-out forwards']
+
+Keyframe @keyframes gbaSmokescreenDrift3:
+@keyframes gbaSmokescreenDrift3 {
+  0% { transform: translateY(10px) scale(0.3); opacity: 0; }
+
+Keyframe @keyframes gbaSmokescreenFade:
+@keyframes gbaSmokescreenFade {
+  0% { opacity: 0; }
+
+Keyframe @keyframes gbaSmokescreenDrift1:
+@keyframes gbaSmokescreenDrift1 {
+  0% { transform: translateX(-40px) scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaSmokescreenDrift2:
+@keyframes gbaSmokescreenDrift2 {
+  0% { transform: translateX(30px) scale(0.3); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'smokescreen_cloud' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Main smoke puff - drifts right */}
+            <div
+              className="absolute"
+              style={{ animation: 'gbaSmokescreenDrift1 1.25s ease-out forwards' }}
+            >
+              <div className="w-14 h-10 rounded-full bg-gradient-to-r from-gray-600/80 via-gray-500/70 to-gray-700/60 blur-[2px] shadow-[0_0_12px_rgba(100,100,100,0.5)]" />
+            </div>
+            {/* Secondary puff - drifts left, slightly lower */}
+            <div
+              className="absolute mt-3"
+              style={{ animation: 'gbaSmokescreenDrift2 1.25s ease-out 0.15s forwards', opacity: 0 }}
+            >
+              <div className="w-12 h-8 rounded-full bg-gradient-to-l from-gray-700/70 via-gray-500/60 to-gray-600/50 blur-[2px] shadow-[0_0_10px_rgba(80,80,80,0.4)]" />
+            </div>
+            {/* Small wisp - higher, faster */}
+            <div
+              className="absolute -mt-4"
+              style={{ animation: 'gbaSmokescreenDrift3 1.25s ease-out 0.3s forwards', opacity: 0 }}
+            >
+              <div className="w-8 h-6 rounded-full bg-gray-500/50 blur-[3px]" />
+            </div>
+            {/* Fading opacity overlay to simulate vision obscure */}
+            <div
+
+======================================================
+ATMOSPHERIC MOVE: magmar_smog
+======================================================
+Animations: ['gbaMagmarHeatCore 1.65s ease-out forwards', 'gbaMagmarSmogPlume1 1.65s cubic-bezier(0.16, 0.85, 0.3, 1) forwards', 'gbaMagmarSmogPlume2 1.65s cubic-bezier(0.16, 0.85, 0.3, 1) 0.12s forwards', 'gbaMagmarSmogPlume3 1.65s ease-out 0.22s forwards', 'gbaSmokescreenFade 1.65s ease-out forwards']
+
+Keyframe @keyframes gbaMagmarSmogPlume2:
+@keyframes gbaMagmarSmogPlume2 {
+  0%   { transform: translate(28px, 18px) scale(0.3) rotate(8deg); opacity: 0; }
+
+Keyframe @keyframes gbaMagmarHeatCore:
+@keyframes gbaMagmarHeatCore {
+  0%   { transform: scale(0.3); opacity: 0; }
+
+Keyframe @keyframes gbaSmokescreenFade:
+@keyframes gbaSmokescreenFade {
+  0% { opacity: 0; }
+
+Keyframe @keyframes gbaMagmarSmogPlume3:
+@keyframes gbaMagmarSmogPlume3 {
+  0%   { transform: translateY(24px) scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaMagmarSmogPlume1:
+@keyframes gbaMagmarSmogPlume1 {
+  0%   { transform: translate(-28px, 22px) scale(0.35) rotate(-6deg); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'magmar_smog' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Ambient Volcanic Heat Core Glow */}
+            <div
+              className="absolute flex items-center justify-center z-15"
+              style={{ animation: 'gbaMagmarHeatCore 1.65s ease-out forwards' }}
+            >
+              <div className="w-36 h-32 rounded-full bg-gradient-to-tr from-red-600/40 via-orange-500/50 to-amber-400/40 blur-2xl shadow-[0_0_35px_rgba(249,115,22,0.65)]" />
+            </div>
+  
+            {/* Plume 1: Primary Volcanic Charcoal & Dark Ash Billow (drifts right and upward) */}
+            <div
+              className="absolute flex items-center justify-center z-25"
+              style={{ animation: 'gbaMagmarSmogPlume1 1.65s cubic-bezier(0.16, 0.85, 0.3, 1) forwards' }}
+            >
+              <div className="relative w-28 h-20 flex items-center justify-center">
+                {/* Dark volcanic soot cloud base */}
+                <div className="w-24 h-16 rounded-full bg-gradient-to-r from-stone-900/90 via-stone-800/85 to-neutral-700/75 blur-[3px] shadow-[0_0_20px_rgba(30,30,30,0.7)]" />
+                {/* Warm amber rim light from inner magma heat */}
+                <div className="absolute -top-2 left-2 w-16 h-12 rounded-full bg-gradient-to-br from-orange-600/60 via-stone-800/70 to-neutral-700/50 blur-[2px]" />
+                <div className="absolute -bottom-1 right-2 w-14 h-10 rounded-full bg-gradient-to-tl from-stone-900/90 to-amber-700/40 blur-[3px]" />
+              </div>
+            </div>
+  
+            {/* Plume 2: Counter-Swirling Pyric Soot Plume (drifts left and upward) */}
+
+======================================================
+ATMOSPHERIC MOVE: weezing_toxic_smog
+======================================================
+Animations: ['gbaWeezingToxicSmogManifest 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards', 'gbaWeezingSmogEruptLeft 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards', 'gbaWeezingSmogEruptRight 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards', 'gbaWeezingNoxiousCloud 1.7s ease-out forwards']
+
+Keyframe @keyframes gbaWeezingNoxiousCloud:
+@keyframes gbaWeezingNoxiousCloud {
+  0%, 20% { transform: scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaWeezingToxicSmogManifest:
+@keyframes gbaWeezingToxicSmogManifest {
+  0%   { transform: translateY(-22px) scale(0.55) rotate(-6deg); opacity: 0; filter: drop-shadow(0 0 0px transparent); }
+
+Keyframe @keyframes gbaWeezingSmogEruptRight:
+@keyframes gbaWeezingSmogEruptRight {
+  0%   { transform: translate(30px, 30px) scale(0.3) rotate(20deg); opacity: 0; }
+
+Keyframe @keyframes gbaWeezingSmogEruptLeft:
+@keyframes gbaWeezingSmogEruptLeft {
+  0%   { transform: translate(-30px, 30px) scale(0.3) rotate(-20deg); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'weezing_toxic_smog' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Weezing Dual-Body Floating Manifestation (Sugimori 1996 Official Artwork) */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-30"
+              style={{ animation: 'gbaWeezingToxicSmogManifest 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+            >
+              <img
+                src="/assets/Weezing_Toxic_Smog.png"
+                alt="Weezing Toxic Smog"
+                className={`${fx.whiffed ? 'w-[84px] h-[78px]' : 'w-[114px] h-[106px]'} object-contain drop-shadow-[0_0_26px_rgba(147,51,234,0.9)] drop-shadow-[0_0_36px_rgba(147,51,234,0.6)]`}
+              />
+            </div>
+            {/* Left Smog Plume Eruption (Yellowish-Green Sulfur Mist) */}
+            <div
+              className="absolute left-2 flex items-center justify-center pointer-events-none z-25"
+              style={{ animation: 'gbaWeezingSmogEruptLeft 1.7s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+            >
+              <div className="relative w-24 h-24 flex items-center justify-center">
+                {/* Dense sulfur core */}
+                <div className="w-20 h-14 rounded-full bg-gradient-to-tr from-lime-700/80 via-yellow-600/70 to-lime-500/60 blur-[3px] shadow-[0_0_20px_rgba(132,204,22,0.6)]" />
+                {/* Billowing sulfur puff */}
+                <div className="absolute -top-2 -right-1 w-14 h-12 rounded-full bg-gradient-to-br from-lime-500/70 via-yellow-400/60 to-emerald-600/50 blur-[2px]" />
+                {/* Lower dense puff */}
+                <div className="absolute -bottom-2 -left-1 w-12 h-10 rounded-full bg-gradient-to-t from-lime-800/80 via-lime-600/60 to-yellow-500/40 blur-[2px]" />
+
+======================================================
+ATMOSPHERIC MOVE: koffing_foul_gas
+======================================================
+Animations: ['gbaKoffingFoulGasFloat 1.65s cubic-bezier(0.15, 0.85, 0.25, 1) forwards', 'gbaPoisonGasCloud 1.4s ease-out forwards', 'gbaPoisonGasCloud2 1.4s ease-out 0.15s forwards']
+
+Keyframe @keyframes gbaPoisonGasCloud:
+@keyframes gbaPoisonGasCloud {
+  0% { transform: translateY(40px) scale(0.35) rotate(-10deg); filter: blur(4px); opacity: 0; }
+
+Keyframe @keyframes gbaPoisonGasCloud2:
+@keyframes gbaPoisonGasCloud2 {
+  0% { transform: translateY(35px) scale(0.3) rotate(8deg); filter: blur(4px); opacity: 0; }
+
+Keyframe @keyframes gbaKoffingFoulGasFloat:
+@keyframes gbaKoffingFoulGasFloat {
+  0%   { transform: translateY(-24px) scale(0.50) rotate(-8deg); opacity: 0; filter: drop-shadow(0 0 0px transparent); }
+
+TSX Structure Preview:
+  {fx.type === 'koffing_foul_gas' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Koffing Gas Mine Body Floating & Squeezing */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-30"
+              style={{ animation: 'gbaKoffingFoulGasFloat 1.65s cubic-bezier(0.15, 0.85, 0.25, 1) forwards' }}
+            >
+              <img
+                src="/assets/Koffing_Foul_Gas.png"
+                alt="Koffing Foul Gas"
+                className={`${fx.whiffed ? 'w-[78px] h-[71px]' : 'w-[110px] h-[100px]'} object-contain drop-shadow-[0_0_24px_rgba(132,204,22,0.9)]`}
+              />
+            </div>
+  
+            {/* Billowing Sulfur & Acidic Gas Clouds */}
+            <div
+              className={`absolute pointer-events-none z-20 ${fx.whiffed ? 'scale-75 opacity-40' : ''}`}
+              style={{ animation: 'gbaPoisonGasCloud 1.4s ease-out forwards' }}
+            >
+              <div className="w-28 h-20 rounded-full bg-gradient-to-tr from-purple-950/90 via-purple-700/80 to-lime-500/60 blur-[3px] shadow-[0_0_24px_rgba(163,230,53,0.6)]" />
+            </div>
+            <div
+              className={`absolute pointer-events-none z-20 mt-2 ml-4 ${fx.whiffed ? 'scale-75 opacity-40' : ''}`}
+              style={{ animation: 'gbaPoisonGasCloud2 1.4s ease-out 0.15s forwards', opacity: 0 }}
+            >
+
+======================================================
+ATMOSPHERIC MOVE: venomoth_venom_powder
+======================================================
+Animations: ['gbaVenomothPollenCloud 1.7s ease-in-out forwards', 'gbaVenomothPollenCloud 1.7s ease-in-out forwards', 'gbaVenomothConfusionRipples 1.7s ease-out forwards']
+
+Keyframe @keyframes gbaVenomothConfusionRipples:
+@keyframes gbaVenomothConfusionRipples {
+  0%   { transform: scale(0.2) rotate(0deg); opacity: 0; }
+
+Keyframe @keyframes gbaVenomothPollenCloud:
+@keyframes gbaVenomothPollenCloud {
+  0%   { transform: scale(0.3); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'venomoth_venom_powder' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Layer 1: Iridescent Toxic Spore Card Block (Restricted cleanly to card below HP bar, 100% crisp HP readout, no rectangular leakage) */}
+            <div
+              className="card-fx-block-overlay z-10 border border-purple-400/30 rounded-xl"
+              style={{
+                animation: 'gbaVenomothPollenCloud 1.7s ease-in-out forwards',
+                background: 'radial-gradient(ellipse at center, rgba(216,180,254,0.38) 0%, rgba(168,85,247,0.28) 50%, rgba(132,204,22,0.18) 80%, transparent 100%)',
+                backdropFilter: 'blur(2.5px)',
+                WebkitBackdropFilter: 'blur(2.5px)'
+              }}
+            />
+  
+            {/* Layer 2: Billowing Iridescent Toxic Spore Cloud */}
+            <div
+              className="absolute w-44 h-44 rounded-full pointer-events-none z-20"
+              style={{
+                animation: 'gbaVenomothPollenCloud 1.7s ease-in-out forwards',
+                background: 'radial-gradient(circle, rgba(216,180,254,0.45) 0%, rgba(168,85,247,0.35) 45%, rgba(132,204,22,0.2) 75%, transparent 100%)'
+              }}
+            />
+  
+            {/* Hypnotic Psy-Confusion Concentric Ripple Rings */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-25"
+
+======================================================
+ATMOSPHERIC MOVE: sandshrew_sand_attack
+======================================================
+Animations: ['gbaSandshrewClawSwipe 1.55s cubic-bezier(0.16, 1, 0.3, 1) forwards', 'gbaSandshrewSandBlast 1.55s ease-out forwards', 'gbaSandshrewBlindingHaze 1.55s ease-out forwards']
+
+Keyframe @keyframes gbaSandshrewClawSwipe:
+@keyframes gbaSandshrewClawSwipe {
+  0% {
+    transform: translate(-75px, -65px) rotate(-50deg) scale(0.45);
+    filter: blur(5px) drop-shadow(0 0 10px #d97706);
+    opacity: 0;
+  }
+
+Keyframe @keyframes gbaSandshrewSandBlast:
+@keyframes gbaSandshrewSandBlast {
+  0%, 32% {
+    transform: scale(0.3) rotate(-10deg);
+    opacity: 0;
+  }
+
+Keyframe @keyframes gbaSandshrewBlindingHaze:
+@keyframes gbaSandshrewBlindingHaze {
+  0%, 35% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+TSX Structure Preview:
+  {fx.type === 'sandshrew_sand_attack' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Authentic 1996 Ken Sugimori Digging Claw Arm */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-30"
+              style={{ animation: 'gbaSandshrewClawSwipe 1.55s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+            >
+              <img
+                src="/assets/Sandshrew_Digging_Claws.png"
+                alt="Sandshrew Digging Claws"
+                className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_18px_#d97706] select-none pointer-events-none"
+              />
+            </div>
+  
+            {/* Conical Swirling Desert Sand Blast */}
+            <div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
+              style={{ animation: 'gbaSandshrewSandBlast 1.55s ease-out forwards' }}
+            >
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <path d="M 20 80 Q 80 20 140 60 Q 150 110 80 130 Q 30 130 20 80 Z" fill="url(#sandBlastGrad)" opacity="0.85" />
+                <defs>
+                  <radialGradient id="sandBlastGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.9" />
+                    <stop offset="60%" stopColor="#d97706" stopOpacity="0.75" />
+
+======================================================
+ATMOSPHERIC MOVE: gastly_sleeping_gas
+======================================================
+Animations: ['gbaGastlySleepGasCloud 1.7s ease-out forwards', 'gbaGastlyMistPulse 1.7s ease-out forwards']
+
+Keyframe @keyframes gbaGastlyMistPulse:
+@keyframes gbaGastlyMistPulse {
+  0%, 20% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+Keyframe @keyframes gbaGastlySleepGasCloud:
+@keyframes gbaGastlySleepGasCloud {
+  0% {
+    transform: scale(0.3) rotate(-15deg);
+    opacity: 0;
+  }
+
+TSX Structure Preview:
+  {fx.type === 'gastly_sleeping_gas' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Swirling Spectral Ectoplasmic Gas Cloud */}
+            <div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
+              style={{ animation: 'gbaGastlySleepGasCloud 1.7s ease-out forwards' }}
+            >
+              <div className="relative w-36 h-36 flex items-center justify-center">
+                {/* Multi-layered ectoplasm shroud */}
+                <div className="w-32 h-32 rounded-full bg-gradient-to-tr from-indigo-950/95 via-purple-900/90 to-fuchsia-700/60 blur-[6px] shadow-[0_0_35px_#7c3aed]" />
+                <div className="absolute w-24 h-24 rounded-full bg-gradient-to-bl from-purple-950/90 via-violet-900/80 to-indigo-950/90 blur-[3px]" />
+                <div className="absolute inset-4 rounded-full border border-purple-400/30 blur-[1px]" />
+                {/* Glowing Gastly Spectral Eyes */}
+                <div className="absolute flex items-center gap-4 -mt-2">
+                  <div className="w-5 h-6 rounded-full bg-white shadow-[0_0_12px_#ffffff] rotate-12 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-purple-950" />
+                  </div>
+                  <div className="w-5 h-6 rounded-full bg-white shadow-[0_0_12px_#ffffff] -rotate-12 flex items-center justify-center">
+                    <div className="w-2 h-2 rounded-full bg-purple-950" />
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            {/* Floating Dream Motes with Subtle Zzz Drift */}
+
+======================================================
+ATMOSPHERIC MOVE: oddish_stun_spore
+======================================================
+Animations: ['gbaOddishBulbShake 1.65s ease-in-out forwards']
+
+Keyframe @keyframes gbaOddishBulbShake:
+@keyframes gbaOddishBulbShake {
+  0%   { transform: rotate(0deg) scale(1); }
+
+TSX Structure Preview:
+  {fx.type === 'oddish_stun_spore' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Shaking 5-Lobed Leaf Bulb (<= 60% Card Width) */}
+            <div
+              className="absolute -top-5 pointer-events-none z-25"
+              style={{ animation: 'gbaOddishBulbShake 1.65s ease-in-out forwards' }}
+            >
+              <svg width="48" height="38" viewBox="0 0 110 90">
+                <ellipse cx="55" cy="30" rx="14" ry="28" fill="#16a34a" stroke="#14532d" strokeWidth="3" />
+                <ellipse cx="32" cy="40" rx="12" ry="24" fill="#22c55e" stroke="#14532d" strokeWidth="3" transform="rotate(-25 32 40)" />
+                <ellipse cx="78" cy="40" rx="12" ry="24" fill="#22c55e" stroke="#14532d" strokeWidth="3" transform="rotate(25 78 40)" />
+                <ellipse cx="18" cy="55" rx="10" ry="20" fill="#4ade80" stroke="#14532d" strokeWidth="3" transform="rotate(-50 18 55)" />
+                <ellipse cx="92" cy="55" rx="10" ry="20" fill="#4ade80" stroke="#14532d" strokeWidth="3" transform="rotate(50 92 55)" />
+              </svg>
+            </div>
+  
+            {/* Drifting Golden Electrostatic Spores */}
+            {[
+              { ox: '-18px', dx: '-6px', delay: 0.15 },
+              { ox: '-8px', dx: '4px', delay: 0.2 },
+              { ox: '6px', dx: '-5px', delay: 0.25 },
+              { ox: '16px', dx: '6px', delay: 0.3 },
+              { ox: '-12px', dx: '8px', delay: 0.35 },
+              { ox: '10px', dx: '-10px', delay: 0.4 }
+            ].map((s, i) => (
+
+======================================================
+ATMOSPHERIC MOVE: sand_attack_throw
+======================================================
+Animations: ['gbaSandScatter 1.2s ease-out 0.4s forwards', 'gbaSandOriginPuff 1.2s ease-out forwards']
+
+Keyframe @keyframes gbaSandOriginPuff:
+@keyframes gbaSandOriginPuff {
+  0% { transform: scale(0.3) translateY(5px); opacity: 0; }
+
+Keyframe @keyframes gbaSandScatter:
+@keyframes gbaSandScatter {
+  0% { transform: scale(0.3); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'sand_attack_throw' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="absolute -left-4 bottom-2" style={{ animation: `gbaSandArc${(i % 3) + 1} 1.2s cubic-bezier(0.2, 0.7, 0.6, 1) ${i * 0.06}s forwards`, opacity: 0 }}>
+                <div className="rounded-full" style={{ width: `${8 + (i % 3) * 4}px`, height: `${8 + (i % 3) * 4}px`, background: i % 2 === 0 ? '#d6a35c' : '#c2884a', boxShadow: '0 0 6px rgba(214,163,92,0.6)' }} />
+              </div>
+            ))}
+            <div className="absolute right-4 top-1/3" style={{ animation: 'gbaSandScatter 1.2s ease-out 0.4s forwards', opacity: 0 }}>
+              <svg width="60" height="44" viewBox="0 0 60 44">
+                <circle cx="12" cy="10" r="2.5" fill="#d6a35c" />
+                <circle cx="26" cy="6" r="2" fill="#e0b878" />
+                <circle cx="40" cy="12" r="2.8" fill="#c2884a" />
+                <circle cx="50" cy="8" r="1.8" fill="#d6a35c" />
+                <circle cx="18" cy="24" r="2.2" fill="#e0b878" />
+                <circle cx="34" cy="22" r="2.6" fill="#d6a35c" />
+                <circle cx="46" cy="26" r="2" fill="#c2884a" />
+                <circle cx="8" cy="34" r="1.8" fill="#e0b878" />
+                <circle cx="28" cy="36" r="2.4" fill="#d6a35c" />
+                <circle cx="44" cy="38" r="2" fill="#c2884a" />
+              </svg>
+            </div>
+            <div className="absolute -left-2 bottom-0" style={{ animation: 'gbaSandOriginPuff 1.2s ease-out forwards', opacity: 0 }}>
+              <div className="w-10 h-5 rounded-full bg-gradient-to-r from-amber-600/50 via-yellow-600/40 to-amber-700/30 blur-[2px]" />
+            </div>
+          </div>
+
+======================================================
+ATMOSPHERIC MOVE: sand_attack_dust
+======================================================
+Animations: ['gbaDustCloudPuff 1.25s ease-out forwards', 'gbaDustSwirl 1.25s ease-in-out 0.2s forwards']
+
+Keyframe @keyframes gbaDustCloudPuff:
+@keyframes gbaDustCloudPuff {
+  0% { transform: scale(0.3); opacity: 0; }
+
+Keyframe @keyframes gbaDustSwirl:
+@keyframes gbaDustSwirl {
+  0% { transform: rotate(0deg) scale(0.5); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'sand_attack_dust' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            <div className="absolute" style={{ animation: 'gbaDustCloudPuff 1.25s ease-out forwards' }}>
+              <div className="relative w-28 h-18 flex items-center justify-center">
+                <div className="w-26 h-16 rounded-full bg-gradient-to-r from-amber-700/60 via-amber-600/55 to-yellow-600/45 blur-[3px] shadow-[0_0_18px_rgba(214,163,92,0.4)]" />
+                <div className="absolute -top-2 left-2 w-16 h-12 rounded-full bg-gradient-to-br from-yellow-500/50 via-amber-400/40 to-amber-700/30 blur-[2px]" />
+                <div className="absolute -bottom-1 right-2 w-14 h-10 rounded-full bg-amber-800/50 blur-[2px]" />
+                <div className="absolute inset-0 rounded-full bg-amber-500/20 blur-lg" />
+              </div>
+            </div>
+            <div className="absolute" style={{ animation: 'gbaDustSwirl 1.25s ease-in-out 0.2s forwards', opacity: 0 }}>
+              <svg width="80" height="50" viewBox="0 0 80 50">
+                <path d="M8 30 Q22 18, 38 26 Q54 34, 70 22" fill="none" stroke="#e0b878" strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
+                <path d="M14 40 Q30 30, 48 36 Q62 42, 72 34" fill="none" stroke="#d6a35c" strokeWidth="2" strokeLinecap="round" opacity="0.55" />
+              </svg>
+            </div>
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="absolute" style={{ left: `${30 + i * 14}%`, top: `${35 + (i % 2) * 15}%`, animation: `gbaDustGrain 1.25s ease-out ${0.15 + i * 0.1}s forwards`, opacity: 0 }}>
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: i % 2 === 0 ? '#e0b878' : '#c2884a' }} />
+              </div>
+            ))}
+          </div>
+        )}
+  
+        {/* 24. PAY DAY COINS (GBA-style golden coins scattering with sparkle) */}
+
+======================================================
+ATMOSPHERIC MOVE: smog_haze
+======================================================
+Animations: ['gbaSmogCloudDrift1 1.25s ease-out forwards', 'gbaSmogCloudDrift2 1.25s ease-out 0.15s forwards', 'gbaSmogToxicWisp 1.25s ease-out 0.25s forwards', 'gbaSmogParticleRise 1.25s ease-out 0.3s forwards', 'gbaSmogParticleRise 1.25s ease-out 0.45s forwards', 'gbaCurseEyeForm 1.25s ease-out forwards', 'gbaCurseChainOrbit 1.25s linear forwards', 'gbaCurseChainOrbit 1.25s linear 0.15s forwards', 'gbaCurseAuraPulse 1.25s ease-out 0.2s forwards', 'gbaCurseShadowWisp 1.25s ease-out 0.3s forwards']
+
+Keyframe @keyframes gbaSmogParticleRise:
+@keyframes gbaSmogParticleRise {
+  0% { transform: translateY(12px) scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaCurseAuraPulse:
+@keyframes gbaCurseAuraPulse {
+  0% { transform: scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaCurseChainOrbit:
+@keyframes gbaCurseChainOrbit {
+  0% { transform: rotate(0deg) translateX(20px) scale(0.5); opacity: 0; }
+
+Keyframe @keyframes gbaCurseShadowWisp:
+@keyframes gbaCurseShadowWisp {
+  0% { transform: translateY(10px) scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaSmogCloudDrift2:
+@keyframes gbaSmogCloudDrift2 {
+  0% { transform: translateX(20px) translateY(5px) scale(0.35); opacity: 0; }
+
+Keyframe @keyframes gbaCurseEyeForm:
+@keyframes gbaCurseEyeForm {
+  0% { transform: scale(0.2); opacity: 0; }
+
+Keyframe @keyframes gbaSmogCloudDrift1:
+@keyframes gbaSmogCloudDrift1 {
+  0% { transform: translateX(-25px) scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaSmogToxicWisp:
+@keyframes gbaSmogToxicWisp {
+  0% { transform: translateY(8px) translateX(3px) scale(0.35); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'smog_haze' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Main smog cloud - drifts right */}
+            <div className="absolute" style={{ animation: 'gbaSmogCloudDrift1 1.25s ease-out forwards' }}>
+              <div className="relative w-28 h-18 flex items-center justify-center">
+                <div className="w-24 h-14 rounded-full bg-gradient-to-r from-gray-700/80 via-gray-600/70 to-gray-500/60 blur-[3px] shadow-[0_0_16px_rgba(75,85,99,0.5)]" />
+                <div className="absolute -top-2 -left-2 w-16 h-11 rounded-full bg-gradient-to-br from-gray-600/70 via-gray-500/60 to-gray-700/40 blur-[2px]" />
+                <div className="absolute -bottom-1 -right-2 w-14 h-10 rounded-full bg-gray-600/60 blur-[2px]" />
+              </div>
+            </div>
+            {/* Secondary smog puff - drifts left, lower */}
+            <div className="absolute mt-4" style={{ animation: 'gbaSmogCloudDrift2 1.25s ease-out 0.15s forwards', opacity: 0 }}>
+              <div className="relative w-22 h-14 flex items-center justify-center">
+                <div className="w-20 h-12 rounded-full bg-gradient-to-l from-gray-800/80 via-gray-600/70 to-gray-700/50 blur-[3px] shadow-[0_0_12px_rgba(55,65,81,0.4)]" />
+                <div className="absolute -top-1 -right-1 w-12 h-8 rounded-full bg-gray-500/50 blur-[2px]" />
+              </div>
+            </div>
+            {/* Toxic purple wisps within smog */}
+            <div className="absolute" style={{ animation: 'gbaSmogToxicWisp 1.25s ease-out 0.25s forwards', opacity: 0 }}>
+              <svg width="50" height="30" viewBox="0 0 50 30">
+                <path d="M8 20 Q15 12, 25 16 Q35 20, 42 14" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+                <path d="M12 25 Q22 18, 32 22 Q40 25, 46 20" fill="none" stroke="#c084fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+              </svg>
+            </div>
+            {/* Small smoke particles rising */}
+
+======================================================
+ATMOSPHERIC MOVE: stun_gas
+======================================================
+Animations: ['gbaStunGasCloudForm 1.25s ease-out forwards', 'gbaStunSpark1 1.25s ease-out 0.2s forwards', 'gbaStunSpark2 1.25s ease-out 0.35s forwards', 'gbaStunGasRise 1.25s ease-out 0.15s forwards', 'gbaStunNumbRing 1.25s ease-out 0.3s forwards']
+
+Keyframe @keyframes gbaStunNumbRing:
+@keyframes gbaStunNumbRing {
+  0% { transform: scale(0.3); opacity: 0; }
+
+Keyframe @keyframes gbaStunSpark2:
+@keyframes gbaStunSpark2 {
+  0% { transform: translate(-7px, 4px) scale(0.35); opacity: 0; }
+
+Keyframe @keyframes gbaStunGasRise:
+@keyframes gbaStunGasRise {
+  0% { transform: translateY(10px) scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaStunGasCloudForm:
+@keyframes gbaStunGasCloudForm {
+  0% { transform: scale(0.3) translateY(5px); opacity: 0; }
+
+Keyframe @keyframes gbaStunSpark1:
+@keyframes gbaStunSpark1 {
+  0% { transform: translate(8px, -5px) scale(0.4); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'stun_gas' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Main gas cloud - diffused paralytic ion mist */}
+            <div className="absolute" style={{ animation: 'gbaStunGasCloudForm 1.25s ease-out forwards' }}>
+              <div className="relative w-28 h-20 flex items-center justify-center">
+                <div className="w-24 h-16 rounded-full bg-gradient-to-r from-yellow-500/40 via-amber-400/45 to-yellow-300/35 blur-[3px] shadow-[0_0_20px_rgba(234,179,8,0.4)]" />
+                <div className="absolute -top-2 left-1 w-16 h-12 rounded-full bg-gradient-to-br from-yellow-300/45 via-yellow-200/35 to-amber-400/25 blur-[2px]" />
+                <div className="absolute -bottom-1 right-2 w-14 h-10 rounded-full bg-amber-500/35 blur-[2px]" />
+                <div className="absolute inset-0 rounded-full bg-yellow-400/20 blur-lg" />
+              </div>
+            </div>
+            {/* Paralysis electric sparks within gas */}
+            <div className="absolute" style={{ animation: 'gbaStunSpark1 1.25s ease-out 0.2s forwards', opacity: 0 }}>
+              <svg width="16" height="20" viewBox="0 0 16 20">
+                <path d="M8 1 L5 8 L9 7 L6 14 L11 10 L8 11 L12 4 Z" fill="#fde047" stroke="#eab308" strokeWidth="0.5" />
+              </svg>
+            </div>
+            <div className="absolute" style={{ animation: 'gbaStunSpark2 1.25s ease-out 0.35s forwards', opacity: 0 }}>
+              <svg width="12" height="16" viewBox="0 0 12 16">
+                <path d="M6 1 L4 6 L7 5.5 L4.5 11 L8.5 8 L6 8.5 L9 3 Z" fill="#fef08a" stroke="#facc15" strokeWidth="0.5" />
+              </svg>
+            </div>
+            {/* Rising gas wisps */}
+            <div className="absolute -top-2" style={{ animation: 'gbaStunGasRise 1.25s ease-out 0.15s forwards', opacity: 0 }}>
+              <svg width="30" height="24" viewBox="0 0 30 24">
+
+======================================================
+ATMOSPHERIC MOVE: stun_spore
+======================================================
+Animations: ['gbaStunSporeSpark 1.25s ease-out 0.5s forwards', 'gbaStunSporeHaze 1.25s ease-out forwards']
+
+Keyframe @keyframes gbaStunSporeHaze:
+@keyframes gbaStunSporeHaze {
+  0% { transform: scale(0.4) translateY(3px); opacity: 0; }
+
+Keyframe @keyframes gbaStunSporeSpark:
+@keyframes gbaStunSporeSpark {
+  0% { transform: scale(0.3); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'stun_spore' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Spore particles falling - staggered */}
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div key={i} className="absolute top-0" style={{ left: `${15 + i * 16}%`, animation: `gbaStunSporeFall${(i % 2) + 1} 1.25s cubic-bezier(0.3, 0.6, 0.5, 1) ${i * 0.08}s forwards`, opacity: 0 }}>
+                <svg width="10" height="10" viewBox="0 0 10 10">
+                  <circle cx="5" cy="5" r={3 + (i % 2)} fill={i % 2 === 0 ? '#facc15' : '#fde047'} opacity="0.8" />
+                  <circle cx="4" cy="4" r="1.2" fill="#fef9c3" opacity="0.6" />
+                </svg>
+              </div>
+            ))}
+            {/* Paralysis spark at impact */}
+            <div className="absolute" style={{ animation: 'gbaStunSporeSpark 1.25s ease-out 0.5s forwards', opacity: 0 }}>
+              <svg width="24" height="28" viewBox="0 0 24 28">
+                <path d="M12 2 L8 10 L13 9 L9 18 L16 12 L11 13 L16 5 Z" fill="#fde047" stroke="#eab308" strokeWidth="0.8" />
+              </svg>
+            </div>
+            {/* Yellow haze aura */}
+            <div
+              className="absolute w-40 h-40 rounded-full pointer-events-none"
+              style={{
+                animation: 'gbaStunSporeHaze 1.25s ease-out forwards',
+                background: 'radial-gradient(circle, rgba(250,204,21,0.18) 0%, rgba(234,179,8,0.10) 50%, transparent 75%)',
+                opacity: 0
+              }}
+
+======================================================
+ATMOSPHERIC MOVE: poisonpowder_shower
+======================================================
+Animations: ['gbaPoisonHazeRise 1.25s ease-out forwards', 'gbaPowderPuffDrift 1.25s ease-out 0.3s forwards', 'gbaPowderPuffDrift 1.25s ease-out 0.5s forwards']
+
+Keyframe @keyframes gbaPowderPuffDrift:
+@keyframes gbaPowderPuffDrift {
+  0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+
+Keyframe @keyframes gbaPoisonHazeRise:
+@keyframes gbaPoisonHazeRise {
+  0% { transform: translateY(10px) scale(0.5); opacity: 0; }
+
+TSX Structure Preview:
+  {fx.type === 'poisonpowder_shower' && (
+          <div className="absolute inset-0 pointer-events-none z-40 overflow-visible">
+            {/* Rising toxic haze at base */}
+            <div className="absolute inset-x-0 bottom-1 flex justify-center" style={{ animation: 'gbaPoisonHazeRise 1.25s ease-out forwards', opacity: 0 }}>
+              <div className="relative w-28 h-10 flex items-center justify-center">
+                <div className="w-24 h-6 rounded-full bg-purple-500/30 blur-[3px] shadow-[0_0_12px_rgba(168,85,247,0.4)]" />
+                <svg width="90" height="34" viewBox="0 0 90 34" className="absolute">
+                  <path d="M15 26 Q22 14, 32 22 Q40 8, 50 18 Q58 6, 66 16 Q74 10, 78 22" fill="none" stroke="#c084fc" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
+                </svg>
+              </div>
+            </div>
+            {/* Powder particles with drift physics — each grain sways on its own sine path,
+                falls at a different speed and turbulence phase, so the shower reads as a real
+                airborne particle cloud instead of rigid vertical columns. */}
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((p) => {
+              const size = 5 + (p % 3) * 2;
+              const fill = ['#c084fc', '#a855f7', '#e879f9', '#d946ef', '#e9d5ff'][p % 5];
+              const drift = ((p % 2) + 1);
+              return (
+                <div
+                  key={`pp-grain-${p}`}
+                  className="absolute top-0"
+                  style={{
+                    left: `${8 + p * 11.5}%`,
+                    animation: `gbaPowderDrift${drift} ${1.05 + (p % 4) * 0.12}s cubic-bezier(0.3, 0.6, 0.5, 1) ${(p % 5) * 0.07}s forwards`,
+
+======================================================
+ATMOSPHERIC MOVE: paras_spore
+======================================================
+Animations: ['gbaParasTochukasoErupt 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards', 'gbaParasSporeCloud 1.6s ease-out forwards']
+
+Keyframe @keyframes gbaParasTochukasoErupt:
+@keyframes gbaParasTochukasoErupt {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(20px);
+  }
+
+Keyframe @keyframes gbaParasSporeCloud:
+@keyframes gbaParasSporeCloud {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+
+TSX Structure Preview:
+  {fx.type === 'paras_spore' && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Main Tochukaso Mushroom Spore Cloud */}
+            <div
+              className={`absolute flex items-center justify-center pointer-events-none z-30 ${fx.whiffed ? 'w-[90px] h-[72px]' : 'w-[124px] h-[100px]'}`}
+              style={{ animation: 'gbaParasTochukasoErupt 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            >
+              <svg viewBox="0 0 124 100" className="w-full h-full overflow-visible drop-shadow-[0_0_24px_#10b981] drop-shadow-[0_0_12px_#34d399]">
+                <defs>
+                  <radialGradient id="parasSporeCloudGrad" cx="50%" cy="50%" r="55%">
+                    <stop offset="0%" stopColor="#ecfdf5" />
+                    <stop offset="30%" stopColor="#a7f3d0" />
+                    <stop offset="65%" stopColor="#34d399" />
+                    <stop offset="85%" stopColor="#059669" />
+                    <stop offset="100%" stopColor="#064e3b" />
+                  </radialGradient>
+                </defs>
+  
+                {/* Billowing Fungal Spore Puffs */}
+                <circle cx="62" cy="52" r="32" fill="url(#parasSporeCloudGrad)" opacity="0.9" />
+                <circle cx="36" cy="56" r="24" fill="url(#parasSporeCloudGrad)" opacity="0.85" />
+                <circle cx="88" cy="56" r="24" fill="url(#parasSporeCloudGrad)" opacity="0.85" />
+                <circle cx="48" cy="38" r="22" fill="url(#parasSporeCloudGrad)" opacity="0.8" />
+                <circle cx="76" cy="38" r="22" fill="url(#parasSporeCloudGrad)" opacity="0.8" />
+  

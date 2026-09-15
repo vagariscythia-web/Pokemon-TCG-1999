@@ -11114,66 +11114,135 @@ html, body {
   }
 }
 
-/* 2. LAPRAS: GLACIAL SURGE (WATER GUN) & AURORA BOREALIS RAY */
-@keyframes gbaLaprasGlacialWave {
-  0% {
-    opacity: 0;
-    transform: translate(-42px, 26px) scale(0.65);
-  }
-  30% {
-    opacity: 0.96;
-    transform: translate(0, 0) scale(1.08);
-    filter: drop-shadow(0 0 22px #38bdf8) drop-shadow(0 0 10px #0284c7);
-  }
-  62% {
-    opacity: 0.88;
-    transform: translate(14px, -6px) scale(1.02);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(36px, -16px) scale(0.88);
-  }
+/* 2. LAPRAS: GLACIAL SURGE (WATER GUN) — pressurized flowing jet */
+/* Container kinematics: blur-in anticipation at the muzzle, acceleration along the arc,
+   micro-settle at impact, then vaporize into mist. */
+@keyframes gbaLaprasJetTravel {
+  0%   { opacity: 0; transform: translate(-44px, 16px) scale(0.78); filter: blur(4px); }
+  8%   { opacity: 1; transform: translate(-32px, 10px) scale(0.88); filter: blur(1px); }
+  30%  { opacity: 1; transform: translate(-10px, 2px) scale(0.98); filter: blur(0px); }
+  60%  { transform: translate(4px, -4px) scale(1.02); }
+  80%  { opacity: 1; transform: translate(9px, -6px) scale(1.0); }
+  100% { opacity: 0; transform: translate(13px, -5px) scale(0.97); filter: blur(5px); }
+}
+@keyframes gbaLaprasJetWhiff {
+  0%   { opacity: 0; transform: translate(-40px, 14px) scale(0.7); filter: blur(4px); }
+  10%  { opacity: 0.75; transform: translate(-28px, 8px) scale(0.78); filter: blur(1.5px); }
+  45%  { opacity: 0.5; transform: translate(-8px, 0px) scale(0.84); filter: blur(0.5px); }
+  100% { opacity: 0; transform: translate(2px, 12px) scale(0.68); filter: blur(5px); }
+}
+/* Column reveal: the stream is progressively un-masked toward the target, so the jet
+   reads as water racing outward — not a sticker sliding. */
+@keyframes gbaLaprasClipReveal {
+  0%   { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+@keyframes gbaLaprasClipRevealShort {
+  0%   { transform: scaleX(0); }
+  100% { transform: scaleX(0.58); }
+}
+/* Internal flow: dash-phase loops (period matches each stroke-dasharray total) */
+@keyframes gbaLaprasCoreFlow     { to { stroke-dashoffset: -24; } }
+@keyframes gbaLaprasCoreFlowFast { to { stroke-dashoffset: -16; } }
+@keyframes gbaLaprasRippleFlow   { to { stroke-dashoffset: -13; } }
+@keyframes gbaLaprasStreamFade {
+  0%, 66% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+@keyframes gbaLaprasLaunchMist {
+  0%   { opacity: 0; transform: translate(0, 6px) scale(0.4); }
+  18%  { opacity: 0.9; transform: translate(-4px, 0px) scale(0.9); }
+  45%  { opacity: 0.55; transform: translate(-8px, -5px) scale(1.15); }
+  100% { opacity: 0; transform: translate(-12px, -9px) scale(1.3); }
 }
 
-@keyframes gbaLaprasIceFloeDrift {
-  0% {
-    opacity: 0;
-    transform: translate(-30px, 20px) rotate(-15deg) scale(0.5);
-  }
-  35% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(10deg) scale(1.1);
-    filter: drop-shadow(0 0 12px #e0f2fe);
-  }
-  70% {
-    opacity: 0.85;
-    transform: translate(16px, -10px) rotate(25deg) scale(0.95);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(32px, -20px) rotate(40deg) scale(0.6);
-  }
+@keyframes gbaLaprasSplashBurst {
+  0%   { opacity: 0; transform: scale(0.18) rotate(-12deg); }
+  16%  { opacity: 1; transform: scale(1.14) rotate(3deg); }
+  38%  { opacity: 0.92; transform: scale(0.98) rotate(-2deg); }
+  60%  { opacity: 0.7; transform: scale(1.05) rotate(2deg); }
+  100% { opacity: 0; transform: scale(1.32) rotate(-4deg); filter: blur(3px); }
+}
+/* Cavitation droplets flung off the impact: ballistic rise, gravity fall-out */
+@keyframes gbaLaprasCavDroplet1 {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+  12%  { opacity: 1; transform: translate(8px, -12px) scale(1); }
+  48%  { opacity: 0.9; transform: translate(22px, -26px) scale(0.92); }
+  100% { opacity: 0; transform: translate(30px, 12px) scale(0.45); }
+}
+@keyframes gbaLaprasCavDroplet2 {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+  14%  { opacity: 1; transform: translate(4px, -16px) scale(0.95); }
+  52%  { opacity: 0.85; transform: translate(-10px, -30px) scale(0.88); }
+  100% { opacity: 0; transform: translate(-18px, 8px) scale(0.4); }
+}
+@keyframes gbaLaprasCavDroplet3 {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+  10%  { opacity: 1; transform: translate(12px, -8px) scale(1); }
+  50%  { opacity: 0.85; transform: translate(28px, -14px) scale(0.9); }
+  100% { opacity: 0; transform: translate(32px, 18px) scale(0.4); }
+}
+@keyframes gbaLaprasCavDroplet4 {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+  12%  { opacity: 1; transform: translate(-6px, -10px) scale(0.9); }
+  55%  { opacity: 0.8; transform: translate(-2px, -24px) scale(0.85); }
+  100% { opacity: 0; transform: translate(4px, 14px) scale(0.38); }
+}
+@keyframes gbaLaprasGroundRing {
+  0%   { opacity: 0; transform: scale(0.25, 0.35); }
+  22%  { opacity: 0.85; transform: scale(0.9, 1); }
+  100% { opacity: 0; transform: scale(1.7, 1.25); }
 }
 
-@keyframes gbaLaprasAuroraSweep {
-  0% {
-    opacity: 0;
-    transform: scale(0.4) rotate(-8deg);
-  }
-  30% {
-    opacity: 0.94;
-    transform: scale(1.06) rotate(4deg);
-    filter: drop-shadow(0 0 26px #34d399) drop-shadow(0 0 14px #38bdf8) drop-shadow(0 0 8px #e879f9);
-  }
-  65% {
-    opacity: 0.85;
-    transform: scale(1.22) rotate(-2deg);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(1.4) rotate(8deg);
-    filter: blur(8px);
-  }
+/* LAPRAS: AURORA BOREALIS RAY (CONFUSE RAY) — curtains, pinwheel, wisps */
+@keyframes gbaLaprasNightAura {
+  0%   { opacity: 0; transform: scale(0.75); }
+  20%  { opacity: 0.95; transform: scale(1.0); }
+  42%  { opacity: 0.55; transform: scale(1.08); }
+  60%  { opacity: 0.85; transform: scale(1.02); }
+  100% { opacity: 0; transform: scale(1.18); filter: blur(4px); }
+}
+@keyframes gbaLaprasCurtainEnter {
+  0%   { opacity: 0; transform: translateY(16px) scaleY(0.6) rotate(-2deg); }
+  20%  { opacity: 1; transform: translateY(0px) scaleY(1) rotate(1deg); }
+  55%  { opacity: 0.95; transform: translateY(-3px) scaleY(1.02) rotate(-1deg); }
+  80%  { opacity: 0.75; }
+  100% { opacity: 0; transform: translateY(-12px) scaleY(1.1) rotate(2deg); filter: blur(4px); }
+}
+@keyframes gbaLaprasCurtainSwayA {
+  0%, 100% { transform: skewX(-4deg) translateX(-2px); }
+  50%      { transform: skewX(5deg) translateX(2.5px) scaleY(1.06); }
+}
+@keyframes gbaLaprasCurtainSwayB {
+  0%, 100% { transform: skewX(4deg) translateX(2px) scaleY(1.05); }
+  50%      { transform: skewX(-5deg) translateX(-2.5px); }
+}
+@keyframes gbaLaprasCurtainSwayC {
+  0%, 100% { transform: skewX(-3deg) translateX(1.5px) scaleY(1.03); }
+  50%      { transform: skewX(6deg) translateX(-2px) scaleY(0.97); }
+}
+@keyframes gbaLaprasHypnoSpin {
+  0%   { opacity: 0; transform: scale(0.25) rotate(0deg); }
+  16%  { opacity: 1; transform: scale(1.08) rotate(130deg); }
+  40%  { transform: scale(0.9) rotate(300deg); }
+  70%  { opacity: 0.95; transform: scale(0.62) rotate(500deg); }
+  100% { opacity: 0; transform: scale(0.32) rotate(640deg); filter: blur(2px); }
+}
+@keyframes gbaLaprasWispOrbit {
+  to { transform: rotate(360deg); }
+}
+@keyframes gbaLaprasWispOrbit2 {
+  to { transform: rotate(-360deg); }
+}
+@keyframes gbaLaprasWispFade {
+  0%, 72% { opacity: 1; }
+  100%    { opacity: 0; }
+}
+@keyframes gbaLaprasStarTwinkle {
+  0%   { opacity: 0; transform: scale(0.2) rotate(0deg); }
+  22%  { opacity: 1; transform: scale(1.15) rotate(50deg); }
+  55%  { opacity: 0.9; transform: scale(0.85) rotate(110deg); }
+  100% { opacity: 0; transform: scale(0.3) rotate(170deg) translateY(-10px); }
 }
 
 /* 3. SEEL: ARCTIC HORN DIVE & ICE SHIELD SHATTER */

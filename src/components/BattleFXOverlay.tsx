@@ -16021,151 +16021,290 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 4. LAPRAS: GLACIAL SURGE / WATER GUN (Arctic Wave, Floating Ice Floes & Frost Mist) */}
-      {fx.type === 'lapras_glacial_surge' && (
+      {/* 4. LAPRAS: GLACIAL SURGE / WATER GUN (Pressurized flowing water jet, cavitation & splash burst) */}
+      {fx.type === 'lapras_glacial_surge' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        const jetD = 'M 6 74 C 38 68 70 50 96 34 C 114 23 130 13 141 5';
+        return (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Massive Glacial Tidal Surge Wave */}
-          <div
-            className={`absolute pointer-events-none z-35 ${fx.whiffed ? 'w-32 h-28' : 'w-44 h-36'}`}
-            style={{ animation: 'gbaLaprasGlacialWave 1.6s cubic-bezier(0.18, 0.9, 0.3, 1) forwards' }}
-          >
-            <svg viewBox="0 0 160 120" className="w-full h-full overflow-visible drop-shadow-[0_0_20px_#38bdf8]">
-              {/* Deep Ocean Undertow */}
-              <path
-                d="M 10 110 C 35 95 65 105 95 85 C 120 70 145 40 155 18 C 145 28 130 36 115 36 C 90 36 75 58 50 70 C 30 80 15 95 10 110 Z"
-                fill="url(#laprasOceanGrad)"
-                opacity="0.9"
-              />
-              {/* Azure Crest Wave */}
-              <path
-                d="M 15 105 C 40 90 70 98 100 78 C 125 62 148 32 156 12 C 144 22 128 28 112 28 C 88 28 72 48 48 60 C 28 70 18 85 15 105 Z"
-                fill="#38bdf8"
-                opacity="0.85"
-              />
-              {/* Crystalline White Frost Foam Lip */}
-              <path
-                d="M 105 76 C 128 58 150 28 156 10 C 142 20 124 24 108 26"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="4"
-                strokeLinecap="round"
-                filter="drop-shadow(0 0 8px #ffffff)"
-              />
+          {/* L1: Launch mist — muzzle puff as the jet breaks free */}
+          <div className="absolute pointer-events-none z-20" style={{ left: '14%', bottom: '20%', animation: 'gbaLaprasLaunchMist 0.7s ease-out forwards', opacity: 0 }}>
+            <svg width={Math.round(52 * wi)} height={Math.round(36 * wi)} viewBox="0 0 52 36" className="overflow-visible">
               <defs>
-                <linearGradient id="laprasOceanGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#0369a1" />
-                  <stop offset="60%" stopColor="#0284c7" />
-                  <stop offset="100%" stopColor="#38bdf8" />
-                </linearGradient>
+                <radialGradient id="laprasMistGrad" cx="0.5" cy="0.6" r="0.55">
+                  <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.9" />
+                  <stop offset="55%" stopColor="#7dd3fc" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+                </radialGradient>
               </defs>
+              <ellipse cx="26" cy="22" rx="22" ry="11" fill="url(#laprasMistGrad)" />
+              <ellipse cx="16" cy="14" rx="11" ry="7" fill="rgba(224,242,254,0.55)" />
+              <ellipse cx="37" cy="16" rx="9" ry="6" fill="rgba(207,250,254,0.45)" />
             </svg>
           </div>
 
-          {/* Floating Translucent Hexagonal Ice Floes */}
-          {!fx.whiffed && [
-            { x: '-18px', y: '16px', sz: '18px', delay: '0.15s' },
-            { x: '14px', y: '-8px', sz: '22px', delay: '0.25s' },
-            { x: '28px', y: '12px', sz: '16px', delay: '0.38s' }
-          ].map((floe, idx) => (
-            <div
-              key={`lapras-floe-${idx}`}
-              className="absolute pointer-events-none z-36"
-              style={{
-                top: '40%',
-                left: '42%',
-                width: floe.sz,
-                height: floe.sz,
-                animation: `gbaLaprasIceFloeDrift 1.35s ease-out ${floe.delay} forwards`,
-                opacity: 0
-              }}
-            >
-              <svg viewBox="0 0 40 40" className="w-full h-full overflow-visible drop-shadow-[0_0_10px_#e0f2fe]">
-                <polygon
-                  points="20,4 34,12 34,28 20,36 6,28 6,12"
-                  fill="rgba(224,242,254,0.75)"
-                  stroke="#ffffff"
-                  strokeWidth="2"
-                />
-              </svg>
-            </div>
-          ))}
+          {/* L2: The jet — a clip-path reveal draws the column toward the target while foam
+              edges and white-hot core streaks flow inside it via looping stroke-dashoffsets.
+              This is what sells fluidity: the water moves INSIDE the stream, not as one block. */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: fx.whiffed ? 'gbaLaprasJetWhiff 1.65s cubic-bezier(0.25, 0.6, 0.35, 1) forwards' : 'gbaLaprasJetTravel 1.65s cubic-bezier(0.22, 0.72, 0.3, 1) forwards' }}
+          >
+            <svg width={Math.round(148 * wi)} height={Math.round(88 * wi)} viewBox="0 0 148 88" className="overflow-visible" style={{ filter: `drop-shadow(0 0 ${Math.round(7 + (wi - 1) * 12)}px rgba(56,189,248,0.55))` }}>
+              <defs>
+                <linearGradient id="laprasJetBodyGrad" x1="0" y1="1" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#0369a1" stopOpacity="0.9" />
+                  <stop offset="55%" stopColor="#38bdf8" />
+                  <stop offset="100%" stopColor="#cffafe" />
+                </linearGradient>
+                <clipPath id="laprasJetClip">
+                  <rect
+                    x="0" y="0" width="148" height="88"
+                    style={{
+                      transformBox: 'fill-box',
+                      transformOrigin: 'left center',
+                      animation: fx.whiffed
+                        ? 'gbaLaprasClipRevealShort 0.8s cubic-bezier(0.2, 0.55, 0.35, 1) forwards'
+                        : 'gbaLaprasClipReveal 0.92s cubic-bezier(0.2, 0.55, 0.35, 1) forwards'
+                    }}
+                  />
+                </clipPath>
+              </defs>
+              <g clipPath="url(#laprasJetClip)" style={{ animation: 'gbaLaprasStreamFade 1.65s ease-out forwards' }}>
+                {/* Deep undertow spine */}
+                <path d="M 6 77 C 38 71 70 53 96 37 C 114 26 130 16 141 8" fill="none" stroke="#0c4a6e" strokeWidth={fx.whiffed ? 6 : 9.5 * wi} strokeLinecap="round" opacity="0.45" />
+                {/* Pressurized body */}
+                <path d={jetD} fill="none" stroke="url(#laprasJetBodyGrad)" strokeWidth={fx.whiffed ? 5.5 : 8 * wi} strokeLinecap="round" opacity="0.95" />
+                {/* Turbulent foam margins — rolling droplet edges */}
+                <path d="M 8 69 C 42 61 72 45 98 29 C 114 20 128 12 138 6" fill="none" stroke="#bae6fd" strokeWidth={fx.whiffed ? 1.8 : 2.6 * wi} strokeLinecap="round" opacity="0.75" style={{ strokeDasharray: '7 6', animation: 'gbaLaprasRippleFlow 0.34s linear infinite' }} />
+                <path d="M 5 78 C 40 73 68 55 94 39 C 112 28 130 18 142 11" fill="none" stroke="#7dd3fc" strokeWidth={fx.whiffed ? 1.6 : 2.3 * wi} strokeLinecap="round" opacity="0.7" style={{ strokeDasharray: '9 7', animation: 'gbaLaprasRippleFlow 0.42s linear infinite' }} />
+                {/* White-hot core streaks racing along the jet */}
+                <path d={jetD} fill="none" stroke="#ffffff" strokeWidth={fx.whiffed ? 1.3 : 2.3 * wi} strokeLinecap="round" opacity="0.9" style={{ strokeDasharray: '10 14', animation: 'gbaLaprasCoreFlow 0.3s linear infinite' }} />
+                <path d={jetD} fill="none" stroke="#e0f2fe" strokeWidth={1.2 * wi} strokeLinecap="round" opacity="0.85" style={{ strokeDasharray: '4 12', animation: 'gbaLaprasCoreFlowFast 0.24s linear infinite' }} />
+              </g>
+              {/* Cavitation head bubble riding the tip of the advancing stream */}
+              <g style={{ animation: 'gbaLaprasStreamFade 1.65s ease-out forwards' }}>
+                <ellipse rx={Math.round(7 * wi)} ry={Math.round(5 * wi)} fill="#7dd3fc" opacity="0.8">
+                  <animateMotion
+                    dur={fx.whiffed ? '0.8s' : '0.92s'} fill="freeze" calcMode="spline"
+                    keyPoints={fx.whiffed ? '0;0.6;0.6' : '0;1'} keyTimes={fx.whiffed ? '0;0.75;1' : '0;1'}
+                    keySplines={fx.whiffed ? '0.2 0.6 0.4 1; 0 0 1 1' : '0.2 0.55 0.35 1'}
+                    path={jetD}
+                  />
+                </ellipse>
+                <ellipse rx={Math.round(3.5 * wi)} ry={Math.round(2.4 * wi)} fill="#e0f2fe" opacity="0.9">
+                  <animateMotion
+                    dur={fx.whiffed ? '0.8s' : '0.92s'} fill="freeze" calcMode="spline"
+                    keyPoints={fx.whiffed ? '0;0.6;0.6' : '0;1'} keyTimes={fx.whiffed ? '0;0.75;1' : '0;1'}
+                    keySplines={fx.whiffed ? '0.2 0.6 0.4 1; 0 0 1 1' : '0.2 0.55 0.35 1'}
+                    path={jetD}
+                  />
+                </ellipse>
+              </g>
+            </svg>
+          </div>
 
-          {/* Frost Mist Splashes */}
+          {/* L3: Impact splash — pressurized water bursting at the target (timing-synced to
+              the clip-reveal tip arriving at ~0.92s) */}
           {!fx.whiffed && (
             <div
-              className="absolute w-36 h-28 rounded-full pointer-events-none z-30"
+              className="absolute pointer-events-none z-30"
               style={{
-                animation: 'gbaLaprasGlacialWave 1.4s ease-out 0.2s forwards',
-                background: 'radial-gradient(ellipse at center, rgba(56,189,248,0.3) 0%, rgba(224,242,254,0.15) 55%, transparent 80%)',
+                left: `calc(50% + ${Math.round(64 * wi)}px)`,
+                top: `calc(50% - ${Math.round(38 * wi)}px)`,
+                marginLeft: -Math.round(38 * wi),
+                marginTop: -Math.round(38 * wi),
+                animation: 'gbaLaprasSplashBurst 0.75s cubic-bezier(0.2, 0.8, 0.3, 1) 0.88s forwards',
                 opacity: 0
               }}
-            />
+            >
+              <svg width={Math.round(76 * wi)} height={Math.round(76 * wi)} viewBox="0 0 76 76" className="overflow-visible" style={{ filter: 'drop-shadow(0 0 12px rgba(56,189,248,0.7))' }}>
+                <circle cx="38" cy="38" r="11" fill="#ffffff" opacity="0.9" />
+                <circle cx="38" cy="38" r="7" fill="#cffafe" opacity="0.95" />
+                <circle cx="38" cy="38" r="3.5" fill="#e0f2fe" />
+                <path d="M38 38 L38 10" stroke="#7dd3fc" strokeWidth={2.6 * wi} strokeLinecap="round" opacity="0.8" />
+                <path d="M38 38 L60 16" stroke="#38bdf8" strokeWidth={2.4 * wi} strokeLinecap="round" opacity="0.75" />
+                <path d="M38 38 L66 34" stroke="#7dd3fc" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.7" />
+                <path d="M38 38 L60 58" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.65" />
+                <path d="M38 38 L16 60" stroke="#7dd3fc" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.65" />
+                <path d="M38 38 L10 40" stroke="#38bdf8" strokeWidth={2.4 * wi} strokeLinecap="round" opacity="0.7" />
+                <path d="M38 38 Q26 26 14 14 Q24 24 32 33" fill="none" stroke="#bae6fd" strokeWidth={2.4 * wi} strokeLinecap="round" opacity="0.8" />
+                <path d="M38 38 Q50 24 64 12 Q52 26 44 34" fill="none" stroke="#e0f2fe" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.7" />
+                {/* Cavitation droplets flung off the burst */}
+                <g style={{ animation: 'gbaLaprasCavDroplet1 0.6s ease-out forwards', opacity: 0 }}>
+                  <path transform="translate(52 18)" d="M0 -6 Q3.5 0, 3.5 3 Q3.5 6.5, 0 8 Q-3.5 6.5, -3.5 3 Q-3.5 0, 0 -6 Z" fill="#38bdf8" opacity="0.9" />
+                </g>
+                <g style={{ animation: 'gbaLaprasCavDroplet2 0.62s ease-out 0.04s forwards', opacity: 0 }}>
+                  <path transform="translate(20 16)" d="M0 -5 Q3 0, 3 2.5 Q3 5.5, 0 6.5 Q-3 5.5, -3 2.5 Q-3 0, 0 -5 Z" fill="#7dd3fc" opacity="0.85" />
+                </g>
+                <g style={{ animation: 'gbaLaprasCavDroplet3 0.65s ease-out 0.08s forwards', opacity: 0 }}>
+                  <path transform="translate(58 46)" d="M0 -4 Q2.5 0, 2.5 2 Q2.5 4.5, 0 5.5 Q-2.5 4.5, -2.5 2 Q-2.5 0, 0 -4 Z" fill="#bae6fd" opacity="0.8" />
+                </g>
+                <g style={{ animation: 'gbaLaprasCavDroplet4 0.6s ease-out 0.12s forwards', opacity: 0 }}>
+                  <path transform="translate(14 44)" d="M0 -4.5 Q2.8 0, 2.8 2.2 Q2.8 4.8, 0 6 Q-2.8 4.8, -2.8 2.2 Q-2.8 0, 0 -4.5 Z" fill="#e0f2fe" opacity="0.75" />
+                </g>
+              </svg>
+            </div>
+          )}
+
+          {/* L4: Ground ring — water slapping down at the target's foot */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-20"
+              style={{
+                left: '50%',
+                bottom: '12%',
+                marginLeft: -Math.round(46 * wi),
+                width: Math.round(92 * wi),
+                height: Math.round(30 * wi),
+                animation: 'gbaLaprasGroundRing 0.65s ease-out 0.95s forwards',
+                opacity: 0
+              }}
+            >
+              <svg viewBox="0 0 92 30" className="w-full h-full overflow-visible">
+                <ellipse cx="46" cy="18" rx="38" ry="8" fill="none" stroke="#7dd3fc" strokeWidth="2.6" opacity="0.6" />
+                <ellipse cx="46" cy="16" rx="26" ry="5" fill="none" stroke="#bae6fd" strokeWidth="1.8" opacity="0.5" />
+                <ellipse cx="46" cy="20" rx="34" ry="6" fill="#0ea5e9" opacity="0.16" />
+              </svg>
+            </div>
           )}
         </div>
-      )}
+        );
+      })()}
 
-      {/* 5. LAPRAS: AURORA BOREALIS RAY / CONFUSE RAY (Shimmering Polar Light Curtains) */}
+      {/* 5. LAPRAS: AURORA BOREALIS RAY / CONFUSE RAY (Undulating polar curtains, hypnotic pinwheel & orbiting wisps) */}
       {fx.type === 'lapras_aurora_ray' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Sweeping Undulating Aurora Curtains */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+          style={{ transform: fx.whiffed ? 'scale(0.72)' : undefined, opacity: fx.whiffed ? 0.55 : undefined }}
+        >
+          {/* L1: Polar-night aura — a breathing chromatic field over the target */}
           <div
-            className="absolute w-44 h-44 pointer-events-none z-35"
-            style={{ animation: 'gbaLaprasAuroraSweep 1.65s cubic-bezier(0.18, 0.9, 0.3, 1) forwards' }}
-          >
-            <svg viewBox="0 0 140 140" className="w-full h-full overflow-visible drop-shadow-[0_0_24px_#34d399]">
-              {/* Emerald Green Polar Ribbon */}
-              <path
-                d="M 12 120 Q 38 60 70 85 T 128 30"
-                fill="none"
-                stroke="#34d399"
-                strokeWidth="8"
-                strokeLinecap="round"
-                opacity="0.85"
-                filter="drop-shadow(0 0 12px #34d399)"
-              />
-              {/* Cyan Ice Polar Ribbon */}
-              <path
-                d="M 18 108 Q 48 48 80 72 T 134 20"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="6"
-                strokeLinecap="round"
-                opacity="0.9"
-                filter="drop-shadow(0 0 12px #38bdf8)"
-              />
-              {/* Violet Ethereal Hypnotic Ribbon */}
-              <path
-                d="M 8 130 Q 32 72 62 98 T 120 42"
-                fill="none"
-                stroke="#c084fc"
-                strokeWidth="7"
-                strokeLinecap="round"
-                opacity="0.75"
-                filter="drop-shadow(0 0 14px #c084fc)"
-              />
+            className="absolute w-48 h-48 rounded-full pointer-events-none z-10"
+            style={{
+              background: 'radial-gradient(circle, rgba(52,211,153,0.22) 0%, rgba(56,189,248,0.18) 35%, rgba(147,51,234,0.20) 65%, transparent 80%)',
+              animation: 'gbaLaprasNightAura 1.7s ease-in-out forwards'
+            }}
+          />
+
+          {/* L2: Aurora curtains — four veils swaying on independent skew rhythms so the
+              field never looks linear or static while the FX is alive */}
+          <div className="absolute w-48 h-48 pointer-events-none z-20" style={{ animation: 'gbaLaprasCurtainEnter 1.7s ease-out forwards' }}>
+            <svg viewBox="0 0 160 160" className="w-full h-full overflow-visible" style={{ filter: 'drop-shadow(0 0 18px rgba(52,211,153,0.4))' }}>
+              <defs>
+                <linearGradient id="laprasCurtainGradA" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#34d399" stopOpacity="0" />
+                  <stop offset="28%" stopColor="#34d399" stopOpacity="0.8" />
+                  <stop offset="70%" stopColor="#38bdf8" stopOpacity="0.55" />
+                  <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="laprasCurtainGradB" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
+                  <stop offset="30%" stopColor="#7dd3fc" stopOpacity="0.85" />
+                  <stop offset="72%" stopColor="#c084fc" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="laprasCurtainGradC" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#c084fc" stopOpacity="0" />
+                  <stop offset="32%" stopColor="#e879f9" stopOpacity="0.7" />
+                  <stop offset="75%" stopColor="#a855f7" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="#581c87" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient id="laprasCurtainGradD" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#cffafe" stopOpacity="0" />
+                  <stop offset="30%" stopColor="#cffafe" stopOpacity="0.65" />
+                  <stop offset="70%" stopColor="#34d399" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#0d9488" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+              <g style={{ animation: 'gbaLaprasCurtainSwayA 1.25s ease-in-out infinite' }}>
+                <path d="M 24 12 C 14 46 32 80 22 120 C 19 132 26 142 30 148 L 44 143 C 37 122 48 92 42 58 C 39 38 47 24 45 10 Z" fill="url(#laprasCurtainGradA)" />
+              </g>
+              <g style={{ animation: 'gbaLaprasCurtainSwayB 1.05s ease-in-out infinite' }}>
+                <path d="M 58 6 C 48 44 68 86 56 130 C 54 140 60 148 64 152 L 78 147 C 71 124 83 90 76 56 C 73 34 81 18 79 6 Z" fill="url(#laprasCurtainGradB)" opacity="0.95" />
+              </g>
+              <g style={{ animation: 'gbaLaprasCurtainSwayC 1.45s ease-in-out infinite' }}>
+                <path d="M 92 10 C 82 50 100 88 90 128 C 88 138 94 146 98 150 L 111 145 C 104 122 115 92 109 60 C 106 40 114 26 112 8 Z" fill="url(#laprasCurtainGradC)" opacity="0.9" />
+              </g>
+              <g style={{ animation: 'gbaLaprasCurtainSwayB 0.9s ease-in-out infinite' }}>
+                <path d="M 124 16 C 114 54 130 90 120 126 C 118 136 124 144 128 148 L 139 143 C 133 122 142 94 137 64 C 134 44 142 32 140 14 Z" fill="url(#laprasCurtainGradD)" opacity="0.8" />
+              </g>
             </svg>
           </div>
 
-          {/* Shimmering Arctic Night Stars */}
+          {/* L3: Hypnotic pinwheel — spinning confusion rays decelerate and shrink into the target */}
+          <div className="absolute z-30" style={{ animation: 'gbaLaprasHypnoSpin 1.7s cubic-bezier(0.3, 0.5, 0.4, 1) forwards' }}>
+            <svg width="86" height="86" viewBox="0 0 86 86" className="overflow-visible" style={{ filter: 'drop-shadow(0 0 14px rgba(217,70,239,0.65))' }}>
+              <defs>
+                <radialGradient id="laprasHypnoRayGrad" cx="0.5" cy="0.2" r="0.9">
+                  <stop offset="0%" stopColor="#fdf4ff" />
+                  <stop offset="45%" stopColor="#e879f9" />
+                  <stop offset="100%" stopColor="#7c3aed" />
+                </radialGradient>
+                <radialGradient id="laprasHypnoEyeGrad" cx="0.4" cy="0.4" r="0.8">
+                  <stop offset="0%" stopColor="#ffffff" />
+                  <stop offset="45%" stopColor="#f0abfc" />
+                  <stop offset="100%" stopColor="#9333ea" />
+                </radialGradient>
+              </defs>
+              {[0, 90, 180, 270].map((deg) => (
+                <path key={deg} transform={`rotate(${deg} 43 43)`} d="M 43 45 C 51 33 54 18 45 3 C 35 15 35 33 43 45 Z" fill="url(#laprasHypnoRayGrad)" opacity="0.92" />
+              ))}
+              {[45, 135, 225, 315].map((deg) => (
+                <path key={deg} transform={`rotate(${deg} 43 43)`} d="M 43 44 C 49 36 52 26 44 15 C 37 25 38 36 43 44 Z" fill="#c084fc" opacity="0.65" />
+              ))}
+              <circle cx="43" cy="43" r="7" fill="url(#laprasHypnoEyeGrad)" />
+              <circle cx="43" cy="43" r="3" fill="#ffffff" opacity="0.95" />
+            </svg>
+          </div>
+
+          {/* L4: Orbiting aurora wisps — two glowing motes circling the spiral in opposite senses */}
+          <div className="absolute z-40 pointer-events-none" style={{ width: 0, height: 0, animation: 'gbaLaprasWispOrbit 1.55s ease-in-out 0.1s forwards' }}>
+            <div className="absolute" style={{ transform: 'translateX(46px)', marginLeft: -9, marginTop: -9, animation: 'gbaLaprasWispFade 1.7s ease-out forwards' }}>
+              <svg width="18" height="18" viewBox="0 0 18 18" className="overflow-visible" style={{ filter: 'drop-shadow(0 0 8px #34d399)' }}>
+                <defs>
+                  <radialGradient id="laprasWispGrad1" cx="0.4" cy="0.4" r="0.75">
+                    <stop offset="0%" stopColor="#d1fae5" />
+                    <stop offset="55%" stopColor="#34d399" />
+                    <stop offset="100%" stopColor="#0d9488" />
+                  </radialGradient>
+                </defs>
+                <circle cx="9" cy="9" r="6" fill="url(#laprasWispGrad1)" />
+                <circle cx="7" cy="7" r="2" fill="#ffffff" opacity="0.9" />
+              </svg>
+            </div>
+          </div>
+          <div className="absolute z-40 pointer-events-none" style={{ width: 0, height: 0, animation: 'gbaLaprasWispOrbit2 1.5s linear 0.15s forwards' }}>
+            <div className="absolute" style={{ transform: 'translateX(-38px)', marginLeft: -7, marginTop: -7, animation: 'gbaLaprasWispFade 1.7s ease-out forwards' }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" className="overflow-visible" style={{ filter: 'drop-shadow(0 0 8px #38bdf8)' }}>
+                <defs>
+                  <radialGradient id="laprasWispGrad2" cx="0.4" cy="0.4" r="0.75">
+                    <stop offset="0%" stopColor="#e0f2fe" />
+                    <stop offset="55%" stopColor="#38bdf8" />
+                    <stop offset="100%" stopColor="#1d4ed8" />
+                  </radialGradient>
+                </defs>
+                <circle cx="7" cy="7" r="5" fill="url(#laprasWispGrad2)" />
+                <circle cx="5.5" cy="5.5" r="1.6" fill="#ffffff" opacity="0.9" />
+              </svg>
+            </div>
+          </div>
+
+          {/* L5: Twinkling frost stars — SVG four-point stars (no emoji glyphs), staggered drift-out */}
           {[
-            { top: '20%', left: '25%', delay: '0.2s', sz: 'text-xs' },
-            { top: '32%', right: '22%', delay: '0.4s', sz: 'text-sm' },
-            { bottom: '26%', left: '30%', delay: '0.6s', sz: 'text-xs' }
+            { top: '18%', left: '22%', bottom: undefined, delay: '0.25s', sz: 15 },
+            { top: '30%', left: '74%', bottom: undefined, delay: '0.45s', sz: 18 },
+            { top: undefined, left: '28%', bottom: '30%', delay: '0.6s', sz: 13 },
+            { top: undefined, left: '68%', bottom: '22%', delay: '0.75s', sz: 16 }
           ].map((st, idx) => (
             <div
-              key={`lapras-star-${idx}`}
-              className={`absolute pointer-events-none z-40 text-cyan-200 font-bold select-none ${st.sz}`}
-              style={{
-                top: st.top,
-                left: st.left,
-                right: st.right,
-                bottom: st.bottom,
-                animation: `gbaSparkleBurst 0.65s ease-out ${st.delay} forwards`,
-                opacity: 0,
-                filter: 'drop-shadow(0 0 8px #38bdf8)'
-              }}
+              key={`lapras-twinkle-${idx}`}
+              className="absolute pointer-events-none z-40"
+              style={{ top: st.top, left: st.left, bottom: st.bottom, animation: `gbaLaprasStarTwinkle 0.8s ease-out ${st.delay} forwards`, opacity: 0 }}
             >
-              ✦
+              <svg width={st.sz} height={st.sz} viewBox="0 0 16 16" className="overflow-visible" style={{ filter: 'drop-shadow(0 0 6px #a5f3fc)' }}>
+                <path d="M8 0 L9.9 6.1 L16 8 L9.9 9.9 L8 16 L6.1 9.9 L0 8 L6.1 6.1 Z" fill={idx % 2 === 0 ? '#a5f3fc' : '#f0abfc'} opacity="0.95" />
+              </svg>
             </div>
           ))}
         </div>

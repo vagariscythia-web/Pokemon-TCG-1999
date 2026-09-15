@@ -1,91 +1,98 @@
 import re
+import sys
+
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 with open('src/components/BattleFXOverlay.tsx', 'r', encoding='utf-8') as f:
-    tsx_content = f.read()
+    tsx_text = f.read()
 
 with open('src/index.css', 'r', encoding='utf-8') as f:
-    css_content = f.read()
+    css_text = f.read()
 
-def extract_keyframes(css_text):
-    kfs = {}
-    pattern = re.compile(r'@keyframes\s+([a-zA-Z0-9_\-]+)\s*\{')
-    pos = 0
-    while True:
-        match = pattern.search(css_text, pos)
-        if not match:
-            break
-        name = match.group(1)
-        start = match.end()
-        brace_count = 1
-        i = start
-        while i < len(css_text) and brace_count > 0:
-            if css_text[i] == '{':
-                brace_count += 1
-            elif css_text[i] == '}':
-                brace_count -= 1
-            i += 1
-        body = css_text[start:i-1]
-        kfs[name] = body
-        pos = i
-    return kfs
+print("=" * 70)
+print("SECTION 1: AUDIT OF ALL STOCK IMAGE USES & SCALING")
+print("=" * 70)
 
-kfs = extract_keyframes(css_content)
+block_iter = list(re.finditer(r"\{fx\.type === ['\"]([^'\"]+)['\"]", tsx_text))
 
-# Extract all FX render blocks
-pattern = r"\{fx\.type === '([^']+)'\s*&& \((.*?)(?=\n\s*\{fx\.type ===|\n\s*\{\(fx\.type ===|\n\s*export |\n\s*const |\n\s*function )"
-blocks = re.findall(pattern, tsx_content, re.DOTALL)
+stock_fx_list = []
+for i, match in enumerate(block_iter):
+    fx_name = match.group(1)
+    start_pos = match.start()
+    end_pos = block_iter[i+1].start() if i+1 < len(block_iter) else len(tsx_text)
+    block_code = tsx_text[start_pos:end_pos]
+    
+    img_matches = re.findall(r'<img[^>]+src=[\'"]([^\'"]+)[\'"][^>]*>', block_code)
+    if img_matches:
+        # Find sizing in this block
+        sizing_matches = re.findall(r'w-\[(\d+)px\]\s+h-\[(\d+)px\]', block_code)
+        whiff_sizing = re.findall(r'fx\.whiffed\s*\?\s*[\'\"`]w-\[(\d+)px\]\s+h-\[(\d+)px\][\'\"`]\s*:\s*[\'\"`]w-\[(\d+)px\]\s+h-\[(\d+)px\][\'\"`]', block_code)
+        tw_sizes = re.findall(r'\b(w-\d+|h-\d+)\b', block_code)
+        stock_fx_list.append({
+            'fx': fx_name,
+            'images': img_matches,
+            'sizing': sizing_matches,
+            'whiff_sizing': whiff_sizing,
+            'tw_sizes': tw_sizes,
+            'code': block_code
+        })
 
-# Also check compound blocks like {(fx.type === 'a' || fx.type === 'b') && ...}
-compound_pattern = r"\{\(([^)]+)\)\s*&& \((.*?)(?=\n\s*\{fx\.type ===|\n\s*\{\(fx\.type ===|\n\s*export |\n\s*const |\n\s*function )"
-compound_blocks = re.findall(compound_pattern, tsx_content, re.DOTALL)
+print(f"Total FX using stock images: {len(stock_fx_list)}")
+for item in stock_fx_list:
+    imgs = [img.split('/')[-1] for img in item['images']]
+    print(f"\n[Move: {item['fx']}]")
+    print(f"  Assets: {imgs}")
+    if item['whiff_sizing']:
+        print(f"  Sizing: Whiffed={item['whiff_sizing'][0][0]}x{item['whiff_sizing'][0][1]}px | Standard={item['whiff_sizing'][0][2]}x{item['whiff_sizing'][0][3]}px")
+    elif item['sizing']:
+        print(f"  Sizing (explicit px): {item['sizing']}")
+    else:
+        print(f"  Sizing (tailwind classes): {set(item['tw_sizes'])}")
 
-all_blocks = []
-for fx_name, body in blocks:
-    all_blocks.append((fx_name, body))
+print("\n" + "=" * 70)
+print("SECTION 2: AUDIT OF ALL GAS / SMOKE / CLOUD / MIST / SPORE / DUST FX")
+print("=" * 70)
 
-for condition, body in compound_blocks:
-    types = re.findall(r"fx\.type === '([^']+)'", condition)
-    name = " / ".join(types) if types else condition[:30]
-    all_blocks.append((name, body))
+gas_keywords = ['gas', 'smoke', 'smog', 'mist', 'cloud', 'spore', 'powder', 'dust', 'sand', 'haze', 'vapor', 'fog']
+matched_fx = []
 
-out_lines = []
-out_lines.append(f"Total FX blocks found: {len(all_blocks)}")
+for i, match in enumerate(block_iter):
+    fx_name = match.group(1)
+    start_pos = match.start()
+    end_pos = block_iter[i+1].start() if i+1 < len(block_iter) else len(tsx_text)
+    block_code = tsx_text[start_pos:end_pos]
+    
+    if any(k in fx_name.lower() for k in gas_keywords):
+        # Look for animations used in this block
+        anims = re.findall(r"animation:\s*['\"]([^'\"]+)['\"]", block_code)
+        # Check if it uses SVG path vs simple divs
+        has_svg_path = '<path' in block_code
+        has_div_circles = 'rounded-full' in block_code
+        
+        # Check CSS keyframes for rotation or blocky transforms
+        rot_in_css = []
+        for anim in anims:
+            anim_name = anim.split()[0]
+            kf_match = re.search(rf"@keyframes\s+{re.escape(anim_name)}\s*\{{([^}}]+(?:\{{[^}}]*\}}[^}}]*)*)\}}", css_text)
+            if kf_match:
+                kf_body = kf_match.group(1)
+                if 'rotate(' in kf_body:
+                    rot_in_css.append(anim_name)
+        
+        matched_fx.append({
+            'fx': fx_name,
+            'anims': anims,
+            'has_svg_path': has_svg_path,
+            'has_div_circles': has_div_circles,
+            'rot_in_css': rot_in_css,
+            'code_preview': block_code[:300]
+        })
 
-out_lines.append("\n=== CRITERIA 1: CONTAINS EMOJIS / ICONS ===")
-emoji_pattern = re.compile(r'[\U00010000-\U0010ffff]|[\u2600-\u27bf]|[\u2300-\u23ff]')
-for name, body in all_blocks:
-    emojis = [c for c in body if ord(c) > 0x2300 and c not in ['✦', '•', '—', '–', '’', '‘', '“', '”']]
-    if emojis:
-        out_lines.append(f"FX: {name} -> Emojis: {[f'{c} (U+{ord(c):04X})' for c in set(emojis)]}")
-
-out_lines.append("\n=== CRITERIA 2: USES IMAGES (<img) ===")
-for name, body in all_blocks:
-    imgs = re.findall(r'<img[^>]+src=[\'"]([^\'"]+)[\'"][^>]*>', body)
-    if imgs:
-        anims = re.findall(r"animation:\s*['\"`]?([a-zA-Z0-9_\-]+)", body)
-        out_lines.append(f"\nFX: {name}")
-        out_lines.append(f"  Images: {imgs}")
-        out_lines.append(f"  Anims: {set(anims)}")
-        for anim in set(anims):
-            if anim in kfs:
-                stops = re.findall(r'(\d+%)', kfs[anim])
-                body_kf = kfs[anim]
-                has_blur = 'blur' in body_kf
-                out_lines.append(f"    - {anim}: {len(stops)} stops ({', '.join(stops[:7])}...) | blur: {has_blur}")
-            else:
-                out_lines.append(f"    - {anim}: NOT in index.css!")
-
-out_lines.append("\n=== CRITERIA 3: CRUDE UNBLURRED SVG CIRCLES/ELLIPSES ===")
-for name, body in all_blocks:
-    circles = re.findall(r'<circle[^>]+r=[\'"]?(\d+)[\'"]?[^>]*>', body)
-    ellipses = re.findall(r'<ellipse[^>]+rx=[\'"]?(\d+)[\'"]?[^>]*>', body)
-    large_c = [int(r) for r in circles if int(r) > 12]
-    large_e = [int(r) for r in ellipses if int(r) > 15]
-    if (large_c or large_e) and 'blur' not in body:
-        out_lines.append(f"FX: {name} -> large circles: {large_c}, large ellipses: {large_e}")
-
-with open('scratch/audit_results.txt', 'w', encoding='utf-8') as f:
-    f.write('\n'.join(out_lines))
-
-print("Audit written to scratch/audit_results.txt successfully.")
-
+print(f"Total Atmospheric FX found: {len(matched_fx)}")
+for item in matched_fx:
+    print(f"\n[Atmospheric FX: {item['fx']}]")
+    print(f"  SVG Path: {item['has_svg_path']} | Rounded Div Circles: {item['has_div_circles']}")
+    print(f"  Animations: {[a.split()[0] for a in item['anims']]}")
+    if item['rot_in_css']:
+        print(f"  --> WARNING: Uses rotate() in cloud keyframes: {item['rot_in_css']}")
