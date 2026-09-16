@@ -148,10 +148,14 @@ export interface ActiveFX {
     | 'pinsir_guillotine'
     | 'magmar_smog'
     | 'golem_avalanche'
+    | 'golem_selfdestruct'
     | 'wigglytuff_do_the_wave'
     | 'vileplume_petal_dance'
     | 'poliwrath_whirlpool_vortex'
     | 'dewgong_aurora_beam'
+    | 'dewgong_ice_beam'
+    | 'pinsir_irongrip'
+    | 'nidoran_horn_hazard'
     | 'kabutops_sickle_slash'
     | 'marowak_bonemerang'
     | 'nidoking_thrash_fury'
@@ -360,9 +364,9 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if ((pkm.includes('poliwag') || pkm.includes('poliwhirl') || pkm.includes('poliwrath')) && name.includes('water gun')) {
     return 'poliwag_water_gun';
   }
-  // Geodude: Stone Barrage
+  // Geodude: Stone Barrage (Sequential per-heads rock barrage with Onix-grade morphology & whiff support)
   if (pkm.includes('geodude') && (name.includes('stone barrage') || name.includes('rock throw') || name.includes('barrage'))) {
-    return 'geodude_stone_barrage';
+    return 'stone_barrage_single';
   }
   // Vulpix: Confuse Ray (Mystical Kitsunebi Fox-Fire)
   if (pkm.includes('vulpix') && (name.includes('confuse ray') || name.includes('confusion ray') || name.includes('foxfire'))) {
@@ -574,11 +578,11 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('blizzard')) return 'blizzard_storm';
   // Crabhammer: Kingler gets dedicated Crabhammer variant
   if (name.includes('crabhammer') || name.includes('crab hammer')) return 'kingler_crabhammer';
-  // Horn Attack: Rhydon/Rhyhorn get drill bore; Goldeen gets single-horn thrust
-  if (name.includes('horn attack')) {
+  // Horn Attack: Rhydon/Rhyhorn get drill bore; Goldeen gets single-horn thrust; Nidoran gets Horn Hazard
+  if (name.includes('horn attack') || name.includes('horn hazard')) {
     if (pkm.includes('rhydon') || pkm.includes('rhyhorn')) return 'rhydon_horn_drill';
     if (pkm.includes('goldeen') || pkm.includes('seaking')) return 'horn_thrust';
-    if (pkm.includes('nidoran')) return 'nidoran_horn_charge';
+    if (pkm.includes('nidoran') || pkm.includes('nidorino') || pkm.includes('nidoking')) return 'nidoran_horn_hazard';
     return 'horn_gore';
   }
   // Stare: Dark Arbok rears up and opens its hood over the chosen Pokémon
@@ -596,9 +600,9 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     if (pkm.includes('ponyta') || pkm.includes('rapidash')) return 'kick_smash';
     return 'kick_strike';
   }
-  // Irongrip: Pinsir gets dedicated vice-clamp; Krabby gets claw clamp
+  // Irongrip: Pinsir gets dedicated dual-claw lunge vice-clamp; Krabby gets claw clamp
   if (name.includes('irongrip') || name.includes('iron grip')) {
-    if (pkm.includes('pinsir')) return 'pinsir_guillotine';
+    if (pkm.includes('pinsir')) return 'pinsir_irongrip';
     if (pkm.includes('krabby') || pkm.includes('kingler')) return 'krabby_irongrip';
     return 'punch';
   }
@@ -639,6 +643,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('dizziness')) return 'dizziness_swirl';
 
   // 1. EXACT HIGH-PRIORITY GBA SIGNATURE MATCHES
+  if ((name === 'sleeping gas' || name.includes('sleeping gas')) && (pkm.includes('gastly') || pkm.includes('haunter') || pkm.includes('gengar'))) return 'gastly_sleeping_gas';
   if (name === 'sleeping gas' || name.includes('sleeping gas')) return 'sleeping_gas';
   if (name === 'psyshock' || name.includes('psyshock') || name === 'mind shock' || name.includes('mind shock') || name === 'psypunch') return 'psyshock_waves';
   if (name.includes('doubleslap') || name.includes('double slap')) return 'doubleslap';
@@ -724,6 +729,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('star freeze') || name.includes('freeze star')) return 'star_freeze';
   if (name.includes('aurora beam')) return 'dewgong_aurora_beam';
   if (name.includes('ice beam') && pkm.includes('gyarados')) return 'dark_gyarados_ice_beam';
+  if (name.includes('ice beam') && (pkm.includes('dewgong') || pkm.includes('seel'))) return 'dewgong_ice_beam';
   if (name.includes('ice beam') || name.includes('blizzard') || name.includes('freeze') || name.includes('frost')) return 'ice_beam_frost';
 
   // 6. Psychic & Mind
@@ -795,11 +801,15 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('wing attack') || name.includes('dive bomb')) return 'wing_slash';
   if (name.includes('pay day') || name.includes('scavenge') || name.includes('coin hurl') || name.includes('fetch')) return 'pay_day_coins';
   if (name.includes('big eggsplosion') || name.includes('eggsplosion')) return 'exeggutor_big_eggsplosion';
-  if (name.includes('selfdestruct') || name.includes('explosion') || name.includes('mass explosion')) return 'selfdestruct_shockwave';
+  if (name.includes('selfdestruct') || name.includes('explosion') || name.includes('mass explosion')) {
+    if (pkm.includes('golem') || pkm.includes('graveler') || pkm.includes('geodude')) return 'golem_selfdestruct';
+    return 'selfdestruct_shockwave';
+  }
   if (name.includes('hyper beam') && pkm.includes('golduck')) return 'hyper_beam_ice';
   if (name.includes('hyper beam')) return 'hyper_beam_annihilation';
   if (name.includes('energy bomb') || name.includes('speed ball') || name.includes('sonicboom')) return 'hyper_beam_laser';
-  if (name.includes('horn attack') || name.includes('horn hazard')) return 'horn_gore';
+  if (name.includes('horn hazard') || (name.includes('horn') && (pkm.includes('nidoran') || pkm.includes('nidorino') || pkm.includes('nidoking')))) return 'nidoran_horn_hazard';
+  if (name.includes('horn attack')) return 'horn_gore';
 
   // 10. Dragon, Charge & Physical
   if (name.includes('dragon rage')) return 'dragon_rage';
@@ -936,6 +946,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'solar_beam_charge_blast':
       return 2200;
     case 'selfdestruct_shockwave':
+    case 'golem_selfdestruct':
       return 2100;
     case 'blizzard_storm':
       return 2000;
@@ -1021,6 +1032,12 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1800;
     case 'dewgong_aurora_beam':
       return 1700;
+    case 'dewgong_ice_beam':
+      return 1750;
+    case 'pinsir_irongrip':
+      return 1650;
+    case 'nidoran_horn_hazard':
+      return 1550;
     case 'kabutops_sickle_slash':
       return 1600;
     case 'marowak_bonemerang':
@@ -1109,7 +1126,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'poliwag_water_gun':
       return 1650;
     case 'geodude_stone_barrage':
-      return 1700;
+    case 'stone_barrage_single':
+      return 950;
     case 'vulpix_confuse_ray':
       return 1700;
     case 'oddish_stun_spore':
@@ -1508,7 +1526,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           </div>
         </>
       )}
-      {/* 1. SLEEPING GAS (Gastly / Gengar / Drowzee — Hypnotic Twilight Mist Vortex & Luminous Dream Motes) */}
+      {/* 1. SLEEPING GAS (Generic / Drowzee — Hypnotic Twilight Mist Vortex & Luminous Dream Motes) */}
       {fx.type === 'sleeping_gas' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Swirling Hypnotic Deep Indigo/Purple Gas Vortex */}
@@ -1525,7 +1543,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </div>
           </div>
 
-          {/* Floating Luminous Dream Motes */}
+          {/* Floating Luminous Ethereal Dream Motes (Zero text, pure glowing light beads) */}
           {[
             { x: '-28px', y: '-30px', delay: 0.1 },
             { x: '30px', y: '-26px', delay: 0.22 },
@@ -1534,28 +1552,27 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           ].map((mote, idx) => (
             <div
               key={`sg-mote-${idx}`}
-              className="absolute z-35"
+              className="absolute z-35 pointer-events-none"
               style={{
                 transform: `translate(${mote.x}, ${mote.y})`,
-                animation: `gbaGastlyDreamMotes 1.35s ease-out ${mote.delay}s forwards`,
+                animation: `gbaGastlyDreamMoteDrift 1.35s ease-out ${mote.delay}s forwards`,
                 opacity: 0,
-              }}
+                '--gm-x': mote.x,
+                '--gm-y': mote.y
+              } as React.CSSProperties}
             >
-              <div className="w-3 h-3 rounded-full bg-indigo-200 border border-white shadow-[0_0_10px_#818cf8] flex items-center justify-center">
-                <span className="text-[7px] font-bold text-indigo-900 font-mono">z</span>
+              <div className="w-3.5 h-3.5 rounded-full bg-indigo-100 border border-white/80 shadow-[0_0_12px_#818cf8] flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-violet-400" />
               </div>
             </div>
           ))}
 
-          {/* Rising Sleep Zzz Rune Banner */}
+          {/* Hypnotic Somnolence Ripple Wave (Expanding dream wave instead of cartoon emoji banner) */}
           <div
-            className="absolute flex items-center justify-center -top-3 right-2 z-40"
-            style={{ animation: 'gbaSleepZzzFloat 1.25s ease-out 0.15s forwards' }}
+            className="absolute flex items-center justify-center z-30 pointer-events-none"
+            style={{ animation: 'gbaGastlyDreamWave 1.35s ease-out 0.15s forwards' }}
           >
-            <div className="flex items-center gap-1.5 bg-indigo-950/90 border border-indigo-400/70 px-3 py-1 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.6)]">
-              <span className="text-xs text-indigo-300 select-none">✦</span>
-              <span className="text-xs font-black text-indigo-200 tracking-widest font-mono">Zzz...</span>
-            </div>
+            <div className="w-28 h-28 rounded-full border-2 border-indigo-300/60 shadow-[0_0_20px_#818cf8]" />
           </div>
         </div>
       )}
@@ -3056,103 +3073,138 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           <div
             className="absolute rounded-full pointer-events-none z-10"
             style={{
-              width: fx.whiffed ? '90px' : '130px',
-              height: fx.whiffed ? '90px' : '130px',
+              width: fx.whiffed ? '95px' : '140px',
+              height: fx.whiffed ? '95px' : '140px',
               animation: 'gbaGrowlitheHeatAura 1.1s ease-out forwards',
-              background: 'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.45) 0%, rgba(239, 68, 68, 0.25) 45%, rgba(185, 28, 28, 0.1) 70%, transparent 100%)'
+              background: 'radial-gradient(ellipse at center, rgba(249, 115, 22, 0.5) 0%, rgba(239, 68, 68, 0.3) 45%, rgba(185, 28, 28, 0.12) 70%, transparent 100%)'
             }}
           />
 
-          {/* Layer 2: Anamorphic Horizontal Optical Lens Flare Beam */}
+          {/* Layer 2: Anamorphic Horizontal Optical Lens Flare Beam & Diamond Ignition Core */}
           {!fx.whiffed && (
             <div
               className="absolute pointer-events-none z-20 flex items-center justify-center"
-              style={{ animation: 'gbaGrowlitheOpticalStreak 0.75s ease-out forwards' }}
+              style={{ animation: 'gbaGrowlitheAnamorphicBeam 0.75s ease-out forwards' }}
             >
-              <svg width="150" height="24" viewBox="0 0 150 24" className="overflow-visible">
+              <svg width="170" height="32" viewBox="0 0 170 32" className="overflow-visible">
                 <defs>
-                  <linearGradient id="growlitheFlareStreak" x1="0" y1="0" x2="1" y2="0">
+                  <linearGradient id="growlitheAnamorphicGrad" x1="0" y1="0" x2="1" y2="0">
                     <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-                    <stop offset="35%" stopColor="#fef08a" stopOpacity="0.85" />
+                    <stop offset="30%" stopColor="#fef08a" stopOpacity="0.9" />
                     <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
-                    <stop offset="65%" stopColor="#f97316" stopOpacity="0.85" />
-                    <stop offset="100%" stopColor="#ef4444" stopOpacity="0" />
+                    <stop offset="70%" stopColor="#f97316" stopOpacity="0.9" />
+                    <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
                   </linearGradient>
                 </defs>
-                <ellipse cx="75" cy="12" rx="72" ry="3.5" fill="url(#growlitheFlareStreak)" filter="drop-shadow(0 0 8px #fef08a)" />
-                <circle cx="75" cy="12" r="6" fill="#ffffff" filter="drop-shadow(0 0 10px #f97316)" />
+                {/* Horizontal Searing Laser Beam */}
+                <ellipse cx="85" cy="16" rx="82" ry="3.2" fill="url(#growlitheAnamorphicGrad)" filter="drop-shadow(0 0 10px #fef08a)" />
+                {/* 4-Point Radiant Center Ignition Diamond */}
+                <polygon
+                  points="85,2 89,12 99,16 89,20 85,30 81,20 71,16 81,12"
+                  fill="#ffffff"
+                  filter="drop-shadow(0 0 12px #f97316)"
+                />
               </svg>
             </div>
           )}
 
-          {/* Layer 3: Central 3-Tier Fluid Bézier Flame Plumes */}
+          {/* Layer 3: Roaring Multi-Tongue Fluid Combustion Core (Organic Asymmetric Flame Dynamics — Zero 2D emoji/sticker look!) */}
           <div
             className="absolute pointer-events-none z-30 flex items-center justify-center"
-            style={{ animation: 'gbaGrowlitheFlareCore 1.15s ease-out forwards' }}
+            style={{
+              animation: fx.whiffed
+                ? 'gbaGrowlitheFlareWhiff 1.0s ease-out forwards'
+                : 'gbaGrowlitheThermalIgnition 1.15s cubic-bezier(0.18, 0.88, 0.28, 1) forwards'
+            }}
           >
-            <svg
-              width={fx.whiffed ? '64' : '92'}
-              height={fx.whiffed ? '64' : '92'}
-              viewBox="0 0 92 92"
-              className="overflow-visible drop-shadow-[0_0_24px_#f97316]"
-            >
-              <defs>
-                <linearGradient id="growlitheOuterFlame" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stopColor="#dc2626" />
-                  <stop offset="45%" stopColor="#ea580c" />
-                  <stop offset="85%" stopColor="#f59e0b" />
-                  <stop offset="100%" stopColor="#fef08a" />
-                </linearGradient>
-                <linearGradient id="growlitheMidFlame" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stopColor="#ea580c" />
-                  <stop offset="50%" stopColor="#facc15" />
-                  <stop offset="100%" stopColor="#ffffff" />
-                </linearGradient>
-              </defs>
-              {/* Outer thermal fire plume */}
-              <path
-                d="M 46 8 C 55 18 68 28 66 44 C 64 58 52 68 46 72 C 40 68 28 58 26 44 C 24 28 37 18 46 8 Z"
-                fill="url(#growlitheOuterFlame)"
-                opacity="0.95"
-              />
-              {/* Flanking flame tongues */}
-              <path
-                d="M 46 22 C 58 26 74 38 68 54 C 62 50 56 46 52 48 C 58 38 52 28 46 22 Z"
-                fill="#f97316"
-                opacity="0.85"
-              />
-              <path
-                d="M 46 22 C 34 26 18 38 24 54 C 30 50 36 46 40 48 C 34 38 40 28 46 22 Z"
-                fill="#f97316"
-                opacity="0.85"
-              />
-              {/* Mid bright gold core */}
-              <path
-                d="M 46 24 C 52 32 58 40 56 52 C 54 60 48 64 46 66 C 44 64 38 60 36 52 C 34 40 40 32 46 24 Z"
-                fill="url(#growlitheMidFlame)"
-                opacity="0.9"
-              />
-              {/* Incandescent white-hot center spark */}
-              <ellipse cx="46" cy="50" rx="8" ry="12" fill="#ffffff" filter="drop-shadow(0 0 10px #ffffff)" />
-            </svg>
+            <div className="relative w-28 h-28 flex items-center justify-center">
+              <svg
+                viewBox="0 0 110 110"
+                className="w-full h-full overflow-visible drop-shadow-[0_0_28px_#f97316]"
+              >
+                <defs>
+                  <linearGradient id="growlitheFlameOuterGrad" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0%" stopColor="#b91c1c" />
+                    <stop offset="35%" stopColor="#ea580c" />
+                    <stop offset="70%" stopColor="#f59e0b" />
+                    <stop offset="100%" stopColor="#fef08a" />
+                  </linearGradient>
+                  <linearGradient id="growlitheFlameMidGrad" x1="0" y1="1" x2="0" y2="0">
+                    <stop offset="0%" stopColor="#ea580c" />
+                    <stop offset="45%" stopColor="#facc15" />
+                    <stop offset="85%" stopColor="#ffffff" />
+                  </linearGradient>
+                </defs>
+
+                {/* Main Asymmetric Surging Fire Envelope */}
+                <path
+                  d="M 55,6 C 68,18 84,28 82,48 C 80,68 64,82 54,86 C 44,82 28,70 26,52 C 24,34 40,20 55,6 Z"
+                  fill="url(#growlitheFlameOuterGrad)"
+                  opacity="0.95"
+                />
+
+                {/* Left Dynamic Waving Flame Tongue (Independent rhythm) */}
+                <g style={{ animation: 'gbaGrowlitheFlameWav1 0.45s ease-in-out infinite alternate', transformOrigin: '40px 70px' }}>
+                  <path
+                    d="M 52,24 C 36,30 18,44 26,64 C 34,58 42,54 48,56 C 40,44 48,32 52,24 Z"
+                    fill="#f97316"
+                    opacity="0.9"
+                  />
+                </g>
+
+                {/* Right Dynamic Waving Flame Tongue (Counter-rhythm) */}
+                <g style={{ animation: 'gbaGrowlitheFlameWav2 0.52s ease-in-out infinite alternate', transformOrigin: '70px 70px' }}>
+                  <path
+                    d="M 58,20 C 72,26 90,40 84,60 C 76,54 68,52 64,54 C 72,42 66,30 58,20 Z"
+                    fill="#ea580c"
+                    opacity="0.92"
+                  />
+                </g>
+
+                {/* Mid Incandescent Plasma Core */}
+                <path
+                  d="M 55,26 C 64,36 70,46 68,60 C 66,70 58,76 55,78 C 52,76 44,70 42,60 C 40,46 46,36 55,26 Z"
+                  fill="url(#growlitheFlameMidGrad)"
+                  opacity="0.95"
+                />
+
+                {/* Central White-Hot Nuclear Spark */}
+                <ellipse cx="55" cy="62" rx="9" ry="14" fill="#ffffff" filter="drop-shadow(0 0 12px #ffffff)" />
+              </svg>
+            </div>
           </div>
 
-          {/* Layer 4: Floating Embers & Cinders */}
+          {/* Layer 4: Expanding Thermal Blast Shockwave Ring */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-35 flex items-center justify-center"
+              style={{ animation: 'gbaGrowlitheBlastRing 1.15s ease-out 0.08s forwards', opacity: 0 }}
+            >
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                <circle cx="70" cy="70" r="58" fill="none" stroke="#fde047" strokeWidth="2.2" strokeDasharray="14 8" opacity="0.85" />
+                <circle cx="70" cy="70" r="42" fill="none" stroke="#f97316" strokeWidth="1.6" strokeDasharray="8 6" opacity="0.75" />
+              </svg>
+            </div>
+          )}
+
+          {/* Layer 5: Convection-Driven Floating Embers & Carbon Cinders */}
           {!fx.whiffed && [
-            { x: -32, y: -42, del: 0.12, sz: 5, col: '#fef08a' },
-            { x: 30,  y: -38, del: 0.18, sz: 6, col: '#f97316' },
-            { x: -22, y: -52, del: 0.24, sz: 4, col: '#fde047' },
-            { x: 26,  y: -50, del: 0.30, sz: 5, col: '#ef4444' },
-            { x: -14, y: -60, del: 0.36, sz: 4, col: '#ffffff' },
-            { x: 16,  y: -58, del: 0.42, sz: 5, col: '#f97316' }
+            { x: -36, y: -48, del: 0.10, sz: 5, col: '#ffffff' },
+            { x: 34,  y: -42, del: 0.16, sz: 6, col: '#fef08a' },
+            { x: -24, y: -62, del: 0.22, sz: 4, col: '#fde047' },
+            { x: 28,  y: -58, del: 0.28, sz: 5, col: '#f97316' },
+            { x: -16, y: -72, del: 0.34, sz: 4, col: '#ea580c' },
+            { x: 18,  y: -70, del: 0.40, sz: 5, col: '#fef08a' },
+            { x: -8,  y: -80, del: 0.46, sz: 3.5, col: '#ffffff' },
+            { x: 10,  y: -84, del: 0.52, sz: 4, col: '#f97316' }
           ].map((emb, eidx) => (
             <div
               key={`flare-ember-${eidx}`}
-              className="absolute pointer-events-none z-35"
+              className="absolute pointer-events-none z-40"
               style={{
                 '--emb-x': `${emb.x}px`,
                 '--emb-y': `${emb.y}px`,
-                animation: `gbaGrowlitheEmberDrift 1.1s ease-out ${emb.del}s forwards`,
+                animation: `gbaGrowlitheEmberAscent 1.15s ease-out ${emb.del}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
@@ -5371,48 +5423,178 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
       {/* 20i. DUGTRIO EARTHQUAKE (Dugtrio Lv. 36 — 60 DMG Subterranean Mole Upheaval & Tectonic Quake) */}
       {fx.type === 'dugtrio_earthquake' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Authentic 1999 Ken Sugimori Dugtrio Trio Eruption Illustration */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+          style={{
+            animation: fx.whiffed
+              ? undefined
+              : 'gbaDugtrioTectonicTremor 1.75s cubic-bezier(0.2, 0.9, 0.3, 1) forwards'
+          }}
+        >
+          {/* L1: Subterranean Dendritic Tectonic Fault Rift (z-10) */}
           <div
-            className="absolute bottom-4 flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaDugtrioErupt 1.75s cubic-bezier(0.12, 0.9, 0.25, 1) forwards' }}
+            className="absolute bottom-1 flex items-center justify-center pointer-events-none z-10"
+            style={{
+              animation: fx.whiffed
+                ? undefined
+                : 'gbaDugtrioFissureTear 1.75s cubic-bezier(0.12, 0.9, 0.25, 1) forwards'
+            }}
           >
+            <svg width="200" height="110" viewBox="0 0 200 110" className="overflow-visible">
+              <defs>
+                <linearGradient id="dugtrioMagmaGlow" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#78350f" />
+                  <stop offset="25%" stopColor="#ea580c" />
+                  <stop offset="50%" stopColor="#fbbf24" />
+                  <stop offset="75%" stopColor="#ea580c" />
+                  <stop offset="100%" stopColor="#78350f" />
+                </linearGradient>
+                <radialGradient id="dugtrioCraterShadow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#1c1917" stopOpacity="0.95" />
+                  <stop offset="55%" stopColor="#451a03" stopOpacity="0.8" />
+                  <stop offset="85%" stopColor="#78350f" stopOpacity="0.4" />
+                  <stop offset="100%" stopColor="#78350f" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+
+              {/* Subterranean crater void under emergence point */}
+              <ellipse cx="100" cy="80" rx="46" ry="18" fill="url(#dugtrioCraterShadow)" />
+
+              {/* Deep chasm trench bedrock shadow */}
+              <path
+                d="M 16 88 L 44 76 L 70 82 L 100 66 L 128 80 L 156 74 L 184 88"
+                fill="none"
+                stroke="#1c1917"
+                strokeWidth="7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                opacity="0.95"
+              />
+
+              {/* Geothermal molten earth glow tearing through rift */}
+              <path
+                d="M 16 88 L 44 76 L 70 82 L 100 66 L 128 80 L 156 74 L 184 88"
+                fill="none"
+                stroke="url(#dugtrioMagmaGlow)"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{ filter: 'drop-shadow(0 0 8px #f97316) drop-shadow(0 0 16px #ea580c)' }}
+              />
+
+              {/* Dendritic secondary micro-fractures spidering outward */}
+              <path d="M 44 76 L 30 58 L 18 52" fill="none" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+              <path d="M 70 82 L 64 98 L 52 104" fill="none" stroke="#c2410c" strokeWidth="1.8" strokeLinecap="round" opacity="0.8" />
+              <path d="M 128 80 L 138 98 L 152 105" fill="none" stroke="#c2410c" strokeWidth="1.8" strokeLinecap="round" opacity="0.8" />
+              <path d="M 156 74 L 170 58 L 182 50" fill="none" stroke="#ea580c" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
+              <path d="M 100 66 L 94 48 L 84 42" fill="none" stroke="#facc15" strokeWidth="1.6" strokeLinecap="round" opacity="0.9" />
+            </svg>
+          </div>
+
+          {/* L2: Churned Earth Crater Base & Dugtrio Trio Emergence (z-25) */}
+          <div
+            className="absolute bottom-3 flex flex-col items-center justify-center pointer-events-none z-25"
+            style={{
+              animation: fx.whiffed
+                ? 'gbaDugtrioBurrowSurgeWhiff 1.2s ease-out forwards'
+                : 'gbaDugtrioBurrowSurge 1.75s cubic-bezier(0.14, 0.94, 0.22, 1) forwards'
+            }}
+          >
+            {/* Authentic 1999 Ken Sugimori Dugtrio Illustration */}
             <img
               src="/assets/Dugtrio_Earthquake_Trio.png"
               alt="Dugtrio Earthquake"
-              className="select-none pointer-events-none drop-shadow-[0_0_24px_rgba(234,88,12,0.85)] drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+              className="select-none pointer-events-none drop-shadow-[0_0_24px_rgba(234,88,12,0.9)] drop-shadow-[0_12px_20px_rgba(0,0,0,0.65)]"
               style={{
-                width: '100px',
-                maxWidth: '100px',
+                width: '104px',
+                maxWidth: '104px',
                 height: 'auto',
                 objectFit: 'contain'
               }}
               draggable={false}
             />
+
+            {/* Churned ground mound collar at Dugtrio's base */}
+            <div className="-mt-3 w-28 h-5 rounded-[50%] bg-gradient-to-r from-[#451a03] via-[#78350f] to-[#451a03] border-t border-[#a16207]/60 shadow-[0_4px_12px_rgba(0,0,0,0.7)] pointer-events-none" />
           </div>
 
-          {/* 4-Way Tectonic Fault Line Fractures */}
-          <div
-            className="absolute flex items-center justify-center bottom-0"
-            style={{ animation: 'gbaDugtrioFaultLine 1.75s cubic-bezier(0.1, 0.9, 0.2, 1) forwards' }}
-          >
-            <svg width="180" height="120" viewBox="0 0 180 120">
-              <path d="M90 60 L40 15 L15 35 L5 25" stroke="#ea580c" strokeWidth="4" strokeLinecap="round" fill="none" />
-              <path d="M90 60 L140 15 L165 35 L175 25" stroke="#ea580c" strokeWidth="4" strokeLinecap="round" fill="none" />
-              <path d="M90 60 L70 105 L35 115" stroke="#ca8a04" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-              <path d="M90 60 L110 105 L145 115" stroke="#ca8a04" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-              <ellipse cx="90" cy="60" rx="35" ry="18" fill="#78350f" opacity="0.6" />
-              <circle cx="90" cy="60" r="14" fill="#ffffff" opacity="0.9" />
-            </svg>
-          </div>
+          {/* L3: Concentric Ground Compression Shockwave Rings (z-30) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute bottom-2 flex items-center justify-center pointer-events-none z-30"
+              style={{ animation: 'gbaDugtrioSeismicRing 1.75s ease-out 0.26s forwards', opacity: 0 }}
+            >
+              <svg width="190" height="70" viewBox="0 0 190 70">
+                <ellipse cx="95" cy="35" rx="78" ry="24" fill="none" stroke="#f97316" strokeWidth="2.5" strokeDasharray="16 8" opacity="0.85" />
+                <ellipse cx="95" cy="35" rx="55" ry="16" fill="none" stroke="#fde047" strokeWidth="1.8" strokeDasharray="10 6" opacity="0.9" />
+              </svg>
+            </div>
+          )}
 
-          {/* Exploding Earthen Quake Debris & Boulders */}
+          {/* L4: Catapulted Ballistic Rock Slabs & Boulders (z-35) */}
+          {!fx.whiffed && (
+            <>
+              {/* Rock 1: Angular Granite Slab flung high-left */}
+              <div
+                className="absolute flex items-center justify-center pointer-events-none z-35"
+                style={{ animation: 'gbaDugtrioRockArcLeft 1.75s cubic-bezier(0.15, 0.85, 0.3, 1) 0.25s forwards', opacity: 0 }}
+              >
+                <svg width="34" height="32" viewBox="0 0 34 32" className="drop-shadow-[0_6px_10px_rgba(0,0,0,0.65)]">
+                  <polygon points="12,2 26,6 32,20 22,30 8,28 2,16" fill="#78716c" stroke="#d6d3d1" strokeWidth="1.2" />
+                  <line x1="12" y1="2" x2="22" y2="30" stroke="#44403c" strokeWidth="1.2" />
+                  <line x1="26" y1="6" x2="8" y2="28" stroke="#44403c" strokeWidth="1.0" />
+                </svg>
+              </div>
+
+              {/* Rock 2: Heavy Basalt Chunk flung right */}
+              <div
+                className="absolute flex items-center justify-center pointer-events-none z-35"
+                style={{ animation: 'gbaDugtrioRockArcRight 1.75s cubic-bezier(0.18, 0.88, 0.32, 1) 0.28s forwards', opacity: 0 }}
+              >
+                <svg width="38" height="36" viewBox="0 0 38 36" className="drop-shadow-[0_6px_12px_rgba(0,0,0,0.7)]">
+                  <polygon points="16,3 32,10 36,24 24,34 6,30 2,14" fill="#57534e" stroke="#e7e5e4" strokeWidth="1.4" />
+                  <line x1="16" y1="3" x2="24" y2="34" stroke="#292524" strokeWidth="1.4" />
+                  <line x1="32" y1="10" x2="6" y2="30" stroke="#292524" strokeWidth="1.0" />
+                </svg>
+              </div>
+
+              {/* Rock 3: Center Sedimentary Shale Projectile */}
+              <div
+                className="absolute flex items-center justify-center pointer-events-none z-35"
+                style={{ animation: 'gbaDugtrioRockArcCenter 1.75s cubic-bezier(0.16, 0.86, 0.3, 1) 0.26s forwards', opacity: 0 }}
+              >
+                <svg width="24" height="22" viewBox="0 0 24 22" className="drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)]">
+                  <polygon points="10,2 20,6 22,16 14,21 4,18 2,9" fill="#a8a29e" stroke="#f5f5f4" strokeWidth="1.0" />
+                  <line x1="10" y1="2" x2="14" y2="21" stroke="#57534e" strokeWidth="1.0" />
+                </svg>
+              </div>
+            </>
+          )}
+
+          {/* L5: Volumetric Billowing Dust Plumes (z-40) */}
           <div
-            className="absolute flex items-center justify-center"
-            style={{ animation: 'gbaDugtrioQuakeRocks 1.75s ease-out 0.2s forwards', opacity: 0 }}
+            className="absolute bottom-2 flex items-center justify-center pointer-events-none z-40"
+            style={{
+              animation: 'gbaDugtrioDustPlume 1.75s ease-out 0.28s forwards',
+              opacity: 0
+            }}
           >
-            <svg width="140" height="140" viewBox="0 0 140 140">
-              <polygon points="70,12 80,48 115,25 92,60 128,70 92,80 115,115 80,92 70,128 60,92 25,115 48,80 12,70 48,60 25,25 60,48" fill="#ea580c" stroke="#facc15" strokeWidth="1.5" />
+            <svg width="180" height="60" viewBox="0 0 180 60" className="overflow-visible">
+              <defs>
+                <radialGradient id="dugtrioDustGrad1" cx="0.5" cy="0.6" r="0.5">
+                  <stop offset="0%" stopColor="#d97706" stopOpacity="0.75" />
+                  <stop offset="50%" stopColor="#a16207" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="#78350f" stopOpacity="0" />
+                </radialGradient>
+                <radialGradient id="dugtrioDustGrad2" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.6" />
+                  <stop offset="55%" stopColor="#b45309" stopOpacity="0.35" />
+                  <stop offset="100%" stopColor="#78350f" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <ellipse cx="90" cy="42" rx="60" ry="16" fill="url(#dugtrioDustGrad1)" />
+              <ellipse cx="55" cy="32" rx="36" ry="14" fill="url(#dugtrioDustGrad2)" />
+              <ellipse cx="125" cy="30" rx="38" ry="15" fill="url(#dugtrioDustGrad2)" />
             </svg>
           </div>
         </div>
@@ -5952,51 +6134,174 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20r. GOLEM AVALANCHE (Golem Lv. 36 — 60 DMG Bedrock Tremor, Mountain Slabs & Cascading Boulders) */}
+      {/* 20r. GOLEM AVALANCHE (Golem Lv. 36 — 60 DMG Massive Cascading Landslide & Stone Heap / Heyelan & Kaya Tepesi) */}
       {fx.type === 'golem_avalanche' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
-             style={{ animation: 'gbaGolemQuakeTremor 0.8s ease-in-out infinite' }}>
-          {/* Boulder 1 Falling Left */}
-          <div
-            className="absolute left-6 flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaGolemRockFall1 1.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
-          >
-            <svg width="55" height="55" viewBox="0 0 55 55" className="drop-shadow-[0_6px_12px_rgba(0,0,0,0.6)]">
-              <polygon points="10,25 25,8 45,15 50,38 35,50 15,45" fill="#78716c" stroke="#d6d3d1" strokeWidth="1.5" />
-              <line x1="25" y1="8" x2="35" y2="50" stroke="#44403c" strokeWidth="1.5" />
-            </svg>
-          </div>
+             style={{ animation: fx.whiffed ? 'none' : 'gbaAvalancheEarthquake 1.8s ease-in-out forwards' }}>
+          <svg className="absolute w-0 h-0 pointer-events-none">
+            <defs>
+              <linearGradient id="avalancheDarkGranite" x1="0" y1="0" x2="0.3" y2="1">
+                <stop offset="0%" stopColor="#78716c" />
+                <stop offset="40%" stopColor="#44403c" />
+                <stop offset="100%" stopColor="#1c1917" />
+              </linearGradient>
+              <linearGradient id="avalancheMidGranite" x1="0.2" y1="0" x2="0.8" y2="1">
+                <stop offset="0%" stopColor="#a8a29e" />
+                <stop offset="35%" stopColor="#78716c" />
+                <stop offset="85%" stopColor="#44403c" />
+                <stop offset="100%" stopColor="#292524" />
+              </linearGradient>
+              <linearGradient id="avalancheLightStone" x1="0" y1="0.2" x2="1" y2="1">
+                <stop offset="0%" stopColor="#d6d3d1" />
+                <stop offset="45%" stopColor="#a8a29e" />
+                <stop offset="100%" stopColor="#57534e" />
+              </linearGradient>
+            </defs>
+          </svg>
 
-          {/* Boulder 2 Falling Right */}
-          <div
-            className="absolute right-6 flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaGolemRockFall2 1.8s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
-          >
-            <svg width="60" height="60" viewBox="0 0 60 60" className="drop-shadow-[0_6px_14px_rgba(0,0,0,0.6)]">
-              <polygon points="12,20 28,5 52,18 48,45 22,55 8,38" fill="#a8a29e" stroke="#f5f5f4" strokeWidth="1.5" />
-              <line x1="28" y1="5" x2="22" y2="55" stroke="#57534e" strokeWidth="1.5" />
-            </svg>
-          </div>
+          {/* Ground Shockwave Ripples */}
+          {!fx.whiffed && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-48 h-10 z-10"
+                 style={{ animation: 'gbaAvalancheGroundShock 1.8s ease-out forwards' }}>
+              <div className="w-full h-full rounded-[100%] border border-stone-300/40 bg-stone-900/30 blur-sm" />
+            </div>
+          )}
 
-          {/* Heavy Granite Center Slab Impact */}
-          <div
-            className="absolute flex items-center justify-center pointer-events-none z-35"
-            style={{ animation: 'gbaGolemRockFall3 1.8s cubic-bezier(0.15, 0.9, 0.25, 1) forwards' }}
-          >
-            <svg width="75" height="75" viewBox="0 0 75 75" className="drop-shadow-[0_8px_16px_rgba(0,0,0,0.7)]">
-              <polygon points="18,12 55,8 70,38 52,68 15,62 5,35" fill="#57534e" stroke="#e7e5e4" strokeWidth="2" />
-              <line x1="18" y1="12" x2="52" y2="68" stroke="#292524" strokeWidth="2" />
-              <line x1="55" y1="8" x2="15" y2="62" stroke="#292524" strokeWidth="1.5" />
-            </svg>
-          </div>
+          {/* Whiff branch: 2 minor skittering rock fragments tumble harmlessly past */}
+          {fx.whiffed ? (
+            <>
+              <div className="absolute left-[20%] top-0 z-30"
+                   style={{ animation: 'gbaAvalancheWhiff 1.2s ease-in forwards' }}>
+                <svg width="28" height="25" viewBox="0 0 28 25" className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  <polygon points="12,1 24,5 27,15 19,24 6,22 1,12 5,4" fill="url(#avalancheMidGranite)" stroke="#292524" strokeWidth="1.2" />
+                  <path d="M12 1 L16 11 L6 22" fill="none" stroke="#1c1917" strokeWidth="1" opacity="0.6" />
+                </svg>
+              </div>
+              <div className="absolute right-[22%] top-[-10px] z-30"
+                   style={{ animation: 'gbaAvalancheWhiff 1.4s 0.2s ease-in forwards' }}>
+                <svg width="24" height="22" viewBox="0 0 24 22" className="drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
+                  <polygon points="10,2 20,4 23,13 16,21 5,19 1,10 4,3" fill="url(#avalancheLightStone)" stroke="#292524" strokeWidth="1.2" />
+                </svg>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* === TIER 1 BASE MONOLITHS (Forms the heavy ground foundation) === */}
+              {/* Boulder 1: Heavy Left Bedrock */}
+              <div className="absolute left-[10%] bottom-[8%] z-20"
+                   style={{ animation: 'gbaAvalancheRock1 1.8s cubic-bezier(0.2, 0.75, 0.35, 1) forwards' }}>
+                <svg width="58" height="52" viewBox="0 0 58 52" className="drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
+                  <polygon points="18,2 40,5 54,18 56,36 44,50 20,51 6,42 1,22 8,8" fill="url(#avalancheDarkGranite)" stroke="#1c1917" strokeWidth="1.8" strokeLinejoin="bevel" />
+                  <polygon points="18,2 32,16 14,28 6,42 1,22 8,8" fill="#57534e" opacity="0.45" />
+                  <polygon points="32,16 40,5 54,18 42,28" fill="#a8a29e" opacity="0.35" />
+                  <path d="M18 2 L32 16 L44 50" fill="none" stroke="#0c0a09" strokeWidth="1.6" />
+                  <path d="M32 16 L14 28" fill="none" stroke="#0c0a09" strokeWidth="1.4" />
+                  <path d="M32 16 L54 18" fill="none" stroke="#0c0a09" strokeWidth="1.4" />
+                  <polygon points="18,2 28,6 24,12 14,8" fill="#e7e5e4" opacity="0.4" />
+                </svg>
+              </div>
 
-          {/* Billowing Dust Puffs at Base */}
-          <div
-            className="absolute bottom-2 flex items-center justify-center z-20"
-            style={{ animation: 'gbaGolemDustPuff 1.8s ease-out forwards' }}
-          >
-            <div className="w-40 h-16 rounded-full bg-stone-500/50 blur-lg shadow-[0_0_25px_#78716c]" />
-          </div>
+              {/* Boulder 2: Medium Right Granite */}
+              <div className="absolute left-[56%] bottom-[8%] z-20"
+                   style={{ animation: 'gbaAvalancheRock2 1.8s cubic-bezier(0.2, 0.75, 0.35, 1) forwards' }}>
+                <svg width="54" height="48" viewBox="0 0 54 48" className="drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
+                  <polygon points="20,1 42,4 52,16 51,36 38,47 16,46 4,36 1,18 7,6" fill="url(#avalancheMidGranite)" stroke="#292524" strokeWidth="1.8" strokeLinejoin="bevel" />
+                  <polygon points="20,1 36,15 28,32 16,46 4,36 1,18 7,6" fill="#44403c" opacity="0.4" />
+                  <polygon points="36,15 42,4 52,16 42,30" fill="#d6d3d1" opacity="0.3" />
+                  <path d="M20 1 L36 15 L28 32 L38 47" fill="none" stroke="#1c1917" strokeWidth="1.6" />
+                  <path d="M36 15 L52 16" fill="none" stroke="#1c1917" strokeWidth="1.3" />
+                  <polygon points="20,1 30,3 26,9 15,6" fill="#f5f5f4" opacity="0.45" />
+                </svg>
+              </div>
+
+              {/* Boulder 3: Heavy Center Base Monolith (Massive anchor slab) */}
+              <div className="absolute left-[30%] bottom-[6%] z-25"
+                   style={{ animation: 'gbaAvalancheRock3 1.8s cubic-bezier(0.18, 0.75, 0.3, 1) forwards' }}>
+                <svg width="68" height="58" viewBox="0 0 68 58" className="drop-shadow-[0_10px_20px_rgba(0,0,0,0.9)]">
+                  <polygon points="24,2 48,4 64,18 66,42 50,56 18,57 4,44 1,22 10,7" fill="url(#avalancheDarkGranite)" stroke="#0c0a09" strokeWidth="2" strokeLinejoin="bevel" />
+                  <polygon points="24,2 40,18 32,38 18,57 4,44 1,22 10,7" fill="#292524" opacity="0.6" />
+                  <polygon points="40,18 48,4 64,18 52,36 32,38" fill="#78716c" opacity="0.35" />
+                  <path d="M24 2 L40 18 L32 38 L50 56" fill="none" stroke="#0c0a09" strokeWidth="1.8" />
+                  <path d="M40 18 L64 18" fill="none" stroke="#0c0a09" strokeWidth="1.5" />
+                  <path d="M4 44 L32 38" fill="none" stroke="#0c0a09" strokeWidth="1.4" />
+                  <polygon points="24,2 36,4 32,12 18,8" fill="#e7e5e4" opacity="0.35" />
+                </svg>
+              </div>
+
+              {/* === TIER 2 MID-STACK SLABS (Stacking directly on base boulders) === */}
+              {/* Boulder 4: Left Mid-Stack Scree */}
+              <div className="absolute left-[18%] bottom-[15%] z-30"
+                   style={{ animation: 'gbaAvalancheRock4 1.8s cubic-bezier(0.22, 0.78, 0.38, 1) forwards' }}>
+                <svg width="42" height="38" viewBox="0 0 42 38" className="drop-shadow-[0_6px_14px_rgba(0,0,0,0.8)]">
+                  <polygon points="14,1 32,3 40,14 38,28 28,36 10,37 2,26 1,12 6,4" fill="url(#avalancheLightStone)" stroke="#292524" strokeWidth="1.5" strokeLinejoin="bevel" />
+                  <path d="M14 1 L24 14 L18 26 L28 36" fill="none" stroke="#1c1917" strokeWidth="1.4" />
+                  <polygon points="14,1 22,2 20,8 10,6" fill="#f5f5f4" opacity="0.5" />
+                </svg>
+              </div>
+
+              {/* Boulder 5: Right Mid-Stack Boulder */}
+              <div className="absolute left-[46%] bottom-[14%] z-30"
+                   style={{ animation: 'gbaAvalancheRock5 1.8s cubic-bezier(0.22, 0.78, 0.38, 1) forwards' }}>
+                <svg width="48" height="42" viewBox="0 0 48 42" className="drop-shadow-[0_6px_14px_rgba(0,0,0,0.8)]">
+                  <polygon points="16,2 36,4 46,15 45,30 34,40 14,41 3,30 1,16 6,5" fill="url(#avalancheMidGranite)" stroke="#292524" strokeWidth="1.6" strokeLinejoin="bevel" />
+                  <polygon points="16,2 28,14 20,28 14,41 3,30 1,16 6,5" fill="#44403c" opacity="0.4" />
+                  <path d="M16 2 L28 14 L34 40" fill="none" stroke="#1c1917" strokeWidth="1.4" />
+                  <polygon points="16,2 26,3 24,9 12,7" fill="#e7e5e4" opacity="0.4" />
+                </svg>
+              </div>
+
+              {/* Boulder 6: Center Stack Keystone (Binds the pile together) */}
+              <div className="absolute left-[30%] bottom-[20%] z-35"
+                   style={{ animation: 'gbaAvalancheRock6 1.8s cubic-bezier(0.2, 0.8, 0.35, 1) forwards' }}>
+                <svg width="52" height="46" viewBox="0 0 52 46" className="drop-shadow-[0_8px_16px_rgba(0,0,0,0.85)]">
+                  <polygon points="18,1 38,3 50,14 48,32 36,44 14,45 3,32 1,16 7,5" fill="url(#avalancheDarkGranite)" stroke="#1c1917" strokeWidth="1.8" strokeLinejoin="bevel" />
+                  <path d="M18 1 L30 15 L22 30 L36 44" fill="none" stroke="#0c0a09" strokeWidth="1.6" />
+                  <polygon points="18,1 28,3 24,10 14,7" fill="#d6d3d1" opacity="0.45" />
+                </svg>
+              </div>
+
+              {/* === TIER 3 PEAK CAPSTONE & FLANKS (Completes the pyramid mound / Kaya Tepesi) === */}
+              {/* Boulder 7: Peak Capstone Rock */}
+              <div className="absolute left-[38%] bottom-[27%] z-40"
+                   style={{ animation: 'gbaAvalancheRock7 1.8s cubic-bezier(0.25, 0.82, 0.4, 1) forwards' }}>
+                <svg width="38" height="34" viewBox="0 0 38 34" className="drop-shadow-[0_6px_14px_rgba(0,0,0,0.85)]">
+                  <polygon points="14,1 28,3 36,12 34,25 24,33 8,33 1,22 1,10 6,3" fill="url(#avalancheLightStone)" stroke="#292524" strokeWidth="1.5" strokeLinejoin="bevel" />
+                  <path d="M14 1 L22 12 L16 22 L24 33" fill="none" stroke="#1c1917" strokeWidth="1.3" />
+                  <polygon points="14,1 22,2 18,7 10,5" fill="#f5f5f4" opacity="0.6" />
+                </svg>
+              </div>
+
+              {/* Boulder 8: Left Flank Wedge */}
+              <div className="absolute left-[6%] bottom-[12%] z-30"
+                   style={{ animation: 'gbaAvalancheRock8 1.8s cubic-bezier(0.25, 0.82, 0.4, 1) forwards' }}>
+                <svg width="40" height="34" viewBox="0 0 40 34" className="drop-shadow-[0_6px_12px_rgba(0,0,0,0.75)]">
+                  <polygon points="12,1 30,3 38,12 36,25 24,33 6,32 1,20 4,4" fill="url(#avalancheMidGranite)" stroke="#292524" strokeWidth="1.4" strokeLinejoin="bevel" />
+                  <path d="M12 1 L20 12 L24 33" fill="none" stroke="#1c1917" strokeWidth="1.2" />
+                </svg>
+              </div>
+
+              {/* Boulder 9: Right Flank Spill */}
+              <div className="absolute left-[68%] bottom-[12%] z-30"
+                   style={{ animation: 'gbaAvalancheRock9 1.8s cubic-bezier(0.25, 0.82, 0.4, 1) forwards' }}>
+                <svg width="36" height="32" viewBox="0 0 36 32" className="drop-shadow-[0_6px_12px_rgba(0,0,0,0.75)]">
+                  <polygon points="12,2 26,3 34,11 32,23 22,31 6,30 1,18 4,4" fill="url(#avalancheLightStone)" stroke="#292524" strokeWidth="1.4" strokeLinejoin="bevel" />
+                  <path d="M12 2 L18 11 L22 31" fill="none" stroke="#1c1917" strokeWidth="1.2" />
+                </svg>
+              </div>
+
+              {/* Billowing Dust Plume Left */}
+              <div className="absolute bottom-4 left-[12%] z-15"
+                   style={{ animation: 'gbaAvalancheDustPlume1 1.8s ease-out forwards' }}>
+                <div className="w-44 h-20 rounded-full bg-stone-500/55 blur-xl shadow-[0_0_30px_#78716c]" />
+              </div>
+
+              {/* Billowing Dust Plume Right */}
+              <div className="absolute bottom-4 right-[12%] z-15"
+                   style={{ animation: 'gbaAvalancheDustPlume2 1.8s ease-out forwards' }}>
+                <div className="w-48 h-22 rounded-full bg-stone-400/50 blur-xl shadow-[0_0_35px_#a8a29e]" />
+              </div>
+            </>
+          )}
         </div>
       )}
 
@@ -6114,37 +6419,181 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 20u. POLIWRATH WHIRLPOOL (Poliwrath Lv. 48 — Deep Oceanic Energy-Stripping Vortex Maelstrom) */}
       {fx.type === 'poliwrath_whirlpool_vortex' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Deep Cyan/Navy Oceanic Maelstrom */}
+          {/* L1: Oceanic Abyss Trench Well (z-10) */}
+          <div
+            className="absolute inset-0 rounded-2xl pointer-events-none z-10"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(2,20,39,0.78) 0%, rgba(3,105,161,0.45) 45%, rgba(56,189,248,0.18) 65%, transparent 80%)',
+              animation: fx.whiffed
+                ? 'gbaWhirlpoolAbyssDepthWhiff 1.2s ease-out forwards'
+                : 'gbaWhirlpoolAbyssDepth 1.8s cubic-bezier(0.16, 0.85, 0.25, 1) forwards'
+            }}
+          />
+
+          {/* L2: Accelerating 4-Arm Hydrodynamic Maelstrom Torrents (z-25) */}
           <div
             className="absolute flex items-center justify-center pointer-events-none z-25"
-            style={{ animation: 'gbaWhirlpoolDeepVortex 1.8s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+            style={{
+              animation: fx.whiffed
+                ? 'gbaWhirlpoolMaelstromSpinWhiff 1.2s cubic-bezier(0.2, 0.7, 0.4, 1) forwards'
+                : 'gbaWhirlpoolMaelstromSpin 1.8s cubic-bezier(0.18, 0.82, 0.25, 1) forwards'
+            }}
           >
-            <svg width="170" height="170" viewBox="0 0 170 170" className="drop-shadow-[0_0_35px_#0284c7]">
+            <svg
+              width="180"
+              height="180"
+              viewBox="0 0 180 180"
+              className="overflow-visible"
+              style={{ filter: 'drop-shadow(0 0 22px rgba(2,132,199,0.75)) drop-shadow(0 0 35px rgba(56,189,248,0.5))' }}
+            >
               <defs>
-                <linearGradient id="poliWhirlpoolGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#e0f2fe" />
-                  <stop offset="35%" stopColor="#38bdf8" />
-                  <stop offset="70%" stopColor="#0284c7" />
-                  <stop offset="100%" stopColor="#0f172a" />
+                <radialGradient id="poliMaelstromSinkhole" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0%" stopColor="#010e1a" />
+                  <stop offset="30%" stopColor="#032b49" />
+                  <stop offset="65%" stopColor="#0284c7" />
+                  <stop offset="90%" stopColor="#38bdf8" />
+                  <stop offset="100%" stopColor="#e0f2fe" stopOpacity="0" />
+                </radialGradient>
+                <linearGradient id="poliTorrentGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#ffffff" />
+                  <stop offset="25%" stopColor="#cffafe" />
+                  <stop offset="55%" stopColor="#38bdf8" />
+                  <stop offset="85%" stopColor="#0284c7" />
+                  <stop offset="100%" stopColor="#075985" />
+                </linearGradient>
+                <linearGradient id="poliUndertowGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.4" />
+                  <stop offset="60%" stopColor="#0c4a6e" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#021427" stopOpacity="0.95" />
                 </linearGradient>
               </defs>
-              <path
-                d="M85 15 C130 15, 160 50, 155 95 C150 140, 115 160, 75 155 C35 150, 15 115, 20 75 C25 40, 55 25, 85 35 C110 45, 130 70, 120 100 C110 130, 85 135, 65 125 C45 115, 50 90, 70 80 C90 70, 100 85, 95 95 C90 105, 80 100, 85 90"
-                fill="none"
-                stroke="url(#poliWhirlpoolGrad)"
-                strokeWidth="6"
-                strokeLinecap="round"
-              />
+
+              {/* Central Vortex Eye Sinkhole */}
+              <circle cx="90" cy="90" r="28" fill="url(#poliMaelstromSinkhole)" />
+              <circle cx="90" cy="90" r="10" fill="#010a13" />
+
+              {/* 4 Logarithmic Interlocking Swirling Torrent Arms */}
+              {[0, 90, 180, 270].map((angle, i) => (
+                <g key={i} transform={`rotate(${angle} 90 90)`}>
+                  {/* Deep undertow fluid spine */}
+                  <path
+                    d="M 90 90 C 88 58, 134 46, 152 70 C 166 90, 138 128, 114 114 C 98 104, 92 94, 90 90 Z"
+                    fill="url(#poliUndertowGradient)"
+                    opacity="0.88"
+                  />
+                  {/* Pressurized body of the torrent stream */}
+                  <path
+                    d="M 90 90 C 91 62, 130 52, 146 72 C 158 88, 134 122, 112 110 C 99 102, 92 93, 90 90 Z"
+                    fill="url(#poliTorrentGradient)"
+                    opacity="0.92"
+                  />
+                  {/* White-water froth ridge streaming along the wave crest (Internal fluid motion!) */}
+                  <path
+                    d="M 90 87 C 94 60, 132 50, 148 70 C 158 86, 136 118, 114 108"
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    style={{
+                      strokeDasharray: '8 6',
+                      animation: 'gbaWhirlpoolFoamFlow 0.35s linear infinite'
+                    }}
+                  />
+                  {/* Secondary aerated spray boundary */}
+                  <path
+                    d="M 91 93 C 89 67, 122 58, 138 76 C 146 88, 128 112, 110 104"
+                    fill="none"
+                    stroke="#cffafe"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    opacity="0.75"
+                    style={{
+                      strokeDasharray: '5 4',
+                      animation: 'gbaWhirlpoolFoamFlow 0.28s linear infinite'
+                    }}
+                  />
+                  {/* Cavitation bubbles caught in the spiral arm */}
+                  <circle cx="140" cy="58" r="3.2" fill="#ffffff" opacity="0.95" style={{ filter: 'drop-shadow(0 0 5px #cffafe)' }} />
+                  <circle cx="152" cy="80" r="2.4" fill="#bae6fd" opacity="0.85" />
+                  <circle cx="128" cy="116" r="2.0" fill="#7dd3fc" opacity="0.8" />
+                  <circle cx="106" cy="104" r="1.6" fill="#e0f2fe" opacity="0.9" />
+                </g>
+              ))}
+
+              {/* High-speed Inner Vortex Ring */}
+              <circle cx="90" cy="90" r="18" fill="none" stroke="#e0f2fe" strokeWidth="1.8" strokeDasharray="10 6" opacity="0.8" style={{ animation: 'gbaWhirlpoolInnerEyeSpin 0.5s linear infinite' }} />
             </svg>
           </div>
 
-          {/* Inward Collapsing Suction Core */}
+          {/* L3: Pulsing Specular Sinkhole Eye (z-30) */}
           <div
-            className="absolute flex items-center justify-center z-30"
-            style={{ animation: 'gbaWhirlpoolSuctionCore 1.8s ease-out forwards' }}
+            className="absolute flex items-center justify-center z-30 pointer-events-none"
+            style={{ animation: 'gbaWhirlpoolEyePulse 1.8s ease-out forwards' }}
           >
-            <div className="w-16 h-16 rounded-full bg-cyan-200 border-2 border-white shadow-[0_0_24px_#38bdf8]" />
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-cyan-100 via-sky-300 to-transparent border border-white/80 shadow-[0_0_20px_#38bdf8] flex items-center justify-center">
+              <div className="w-3.5 h-3.5 rounded-full bg-[#010912]" />
+            </div>
           </div>
+
+          {/* L4: Centrifugal Ballistic Droplet Ejection (z-35) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-35"
+              style={{ animation: 'gbaWhirlpoolSprayFly 1.8s cubic-bezier(0.15, 0.8, 0.3, 1) forwards' }}
+            >
+              <svg width="220" height="220" viewBox="0 0 220 220" className="overflow-visible">
+                {/* 8 Ballistic droplets flung tangentially outward by centrifugal force */}
+                <circle cx="110" cy="18" r="3.2" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 6px #38bdf8)' }} />
+                <circle cx="178" cy="38" r="2.6" fill="#cffafe" />
+                <circle cx="204" cy="110" r="3.0" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 6px #38bdf8)' }} />
+                <circle cx="182" cy="178" r="2.5" fill="#7dd3fc" />
+                <circle cx="110" cy="202" r="3.2" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 6px #38bdf8)' }} />
+                <circle cx="38" cy="182" r="2.4" fill="#cffafe" />
+                <circle cx="16" cy="110" r="3.0" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 6px #38bdf8)' }} />
+                <circle cx="42" cy="42" r="2.5" fill="#7dd3fc" />
+              </svg>
+            </div>
+          )}
+
+          {/* L5: Energy Discard Maelstrom (Energy particles sucked into the abyss) (z-40) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-40"
+              style={{ animation: 'gbaWhirlpoolEnergySuck 1.8s cubic-bezier(0.18, 0.88, 0.25, 1) forwards' }}
+            >
+              <svg width="140" height="140" viewBox="0 0 140 140">
+                {[0, 60, 120, 180, 240, 300].map((deg, idx) => (
+                  <g key={idx} transform={`rotate(${deg} 70 70)`}>
+                    {/* Golden energy stream trace */}
+                    <path
+                      d="M 70 16 C 82 28, 86 44, 73 60"
+                      fill="none"
+                      stroke="#facc15"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      opacity="0.85"
+                    />
+                    {/* Incandescent energy mote */}
+                    <circle cx="70" cy="16" r="3.4" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 8px #fde047)' }} />
+                    <circle cx="78" cy="34" r="2.2" fill="#38bdf8" />
+                  </g>
+                ))}
+              </svg>
+            </div>
+          )}
+
+          {/* L6: Collapse Impact Froth Rings (Expanding outward on implosion) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-30"
+              style={{ animation: 'gbaWhirlpoolFrothRings 1.8s ease-out 0.4s forwards', opacity: 0 }}
+            >
+              <svg width="160" height="160" viewBox="0 0 160 160">
+                <circle cx="80" cy="80" r="62" fill="none" stroke="#e0f2fe" strokeWidth="2.5" strokeDasharray="14 9" opacity="0.8" />
+                <circle cx="80" cy="80" r="44" fill="none" stroke="#38bdf8" strokeWidth="2" strokeDasharray="9 6" opacity="0.85" />
+              </svg>
+            </div>
+          )}
         </div>
       )}
 
@@ -6199,6 +6648,161 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <polygon points="60,10 65,50 105,60 65,70 60,110 55,70 15,60 55,50" fill="#a5f3fc" stroke="#ffffff" strokeWidth="1.5" className="drop-shadow-[0_0_15px_#38bdf8]" />
               <circle cx="60" cy="60" r="12" fill="#ffffff" />
             </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 20va. DEWGONG ICE BEAM (Dewgong Lv. 42 — Sub-Zero Cryo-Laser & Glacial Permafrost Crystal Spikes) */}
+      {fx.type === 'dewgong_ice_beam' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 1: Sub-Zero Permafrost Flash-Freeze Overlay (Cleanly bound below HP bar, crisp border) */}
+          <div
+            className="card-fx-block-overlay z-20 flex items-center justify-center border-2 border-cyan-200/80 rounded-xl"
+            style={{
+              animation: 'gbaDewgongPermafrostOverlay 1.75s ease-out forwards',
+              background: 'radial-gradient(ellipse at center, rgba(186,230,253,0.38) 0%, rgba(56,189,248,0.24) 45%, rgba(2,132,199,0.15) 75%, transparent 100%)',
+              backdropFilter: 'blur(3px)',
+              WebkitBackdropFilter: 'blur(3px)'
+            }}
+          >
+            {/* Crystalline Frostbite Fracture Lines */}
+            <svg width="140" height="180" viewBox="0 0 140 180" className="absolute opacity-85">
+              <path d="M 25 30 L 55 65 L 95 45 L 125 75 M 55 65 L 45 105 L 85 125 M 45 105 L 25 155 M 85 125 L 115 165" fill="none" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
+              <path d="M 55 65 L 75 85 L 115 75" fill="none" stroke="#cffafe" strokeWidth="1.4" strokeLinecap="round" opacity="0.8" />
+            </svg>
+          </div>
+
+          {/* Layer 2: Iconic Zigzagging Sub-Zero Cryo-Beam Stream */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaDewgongIceBeamPulse 1.75s cubic-bezier(0.16, 0.92, 0.25, 1) forwards' }}
+          >
+            <svg width="210" height="50" viewBox="0 0 210 50" className="drop-shadow-[0_0_24px_#38bdf8]">
+              <defs>
+                <linearGradient id="dewgongCryoBeamGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.2" />
+                  <stop offset="25%" stopColor="#38bdf8" />
+                  <stop offset="60%" stopColor="#cffafe" />
+                  <stop offset="100%" stopColor="#ffffff" />
+                </linearGradient>
+              </defs>
+              {/* Outer cryogenic beam envelope */}
+              <path
+                d="M 5 25 Q 35 10, 65 35 Q 95 48, 125 20 Q 155 8, 185 28 L 205 25 L 185 22 Q 155 12, 125 30 Q 95 2, 65 15 Z"
+                fill="url(#dewgongCryoBeamGrad)"
+                opacity="0.9"
+              />
+              {/* Intense white-hot core laser strand */}
+              <path
+                d="M 15 25 Q 45 14, 75 32 Q 105 44, 135 22 Q 165 14, 195 26 L 208 25"
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                className="drop-shadow-[0_0_8px_#ffffff]"
+              />
+              {/* Secondary trailing frost spirals */}
+              <path
+                d="M 25 22 Q 55 35, 85 18 Q 115 10, 145 32 Q 175 38, 202 25"
+                fill="none"
+                stroke="#67e8f9"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                opacity="0.85"
+              />
+            </svg>
+          </div>
+
+          {/* Layer 3: Concentric Cryogenic Frost Shockwave Ring */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaDewgongFrostShockRing 1.75s cubic-bezier(0.12, 0.88, 0.25, 1) forwards' }}
+          >
+            <div className="w-24 h-24 rounded-full border-2 border-cyan-200/90 shadow-[0_0_20px_#38bdf8]" />
+          </div>
+
+          {/* Layer 4: 3D Prismatic Glacial Monolith Spikes Erupting from Epicenter */}
+          {/* Spike 1: Left Angled Monolith */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaDewgongCrystalSpike1 1.75s cubic-bezier(0.14, 0.9, 0.25, 1) forwards' }}
+          >
+            <svg width="40" height="70" viewBox="0 0 40 70" className="drop-shadow-[0_0_15px_#38bdf8]">
+              <polygon points="20,0 6,40 18,68 20,68" fill="#0284c7" opacity="0.9" />
+              <polygon points="20,0 20,68 28,68 34,35" fill="#38bdf8" opacity="0.95" />
+              <line x1="20" y1="0" x2="20" y2="68" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
+              <line x1="20" y1="0" x2="6" y2="40" stroke="#cffafe" strokeWidth="1.2" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {/* Spike 2: Right Angled Monolith */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{ animation: 'gbaDewgongCrystalSpike2 1.75s cubic-bezier(0.14, 0.9, 0.25, 1) forwards' }}
+          >
+            <svg width="44" height="66" viewBox="0 0 44 66" className="drop-shadow-[0_0_15px_#38bdf8]">
+              <polygon points="22,0 8,36 18,64 22,64" fill="#0369a1" opacity="0.9" />
+              <polygon points="22,0 22,64 30,64 38,32" fill="#7dd3fc" opacity="0.95" />
+              <line x1="22" y1="0" x2="22" y2="64" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
+              <line x1="22" y1="0" x2="38" y2="32" stroke="#e0f2fe" strokeWidth="1.2" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {/* Spike 3: Apex Central Permafrost Sentry */}
+          <div
+            className="absolute pointer-events-none z-32"
+            style={{ animation: 'gbaDewgongCrystalSpike3 1.75s cubic-bezier(0.14, 0.9, 0.25, 1) forwards' }}
+          >
+            <svg width="36" height="80" viewBox="0 0 36 80" className="drop-shadow-[0_0_20px_#cffafe]">
+              <polygon points="18,0 4,45 15,78 18,78" fill="#0284c7" opacity="0.85" />
+              <polygon points="18,0 18,78 26,78 32,42" fill="#bae6fd" opacity="0.95" />
+              <line x1="18" y1="0" x2="18" y2="78" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
+              <line x1="18" y1="0" x2="4" y2="45" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" />
+            </svg>
+          </div>
+
+          {/* Layer 5: Diamond-Dust Glacial Shard Particles */}
+          {[
+            { x: -38, y: -25, size: 6, color: '#ffffff' },
+            { x: 35, y: -30, size: 5, color: '#cffafe' },
+            { x: -25, y: 25, size: 7, color: '#7dd3fc' },
+            { x: 30, y: 22, size: 5, color: '#bae6fd' },
+            { x: -45, y: -5, size: 4, color: '#ffffff' },
+            { x: 42, y: -10, size: 6, color: '#38bdf8' }
+          ].map((d, i) => (
+            <div
+              key={i}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--dust-x': `${d.x}px`,
+                '--dust-y': `${d.y}px`,
+                animation: `gbaDewgongDiamondDust 1.75s ease-out ${0.35 + i * 0.06}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div
+                className="rounded-full drop-shadow-[0_0_8px_#ffffff]"
+                style={{
+                  width: d.size,
+                  height: d.size,
+                  backgroundColor: d.color
+                }}
+              />
+            </div>
+          ))}
+
+          {/* Layer 5b: Bilowing Cryogenic Sub-Zero Vapor Mist */}
+          <div
+            className="absolute bottom-4 flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaDewgongCryoMist 1.75s ease-out forwards' }}
+          >
+            <div
+              className="w-48 h-16 rounded-full"
+              style={{
+                background: 'radial-gradient(ellipse at center, rgba(186,230,253,0.45) 0%, rgba(56,189,248,0.2) 50%, transparent 80%)',
+                filter: 'blur(6px)'
+              }}
+            />
           </div>
         </div>
       )}
@@ -6452,7 +7056,69 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20ab-2. PINSIR GUILLOTINE / IRONGRIP (Pinsir Lv. 24 — Ken Sugimori Stag-Beetle Pincer Vice Crunch) */}
+      {/* 20ab-1. PINSIR IRON GRIP (Pinsir Lv. 24 — Ken Sugimori Dual-Claw Lunge & Vice Crunch) */}
+      {fx.type === 'pinsir_irongrip' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 1: Ambient Vice Compression Ground Tension */}
+          <div
+            className="card-fx-block-overlay z-15"
+            style={{
+              animation: 'gbaPinsirViceCrunchRing 1.65s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(245,158,11,0.25) 0%, rgba(120,53,15,0.15) 50%, transparent 80%)'
+            }}
+          />
+
+          {/* Layer 2: Authentic 1999 Ken Sugimori Pinsir Lunge with Hooked Pincer Claws */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaPinsirIronGripLunge 1.65s cubic-bezier(0.18, 0.95, 0.25, 1) forwards' }}
+          >
+            <img
+              src="/assets/Pinsir_IronGrip_Lunge.png"
+              alt="Pinsir Iron Grip Lunge"
+              className={`${fx.whiffed ? 'w-[76px] h-[76px]' : 'w-[96px] h-[96px]'} object-contain drop-shadow-[0_6px_20px_rgba(0,0,0,0.75)] drop-shadow-[0_0_22px_rgba(245,158,11,0.5)] select-none pointer-events-none`}
+            />
+          </div>
+
+          {/* Layer 3: Concentric Vice Crunch Impact Shockwave */}
+          {!fx.whiffed && (
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-25"
+              style={{ animation: 'gbaPinsirViceCrunchRing 1.65s cubic-bezier(0.12, 0.9, 0.25, 1) forwards' }}
+            >
+              <div className="w-24 h-24 rounded-full border-2 border-amber-400/90 shadow-[0_0_18px_#f59e0b]" />
+            </div>
+          )}
+
+          {/* Layer 4: Metallic Friction Sparks & Mechanical Vice Stress Lines */}
+          {!fx.whiffed && [
+            { x: -30, y: -15, color: '#fde047' },
+            { x: 28, y: -20, color: '#ffffff' },
+            { x: -25, y: 22, color: '#f59e0b' },
+            { x: 30, y: 18, color: '#fde047' },
+            { x: -35, y: 5, color: '#fbbf24' },
+            { x: 32, y: -5, color: '#ffffff' }
+          ].map((spk, idx) => (
+            <div
+              key={idx}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--vspk-x': `${spk.x}px`,
+                '--vspk-y': `${spk.y}px`,
+                animation: `gbaPinsirViceSparks 1.65s ease-out ${0.36 + idx * 0.04}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div
+                className="w-2 h-2 rounded-full drop-shadow-[0_0_8px_#f59e0b]"
+                style={{ backgroundColor: spk.color }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 20ab-2. PINSIR GUILLOTINE (Pinsir Lv. 24 — Ken Sugimori Stag-Beetle Pincer Horn Snap) */}
       {fx.type === 'pinsir_guillotine' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Left Pincer Horn (Snaps inward from left) */}
@@ -7535,54 +8201,124 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 20av. CHARMANDER EMBER FLAME (Charmander Lv. 10 — 1996 Ken Sugimori Teardrop Tail Flame & Incandescent Ember Burst) */}
       {fx.type === 'charmander_ember_flame' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Authentic 1996 Ken Sugimori Charmander Tail Flame */}
+          {/* Layer 1: Scorched Ground Magma Aura Patch (Impact-synchronized, branded at apex strike) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute w-36 h-36 rounded-full pointer-events-none z-10"
+              style={{
+                animation: 'gbaCharmanderScorchPatch 1.6s ease-out forwards',
+                background: 'radial-gradient(circle, rgba(249,115,22,0.6) 0%, rgba(220,38,38,0.35) 50%, rgba(127,29,29,0.15) 70%, transparent 85%)'
+              }}
+            />
+          )}
+
+          {/* Layer 2: Authentic 1996 Ken Sugimori Charmander Tail Flame (Unbroken single-arc whip trajectory — zero jerky stutter!) */}
           <div
             className="absolute flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaCharmanderTailSweep 1.6s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+            style={{
+              animation: fx.whiffed
+                ? 'gbaCharmanderTailWhiff 1.4s ease-out forwards'
+                : 'gbaCharmanderTailSweep 1.6s cubic-bezier(0.18, 0.95, 0.28, 1) forwards'
+            }}
           >
             <img
               src="/assets/Charmander_Tail_Flame.png"
               alt="Charmander Tail Flame"
-              className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_20px_#ea580c] select-none pointer-events-none"
+              className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_24px_#ea580c] drop-shadow-[0_0_12px_#facc15] select-none pointer-events-none"
+              draggable={false}
             />
           </div>
 
-          {/* Triple Staggered Incandescent Ember Projectiles */}
-          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaCharmanderEmber1 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
-            <div className="w-7 h-7 rounded-full bg-radial from-white via-amber-400 to-red-600 shadow-[0_0_15px_#f97316]" />
-          </div>
-          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaCharmanderEmber2 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
-            <div className="w-6 h-6 rounded-full bg-radial from-white via-yellow-300 to-orange-600 shadow-[0_0_12px_#ea580c]" />
-          </div>
-          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaCharmanderEmber3 1.6s cubic-bezier(0.2, 0.8, 0.25, 1) forwards' }}>
-            <div className="w-8 h-8 rounded-full bg-radial from-white via-orange-400 to-rose-700 shadow-[0_0_18px_#dc2626]" />
-          </div>
+          {/* Layer 3: Searing Arcing Flame Ribbon (Trails the tail sweep trajectory seamlessly) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-25 flex items-center justify-center"
+              style={{ animation: 'gbaCharmanderFlameWake 1.6s ease-out 0.1s forwards', opacity: 0 }}
+            >
+              <svg width="130" height="90" viewBox="0 0 130 90" className="overflow-visible">
+                <defs>
+                  <linearGradient id="cmFlameWakeGrad" x1="0" y1="1" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#ef4444" stopOpacity="0" />
+                    <stop offset="35%" stopColor="#f97316" stopOpacity="0.85" />
+                    <stop offset="70%" stopColor="#fde047" stopOpacity="0.95" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 12 75 Q 45 68, 75 42 Q 105 16, 120 4"
+                  fill="none"
+                  stroke="url(#cmFlameWakeGrad)"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  style={{ strokeDasharray: '90', strokeDashoffset: '80' }}
+                />
+                <path
+                  d="M 12 75 Q 45 68, 75 42 Q 105 16, 120 4"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  style={{ strokeDasharray: '90', strokeDashoffset: '80' }}
+                />
+              </svg>
+            </div>
+          )}
 
-          {/* Scorched Ground Magma Aura Patch */}
-          <div
-            className="absolute w-36 h-36 rounded-full pointer-events-none z-20"
-            style={{
-              animation: 'gbaCharmanderScorchPatch 1.6s ease-out forwards',
-              background: 'radial-gradient(circle, rgba(249,115,22,0.5) 0%, rgba(220,38,38,0.3) 55%, transparent 80%)'
-            }}
-          />
+          {/* Layer 4: Tangential Ballistic Ember Projectiles (Bursting from whip apex at ~0.34s) */}
+          {!fx.whiffed && (
+            <>
+              {/* Ember Arc 1: Forward-Right Streaking Coal */}
+              <div
+                className="absolute pointer-events-none z-35"
+                style={{ animation: 'gbaCharmanderEmberArc1 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
+              >
+                <div className="relative flex items-center justify-center">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-white via-amber-300 to-rose-600 shadow-[0_0_16px_#f97316]" />
+                  <div className="absolute w-2.5 h-2.5 rounded-full bg-white blur-[0.5px]" />
+                </div>
+              </div>
 
-          {/* Floating Carbon Cinders */}
-          {[
-            { x: '-30px', y: '-35px' }, { x: '30px', y: '-35px' },
-            { x: '-20px', y: '25px' }, { x: '20px', y: '25px' }
+              {/* Ember Arc 2: Forward-Center Heavy Spark */}
+              <div
+                className="absolute pointer-events-none z-35"
+                style={{ animation: 'gbaCharmanderEmberArc2 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
+              >
+                <div className="relative flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-white via-yellow-200 to-orange-600 shadow-[0_0_18px_#ea580c]" />
+                  <div className="absolute w-3 h-3 rounded-full bg-white blur-[0.5px]" />
+                </div>
+              </div>
+
+              {/* Ember Arc 3: High-Trajectory Arcing Ember */}
+              <div
+                className="absolute pointer-events-none z-35"
+                style={{ animation: 'gbaCharmanderEmberArc3 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
+              >
+                <div className="relative flex items-center justify-center">
+                  <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-white via-orange-300 to-red-600 shadow-[0_0_14px_#ef4444]" />
+                  <div className="absolute w-2 h-2 rounded-full bg-white blur-[0.5px]" />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Layer 5: Ascending Convection Carbon Cinders */}
+          {!fx.whiffed && [
+            { x: '-32px', y: '-38px' }, { x: '34px', y: '-40px' },
+            { x: '-22px', y: '22px' },  { x: '24px', y: '26px' },
+            { x: '-8px',  y: '-48px' }, { x: '12px', y: '-52px' }
           ].map((p, i) => (
             <div
               key={`cm-cind-${i}`}
-              className="absolute pointer-events-none z-35"
+              className="absolute pointer-events-none z-40"
               style={{
                 '--cm-x': p.x,
                 '--cm-y': p.y,
-                animation: `gbaCharmanderCinders 1.6s ease-out ${0.45 + i * 0.08}s forwards`,
+                animation: `gbaCharmanderCinders 1.6s ease-out ${0.40 + i * 0.08}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
-              <div className="w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_6px_#f59e0b]" />
+              <div className="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-[0_0_8px_#f59e0b]" />
             </div>
           ))}
         </div>
@@ -7949,60 +8685,117 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20bb. GASTLY SLEEPING GAS (Gastly Lv. 8 — Swirling Spectral Ectoplasm & Hypnotic Sleep Spores) */}
+      {/* 20bb. GASTLY SLEEPING GAS (Gastly Lv. 8 — Billowing Spectral Ectoplasm & Hypnotic Somnolence Waves) */}
       {fx.type === 'gastly_sleeping_gas' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Swirling Spectral Ectoplasmic Gas Cloud */}
+          {/* Layer 1: Somnific Twilight Abyss Vignette */}
           <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
-            style={{ animation: 'gbaGastlySleepGasCloud 1.7s ease-out forwards' }}
+            className="absolute inset-0 rounded-2xl pointer-events-none z-10"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(46,16,101,0.85) 0%, rgba(76,29,149,0.5) 45%, rgba(15,23,42,0.3) 70%, transparent 88%)',
+              animation: 'gbaGastlyTwilightVignette 1.7s ease-out forwards'
+            }}
+          />
+
+          {/* Layer 2: Primary Visual Actor - Fluid Multi-Lobed Ectoplasmic Gas Cloud & Gastly Gaze */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-25"
+            style={{
+              animation: fx.whiffed
+                ? 'gbaGastlySleepWhiff 1.2s ease-out forwards'
+                : 'gbaGastlyEctoBillow 1.7s cubic-bezier(0.16, 0.85, 0.25, 1) forwards'
+            }}
           >
-            <div className="relative w-36 h-36 flex items-center justify-center">
-              {/* Multi-layered ectoplasm shroud */}
-              <div className="w-32 h-32 rounded-full bg-gradient-to-tr from-indigo-950/95 via-purple-900/90 to-fuchsia-700/60 blur-[6px] shadow-[0_0_35px_#7c3aed]" />
-              <div className="absolute w-24 h-24 rounded-full bg-gradient-to-bl from-purple-950/90 via-violet-900/80 to-indigo-950/90 blur-[3px]" />
-              <div className="absolute inset-4 rounded-full border border-purple-400/30 blur-[1px]" />
-              {/* Glowing Gastly Spectral Eyes */}
-              <div className="absolute flex items-center gap-4 -mt-2">
-                <div className="w-5 h-6 rounded-full bg-white shadow-[0_0_12px_#ffffff] rotate-12 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-purple-950" />
-                </div>
-                <div className="w-5 h-6 rounded-full bg-white shadow-[0_0_12px_#ffffff] -rotate-12 flex items-center justify-center">
-                  <div className="w-2 h-2 rounded-full bg-purple-950" />
-                </div>
-              </div>
+            <div className="relative w-44 h-44 flex items-center justify-center">
+              <svg viewBox="0 0 160 160" className="w-full h-full overflow-visible" style={{ filter: 'drop-shadow(0 0 24px #7c3aed)' }}>
+                <defs>
+                  <radialGradient id="gastlyEctoCoreGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#0f051d" stopOpacity="0.98" />
+                    <stop offset="40%" stopColor="#2e1065" stopOpacity="0.95" />
+                    <stop offset="75%" stopColor="#6b21a8" stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#a855f7" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="gastlyVaporEdgeGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#c084fc" stopOpacity="0.8" />
+                    <stop offset="60%" stopColor="#9333ea" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#3b0764" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+
+                {/* Outer Billowing Ectoplasmic Plumes (Organic Bézier Lobes - No box rotation!) */}
+                <path
+                  d="M 80,18 C 108,12 136,32 142,60 C 148,88 132,118 108,136 C 84,152 48,146 28,126 C 8,104 12,68 32,44 C 50,22 66,22 80,18 Z"
+                  fill="url(#gastlyVaporEdgeGrad)"
+                />
+                {/* Secondary Interlocking Ectoplasm Puff */}
+                <path
+                  d="M 85,28 C 114,24 135,46 138,76 C 142,104 120,130 92,138 C 62,146 32,126 24,98 C 16,68 36,38 64,30 C 72,28 78,30 85,28 Z"
+                  fill="url(#gastlyEctoCoreGrad)"
+                />
+                {/* Inner Dense Somnolent Void */}
+                <circle cx="80" cy="80" r="42" fill="#1e1b4b" opacity="0.92" />
+                <circle cx="80" cy="80" r="28" fill="#0f051d" opacity="0.98" />
+
+                {/* Gastly's Menacing Luminous Spectral Eyes */}
+                <g style={{ filter: 'drop-shadow(0 0 10px #ffffff)' }}>
+                  {/* Left Eye */}
+                  <path
+                    d="M 52,66 C 60,60 72,68 70,78 C 66,84 54,82 50,76 C 48,72 48,68 52,66 Z"
+                    fill="#ffffff"
+                  />
+                  <ellipse cx="61" cy="73" rx="3.5" ry="5.5" fill="#1e1b4b" transform="rotate(-15 61 73)" />
+                  <circle cx="62.5" cy="71" r="1.5" fill="#ffffff" />
+
+                  {/* Right Eye */}
+                  <path
+                    d="M 108,66 C 100,60 88,68 90,78 C 94,84 106,82 110,76 C 112,72 112,68 108,66 Z"
+                    fill="#ffffff"
+                  />
+                  <ellipse cx="99" cy="73" rx="3.5" ry="5.5" fill="#1e1b4b" transform="rotate(15 99 73)" />
+                  <circle cx="97.5" cy="71" r="1.5" fill="#ffffff" />
+                </g>
+              </svg>
             </div>
           </div>
 
-          {/* Floating Dream Motes with Subtle Zzz Drift */}
-          {[
-            { x: '-32px', y: '-35px' }, { x: '32px', y: '-35px' },
-            { x: '-25px', y: '25px' }, { x: '25px', y: '25px' }
-          ].map((p, i) => (
+          {/* Layer 3: Concentric Hypnotic Somnolence Dream Waves */}
+          {!fx.whiffed && (
             <div
-              key={`gs-mote-${i}`}
+              className="absolute flex items-center justify-center pointer-events-none z-30"
+              style={{ animation: 'gbaGastlyDreamWave 1.7s ease-out 0.18s forwards', opacity: 0 }}
+            >
+              <svg width="150" height="150" viewBox="0 0 150 150">
+                <circle cx="75" cy="75" r="62" fill="none" stroke="#c084fc" strokeWidth="2.5" strokeDasharray="14 8" opacity="0.85" />
+                <circle cx="75" cy="75" r="46" fill="none" stroke="#e0e7ff" strokeWidth="1.8" strokeDasharray="8 6" opacity="0.9" />
+              </svg>
+            </div>
+          )}
+
+          {/* Layer 4: Floating Luminous Somnific Dream Motes (Zero text, pure glowing light beads) */}
+          {!fx.whiffed && [
+            { x: '-34px', y: '-36px', delay: 0.18 },
+            { x: '35px', y: '-32px', delay: 0.28 },
+            { x: '-24px', y: '26px', delay: 0.38 },
+            { x: '26px', y: '30px', delay: 0.46 },
+            { x: '-8px', y: '-42px', delay: 0.34 },
+            { x: '12px', y: '40px', delay: 0.52 }
+          ].map((mote, idx) => (
+            <div
+              key={`gastly-dream-mote-${idx}`}
               className="absolute pointer-events-none z-35"
               style={{
-                '--gs-x': p.x,
-                '--gs-y': p.y,
-                animation: `gbaGastlyDreamMotes 1.7s ease-out ${0.4 + i * 0.08}s forwards`,
-                opacity: 0
+                transform: `translate(${mote.x}, ${mote.y})`,
+                animation: `gbaGastlyDreamMoteDrift 1.7s ease-out ${mote.delay}s forwards`,
+                opacity: 0,
+                '--gm-x': mote.x,
+                '--gm-y': mote.y
               } as React.CSSProperties}
             >
-              <div className="w-3.5 h-3.5 rounded-full bg-violet-300 border border-white shadow-[0_0_12px_#c084fc] flex items-center justify-center">
-                <span className="text-[7px] font-black text-purple-950 font-mono">z</span>
+              <div className="w-3.5 h-3.5 rounded-full bg-violet-100 border border-white shadow-[0_0_12px_#c084fc] flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-fuchsia-500 shadow-[0_0_6px_#e879f9]" />
               </div>
             </div>
           ))}
-
-          {/* Deep Somnolence Hypnotic Pulse */}
-          <div
-            className="absolute w-44 h-44 rounded-full pointer-events-none z-20"
-            style={{
-              animation: 'gbaGastlyMistPulse 1.7s ease-out forwards',
-              background: 'radial-gradient(circle, rgba(124,58,237,0.4) 0%, rgba(91,33,182,0.3) 55%, transparent 80%)'
-            }}
-          />
         </div>
       )}
 
@@ -8551,11 +9344,11 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 20bk. GEODUDE STONE BARRAGE (Sequential Granite Boulder Volley & Ground Tremor) */}
       {fx.type === 'geodude_stone_barrage' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* 3 Sequential Falling Boulders (<= 60% Card Width) */}
+          {/* 3 Sequential Falling Boulders (<= 60% Card Width) with Onix-grade granite facets */}
           {[
-            { bx: '-18px', br: '25deg', delay: 0.1 },
-            { bx: '16px', br: '-30deg', delay: 0.3 },
-            { bx: '0px', br: '60deg', delay: 0.5 }
+            { bx: '-18px', br: '25deg', delay: 0.08 },
+            { bx: '16px', br: '-30deg', delay: 0.28 },
+            { bx: '0px', br: '60deg', delay: 0.48 }
           ].map((b, i) => (
             <div
               key={`geo-boulder-${i}`}
@@ -8563,30 +9356,41 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 '--gb-x': b.bx,
                 '--gb-r': b.br,
-                animation: `gbaGeodudeBoulderFall 1.7s cubic-bezier(0.2, 0.8, 0.4, 1) ${b.delay}s forwards`,
+                animation: `gbaGeodudeBoulderFall 1.2s cubic-bezier(0.2, 0.8, 0.4, 1) ${b.delay}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
-              <svg width="34" height="34" viewBox="0 0 75 75" className="drop-shadow-[0_0_10px_#78716c]">
+              <svg width="42" height="38" viewBox="0 0 75 75" className="drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)]">
+                <defs>
+                  <linearGradient id={`geoBoulderGrad_${i}`} x1="0" y1="0" x2="0.4" y2="1">
+                    <stop offset="0%" stopColor="#d6d3d1" />
+                    <stop offset="35%" stopColor="#a8a29e" />
+                    <stop offset="70%" stopColor="#78716c" />
+                    <stop offset="100%" stopColor="#44403c" />
+                  </linearGradient>
+                </defs>
                 <polygon
                   points="20,10 55,15 70,40 58,68 25,65 10,42"
-                  fill="#64748b"
-                  stroke="#1e293b"
-                  strokeWidth="4"
-                  strokeLinejoin="round"
+                  fill={`url(#geoBoulderGrad_${i})`}
+                  stroke="#1c1917"
+                  strokeWidth="2.5"
+                  strokeLinejoin="bevel"
                 />
-                <polygon points="20,10 40,35 25,65 10,42" fill="#78716c" opacity="0.6" />
-                <polygon points="55,15 70,40 40,35" fill="#475569" />
-                <polygon points="20,10 40,35 55,15" fill="#94a3b8" />
-                <polyline points="20,10 55,15 70,40" fill="none" stroke="#e2e8f0" strokeWidth="2.5" strokeLinecap="round" />
+                <polygon points="20,10 40,35 25,65 10,42" fill="#44403c" opacity="0.45" />
+                <polygon points="55,15 70,40 40,35" fill="#292524" opacity="0.5" />
+                <polygon points="20,10 40,35 55,15" fill="#f5f5f4" opacity="0.4" />
+                <path d="M20 10 L40 35 L58 68" fill="none" stroke="#1c1917" strokeWidth="2" />
+                <path d="M40 35 L70 40" fill="none" stroke="#1c1917" strokeWidth="1.5" />
+                <circle cx="30" cy="22" r="1.5" fill="#f5f5f4" opacity="0.6" />
+                <circle cx="48" cy="48" r="1.2" fill="#d6d3d1" opacity="0.5" />
               </svg>
             </div>
           ))}
 
-          {/* Earth Dust Shockwave */}
+          {/* Earth Dust Shockwave & Plumes */}
           <div
-            className="absolute w-18 h-18 rounded-full border-2 border-stone-400 pointer-events-none z-20"
-            style={{ animation: 'gbaGeodudeDustShockwave 1.7s ease-out 0.5s forwards', opacity: 0 }}
+            className="absolute w-24 h-12 rounded-[100%] border border-stone-400/60 bg-stone-800/20 blur-[2px] pointer-events-none z-20"
+            style={{ animation: 'gbaGeodudeDustShockwave 1.2s ease-out 0.45s forwards', opacity: 0 }}
           />
         </div>
       )}
@@ -9962,91 +10766,37 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 22b. WATER VORTEX (Whirlpool - Poliwrath Lv. 48 — 40 DMG + Energy Discard Oceanic Maelstrom) */}
+      {/* 22b. WATER VORTEX (Fallback Water Vortex) */}
       {fx.type === 'water_vortex' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Deep oceanic abyss vignette */}
           <div
-            className="absolute inset-0 rounded-2xl bg-gradient-to-b from-sky-950/65 via-blue-950/50 to-cyan-950/40 pointer-events-none"
-            style={{ animation: 'gbaWhirlpoolAbyss 1.75s ease-in-out forwards' }}
+            className="absolute inset-0 rounded-2xl pointer-events-none z-10"
+            style={{
+              background: 'radial-gradient(circle at 50% 50%, rgba(2,20,39,0.78) 0%, rgba(3,105,161,0.45) 45%, rgba(56,189,248,0.18) 65%, transparent 80%)',
+              animation: 'gbaWhirlpoolAbyssDepth 1.75s cubic-bezier(0.16, 0.85, 0.25, 1) forwards'
+            }}
           />
-
-          {/* Rapidly accelerating 4-arm water torrent vortex */}
           <div
-            className="absolute flex items-center justify-center"
-            style={{ animation: 'gbaWhirlpoolSpiralTorrents 1.75s cubic-bezier(0.18, 0.85, 0.25, 1) forwards' }}
+            className="absolute flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaWhirlpoolMaelstromSpin 1.75s cubic-bezier(0.18, 0.82, 0.25, 1) forwards' }}
           >
-            <svg width="150" height="150" viewBox="0 0 150 150" className="drop-shadow-[0_0_24px_#38bdf8]">
-              <defs>
-                <radialGradient id="maelstromAbyssGrad" cx="0.5" cy="0.5" r="0.5">
-                  <stop offset="0%" stopColor="#082f49" />
-                  <stop offset="45%" stopColor="#0369a1" />
-                  <stop offset="85%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#bae6fd" stopOpacity="0" />
-                </radialGradient>
-                <linearGradient id="torrentWaveGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="30%" stopColor="#7dd3fc" />
-                  <stop offset="70%" stopColor="#0284c7" />
-                  <stop offset="100%" stopColor="#0c4a6e" />
-                </linearGradient>
-              </defs>
-              {/* Central oceanic sinkhole */}
-              <circle cx="75" cy="75" r="24" fill="url(#maelstromAbyssGrad)" />
-              <circle cx="75" cy="75" r="10" fill="#032541" />
-
-              {/* 4 swirling tidal torrent arms */}
+            <svg width="150" height="150" viewBox="0 0 180 180" className="overflow-visible" style={{ filter: 'drop-shadow(0 0 22px #0284c7)' }}>
+              <circle cx="90" cy="90" r="28" fill="#032b49" />
               {[0, 90, 180, 270].map((angle, i) => (
-                <g key={i} transform={`rotate(${angle} 75 75)`}>
-                  <path
-                    d="M75 75 C 75 48, 110 40, 125 58 C 138 74, 115 105, 95 95 C 82 88, 76 78, 75 75 Z"
-                    fill="url(#torrentWaveGrad)"
-                    opacity="0.82"
-                  />
-                  {/* Foaming crest line */}
-                  <path
-                    d="M75 72 C 78 46, 112 38, 126 56 C 136 70, 118 98, 98 92"
-                    fill="none"
-                    stroke="#ffffff"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    opacity="0.9"
-                  />
-                  {/* Droplet beads along arm */}
-                  <circle cx="118" cy="46" r="2.8" fill="#e0f2fe" opacity="0.95" />
-                  <circle cx="128" cy="65" r="2.2" fill="#7dd3fc" opacity="0.85" />
-                  <circle cx="108" cy="98" r="1.8" fill="#bae6fd" opacity="0.8" />
+                <g key={i} transform={`rotate(${angle} 90 90)`}>
+                  <path d="M 90 90 C 91 62, 130 52, 146 72 C 158 88, 134 122, 112 110 C 99 102, 92 93, 90 90 Z" fill="#38bdf8" opacity="0.88" />
+                  <path d="M 90 87 C 94 60, 132 50, 148 70 C 158 86, 136 118, 114 108" fill="none" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" style={{ strokeDasharray: '8 6', animation: 'gbaWhirlpoolFoamFlow 0.35s linear infinite' }} />
                 </g>
               ))}
             </svg>
           </div>
-
-          {/* Energy Drain sinkhole swirl (energy cards sucked into vortex) */}
-          <div
-            className="absolute flex items-center justify-center"
-            style={{ animation: 'gbaWhirlpoolEnergyDrain 1.75s cubic-bezier(0.12, 0.9, 0.28, 1) forwards' }}
-          >
-            <svg width="120" height="120" viewBox="0 0 120 120">
-              {/* Spiraling golden & cyan energy particles */}
-              {[0, 60, 120, 180, 240, 300].map((deg, idx) => (
-                <g key={idx} transform={`rotate(${deg} 60 60)`}>
-                  <line x1="60" y1="12" x2="60" y2="35" stroke="#fde047" strokeWidth="2" strokeLinecap="round" opacity="0.85" />
-                  <circle cx="60" cy="12" r="3" fill="#ffffff" className="drop-shadow-[0_0_6px_#fde047]" />
-                  <circle cx="58" cy="24" r="2" fill="#38bdf8" />
-                </g>
-              ))}
-            </svg>
-          </div>
-
-          {/* Froth rings expanding on collapse */}
           {!fx.whiffed && (
             <div
-              className="absolute flex items-center justify-center"
+              className="absolute flex items-center justify-center pointer-events-none z-30"
               style={{ animation: 'gbaWhirlpoolFrothRings 1.75s ease-out 0.4s forwards', opacity: 0 }}
             >
               <svg width="140" height="140" viewBox="0 0 140 140">
                 <circle cx="70" cy="70" r="54" fill="none" stroke="#e0f2fe" strokeWidth="2.5" strokeDasharray="12 8" opacity="0.75" />
-                <circle cx="70" cy="70" r="38" fill="none" stroke="#38bdf8" strokeWidth="2" strokeDasharray="8 6" opacity="0.85" />
               </svg>
             </div>
           )}
@@ -10263,6 +11013,181 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <ellipse cx="25" cy="24" rx="16" ry="10" fill="#9ca3af" opacity="0.25" />
               <ellipse cx="45" cy="20" rx="14" ry="9" fill="#6b7280" opacity="0.2" />
               <ellipse cx="35" cy="14" rx="10" ry="6" fill="#d1d5db" opacity="0.15" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* 25b. GOLEM SELFDESTRUCT (Golem Lv. 36 — 100 DMG Volcanic Boulder Detonation & Ballistic Granite Shrapnel) */}
+      {fx.type === 'golem_selfdestruct' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          <svg className="absolute w-0 h-0 pointer-events-none">
+            <defs>
+              <linearGradient id="golemDetCoreGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#ffffff" />
+                <stop offset="25%" stopColor="#fef08a" />
+                <stop offset="55%" stopColor="#f97316" />
+                <stop offset="85%" stopColor="#ef4444" />
+                <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0.4" />
+              </linearGradient>
+              <linearGradient id="golemDarkGranite" x1="0" y1="0" x2="0.3" y2="1">
+                <stop offset="0%" stopColor="#78716c" />
+                <stop offset="40%" stopColor="#44403c" />
+                <stop offset="100%" stopColor="#1c1917" />
+              </linearGradient>
+              <linearGradient id="golemMidGranite" x1="0.2" y1="0" x2="0.8" y2="1">
+                <stop offset="0%" stopColor="#a8a29e" />
+                <stop offset="35%" stopColor="#78716c" />
+                <stop offset="85%" stopColor="#44403c" />
+                <stop offset="100%" stopColor="#292524" />
+              </linearGradient>
+              <linearGradient id="golemLightStone" x1="0" y1="0.2" x2="1" y2="1">
+                <stop offset="0%" stopColor="#d6d3d1" />
+                <stop offset="45%" stopColor="#a8a29e" />
+                <stop offset="100%" stopColor="#57534e" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          {/* Layer 1: Scorched Volcanic Crater & Magma Fractures */}
+          <div className="absolute bottom-2 flex items-center justify-center" style={{ animation: 'gbaGolemMagmaCrater 1.85s cubic-bezier(0.12, 0.9, 0.25, 1) forwards' }}>
+            <svg width="120" height="36" viewBox="0 0 120 36">
+              <ellipse cx="60" cy="18" rx="54" ry="15" fill="#1c1917" opacity="0.85" />
+              <ellipse cx="60" cy="18" rx="42" ry="11" fill="#0c0a09" opacity="0.9" />
+              <ellipse cx="60" cy="18" rx="26" ry="6" fill="#451a03" opacity="0.75" />
+              {/* Magma fracture fissures */}
+              <path d="M 22 18 L 45 15 L 60 20 L 78 16 L 98 18" fill="none" stroke="#f97316" strokeWidth="2.2" strokeLinecap="round" opacity="0.9" />
+              <path d="M 45 15 L 52 24 M 68 12 L 78 16" fill="none" stroke="#fef08a" strokeWidth="1.5" strokeLinecap="round" opacity="0.95" />
+            </svg>
+          </div>
+
+          {/* Layer 1.5: Golem Detonation Actor (Ken Sugimori Seismic Stance with Magma Overcharge) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-34"
+            style={{ animation: 'gbaGolemSelfDestructActor 1.85s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+          >
+            <img
+              src="/assets/Golem_SelfDestruct.png"
+              alt="Golem Selfdestruct"
+              className="w-[110px] h-[86px] object-contain select-none"
+            />
+          </div>
+
+          {/* Layer 2: Thermonuclear White-Hot Blast Core */}
+          <div className="absolute flex items-center justify-center pointer-events-none z-35" style={{ animation: 'gbaGolemDetonationCore 1.85s ease-out forwards' }}>
+            <svg width="110" height="110" viewBox="0 0 110 110">
+              <circle cx="55" cy="55" r="46" fill="url(#golemDetCoreGrad)" />
+              <circle cx="55" cy="55" r="26" fill="#ffffff" opacity="0.95" />
+              <circle cx="55" cy="55" r="14" fill="#fef08a" opacity="0.85" />
+            </svg>
+          </div>
+
+          {/* Concentric Seismic Shock Rings */}
+          <div className="absolute flex items-center justify-center pointer-events-none z-25" style={{ animation: 'gbaGolemShockRingPrimary 1.85s cubic-bezier(0.1, 0.9, 0.2, 1) forwards' }}>
+            <div className="w-32 h-32 rounded-full border-3 border-amber-400/90 shadow-[0_0_24px_#f59e0b]" />
+          </div>
+          <div className="absolute flex items-center justify-center pointer-events-none z-20" style={{ animation: 'gbaGolemShockRingSecondary 1.85s cubic-bezier(0.15, 0.85, 0.25, 1) forwards' }}>
+            <div className="w-44 h-44 rounded-full border-2 border-orange-500/70 shadow-[0_0_18px_#ea580c]" />
+          </div>
+
+          {/* Layer 3: 6 HEAVY 3D FACETED GRANITE BOULDERS (Ballistic Parabolic Gravity Trajectories) */}
+          
+          {/* Boulder 1: Heavy Megalith (Upper-Left High Arc) */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaGolemBoulderBallistic1 1.85s cubic-bezier(0.12, 0.82, 0.25, 1) forwards' }}>
+            <svg width="34" height="30" viewBox="0 0 34 30">
+              <polygon points="10,2 26,4 32,14 26,27 12,28 3,22 1,11 6,4" fill="url(#golemDarkGranite)" stroke="#1c1917" strokeWidth="1.5" strokeLinejoin="bevel" />
+              <polygon points="10,2 18,10 9,18 3,22 1,11 6,4" fill="#57534e" opacity="0.5" />
+              <polygon points="18,10 26,4 32,14 24,18" fill="#a8a29e" opacity="0.4" />
+              <path d="M10 2 L18 10 L26 27" fill="none" stroke="#0c0a09" strokeWidth="1.3" />
+              <polygon points="10,2 16,5 14,8 8,6" fill="#f5f5f4" opacity="0.4" />
+            </svg>
+          </div>
+
+          {/* Boulder 2: Heavy Megalith (Upper-Right High Arc) */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaGolemBoulderBallistic2 1.85s cubic-bezier(0.12, 0.82, 0.25, 1) forwards' }}>
+            <svg width="36" height="32" viewBox="0 0 36 32">
+              <polygon points="12,2 27,5 34,16 28,29 14,30 4,23 2,12 7,4" fill="url(#golemMidGranite)" stroke="#1c1917" strokeWidth="1.5" strokeLinejoin="bevel" />
+              <polygon points="12,2 20,11 11,20 4,23 2,12 7,4" fill="#44403c" opacity="0.5" />
+              <polygon points="20,11 27,5 34,16 26,20" fill="#d6d3d1" opacity="0.35" />
+              <path d="M12 2 L20 11 L28 29" fill="none" stroke="#0c0a09" strokeWidth="1.3" />
+              <polygon points="12,2 19,5 16,9 9,7" fill="#ffffff" opacity="0.45" />
+            </svg>
+          </div>
+
+          {/* Boulder 3: Jagged Granite Slab (Left Flank Eject) */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaGolemBoulderBallistic3 1.85s cubic-bezier(0.1, 0.88, 0.28, 1) forwards' }}>
+            <svg width="26" height="22" viewBox="0 0 26 22">
+              <polygon points="8,1 21,3 25,12 18,20 6,21 1,14 3,5" fill="url(#golemDarkGranite)" stroke="#1c1917" strokeWidth="1.3" strokeLinejoin="bevel" />
+              <polygon points="8,1 15,8 7,15 1,14 3,5" fill="#78716c" opacity="0.45" />
+              <path d="M8 1 L15 8 L18 20" fill="none" stroke="#0c0a09" strokeWidth="1.2" />
+            </svg>
+          </div>
+
+          {/* Boulder 4: Jagged Granite Slab (Right Flank Eject) */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaGolemBoulderBallistic4 1.85s cubic-bezier(0.1, 0.88, 0.28, 1) forwards' }}>
+            <svg width="28" height="24" viewBox="0 0 28 24">
+              <polygon points="9,2 23,4 27,13 20,22 7,23 2,15 4,6" fill="url(#golemLightStone)" stroke="#1c1917" strokeWidth="1.3" strokeLinejoin="bevel" />
+              <polygon points="9,2 16,9 8,16 2,15 4,6" fill="#57534e" opacity="0.45" />
+              <path d="M9 2 L16 9 L20 22" fill="none" stroke="#0c0a09" strokeWidth="1.2" />
+            </svg>
+          </div>
+
+          {/* Boulder 5: High Sky Rocket Boulder (Apex Hangtime) */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaGolemBoulderBallistic5 1.85s cubic-bezier(0.14, 0.84, 0.26, 1) forwards' }}>
+            <svg width="24" height="28" viewBox="0 0 24 28">
+              <polygon points="8,2 18,3 23,12 19,25 7,26 1,18 2,8" fill="url(#golemMidGranite)" stroke="#1c1917" strokeWidth="1.4" strokeLinejoin="bevel" />
+              <polygon points="8,2 14,9 8,18 1,18 2,8" fill="#44403c" opacity="0.5" />
+              <path d="M8 2 L14 9 L19 25" fill="none" stroke="#0c0a09" strokeWidth="1.2" />
+            </svg>
+          </div>
+
+          {/* Boulder 6: Forward Ground Skip Boulder */}
+          <div className="absolute pointer-events-none z-30" style={{ animation: 'gbaGolemBoulderBallistic6 1.85s cubic-bezier(0.15, 0.9, 0.3, 1) forwards' }}>
+            <svg width="22" height="20" viewBox="0 0 22 20">
+              <polygon points="7,2 17,3 21,10 16,18 5,19 1,12 2,5" fill="url(#golemDarkGranite)" stroke="#1c1917" strokeWidth="1.3" strokeLinejoin="bevel" />
+              <polygon points="7,2 12,8 6,14 1,12 2,5" fill="#a8a29e" opacity="0.35" />
+              <path d="M7 2 L12 8 L16 18" fill="none" stroke="#0c0a09" strokeWidth="1.1" />
+            </svg>
+          </div>
+
+          {/* Layer 4: 6 HIGH-VELOCITY STONE SPLINTER SHARDS (Fast Radial Shrapnel) */}
+          {[
+            { x: -55, y: -45, w: 10, h: 5, rot: 35 },
+            { x: 58, y: -40, w: 11, h: 6, rot: -40 },
+            { x: -65, y: 15, w: 8, h: 4, rot: -20 },
+            { x: 68, y: 20, w: 9, h: 5, rot: 25 },
+            { x: -20, y: -70, w: 7, h: 4, rot: 75 },
+            { x: 25, y: -68, w: 8, h: 4, rot: -70 }
+          ].map((shd, idx) => (
+            <div
+              key={idx}
+              className="absolute pointer-events-none z-32"
+              style={{
+                '--shd-x': `${shd.x}px`,
+                '--shd-y': `${shd.y}px`,
+                animation: `gbaGolemFastShard 1.85s ease-out ${0.14 + idx * 0.03}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div
+                className="bg-stone-400 border border-stone-800 drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"
+                style={{
+                  width: `${shd.w}px`,
+                  height: `${shd.h}px`,
+                  transform: `rotate(${shd.rot}deg)`,
+                  clipPath: 'polygon(0% 40%, 40% 0%, 100% 60%, 60% 100%)'
+                }}
+              />
+            </div>
+          ))}
+
+          {/* Layer 5: Volcanic Dust Smoke & Burning Embers */}
+          <div className="absolute -top-6 pointer-events-none z-28" style={{ animation: 'gbaGolemVolcanicAsh 1.85s ease-out 0.35s forwards', opacity: 0 }}>
+            <svg width="90" height="65" viewBox="0 0 90 65">
+              <ellipse cx="45" cy="42" rx="32" ry="18" fill="#44403c" opacity="0.45" />
+              <ellipse cx="32" cy="30" rx="22" ry="14" fill="#78716c" opacity="0.35" />
+              <ellipse cx="58" cy="26" rx="20" ry="12" fill="#57534e" opacity="0.3" />
+              <ellipse cx="45" cy="18" rx="14" ry="8" fill="#a8a29e" opacity="0.25" />
             </svg>
           </div>
         </div>
@@ -11433,61 +12358,91 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
 
-          {/* Colossal 150px Blazing Predator Charge Streak */}
+          {/* Colossal Blazing Predator Charge with 1999 Ken Sugimori Arcanine Sprite */}
           <div
-            className="absolute flex items-center justify-center"
+            className="absolute flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaArcanineSonicCharge 1.65s cubic-bezier(0.18, 0.92, 0.28, 1) forwards' }}
           >
-            <svg width="150" height="70" viewBox="0 0 150 70" className="drop-shadow-[0_0_28px_#ea580c]">
+            {/* Trailing supersonic aerodynamic flame vanguard */}
+            <div className="absolute pointer-events-none -left-6">
+              <svg width="150" height="70" viewBox="0 0 150 70" className="drop-shadow-[0_0_28px_#ea580c] opacity-85">
+                <defs>
+                  <linearGradient id="arcanineFlameGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#991b1b" stopOpacity="0" />
+                    <stop offset="25%" stopColor="#ef4444" />
+                    <stop offset="60%" stopColor="#f97316" />
+                    <stop offset="85%" stopColor="#fde047" />
+                    <stop offset="100%" stopColor="#ffffff" />
+                  </linearGradient>
+                  <linearGradient id="arcanineCoreGrad" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
+                    <stop offset="60%" stopColor="#fef08a" />
+                    <stop offset="100%" stopColor="#ffffff" />
+                  </linearGradient>
+                </defs>
+                <path d="M10 35 C 35 15, 80 18, 142 35 C 80 52, 35 55, 10 35 Z" fill="url(#arcanineFlameGrad)" opacity="0.95" />
+                <path d="M45 35 C 70 24, 110 26, 138 35 C 110 44, 70 46, 45 35 Z" fill="url(#arcanineCoreGrad)" opacity="0.95" />
+                <path d="M125 18 Q 138 26, 145 35 Q 138 44, 125 52" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
+                <path d="M105 10 Q 124 22, 135 35 Q 124 48, 105 60" fill="none" stroke="#fde047" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+              </svg>
+            </div>
+
+            {/* Authentic Ken Sugimori Arcanine Stock Sprite */}
+            <img
+              src="/assets/Arcanine_TakeDown_Lunge.png"
+              alt="Arcanine Take Down"
+              className={`${fx.whiffed ? 'w-[84px] h-[71px]' : 'w-[110px] h-[93px]'} object-contain drop-shadow-[0_0_22px_#f97316] drop-shadow-[0_4px_16px_rgba(0,0,0,0.65)] select-none pointer-events-none relative z-10`}
+            />
+          </div>
+
+          {/* 80-DMG Incandescent Collision Impact Burst & Anamorphic Cross Flare */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaArcanineCataclysmBurst 1.65s cubic-bezier(0.15, 0.85, 0.25, 1) forwards' }}
+          >
+            <svg width="140" height="140" viewBox="0 0 140 140" className="drop-shadow-[0_0_24px_#f97316]">
               <defs>
-                <linearGradient id="arcanineFlameGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#991b1b" stopOpacity="0" />
-                  <stop offset="25%" stopColor="#ef4444" />
-                  <stop offset="60%" stopColor="#f97316" />
-                  <stop offset="85%" stopColor="#fde047" />
-                  <stop offset="100%" stopColor="#ffffff" />
+                <radialGradient id="arcanineHitRadial" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="25%" stopColor="#fef08a" stopOpacity="0.9" />
+                  <stop offset="55%" stopColor="#f97316" stopOpacity="0.5" />
+                  <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+                </radialGradient>
+                <linearGradient id="arcanineLensH" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#f97316" stopOpacity="0" />
+                  <stop offset="25%" stopColor="#fef08a" stopOpacity="0.8" />
+                  <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="75%" stopColor="#fef08a" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
                 </linearGradient>
-                <linearGradient id="arcanineCoreGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#f97316" stopOpacity="0.2" />
-                  <stop offset="60%" stopColor="#fef08a" />
-                  <stop offset="100%" stopColor="#ffffff" />
+                <linearGradient id="arcanineLensV" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#f97316" stopOpacity="0" />
+                  <stop offset="25%" stopColor="#fef08a" stopOpacity="0.8" />
+                  <stop offset="50%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="75%" stopColor="#fef08a" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
                 </linearGradient>
               </defs>
-              {/* Giant aerodynamic flame vanguard */}
-              <path
-                d="M10 35 C 35 15, 80 18, 142 35 C 80 52, 35 55, 10 35 Z"
-                fill="url(#arcanineFlameGrad)"
-                opacity="0.95"
-              />
-              {/* Thermonuclear white-hot core */}
-              <path
-                d="M45 35 C 70 24, 110 26, 138 35 C 110 44, 70 46, 45 35 Z"
-                fill="url(#arcanineCoreGrad)"
-                opacity="0.95"
-              />
-              {/* Supersonic shockwaves and trailing fire crests */}
-              <path d="M125 18 Q 138 26, 145 35 Q 138 44, 125 52" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
-              <path d="M105 10 Q 124 22, 135 35 Q 124 48, 105 60" fill="none" stroke="#fde047" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
-              <path d="M55 8 Q 80 5, 110 16" fill="none" stroke="#fbbf24" strokeWidth="2.2" strokeLinecap="round" opacity="0.85" />
-              <path d="M55 62 Q 80 65, 110 54" fill="none" stroke="#fbbf24" strokeWidth="2.2" strokeLinecap="round" opacity="0.85" />
+              {/* Radial thermal glow */}
+              <circle cx="70" cy="70" r="35" fill="url(#arcanineHitRadial)" />
+              {/* Anamorphic horizontal streak */}
+              <ellipse cx="70" cy="70" rx="66" ry="4" fill="url(#arcanineLensH)" />
+              {/* Vertical flare beam */}
+              <ellipse cx="70" cy="70" rx="4" ry="48" fill="url(#arcanineLensV)" />
+              {/* Kinetic diamond core */}
+              <circle cx="70" cy="70" r="10" fill="#ffffff" className="drop-shadow-[0_0_8px_#ffffff]" />
+              {/* Crossed 45-deg energy rays */}
+              <line x1="45" y1="45" x2="95" y2="95" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
+              <line x1="95" y1="45" x2="45" y2="95" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
             </svg>
           </div>
 
-          {/* 80-DMG Cataclysm Impact Burst */}
+          {/* Concentric Kinetic Shockwave Ring */}
           <div
-            className="absolute flex items-center justify-center"
-            style={{ animation: 'gbaArcanineCataclysmBurst 1.65s cubic-bezier(0.15, 0.85, 0.25, 1) forwards' }}
+            className="absolute flex items-center justify-center pointer-events-none z-25"
+            style={{ animation: 'gbaArcanineShockRing 1.65s cubic-bezier(0.12, 0.9, 0.25, 1) forwards' }}
           >
-            <svg width="110" height="110" viewBox="0 0 110 110" className="drop-shadow-[0_0_35px_#f97316]">
-              <polygon
-                points="55,4 62,38 96,18 76,46 106,55 76,64 96,92 62,72 55,106 48,72 14,92 34,64 4,55 34,46 14,18 48,38"
-                fill="#fde047"
-                stroke="#ffffff"
-                strokeWidth="2"
-              />
-              <circle cx="55" cy="55" r="22" fill="#ffffff" opacity="0.9" />
-              <circle cx="55" cy="55" r="34" fill="#ea580c" opacity="0.35" />
-            </svg>
+            <div className="w-24 h-24 rounded-full border-2 border-amber-300/80 shadow-[0_0_18px_#f97316]" />
           </div>
 
           {/* Scattering recoil volcanic embers (visualizing Arcanine's 30 self-recoil!) */}
@@ -12112,85 +13067,111 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       )}
 
       {/* 44a. STONE BARRAGE SINGLE ROCK (Geodude — one small rock per heads, sequential beats).
-            variantSeed picks one of five landing spots so consecutive rocks scatter across the
-            card instead of all hitting the same point. The rock keeps tumbling as it travels. */}
+            variantSeed picks one of 8 landing spots so consecutive rocks scatter across the
+            card instead of all hitting the same point. The rock tumbles realistically as it travels.
+            Onix-grade 3D rock morphology, fracture lines, shards, and whiff support. */}
       {fx.type === 'stone_barrage_single' && (() => {
         const ROCK_TARGETS = [
-          { x: -14, y: -8 },
-          { x: 10, y: -12 },
-          { x: -6, y: 10 },
-          { x: 14, y: 6 },
-          { x: 2, y: -4 }
+          { x: -16, y: -12 },
+          { x: 14,  y: -16 },
+          { x: -10, y: 14 },
+          { x: 18,  y: 8 },
+          { x: 2,   y: -8 },
+          { x: -16, y: 6 },
+          { x: 12,  y: 18 },
+          { x: -4,  y: -20 }
         ];
         const spot = ROCK_TARGETS[(fx.variantSeed ?? 0) % ROCK_TARGETS.length];
         return (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-            {/* Tumbling rock — angular, jagged, geologically layered: concave fracture
-                notches, sharp protrusions, sedimentary strata and mineral flecks.
-                ~30% larger than previous version for better visibility. */}
+            {/* Tumbling rock — angular, multifaceted, geologically layered: Onix-grade morphology */}
             <div className="absolute" style={{
-              animation: 'gbaSingleRockToss 0.85s cubic-bezier(0.25, 0.6, 0.5, 1) forwards',
+              animation: fx.whiffed
+                ? 'gbaSingleRockWhiff 0.85s ease-out forwards'
+                : 'gbaSingleRockToss 0.85s cubic-bezier(0.2, 0.65, 0.45, 1) forwards',
+              transform: fx.whiffed ? 'scale(0.65)' : undefined,
               ['--rock-x' as string]: `${spot.x}px`,
               ['--rock-y' as string]: `${spot.y}px`
             }}>
-              <svg width="36" height="31" viewBox="0 0 36 31" className="drop-shadow-[0_0_7px_#78716c]">
+              <svg width="38" height="34" viewBox="0 0 38 34" className="drop-shadow-[0_4px_10px_rgba(0,0,0,0.7)]">
                 <defs>
-                  <linearGradient id="rockStrataSB" x1="0" y1="0" x2="0.3" y2="1">
-                    <stop offset="0%" stopColor="#b8b2ac" />
-                    <stop offset="40%" stopColor="#78716c" />
-                    <stop offset="100%" stopColor="#4a4540" />
-                  </linearGradient>
+                  <radialGradient id="rockCoreSBSingle" cx="0.35" cy="0.3">
+                    <stop offset="0%" stopColor="#d6d3d1" />
+                    <stop offset="35%" stopColor="#a8a29e" />
+                    <stop offset="75%" stopColor="#78716c" />
+                    <stop offset="100%" stopColor="#44403c" />
+                  </radialGradient>
                 </defs>
                 {/* Body — jagged angular silhouette with concave notches and sharp spurs */}
-                <polygon points="18,0 24,2 28,1 33,6 31,10 35,14 33,19 34,24 29,28 24,31 19,29 14,31 9,28 5,30 2,24 0,19 3,14 1,9 5,5 8,2 13,3" fill="url(#rockStrataSB)" stroke="#3d3833" strokeWidth="1.5" strokeLinejoin="miter" />
-                {/* Concave chip notches to break the rounded feel */}
-                <polygon points="28,1 30,4 26,5" fill="#3d3833" opacity="0.35" />
-                <polygon points="1,9 4,10 2,13" fill="#3d3833" opacity="0.3" />
-                <polygon points="34,24 31,22 33,19" fill="#3d3833" opacity="0.3" />
+                <polygon points="19,1 26,3 32,2 37,8 35,13 38,18 36,24 37,28 31,32 26,34 19,32 14,34 9,30 4,32 1,25 0,19 3,14 1,9 6,4 9,2 14,3"
+                         fill="url(#rockCoreSBSingle)" stroke="#1c1917" strokeWidth="1.6" strokeLinejoin="bevel" />
+                {/* 3D facets: Top highlight facet in stone light */}
+                <polygon points="19,1 26,3 23,10 14,9 10,4" fill="#f5f5f4" opacity="0.45" />
+                {/* 3D facets: Bottom-right shadow facet */}
+                <polygon points="36,24 37,28 31,32 26,34 24,26 33,22" fill="#1c1917" opacity="0.55" />
+                {/* Concave chip notches breaking the silhouette */}
+                <polygon points="32,2 34,6 29,7" fill="#1c1917" opacity="0.4" />
+                <polygon points="1,9 5,11 3,15" fill="#1c1917" opacity="0.35" />
                 {/* Sedimentary strata bands */}
-                <path d="M4 10 L14 8 L26 11 L33 13" fill="none" stroke="#d6d3d1" strokeWidth="1.1" opacity="0.5" />
-                <path d="M2 17 L12 15 L24 17 L34 19" fill="none" stroke="#a8a29e" strokeWidth="1" opacity="0.45" />
-                <path d="M5 24 L15 22 L26 24 L30 26" fill="none" stroke="#57534e" strokeWidth="1" opacity="0.5" />
-                {/* Fracture cracks — angular, not curved */}
-                <path d="M15 3 L18 10 L14 17 L17 23" fill="none" stroke="#3d3833" strokeWidth="1.1" strokeLinecap="butt" opacity="0.7" />
-                <path d="M25 6 L22 13 L25 16" fill="none" stroke="#3d3833" strokeWidth="0.9" strokeLinecap="butt" opacity="0.6" />
-                <path d="M8 12 L11 16" fill="none" stroke="#3d3833" strokeWidth="0.8" strokeLinecap="butt" opacity="0.55" />
+                <path d="M4 11 L14 9 L28 12 L35 14" fill="none" stroke="#d6d3d1" strokeWidth="1.2" opacity="0.5" />
+                <path d="M2 18 L12 16 L26 18 L36 20" fill="none" stroke="#57534e" strokeWidth="1.1" opacity="0.55" />
+                <path d="M5 26 L16 24 L28 26 L32 28" fill="none" stroke="#292524" strokeWidth="1.2" opacity="0.6" />
+                {/* Deep fracture cracks radiating across the face */}
+                <path d="M16 3 L19 11 L15 19 L18 26" fill="none" stroke="#1c1917" strokeWidth="1.3" strokeLinecap="butt" />
+                <path d="M27 7 L24 15 L27 19" fill="none" stroke="#1c1917" strokeWidth="1.1" strokeLinecap="butt" />
                 {/* Mineral flecks */}
-                <circle cx="10" cy="8" r="1.1" fill="#e7e5e4" opacity="0.7" />
-                <circle cx="26" cy="14" r="1" fill="#d6d3d1" opacity="0.6" />
-                <circle cx="18" cy="25" r="0.9" fill="#e7e5e4" opacity="0.5" />
-                <circle cx="30" cy="20" r="0.8" fill="#f5f5f4" opacity="0.5" />
-                {/* Top highlight facet — angular */}
-                <polygon points="18,1 25,3 22,9 14,8 11,4" fill="#d6d3d1" opacity="0.4" />
+                <circle cx="11" cy="9" r="1.1" fill="#f5f5f4" opacity="0.75" />
+                <circle cx="28" cy="15" r="1" fill="#e7e5e4" opacity="0.7" />
+                <circle cx="19" cy="27" r="0.9" fill="#f5f5f4" opacity="0.6" />
               </svg>
             </div>
-            {/* Impact burst only on a connected hit (heads); tails is skipped entirely by the UI.
-                Outer div owns the landing-spot translate, inner div owns the scale animation so
-                the two transforms never fight over the same property. */}
+
+            {/* Connected Hit FX (Only when heads / not whiffed) */}
             {!fx.whiffed && (
-              <div className="absolute" style={{ transform: `translate(${spot.x}px, ${spot.y}px)` }}>
-                <div style={{ animation: 'gbaRockImpactBurst 0.5s ease-out 0.55s forwards', opacity: 0 }}>
-                  <svg width="34" height="34" viewBox="0 0 34 34">
-                    {[0, 45, 90, 135, 180, 225, 270, 315].map(deg => (
-                      <line key={deg} x1="17" y1="17" x2="17" y2="4"
-                        stroke="#d6a35c" strokeWidth="2.5" strokeLinecap="round"
-                        transform={`rotate(${deg} 17 17)`} opacity="0.9" />
-                    ))}
-                    <circle cx="17" cy="17" r="6" fill="#fef3c7" opacity="0.8" />
-                  </svg>
+              <>
+                {/* 1. Dynamic Impact Burst */}
+                <div className="absolute" style={{ transform: `translate(${spot.x}px, ${spot.y}px)` }}>
+                  <div style={{ animation: 'gbaRockImpactBurst 0.5s ease-out 0.45s forwards', opacity: 0 }}>
+                    <svg width="36" height="36" viewBox="0 0 36 36">
+                      {[0, 45, 90, 135, 180, 225, 270, 315].map(deg => (
+                        <line key={deg} x1="18" y1="18" x2="18" y2="4"
+                          stroke="#eab308" strokeWidth="2.5" strokeLinecap="round"
+                          transform={`rotate(${deg} 18 18)`} opacity="0.9" />
+                      ))}
+                      <circle cx="18" cy="18" r="6" fill="#fef08a" opacity="0.85" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            )}
-            {/* Dust puff at the landing spot */}
-            {!fx.whiffed && (
-              <div className="absolute" style={{ transform: `translate(${spot.x}px, ${spot.y + 6}px)` }}>
-                <div style={{ animation: 'gbaRockDustPuff 0.6s ease-out 0.6s forwards', opacity: 0 }}>
-                  <svg width="24" height="16" viewBox="0 0 24 16">
-                    <ellipse cx="12" cy="10" rx="10" ry="5" fill="#a8a29e" opacity="0.5" />
-                    <ellipse cx="8" cy="8" rx="5" ry="3" fill="#d6d3d1" opacity="0.4" />
-                  </svg>
+
+                {/* 2. Flying Rock Shards scattering outward */}
+                <div className="absolute" style={{ transform: `translate(${spot.x}px, ${spot.y}px)` }}>
+                  <div className="absolute" style={{ animation: 'gbaRockShardScatter1 0.5s ease-out 0.45s forwards', opacity: 0 }}>
+                    <svg width="10" height="8" viewBox="0 0 10 8">
+                      <polygon points="5,0 10,4 6,8 0,5" fill="#78716c" stroke="#292524" strokeWidth="1" />
+                    </svg>
+                  </div>
+                  <div className="absolute" style={{ animation: 'gbaRockShardScatter2 0.55s ease-out 0.45s forwards', opacity: 0 }}>
+                    <svg width="8" height="10" viewBox="0 0 8 10">
+                      <polygon points="4,0 8,6 3,10 0,4" fill="#a8a29e" stroke="#292524" strokeWidth="1" />
+                    </svg>
+                  </div>
+                  <div className="absolute" style={{ animation: 'gbaRockShardScatter3 0.5s ease-out 0.46s forwards', opacity: 0 }}>
+                    <svg width="7" height="7" viewBox="0 0 7 7">
+                      <polygon points="3,0 7,3 4,7 0,4" fill="#57534e" stroke="#1c1917" strokeWidth="1" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
+
+                {/* 3. Dust puff at the landing spot */}
+                <div className="absolute" style={{ transform: `translate(${spot.x}px, ${spot.y + 6}px)` }}>
+                  <div style={{ animation: 'gbaRockDustPuff 0.6s ease-out 0.48s forwards', opacity: 0 }}>
+                    <svg width="26" height="18" viewBox="0 0 26 18">
+                      <ellipse cx="13" cy="11" rx="11" ry="5" fill="#a8a29e" opacity="0.55" />
+                      <ellipse cx="9" cy="9" rx="6" ry="3" fill="#d6d3d1" opacity="0.45" />
+                    </svg>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         );
@@ -12961,6 +13942,82 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <polygon points="17,2 20,13 31,13 22,20 25,31 17,24 9,31 12,20 3,13 14,13" fill="#fef9c3" stroke="#fde047" strokeWidth="1" opacity="0.9" />
             </svg>
           </div>
+        </div>
+      )}
+
+      {/* 49a. NIDORAN MALE HORN HAZARD (Nidoran ♂ Lv. 20 — 1996 Ken Sugimori Toxic Horn Charge & Pierce) */}
+      {fx.type === 'nidoran_horn_hazard' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 1: Ambient Toxic Hazard Venom Ground Aura */}
+          <div
+            className="card-fx-block-overlay z-15"
+            style={{
+              animation: 'gbaNidoranToxicBurst 1.55s ease-out forwards',
+              background: 'radial-gradient(ellipse at center, rgba(168,85,247,0.30) 0%, rgba(107,33,168,0.18) 45%, transparent 75%)'
+            }}
+          />
+
+          {/* Layer 2: Authentic 1999 Ken Sugimori Nidoran ♂ Low Crouched Horn Charge */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaNidoranHornCharge 1.55s cubic-bezier(0.18, 0.95, 0.28, 1) forwards' }}
+          >
+            <img
+              src="/assets/NidoranM_Horn_Hazard.png"
+              alt="Nidoran Male Horn Hazard"
+              className={`${fx.whiffed ? 'w-[58px] h-[56px]' : 'w-[78px] h-[76px]'} object-contain drop-shadow-[0_0_18px_#a855f7] drop-shadow-[0_4px_12px_rgba(0,0,0,0.6)] select-none pointer-events-none`}
+            />
+          </div>
+
+          {/* Layer 3: Sharp Toxic Puncture Flash at Horn Tip */}
+          {!fx.whiffed && (
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-35"
+              style={{ animation: 'gbaNidoranToxicBurst 1.55s cubic-bezier(0.12, 0.9, 0.25, 1) forwards' }}
+            >
+              <svg width="80" height="80" viewBox="0 0 80 80">
+                <defs>
+                  <radialGradient id="nidoranPierceGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="40%" stopColor="#c084fc" />
+                    <stop offset="100%" stopColor="#9333ea" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <circle cx="40" cy="40" r="22" fill="url(#nidoranPierceGrad)" />
+                <line x1="15" y1="40" x2="65" y2="40" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="40" y1="15" x2="40" y2="65" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+            </div>
+          )}
+
+          {/* Layer 4: Scattering Venom Splatter Droplets */}
+          {!fx.whiffed && [
+            { x: 25, y: -22, size: 6, color: '#a855f7' },
+            { x: 32, y: 15, size: 5, color: '#c084fc' },
+            { x: 18, y: 28, size: 7, color: '#9333ea' },
+            { x: -20, y: -18, size: 5, color: '#ec4899' },
+            { x: 38, y: -5, size: 6, color: '#e9d5ff' }
+          ].map((drp, idx) => (
+            <div
+              key={idx}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--pdrp-x': `${drp.x}px`,
+                '--pdrp-y': `${drp.y}px`,
+                animation: `gbaNidoranVenomDroplets 1.55s ease-out ${0.38 + idx * 0.05}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div
+                className="rounded-full drop-shadow-[0_0_8px_#c084fc]"
+                style={{
+                  width: drp.size,
+                  height: drp.size,
+                  backgroundColor: drp.color
+                }}
+              />
+            </div>
+          ))}
         </div>
       )}
 
@@ -15729,138 +16786,223 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           BATCH 25: ARCTIC SURGE & PSYCHIC MIGRAINES (PSYDUCK, LAPRAS, SEEL)
           ========================================================================== */}
 
-      {/* 1. PSYDUCK: REFINED HEADACHE (Harmonic Brainwave Resonators, Synaptic Cranial Lightning & Holographic Trainer Seal) */}
+      {/* 1. PSYDUCK: CINEMATIC HEADACHE (Cranial Migraine Tremor, Synaptic Neural Discharges & Ethereal Mind Lock) */}
       {fx.type === 'psyduck_headache' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Layer 1: Undulating Harmonic Sinusoidal Migraine Distortion Rings */}
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+          style={{
+            animation: !fx.whiffed ? 'gbaPsyduckMigraineTremor 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' : undefined
+          }}
+        >
+          {/* Layer 1: Optical Migraine & Cerebral Distortion Field */}
           <div
-            className="absolute w-44 h-44 rounded-full pointer-events-none z-30"
+            className="absolute w-52 h-52 rounded-full pointer-events-none z-15 flex items-center justify-center"
             style={{
-              animation: 'gbaPsyduckHarmonicRipple 1.65s cubic-bezier(0.18, 0.9, 0.3, 1) forwards'
-            }}
-          >
-            <svg viewBox="0 0 120 120" className="w-full h-full overflow-visible drop-shadow-[0_0_18px_#facc15]">
-              {/* Inner High-Frequency Cranial Distortion Wave */}
-              <path
-                d="M 60,18 C 76,16 92,28 98,46 C 104,64 94,82 78,94 C 62,106 40,102 26,90 C 12,78 8,56 16,38 C 24,20 44,20 60,18 Z"
-                fill="none"
-                stroke="url(#psyMigraineGrad1)"
-                strokeWidth="3.5"
-                strokeDasharray="6 3"
-                opacity="0.95"
-              />
-              {/* Outer Pulsing Psycho-Aura Resonator */}
-              <circle
-                cx="60"
-                cy="60"
-                r="48"
-                fill="none"
-                stroke="#c084fc"
-                strokeWidth="2.5"
-                strokeDasharray="12 6"
-                opacity="0.8"
-              />
-              <defs>
-                <linearGradient id="psyMigraineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#facc15" />
-                  <stop offset="50%" stopColor="#d946ef" />
-                  <stop offset="100%" stopColor="#7c3aed" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-
-          {/* Layer 2: High-Voltage Synaptic Cranial Lightning Arcs at Left and Right Temples */}
-          <div
-            className="absolute pointer-events-none z-35 w-36 h-28 flex items-center justify-between"
-            style={{
-              top: '28%',
-              animation: 'gbaPsyduckSynapticDischarge 0.75s ease-in-out infinite alternate'
-            }}
-          >
-            {/* Left Temple Synaptic Arc */}
-            <div className="w-14 h-16 drop-shadow-[0_0_12px_#fde047]">
-              <svg viewBox="0 0 50 60" className="w-full h-full overflow-visible">
-                <path
-                  d="M 40,50 L 26,34 L 32,30 L 14,14 L 20,12 L 4,2"
-                  fill="none"
-                  stroke="#ffffff"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M 40,50 L 26,34 L 32,30 L 14,14 L 20,12 L 4,2"
-                  fill="none"
-                  stroke="#facc15"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.85"
-                />
-              </svg>
-            </div>
-
-            {/* Right Temple Synaptic Arc */}
-            <div className="w-14 h-16 drop-shadow-[0_0_12px_#fde047]">
-              <svg viewBox="0 0 50 60" className="w-full h-full overflow-visible">
-                <path
-                  d="M 10,50 L 24,34 L 18,30 L 36,14 L 30,12 L 46,2"
-                  fill="none"
-                  stroke="#ffffff"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M 10,50 L 24,34 L 18,30 L 36,14 L 30,12 L 46,2"
-                  fill="none"
-                  stroke="#facc15"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  opacity="0.85"
-                />
-              </svg>
-            </div>
-          </div>
-
-          {/* Layer 3: Expanding Cranial Pressure Distortion Sphere */}
-          <div
-            className="absolute w-44 h-44 rounded-full pointer-events-none z-25 flex items-center justify-center border-2 border-fuchsia-400/60"
-            style={{
-              animation: 'gbaPsyduckCranialThrob 1.6s ease-out forwards',
-              background: 'radial-gradient(circle, rgba(250,204,21,0.3) 0%, rgba(217,70,239,0.25) 50%, rgba(124,58,237,0.1) 75%, transparent 90%)'
+              animation: fx.whiffed
+                ? 'gbaPsyduckHeadacheWhiff 1.2s ease-out forwards'
+                : 'gbaPsyduckPsychicBurst 1.7s cubic-bezier(0.15, 0.85, 0.3, 1) forwards',
+              background: 'radial-gradient(circle at 50% 50%, rgba(253,244,255,0.7) 0%, rgba(240,171,252,0.45) 30%, rgba(192,132,252,0.25) 60%, rgba(88,28,135,0.12) 80%, transparent 92%)'
             }}
           />
 
-          {/* Layer 4: High-Tech Holographic Runic Trainer Lockdown Sigil */}
-          <div
-            className="absolute w-36 h-36 flex flex-col items-center justify-center pointer-events-none z-45"
-            style={{
-              animation: 'gbaPsyduckTrainerSealLock 1.55s cubic-bezier(0.18, 0.9, 0.3, 1) 0.15s forwards',
-              opacity: 0
-            }}
-          >
-            <div className="relative w-24 h-24 flex items-center justify-center">
-              <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_18px_#ef4444]">
-                {/* Runic Barrier Outer Ring */}
-                <circle cx="50" cy="50" r="44" fill="none" stroke="#ef4444" strokeWidth="2.5" strokeDasharray="8 4" opacity="0.9" />
-                <circle cx="50" cy="50" r="38" fill="rgba(239,68,68,0.15)" stroke="#facc15" strokeWidth="1.5" />
-                {/* Suppression Diagonal Cross Beams */}
-                <line x1="24" y1="24" x2="76" y2="76" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
-                <line x1="24" y1="24" x2="76" y2="76" stroke="#ef4444" strokeWidth="6" strokeLinecap="round" opacity="0.9" />
-                <line x1="76" y1="24" x2="24" y2="76" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" />
-                <line x1="76" y1="24" x2="24" y2="76" stroke="#ef4444" strokeWidth="6" strokeLinecap="round" opacity="0.9" />
-                {/* Central Crystalline Lock Core */}
-                <polygon points="50,38 60,50 50,62 40,50" fill="#facc15" stroke="#ffffff" strokeWidth="1.5" />
+          {/* Layer 2: Undulating Psychokinetic Brainwave Resonators (Organic Sinusoidal Contours - No primitive dashed circles!) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute w-48 h-48 pointer-events-none z-25 flex items-center justify-center"
+              style={{
+                animation: 'gbaPsyduckBrainwaveExpand 1.7s cubic-bezier(0.14, 0.9, 0.25, 1) forwards'
+              }}
+            >
+              <svg viewBox="0 0 140 140" className="w-full h-full overflow-visible drop-shadow-[0_0_20px_#e879f9]">
+                <defs>
+                  <linearGradient id="psyBrainwaveGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="35%" stopColor="#facc15" />
+                    <stop offset="70%" stopColor="#e879f9" />
+                    <stop offset="100%" stopColor="#7c3aed" />
+                  </linearGradient>
+                  <linearGradient id="psyBrainwaveGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#fef08a" />
+                    <stop offset="50%" stopColor="#c084fc" />
+                    <stop offset="100%" stopColor="#3b0764" />
+                  </linearGradient>
+                </defs>
+
+                {/* Primary High-Frequency Harmonic Cranial Waveform */}
+                <path
+                  d="M 70,14 C 92,10 114,24 122,46 C 130,68 118,92 98,110 C 78,128 48,124 28,106 C 8,88 6,58 20,36 C 34,14 54,16 70,14 Z"
+                  fill="none"
+                  stroke="url(#psyBrainwaveGrad1)"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                  opacity="0.95"
+                />
+                {/* Secondary Counter-Resonance Brainwave Crest */}
+                <path
+                  d="M 70,26 C 88,22 106,34 112,52 C 118,70 108,90 92,102 C 76,114 52,112 36,98 C 20,84 18,60 30,44 C 42,28 58,30 70,26 Z"
+                  fill="none"
+                  stroke="url(#psyBrainwaveGrad2)"
+                  strokeWidth="2.0"
+                  strokeLinecap="round"
+                  opacity="0.8"
+                />
+                {/* Tertiary Concentric Neural Echo Ripple */}
+                <path
+                  d="M 70,38 C 82,35 96,44 100,56 C 104,68 98,82 86,90 C 74,98 56,96 46,86 C 36,76 34,60 42,48 C 50,36 62,40 70,38 Z"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="1.4"
+                  opacity="0.9"
+                />
               </svg>
             </div>
-            {/* High-Clarity Holographic Warning Ribbon */}
-            <div className="mt-1 px-2.5 py-0.5 rounded-full bg-rose-950/90 border border-rose-400 text-[9px] font-black text-amber-200 tracking-wider uppercase shadow-[0_0_12px_rgba(239,68,68,0.8)] select-none whitespace-nowrap">
-              {lang === 'tr' ? 'ANTRENÖR KİLİDİ' : 'TRAINER LOCK'}
+          )}
+
+          {/* Layer 3: Micro-Synaptic Neural Filaments (Crackling Electrical/Psionic Nerve Discharges - No cartoon lightning bolts!) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-30 w-44 h-32 flex items-center justify-between"
+              style={{
+                top: '24%',
+                animation: 'gbaPsyduckSynapticPulse 1.7s ease-out forwards'
+              }}
+            >
+              {/* Left Temple Dendritic Neural Discharge */}
+              <div className="w-18 h-20 drop-shadow-[0_0_14px_#fde047]">
+                <svg viewBox="0 0 70 80" className="w-full h-full overflow-visible">
+                  {/* Outer Psionic Glow Filament */}
+                  <path
+                    d="M 58,68 L 42,50 L 48,44 L 28,26 L 34,22 L 12,8 L 18,4 L 4,0"
+                    fill="none"
+                    stroke="#facc15"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.85"
+                  />
+                  {/* Core White-Hot Superconducting Nerve Filament */}
+                  <path
+                    d="M 58,68 L 42,50 L 48,44 L 28,26 L 34,22 L 12,8 L 18,4 L 4,0"
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {/* Secondary Micro-Branch */}
+                  <path
+                    d="M 42,50 L 30,56 M 28,26 L 16,30"
+                    fill="none"
+                    stroke="#e879f9"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
+
+              {/* Right Temple Dendritic Neural Discharge */}
+              <div className="w-18 h-20 drop-shadow-[0_0_14px_#fde047]">
+                <svg viewBox="0 0 70 80" className="w-full h-full overflow-visible">
+                  {/* Outer Psionic Glow Filament */}
+                  <path
+                    d="M 12,68 L 28,50 L 22,44 L 42,26 L 36,22 L 58,8 L 52,4 L 66,0"
+                    fill="none"
+                    stroke="#facc15"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.85"
+                  />
+                  {/* Core White-Hot Superconducting Nerve Filament */}
+                  <path
+                    d="M 12,68 L 28,50 L 22,44 L 42,26 L 36,22 L 58,8 L 52,4 L 66,0"
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  {/* Secondary Micro-Branch */}
+                  <path
+                    d="M 28,50 L 40,56 M 42,26 L 54,30"
+                    fill="none"
+                    stroke="#e879f9"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* Layer 4: Floating Psionic Tachyon Particles */}
+          {!fx.whiffed && [
+            { x: '-28px', y: '-36px', delay: 0.15, sz: '5px', col: '#fde047' },
+            { x: '30px', y: '-32px', delay: 0.25, sz: '6px', col: '#e879f9' },
+            { x: '-18px', y: '28px', delay: 0.35, sz: '4px', col: '#ffffff' },
+            { x: '24px', y: '32px', delay: 0.42, sz: '5px', col: '#c084fc' }
+          ].map((pt, idx) => (
+            <div
+              key={`psyduck-tachyon-${idx}`}
+              className="absolute rounded-full pointer-events-none z-35"
+              style={{
+                width: pt.sz,
+                height: pt.sz,
+                background: pt.col,
+                transform: `translate(${pt.x}, ${pt.y})`,
+                animation: `gbaGastlyDreamMoteDrift 1.7s ease-out ${pt.delay}s forwards`,
+                boxShadow: `0 0 10px ${pt.col}`,
+                '--gm-x': pt.x,
+                '--gm-y': pt.y
+              } as React.CSSProperties}
+            />
+          ))}
+
+          {/* Layer 5: Ethereal Holographic Psionic Mind-Lock Seal (Fine-line Sacred Geometry - No cartoon stop signs!) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute w-40 h-40 flex flex-col items-center justify-center pointer-events-none z-45"
+              style={{
+                animation: 'gbaPsyduckMindLockSigil 1.7s cubic-bezier(0.18, 0.9, 0.28, 1) 0.18s forwards',
+                opacity: 0
+              }}
+            >
+              <div className="relative w-28 h-28 flex items-center justify-center">
+                <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_20px_#a855f7]">
+                  {/* Concentric Psionic Suppression Circles */}
+                  <circle cx="50" cy="50" r="46" fill="none" stroke="#c084fc" strokeWidth="1.8" strokeDasharray="10 5" opacity="0.9" />
+                  <circle cx="50" cy="50" r="40" fill="rgba(88,28,135,0.22)" stroke="#facc15" strokeWidth="1.2" />
+                  <circle cx="50" cy="50" r="28" fill="none" stroke="#ffffff" strokeWidth="1.0" strokeDasharray="6 3" opacity="0.8" />
+
+                  {/* 4 Cardinal Psionic Focus Beams */}
+                  <line x1="50" y1="4" x2="50" y2="22" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
+                  <line x1="50" y1="78" x2="50" y2="96" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
+                  <line x1="4" y1="50" x2="22" y2="50" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
+                  <line x1="78" y1="50" x2="96" y2="50" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
+
+                  {/* 4 Diagonal Focus Nodes */}
+                  <circle cx="26" cy="26" r="2.5" fill="#ffffff" />
+                  <circle cx="74" cy="26" r="2.5" fill="#ffffff" />
+                  <circle cx="26" cy="74" r="2.5" fill="#ffffff" />
+                  <circle cx="74" cy="74" r="2.5" fill="#ffffff" />
+
+                  {/* Central Crystalline Mind-Lock Diamond */}
+                  <polygon
+                    points="50,34 64,50 50,66 36,50"
+                    fill="rgba(250,204,21,0.2)"
+                    stroke="#ffffff"
+                    strokeWidth="1.8"
+                  />
+                  <circle cx="50" cy="50" r="4" fill="#facc15" style={{ filter: 'drop-shadow(0 0 6px #ffffff)' }} />
+                </svg>
+              </div>
+
+              {/* Sleek Holographic Psionic Lock Ribbon */}
+              <div className="mt-1.5 px-3 py-0.5 rounded-full bg-indigo-950/90 border border-violet-400/80 text-[9px] font-black text-violet-200 tracking-widest uppercase shadow-[0_0_15px_rgba(168,85,247,0.7)] select-none whitespace-nowrap">
+                {lang === 'tr' ? 'ANTRENÖR KİLİDİ' : 'TRAINER LOCK'}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -16753,7 +17895,17 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* FLOATING COMBAT DAMAGE (aligned with the red HP readout above the card, offset to the right with a small gap) */}
       {fx.damageText && (
         <div className="absolute left-full top-0 ml-1 flex flex-col items-start z-50 select-none pointer-events-none animate-damage-float whitespace-nowrap">
-          <div className={`text-[11px] sm:text-xs md:text-sm font-black drop-shadow-[0_2px_8px_rgba(0,0,0,1)] tracking-wide whitespace-nowrap leading-tight ${fx.isSelfTarget ? 'text-emerald-300' : 'text-rose-400'}`}>
+          <div className={`text-[11px] sm:text-xs md:text-sm font-black drop-shadow-[0_2px_8px_rgba(0,0,0,1)] tracking-wide whitespace-nowrap leading-tight ${
+            fx.damageText?.startsWith('-')
+              ? 'text-rose-400'
+              : fx.isSelfTarget
+                ? 'text-emerald-300'
+                : (fx.damageText === 'ENGELLENDİ' || fx.damageText === 'BLOCKED')
+                  ? 'text-amber-300'
+                  : (fx.damageText === 'DİRENÇ' || fx.damageText === 'RESIST')
+                    ? 'text-sky-300'
+                    : 'text-amber-300 drop-shadow-[0_0_8px_rgba(245,158,11,0.7)]'
+          }`}>
             {fx.damageText}
           </div>
           {fx.type === 'confusion_self_hit' && (

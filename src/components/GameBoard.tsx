@@ -552,6 +552,36 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   }, []);
 
   /**
+   * Returns formatted damage or effect text for an attack:
+   * - If blocked by shield/power: "ENGELLENDİ" / "BLOCKED"
+   * - If damage dealt > 0: "-{damage} HASAR" / "-{damage} DMG"
+   * - If base damage > 0 but damage dealt is 0 (due to resistance): "DİRENÇ" / "RESIST" or "-0 HASAR"
+   * - If base damage == 0 (effect class moves such as Amnesia, Hypnosis, Supersonic, Swords Dance, etc.):
+   *   returns the move's actual name (e.g. "Amnesia", "Hypnosis") so players clearly see which effect triggered!
+   */
+  const formatAttackDamageOrEffectText = (
+    attackObj: { name?: string; damage?: number } | undefined,
+    damageDealt: number,
+    isBlocked: boolean,
+    isResistance?: boolean,
+    _isSelfTarget?: boolean
+  ): string => {
+    if (isBlocked) {
+      return lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED';
+    }
+    if (damageDealt > 0) {
+      return `-${damageDealt} ${t.dmgText}`;
+    }
+    const baseDmg = attackObj?.damage || 0;
+    if (baseDmg > 0) {
+      return isResistance ? (lang === 'tr' ? 'DİRENÇ' : 'RESIST') : `-0 ${t.dmgText}`;
+    }
+    // Effect class move (base damage is 0, e.g. Amnesia, Hypnosis, Supersonic, Swords Dance, etc.):
+    // Display the move's name instead of generic "ETKİ" / "EFFECT"
+    return attackObj?.name || t.effectText;
+  };
+
+  /**
    * Everything the engine reported about a resolved attack, turned into animation beats.
    *
    * Two rules the old single-beat version could not express: a move that names its own victim
@@ -596,7 +626,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     // three-rock volley, played whiffed so it clearly reads as a total miss.
     const MULTI_HIT_STAGGER_MS = 380;
     const seq = spec.result?.multiHitSequence;
-    const isStoneBarrage = spec.fxType === 'stone_barrage_single';
+    const isStoneBarrage = spec.fxType === 'stone_barrage_single' || spec.fxType === 'geodude_stone_barrage';
     const beats: ActiveFX[] = [];
 
     const baseBeat = (over: Partial<ActiveFX>): ActiveFX => ({
@@ -629,14 +659,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     } else if (isStoneBarrage) {
       const heads = spec.result?.multiHitCount ?? 0;
       if (heads === 0) {
-        // First coin was tails → zero damage. Legacy triple-rock volley, whiffed (no impact FX).
+        // First coin was tails → zero damage. Single rock whiffed toss (no impact FX, suppressed shake).
         beats.push(baseBeat({
-          type: 'rock_barrage',
+          type: 'stone_barrage_single',
           damageText: spec.damageText,
           isWeakness: spec.isWeakness,
           isResistance: spec.isResistance,
           isBlocked: spec.isBlocked,
-          whiffed: true
+          whiffed: true,
+          variantSeed: 0
         }));
       } else {
         // One small rock per heads, each aimed at a different spot on the target card.
@@ -1145,9 +1176,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               playAttackFX({
                 fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
                 target: selfTarget ? 'cpu' : 'player',
-                damageText: isBlocked
-                  ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
-                  : selfTarget ? attackToUse.name : (calculatedDmg > 0 ? `-${calculatedDmg} ${t.dmgText}` : t.effectText),
+                damageText: formatAttackDamageOrEffectText(attackToUse, calculatedDmg, isBlocked, isResist, selfTarget),
                 isWeakness: isWeak,
                 isResistance: isResist,
                 isBlocked,
@@ -1539,9 +1568,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 playAttackFX({
                   fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
                   target: selfTarget ? 'cpu' : 'player',
-                  damageText: isBlocked
-                    ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
-                    : selfTarget ? atk.name : (dealtDmg > 0 ? `-${dealtDmg} ${t.dmgText}` : t.effectText),
+                  damageText: formatAttackDamageOrEffectText(atk, dealtDmg, isBlocked, atkRes?.isResistance, selfTarget),
                   isWeakness: atkRes?.isWeakness,
                   isResistance: atkRes?.isResistance,
                   isBlocked,
@@ -4167,9 +4194,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         playAttackFX({
           fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
           target: selfTarget ? 'player' : 'cpu',
-          damageText: isBlocked
-            ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
-            : selfTarget ? attack.name : (calculatedDmg > 0 ? `-${calculatedDmg} ${t.dmgText}` : t.effectText),
+          damageText: formatAttackDamageOrEffectText(attack, calculatedDmg, isBlocked, isResist, selfTarget),
           isWeakness: isWeak,
           isResistance: isResist,
           isBlocked,
@@ -4215,7 +4240,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       // Delay it by the FX duration (plus multi-hit beat stagger) so the hit visually
       // lands before the fainted state is revealed.
       const koBeatCount = atkRes?.multiHitCount ?? 1;
-      const koStaggerMs = fxType === 'stone_barrage_single' ? Math.max(0, koBeatCount - 1) * 380 : 0;
+      const koStaggerMs = (fxType === 'stone_barrage_single' || fxType === 'geodude_stone_barrage') ? Math.max(0, koBeatCount - 1) * 380 : 0;
       const baseDuration = atkRes?.whiffed ? 700 : getFXDuration(isBlocked ? 'barrier' : fxType);
       const koAnimDelay = baseDuration + koStaggerMs;
 
@@ -4272,7 +4297,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         // (850ms for rocks) plus a small buffer, otherwise the opponent's turn starts while
         // rocks are still flying.
         const beatCount = atkRes?.multiHitCount ?? 1;
-        const isStoneBarrageFx = fxType === 'stone_barrage_single';
+        const isStoneBarrageFx = fxType === 'stone_barrage_single' || fxType === 'geodude_stone_barrage';
         const staggerMs = 380;
         const lastBeatStart = isStoneBarrageFx
           ? Math.max(0, beatCount - 1) * staggerMs
@@ -4392,9 +4417,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       playAttackFX({
         fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
         target: selfTarget ? 'player' : 'cpu',
-        damageText: isBlocked
-          ? (lang === 'tr' ? 'ENGELLENDİ' : 'BLOCKED')
-          : selfTarget ? (attack?.name || '') : (calculatedDmg > 0 ? `-${calculatedDmg} ${t.dmgText}` : t.effectText),
+        damageText: formatAttackDamageOrEffectText(attack, calculatedDmg, isBlocked, isResist, selfTarget),
         isWeakness: isWeak,
         isResistance: isResist,
         isBlocked,
@@ -4435,7 +4458,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
     // The knockout banner must not appear while the attack animation is still playing.
     const choiceKoBeatCount = atkRes?.multiHitCount ?? 1;
-    const choiceKoStaggerMs = fxType === 'stone_barrage_single' ? Math.max(0, choiceKoBeatCount - 1) * 380 : 0;
+    const choiceKoStaggerMs = (fxType === 'stone_barrage_single' || fxType === 'geodude_stone_barrage') ? Math.max(0, choiceKoBeatCount - 1) * 380 : 0;
     const choiceBaseDuration = atkRes?.whiffed ? 700 : getFXDuration(isBlocked ? 'barrier' : fxType);
     const choiceKoAnimDelay = choiceBaseDuration + choiceKoStaggerMs;
 

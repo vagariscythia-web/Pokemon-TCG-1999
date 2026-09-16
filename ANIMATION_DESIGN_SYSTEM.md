@@ -47,6 +47,19 @@ This document is the permanent, canonical design standard for all move animation
 - **Rule of Thumb:** If an asset naturally faces left-downward (e.g. Horsea's snout), place it in the upper-right corner so its breath sweeps down-left across the target card. Never place an asset where its anatomy points into empty void or shoots backwards.
 - **Expulsion Recoil:** Projectile attacks (water jets, ink streams, blasts) must feature an anticipation lean toward the target followed by a snappy recoil in the opposite direction of the shot.
 
+### D. Exemplary Fluid Dynamics & Jet Options (Akışkan Jet & Atmosferik Salınım Seçenekleri)
+*Bu teknikler; Water Gun, Hydro Pump, Acid, Dragon Breath gibi yönlü sıvı veya enerji akıntılarında "katı blok kayması" yerine viskozite ve akışkanlık yaratmak istendiğinde başvurulabilecek zenginleştirici yöntem seçenekleridir:*
+
+1. **İlerleyen Maske ile Akıntı Açılımı (Progressive Reveal via Clip-Path Option):**
+   - **Prensip:** Akıntı nesnesini bir görsel blok gibi A'dan B'ye kaydırmak yerine; akıntının Bézier yolunu baştan çizip bir `<clipPath>` maskesi (`scaleX(0)` → `scaleX(1)`) ile kaynaktan hedefe doğru fışkırarak açmak.
+   - **İç Akış Kayması (Internal Fluid Shear via Stroke-Dashoffset):** Maske açılırken, sütunun içindeki köpük kenarları ve beyaz çekirdek çizgilerinin `strokeDasharray` ve negatif `stroke-dashoffset` döngüleriyle akıntı yönünde bağımsız hızlarda kaydırılması. Bu, akıntının kendi içinde aktığı hissini verir.
+2. **Yol Takip Eden Kavitasyon Ucu (Spline Tracking via `<animateMotion>` Option):**
+   - **Prensip:** Jetin en ucundaki hava kabarcığı, enerji ucu veya mermi çekirdeği; düz bir çizgi yerine akıntının tam Bézier eğrisini (`path={...}`) takip eden bir SVG `<animateMotion calcMode="spline">` ile yürütülebilir.
+3. **Parabolik Yerçekimli Sıçrama (Parabolic Ballistic Droplets Option):**
+   - **Prensip:** Çarpma anında fırlayan damlalar veya moloz parçaları, sadece radyal düz çizgilerle saçılmak yerine; yerçekimi parabolü içeren keyframe'lerle (önce `-Y` ekseninde havaya fırlama, ardından tepe noktasından `+Y` ekseninde yere dökülme) balistik bir yay çizebilir.
+4. **Asal Frekanslı Atmosferik Salınım (Incommensurate Frequency Aurora Veils Option):**
+   - **Prensip:** Confuse Ray, Mist, Aurora gibi tül/perde formundaki atmosferik katmanlarda; perdelerin salınım süreleri birbirinin tam katı olmayan farklı frekanslara (örneğin `1.25s`, `1.05s`, `1.45s`, `0.9s`) ayarlanabilir. Bu, mekanik senkron tekrarı kırarak doğal, yaşayan bir kutup ışığı dalgalanması sağlar.
+
 ---
 
 ## 3. Scale, Proportion & Whiff Standards
@@ -79,6 +92,18 @@ This document is the permanent, canonical design standard for all move animation
 ### D. Strict Bounding-Box Cropping
 - Raw art canvases must never have transparent margins left in production.
 - All assets must be cropped tightly to their visible content boundary (+ 8–16px safe margin) before deployment, ensuring that CSS container dimensions translate directly and predictably into intended on-screen pixel proportions.
+
+### E. Exemplary Whiff & Intensity Modeling (İleri Düzey Whiff & Intensity Şablonu)
+*Enerjiye bağlı güçlenen veya isabetsiz giden mermi/jet tipi saldırılarda referans alınabilecek örnek bir matematiksel modelleme varyasyonudur:*
+
+1. **Kütlesel ve Geometrik Intensity Ölçeklemesi:**
+   - Şiddet katsayısı (`wi = Math.max(1, fx.intensity ?? 1)`) sadece ana kapsayıcıyı büyütmekle kalmayıp; iç akıntı kalınlıklarına (`strokeWidth={8 * wi}`), dinamik ışıma yarıçapına (`drop-shadow(...)`) ve çarpma sıçramasının saçılma menziline orantılı olarak dağıtılabilir.
+2. **Fiziksel Whiff (Menzil Yetmezliği & Hedefe Ulaşamama - Short-Fall Model):**
+   - Iskalayan veya engellenen saldırılarda yalnızca opaklığı kısmak yerine bir seçenek olarak:
+     - Maske açılımının yarıda kesilmesi (örneğin `%58`'de durması),
+     - Kavitasyon ucunun yolun `%60`'ında enerjisini tüketip sönmesi,
+     - Akıntının yerçekimiyle aşağıya meylederek düşmesi,
+     - Hedef karttaki çarpma patlaması ve zemin halkalarının koşullu olarak tamamen bastırılması (`!fx.whiffed`).
 
 ---
 
