@@ -133,6 +133,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   }, [clairvoyanceDrawerOpen]);
   const [opponentEmote, setOpponentEmote] = useState<string | null>(null);
   const [activeFXList, setActiveFXList] = useState<ActiveFX[]>([]);
+  const [activeShakes, setActiveShakes] = useState<Record<string, 'normal' | 'recoil'>>({});
+  const shakeTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
   const [hoveredDropTarget, setHoveredDropTarget] = useState<{
     type: 'active' | 'bench';
@@ -803,18 +805,102 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       }
     }
 
+    // Recoil / Self-Damage (e.g. Electabuzz Thunderpunch tails, Double-Edge, Take Down, Submission, etc.)
+    // Visual recoil animation ignites first, followed ~90ms later by the heavy recoil card shudder!
+    if (spec.result && spec.result.selfDamage && spec.result.selfDamage > 0) {
+      const attackerSide: 'player' | 'cpu' = spec.selfTarget
+        ? spec.target
+        : (spec.target === 'player' ? 'cpu' : 'player');
+      const recoilDelay = spec.fxType === 'thunder_punch' ? 580
+        : (spec.fxType === 'raichu_gigashock' || spec.fxType === 'heavy_thunder_strike') ? 600
+        : (spec.fxType === 'selfdestruct_shockwave' || spec.fxType === 'golem_selfdestruct') ? 550
+        : 480;
+      beats.push({
+        id: uid(),
+        type: 'recoil_self_hit',
+        target: attackerSide,
+        slot: 'active',
+        pokemonName: spec.attackerName,
+        attackerType: spec.attackerType,
+        damageText: `-${spec.result.selfDamage} ${t.dmgText}`,
+        shake: false,
+        delayMs: recoilDelay,
+        intensity: moveIntensity,
+        isSelfTarget: true
+      });
+
+      // Recoil card shudder triggers ~90ms AFTER the recoil visual erupts on the attacker!
+      triggerSlotShake(attackerSide, 'active', undefined, 'recoil', recoilDelay + 90, 600);
+    }
+
+    // Trigger regular card shakes respecting each beat's delayMs
+    beats.forEach(b => {
+      if (b.shake && b.type !== 'recoil_self_hit') {
+        triggerSlotShake(b.target, b.slot || 'active', b.benchIndex, 'normal', b.delayMs ?? 0, 550);
+      }
+    });
+
     setActiveFXList(beats);
   };
 
+  const clearAllShakes = () => {
+    shakeTimersRef.current.forEach(t => clearTimeout(t));
+    shakeTimersRef.current = [];
+    setActiveShakes({});
+  };
+
+  const triggerSlotShake = (
+    side: 'player' | 'cpu',
+    slot: 'active' | 'bench',
+    benchIndex: number | undefined,
+    shakeType: 'normal' | 'recoil',
+    delayMs: number = 0,
+    durationMs: number = 550
+  ) => {
+    const key = `${side}-${slot}-${benchIndex ?? 0}`;
+    if (delayMs <= 0) {
+      setActiveShakes(prev => ({ ...prev, [key]: shakeType }));
+      const timer = setTimeout(() => {
+        setActiveShakes(prev => {
+          const next = { ...prev };
+          delete next[key];
+          return next;
+        });
+      }, durationMs);
+      shakeTimersRef.current.push(timer);
+    } else {
+      const timer = setTimeout(() => {
+        setActiveShakes(prev => ({ ...prev, [key]: shakeType }));
+        const endTimer = setTimeout(() => {
+          setActiveShakes(prev => {
+            const next = { ...prev };
+            delete next[key];
+            return next;
+          });
+        }, durationMs);
+        shakeTimersRef.current.push(endTimer);
+      }, delayMs);
+      shakeTimersRef.current.push(timer);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      shakeTimersRef.current.forEach(t => clearTimeout(t));
+      shakeTimersRef.current = [];
+    };
+  }, []);
+
   useEffect(() => {
     (window as any).__triggerFX = (fxType: ActiveFX['type'], target: 'player' | 'cpu' = 'cpu') => {
+      triggerSlotShake(target, 'active', undefined, fxType === 'recoil_self_hit' ? 'recoil' : 'normal', fxType === 'recoil_self_hit' ? 90 : 0, 550);
       setActiveFXList([{
         id: Math.random().toString(36).substring(2, 9),
         type: fxType,
         target,
         slot: 'active',
-        pokemonName: 'Bulbasaur',
-        attackerType: 'Grass',
+        pokemonName: fxType === 'recoil_self_hit' ? 'Electabuzz' : 'Bulbasaur',
+        attackerType: fxType === 'recoil_self_hit' ? 'Lightning' : 'Grass',
         damageText: '20'
       }]);
     };
@@ -851,6 +937,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const moveTarget: 'player' | 'cpu' = isSelfTarget
       ? selfHit.target
       : (selfHit.target === 'player' ? 'cpu' : 'player');
+    triggerSlotShake(selfHit.target, 'active', undefined, 'normal', 0, 550);
     setActiveFXList([
       {
         id: uid(),
@@ -858,7 +945,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         target: selfHit.target,
         damageText: `-${selfHit.damage} ${t.dmgText}`,
         pokemonName: attackerName,
-        shake: true
+        shake: false
       },
       {
         id: uid(),
@@ -874,19 +961,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   };
 
   const removeFX = (id: string) => {
-    setActiveFXList(prev => prev.filter(f => f.id !== id));
+    setActiveFXList(prev => {
+      const next = prev.filter(f => f.id !== id);
+      if (next.length === 0) {
+        clearAllShakes();
+      }
+      return next;
+    });
   };
 
   /**
-   * Does a shaking beat sit on this exact slot? The Active card used to shake whenever anything
-   * on its side animated, which made a Stare that picked the Bench look like it had hit the
-   * Active Pokémon as well.
+   * Active shake state for a slot: 'normal' (standard hit shake) or 'recoil' (heavy downward shudder).
    */
-  const slotShakes = (side: 'player' | 'cpu', slot: 'active' | 'bench', benchIndex?: number) =>
-    activeFXList.some(f =>
-      f.target === side && f.shake && (f.slot || 'active') === slot &&
-      (slot === 'active' || f.benchIndex === benchIndex)
-    );
+  const slotShakes = (side: 'player' | 'cpu', slot: 'active' | 'bench', benchIndex?: number): 'normal' | 'recoil' | null => {
+    const key = `${side}-${slot}-${benchIndex ?? 0}`;
+    return activeShakes[key] || null;
+  };
 
   /**
    * Are attack / status animation beats still on screen? Multi-hit coin-flip moves now run one
@@ -1262,13 +1352,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             (cpuAtkRes?.damageTarget !== 'bench') &&
             (cpuAtkRes?.damage ?? 0) > 0 && preAtkPlayerHp > 0 &&
             (cpuAtkRes!.damage >= preAtkPlayerHp);
-          const cpuAttackAloneKilledCpu = Boolean(cpuAtkRes?.confusionSelfHit) &&
+          const cpuAttackAloneKilledCpu = (Boolean(cpuAtkRes?.confusionSelfHit) &&
             (cpuAtkRes?.damage ?? 0) > 0 && preAtkCpuHp > 0 &&
-            (cpuAtkRes!.damage >= preAtkCpuHp);
+            (cpuAtkRes!.damage >= preAtkCpuHp)) ||
+            (Boolean(cpuAtkRes?.selfDamage) && preAtkCpuHp > 0 && (cpuAtkRes!.selfDamage! >= preAtkCpuHp));
 
           // Hold the fainted visual back while the attack FX is still playing.
           // Target depends on who the attack actually struck.
-          setKoVisualHold(cpuAtkRes?.confusionSelfHit ? 'cpu' : 'player');
+          setKoVisualHold(cpuAtkRes?.confusionSelfHit || cpuAttackAloneKilledCpu ? 'cpu' : 'player');
 
           // Check if either Pokémon was knocked out from the attack
           setTimeout(() => {
@@ -1376,7 +1467,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               }
               return current;
             });
-          }, (cpuAtkRes?.whiffed ? 700 : getFXDuration(cpuFxType)) + 200);
+          }, Math.max(
+            cpuAtkRes?.whiffed ? 700 : getFXDuration(cpuFxType),
+            (cpuAtkRes?.selfDamage && cpuAtkRes.selfDamage > 0)
+              ? ((cpuFxType === 'thunder_punch' ? 580 : (cpuFxType === 'raichu_gigashock' || cpuFxType === 'heavy_thunder_strike') ? 600 : (cpuFxType === 'selfdestruct_shockwave' || cpuFxType === 'golem_selfdestruct') ? 550 : 480) + getFXDuration('recoil_self_hit'))
+              : 0
+          ) + 200);
         };
 
         if (coinCount > 0 || mode === 'until_tails') {
@@ -4324,9 +4420,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         (atkRes?.damageTarget !== 'bench') &&
         (atkRes?.damage ?? 0) > 0 && cpuHpBeforeAtk > 0 &&
         (atkRes!.damage >= cpuHpBeforeAtk);
-      const attackAloneKilledPlayer = Boolean(atkRes?.confusionSelfHit) &&
+      const attackAloneKilledPlayer = (Boolean(atkRes?.confusionSelfHit) &&
         (atkRes?.damage ?? 0) > 0 && playerHpBeforeAtk > 0 &&
-        (atkRes!.damage >= playerHpBeforeAtk);
+        (atkRes!.damage >= playerHpBeforeAtk)) ||
+        (Boolean(atkRes?.selfDamage) && playerHpBeforeAtk > 0 && (atkRes!.selfDamage! >= playerHpBeforeAtk));
 
       // If the fainted Pokémon has a matching withheld tick AND the attack alone was NOT
       // lethal, the killing blow came from endTurn's poison/toxic step. Route through the
@@ -4342,7 +4439,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const koBeatCount = atkRes?.multiHitCount ?? 1;
       const koStaggerMs = (fxType === 'stone_barrage_single' || fxType === 'geodude_stone_barrage') ? Math.max(0, koBeatCount - 1) * 380 : 0;
       const baseDuration = atkRes?.whiffed ? 700 : getFXDuration(isBlocked ? 'barrier' : fxType);
-      const koAnimDelay = baseDuration + koStaggerMs;
+      const playerRecoilDelay = (fxType === 'thunder_punch') ? 580
+        : (fxType === 'raichu_gigashock' || fxType === 'heavy_thunder_strike') ? 600
+        : (fxType === 'selfdestruct_shockwave' || fxType === 'golem_selfdestruct') ? 550
+        : 480;
+      const recoilExtraDelay = (atkRes?.selfDamage && atkRes.selfDamage > 0) ? playerRecoilDelay + getFXDuration('recoil_self_hit') : 0;
+      const koAnimDelay = Math.max(baseDuration + koStaggerMs, recoilExtraDelay);
 
       if (next.player.active && next.player.active.currentHp <= 0 && !playerKoIsFromTick) {
         setWithheldTicks([]);
@@ -4570,9 +4672,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       (atkRes?.damageTarget !== 'bench') &&
       (atkRes?.damage ?? 0) > 0 && choiceCpuHpBefore > 0 &&
       (atkRes!.damage >= choiceCpuHpBefore);
-    const choiceAttackAloneKilledPlayer = Boolean(atkRes?.confusionSelfHit) &&
+    const choiceAttackAloneKilledPlayer = (Boolean(atkRes?.confusionSelfHit) &&
       (atkRes?.damage ?? 0) > 0 && choicePlayerHpBefore > 0 &&
-      (atkRes!.damage >= choicePlayerHpBefore);
+      (atkRes!.damage >= choicePlayerHpBefore)) ||
+      (Boolean(atkRes?.selfDamage) && choicePlayerHpBefore > 0 && (atkRes!.selfDamage! >= choicePlayerHpBefore));
 
     const choiceCpuKoIsFromTick = !choiceAttackAloneKilledCpu && next.cpu.active &&
       choiceTicks.some(t => t.instanceId === next.cpu.active!.instanceId);
@@ -4583,7 +4686,12 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     const choiceKoBeatCount = atkRes?.multiHitCount ?? 1;
     const choiceKoStaggerMs = (fxType === 'stone_barrage_single' || fxType === 'geodude_stone_barrage') ? Math.max(0, choiceKoBeatCount - 1) * 380 : 0;
     const choiceBaseDuration = atkRes?.whiffed ? 700 : getFXDuration(isBlocked ? 'barrier' : fxType);
-    const choiceKoAnimDelay = choiceBaseDuration + choiceKoStaggerMs;
+    const choiceRecoilDelay = (fxType === 'thunder_punch') ? 580
+      : (fxType === 'raichu_gigashock' || fxType === 'heavy_thunder_strike') ? 600
+      : (fxType === 'selfdestruct_shockwave' || fxType === 'golem_selfdestruct') ? 550
+      : 480;
+    const choiceRecoilExtraDelay = (atkRes?.selfDamage && atkRes.selfDamage > 0) ? choiceRecoilDelay + getFXDuration('recoil_self_hit') : 0;
+    const choiceKoAnimDelay = Math.max(choiceBaseDuration + choiceKoStaggerMs, choiceRecoilExtraDelay);
 
     if (next.player.active && next.player.active.currentHp <= 0 && !choicePlayerKoIsFromTick) {
       setWithheldTicks([]);
@@ -5509,7 +5617,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               {cpu.bench.map((b, bIdx) => (
                 <div
                   key={b.instanceId}
-                  className={`relative ${slotShakes('cpu', 'bench', bIdx) ? 'animate-fx-card-shake' : ''}`}
+                  className={`relative ${slotShakes('cpu', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
                 >
                   <CardView
                     inPlayCard={b}
@@ -5550,7 +5658,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           {/* 2. CENTER BATTLEFIELD: ACTIVE POKEMON */}
           <div data-drop-zone="center-field" className="my-auto py-2 flex items-center justify-around rounded-3xl transition-all duration-300">
             {/* CPU Active */}
-            <div className={`flex flex-col items-center transition-transform duration-200 ${slotShakes('cpu', 'active') ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'cpu' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`} style={{ zoom: uiScale }}>
+            <div className={`flex flex-col items-center transition-transform duration-200 ${slotShakes('cpu', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'cpu' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`} style={{ zoom: uiScale }}>
               <div className="text-xs font-bold text-blue-300 mb-1.5  tracking-wider">{t.opponentActive}</div>
               <div className="relative">
                 {cpu.active ? (
@@ -5586,7 +5694,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   data-drop-zone="in-play-pokemon"
                   data-instance-id={player.active.instanceId}
                   data-is-active="true"
-                  className={`w-full flex justify-center relative ${slotShakes('player', 'active') ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'player' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`}
+                  className={`w-full flex justify-center relative ${slotShakes('player', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'player' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`}
                 >
                   {/* Active Hover Target Indicator */}
                   {hoveredDropTarget?.type === 'active' && (
@@ -5655,7 +5763,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     onPointerDown={(e) => handleBenchCardPointerDown(e, b, bIdx)}
                     className={`relative touch-none select-none transition-opacity duration-200 ${
                       draggingBenchPokemon?.benchIndex === bIdx ? 'opacity-30' : ''
-                    } ${slotShakes('player', 'bench', bIdx) ? 'animate-fx-card-shake' : ''}`}
+                    } ${slotShakes('player', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
                   >
                     {/* Bench Hover Target Indicator (Downward Triangle/Arrow) */}
                     {hoveredDropTarget?.type === 'bench' && hoveredDropTarget.benchIndex === bIdx && (

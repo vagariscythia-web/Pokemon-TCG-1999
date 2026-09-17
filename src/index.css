@@ -1346,6 +1346,22 @@ html, body {
   animation: fxCardShake 0.55s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
+/* Recoil Card Shudder - heavy backward / downward shock compression followed by elastic reverberations */
+@keyframes fxRecoilCardShudder {
+  0%   { transform: translate(0, 0) scale(1); }
+  12%  { transform: translate(0, 8px) scale(0.95) rotate(-1.5deg); }
+  24%  { transform: translate(-6px, -4px) scale(1.02) rotate(1.2deg); }
+  36%  { transform: translate(5px, 3px) scale(0.98) rotate(-1.0deg); }
+  48%  { transform: translate(-4px, -2px) scale(1.01) rotate(0.6deg); }
+  62%  { transform: translate(3px, 1px) scale(0.99) rotate(-0.3deg); }
+  78%  { transform: translate(-2px, 0) scale(1.0) rotate(0.1deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+.animate-recoil-card-shudder {
+  animation: fxRecoilCardShudder 0.60s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Impact Flash - white radial burst on hit */
 @keyframes impactFlash {
   0%, 20% { opacity: 0; }
@@ -1426,69 +1442,246 @@ html, body {
   100% { opacity: 0; transform: scale(1.2); }
 }
 
-/* GBA THUNDER PUNCH (Electabuzz) — Reference-image approach trajectory.
-   Fist+arm spawns small at the right-back of the card (depth: far),
-   sweeps toward the left-front while growing and rotating. Angular
-   tilt settles to 0° at impact. Motion accelerates via cubic-bezier
-   on the parent; keyframes add the spatial path + scale + rotation.
-   Final scale(1) = 60% card width (40% horizontal margin preserved).
-   Impact sync: fist reaches ~94% size at 80% (0.80s) and full size at
-   90% (0.90s) of the 1.0s duration — impact FX delays are tuned to
-   fire exactly at that arrival moment. */
-@keyframes gbaThunderPunchApproach {
-  0%   { transform: translate(42%, -20%) scale(0.10) rotate(16deg); opacity: 0; }
-  8%   { transform: translate(38%, -17%) scale(0.14) rotate(13deg); opacity: 0.55; }
-  20%  { transform: translate(30%, -12%) scale(0.24) rotate(9deg);  opacity: 0.82; }
-  36%  { transform: translate(18%, -6%)  scale(0.42) rotate(5deg);  opacity: 0.94; }
-  52%  { transform: translate(7%, -2%)   scale(0.62) rotate(2deg);  opacity: 1; }
-  66%  { transform: translate(-1%, 0%)   scale(0.80) rotate(0.5deg); opacity: 1; filter: drop-shadow(0 0 18px #facc15); }
-  80%  { transform: translate(-4%, 0%)   scale(0.94) rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 26px #facc15); }
-  90%  { transform: translate(-5%, 0%)   scale(1.0)  rotate(0deg);  opacity: 1; filter: drop-shadow(0 0 30px #facc15); }
-  100% { transform: translate(-5%, 0%)   scale(1.0)  rotate(0deg);  opacity: 0; }
+/* ============================================
+   HITMONCHAN JAB (0.90s total duration, Tier 1 scale ~104px)
+   Choreography: Anticipation & coil (0-0.20s) -> Explosive forward lunge (0.20-0.26s)
+   -> Impact peak & squash (0.26-0.38s) -> Elastic recoil drift & recovery (0.38-0.90s).
+   ============================================ */
+@keyframes gbaHitmonchanFrictionDust {
+  0%   { opacity: 0; transform: scale(0.4) translateX(12px); }
+  25%  { opacity: 0.8; transform: scale(1.1) translateX(4px); }
+  65%  { opacity: 0.5; transform: scale(1.3) translateX(-6px); }
+  100% { opacity: 0; transform: scale(1.5) translateX(-14px); }
 }
 
-/* Camouflage spark burst — masks the reference image's built-in electric
-   FX during the tiny/transparent spawn phase. Quick bloom + fade. */
-@keyframes gbaThunderPunchCamouflage {
-  0%   { transform: scale(0.3); opacity: 0; }
-  18%  { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 12px #fef08a); }
-  45%  { transform: scale(1.3); opacity: 0.85; }
-  75%  { transform: scale(1.0); opacity: 0.4; }
-  100% { transform: scale(0.6); opacity: 0; }
+@keyframes gbaHitmonchanJabLunge {
+  0%   { transform: translate(36px, -12px) rotate(4deg) scale(0.92); opacity: 0; filter: drop-shadow(0 0 8px rgba(245,158,11,0.3)); }
+  10%  { transform: translate(32px, -10px) rotate(3deg) scale(0.94); opacity: 0.95; }
+  18%  { transform: translate(34px, -11px) rotate(4deg) scale(0.93); opacity: 1; filter: drop-shadow(0 0 16px rgba(245,158,11,0.7)); }
+  26%  { transform: translate(-8px, 4px) rotate(-3deg) scale(1.10, 0.92); opacity: 1; filter: drop-shadow(0 0 28px #f59e0b); }
+  34%  { transform: translate(-4px, 2px) rotate(-1deg) scale(1.05, 0.96); opacity: 1; filter: drop-shadow(0 0 22px rgba(245,158,11,0.8)); }
+  44%  { transform: translate(-1px, 1px) rotate(0deg) scale(1.02); opacity: 1; }
+  58%  { transform: translate(8px, -2px) rotate(1deg) scale(0.98); opacity: 0.90; }
+  74%  { transform: translate(18px, -6px) rotate(2deg) scale(0.95); opacity: 0.65; }
+  88%  { transform: translate(26px, -9px) rotate(3deg) scale(0.92); opacity: 0.30; }
+  100% { transform: translate(32px, -11px) rotate(3deg) scale(0.90); opacity: 0; }
 }
 
-@keyframes gbaThunderPunchSpark {
-  0% { transform: scale(0.3); opacity: 0; }
-  30% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 15px #fde047); }
-  60% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(0.7); opacity: 0; }
+@keyframes gbaHitmonchanJabWhiff {
+  0%   { transform: translate(32px, -10px) scale(0.78); opacity: 0; }
+  20%  { transform: translate(26px, -8px) scale(0.82); opacity: 0.85; }
+  45%  { transform: translate(12px, -4px) scale(0.84); opacity: 0.80; }
+  70%  { transform: translate(20px, -6px) scale(0.79); opacity: 0.35; }
+  100% { transform: translate(26px, -8px) scale(0.74); opacity: 0; }
 }
 
-/* Impact ring — short, sharp burst; runs on a 0.4-0.45s duration so it
-   completes fully before the 1300ms FX cleanup. */
-@keyframes gbaThunderPunchRing {
-  0% { transform: scale(0.3); opacity: 0; }
-  30% { transform: scale(1); opacity: 0.9; }
-  65% { transform: scale(1.4); opacity: 0.5; }
-  100% { transform: scale(1.8); opacity: 0; }
+@keyframes gbaHitmonchanImpactRing {
+  0%   { transform: scale(0.2); opacity: 0; border-width: 3px; }
+  25%  { opacity: 0.95; }
+  65%  { transform: scale(1.2); opacity: 0.5; border-width: 2px; }
+  100% { transform: scale(1.75); opacity: 0; border-width: 1px; }
 }
 
-/* Rotating electric aura around the Thunderpunch fist */
-@keyframes gbaThunderPunchAura {
-  0% { transform: rotate(0deg) scale(0.4); opacity: 0; }
-  25% { transform: rotate(90deg) scale(1); opacity: 0.9; }
-  60% { transform: rotate(220deg) scale(1.1); opacity: 0.7; }
-  100% { transform: rotate(360deg) scale(1.35); opacity: 0; }
+@keyframes gbaHitmonchanImpactStar {
+  0%   { transform: scale(0.2) rotate(-15deg); opacity: 0; }
+  25%  { transform: scale(1.25) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 20px #fef08a); }
+  60%  { transform: scale(1.02) rotate(8deg); opacity: 0.8; }
+  100% { transform: scale(1.4) rotate(18deg); opacity: 0; }
 }
 
-/* Glow flash behind the Thunderpunch fist — grows with the fist and
-   peaks at 78% (0.78s of the 1.0s duration), just as the fist arrives
-   at full size, so the flash reads as the impact moment */
-@keyframes gbaThunderPunchGlow {
-  0%   { transform: scale(0.3); opacity: 0; }
-  45%  { transform: scale(0.7); opacity: 0.5; }
-  78%  { transform: scale(1.15); opacity: 0.9; }
-  100% { transform: scale(1.6); opacity: 0; }
+@keyframes gbaHitmonchanCardTremor {
+  0%   { transform: translate(0, 0); }
+  18%  { transform: translate(-5px, 4px) rotate(-1deg); }
+  38%  { transform: translate(4px, -3px) rotate(0.8deg); }
+  60%  { transform: translate(-3px, 2px) rotate(-0.4deg); }
+  80%  { transform: translate(2px, -1px) rotate(0.2deg); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes gbaHitmonchanWindStreaks {
+  0%   { transform: scaleX(0.3) translateX(20px); opacity: 0; }
+  25%  { transform: scaleX(1.1) translateX(0px); opacity: 0.9; }
+  65%  { transform: scaleX(1.3) translateX(-12px); opacity: 0.6; }
+  100% { transform: scaleX(1.5) translateX(-24px); opacity: 0; }
+}
+
+@keyframes gbaHitmonchanSparkMote {
+  0%   { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  28%  { transform: translate(calc(var(--spk-x) * 0.45), calc(var(--spk-y) * 0.45)) scale(1.2); opacity: 1; }
+  68%  { transform: translate(calc(var(--spk-x) * 0.85), calc(var(--spk-y) * 0.85)) scale(0.85); opacity: 0.65; }
+  100% { transform: translate(var(--spk-x), var(--spk-y)) scale(0.25); opacity: 0; }
+}
+
+/* ============================================
+   ELECTABUZZ THUNDERPUNCH (1.20s total duration, Tier 1 scale ~114px)
+   Choreography: Electric wind-up & static jitter (0-0.44s) -> Heavy downward hammer slam
+   (0.44-0.56s) -> High-voltage discharge recoil & dissipation (0.56-1.20s).
+   ============================================ */
+@keyframes gbaThunderPunchSlam {
+  0%   { transform: translate(24px, -22px) scale(0.80); opacity: 0; filter: drop-shadow(0 0 10px rgba(250,204,21,0.4)); }
+  10%  { transform: translate(22px, -20px) scale(0.84); opacity: 0.95; }
+  22%  { transform: translate(23px, -19px) scale(0.86); opacity: 1; }
+  34%  { transform: translate(21px, -21px) scale(0.88); opacity: 1; filter: drop-shadow(0 0 22px rgba(250,204,21,0.85)); }
+  42%  { transform: translate(22px, -20px) scale(0.89); opacity: 1; filter: drop-shadow(0 0 28px #facc15); }
+  47%  { transform: translate(10px, -8px)   scale(0.96); opacity: 1; }
+  54%  { transform: translate(-5px, 6px)   scale(1.14, 0.92); opacity: 1; filter: drop-shadow(0 0 38px #facc15); }
+  62%  { transform: translate(-3px, 3px)   scale(1.06, 0.96); opacity: 1; filter: drop-shadow(0 0 26px rgba(250,204,21,0.75)); }
+  74%  { transform: translate(4px, 0px)    scale(1.00); opacity: 0.88; }
+  86%  { transform: translate(10px, -2px)  scale(0.95); opacity: 0.50; }
+  100% { transform: translate(16px, -4px)  scale(0.90); opacity: 0; }
+}
+
+/* Whiffed Thunderpunch — electrical charge sputters out with no heavy slam */
+@keyframes gbaThunderPunchWhiff {
+  0%   { transform: translate(22px, -20px) scale(0.76); opacity: 0; }
+  25%  { transform: translate(20px, -18px) scale(0.80); opacity: 0.8; }
+  50%  { transform: translate(21px, -17px) scale(0.82); opacity: 0.75; }
+  75%  { transform: translate(15px, -13px) scale(0.78); opacity: 0.35; }
+  100% { transform: translate(17px, -15px) scale(0.72); opacity: 0; }
+}
+
+/* Layer 1: Ambient ionized ground discharge patch */
+@keyframes gbaThunderPunchGroundIon {
+  0%   { transform: scale(0.35); opacity: 0; }
+  30%  { transform: scale(0.85); opacity: 0.35; }
+  54%  { transform: scale(1.35); opacity: 0.90; filter: drop-shadow(0 0 26px #facc15); }
+  78%  { transform: scale(1.50); opacity: 0.45; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+
+/* Layer 2: Rotating high-speed electric aura ring wrapping the raised fist */
+@keyframes gbaThunderPunchAuraRing {
+  0%   { transform: rotate(0deg) scale(0.4); opacity: 0; }
+  28%  { transform: rotate(110deg) scale(1.0); opacity: 0.95; }
+  65%  { transform: rotate(260deg) scale(1.15); opacity: 0.85; }
+  100% { transform: rotate(360deg) scale(1.4); opacity: 0; }
+}
+
+/* Layer 3: Central impact incandescent glow flash behind the slam */
+@keyframes gbaThunderPunchFlash {
+  0%   { transform: scale(0.25); opacity: 0; }
+  25%  { transform: scale(1.30); opacity: 1; filter: drop-shadow(0 0 32px #ffffff); }
+  60%  { transform: scale(1.08); opacity: 0.75; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+
+/* Layer 3: Expanding high-voltage shockwave ring */
+@keyframes gbaThunderPunchRingExpand {
+  0%   { transform: scale(0.2); opacity: 0; }
+  25%  { transform: scale(0.95); opacity: 0.95; }
+  65%  { transform: scale(1.50); opacity: 0.55; }
+  100% { transform: scale(2.0); opacity: 0; }
+}
+
+/* Layer 4: Radial zigzag lightning bolts bursting along directional vectors */
+@keyframes gbaThunderPunchRadialSpark {
+  0%   { transform: scale(0.25) translateY(0); opacity: 0; }
+  30%  { transform: scale(1.30) translateY(-16px); opacity: 1; filter: drop-shadow(0 0 18px #fef08a); }
+  65%  { transform: scale(1.0) translateY(-24px); opacity: 0.75; }
+  100% { transform: scale(0.65) translateY(-34px); opacity: 0; }
+}
+
+/* Layer 5: Ambient floating electric motes & spark droplets */
+@keyframes gbaThunderPunchMoteDrift {
+  0%   { transform: translate(0, 0) scale(0.4); opacity: 0; }
+  30%  { transform: translate(calc(var(--em-x) * 0.45), calc(var(--em-y) * 0.45)) scale(1.2); opacity: 1; }
+  70%  { transform: translate(calc(var(--em-x) * 0.85), calc(var(--em-y) * 0.85)) scale(0.85); opacity: 0.6; }
+  100% { transform: translate(var(--em-x), var(--em-y)) scale(0.3); opacity: 0; }
+}
+
+/* Card heavy impact tremor on Thunderpunch strike */
+@keyframes gbaThunderPunchCardTremor {
+  0%   { transform: translate(0, 0); }
+  14%  { transform: translate(-6px, 6px) rotate(-1.4deg); }
+  32%  { transform: translate(5px, -4px) rotate(1.2deg); }
+  52%  { transform: translate(-4px, 3px) rotate(-0.6deg); }
+  72%  { transform: translate(3px, -2px) rotate(0.3deg); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ============================================
+   RECOIL SELF-HIT (0.75s total duration — Dual 5-Layer FX Architecture)
+   Choreography:
+   0.00s: Recoil ignition & explosive flash
+   0.08s: Card recoil shudder begins
+   0.08s - 0.45s: Shockwaves burst, lightning/shards streak outward, card shudders violently
+   0.45s - 0.75s: Dissipation of arcs, motes, and floating damage text.
+   ============================================ */
+
+/* 1. Electric Overload Recoil (Electabuzz, Pikachu, Raichu, Zapdos, Electrode, Jolteon) */
+@keyframes gbaRecoilElectricFloor {
+  0%   { opacity: 0; transform: scale(0.5); }
+  18%  { opacity: 0.95; transform: scale(1.15); filter: drop-shadow(0 0 24px #facc15); }
+  40%  { opacity: 0.70; transform: scale(1.05); }
+  70%  { opacity: 0.35; transform: scale(1.20); }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+
+@keyframes gbaRecoilElectricBurst {
+  0%   { opacity: 0; transform: scale(0.15) rotate(-12deg); }
+  20%  { opacity: 1; transform: scale(1.28) rotate(6deg); filter: drop-shadow(0 0 28px #ffffff); }
+  38%  { opacity: 1; transform: scale(1.10) rotate(-2deg); filter: drop-shadow(0 0 22px #facc15); }
+  60%  { opacity: 0.85; transform: scale(1.02) rotate(1deg); }
+  80%  { opacity: 0.45; transform: scale(0.95); }
+  100% { opacity: 0; transform: scale(0.85); }
+}
+
+@keyframes gbaRecoilElectricRing {
+  0%   { transform: scale(0.18); opacity: 0; border-width: 4px; }
+  22%  { opacity: 1; }
+  60%  { transform: scale(1.35); opacity: 0.65; border-width: 2.5px; }
+  100% { transform: scale(1.95); opacity: 0; border-width: 1px; }
+}
+
+@keyframes gbaRecoilElectricBolt {
+  0%   { transform: scale(0.2) translateY(0); opacity: 0; }
+  25%  { transform: scale(1.3) translateY(-18px); opacity: 1; filter: drop-shadow(0 0 16px #fde047); }
+  60%  { transform: scale(1.05) translateY(-28px); opacity: 0.85; }
+  100% { transform: scale(0.65) translateY(-38px); opacity: 0; }
+}
+
+@keyframes gbaRecoilElectricMote {
+  0%   { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  25%  { transform: translate(calc(var(--rem-x) * 0.45), calc(var(--rem-y) * 0.45)) scale(1.25); opacity: 1; }
+  65%  { transform: translate(calc(var(--rem-x) * 0.85), calc(var(--rem-y) * 0.85)) scale(0.9); opacity: 0.7; }
+  100% { transform: translate(var(--rem-x), var(--rem-y)) scale(0.25); opacity: 0; }
+}
+
+/* 2. Physical Kinetic Recoil (Chansey, Arcanine, Machoke, Rhydon, Nidoking, etc.) */
+@keyframes gbaRecoilPhysicalFloor {
+  0%   { opacity: 0; transform: scale(0.5); }
+  20%  { opacity: 0.90; transform: scale(1.10); filter: drop-shadow(0 0 20px rgba(225,29,72,0.8)); }
+  55%  { opacity: 0.60; transform: scale(1.02); }
+  100% { opacity: 0; transform: scale(1.25); }
+}
+
+@keyframes gbaRecoilPhysicalBurst {
+  0%   { opacity: 0; transform: scale(0.2) rotate(-10deg); }
+  22%  { opacity: 1; transform: scale(1.24) rotate(4deg); filter: drop-shadow(0 0 24px #ffffff); }
+  45%  { opacity: 0.95; transform: scale(1.05) rotate(0deg); }
+  75%  { opacity: 0.55; transform: scale(0.96); }
+  100% { opacity: 0; transform: scale(0.86); }
+}
+
+@keyframes gbaRecoilPhysicalRing {
+  0%   { transform: scale(0.2); opacity: 0; border-width: 3.5px; }
+  24%  { opacity: 0.95; }
+  62%  { transform: scale(1.30); opacity: 0.55; border-width: 2px; }
+  100% { transform: scale(1.85); opacity: 0; border-width: 1px; }
+}
+
+@keyframes gbaRecoilShatterSpike {
+  0%   { transform: scale(0.25) translateY(0); opacity: 0; }
+  28%  { transform: scale(1.25) translateY(-16px); opacity: 1; filter: drop-shadow(0 0 14px #f43f5e); }
+  65%  { transform: scale(1.0) translateY(-26px); opacity: 0.75; }
+  100% { transform: scale(0.6) translateY(-36px); opacity: 0; }
+}
+
+@keyframes gbaRecoilPhysicalMote {
+  0%   { transform: translate(0, 0) scale(0.3); opacity: 0; }
+  25%  { transform: translate(calc(var(--rspk-x) * 0.42), calc(var(--rspk-y) * 0.42)) scale(1.15); opacity: 1; }
+  65%  { transform: translate(calc(var(--rspk-x) * 0.82), calc(var(--rspk-y) * 0.82)) scale(0.85); opacity: 0.65; }
+  100% { transform: translate(var(--rspk-x), var(--rspk-y)) scale(0.2); opacity: 0; }
 }
 
 /* Electric flicker for crackle arcs and sparks */
@@ -4777,28 +4970,68 @@ html, body {
   100% { transform: translateX(-18px) translateY(-5px) scale(1.15); opacity: 0; }
 }
 
-/* HITMONCHAN JAB / SPECIAL PUNCH */
-/* Jab approach — the <img> width sets final size (30% of card); keyframes drive
-   the GBA-snappy spatial path: tiny spawn at right-back, accelerating left-front,
-   dead stop at scale(1) by 90%, quick fade. Impact star delay (0.75s) is tuned
-   to the 80-90% arrival window so it completes before the ~1300ms FX cleanup. */
-@keyframes gbaHitmonchanJab {
-  0%   { transform: translate(40%, -18%) scale(0.12) rotate(14deg); opacity: 0; }
-  10%  { transform: translate(36%, -15%) scale(0.18) rotate(11deg); opacity: 0.6; }
-  25%  { transform: translate(27%, -10%) scale(0.32) rotate(7deg);  opacity: 0.85; }
-  45%  { transform: translate(14%, -5%)  scale(0.52) rotate(3deg);  opacity: 1; }
-  65%  { transform: translate(2%, -1%)   scale(0.78) rotate(1deg);  opacity: 1; }
-  80%  { transform: translate(-3%, 0%)   scale(0.96) rotate(0deg);  opacity: 1; }
-  90%  { transform: translate(-4%, 0%)   scale(1)    rotate(0deg);  opacity: 1; }
-  100% { transform: translate(-4%, 0%)   scale(1)    rotate(0deg);  opacity: 0; }
+/* HITMONCHAN JAB (0.75s total duration, Tier 1 scale ~104x126px)
+   Choreography: Dash-in acceleration (0-0.18s) -> Snappy punch impact & micro-shudder
+   (0.18-0.34s) -> Recoil spring & dust dissipation (0.34-0.75s). */
+@keyframes gbaHitmonchanJabLunge {
+  0%   { transform: translate(-34px, 24px) scale(0.78); opacity: 0; filter: blur(2px); }
+  14%  { transform: translate(-12px, 8px)  scale(0.92); opacity: 0.95; filter: blur(0.5px); }
+  24%  { transform: translate(4px, -2px)   scale(1.08, 0.95); opacity: 1; filter: blur(0px) drop-shadow(0 0 16px rgba(239,68,68,0.65)); }
+  34%  { transform: translate(-1px, 1px)   scale(1.02); opacity: 1; filter: drop-shadow(0 0 22px rgba(244,63,94,0.75)); }
+  46%  { transform: translate(-8px, 6px)   scale(0.95); opacity: 0.92; }
+  68%  { transform: translate(-18px, 14px) scale(0.88); opacity: 0.50; }
+  100% { transform: translate(-26px, 20px) scale(0.82); opacity: 0; }
 }
-/* Jab wind streaks — bloom in during flight, sweep backward, gone at impact */
+
+/* Whiffed Hitmonchan Jab — glancing punch slips off-center into the void */
+@keyframes gbaHitmonchanJabWhiff {
+  0%   { transform: translate(-30px, 20px) scale(0.72); opacity: 0; }
+  25%  { transform: translate(-8px, 6px)   scale(0.82); opacity: 0.75; }
+  45%  { transform: translate(14px, -8px)  scale(0.85); opacity: 0.60; }
+  70%  { transform: translate(6px, -2px)   scale(0.80); opacity: 0.30; }
+  100% { transform: translate(-4px, 4px)   scale(0.75); opacity: 0; }
+}
+
+/* Layer 1: Floor friction dust & step shockwave */
+@keyframes gbaHitmonchanFrictionDust {
+  0%   { transform: translate(-30px, 34px) scale(0.3); opacity: 0; }
+  18%  { transform: translate(-24px, 30px) scale(1.0); opacity: 0.7; }
+  50%  { transform: translate(-16px, 24px) scale(1.4); opacity: 0.35; }
+  100% { transform: translate(-8px, 18px)  scale(1.8); opacity: 0; }
+}
+
+/* Layer 3: Concentric impact shock ring */
+@keyframes gbaHitmonchanImpactRing {
+  0%   { transform: scale(0.25); opacity: 0; }
+  20%  { transform: scale(0.85); opacity: 0.9; }
+  65%  { transform: scale(1.35); opacity: 0.45; }
+  100% { transform: scale(1.70); opacity: 0; }
+}
+
+/* Layer 4: Dynamic speedlines / wind wake behind the lunge */
 @keyframes gbaHitmonchanWindStreaks {
-  0%   { transform: translateX(16px) scaleX(0.4); opacity: 0; }
-  20%  { transform: translateX(6px) scaleX(0.85); opacity: 0.9; }
-  55%  { transform: translateX(-4px) scaleX(1); opacity: 0.7; }
-  80%  { transform: translateX(-16px) scaleX(1.1); opacity: 0; }
-  100% { transform: translateX(-16px) scaleX(1.1); opacity: 0; }
+  0%   { transform: translateX(-18px) scaleX(0.4); opacity: 0; }
+  25%  { transform: translateX(-4px)  scaleX(1.0); opacity: 0.95; }
+  65%  { transform: translateX(12px)  scaleX(1.15); opacity: 0.50; }
+  100% { transform: translateX(24px)  scaleX(1.20); opacity: 0; }
+}
+
+/* Layer 5: Kinetic spark motes dissipating from impact point */
+@keyframes gbaHitmonchanSparkMote {
+  0%   { transform: translate(0, 0) scale(0.5); opacity: 0; }
+  25%  { transform: translate(calc(var(--spk-x) * 0.45), calc(var(--spk-y) * 0.45)) scale(1.2); opacity: 1; }
+  70%  { transform: translate(calc(var(--spk-x) * 0.85), calc(var(--spk-y) * 0.85)) scale(0.9); opacity: 0.6; }
+  100% { transform: translate(var(--spk-x), var(--spk-y)) scale(0.4); opacity: 0; }
+}
+
+/* Card micro-tremor on Jab hit */
+@keyframes gbaHitmonchanCardTremor {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(4px, -3px) rotate(0.8deg); }
+  40%  { transform: translate(-3px, 2px) rotate(-0.6deg); }
+  60%  { transform: translate(2px, -1px) rotate(0.3deg); }
+  80%  { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
 }
 /* Special Punch approach — single-arm layer fills entire timeline (dual-arm
    windup removed). Spawns tiny at right-back, becomes visible early (~8%),

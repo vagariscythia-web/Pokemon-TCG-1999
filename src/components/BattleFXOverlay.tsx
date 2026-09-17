@@ -86,6 +86,7 @@ export interface ActiveFX {
     | 'sand_attack_dust'
     | 'poison_tick'
     | 'confusion_self_hit'
+    | 'recoil_self_hit'
     | 'confuse_ray_spiral'
     | 'cobra_stare'
     | 'poison_vapor'
@@ -977,6 +978,12 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1750;
     case 'seismic_toss_machamp':
       return 1800;
+    case 'thunder_punch':
+      return 1200;
+    case 'hitmonchan_jab':
+      return 900;
+    case 'recoil_self_hit':
+      return 750;
     case 'heavy_thunder_strike':
       return 1650;
     case 'fire_take_down':
@@ -2613,44 +2620,109 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 10b. HITMONCHAN JAB (red boxing glove — quick straight punch with small impact) */}
+      {/* 10b. HITMONCHAN JAB (Ken Sugimori 1996 Full-Body Lunge — 5-Layer FX Architecture) */}
       {fx.type === 'hitmonchan_jab' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Watercolor glove stock art — GBA approach trajectory: spawns tiny at
-              right-back, accelerates left-front, dead-stops at 30% card width
-              (img width) behind the card boundary; quick fade at the end. */}
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ animation: 'gbaHitmonchanJab 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) forwards' }}
-          >
-            <img
-              src="/assets/Hitmonchan_Jab.png"
-              alt=""
-              className="select-none pointer-events-none drop-shadow-[0_0_18px_#ec4899]"
-              style={{ width: '30%', maxWidth: '30%', height: 'auto', objectFit: 'contain' }}
-              draggable={false}
-            />
-          </div>
-          {/* Wind streaks trailing the glove — staggered opacity, sweep backward
-              during flight and vanish at the impact window */}
-          <div className="absolute" style={{ transform: 'translate(30%, -8%)' }}>
-            <div style={{ animation: 'gbaHitmonchanWindStreaks 1.1s ease-out forwards', opacity: 0 }}>
-              <svg width="46" height="30" viewBox="0 0 46 30">
-                <line x1="6" y1="7" x2="44" y2="7" stroke="#f9a8d4" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
-                <line x1="0" y1="15" x2="38" y2="15" stroke="#ec4899" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
-                <line x1="8" y1="23" x2="40" y2="23" stroke="#f9a8d4" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-              </svg>
-            </div>
-          </div>
-          {/* Small impact star */}
+          {/* Layer 1: Ambient Card Floor / Friction Dust Puff on launch */}
           {!fx.whiffed && (
-            <div className="absolute" style={{ animation: 'gbaHitmonchanImpactStar 0.55s ease-out 0.75s forwards', opacity: 0 }}>
-              <svg width="40" height="40" viewBox="0 0 40 40">
-                <polygon points="20,2 24,14 38,14 27,22 30,36 20,28 10,36 13,22 2,14 16,14" fill="#fef08a" stroke="#f59e0b" strokeWidth="1.2" />
-                <circle cx="20" cy="20" r="6" fill="#ffffff" opacity="0.8" />
+            <div
+              className="absolute pointer-events-none z-10"
+              style={{ animation: 'gbaHitmonchanFrictionDust 0.65s ease-out forwards' }}
+            >
+              <svg width="64" height="40" viewBox="0 0 64 40" className="overflow-visible">
+                <ellipse cx="26" cy="22" rx="22" ry="12" fill="none" stroke="#f59e0b" strokeWidth="2.5" opacity="0.65" />
+                <ellipse cx="36" cy="26" rx="14" ry="8" fill="none" stroke="#fbbf24" strokeWidth="1.8" opacity="0.5" />
               </svg>
             </div>
           )}
+
+          {/* Layer 2: Primary Visual Actor (Otantik 1996 Ken Sugimori Hitmonchan Sprite) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-20"
+            style={{
+              animation: fx.whiffed
+                ? 'gbaHitmonchanJabWhiff 0.85s ease-out forwards'
+                : 'gbaHitmonchanJabLunge 0.90s cubic-bezier(0.2, 0.8, 0.35, 1) forwards'
+            }}
+          >
+            <img
+              src="/assets/Hitmonchan_Jab.png"
+              alt="Hitmonchan Jab"
+              className={`${fx.whiffed ? 'w-[76px] h-[92px]' : 'w-[104px] h-[126px]'} object-contain drop-shadow-[0_4px_14px_rgba(0,0,0,0.6)] drop-shadow-[0_0_20px_rgba(239,68,68,0.55)] select-none pointer-events-none`}
+              draggable={false}
+            />
+          </div>
+
+          {/* Layer 3: Concentric Impact Shock Ring */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-25 flex items-center justify-center"
+              style={{ animation: 'gbaHitmonchanImpactRing 0.45s ease-out 0.24s forwards', opacity: 0 }}
+            >
+              <div className="w-24 h-24 rounded-full border-2 border-amber-400/90 shadow-[0_0_18px_#f59e0b]" />
+            </div>
+          )}
+
+          {/* Layer 3: Incandescent 8-Point Starburst Pop (White -> Lemon -> Amber) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-30 flex items-center justify-center"
+              style={{ animation: 'gbaHitmonchanImpactStar 0.48s cubic-bezier(0.15, 0.85, 0.35, 1) 0.24s forwards', opacity: 0 }}
+            >
+              <svg width="52" height="52" viewBox="0 0 52 52" className="overflow-visible drop-shadow-[0_0_14px_#fef08a]">
+                <polygon points="26,2 31,18 48,18 34,28 39,46 26,36 13,46 18,28 4,18 21,18" fill="#fef08a" stroke="#f59e0b" strokeWidth="1.5" />
+                <polygon points="26,8 29,20 42,20 31,27 35,40 26,32 17,40 21,27 10,20 23,20" fill="#ffffff" />
+                <circle cx="26" cy="26" r="6" fill="#ffffff" />
+              </svg>
+            </div>
+          )}
+
+          {/* Layer 3: Card Micro-Tremor on Hit */}
+          {!fx.whiffed && (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ animation: 'gbaHitmonchanCardTremor 0.40s ease-out 0.24s forwards' }}
+            />
+          )}
+
+          {/* Layer 4: Curved Speedlines / Wind Wake behind punch */}
+          <div
+            className="absolute pointer-events-none z-35"
+            style={{ transform: 'translate(28%, -10%)' }}
+          >
+            <div style={{ animation: 'gbaHitmonchanWindStreaks 0.48s ease-out forwards', opacity: 0 }}>
+              <svg width="52" height="34" viewBox="0 0 52 34" className="overflow-visible">
+                <path d="M4 8 Q24 6 48 8" fill="none" stroke="#fecdd3" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+                <path d="M0 17 Q26 15 52 17" fill="none" stroke="#f43f5e" strokeWidth="3.2" strokeLinecap="round" opacity="0.9" />
+                <path d="M6 26 Q28 24 46 26" fill="none" stroke="#fecdd3" strokeWidth="2.2" strokeLinecap="round" opacity="0.75" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Layer 5: Kinetic Spark Motes dissipating from impact */}
+          {!fx.whiffed && [
+            { x: -32, y: -24, color: '#ffffff' },
+            { x: 30, y: -28, color: '#fef08a' },
+            { x: -28, y: 22, color: '#f59e0b' },
+            { x: 34, y: 18, color: '#f43f5e' },
+            { x: -38, y: -4, color: '#fef08a' }
+          ].map((spk, idx) => (
+            <div
+              key={idx}
+              className="absolute pointer-events-none z-40"
+              style={{
+                '--spk-x': `${spk.x}px`,
+                '--spk-y': `${spk.y}px`,
+                animation: `gbaHitmonchanSparkMote 0.50s ease-out ${0.28 + idx * 0.02}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            >
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: spk.color, boxShadow: `0 0 8px ${spk.color}` }}
+              />
+            </div>
+          ))}
         </div>
       )}
 
@@ -2815,112 +2887,379 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 11b. THUNDERPUNCH (Electabuzz - yellow fist with lightning streaks) */}
-      {fx.type === 'thunder_punch' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Camouflage spark burst — masks the reference image's built-in electricity
-              during the initial small/transparent spawn phase at the right-back origin */}
-          <div className="absolute" style={{ transform: 'translate(38%, -18%)', animation: 'gbaThunderPunchCamouflage 0.45s ease-out forwards', opacity: 0 }}>
-            <svg width="52" height="52" viewBox="0 0 52 52" className="drop-shadow-[0_0_14px_#fef08a]">
-              <path d="M26 2 L22 16 L26 14 L20 30 L28 20 L24 24 L30 6 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.6" />
-              <path d="M40 12 L34 22 L38 20 L32 34 L38 26 L36 28 L42 14 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.5" opacity="0.85" />
-              <path d="M10 16 L14 26 L11 24 L16 36 L12 28 L13 30 L8 18 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.5" opacity="0.8" />
-              <circle cx="26" cy="26" r="8" fill="none" stroke="#fef08a" strokeWidth="1.5" opacity="0.6" />
-              <circle cx="26" cy="26" r="14" fill="none" stroke="#fde047" strokeWidth="1" opacity="0.4" />
-            </svg>
+      {/* 11b. THUNDERPUNCH (Electabuzz - Ken Sugimori 1996 Full-Body Heavy Slam — 5-Layer FX Architecture) */}
+      {fx.type === 'thunder_punch' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        const bolts = [
+          { angle: -40, x: -38 * wi, y: -42 * wi },
+          { angle: 35, x: 34 * wi, y: -44 * wi },
+          { angle: 90, x: 46 * wi, y: -4 * wi },
+          { angle: 145, x: 36 * wi, y: 36 * wi },
+          { angle: -140, x: -36 * wi, y: 38 * wi },
+          { angle: -90, x: -48 * wi, y: -2 * wi },
+          ...(wi > 1 ? [
+            { angle: -15, x: -10 * wi, y: -50 * wi },
+            { angle: 165, x: 10 * wi, y: 48 * wi }
+          ] : [])
+        ];
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Layer 1: Ambient Card Floor / Ionized Ground Discharge Patch */}
+            <div
+              className="absolute pointer-events-none z-10"
+              style={{ animation: 'gbaThunderPunchGroundIon 1.20s ease-out forwards', opacity: 0 }}
+            >
+              <div
+                className="rounded-full bg-radial from-yellow-300/50 via-amber-400/25 to-transparent blur-md"
+                style={{ width: `${160 * wi}px`, height: `${160 * wi}px` }}
+              />
+            </div>
+
+            {/* Layer 2: Rotating High-Speed Electric Aura Ring wrapping raised fist during charge */}
+            {!fx.whiffed && (
+              <div
+                className="absolute w-28 h-28 pointer-events-none z-15"
+                style={{
+                  transform: 'translate(-16px, -24px)',
+                  animation: 'gbaThunderPunchAuraRing 0.65s linear forwards',
+                  opacity: 0
+                }}
+              >
+                <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_14px_#fde047]">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="#fde047" strokeWidth="2.5" strokeDasharray="12 6" opacity="0.9" />
+                  <circle cx="50" cy="50" r="34" fill="none" stroke="#ffffff" strokeWidth="1.8" strokeDasharray="6 8" opacity="0.8" />
+                </svg>
+              </div>
+            )}
+
+            {/* Layer 2: Primary Visual Actor (Ken Sugimori 1996 Full-Body Electabuzz) */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-20"
+              style={{
+                animation: fx.whiffed
+                  ? 'gbaThunderPunchWhiff 1.05s ease-out forwards'
+                  : 'gbaThunderPunchSlam 1.20s cubic-bezier(0.25, 0.8, 0.25, 1) forwards'
+              }}
+            >
+              <img
+                src="/assets/ThunderPunch_Fist.png"
+                alt="Electabuzz Thunderpunch"
+                className={`${fx.whiffed ? 'w-[84px] h-[82px]' : 'w-[114px] h-[112px]'} object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.65)] ${wi > 1 ? 'drop-shadow-[0_0_36px_rgba(250,204,21,0.95)]' : 'drop-shadow-[0_0_24px_rgba(250,204,21,0.65)]'} select-none pointer-events-none`}
+                draggable={false}
+              />
+            </div>
+
+            {/* Layer 3: Central Impact Incandescent Glow Flash (White -> Neon Yellow -> Amber) */}
+            {!fx.whiffed && (
+              <div
+                className="absolute pointer-events-none z-25 flex items-center justify-center"
+                style={{ animation: 'gbaThunderPunchFlash 0.60s ease-out 0.54s forwards', opacity: 0 }}
+              >
+                <div
+                  className="rounded-full bg-radial from-white via-yellow-200/90 to-transparent blur-md"
+                  style={{ width: `${144 * wi}px`, height: `${144 * wi}px` }}
+                />
+                <div
+                  className="absolute inset-0 m-auto rounded-full bg-radial from-white to-yellow-300 blur-sm"
+                  style={{ width: `${80 * wi}px`, height: `${80 * wi}px` }}
+                />
+              </div>
+            )}
+
+            {/* Layer 3: Concentric High-Voltage Shockwave Rings */}
+            {!fx.whiffed && (
+              <>
+                <div
+                  className="absolute rounded-full border-yellow-300/90 pointer-events-none z-30"
+                  style={{
+                    width: `${112 * wi}px`,
+                    height: `${112 * wi}px`,
+                    borderWidth: `${wi > 1 ? 4 : 3}px`,
+                    animation: 'gbaThunderPunchRingExpand 0.55s ease-out 0.56s forwards',
+                    opacity: 0
+                  }}
+                />
+                <div
+                  className="absolute rounded-full border-white/95 pointer-events-none z-30"
+                  style={{
+                    width: `${80 * wi}px`,
+                    height: `${80 * wi}px`,
+                    borderWidth: `${wi > 1 ? 3 : 2}px`,
+                    animation: 'gbaThunderPunchRingExpand 0.48s ease-out 0.60s forwards',
+                    opacity: 0
+                  }}
+                />
+              </>
+            )}
+
+            {/* Layer 3: Card Heavy Impact Tremor on Slam */}
+            {!fx.whiffed && (
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ animation: 'gbaThunderPunchCardTremor 0.45s ease-out 0.56s forwards' }}
+              />
+            )}
+
+            {/* Layer 4: Radial Zigzag Lightning Bolts */}
+            {!fx.whiffed && bolts.map((bolt, idx) => (
+              <div
+                key={idx}
+                className="absolute pointer-events-none z-35"
+                style={{
+                  transform: `translate(${bolt.x}px, ${bolt.y}px) rotate(${bolt.angle}deg)`
+                }}
+              >
+                <div style={{ animation: `gbaThunderPunchRadialSpark 0.55s ease-out ${0.56 + idx * 0.02}s forwards`, opacity: 0 }}>
+                  <svg width={Math.round(26 * wi)} height={Math.round(46 * wi)} viewBox="0 0 26 46" className="drop-shadow-[0_0_16px_#fef08a]">
+                    <path d="M13 2 L8 20 L13 18 L6 42 L17 22 L11 25 L18 4 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.8" />
+                    <path d="M13 6 L10 18 L13 17 L9 35 L15 22 L12 24 L16 6 Z" fill="#ffffff" opacity="0.85" />
+                  </svg>
+                </div>
+              </div>
+            ))}
+
+            {/* Layer 5: Ambient Floating Electric Motes & Spark Droplets */}
+            {!fx.whiffed && [
+              { x: -38 * wi, y: -30 * wi, color: '#ffffff' },
+              { x: 42 * wi, y: -26 * wi, color: '#fef9c3' },
+              { x: -32 * wi, y: 34 * wi, color: '#facc15' },
+              { x: 38 * wi, y: 32 * wi, color: '#ffffff' },
+              { x: 0, y: -48 * wi, color: '#fde047' },
+              { x: -44 * wi, y: 6 * wi, color: '#fbbf24' }
+            ].map((mote, idx) => (
+              <div
+                key={idx}
+                className="absolute pointer-events-none z-40"
+                style={{
+                  '--em-x': `${mote.x}px`,
+                  '--em-y': `${mote.y}px`,
+                  animation: `gbaThunderPunchMoteDrift 0.60s ease-out ${0.58 + idx * 0.02}s forwards`,
+                  opacity: 0
+                } as React.CSSProperties}
+              >
+                <svg width="12" height="12" viewBox="0 0 12 12" className="drop-shadow-[0_0_8px_#facc15]">
+                  <polygon points="6,0 12,6 6,12 0,6" fill={mote.color} />
+                </svg>
+              </div>
+            ))}
           </div>
-          <div className="absolute" style={{ transform: 'translate(42%, -22%)', animation: 'gbaThunderPunchCamouflage 0.4s ease-out 0.06s forwards', opacity: 0 }}>
-            <svg width="36" height="36" viewBox="0 0 36 36" className="drop-shadow-[0_0_10px_#fef9c3]">
-              <path d="M18 3 L15 14 L18 12 L13 26 L20 16 L17 19 L22 5 Z" fill="#ffffff" stroke="#fef08a" strokeWidth="0.5" opacity="0.9" />
-              <path d="M28 10 L24 18 L27 16 L22 28 L27 21 L25 23 L30 12 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.4" opacity="0.7" />
-            </svg>
-          </div>
-          {/* Electabuzz fist + arm — reference image with approach trajectory.
-              Spawns small at right-back, grows while sweeping left-front with
-              angular rotation, accelerating into a dead-on frontal impact.
-              Final width = 60% of card (40% margin from horizontal edge). */}
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ animation: 'gbaThunderPunchApproach 1.0s cubic-bezier(0.3, 0.0, 0.85, 0.35) forwards' }}
-          >
-            <img
-              src="/assets/ThunderPunch_Fist.png"
-              alt=""
-              className="select-none pointer-events-none drop-shadow-[0_0_22px_#facc15]"
-              style={{ width: '60%', maxWidth: '60%', height: 'auto', objectFit: 'contain' }}
-              draggable={false}
+        );
+      })()}
+
+      {/* 11c. RECOIL SELF-HIT (Attacker recoils with self-damage — Dual Elemental 5-Layer Architecture) */}
+      {fx.type === 'recoil_self_hit' && (() => {
+        const isElectricRecoil = fx.attackerType === 'Lightning' ||
+          (fx.pokemonName || '').toLowerCase().includes('electabuzz') ||
+          (fx.pokemonName || '').toLowerCase().includes('pikachu') ||
+          (fx.pokemonName || '').toLowerCase().includes('raichu') ||
+          (fx.pokemonName || '').toLowerCase().includes('zapdos') ||
+          (fx.pokemonName || '').toLowerCase().includes('electrode') ||
+          (fx.pokemonName || '').toLowerCase().includes('jolteon');
+
+        if (isElectricRecoil) {
+          // 1. Electric Overload Recoil (Electabuzz, Pikachu, Raichu, Zapdos, Electrode, Jolteon)
+          const electricAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+          const electricMotes = [
+            { x: -36, y: -28, color: '#ffffff' },
+            { x: 34, y: -30, color: '#fef9c3' },
+            { x: -32, y: 32, color: '#facc15' },
+            { x: 36, y: 28, color: '#ffffff' },
+            { x: 0, y: -44, color: '#fde047' },
+            { x: -42, y: 4, color: '#fbbf24' },
+            { x: 40, y: -4, color: '#ffffff' },
+            { x: 8, y: 40, color: '#facc15' }
+          ];
+          return (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+              {/* Layer 1: Ambient Card Floor / High-Voltage Ionized Ground Scorch */}
+              <div
+                className="absolute inset-0 rounded-xl pointer-events-none z-10"
+                style={{
+                  animation: 'gbaRecoilElectricFloor 0.75s ease-out forwards',
+                  background: 'radial-gradient(ellipse at center, rgba(250,204,21,0.45) 0%, rgba(245,158,11,0.25) 50%, rgba(234,88,12,0.10) 100%)'
+                }}
+              />
+
+              {/* Layer 2: Primary Visual Actor (Triple-Layered High-Voltage Plasma Star) */}
+              <div
+                className="absolute flex items-center justify-center pointer-events-none z-20"
+                style={{ animation: 'gbaRecoilElectricBurst 0.65s cubic-bezier(0.12, 0.95, 0.25, 1) forwards' }}
+              >
+                <svg width="84" height="84" viewBox="0 0 84 84" className="overflow-visible drop-shadow-[0_0_24px_#facc15]">
+                  {/* Outer 12-prong jagged plasma corona */}
+                  <polygon
+                    points="42,2 47,26 66,14 56,33 78,32 60,46 76,62 53,55 52,78 39,58 28,76 29,54 8,62 24,46 4,34 26,33 16,14 36,25"
+                    fill="#facc15"
+                    stroke="#f59e0b"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                  />
+                  {/* Middle 8-point bright lemon electric star */}
+                  <polygon
+                    points="42,10 48,30 68,26 53,40 62,60 42,48 22,60 31,40 16,26 36,30"
+                    fill="#fef08a"
+                  />
+                  {/* Inner pure white incandescent flash core */}
+                  <circle cx="42" cy="42" r="10" fill="#ffffff" />
+                </svg>
+              </div>
+
+              {/* Layer 3: Concentric High-Voltage Shockwave Rings */}
+              <div
+                className="absolute pointer-events-none z-25 flex items-center justify-center"
+                style={{ animation: 'gbaRecoilElectricRing 0.50s ease-out 0.04s forwards', opacity: 0 }}
+              >
+                <div className="w-28 h-28 rounded-full border-3 border-yellow-300/95 shadow-[0_0_22px_#fde047]" />
+              </div>
+              <div
+                className="absolute pointer-events-none z-25 flex items-center justify-center"
+                style={{ animation: 'gbaRecoilElectricRing 0.44s ease-out 0.08s forwards', opacity: 0 }}
+              >
+                <div className="w-20 h-20 rounded-full border-2 border-white/95 shadow-[0_0_14px_#ffffff]" />
+              </div>
+
+              {/* Layer 4: 8-Directional Radial Zigzag Backfire Lightning Bolts */}
+              {electricAngles.map((angle, idx) => {
+                const rad = (angle * Math.PI) / 180;
+                const bx = Math.round(Math.cos(rad) * 36);
+                const by = Math.round(Math.sin(rad) * 36);
+                return (
+                  <div
+                    key={idx}
+                    className="absolute pointer-events-none z-30"
+                    style={{ transform: `translate(${bx}px, ${by}px) rotate(${angle + 90}deg)` }}
+                  >
+                    <div style={{ animation: `gbaRecoilElectricBolt 0.52s ease-out ${0.04 + idx * 0.015}s forwards`, opacity: 0 }}>
+                      <svg width="22" height="42" viewBox="0 0 22 42" className="drop-shadow-[0_0_14px_#fef08a]">
+                        <path d="M11 2 L7 18 L12 16 L5 38 L14 20 L9 22 L15 4 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.8" />
+                        <path d="M11 5 L8 16 L12 15 L7 32 L12 20 L10 21 L13 6 Z" fill="#ffffff" opacity="0.9" />
+                      </svg>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Layer 5: High-Density Ambient Plasma Spark Droplets */}
+              {electricMotes.map((mote, idx) => (
+                <div
+                  key={idx}
+                  className="absolute pointer-events-none z-35"
+                  style={{
+                    '--rem-x': `${mote.x}px`,
+                    '--rem-y': `${mote.y}px`,
+                    animation: `gbaRecoilElectricMote 0.60s ease-out ${0.06 + idx * 0.02}s forwards`,
+                    opacity: 0
+                  } as React.CSSProperties}
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" className="drop-shadow-[0_0_8px_#facc15]">
+                    <polygon points="6,0 12,6 6,12 0,6" fill={mote.color} />
+                  </svg>
+                </div>
+              ))}
+            </div>
+          );
+        }
+
+        // 2. Physical Kinetic Recoil (Chansey, Arcanine, Machoke, Rhydon, Nidoking, Dark Blastoise, etc.)
+        const physicalAngles = [0, 45, 90, 135, 180, 225, 270, 315];
+        const physicalMotes = [
+          { x: -32, y: -24, color: '#ffffff' },
+          { x: 30, y: -26, color: '#fef08a' },
+          { x: -28, y: 28, color: '#f43f5e' },
+          { x: 32, y: 24, color: '#fb7185' },
+          { x: -36, y: -2, color: '#f97316' },
+          { x: 36, y: 0, color: '#fef08a' },
+          { x: 0, y: -38, color: '#ffffff' },
+          { x: 0, y: 38, color: '#f43f5e' }
+        ];
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Layer 1: Concussion Ground Scorch Crater */}
+            <div
+              className="absolute inset-0 rounded-xl pointer-events-none z-10"
+              style={{
+                animation: 'gbaRecoilPhysicalFloor 0.75s ease-out forwards',
+                background: 'radial-gradient(ellipse at center, rgba(225,29,72,0.38) 0%, rgba(249,115,22,0.22) 50%, rgba(185,28,28,0.10) 100%)'
+              }}
             />
-          </div>
-          {/* Impact glow flash behind the fist — soft outer halo + tighter hot core for cleaner falloff */}
-          <div className="absolute" style={{ animation: 'gbaThunderPunchGlow 1.0s ease-out forwards', opacity: 0 }}>
-            <div className="w-32 h-32 rounded-full bg-gradient-to-t from-yellow-300 via-amber-200/60 to-transparent blur-md" />
-            <div className="absolute inset-0 m-auto w-16 h-16 rounded-full bg-gradient-to-t from-yellow-100 via-yellow-200/70 to-transparent blur-sm" />
-          </div>
-          {/* Rotating electric aura ring wrapping the fist */}
-          <div className="absolute w-32 h-32" style={{ animation: 'gbaThunderPunchAura 0.9s linear 0.1s forwards', opacity: 0 }}>
-            <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_12px_#fde047]">
-              <circle cx="50" cy="50" r="44" fill="none" stroke="#fde047" strokeWidth="2.5" strokeDasharray="10 6" opacity="0.85" />
-              <circle cx="50" cy="50" r="36" fill="none" stroke="#fef9c3" strokeWidth="1.5" strokeDasharray="4 8" opacity="0.7" />
-            </svg>
-          </div>
-          {/* Radial lightning bolts bursting outward from the fist (tip-up bolts, rotated per direction) */}
-          <div className="absolute" style={{ transform: 'translate(-48px, -50px) rotate(-40deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.35s forwards', opacity: 0 }}>
-              <svg width="26" height="44" viewBox="0 0 26 44" className="drop-shadow-[0_0_12px_#fef08a]">
-                <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.8" />
-                <path d="M13 6 L10 18 L13 17 L9 33 L14 22 L12 24 L15 6 Z" fill="#ffffff" opacity="0.7" />
+
+            {/* Layer 2: Primary Visual Actor (12-Point Heavy Kinetic Concussion Burst Star) */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-20"
+              style={{ animation: 'gbaRecoilPhysicalBurst 0.65s cubic-bezier(0.12, 0.95, 0.25, 1) forwards' }}
+            >
+              <svg width="80" height="80" viewBox="0 0 80 80" className="overflow-visible drop-shadow-[0_0_22px_#f43f5e]">
+                <polygon
+                  points="40,2 45,24 64,12 54,30 76,32 58,45 74,61 51,54 50,76 37,56 26,74 27,52 6,60 22,44 2,32 24,31 14,12 34,23"
+                  fill="#fef08a"
+                  stroke="#e11d48"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                />
+                <polygon
+                  points="40,10 45,28 64,24 50,38 58,56 40,46 22,56 30,38 16,24 35,28"
+                  fill="#ffffff"
+                />
+                <circle cx="40" cy="40" r="9" fill="#ffffff" />
               </svg>
             </div>
-          </div>
-          <div className="absolute" style={{ transform: 'translate(26px, -52px) rotate(40deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.4s forwards', opacity: 0 }}>
-              <svg width="26" height="44" viewBox="0 0 26 44" className="drop-shadow-[0_0_12px_#fef08a]">
-                <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fde047" stroke="#facc15" strokeWidth="0.8" />
-                <path d="M13 6 L10 18 L13 17 L9 33 L14 22 L12 24 L15 6 Z" fill="#ffffff" opacity="0.7" />
-              </svg>
+
+            {/* Layer 3: Double Concussion Shockwave Rings */}
+            <div
+              className="absolute pointer-events-none z-25 flex items-center justify-center"
+              style={{ animation: 'gbaRecoilPhysicalRing 0.50s ease-out 0.04s forwards', opacity: 0 }}
+            >
+              <div className="w-26 h-26 rounded-full border-3 border-rose-400/90 shadow-[0_0_20px_#e11d48]" />
             </div>
-          </div>
-          <div className="absolute" style={{ transform: 'translate(44px, -14px) rotate(90deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.45s forwards', opacity: 0 }}>
-              <svg width="22" height="38" viewBox="0 0 26 44" className="drop-shadow-[0_0_10px_#fde047]">
-                <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.8" />
-              </svg>
+            <div
+              className="absolute pointer-events-none z-25 flex items-center justify-center"
+              style={{ animation: 'gbaRecoilPhysicalRing 0.44s ease-out 0.08s forwards', opacity: 0 }}
+            >
+              <div className="w-18 h-18 rounded-full border-2 border-amber-300/90 shadow-[0_0_12px_#f59e0b]" />
             </div>
+
+            {/* Layer 4: 8 Radial Ballistic Shatter Spikes */}
+            {physicalAngles.map((angle, idx) => {
+              const rad = (angle * Math.PI) / 180;
+              const sx = Math.round(Math.cos(rad) * 34);
+              const sy = Math.round(Math.sin(rad) * 34);
+              return (
+                <div
+                  key={idx}
+                  className="absolute pointer-events-none z-30"
+                  style={{ transform: `translate(${sx}px, ${sy}px) rotate(${angle + 90}deg)` }}
+                >
+                  <div style={{ animation: `gbaRecoilShatterSpike 0.52s ease-out ${0.04 + idx * 0.015}s forwards`, opacity: 0 }}>
+                    <svg width="14" height="28" viewBox="0 0 14 28" className="drop-shadow-[0_0_12px_#f43f5e]">
+                      <polygon points="7,0 14,16 7,28 0,16" fill="#fb7185" />
+                      <polygon points="7,4 12,16 7,24 2,16" fill="#ffffff" opacity="0.9" />
+                    </svg>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Layer 5: Dissipating Kinetic Spark Motes */}
+            {physicalMotes.map((mote, idx) => (
+              <div
+                key={idx}
+                className="absolute pointer-events-none z-35"
+                style={{
+                  '--rspk-x': `${mote.x}px`,
+                  '--rspk-y': `${mote.y}px`,
+                  animation: `gbaRecoilPhysicalMote 0.60s ease-out ${0.06 + idx * 0.02}s forwards`,
+                  opacity: 0
+                } as React.CSSProperties}
+              >
+                <div
+                  className="w-2.5 h-2.5 rounded-full"
+                  style={{ backgroundColor: mote.color, boxShadow: `0 0 10px ${mote.color}` }}
+                />
+              </div>
+            ))}
           </div>
-          <div className="absolute" style={{ transform: 'translate(-64px, -14px) rotate(-90deg)' }}>
-            <div style={{ animation: 'gbaThunderPunchSpark 0.7s ease-out 0.5s forwards', opacity: 0 }}>
-              <svg width="22" height="38" viewBox="0 0 26 44" className="drop-shadow-[0_0_10px_#fde047]">
-                <path d="M13 2 L8 20 L13 18 L6 40 L16 22 L11 25 L17 4 Z" fill="#fef9c3" stroke="#fde047" strokeWidth="0.8" />
-              </svg>
-            </div>
-          </div>
-          {/* Jagged crackle arcs zapping across the fist surface */}
-          <div className="absolute" style={{ animation: 'gbaElectricFlicker 0.7s linear 0.3s forwards', opacity: 0 }}>
-            <svg width="76" height="54" viewBox="0 0 76 54">
-              <path d="M4 28 L14 20 L12 28 L24 16 L22 26 L36 12" fill="none" stroke="#fde047" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
-              <path d="M72 32 L60 38 L63 30 L50 42" fill="none" stroke="#fef9c3" strokeWidth="1.5" strokeLinecap="round" opacity="0.8" />
-            </svg>
-          </div>
-          {/* Flickering spark particles scattering */}
-          <div className="absolute -top-6 left-1" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.35s forwards', opacity: 0 }}>
-            <span className="text-lg text-yellow-200 select-none drop-shadow-[0_0_8px_#fef08a]">✦</span>
-          </div>
-          <div className="absolute bottom-0 -right-4" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.42s forwards', opacity: 0 }}>
-            <span className="text-sm text-yellow-300 select-none drop-shadow-[0_0_6px_#fde047]">✦</span>
-          </div>
-          <div className="absolute top-1 -left-5" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.48s forwards', opacity: 0 }}>
-            <span className="text-xs text-amber-200 select-none drop-shadow-[0_0_5px_#fde047]">✦</span>
-          </div>
-          <div className="absolute -bottom-4 -left-2" style={{ animation: 'gbaElectricFlicker 0.6s linear 0.52s forwards', opacity: 0 }}>
-            <span className="text-sm text-yellow-200 select-none drop-shadow-[0_0_6px_#fef08a]">✦</span>
-          </div>
-          {/* Double impact rings — fire the moment the fist reaches full size
-              (0.82s / 0.88s ≈ fist at 94-100% scale) so the impact reads as
-              the hit itself; short durations finish before the 1300ms cleanup */}
-          <div className="absolute w-24 h-24 rounded-full border-3 border-yellow-300/80" style={{ animation: 'gbaThunderPunchRing 0.45s ease-out 0.82s forwards', opacity: 0 }} />
-          <div className="absolute w-16 h-16 rounded-full border-2 border-yellow-100/90" style={{ animation: 'gbaThunderPunchRing 0.4s ease-out 0.88s forwards', opacity: 0 }} />
-        </div>
-      )}
+        );
+      })()}
 
       {/* 12. FLAMETHROWER_BLAZE (generic fire fallback)
           Static baseline rendering. Fire moves never scale their FX visually; intensity
@@ -18404,6 +18743,11 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           {fx.type === 'confusion_self_hit' && (
             <div className="text-[7px] sm:text-[8px] font-bold text-fuchsia-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] tracking-wider uppercase leading-tight mt-px">
               {lang === 'tr' ? 'Kafası karıştı!' : 'Confused!'}
+            </div>
+          )}
+          {fx.type === 'recoil_self_hit' && (
+            <div className="text-[7px] sm:text-[8px] font-bold text-rose-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)] tracking-wider uppercase leading-tight mt-px">
+              {lang === 'tr' ? 'Geri tepme!' : 'Recoil!'}
             </div>
           )}
           {fx.isWeakness && (

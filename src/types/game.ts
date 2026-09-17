@@ -247,6 +247,8 @@ export interface AttackResult {
   whiffed?: boolean;
   /** Coin flip outcome for single-coin moves (true = heads, false = tails). */
   coinFlipSuccess?: boolean;
+  /** Recoil or self-damage inflicted on the attacker Pokémon by this attack (Thunderpunch, Double-edge, Take Down, etc.) */
+  selfDamage?: number;
 }
 
 /** One Benched Pokémon damaged as a secondary effect of an attack. */
