@@ -982,8 +982,11 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1200;
     case 'hitmonchan_jab':
       return 900;
+<<<<<<< HEAD
     case 'hitmonchan_special_punch':
       return 1320;
+=======
+>>>>>>> dac91205b590482208a8d02328dceaab5392ab09
     case 'recoil_self_hit':
       return 750;
     case 'heavy_thunder_strike':
