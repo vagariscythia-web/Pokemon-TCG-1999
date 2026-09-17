@@ -6102,29 +6102,81 @@ html, body {
    BATCH 10 (Tur 7): LEGENDARY FIRE, CELESTIAL BEAMS & ANCIENT MIGHT
    ========================================================================== */
 
-/* NINETALES FIRE BLAST (Daimonji Kanji Star Flame) */
-@keyframes gbaFireBlastDaimonjiKanji {
-  0%   { transform: scale(0.2) rotate(-15deg); opacity: 0; filter: drop-shadow(0 0 8px #f97316); }
-  25%  { transform: scale(1.15) rotate(5deg); opacity: 1; filter: drop-shadow(0 0 25px #ea580c); }
-  50%  { transform: scale(0.95) rotate(0deg); opacity: 1; filter: drop-shadow(0 0 35px #dc2626); }
-  75%  { transform: scale(1.25) rotate(0deg); opacity: 0.9; filter: drop-shadow(0 0 45px #fef08a); }
-  100% { transform: scale(1.6) rotate(0deg); opacity: 0; filter: drop-shadow(0 0 60px #ea580c); }
+/* NINETALES FIRE BLAST (Daimonji Kanji Star Flame — 12 Animation Principles) */
+/* 1. Anticipation: Inward solar fire condensation */
+@keyframes gbaFireBlastPreGatherCore {
+  0%   { transform: scale(0.1) rotate(0deg); opacity: 0; filter: drop-shadow(0 0 8px #ffffff); }
+  35%  { transform: scale(0.85) rotate(90deg); opacity: 0.95; filter: drop-shadow(0 0 25px #f97316); }
+  65%  { transform: scale(0.25) rotate(220deg); opacity: 1; filter: drop-shadow(0 0 35px #ffffff); }
+  85%  { transform: scale(2.2) rotate(270deg); opacity: 1; filter: drop-shadow(0 0 50px #fef08a); }
+  100% { transform: scale(0); opacity: 0; }
 }
+
+/* 2. Explosive Ignition Flare */
+@keyframes gbaFireBlastIgnitionFlare {
+  0%   { transform: scale(0.1); opacity: 0; }
+  15%  { transform: scale(1.75); opacity: 1; filter: drop-shadow(0 0 45px #ffffff) drop-shadow(0 0 80px #f97316); }
+  35%  { transform: scale(1.3); opacity: 0.85; filter: drop-shadow(0 0 30px #facc15); }
+  75%  { transform: scale(0.6); opacity: 0.35; filter: drop-shadow(0 0 15px #ea580c); }
+  100% { transform: scale(0.1); opacity: 0; }
+}
+
+/* 3. The Roaring Daimonji '大' Kanji Body (Anticipation, Eruption, Wave Oscillation & Dispersion) */
+@keyframes gbaFireBlastDaimonjiKanjiRoar {
+  0%   { transform: scale(0.1) rotate(-8deg); opacity: 0; filter: drop-shadow(0 0 10px #f97316); }
+  14%  { transform: scale(0.15) rotate(-6deg); opacity: 0; }
+  22%  { transform: scale(1.22) rotate(3deg); opacity: 1; filter: drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 60px #f97316); }
+  34%  { transform: scale(0.96) rotate(-1.5deg); opacity: 1; filter: drop-shadow(0 0 35px #ea580c) drop-shadow(0 0 70px #dc2626); }
+  48%  { transform: scale(1.08, 1.02) rotate(1deg); opacity: 1; filter: drop-shadow(0 0 45px #facc15) drop-shadow(0 0 85px #ea580c); }
+  62%  { transform: scale(1.02, 1.08) rotate(-0.5deg); opacity: 0.98; filter: drop-shadow(0 0 40px #f97316) drop-shadow(0 0 80px #dc2626); }
+  76%  { transform: scale(1.24, 1.20) rotate(0.5deg); opacity: 0.95; filter: drop-shadow(0 0 50px #ea580c) drop-shadow(0 0 95px #fef08a); }
+  88%  { transform: scale(1.48, 1.42) rotate(0deg); opacity: 0.55; filter: blur(2px) drop-shadow(0 0 65px #dc2626); }
+  100% { transform: scale(1.72, 1.65) rotate(0deg); opacity: 0; filter: blur(6px) drop-shadow(0 0 90px #ea580c); }
+}
+
+/* 4. Organic Flame Tongue Fluttering along the Kanji Strokes */
+@keyframes gbaFireBlastFlameTongueFlutter {
+  0%   { transform: scaleY(0.92) skewX(-2.5deg); opacity: 0.8; }
+  25%  { transform: scaleY(1.18) skewX(3.5deg); opacity: 1; filter: drop-shadow(0 0 8px #fef08a); }
+  50%  { transform: scaleY(0.94) skewX(-3deg); opacity: 0.85; }
+  75%  { transform: scaleY(1.22) skewX(2.5deg); opacity: 0.95; filter: drop-shadow(0 0 10px #f97316); }
+  100% { transform: scaleY(0.92) skewX(-2.5deg); opacity: 0.8; }
+}
+
+/* 5. Outward Flame Burst Jets from the 5 Kanji Tips (Alev Yayılımı) */
+@keyframes gbaFireBlastStrokeJet {
+  0%   { transform: translate(0, 0) scale(0.1); opacity: 0; }
+  22%  { transform: translate(0, 0) scale(0.2); opacity: 0; }
+  32%  { transform: translate(calc(var(--jet-x, 0px) * 0.45), calc(var(--jet-y, 0px) * 0.45)) scale(1.35); opacity: 1; filter: drop-shadow(0 0 20px #fef08a); }
+  52%  { transform: translate(calc(var(--jet-x, 0px) * 0.95), calc(var(--jet-y, 0px) * 0.95)) scale(1.15); opacity: 0.95; filter: drop-shadow(0 0 25px #ea580c); }
+  75%  { transform: translate(calc(var(--jet-x, 0px) * 1.35), calc(var(--jet-y, 0px) * 1.35)) scale(0.75); opacity: 0.65; filter: blur(1px); }
+  100% { transform: translate(calc(var(--jet-x, 0px) * 1.75), calc(var(--jet-y, 0px) * 1.75)) scale(0.2); opacity: 0; filter: blur(3.5px); }
+}
+
+/* 6. Expanding Thermal Shockwave Ring */
+@keyframes gbaFireBlastThermalShockwave {
+  0%   { transform: scale(0.15); opacity: 0; border-width: 8px; }
+  22%  { transform: scale(0.2); opacity: 0; }
+  28%  { transform: scale(0.65); opacity: 1; border-width: 6px; filter: drop-shadow(0 0 25px #ffffff) drop-shadow(0 0 50px #f97316); }
+  60%  { transform: scale(1.55); opacity: 0.75; border-width: 3.5px; filter: drop-shadow(0 0 35px #ea580c); }
+  100% { transform: scale(2.35); opacity: 0; border-width: 1px; filter: blur(2.5px); }
+}
+
+/* 7. Scorched Earth Crater Rune */
 @keyframes gbaFireBlastScorchRune {
-  0%   { transform: scale(0.4); opacity: 0; }
-  35%  { transform: scale(1); opacity: 0.85; filter: drop-shadow(0 0 20px #ea580c); }
-  75%  { transform: scale(1.05); opacity: 0.7; }
-  100% { transform: scale(1.1); opacity: 0; }
+  0%   { transform: scale(0.3); opacity: 0; }
+  25%  { transform: scale(1); opacity: 1; filter: drop-shadow(0 0 35px #ea580c); }
+  60%  { transform: scale(1.05); opacity: 0.85; filter: drop-shadow(0 0 20px #dc2626); }
+  85%  { transform: scale(1.1); opacity: 0.45; }
+  100% { transform: scale(1.15); opacity: 0; }
 }
-@keyframes gbaFireBlastKanjiShockwave {
-  0%   { transform: scale(0.3); opacity: 0; border-width: 4px; }
-  40%  { transform: scale(1); opacity: 0.95; border-width: 3px; filter: drop-shadow(0 0 16px #f97316); }
-  100% { transform: scale(1.8); opacity: 0; border-width: 1px; }
-}
+
+/* 8. Radiating Volcanic Ember Shower */
 @keyframes gbaFireBlastEmberShower {
   0%   { transform: translate(0, 0) scale(0.2); opacity: 0; }
-  30%  { transform: translate(var(--eb-x, 20px), var(--eb-y, -20px)) scale(1.2); opacity: 1; }
-  100% { transform: translate(calc(var(--eb-x, 20px) * 2.2), calc(var(--eb-y, -20px) * 2.2)) scale(0.3); opacity: 0; }
+  25%  { transform: translate(calc(var(--eb-x, 20px) * 0.4), calc(var(--eb-y, -20px) * 0.4)) scale(1.4); opacity: 1; filter: drop-shadow(0 0 10px #fef08a); }
+  60%  { transform: translate(var(--eb-x, 20px), var(--eb-y, -20px)) scale(1); opacity: 0.9; }
+  100% { transform: translate(calc(var(--eb-x, 20px) * 2.1), calc(var(--eb-y, -20px) * 2.1)) scale(0.2); opacity: 0; filter: blur(1px); }
 }
 
 /* DRAGONAIR / GOLDUCK HYPER BEAM (High-Density Ion Disintegration Laser) */
@@ -6478,6 +6530,69 @@ html, body {
     filter: blur(3px);
     opacity: 0;
   }
+}
+
+/* ARBOK: Menacing Constrict & Terror Strike (Authentic 1999 Ken Sugimori Cobra Wrap) */
+@keyframes gbaArbokMenacingConstrict {
+  0% {
+    transform: translateY(35px) scale(0.68) rotate(-5deg);
+    filter: blur(4px) brightness(0.85);
+    opacity: 0;
+  }
+  14% {
+    transform: translateY(10px) scale(0.96) rotate(-2deg);
+    filter: blur(1px) drop-shadow(0 0 16px #7e22ce);
+    opacity: 0.95;
+  }
+  26% {
+    /* MENACING COBRA RISE & HOOD EXPANSION */
+    transform: translateY(-8px) scale(1.06) rotate(1deg);
+    filter: blur(0) drop-shadow(0 0 28px #9333ea) drop-shadow(0 0 40px #c084fc) brightness(1.2);
+    opacity: 1;
+  }
+  38% {
+    /* CONSTRICTION COIL CRUNCH - Deep muscular squeeze */
+    transform: translateY(2px) scale(1.02, 1.06) rotate(0deg);
+    filter: drop-shadow(0 0 35px #a855f7) drop-shadow(0 0 45px #dc2626) brightness(1.3);
+    opacity: 1;
+  }
+  48% {
+    /* Coiling pulse shudder 1 */
+    transform: translateY(-2px) translateX(-3px) scale(1.04, 1.02) rotate(-2deg);
+    filter: drop-shadow(0 0 32px #9333ea);
+    opacity: 1;
+  }
+  58% {
+    /* Coiling pulse shudder 2 */
+    transform: translateY(4px) translateX(3px) scale(1.05, 1.04) rotate(2deg);
+    filter: drop-shadow(0 0 36px #c084fc);
+    opacity: 1;
+  }
+  72% {
+    /* Muscular grip hold */
+    transform: translateY(0px) scale(1.01) rotate(0deg);
+    filter: drop-shadow(0 0 22px #7e22ce);
+    opacity: 0.95;
+  }
+  86% {
+    /* Retract recoil */
+    transform: translateY(15px) scale(0.92) rotate(-3deg);
+    filter: blur(2px);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(40px) scale(0.7);
+    filter: blur(4px);
+    opacity: 0;
+  }
+}
+
+@keyframes gbaArbokChestWarningGlare {
+  0%, 18% { opacity: 0; transform: scale(0.4); }
+  28%     { opacity: 0.95; transform: scale(1.15); filter: drop-shadow(0 0 25px #ef4444); }
+  45%     { opacity: 1; transform: scale(1.25); filter: drop-shadow(0 0 35px #dc2626) drop-shadow(0 0 45px #9333ea); }
+  68%     { opacity: 0.8; transform: scale(1.1); filter: drop-shadow(0 0 20px #a855f7); }
+  100%    { opacity: 0; transform: scale(0.9); }
 }
 
 /* GOLBAT LEECH LIFE (Vampiric Wing Swoop & Vitality Siphon) */
@@ -6862,118 +6977,199 @@ html, body {
   }
 }
 
-/* Bulbasaur Leech Seed */
-@keyframes gbaBulbasaurSeedImplant {
+/* Bulbasaur Leech Seed — Authentic 1996 Ken Sugimori 4-Actor Sequence & Parasitic Tendril Drain */
+@keyframes gbaLeechBulletFly {
   0% {
-    transform: translate(-85px, -85px) rotate(-65deg) scale(0.35);
-    filter: blur(5px);
+    transform: translate(var(--bf-start-x, -40px), var(--bf-start-y, 110px)) rotate(var(--bf-rot, -20deg)) scale(0.4);
     opacity: 0;
+    filter: blur(1.5px);
   }
-  18% {
-    transform: translate(-35px, -45px) rotate(-25deg) scale(1.05);
-    filter: blur(1.5px) drop-shadow(0 0 16px #84cc16);
-    opacity: 0.95;
-  }
-  32% {
-    /* GROUND BURROWING IMPACT! */
-    transform: translate(0px, 4px) rotate(0deg) scale(1.3, 0.95);
-    filter: blur(0) drop-shadow(0 0 28px #22c55e) drop-shadow(0 0 40px #bef264) brightness(1.3);
+  20% {
     opacity: 1;
+    filter: blur(0);
   }
-  44% {
-    /* Root tendril eruption pulse 1 */
-    transform: translate(2px, 2px) rotate(4deg) scale(1.22, 1.05);
-    filter: drop-shadow(0 0 35px #15803d);
+  85% {
+    transform: translate(0px, 0px) rotate(var(--bf-rot, 0deg)) scale(1.0);
     opacity: 1;
-  }
-  56% {
-    /* Root tendril eruption pulse 2 */
-    transform: translate(-2px, 0px) rotate(-3deg) scale(1.26);
-    filter: drop-shadow(0 0 32px #4ade80);
-    opacity: 1;
-  }
-  68% {
-    /* Vine latch tension pull */
-    transform: translate(0px, 6px) rotate(2deg) scale(1.18);
-    filter: drop-shadow(0 0 25px #22c55e);
-    opacity: 0.95;
-  }
-  82% {
-    /* Siphon completion glow ease */
-    transform: translate(0px, 12px) rotate(0deg) scale(1.05);
-    filter: blur(1px);
-    opacity: 0.75;
   }
   100% {
-    /* Seed burrows deep */
-    transform: translate(0px, 25px) scale(0.65);
-    filter: blur(4px);
+    transform: translate(0px, 0px) rotate(0deg) scale(1.18);
     opacity: 0;
+    filter: drop-shadow(0 0 12px #bef264);
   }
 }
 
-@keyframes gbaBulbasaurTendrilClasp {
-  0%, 26% {
+@keyframes gbaLeechSproutErupt {
+  0% {
     opacity: 0;
-    transform: scale(0.3) rotate(-20deg);
-    filter: blur(3px);
+    transform: scale(0.35) rotate(0deg);
   }
-  36% {
+  8% {
+    /* TOK SAPLANMA & PATLAMA (Instant Leaf Sprout Impact) */
     opacity: 1;
-    transform: scale(1.25) rotate(0deg);
-    filter: blur(0) drop-shadow(0 0 20px #22c55e);
+    transform: scale(1.22) rotate(var(--sp-rot-hit, 6deg));
+    filter: drop-shadow(0 0 16px #4ade80) brightness(1.25);
+  }
+  18% {
+    transform: scale(0.96) rotate(var(--sp-rot-settle, -4deg));
+    filter: drop-shadow(0 0 10px #22c55e);
+  }
+  38% {
+    /* Canlı yaprak salınımı (Natural Leaf Sway 1) */
+    transform: scale(1.04) rotate(var(--sp-rot-sway1, 4deg));
+    filter: drop-shadow(0 0 14px #86efac);
+  }
+  62% {
+    /* Canlı yaprak salınımı (Natural Leaf Sway 2) */
+    transform: scale(0.98) rotate(var(--sp-rot-sway2, -3deg));
+    filter: drop-shadow(0 0 10px #22c55e);
+  }
+  82% {
+    transform: scale(1.0) rotate(var(--sp-rot-settle, 0deg));
+    opacity: 1;
+  }
+  92% {
+    transform: scale(0.95);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(0.65);
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaLeechTendrilClasp {
+  0%, 15% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 14px #22c55e);
   }
   55% {
     opacity: 0.95;
-    transform: scale(1.15) rotate(8deg);
-    filter: drop-shadow(0 0 25px #86efac);
+    transform: scale(1.0);
+    filter: drop-shadow(0 0 18px #86efac);
   }
-  75% {
-    opacity: 0.8;
-    transform: scale(1.22) rotate(-5deg);
+  85% {
+    opacity: 0.9;
+    transform: scale(0.98);
   }
   100% {
     opacity: 0;
-    transform: scale(1.35) rotate(10deg);
-    filter: blur(4px);
+    transform: scale(0.8);
+    filter: blur(2px);
   }
 }
 
-@keyframes gbaBulbasaurLifeSiphon {
+@keyframes gbaLeechSiphonOrb {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.3);
+    filter: drop-shadow(0 0 12px #bef264) brightness(1.35);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(var(--orb-mid-x, 0px), var(--orb-mid-y, 30px)) scale(1.05);
+    filter: drop-shadow(0 0 10px #22c55e);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--orb-end-x, 0px), var(--orb-end-y, 110px)) scale(0.35);
+    filter: blur(2px);
+  }
+}
+
+/* Whiff State: Dağılan ve hedefe tutunamayan yeşil küreler */
+@keyframes gbaLeechWhiffOrb {
   0% {
     opacity: 0;
     transform: translate(0, 0) scale(0.5);
   }
   20% {
     opacity: 1;
-    transform: translate(var(--bs-x), var(--bs-y)) scale(1.2);
+    transform: translate(0, 0) scale(1.25);
+    filter: drop-shadow(0 0 12px #bef264);
   }
-  60% {
-    opacity: 0.9;
-    transform: translate(calc(var(--bs-x) * 1.5), calc(var(--bs-y) * 1.5 - 20px)) scale(1);
+  65% {
+    opacity: 0.75;
+    transform: translate(var(--w-drift-x, 20px), var(--w-drift-y, -30px)) scale(0.9);
   }
   100% {
     opacity: 0;
-    transform: translate(calc(var(--bs-x) * 2), calc(var(--bs-y) * 2 - 50px)) scale(0.4);
+    transform: translate(var(--w-end-x, 40px), var(--w-end-y, -60px)) scale(0.25);
+    filter: blur(3px);
   }
 }
 
-@keyframes gbaBulbasaurDrainRipple {
-  0%, 48% {
+/* Bulbasaur Grass Energy Replenish (Attacker Healing Rejuvenation) */
+@keyframes gbaLeechReplenishBloom {
+  0% {
     opacity: 0;
     transform: scale(0.4);
+    filter: blur(4px);
   }
-  56% {
-    opacity: 0.8;
-    transform: scale(0.9);
+  24% {
+    opacity: 0.95;
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 22px #22c55e) drop-shadow(0 0 35px #86efac);
   }
-  85% {
-    opacity: 0.4;
+  60% {
+    opacity: 0.65;
     transform: scale(1.35);
   }
   100% {
     opacity: 0;
-    transform: scale(1.65);
+    transform: scale(1.6);
+    filter: blur(6px);
+  }
+}
+
+@keyframes gbaLeechReplenishLeafSpark {
+  0% {
+    opacity: 0;
+    transform: translate(var(--spark-x), 25px) rotate(0deg) scale(0.3);
+  }
+  22% {
+    opacity: 1;
+    transform: translate(calc(var(--spark-x) + var(--spark-drift)), 5px) rotate(var(--spark-rot)) scale(1.15);
+    filter: drop-shadow(0 0 8px #4ade80);
+  }
+  68% {
+    opacity: 0.9;
+    transform: translate(calc(var(--spark-x) - var(--spark-drift)), -35px) rotate(calc(var(--spark-rot) * 2)) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--spark-x) + var(--spark-drift)), -65px) rotate(calc(var(--spark-rot) * 3)) scale(0.4);
+  }
+}
+
+@keyframes gbaLeechReplenishHpBadge {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.75);
+  }
+  22% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.14);
+    filter: drop-shadow(0 0 14px #22c55e);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-6px) scale(1);
+    filter: drop-shadow(0 0 10px #4ade80);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.85);
   }
 }
 

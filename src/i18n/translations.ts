@@ -645,7 +645,8 @@ export function translateLog(text: string, lang: Language): string {
   s = s.replace(/😵 Rampage: TAILS! Tauros became Confused!/g, '😵 Rampage: YAZI! Tauros kafa karışıklığına (Confusion) uğradı!');
 
   s = s.replace(/🌋 Earthquake dealt 10 damage to each benched Pokémon on (.*?)'s side!/g, '🌋 Earthquake, $1 tarafındaki tüm yedek Pokémonlara 10 hasar verdi!');
-  s = s.replace(/💥 Selfdestruct exploded! 10 damage to all benched Pokémon, 40 to (.*?)!/g, '💥 Selfdestruct patladı! Tüm yedeklere 10 hasar, $1 Pokémonuna 40 hasar!');
+  s = s.replace(/💥 Selfdestruct exploded! (\d+) damage to all benched Pokémon, (\d+) to (.*?)!/g, '💥 Selfdestruct patladı! Tüm yedeklere $1 hasar, $3 Pokémonuna $2 hasar!');
+  s = s.replace(/💥 Ram recoil: Rhydon dealt 20 damage to itself \((.*?)\)!/g, '💥 Ram geri tepmesi: Rhydon kendine 20 hasar verdi ($1)!');
   s = s.replace(/👻 Gastly formed a Destiny Bond! If knocked out next turn, the attacker is knocked out too!/g, '👻 Gastly Destiny Bond kurdu! Gelecek tur bayılırsa saldıran da bayılacak!');
   s = s.replace(/👻 Destiny Bond activated! (.*?) is Knocked Out along with (.*?)!/g, '👻 Destiny Bond etkinleşti! $1, $2 ile birlikte bayıldı!');
 

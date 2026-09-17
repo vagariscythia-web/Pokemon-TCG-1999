@@ -1,4 +1,5 @@
-=== MOVE: selfdestruct ===
+
+==================== selfdestruct === ====================
 Match at line 3255:
   3253: 
   3254:     // 11. Magnemite - Selfdestruct
@@ -20,7 +21,9 @@ Match at line 3255:
   3270:     if (attackName === 'destiny bond') {
   3271:       const pIdx = attacker.attachedEnergy.findIndex(e => e.types && e.types.includes('Psychic'));
   3272:       if (pIdx !== -1) {
-=== MOVE: earthquake ===
+
+
+==================== earthquake === ====================
 Match at line 3246:
   3244: 
   3245:     // 10. Dugtrio - Earthquake
@@ -42,7 +45,9 @@ Match at line 3246:
   3261:         b.damage += 10;
   3262:         b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
   3263:       });
-=== MOVE: chain lightning ===
+
+
+==================== chain lightning === ====================
 Match at line 3098:
   3096: 
   3097:     // 18. Electrode - Chain Lightning
@@ -64,7 +69,9 @@ Match at line 3098:
   3113:       attacker.status = 'Confused';
   3114:       GameEngine.addLog(next, `😵 Tantrum: TAILS! ${attacker.card.name} is now Confused!`, 'status');
   3115:     }
-=== MOVE: double-edge ===
+
+
+==================== double-edge === ====================
 Match at line 3433:
   3431: 
   3432:     // Recoil checks
@@ -86,7 +93,9 @@ Match at line 3433:
   3448:         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
   3449:         GameEngine.addLog(next, `⚡ Thunder Jolt recoil: TAILS! ${attacker.card.name} dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
   3450:       }
-=== MOVE: take down ===
+
+
+==================== take down === ====================
 Match at line 3437:
   3435:       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
   3436:       GameEngine.addLog(next, `💥 Double-edge recoil: ${attacker.card.name} dealt 80 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
@@ -108,7 +117,9 @@ Match at line 3437:
   3452:       // Reads "Flip a coin. If tails, {this Pokémon} does 30 damage to itself." The old
   3453:       // check keyed on card numbers 14 and 16, which covered Raichu and one Zapdos and
   3454:       // silently skipped the rest — so on those printings the coin was shown, the tails
-=== MOVE: submission ===
+
+
+==================== submission === ====================
 Match at line 3441:
   3439:       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
   3440:       GameEngine.addLog(next, `💥 Take Down recoil: ${attacker.card.name} dealt 30 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
@@ -130,7 +141,9 @@ Match at line 3441:
   3456:       const recoil = GameEngine.getSelfDamageFromText(attack);
   3457:       if (!primaryFlip) {
   3458:         attacker.damage += recoil;
-=== MOVE: thunder jolt ===
+
+
+==================== thunder jolt === ====================
 Match at line 3445:
   3443:       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
   3444:       GameEngine.addLog(next, `💥 Submission recoil: ${attacker.card.name} dealt 20 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
@@ -152,7 +165,9 @@ Match at line 3445:
   3460:         GameEngine.addLog(next, `⚡ Thunder recoil: TAILS! ${attacker.card.name} dealt ${recoil} damage to itself!`, 'damage');
   3461:       }
   3462:     } else if (attackName === 'electric shock') {
-=== MOVE: thunder ===
+
+
+==================== thunder === ====================
 Match at line 3451:
   3449:         GameEngine.addLog(next, `⚡ Thunder Jolt recoil: TAILS! ${attacker.card.name} dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
   3450:       }
@@ -174,7 +189,9 @@ Match at line 3451:
   3466:         GameEngine.addLog(next, `⚡ Electric Shock recoil: TAILS! ${attacker.card.name} dealt 10 damage to itself!`, 'damage');
   3467:       }
   3468:     }
-=== MOVE: electric shock ===
+
+
+==================== electric shock === ====================
 Match at line 3462:
   3460:         GameEngine.addLog(next, `⚡ Thunder recoil: TAILS! ${attacker.card.name} dealt ${recoil} damage to itself!`, 'damage');
   3461:       }
@@ -196,7 +213,9 @@ Match at line 3462:
   3477:           attackName === 'thundershock' || attackName === 'thunder wave' || attackName === 'psyshock' || attackName === 'string shot' ||
   3478:           attackName === 'ice beam' || attackName === 'star freeze' || attackName === 'bubble' || attackName === 'toxic' ||
   3479:           attackName === 'poison sting' || attackName === 'poisonpowder' || attackName === 'poison vapor' || attackName === 'sludge punch' ||
-=== MOVE: thrash ===
+
+
+==================== thrash === ====================
 Match at line 2368:
   2366:       baseDamage = 10 + attackerPlayer.bench.length * 10;
   2367:       GameEngine.addLog(next, `🌊 Do the Wave dealt ${baseDamage} damage (+${attackerPlayer.bench.length * 10} for ${attackerPlayer.bench.length} benched Pokémon)!`, 'action');
@@ -218,7 +237,9 @@ Match at line 2368:
   2383:         GameEngine.addLog(next, `🔥 Playing with Fire: HEADS! Discarded 1 Fire Energy for +20 damage (50 damage)!`, 'action');
   2384:       } else {
   2385:         baseDamage = 30;
-=== MOVE: thunderpunch ===
+
+
+==================== thunderpunch === ====================
 Match at line 2241:
   2239:         }
   2240:       }
@@ -240,7 +261,9 @@ Match at line 2241:
   2256:         attacker.damage += 10;
   2257:         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
   2258:         GameEngine.addLog(next, `⚡ Thunder Attack: TAILS! Dark Jolteon dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining).`, 'damage');
-=== MOVE: energy conversion ===
+
+
+==================== energy conversion === ====================
 Match at line 3039:
   3037: 
   3038:     // 12. Energy Conversion (Gastly - Fossil)
@@ -262,7 +285,9 @@ Match at line 3039:
   3054:       attacker.status = 'Confused';
   3055:       GameEngine.addLog(next, `💢 Frenzied Attack: ${attacker.card.name} is now Confused!`, 'status');
   3056:     }
-=== MOVE: rocket tackle ===
+
+
+==================== rocket tackle === ====================
 Match at line 2742:
   2740: 
   2741:     // Rocket Tackle (Dark Blastoise)
@@ -284,7 +309,9 @@ Match at line 2742:
   2757:         isWhiffed = true;
   2758:         if (next.lastAttackResult) next.lastAttackResult.whiffed = true;
   2759:         GameEngine.addLog(next, `Coin flip: TAILS! ${attack.name} failed to protect ${attacker.card.name}.`, 'action');
-=== MOVE: thunder attack ===
+
+
+==================== thunder attack === ====================
 Match at line 2251:
   2249:         GameEngine.addLog(next, `⚡ Thunderpunch check: TAILS! Electabuzz dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining).`, 'damage');
   2250:       }
@@ -309,25 +336,8 @@ Match at line 2251:
 Match at line 2699:
   2697: 
   2698:     // Thunder Attack (Dark Jolteon)
-  2699:     if (attackName === 'thunder attack') {
-  2700:       if (primaryFlip) {
-  2701:         defender.status = 'Paralyzed';
-  2702:         GameEngine.addLog(next, `⚡ Thunder Attack: HEADS! ${defender.card.name} is now Paralyzed!`, 'status');
-  2703:       } else {
-  2704:         attacker.damage += 10;
-  2705:         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
-  2706:         GameEngine.addLog(next, `⚡ Thunder Attack: TAILS! Dark Jolteon dealt 10 damage to itself!`, 'damage');
-  2707:       }
-  2708:     }
-  2709: 
-  2710:     // Rampage (Tauros)
-  2711:     if (attackName === 'rampage') {
-  2712:       if (!primaryFlip) {
-  2713:         attacker.status = 'Confused';
-  2714:         GameEngine.addLog(next, `😵 Rampage: TAILS! Tauros became Confused!`, 'status');
-  2715:       }
-  2716:     }
-=== MOVE: thunderstorm ===
+
+==================== thunderstorm === ====================
 Match at line 1677:
   1675:     if (attackName === 'continuous fireball') return energies.filter(e => e.types && e.types.includes('Fire')).length;
   1676:     // These two flip once per opposing Benched Pokémon, so the count is a board property.
@@ -352,46 +362,8 @@ Match at line 1677:
 Match at line 2201:
   2199:       multiHitCount = heads;
   2200:       multiHitSequence = [c1, c2, c3, c4];
-  2201:     } else if (attackName === 'thunderstorm') {
-  2202:       // Flips one coin per opposing Benched Pokémon further down, so it must not also
-  2203:       // draw a declaration-time coin here: that extra read shifted the coin list by one,
-  2204:       // so the modal's coins landed on the wrong checks.
-  2205:     } else if (GameEngine.getAttackCoinFlipCount(attacker, attack, defender, defenderPlayer.bench.length) > 0) {
-  2206:       // Ordinary coin-flip attacks spend their declaration-time flip here.
-  2207:       // The delayed-accuracy family deliberately has no such flip: the UI hands us an
-  2208:       // empty coin list for it, so consuming one here would fall through to
-  2209:       // Math.random() and silently randomise damage that is supposed to be fixed.
-  2210:       primaryFlip = (coinResults && coinResults[coinIdx] !== undefined) ? coinResults[coinIdx++] : (Math.random() >= 0.5);
-  2211:       coinFlipSuccess = primaryFlip;
-  2212:     }
-  2213:     // Anything else flips no coin, so primaryFlip stays true. This matters: roughly
-  2214:     // twenty effects below are written as `attackName === 'x' && primaryFlip`, and for
-  2215:     // moves whose text never mentions a coin (Hypnosis, Spore, Whirlpool, Whirlwind,
-  2216:     // Fling, Nightmare, Poison Gas) that used to draw an invisible Math.random() flip
-  2217:     // and quietly fail the effect half the time without the player ever seeing a coin.
-  2218: 
-Match at line 2679:
-  2677: 
-  2678:     // Thunderstorm (Zapdos - Fossil)
-  2679:     if (attackName === 'thunderstorm') {
-  2680:       let tailsCount = 0;
-  2681:       defenderPlayer.bench.forEach(b => {
-  2682:         const bFlip = (coinResults && coinResults[coinIdx] !== undefined) ? coinResults[coinIdx++] : (Math.random() >= 0.5);
-  2683:         if (bFlip) {
-  2684:           b.damage += 20;
-  2685:           b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
-  2686:         } else {
-  2687:           tailsCount++;
-  2688:         }
-  2689:       });
-  2690:       if (tailsCount > 0) {
-  2691:         attacker.damage += tailsCount * 10;
-  2692:         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
-  2693:         GameEngine.addLog(next, `⚡ Thunderstorm: ${tailsCount} tails! Zapdos dealt ${tailsCount * 10} recoil damage to itself!`, 'damage');
-  2694:       }
-  2695:       GameEngine.addLog(next, `⚡ Thunderstorm struck opponent's bench!`, 'damage');
-  2696:     }
-=== MOVE: blizzard ===
+
+==================== blizzard === ====================
 Match at line 2650:
   2648: 
   2649:     // Blizzard (Articuno)
@@ -413,7 +385,9 @@ Match at line 2650:
   2665:     if (attackName === 'gigaspark') {
   2666:       if (primaryFlip) {
   2667:         defender.status = 'Paralyzed';
-=== MOVE: gigashock ===
+
+
+==================== gigashock === ====================
 Match at line 3070:
   3068: 
   3069:     // 15. Raichu - Gigashock (10 damage to up to 3 benched Pokemon)
@@ -435,7 +409,9 @@ Match at line 3070:
   3085:       GameEngine.addLog(next, `⚡ ${attack.name} dealt ${dealt} damage to benched ${b.card.name}!`, 'damage');
   3086:     }
   3087: 
-=== MOVE: poison vapor ===
+
+
+==================== poison vapor === ====================
 Match at line 2625:
   2623:     // damage to each of your opponent's Benched Pokémon." The bench hits are recorded so the
   2624:     // animation can roll across every one of them instead of stopping on the Active card.
@@ -460,46 +436,8 @@ Match at line 2625:
 Match at line 3479:
   3477:           attackName === 'thundershock' || attackName === 'thunder wave' || attackName === 'psyshock' || attackName === 'string shot' ||
   3478:           attackName === 'ice beam' || attackName === 'star freeze' || attackName === 'bubble' || attackName === 'toxic' ||
-  3479:           attackName === 'poison sting' || attackName === 'poisonpowder' || attackName === 'poison vapor' || attackName === 'sludge punch' ||
-  3480:           attackName === 'jellyfish sting' || attackName === 'poison fang' || attackName === 'hypnosis' || attackName === 'sleep powder' ||
-  3481:           attackName === 'sing' || attackName === 'lullaby' || attackName === 'confuse ray' || attackName === 'foul gas' || attackName === 'venom powder')) {
-  3482:         GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented status conditions!`, 'status');
-  3483:       }
-  3484:     } else if (attackName !== 'stun gas' && (attackText.includes('paralyzed') || attackName === 'thundershock' || attackName === 'thunder wave' || attackName === 'psyshock' || attackName === 'string shot' || attackName === 'ice beam' || attackName === 'star freeze' || attackName === 'bubble')) {
-  3485:       if (attackText.includes('flip a coin') || attackName === 'thundershock' || attackName === 'bubble' || attackName === 'ice beam' || attackName === 'star freeze') {
-  3486:         if (primaryFlip) {
-  3487:           defender.status = 'Paralyzed';
-  3488:           GameEngine.addLog(next, `⚡ Coin flip: HEADS! ${defender.card.name} is now Paralyzed (Cannot attack or retreat next turn)!`, 'status');
-  3489:         } else {
-  3490:           GameEngine.addLog(next, `Coin flip: TAILS! ${defender.card.name} avoided Paralysis.`, 'action');
-  3491:         }
-  3492:       } else {
-  3493:         defender.status = 'Paralyzed';
-  3494:         GameEngine.addLog(next, `⚡ ${defender.card.name} is now Paralyzed!`, 'status');
-  3495:       }
-  3496:     } else if (attackText.includes('poisoned') || attackName === 'toxic' || attackName === 'poison sting' || attackName === 'poisonpowder' || attackName === 'poison vapor' || attackName === 'sludge punch' || attackName === 'jellyfish sting' || attackName === 'poison fang') {
-Match at line 3496:
-  3494:         GameEngine.addLog(next, `⚡ ${defender.card.name} is now Paralyzed!`, 'status');
-  3495:       }
-  3496:     } else if (attackText.includes('poisoned') || attackName === 'toxic' || attackName === 'poison sting' || attackName === 'poisonpowder' || attackName === 'poison vapor' || attackName === 'sludge punch' || attackName === 'jellyfish sting' || attackName === 'poison fang') {
-  3497:       if (attackName === 'toxic') {
-  3498:         defender.poisonType = 'Toxic';
-  3499:         GameEngine.addLog(next, `☠️ ${defender.card.name} is badly Poisoned (Takes 20 damage between turns)!`, 'status');
-  3500:       } else if (attackText.includes('flip a coin')) {
-  3501:         if (primaryFlip) {
-  3502:           defender.poisonType = 'Poisoned';
-  3503:           GameEngine.addLog(next, `☠️ Coin flip: HEADS! ${defender.card.name} is now Poisoned!`, 'status');
-  3504:         } else {
-  3505:           GameEngine.addLog(next, `Coin flip: TAILS! ${defender.card.name} avoided Poison.`, 'action');
-  3506:         }
-  3507:       } else {
-  3508:         defender.poisonType = 'Poisoned';
-  3509:         GameEngine.addLog(next, `☠️ ${defender.card.name} is now Poisoned!`, 'status');
-  3510:       }
-  3511:     } else if (attackText.includes('asleep') || attackName === 'hypnosis' || attackName === 'sleep powder' || attackName === 'sing' || attackName === 'lullaby') {
-  3512:       if (attackText.includes('flip a coin')) {
-  3513:         if (primaryFlip) {
-=== MOVE: flame pillar ===
+
+==================== flame pillar === ====================
 Match at line 2733:
   2731: 
   2732:     // Flame Pillar (Dark Rapidash) - "choose 1 of them"
@@ -521,7 +459,9 @@ Match at line 2733:
   2748:       }
   2749:     }
   2750: 
-=== MOVE: surprise thunder ===
+
+
+==================== surprise thunder === ====================
 Match at line 2719:
   2717: 
   2718:     // Surprise Thunder (Dark Raichu)
@@ -543,7 +483,9 @@ Match at line 2719:
   2734:       const bIdx = pickBenchIndex(defenderPlayer.bench, 'first', 10);
   2735:       const target = defenderPlayer.bench[bIdx];
   2736:       const dealt = hitBench(target, 10);
-=== MOVE: mass explosion ===
+
+
+==================== mass explosion === ====================
 Match at line 2308:
   2306:       baseDamage = 20 + nidokingCount * 20;
   2307:       GameEngine.addLog(next, `👑 Boyfriends dealt ${baseDamage} damage (+${nidokingCount * 20} for Nidoking in play)!`, 'action');
@@ -565,7 +507,9 @@ Match at line 2308:
   2323:       }
   2324:     } else if (attackName === 'quick attack') {
   2325:       if (primaryFlip) {
-=== MOVE: spark ===
+
+
+==================== spark === ====================
 Match at line 3080:
   3078: 
   3079:     // 16. Gengar - Dark Mind / Pikachu - Spark ("choose 1 of them")
@@ -587,7 +531,9 @@ Match at line 3080:
   3095:     }
   3096: 
   3097:     // 18. Electrode - Chain Lightning
-=== MOVE: stretch kick ===
+
+
+==================== stretch kick === ====================
 Match at line 3089:
   3087: 
   3088:     // 17. Hitmonlee - Stretch Kick ("choose 1 of them")
@@ -609,7 +555,9 @@ Match at line 3089:
   3104:             b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
   3105:           }
   3106:         });
-=== MOVE: dark mind ===
+
+
+==================== dark mind === ====================
 Match at line 3080:
   3078: 
   3079:     // 16. Gengar - Dark Mind / Pikachu - Spark ("choose 1 of them")

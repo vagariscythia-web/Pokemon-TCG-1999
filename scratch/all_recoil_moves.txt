@@ -1,0 +1,305 @@
+[Base Set] Chansey - Attack: 'Double-edge' (80 dmg)
+  Text: Chansey does 80 damage to itself.
+
+[Base Set] Magneton - Attack: 'Selfdestruct' (80 dmg)
+  Text: Does 20 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magneton does 80 damage to itself.
+
+[Base Set] Nidoking - Attack: 'Thrash' (30 dmg)
+  Text: Flip a coin. If heads, this attack does 30 damage plus 10 more damage; if tails, this attack does 30 damage plus Nidoking does 10 damage to itself.
+
+[Base Set] Ninetales - Attack: 'Lure' (0 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and switch it with his or her Active Pokémon.
+
+[Base Set] Raichu - Attack: 'Thunder' (60 dmg)
+  Text: Flip a coin. If tails, Raichu does 30 damage to itself.
+
+[Base Set] Zapdos - Attack: 'Thunder' (60 dmg)
+  Text: Flip a coin. If tails, Zapdos does 30 damage to itself.
+
+[Base Set] Dugtrio - Attack: 'Earthquake' (70 dmg)
+  Text: Does 10 damage to each of your own Benched Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Base Set] Electabuzz - Attack: 'Thunderpunch' (30 dmg)
+  Text: Flip a coin. If heads, this attack does 30 damage plus 10 more damage; if tails, this attack does 30 damage plus Electabuzz does 10 damage to itself.
+
+[Base Set] Electrode - Attack: 'Electric Shock' (50 dmg)
+  Text: Flip a coin. If tails, Electrode does 10 damage to itself.
+
+[Base Set] Pidgeotto - Attack: 'Whirlwind' (20 dmg)
+  Text: If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Base Set] Arcanine - Attack: 'Take Down' (80 dmg)
+  Text: Arcanine does 30 damage to itself.
+
+[Base Set] Farfetch'd - Attack: 'Leek Slap' (30 dmg)
+  Text: Flip a coin. If tails, this attack does nothing. Either way, you can't use this attack again as long as Farfetch'd stays in play (even putting Farfetch'd on the Bench won't let you use it again).
+
+[Base Set] Machoke - Attack: 'Submission' (60 dmg)
+  Text: Machoke does 20 damage to itself.
+
+[Base Set] Magnemite - Attack: 'Selfdestruct' (40 dmg)
+  Text: Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.
+
+[Base Set] Pidgey - Attack: 'Whirlwind' (10 dmg)
+  Text: If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Base Set] Pikachu - Attack: 'Thunder Jolt' (30 dmg)
+  Text: Flip a coin. If tails, Pikachu does 10 damage to itself.
+
+[Jungle] Electrode - Attack: 'Chain Lightning' (20 dmg)
+  Text: If the Defending Pokémon isn't Colorless, this attack does 10 damage to each Benched Pokémon of the same type as the Defending Pokémon (including your own) .
+
+[Jungle] Victreebel - Attack: 'Lure' (0 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and switch it with his or her Active Pokémon.
+
+[Jungle] Wigglytuff - Attack: 'Do the Wave' (10 dmg)
+  Text: Does 10 damage plus 10 more damage for each of your Benched Pokémon.
+
+[Jungle] Electrode - Attack: 'Chain Lightning' (20 dmg)
+  Text: If the Defending Pokémon isn't Colorless, this attack does 10 damage to each Benched Pokémon of the same type as the Defending Pokémon (including your own) .
+
+[Jungle] Victreebel - Attack: 'Lure' (0 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and switch it with his or her Active Pokémon.
+
+[Jungle] Wigglytuff - Attack: 'Do the Wave' (10 dmg)
+  Text: Does 10 damage plus 10 more damage for each of your Benched Pokémon.
+
+[Jungle] Butterfree - Attack: 'Whirlwind' (20 dmg)
+  Text: If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Jungle] Exeggutor - Attack: 'Teleport' (0 dmg)
+  Text: Switch Exeggutor with 1 of your Benched Pokémon.
+
+[Jungle] Marowak - Attack: 'Call for Friend' (0 dmg)
+  Text: Search your deck for a { F } Basic Pokémon card and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench is full.)
+
+[Jungle] Persian - Attack: 'Pounce' (30 dmg)
+  Text: If the Defending Pokémon attacks Persian during your opponent's next turn, any damage done by the attack is reduced by 10 (after applying Weakness and Resistance) . (Benching either Pokémon ends this effect.)
+
+[Jungle] Rhydon - Attack: 'Ram' (50 dmg)
+  Text: Rhydon does 20 damage to itself. If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon. Switch the Pokémon even if Rhydon is knocked out.)
+
+[Jungle] Bellsprout - Attack: 'Call for Family' (0 dmg)
+  Text: Search your deck for a Basic Pokémon named Bellsprout and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench is full.)
+
+[Jungle] Cubone - Attack: 'Snivel' (0 dmg)
+  Text: If the Defending Pokémon attacks Cubone during your opponent's next turn, any damage done by the attack is reduced by 20 (after applying Weakness and Resistance) . (Benching either Pokémon ends this effect.)
+
+[Jungle] Eevee - Attack: 'Tail Wag' (0 dmg)
+  Text: Flip a coin. If heads, the Defending Pokémon can't attack Eevee during your opponent's next turn. (Benching either Pokémon ends this effect.)
+
+[Jungle] Nidoran Female - Attack: 'Call for Family' (0 dmg)
+  Text: Search your deck for a Basic Pokémon named Nidoran Male or Nidoran Female and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench is full.)
+
+[Jungle] Oddish - Attack: 'Sprout' (0 dmg)
+  Text: Search your deck for a Basic Pokémon named Oddish and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench is full.)
+
+[Jungle] Pikachu - Attack: 'Spark' (20 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and this attack does 10 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Jungle] Rhyhorn - Attack: 'Leer' (0 dmg)
+  Text: Flip a coin. If heads, the Defending Pokémon can't attack Rhyhorn during your opponent's next turn. (Benching either Pokémon ends this effect.)
+
+[Fossil] Articuno - Attack: 'Blizzard' (50 dmg)
+  Text: Flip a coin. If heads, this attack does 10 damage to each of your opponent's Benched Pokémon. If tails, this attack does 10 damage to each of your own Benched Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Gengar - Attack: 'Dark Mind' (30 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and this attack does 10 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Hitmonlee - Attack: 'Stretch Kick' (0 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and this attack does 20 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Hypno - Attack: 'Dark Mind' (30 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and this attack does 10 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Magneton - Attack: 'Selfdestruct' (100 dmg)
+  Text: Does 20 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magneton does 100 damage to itself.
+
+[Fossil] Raichu - Attack: 'Gigashock' (30 dmg)
+  Text: Choose 3 of your opponent's Benched Pokémon and this attack does 10 damage to each of them. (Don't apply Weakness and Resistance for Benched Pokémon.) If your opponent has fewer than 3 Benched Pokémon, do the damage to each of them.
+
+[Fossil] Zapdos - Attack: 'Thunderstorm' (40 dmg)
+  Text: For each of your opponent's Benched Pokémon, flip a coin. If heads, this attack does 20 damage to that Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.) Then, Zapdos does 10 damage times the number of tails to itself.
+
+[Fossil] Articuno - Attack: 'Blizzard' (50 dmg)
+  Text: Flip a coin. If heads, this attack does 10 damage to each of your opponent's Benched Pokémon. If tails, this attack does 10 damage to each of your own Benched Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Gengar - Attack: 'Dark Mind' (30 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and this attack does 10 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Hitmonlee - Attack: 'Stretch Kick' (0 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and this attack does 20 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Hypno - Attack: 'Dark Mind' (30 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and this attack does 10 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Fossil] Magneton - Attack: 'Selfdestruct' (100 dmg)
+  Text: Does 20 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magneton does 100 damage to itself.
+
+[Fossil] Raichu - Attack: 'Gigashock' (30 dmg)
+  Text: Choose 3 of your opponent's Benched Pokémon and this attack does 10 damage to each of them. (Don't apply Weakness and Resistance for Benched Pokémon.) If your opponent has fewer than 3 Benched Pokémon, do that damage to each of them.
+
+[Fossil] Zapdos - Attack: 'Thunderstorm' (40 dmg)
+  Text: For each of your opponent's Benched Pokémon, flip a coin. If heads, this attack does 20 damage to that Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.) Then, Zapdos does 10 damage times the number of tails to itself.
+
+[Fossil] Arbok - Attack: 'Terror Strike' (10 dmg)
+  Text: Flip a coin. If heads and if your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Fossil] Gastly - Attack: 'Energy Conversion' (0 dmg)
+  Text: Put up to 2 Energy cards from your discard pile into your hand. Gastly does 10 damage to itself.
+
+[Fossil] Golem - Attack: 'Selfdestruct' (100 dmg)
+  Text: Does 20 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Golem does 100 damage to itself.
+
+[Fossil] Weezing - Attack: 'Selfdestruct' (60 dmg)
+  Text: Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Weezing does 60 damage to itself.
+
+[Fossil] Krabby - Attack: 'Call for Family' (0 dmg)
+  Text: Search your deck for a Basic Pokémon named Krabby and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench if full.)
+
+[Base Set 2] Chansey - Attack: 'Double-edge' (80 dmg)
+  Text: Chansey does 80 damage to itself.
+
+[Base Set 2] Magneton - Attack: 'Selfdestruct' (80 dmg)
+  Text: Does 20 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magneton does 80 damage to itself.
+
+[Base Set 2] Nidoking - Attack: 'Thrash' (30 dmg)
+  Text: Flip a coin. If heads, this attack does 30 damage plus 10 more damage; if tails, this attack does 30 damage and Nidoking does 10 damage to itself.
+
+[Base Set 2] Ninetales - Attack: 'Lure' (0 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and switch it with the Defending Pokémon.
+
+[Base Set 2] Raichu - Attack: 'Thunder' (60 dmg)
+  Text: Flip a coin. If tails, Raichu does 30 damage to itself.
+
+[Base Set 2] Wigglytuff - Attack: 'Do the Wave' (10 dmg)
+  Text: Does 10 damage plus 10 more damage for each of your Benched Pokémon.
+
+[Base Set 2] Zapdos - Attack: 'Thunder' (60 dmg)
+  Text: Flip a coin. If tails, Zapdos does 30 damage to itself.
+
+[Base Set 2] Dugtrio - Attack: 'Earthquake' (70 dmg)
+  Text: Does 10 damage to each of your own Benched Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Base Set 2] Electabuzz - Attack: 'Thunderpunch' (30 dmg)
+  Text: Flip a coin. If heads, this attack does 30 damage plus 10 more damage; if tails, this attack does 30 damage and Electabuzz does 10 damage to itself.
+
+[Base Set 2] Electrode - Attack: 'Electric Shock' (50 dmg)
+  Text: Flip a coin. If tails, Electrode does 10 damage to itself.
+
+[Base Set 2] Pidgeotto - Attack: 'Whirlwind' (20 dmg)
+  Text: If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Base Set 2] Victreebel - Attack: 'Lure' (0 dmg)
+  Text: If your opponent has any Benched Pokémon, choose 1 of them and switch it with his or her Active Pokémon.
+
+[Base Set 2] Arcanine - Attack: 'Take Down' (80 dmg)
+  Text: Arcanine does 30 damage to itself.
+
+[Base Set 2] Butterfree - Attack: 'Whirlwind' (20 dmg)
+  Text: If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Base Set 2] Exeggutor - Attack: 'Teleport' (0 dmg)
+  Text: Switch Exeggutor with 1 of your Benched Pokémon.
+
+[Base Set 2] Farfetch'd - Attack: 'Leek Slap' (30 dmg)
+  Text: Flip a coin. If tails, this attack does nothing. Either way, you can't use this attack again as long as Farfetch'd stays in play (even putting Farfetch'd on the Bench won't let you use it again).
+
+[Base Set 2] Machoke - Attack: 'Submission' (60 dmg)
+  Text: Machoke does 20 damage to itself.
+
+[Base Set 2] Marowak - Attack: 'Call for Friend' (0 dmg)
+  Text: Search your deck for a { F } Basic Pokémon card and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench is full.)
+
+[Base Set 2] Persian - Attack: 'Pounce' (30 dmg)
+  Text: If the Defending Pokémon attacks Persian during your opponent's next turn, any damage done by the attack is reduced by 10 (after applying Weakness and Resistance) . (Benching either Pokémon ends this effect.)
+
+[Base Set 2] Rhydon - Attack: 'Ram' (50 dmg)
+  Text: Rhydon does 20 damage to itself. If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon. Switch the Pokémon even if Rhydon is knocked out.)
+
+[Base Set 2] Bellsprout - Attack: 'Call for Family' (0 dmg)
+  Text: Search your deck for a Basic Pokémon named Bellsprout and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench is full.)
+
+[Base Set 2] Cubone - Attack: 'Snivel' (0 dmg)
+  Text: If the Defending Pokémon attacks Cubone during your opponent's next turn, any damage done by the attack is reduced by 20 (after applying Weakness and Resistance) . (Benching either Pokémon ends this effect.)
+
+[Base Set 2] Magnemite - Attack: 'Selfdestruct' (40 dmg)
+  Text: Does 10 damage to each Pokémon on each player's Bench. (Don't apply Weakness and Resistance for Benched Pokémon.) Magnemite does 40 damage to itself.
+
+[Base Set 2] Nidoran Female - Attack: 'Call for Family' (0 dmg)
+  Text: Search your deck for a Basic Pokémon named Nidoran Male or Nidoran Female and put it onto your Bench. Shuffle your deck afterward. (You can't use this attack if your Bench is full.)
+
+[Base Set 2] Pidgey - Attack: 'Whirlwind' (10 dmg)
+  Text: If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Base Set 2] Pikachu - Attack: 'Thunder Jolt' (30 dmg)
+  Text: Flip a coin. If tails, Pikachu does 10 damage to itself.
+
+[Base Set 2] Rhyhorn - Attack: 'Leer' (0 dmg)
+  Text: Flip a coin. If heads, the Defending Pokémon can't attack Rhyhorn during your opponent's next turn. (Benching either Pokémon ends this effect.)
+
+[Team Rocket] Dark Alakazam - Attack: 'Teleport Blast' (30 dmg)
+  Text: You may switch Dark Alakazam with 1 of your Benched Pokémon. (Do the damage before switching the Pokémon.)
+
+[Team Rocket] Dark Arbok - Attack: 'Poison Vapor' (10 dmg)
+  Text: The Defending Pokémon is now Poisoned. This attack does 10 damage to each of your opponent's Benched Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Team Rocket] Dark Blastoise - Attack: 'Rocket Tackle' (40 dmg)
+  Text: Dark Blastoise does 10 damage to itself. Flip a coin. If heads, prevent all damage done to Dark Blastoise during your opponent's next turn. (Any other effects of attacks still happen.)
+
+[Team Rocket] Dark Hypno - Attack: 'Bench Manipulation' (20 dmg)
+  Text: Your opponent flips a number of coins equal to the number of Pokémon on his or her Bench. This attack does 20 damage times the number of tails. Don't apply Weakness and Resistance for this attack. (Any other effects that would happen after applying Weakness and Resistance still happen.)
+
+[Team Rocket] Dark Machamp - Attack: 'Fling' (0 dmg)
+  Text: Your opponent shuffles his or her Active Pokémon and all cards attached to it into his or her deck. This attack can't be used if your opponent has no Benched Pokémon.
+
+[Team Rocket] Dark Magneton - Attack: 'Magnetic Lines' (30 dmg)
+  Text: If the Defending Pokémon has any basic Energy cards attached to it, choose 1 of them. If your opponent has any Benched Pokémon, choose 1 of them and attach that Energy card to it.
+
+[Team Rocket] Dark Weezing - Attack: 'Mass Explosion' (20 dmg)
+  Text: Does 20 damage times the total number of Koffings, Weezings, and Dark Weezings in play (Apply Weakness and Resistance.) . Then, this attack does 20 damage to each Koffing, Weezing, and Dark Weezing (even your own) . Don't apply Weakness and Resistance.
+
+[Team Rocket] Dark Alakazam - Attack: 'Teleport Blast' (30 dmg)
+  Text: You may switch Dark Alakazam with 1 of your Benched Pokémon. (Do the damage before switching the Pokémon.)
+
+[Team Rocket] Dark Arbok - Attack: 'Poison Vapor' (10 dmg)
+  Text: The Defending Pokémon is now Poisoned. This attack does 10 damage to each of your opponent's Benched Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Team Rocket] Dark Blastoise - Attack: 'Rocket Tackle' (40 dmg)
+  Text: Dark Blastoise does 10 damage to itself. Flip a coin. If heads, prevent all damage done to Dark Blastoise during your opponent's next turn. (Any other effects of attacks still happen.)
+
+[Team Rocket] Dark Hypno - Attack: 'Bench Manipulation' (20 dmg)
+  Text: Your opponent flips a number of coins equal to the number of Pokémon on his or her Bench. This attack does 20 damage times the number of tails. Don't apply Weakness and Resistance for this attack. (Any other effects that would happen after applying Weakness and Resistance still happen.)
+
+[Team Rocket] Dark Machamp - Attack: 'Fling' (0 dmg)
+  Text: Your opponent shuffles his or her Active Pokémon and all cards attached to it into his or her deck. This attack can't be used if your opponent has no Benched Pokémon.
+
+[Team Rocket] Dark Magneton - Attack: 'Magnetic Lines' (30 dmg)
+  Text: If the Defending Pokémon has any basic Energy cards attached to it, choose 1 of them. If your opponent has any Benched Pokémon, choose 1 of them and attach that Energy card to it.
+
+[Team Rocket] Dark Weezing - Attack: 'Mass Explosion' (20 dmg)
+  Text: Does 20 damage times the total number of Koffings, Weezings, and Dark Weezings in play (Apply Weakness and Resistance.) . Then, this attack does 20 damage to each Koffing, Weezing, and Dark Weezing (even your own) . Don't apply Weakness and Resistance.
+
+[Team Rocket] Dark Electrode - Attack: 'Energy Bomb' (30 dmg)
+  Text: Take all Energy cards attached to Dark Electrode and attach them to your Benched Pokémon (in any way you choose) . If you have no Benched Pokémon, discard all Energy cards attached to Dark Electrode.
+
+[Team Rocket] Dark Jolteon - Attack: 'Thunder Attack' (30 dmg)
+  Text: Flip a coin. If heads, the Defending Pokémon is now Paralyzed. If tails, Dark Jolteon does 10 damage to itself.
+
+[Team Rocket] Dark Machoke - Attack: 'Drag Off' (20 dmg)
+  Text: Before doing damage, choose 1 of your opponent's Benched Pokémon and switch it with the Defending Pokémon. Do the damage to the new Defending Pokémon. This attack can't be used if your opponent has no Benched Pokémon.
+
+[Team Rocket] Dark Machoke - Attack: 'Knock Back' (30 dmg)
+  Text: If your opponent has any Benched Pokémon, he or she chooses 1 of them and switches it with the Defending Pokémon. (Do the damage before switching the Pokémon.)
+
+[Team Rocket] Dark Persian - Attack: 'Fascinate' (0 dmg)
+  Text: Flip a coin. If heads, choose 1 of your opponent's Benched Pokémon and switch it with the Defending Pokémon. This attack can't be used if your opponent has no Benched Pokémon.
+
+[Team Rocket] Dark Rapidash - Attack: 'Flame Pillar' (30 dmg)
+  Text: You may discard 1 { R } Energy card attached to Dark Rapidash when you use this attack. If you do and if your opponent has any Benched Pokémon, choose 1 of them and this attack does 10 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)
+
+[Team Rocket] Magnemite - Attack: 'Magnetism' (10 dmg)
+  Text: Does 10 damage plus 10 more damage for each Magnemite, Magneton, and Dark Magneton on your Bench.
+
+[Team Rocket] Dark Raichu - Attack: 'Surprise Thunder' (30 dmg)
+  Text: Flip a coin. If heads, flip another coin. If the second coin is heads, this attack does 20 damage to each of your opponent's Benched Pokémon. If the second coin is tails, this attack does 10 damage to each of your opponent's Benched Pokémon. (Don't apply Weakness and Resistance for Benched Pokémon.)

@@ -174,12 +174,14 @@ export interface ActiveFX {
     | 'jolteon_pin_missile'
     | 'dark_gyarados_ice_beam'
     | 'arbok_poison_fang'
+    | 'arbok_wrap_constrict'
     | 'golbat_leech_life'
     | 'dark_blastoise_hydrocannon'
     | 'dark_charizard_fireball'
     | 'farfetchd_leek_slap'
     | 'cubone_bone_strike'
     | 'bulbasaur_leech_seed'
+    | 'bulbasaur_leech_replenish'
     | 'squirtle_shell_defense'
     | 'pikachu_thunder_jolt'
     | 'charmander_ember_flame'
@@ -654,10 +656,12 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   // Poison Sting & Spit Poison: Weedle gets authentic larva stinger; Ekans gets dedicated serpent venom darts; others get GBA venom needle
   if (name.includes('poison sting') || name.includes('spit poison')) {
     if (pkm.includes('weedle')) return 'weedle_poison_sting';
-    if (pkm.includes('ekans') || pkm.includes('arbok')) return 'ekans_poison_sting';
+    if (pkm.includes('ekans')) return 'ekans_poison_sting';
+    if (pkm.includes('arbok')) return 'arbok_poison_fang';
     return 'poison_sting';
   }
-  if ((name.includes('poison fang') || name.includes('terror strike')) && pkm.includes('arbok')) return 'arbok_poison_fang';
+  if (name.includes('terror strike') && pkm.includes('arbok')) return 'arbok_wrap_constrict';
+  if (name.includes('poison fang') && pkm.includes('arbok')) return 'arbok_poison_fang';
   if (name.includes('poison fang')) {
     if (pkm.includes('ekans')) return 'ekans_poison_sting';
     return 'poison_sting';
@@ -750,7 +754,8 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     return 'leech_seed_vines';
   }
   if (name.includes('vine whip') || name.includes('razor leaf') || name.includes('absorb') || name.includes('giga drain')) return 'leech_seed_vines';
-  if ((name.includes('wrap') || name.includes('constrict')) && (pkm.includes('ekans') || pkm.includes('arbok'))) return 'ekans_wrap_constrict';
+  if ((name.includes('wrap') || name.includes('constrict')) && pkm.includes('arbok')) return 'arbok_wrap_constrict';
+  if ((name.includes('wrap') || name.includes('constrict')) && pkm.includes('ekans')) return 'ekans_wrap_constrict';
   if ((name.includes('wrap') || name.includes('constrict')) && (pkm.includes('dratini') || pkm.includes('dragonair') || pkm.includes('dragonite'))) return 'dratini_tail_wrap';
   if (name.includes('string shot') && (pkm.includes('caterpie') || pkm.includes('metapod'))) return 'caterpie_string_shot';
   if (name.includes('web') || name.includes('bind') || name.includes('string shot') || name.includes('wrap') || name.includes('constrict')) return 'string_shot_cocoon';
@@ -1076,6 +1081,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1750;
     case 'arbok_poison_fang':
       return 1650;
+    case 'arbok_wrap_constrict':
+      return 1750;
     case 'golbat_leech_life':
       return 1700;
     case 'dark_blastoise_hydrocannon':
@@ -1087,7 +1094,9 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'cubone_bone_strike':
       return 1650;
     case 'bulbasaur_leech_seed':
-      return 1750;
+      return 2700;
+    case 'bulbasaur_leech_replenish':
+      return 1600;
     case 'squirtle_shell_defense':
       return 1600;
     case 'pikachu_thunder_jolt':
@@ -1376,7 +1385,7 @@ export function getSlashPalette(pokemonName = '', attackerType = ''): SlashPalet
  * so the universal SVG 68.1% container transform must not double-scale them.
  */
 const STOCK_IMAGE_FX_TYPES = new Set<string>([
-  'arbok_poison_fang', 'beedrill_twineedle', 'bulbasaur_leech_seed', 'caterpie_string_shot',
+  'arbok_poison_fang', 'arbok_wrap_constrict', 'beedrill_twineedle', 'bulbasaur_leech_seed', 'bulbasaur_leech_replenish', 'caterpie_string_shot',
   'charmander_ember_flame', 'claw_pinch', 'clefairy_metronome', 'cloyster_clamp', 'cobra_stare',
   'crab_hammer_slam', 'cubone_bone_strike', 'doubleslap', 'dragon_rage', 'dugtrio_earthquake',
   'ekans_wrap_constrict', 'exeggutor_big_eggsplosion', 'farfetchd_leek_slap', 'fearow_drill_peck',
@@ -7247,68 +7256,216 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20ae. NINETALES FIRE BLAST (Ninetales Lv. 32 — Daimonji Kanji Star Flame) */}
+      {/* 20ae. NINETALES FIRE BLAST (Ninetales Lv. 32 — Daimonji Kanji Living Flame Masterpiece) */}
       {fx.type === 'ninetales_fire_blast' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Scorched Earth Rune Floor */}
+          {/* Layer 0: Scorched Earth Crater Rune with Incandescent Core */}
           <div
-            className="absolute w-36 h-36 rounded-full flex items-center justify-center pointer-events-none z-10"
+            className="absolute w-44 h-44 rounded-full flex items-center justify-center pointer-events-none z-10"
             style={{ animation: 'gbaFireBlastScorchRune 1.8s ease-out forwards' }}
           >
-            <div className="w-full h-full rounded-full border border-orange-500/40 bg-radial from-orange-600/30 via-red-600/20 to-transparent blur-xs" />
+            <div className="w-full h-full rounded-full border-2 border-orange-500/50 bg-radial from-amber-500/40 via-red-600/30 to-transparent blur-xs shadow-[0_0_35px_#ea580c]" />
           </div>
 
-          {/* Incandescent Daimonji '大' Kanji Flame Crest */}
+          {/* Layer 1: Pre-Ignition Condensing Solar Seed (Anticipation 0.0s - 0.35s) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaFireBlastPreGatherCore 1.8s ease-in-out forwards' }}
+          >
+            <div className="w-20 h-20 rounded-full bg-radial from-white via-yellow-300 to-orange-600 shadow-[0_0_40px_#ffffff] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-white shadow-[0_0_20px_#fef08a]" />
+            </div>
+          </div>
+
+          {/* Layer 2: Explosive Ignition Solar Flare (Detonation 0.22s - 0.8s) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-35"
+            style={{ animation: 'gbaFireBlastIgnitionFlare 1.8s ease-out forwards' }}
+          >
+            <div className="w-48 h-48 rounded-full bg-radial from-white via-amber-300/80 to-transparent blur-sm shadow-[0_0_60px_#ffffff]" />
+          </div>
+
+          {/* Layer 3: Expanding Thermal Shockwave Rings */}
+          <div
+            className="absolute w-32 h-32 rounded-full border-orange-400 pointer-events-none z-20 shadow-[0_0_30px_#f97316]"
+            style={{ animation: 'gbaFireBlastThermalShockwave 1.8s ease-out forwards' }}
+          />
+          <div
+            className="absolute w-24 h-24 rounded-full border-yellow-200 pointer-events-none z-20"
+            style={{ animation: 'gbaFireBlastThermalShockwave 1.8s ease-out 0.08s forwards' }}
+          />
+
+          {/* Layer 4: The Master Living Daimonji '大' Kanji Flame Body */}
           <div
             className="absolute flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaFireBlastDaimonjiKanji 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+            style={{ animation: 'gbaFireBlastDaimonjiKanjiRoar 1.8s cubic-bezier(0.18, 0.9, 0.25, 1) forwards' }}
           >
-            <svg width="150" height="150" viewBox="0 0 150 150" className="drop-shadow-[0_0_30px_#ea580c]">
+            <svg width="180" height="180" viewBox="0 0 180 180" className="drop-shadow-[0_0_35px_#ea580c] filter drop-shadow-[0_0_15px_#facc15]">
               <defs>
-                <linearGradient id="ninetalesDaimonjiGrad" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="25%" stopColor="#fef08a" />
-                  <stop offset="60%" stopColor="#f97316" />
-                  <stop offset="100%" stopColor="#dc2626" />
+                {/* Gradients */}
+                <linearGradient id="daimonjiOuterMantle" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#b91c1c" />
+                  <stop offset="35%" stopColor="#dc2626" />
+                  <stop offset="70%" stopColor="#ea580c" />
+                  <stop offset="100%" stopColor="#991b1b" />
                 </linearGradient>
-                <filter id="daimonjiGlow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
+
+                <linearGradient id="daimonjiMainFire" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#fef08a" />
+                  <stop offset="25%" stopColor="#fbbf24" />
+                  <stop offset="60%" stopColor="#f97316" />
+                  <stop offset="100%" stopColor="#ea580c" />
+                </linearGradient>
+
+                <linearGradient id="daimonjiWhiteSpine" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff" />
+                  <stop offset="60%" stopColor="#fef08a" />
+                  <stop offset="100%" stopColor="#fde047" />
+                </linearGradient>
+
+                <radialGradient id="daimonjiNexusSun" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                  <stop offset="40%" stopColor="#fef08a" stopOpacity="0.95" />
+                  <stop offset="75%" stopColor="#f97316" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+                </radialGradient>
+
+                <filter id="daimonjiHeatBlur" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="4" result="heatGlow" />
                   <feMerge>
-                    <feMergeNode in="blur" />
+                    <feMergeNode in="heatGlow" />
+                    <feMergeNode in="heatGlow" />
                     <feMergeNode in="SourceGraphic" />
                   </feMerge>
                 </filter>
               </defs>
-              {/* Horizontal Bar */}
-              <path d="M 25 55 Q 75 50 125 55" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
-              {/* Vertical Spine */}
-              <path d="M 75 15 L 75 80" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
-              {/* Sweeping Left Leg */}
-              <path d="M 75 60 Q 55 95 25 135" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
-              {/* Sweeping Right Leg */}
-              <path d="M 75 60 Q 95 95 125 135" stroke="url(#ninetalesDaimonjiGrad)" strokeWidth="16" strokeLinecap="round" filter="url(#daimonjiGlow)" />
-              {/* Inner White-Hot Flame Core */}
-              <path d="M 35 55 L 115 55" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.9" />
-              <path d="M 75 25 L 75 75" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.9" />
-              <path d="M 75 60 Q 60 90 35 125" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.85" />
-              <path d="M 75 60 Q 90 90 115 125" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" opacity="0.85" />
-              {/* Nexus Blast Core */}
-              <circle cx="75" cy="58" r="16" fill="#ffffff" className="drop-shadow-[0_0_20px_#facc15]" />
+
+              {/* === TIER 1: Roaring Outer Crimson Mantle (Silhouette & Fiery Mass) === */}
+              <g filter="url(#daimonjiHeatBlur)">
+                {/* Horizontal Bar: Undulating billowing wave with rising heat crests */}
+                <path
+                  d="M 12 76 C 28 62, 50 64, 72 70 C 82 73, 98 73, 108 70 C 130 64, 152 62, 168 76 C 154 88, 128 84, 90 84 C 52 84, 26 88, 12 76 Z"
+                  fill="url(#daimonjiOuterMantle)"
+                  opacity="0.95"
+                />
+                {/* Vertical Top Spire: Tapering torch flame */}
+                <path
+                  d="M 90 8 C 78 28, 74 50, 78 72 C 86 80, 94 80, 102 72 C 106 50, 102 28, 90 8 Z"
+                  fill="url(#daimonjiOuterMantle)"
+                  opacity="0.95"
+                />
+                {/* Sweeping Left Leg (丿): Curving calligraphy stroke with flame crests */}
+                <path
+                  d="M 80 74 C 66 98, 46 124, 16 160 C 32 152, 52 134, 68 112 C 82 93, 88 84, 80 74 Z"
+                  fill="url(#daimonjiOuterMantle)"
+                  opacity="0.95"
+                />
+                {/* Sweeping Right Leg (乀): Tapering sweeping tail */}
+                <path
+                  d="M 100 74 C 114 98, 134 124, 164 160 C 148 152, 128 134, 112 112 C 98 93, 92 84, 100 74 Z"
+                  fill="url(#daimonjiOuterMantle)"
+                  opacity="0.95"
+                />
+              </g>
+
+              {/* === TIER 2: Main Radiant Amber/Orange Living Flame Body === */}
+              {/* Horizontal Bar Body with Rising Flame Cusps */}
+              <path
+                d="M 18 76 Q 36 60, 54 68 Q 68 54, 80 66 Q 92 54, 106 68 Q 124 60, 142 68 Q 152 72, 162 76 Q 146 82, 120 79 Q 90 80, 60 79 Q 34 82, 18 76 Z"
+                fill="url(#daimonjiMainFire)"
+              />
+              {/* Top Flame Torch */}
+              <path
+                d="M 90 14 Q 82 32, 80 52 Q 82 66, 90 74 Q 98 66, 100 52 Q 98 32, 90 14 Z"
+                fill="url(#daimonjiMainFire)"
+              />
+              {/* Sweeping Left Flame Leg */}
+              <path
+                d="M 84 76 Q 70 96, 52 118 Q 36 136, 22 156 Q 34 146, 52 130 Q 72 108, 86 86 Z"
+                fill="url(#daimonjiMainFire)"
+              />
+              {/* Sweeping Right Flame Leg */}
+              <path
+                d="M 96 76 Q 110 96, 128 118 Q 144 136, 158 156 Q 146 146, 128 130 Q 108 108, 94 86 Z"
+                fill="url(#daimonjiMainFire)"
+              />
+
+              {/* === TIER 3: Living Flame Tongues Fluttering (Licking Upward & Inward) === */}
+              <g style={{ animation: 'gbaFireBlastFlameTongueFlutter 0.35s ease-in-out infinite alternate', transformOrigin: '90px 75px' }}>
+                {/* Rising flame tongues on the horizontal bar */}
+                <path d="M 38 68 Q 44 48, 50 62 Q 56 46, 62 64 Z" fill="#fef08a" opacity="0.9" />
+                <path d="M 70 65 Q 76 44, 82 60 Q 88 42, 94 62 Z" fill="#fef08a" opacity="0.95" />
+                <path d="M 118 64 Q 124 46, 130 62 Q 136 48, 142 68 Z" fill="#fef08a" opacity="0.9" />
+                {/* Licking tongues on the top crest */}
+                <path d="M 86 36 Q 90 18, 94 36 Q 98 22, 94 45 Z" fill="#ffffff" opacity="0.9" />
+                {/* Flaring tongues along the leg sweeps */}
+                <path d="M 52 116 Q 44 100, 48 112 Q 38 124, 44 130 Z" fill="#fbbf24" opacity="0.85" />
+                <path d="M 128 116 Q 136 100, 132 112 Q 142 124, 136 130 Z" fill="#fbbf24" opacity="0.85" />
+              </g>
+
+              {/* === TIER 4: Superheated White-Hot Plasma Spines (Intense Core Line) === */}
+              <path d="M 24 76 Q 55 72, 90 75 Q 125 72, 156 76" stroke="url(#daimonjiWhiteSpine)" strokeWidth="7" strokeLinecap="round" opacity="0.95" />
+              <path d="M 90 20 L 90 78" stroke="url(#daimonjiWhiteSpine)" strokeWidth="7" strokeLinecap="round" opacity="0.95" />
+              <path d="M 90 76 Q 72 102, 30 148" stroke="url(#daimonjiWhiteSpine)" strokeWidth="6.5" strokeLinecap="round" opacity="0.9" />
+              <path d="M 90 76 Q 108 102, 150 148" stroke="url(#daimonjiWhiteSpine)" strokeWidth="6.5" strokeLinecap="round" opacity="0.9" />
+
+              {/* Pure White Central Core Filaments */}
+              <path d="M 38 76 L 142 76" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" opacity="1" />
+              <path d="M 90 26 L 90 78" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" opacity="1" />
+              <path d="M 90 76 Q 74 100, 40 140" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" opacity="0.95" />
+              <path d="M 90 76 Q 106 100, 140 140" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" opacity="0.95" />
+
+              {/* === TIER 5: Blazing Furnace Nexus Star Core === */}
+              <circle cx="90" cy="75" r="28" fill="url(#daimonjiNexusSun)" />
+              <circle cx="90" cy="75" r="15" fill="#ffffff" className="drop-shadow-[0_0_25px_#fef08a]" />
+              <circle cx="90" cy="75" r="8" fill="#ffffff" />
             </svg>
           </div>
 
-          {/* Expanding Flame Shockwave Ring */}
-          <div
-            className="absolute w-28 h-28 rounded-full border-orange-400 pointer-events-none z-20"
-            style={{ animation: 'gbaFireBlastKanjiShockwave 1.8s ease-out forwards' }}
-          />
-
-          {/* Radiating Volcanic Ember Spark Shower */}
+          {/* Layer 5: Five Outward Flame Eruption Jets (Alev Yayılımı / Dispersion) */}
           {[
-            { x: '-38px', y: '-35px' }, { x: '38px', y: '-35px' },
-            { x: '-48px', y: '25px' }, { x: '48px', y: '25px' },
-            { x: '0px', y: '-48px' }, { x: '0px', y: '48px' },
-            { x: '-42px', y: '-8px' }, { x: '42px', y: '-8px' }
+            { id: 'top', jx: '0px', jy: '-72px', rot: '0deg' },
+            { id: 'left', jx: '-78px', jy: '-8px', rot: '-90deg' },
+            { id: 'right', jx: '78px', jy: '-8px', rot: '90deg' },
+            { id: 'botL', jx: '-68px', jy: '72px', rot: '-140deg' },
+            { id: 'botR', jx: '68px', jy: '72px', rot: '140deg' }
+          ].map((jet) => (
+            <div
+              key={`fb-jet-${jet.id}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                '--jet-x': jet.jx,
+                '--jet-y': jet.jy,
+                animation: 'gbaFireBlastStrokeJet 1.8s cubic-bezier(0.12, 0.85, 0.2, 1) forwards'
+              } as React.CSSProperties}
+            >
+              <div style={{ transform: `rotate(${jet.rot})` }}>
+                <svg width="36" height="48" viewBox="0 0 36 48" className="drop-shadow-[0_0_18px_#f97316]">
+                  {/* Outer Jet Flame Plume */}
+                  <path d="M 18 0 C 8 16, 2 28, 4 38 C 6 44, 12 48, 18 48 C 24 48, 30 44, 32 38 C 34 28, 28 16, 18 0 Z" fill="#ea580c" />
+                  {/* Inner Radiant Amber Core */}
+                  <path d="M 18 8 C 12 20, 8 28, 10 36 C 12 40, 15 42, 18 42 C 21 42, 24 40, 26 36 C 28 28, 24 20, 18 8 Z" fill="#fbbf24" />
+                  {/* White-Hot Core Tip */}
+                  <path d="M 18 14 C 15 22, 13 28, 14 32 C 15 35, 17 36, 18 36 C 19 36, 21 35, 22 32 C 23 28, 21 22, 18 14 Z" fill="#ffffff" />
+                </svg>
+              </div>
+            </div>
+          ))}
+
+          {/* Layer 6: Radiating Volcanic Ember Particle Shower */}
+          {[
+            { x: '-42px', y: '-42px', s: 10, col: '#ffffff' },
+            { x: '42px', y: '-42px', s: 10, col: '#ffffff' },
+            { x: '-56px', y: '28px', s: 14, col: '#fef08a' },
+            { x: '56px', y: '28px', s: 14, col: '#fef08a' },
+            { x: '0px', y: '-56px', s: 12, col: '#facc15' },
+            { x: '0px', y: '56px', s: 12, col: '#f97316' },
+            { x: '-52px', y: '-10px', s: 13, col: '#ea580c' },
+            { x: '52px', y: '-10px', s: 13, col: '#ea580c' },
+            { x: '-28px', y: '62px', s: 11, col: '#fef08a' },
+            { x: '28px', y: '62px', s: 11, col: '#fef08a' },
+            { x: '-62px', y: '48px', s: 9, col: '#f97316' },
+            { x: '62px', y: '48px', s: 9, col: '#f97316' }
           ].map((p, i) => (
             <div
               key={`fb-ember-${i}`}
@@ -7316,12 +7473,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 '--eb-x': p.x,
                 '--eb-y': p.y,
-                animation: `gbaFireBlastEmberShower 1.8s ease-out ${0.2 + i * 0.05}s forwards`,
+                animation: `gbaFireBlastEmberShower 1.8s ease-out ${0.22 + (i % 6) * 0.04}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
-              <svg width="12" height="12" viewBox="0 0 12 12">
-                <polygon points="6,0 7.5,4.5 12,6 7.5,7.5 6,12 4.5,7.5 0,6 4.5,4.5" fill={i % 2 === 0 ? '#fef08a' : '#f97316'} />
+              <svg width={p.s} height={p.s} viewBox="0 0 12 12">
+                <polygon points="6,0 7.5,4.5 12,6 7.5,7.5 6,12 4.5,7.5 0,6 4.5,4.5" fill={p.col} />
               </svg>
             </div>
           ))}
@@ -8014,63 +8171,350 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20as. BULBASAUR LEECH SEED (Bulbasaur Lv. 13 — 1996 Ken Sugimori Spiked Seed Pod & Tendril Drain) */}
+      {/* 20as. BULBASAUR LEECH SEED (Bulbasaur Lv. 13 — 4-Actor Ken Sugimori Seed Volley, Sprout Morph & Tendrils) */}
       {fx.type === 'bulbasaur_leech_seed' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Authentic 1996 Ken Sugimori Spiked Seed Pod */}
-          <div
-            className="absolute flex items-center justify-center pointer-events-none z-30"
-            style={{ animation: 'gbaBulbasaurSeedImplant 1.75s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
-          >
-            <img
-              src="/assets/Bulbasaur_Leech_Seed_Pod.png"
-              alt="Bulbasaur Leech Seed Pod"
-              className="w-[98px] h-[98px] object-contain drop-shadow-[0_0_16px_#15803d] select-none pointer-events-none"
-            />
-          </div>
+          {fx.whiffed ? (
+            /* Whiff / Misdirected State: Hedefe tutunamayıp etrafa saçılan yeşil enerji küreleri */
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+              {[
+                { x: '-35px', y: '-30px', driftX: '-65px', driftY: '-55px', endX: '-90px', endY: '-80px', delay: 0 },
+                { x: '35px', y: '-25px', driftX: '65px', driftY: '-50px', endX: '95px', endY: '-75px', delay: 0.1 },
+                { x: '-28px', y: '30px', driftX: '-55px', driftY: '60px', endX: '-80px', endY: '90px', delay: 0.15 },
+                { x: '30px', y: '35px', driftX: '60px', driftY: '60px', endX: '90px', endY: '85px', delay: 0.2 },
+                { x: '0px', y: '0px', driftX: '0px', driftY: '-70px', endX: '0px', endY: '-110px', delay: 0.05 }
+              ].map((orb, i) => (
+                <div
+                  key={`whiff-orb-${i}`}
+                  className="absolute pointer-events-none z-35"
+                  style={{
+                    '--w-drift-x': orb.driftX,
+                    '--w-drift-y': orb.driftY,
+                    '--w-end-x': orb.endX,
+                    '--w-end-y': orb.endY,
+                    animation: `gbaLeechWhiffOrb 1.2s ease-out ${orb.delay}s forwards`,
+                    transform: `translate(${orb.x}, ${orb.y})`
+                  } as React.CSSProperties}
+                >
+                  <div className="w-4 h-4 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400 border border-white shadow-[0_0_14px_#bef264,0_0_22px_#22c55e] flex items-center justify-center">
+                    <div className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+                  </div>
+                </div>
+              ))}
+              {/* Sönümlenme duman aurası */}
+              <div
+                className="absolute w-32 h-32 rounded-full pointer-events-none z-20"
+                style={{
+                  animation: 'gbaWhiffSmokePuff 1.1s ease-out 0.15s forwards',
+                  background: 'radial-gradient(circle, rgba(163,230,53,0.35) 0%, rgba(34,197,94,0.18) 50%, transparent 75%)'
+                }}
+              />
+            </div>
+          ) : (
+            <>
+              {/* Layer 1: Parazit Sarmaşık Ağı (Living Parasitic Tendrils between Seeds) */}
+              <div
+                className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+                style={{ animation: 'gbaLeechTendrilClasp 2.0s ease-out 0.35s forwards', opacity: 0 }}
+              >
+                <svg width="200" height="210" viewBox="0 0 200 210" className="overflow-visible">
+                  {/* Vine 1: Seed 1 (sol üst ~64, 63) to Center Seed (100, 105) */}
+                  <path
+                    d="M 64 63 Q 78 82 100 105"
+                    fill="none"
+                    stroke="#22c55e"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                    className="drop-shadow-[0_0_8px_#16a34a]"
+                  />
+                  {/* Vine 2: Center Seed (100, 105) to Seed 2 (sağ orta ~138, 93) */}
+                  <path
+                    d="M 100 105 Q 118 102 138 93"
+                    fill="none"
+                    stroke="#16a34a"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                    className="drop-shadow-[0_0_8px_#15803d]"
+                  />
+                  {/* Vine 3: Seed 3 (sol alt ~70, 139) to Center Seed (100, 105) */}
+                  <path
+                    d="M 70 139 Q 84 124 100 105"
+                    fill="none"
+                    stroke="#4ade80"
+                    strokeWidth="2.8"
+                    strokeLinecap="round"
+                    className="drop-shadow-[0_0_8px_#22c55e]"
+                  />
+                  {/* Vine 4: Seed 4 (sağ üst ~132, 59) to Center Seed (100, 105) */}
+                  <path
+                    d="M 132 59 Q 118 78 100 105"
+                    fill="none"
+                    stroke="#15803d"
+                    strokeWidth="2.8"
+                    strokeLinecap="round"
+                    className="drop-shadow-[0_0_8px_#166534]"
+                  />
+                  {/* Dışa doğru kıvrılan yapraklı filiz uçları */}
+                  <path
+                    d="M 64 63 Q 46 48 34 66"
+                    fill="none"
+                    stroke="#86efac"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M 138 93 Q 156 108 146 128"
+                    fill="none"
+                    stroke="#4ade80"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                  />
+                  {/* Dikenler / Mini yapraklar */}
+                  <polygon points="50,56 56,48 48,50" fill="#86efac" />
+                  <polygon points="146,102 140,94 148,96" fill="#86efac" />
+                </svg>
+              </div>
 
-          {/* Sprouting Coiled Vine Tendrils */}
-          <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none z-25"
-            style={{ animation: 'gbaBulbasaurTendrilClasp 1.75s ease-out forwards' }}
-          >
-            <svg width="160" height="160" viewBox="0 0 160 160">
-              <path d="M 80 80 Q 50 30 20 40 Q 10 70 30 90" fill="none" stroke="#22c55e" strokeWidth="3" strokeLinecap="round" />
-              <path d="M 80 80 Q 110 30 140 40 Q 150 70 130 90" fill="none" stroke="#16a34a" strokeWidth="3" strokeLinecap="round" />
-              <path d="M 80 80 Q 50 130 30 120 Q 20 150 50 150" fill="none" stroke="#4ade80" strokeWidth="2.5" strokeLinecap="round" />
-              <path d="M 80 80 Q 110 130 130 120 Q 140 150 110 150" fill="none" stroke="#15803d" strokeWidth="2.5" strokeLinecap="round" />
-            </svg>
-          </div>
+              {/* Layer 2: 5 Bağımsız Ken Sugimori Tohum & Filiz Aktörü (Staggered Bullet Volley -> Sprout Morph) */}
+              {[
+                {
+                  // 1. Tohum: Sol üst
+                  x: '-36px',
+                  y: '-42px',
+                  fromX: '-25px',
+                  fromY: '110px',
+                  rot: '-24deg',
+                  bulletImg: '/assets/LeechSeed_Bullet_01.png',
+                  sproutImg: '/assets/LeechSeed_Sprout_01.png',
+                  hitRot: '8deg',
+                  settleRot: '-10deg',
+                  sway1: '5deg',
+                  sway2: '-8deg',
+                  w: 38,
+                  h: 40
+                },
+                {
+                  // 2. Tohum: Merkez sağ
+                  x: '38px',
+                  y: '-12px',
+                  fromX: '20px',
+                  fromY: '120px',
+                  rot: '20deg',
+                  bulletImg: '/assets/LeechSeed_Bullet_02.png',
+                  sproutImg: '/assets/LeechSeed_Sprout_02.png',
+                  hitRot: '-8deg',
+                  settleRot: '12deg',
+                  sway1: '-4deg',
+                  sway2: '10deg',
+                  w: 39,
+                  h: 41
+                },
+                {
+                  // 3. Tohum: Sol alt
+                  x: '-30px',
+                  y: '34px',
+                  fromX: '-35px',
+                  fromY: '100px',
+                  rot: '-18deg',
+                  bulletImg: '/assets/LeechSeed_Bullet_01.png',
+                  sproutImg: '/assets/LeechSeed_Sprout_01.png',
+                  hitRot: '6deg',
+                  settleRot: '-6deg',
+                  sway1: '3deg',
+                  sway2: '-5deg',
+                  w: 36,
+                  h: 39
+                },
+                {
+                  // 4. Tohum: Sağ üst
+                  x: '32px',
+                  y: '-46px',
+                  fromX: '30px',
+                  fromY: '115px',
+                  rot: '25deg',
+                  bulletImg: '/assets/LeechSeed_Bullet_02.png',
+                  sproutImg: '/assets/LeechSeed_Sprout_02.png',
+                  hitRot: '-10deg',
+                  settleRot: '14deg',
+                  sway1: '-6deg',
+                  sway2: '12deg',
+                  w: 38,
+                  h: 40
+                },
+                {
+                  // 5. Tohum: Tam merkez
+                  x: '0px',
+                  y: '0px',
+                  fromX: '0px',
+                  fromY: '125px',
+                  rot: '0deg',
+                  bulletImg: '/assets/LeechSeed_Bullet_01.png',
+                  sproutImg: '/assets/LeechSeed_Sprout_02.png',
+                  hitRot: '5deg',
+                  settleRot: '2deg',
+                  sway1: '4deg',
+                  sway2: '-2deg',
+                  w: 41,
+                  h: 45
+                }
+              ].map((seed, idx) => {
+                const bulletDelay = idx * 0.07;
+                const sproutDelay = idx * 0.07 + 0.28;
 
-          {/* Siphoned Emerald & Ruby Vitality Orbs */}
+                return (
+                  <div
+                    key={`leech-actor-${idx}`}
+                    className="absolute flex items-center justify-center pointer-events-none z-30"
+                    style={{
+                      width: `${seed.w}px`,
+                      height: `${seed.h}px`,
+                      left: '50%',
+                      top: '50%',
+                      marginLeft: `${-seed.w / 2}px`,
+                      marginTop: `${-seed.h / 2}px`,
+                      transform: `translate(${seed.x}, ${seed.y})`
+                    }}
+                  >
+                    {/* Phase A: Uçuş Halindeki Kapalı Sugimori Mermi Tohumu (Bullet Flight) */}
+                    <div
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                      style={{
+                        '--bf-start-x': seed.fromX,
+                        '--bf-start-y': seed.fromY,
+                        '--bf-rot': seed.rot,
+                        animation: `gbaLeechBulletFly 0.32s cubic-bezier(0.2, 0.8, 0.3, 1) ${bulletDelay}s forwards`,
+                        opacity: 0
+                      } as React.CSSProperties}
+                    >
+                      <img
+                        src={seed.bulletImg}
+                        alt="Leech Seed Bullet"
+                        className="w-full h-full object-contain drop-shadow-[0_0_10px_#86efac] select-none pointer-events-none"
+                      />
+                    </div>
+
+                    {/* Phase B: Tok Çarpma Anında Canlı Filizlenme (Sprout Morph) */}
+                    <div
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                      style={{
+                        '--sp-rot-hit': seed.hitRot,
+                        '--sp-rot-settle': seed.settleRot,
+                        '--sp-rot-sway1': seed.sway1,
+                        '--sp-rot-sway2': seed.sway2,
+                        animation: `gbaLeechSproutErupt 1.85s ease-out ${sproutDelay}s forwards`,
+                        opacity: 0
+                      } as React.CSSProperties}
+                    >
+                      <img
+                        src={seed.sproutImg}
+                        alt="Leech Seed Sprout"
+                        className="w-full h-full object-contain drop-shadow-[0_0_14px_#22c55e] drop-shadow-[0_0_24px_#4ade80] select-none pointer-events-none"
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Layer 3: Emilen Canlılık Enerji Küreleri (Siphoned Vitality Orbs) */}
+              {[
+                { midX: '-18px', midY: '25px', endX: '-40px', endY: '110px', delay: 0.65 },
+                { midX: '15px', midY: '30px', endX: '35px', endY: '120px', delay: 0.75 },
+                { midX: '-8px', midY: '45px', endX: '-20px', endY: '130px', delay: 0.85 },
+                { midX: '22px', midY: '20px', endX: '45px', endY: '115px', delay: 0.95 },
+                { midX: '0px', midY: '50px', endX: '0px', endY: '140px', delay: 1.05 }
+              ].map((orb, i) => (
+                <div
+                  key={`drain-orb-${i}`}
+                  className="absolute pointer-events-none z-35"
+                  style={{
+                    '--orb-mid-x': orb.midX,
+                    '--orb-mid-y': orb.midY,
+                    '--orb-end-x': orb.endX,
+                    '--orb-end-y': orb.endY,
+                    animation: `gbaLeechSiphonOrb 0.95s ease-in-out ${orb.delay}s forwards`,
+                    opacity: 0
+                  } as React.CSSProperties}
+                >
+                  <div className="w-3.5 h-3.5 rounded-full bg-gradient-to-tr from-lime-300 to-emerald-400 border border-white shadow-[0_0_12px_#bef264,0_0_18px_#22c55e]" />
+                </div>
+              ))}
+
+              {/* Layer 4: Parazitik Hedef Drenaj Nabzı (Siphoning Bio-Pulse Ripple) */}
+              <div
+                className="absolute w-36 h-36 rounded-full pointer-events-none z-15"
+                style={{
+                  animation: 'gbaBulbasaurDrainRipple 1.8s ease-out 0.4s forwards',
+                  background: 'radial-gradient(circle, rgba(34,197,94,0.32) 0%, rgba(190,242,100,0.18) 50%, transparent 75%)'
+                }}
+              />
+            </>
+          )}
+        </div>
+      )}
+
+      {/* 20as-2. BULBASAUR LEECH REPLENISH (Photosynthesis Bloom, Klorofil Işıltıları & +10 HP Badge) */}
+      {fx.type === 'bulbasaur_leech_replenish' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Photosynthesis Biyo-Şok Dalgası Halkası */}
+          <div
+            className="absolute w-36 h-36 rounded-full pointer-events-none z-20 border-2 border-emerald-300"
+            style={{
+              animation: 'gbaLeechReplenishBloom 1.5s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(34,197,94,0.38) 0%, rgba(74,222,128,0.2) 50%, transparent 75%)'
+            }}
+          />
+
+          {/* İkincil Dış Yeşil Enerji Aurası */}
+          <div
+            className="absolute w-44 h-44 rounded-full pointer-events-none z-15"
+            style={{
+              animation: 'gbaLeechReplenishBloom 1.5s ease-out 0.1s forwards',
+              background: 'radial-gradient(circle, rgba(190,242,100,0.25) 0%, rgba(34,197,94,0.12) 60%, transparent 80%)'
+            }}
+          />
+
+          {/* Kartın Etrafında Yükselen Parlak Klorofil Işıltıları ve Minik Yaprak Zerrecikleri */}
           {[
-            { x: '-32px', y: '-30px' }, { x: '32px', y: '-30px' },
-            { x: '-22px', y: '30px' }, { x: '22px', y: '30px' }
-          ].map((p, i) => (
+            { x: -35, drift: 10, rot: '35deg', delay: 0.05, size: 6 },
+            { x: -18, drift: -8, rot: '-40deg', delay: 0.15, size: 8 },
+            { x: 0, drift: 6, rot: '20deg', delay: 0.0, size: 7 },
+            { x: 18, drift: -12, rot: '-30deg', delay: 0.2, size: 9 },
+            { x: 36, drift: 8, rot: '45deg', delay: 0.1, size: 6 },
+            { x: -28, drift: -6, rot: '15deg', delay: 0.25, size: 8 },
+            { x: 26, drift: 10, rot: '-25deg', delay: 0.18, size: 7 }
+          ].map((sp, idx) => (
             <div
-              key={`bs-orb-${i}`}
-              className="absolute pointer-events-none z-35"
+              key={`leaf-spark-${idx}`}
+              className="absolute pointer-events-none z-30"
               style={{
-                '--bs-x': p.x,
-                '--bs-y': p.y,
-                animation: `gbaBulbasaurLifeSiphon 1.75s cubic-bezier(0.2, 0.8, 0.25, 1) ${0.55 + i * 0.1}s forwards`,
+                '--spark-x': `${sp.x}px`,
+                '--spark-drift': `${sp.drift}px`,
+                '--spark-rot': sp.rot,
+                animation: `gbaLeechReplenishLeafSpark 1.35s ease-out ${sp.delay}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
-              <div className="w-5 h-5 rounded-full bg-emerald-400 border border-white shadow-[0_0_15px_#22c55e] flex items-center justify-center">
-                <div className="w-2 h-2 rounded-full bg-rose-400" />
-              </div>
+              <div
+                style={{ width: `${sp.size}px`, height: `${sp.size * 1.5}px` }}
+                className="rounded-[50%_0_50%_0] bg-gradient-to-tr from-emerald-500 via-green-400 to-lime-300 border border-white/60 shadow-[0_0_8px_#4ade80]"
+              />
             </div>
           ))}
 
-          {/* Drained Target Healing Aura Ripple */}
+          {/* Parıldayan +10 HP Göstergesi (Doğal Bitki Temalı Badge) */}
           <div
-            className="absolute w-32 h-32 rounded-full pointer-events-none z-20"
-            style={{
-              animation: 'gbaBulbasaurDrainRipple 1.75s ease-out forwards',
-              background: 'radial-gradient(circle, rgba(34,197,94,0.35) 0%, rgba(21,128,61,0.2) 60%, transparent 80%)'
-            }}
-          />
+            className="absolute pointer-events-none z-35 flex items-center justify-center"
+            style={{ animation: 'gbaLeechReplenishHpBadge 1.5s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <div className="px-3 py-1 rounded-full bg-gradient-to-r from-emerald-700 via-green-600 to-emerald-700 border-2 border-lime-300 shadow-[0_0_18px_#22c55e,0_0_30px_#86efac] flex items-center gap-1.5 backdrop-blur-sm">
+              <span className="text-lime-300 text-sm font-black tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                +10 HP
+              </span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="text-lime-200">
+                <path d="M12 2L9 9H2L7 14L5 21L12 17L19 21L17 14L22 9H15L12 2Z" fill="#bef264" />
+              </svg>
+            </div>
+          </div>
         </div>
       )}
 
@@ -8321,6 +8765,52 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <div className="w-2.5 h-2.5 rounded-full bg-amber-300 shadow-[0_0_8px_#f59e0b]" />
             </div>
           ))}
+        </div>
+      )}
+
+      {/* 20av2. ARBOK WRAP CONSTRICT / TERROR STRIKE (Arbok Lv. 27 — 1999 Ken Sugimori Menacing Cobra Constrict) */}
+      {fx.type === 'arbok_wrap_constrict' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Authentic 1999 Ken Sugimori Arbok Menacing Cobra Constrict */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaArbokMenacingConstrict 1.75s cubic-bezier(0.18, 1, 0.3, 1) forwards' }}
+          >
+            <img
+              src="/assets/Arbok_Menacing_Strike.png"
+              alt="Arbok Menacing Constrict"
+              className={`${fx.whiffed ? 'w-[110px] h-[110px]' : 'w-[145px] h-[145px]'} object-contain drop-shadow-[0_0_24px_#7e22ce] select-none pointer-events-none`}
+            />
+          </div>
+
+          {/* Menacing Chest Hood Glare Flash */}
+          <div
+            className="absolute w-32 h-32 rounded-full pointer-events-none z-32"
+            style={{
+              animation: 'gbaArbokChestWarningGlare 1.75s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(239,68,68,0.7) 0%, rgba(147,51,234,0.45) 45%, transparent 70%)'
+            }}
+          />
+
+          {/* Dual Corrosive Venom Spurt Droplets */}
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaArbokVenomSpurtL 1.75s ease-out forwards' }}>
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="7" fill="#a855f7" className="drop-shadow-[0_0_10px_#c084fc]" />
+              <circle cx="12" cy="26" r="4" fill="#ec4899" />
+            </svg>
+          </div>
+          <div className="absolute pointer-events-none z-35" style={{ animation: 'gbaArbokVenomSpurtR 1.75s ease-out forwards' }}>
+            <svg width="40" height="40" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="7" fill="#a855f7" className="drop-shadow-[0_0_10px_#c084fc]" />
+              <circle cx="28" cy="26" r="4" fill="#ec4899" />
+            </svg>
+          </div>
+
+          {/* Heavy Purple Constriction Ring Pulse */}
+          <div
+            className="absolute w-44 h-44 rounded-full border-2 border-purple-500 pointer-events-none z-25"
+            style={{ animation: 'gbaEkansCrushPulse 1.75s ease-out forwards' }}
+          />
         </div>
       )}
 
@@ -14823,7 +15313,10 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
       {/* 58. HITMONLEE STRETCH KICK (Hitmonlee — Lateral Coiled Spring Thrust & Kinetic Impact) */}
       {fx.type === 'hitmonlee_stretch_kick' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+          style={fx.slot === 'bench' ? { transform: 'scale(0.8)' } : undefined}
+        >
           {/* Card Impact Shudder */}
           {!fx.whiffed && (
             <div

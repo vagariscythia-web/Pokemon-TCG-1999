@@ -6373,7 +6373,7 @@
           "Fighting",
           "Fighting"
         ],
-        "damage": 0,
+        "damage": 20,
         "text": "If your opponent has any Benched Pokémon, choose 1 of them and this attack does 20 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)"
       },
       {
@@ -7000,7 +7000,7 @@
           "Fighting",
           "Fighting"
         ],
-        "damage": 0,
+        "damage": 20,
         "text": "If your opponent has any Benched Pokémon, choose 1 of them and this attack does 20 damage to it. (Don't apply Weakness and Resistance for Benched Pokémon.)"
       },
       {
@@ -13482,7 +13482,7 @@
           "Grass",
           "Grass"
         ],
-        "damage": 0,
+        "damage": 20,
         "text": "Choose 1 of your opponent's Pokémon. This attack does 20 damage to that Pokémon. Don't apply Weakness and Resistance for this attack. (Any other effects that would happen after applying Weakness and Resistance still happen.)"
       }
     ],
@@ -14153,7 +14153,7 @@
           "Grass",
           "Grass"
         ],
-        "damage": 0,
+        "damage": 20,
         "text": "Choose 1 of your opponent's Pokémon. This attack does 20 damage to that Pokémon. Don't apply Weakness and Resistance for this attack. (Any other effects that would happen after applying Weakness and Resistance still happen.)"
       }
     ],
@@ -15347,7 +15347,7 @@
         "cost": [
           "Fighting"
         ],
-        "damage": 0,
+        "damage": 10,
         "text": "Choose 1 of your opponent's Pokémon. This attack does 10 damage to that Pokémon. Don't apply Weakness and Resistance for this attack. (Any other effects that would happen after applying Weakness and Resistance still happen.)"
       },
       {
@@ -15754,7 +15754,7 @@
           "Colorless",
           "Colorless"
         ],
-        "damage": 0,
+        "damage": 20,
         "text": "Choose 1 of your opponent's Pokémon and flip a coin. If heads, this attack does 20 damage to that Pokémon. Don't apply Weakness and Resistance for this attack. (Any other effects that would happen after applying Weakness and Resistance still happen.)"
       }
     ],

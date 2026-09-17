@@ -360,7 +360,14 @@ export class AIPlayer {
           return;
         }
         const atkName = atk.name.toLowerCase();
-        const baseDmg = atk.damage || 0;
+        let baseDmg = atk.damage || 0;
+        if (atkName === 'stretch kick') baseDmg = 20;
+        else if (atkName === 'flitter') baseDmg = 20;
+        else if (atkName === 'dig under') baseDmg = 10;
+        else if (atkName === 'coin hurl') baseDmg = 20;
+        else if (atkName === 'super fang' && player.active) {
+          baseDmg = Math.ceil(player.active.currentHp / 20) * 10;
+        }
         let score = baseDmg;
 
         // Weakness bonus
@@ -533,7 +540,11 @@ export class AIPlayer {
 
       // Massive bonus if this attachment makes the attack READY TO USE RIGHT NOW!
       if (totalMissingAfter === 0) {
-        const attackDmg = attack.damage || 0;
+        let attackDmg = attack.damage || 0;
+        const aname = attack.name.toLowerCase();
+        if (aname === 'stretch kick' || aname === 'flitter' || aname === 'coin hurl') attackDmg = 20;
+        else if (aname === 'dig under') attackDmg = 10;
+        else if (aname === 'super fang') attackDmg = 30;
         benefitScore += isTargetActive ? (300 + attackDmg * 2) : (150 + attackDmg);
       } else if (totalMissingAfter === 1) {
         // 1 energy away from ready!

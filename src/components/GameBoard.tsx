@@ -309,6 +309,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   // React's useState is async: two fast clicks can both see isTurnLocked=false
   // before the state update propagates. A ref update is synchronous and immediate.
   const attackLockRef = useRef(false);
+  const watchdogActiveRef = useRef(false);
   // Engaged when CPU attack beats are still on screen at the moment the turn hands back to the
   // player; keeps the turn locked until they drain without re-locking on the player's own FX.
   const playerTurnFxGateRef = useRef(false);
@@ -366,6 +367,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       return;
     }
 
+    if (watchdogActiveRef.current) return;
+
     if (anyPlayerFainted) {
       const faintedName = (state.player.active && state.player.active.currentHp <= 0)
         ? state.player.active.card.name
@@ -373,6 +376,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const wdTicks = statusTicksToShow(state);
       attackLockRef.current = false;
       setIsTurnLocked(false);
+      watchdogActiveRef.current = true;
       if (wdTicks.length > 0) {
         setWithheldTicks([]);
         setActiveFXList(poisonFXFromTicks(wdTicks));
@@ -388,14 +392,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             });
             setActionBanner(null);
             setKnockoutAnimationActive(false);
+            watchdogActiveRef.current = false;
           }, 1300);
-          return () => clearTimeout(inner);
         }, 1600);
-        return () => clearTimeout(timer);
+        return;
       }
       setActionBanner({ text: `💀 ${faintedName} was Knocked Out!`, type: 'knockout' });
       setKnockoutAnimationActive(true);
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         setActiveFXList([]);
         setState(curr => {
           if (curr.phase === 'SELECT_BENCH_REPLACEMENT' || curr.winner || curr.phase === 'GAME_OVER') return curr;
@@ -403,8 +407,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         });
         setActionBanner(null);
         setKnockoutAnimationActive(false);
+        watchdogActiveRef.current = false;
       }, 1300);
-      return () => clearTimeout(timer);
+      return;
     }
 
     if (anyCpuFainted) {
@@ -414,6 +419,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         ? state.cpu.active.card.name
         : state.cpu.bench.find(b => b.currentHp <= 0)?.card.name || 'Pokémon';
       const wdTicks = statusTicksToShow(state);
+      watchdogActiveRef.current = true;
       if (wdTicks.length > 0) {
         setWithheldTicks([]);
         setActiveFXList(poisonFXFromTicks(wdTicks));
@@ -431,14 +437,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             setKnockoutAnimationActive(false);
             setIsAiThinking(false);
             isAiRunningRef.current = false;
+            watchdogActiveRef.current = false;
           }, 1300);
-          return () => clearTimeout(inner);
         }, 1600);
-        return () => clearTimeout(timer);
+        return;
       }
       setActionBanner({ text: `💀 Opponent's ${faintedName} was Knocked Out!`, type: 'knockout' });
       setKnockoutAnimationActive(true);
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         setActiveFXList([]);
         setState(curr => {
           if (curr.phase === 'SELECT_BENCH_REPLACEMENT' || curr.winner || curr.phase === 'GAME_OVER') return curr;
@@ -448,8 +454,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         setKnockoutAnimationActive(false);
         setIsAiThinking(false);
         isAiRunningRef.current = false;
+        watchdogActiveRef.current = false;
       }, 1300);
-      return () => clearTimeout(timer);
+      return;
     }
   }, [
     state.player.active?.currentHp,
@@ -602,6 +609,9 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     attackerType?: string;
     selfTarget?: boolean;
     result?: AttackResult;
+    attackerDamage?: number;
+    attackerHp?: number;
+    attackerMaxHp?: number;
   }) => {
     const uid = () => Math.random().toString(36).substring(2, 9);
     const onBench = !spec.selfTarget && spec.result?.damageTarget === 'bench';
@@ -765,8 +775,62 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       });
     }
 
+    // Leech Seed: After the draining seed strikes the opponent, Bulbasaur absorbs vitality and recovers 10 HP.
+    // Animate the lush emerald replenishment vortex and +10 HP recovery directly on the attacking Bulbasaur.
+    // However, if Bulbasaur is already at full HP (0 damage counters / HP >= maxHp), do not play the
+    // replenish animation, as displaying "+10 HP" when no damage was healed is misleading.
+    if (spec.fxType === 'bulbasaur_leech_seed' && !spec.result?.whiffed && !spec.isBlocked) {
+      const oppSide: 'player' | 'cpu' = spec.target === 'player' ? 'cpu' : 'player';
+      const attackerInPlay = state[oppSide]?.active;
+      const dmg = spec.attackerDamage ?? attackerInPlay?.damage ?? 0;
+      const curHp = spec.attackerHp ?? attackerInPlay?.currentHp ?? 40;
+      const maxHp = spec.attackerMaxHp ?? attackerInPlay?.card?.hp ?? 40;
+      const isDamaged = dmg > 0 || curHp < maxHp;
+
+      if (isDamaged) {
+        beats.push({
+          id: uid(),
+          type: 'bulbasaur_leech_replenish',
+          target: oppSide,
+          slot: 'active',
+          pokemonName: spec.attackerName,
+          attackerType: spec.attackerType,
+          isSelfTarget: true,
+          damageText: '+10 HP',
+          delayMs: 1100,
+          intensity: moveIntensity
+        });
+      }
+    }
+
     setActiveFXList(beats);
   };
+
+  useEffect(() => {
+    (window as any).__triggerFX = (fxType: ActiveFX['type'], target: 'player' | 'cpu' = 'cpu') => {
+      setActiveFXList([{
+        id: Math.random().toString(36).substring(2, 9),
+        type: fxType,
+        target,
+        slot: 'active',
+        pokemonName: 'Bulbasaur',
+        attackerType: 'Grass',
+        damageText: '20'
+      }]);
+    };
+    (window as any).__triggerLeechSeed = (damaged: boolean = true) => {
+      playAttackFX({
+        fxType: 'bulbasaur_leech_seed',
+        target: 'cpu',
+        damageText: '20',
+        attackerName: 'Bulbasaur',
+        attackerType: 'Grass',
+        attackerDamage: damaged ? 10 : 0,
+        attackerHp: damaged ? 30 : 40,
+        attackerMaxHp: 40
+      });
+    };
+  }, []);
 
   /**
    * A confused attacker that rolls TAILS never lands its move - it hits itself for 20. Play that
@@ -1183,7 +1247,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 attackerName: prev.cpu.active?.card.name || '',
                 attackerType: prev.cpu.active?.card.types?.[0],
                 selfTarget,
-                result: atkRes
+                result: atkRes,
+                attackerDamage: prev.cpu.active?.damage,
+                attackerHp: prev.cpu.active?.currentHp,
+                attackerMaxHp: prev.cpu.active?.card.hp
               });
             }
             return next;
@@ -1253,6 +1320,20 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     setKnockoutAnimationActive(false);
                     cleanupAiTurn();
                   }
+                }, 1300);
+              } else if (current.player.bench.some(b => b.currentHp <= 0) || current.cpu.bench.some(b => b.currentHp <= 0)) {
+                const faintedBenchPokemon = current.player.bench.find(b => b.currentHp <= 0) || current.cpu.bench.find(b => b.currentHp <= 0);
+                const isPlayerTarget = current.player.bench.some(b => b.currentHp <= 0);
+                const bannerText = isPlayerTarget
+                  ? `💀 Your Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`
+                  : `💀 Opponent's Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`;
+                setActionBanner({ text: bannerText, type: 'knockout' });
+                setKnockoutAnimationActive(true);
+                setTimeout(() => {
+                  setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+                  setActionBanner(null);
+                  setKnockoutAnimationActive(false);
+                  cleanupAiTurn();
                 }, 1300);
               } else {
                 // Release the held-back poison damage in the very same frame the tick FX starts,
@@ -1575,7 +1656,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   attackerName,
                   attackerType: updated.cpu.active?.card.types?.[0],
                   selfTarget,
-                  result: atkRes
+                  result: atkRes,
+                  attackerDamage: updated.cpu.active?.damage,
+                  attackerHp: updated.cpu.active?.currentHp,
+                  attackerMaxHp: updated.cpu.active?.card.hp
                 });
               }
             }
@@ -1662,6 +1746,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   }
                 }, 1300);
               }
+            } else if (current.player.bench.some(b => b.currentHp <= 0) || current.cpu.bench.some(b => b.currentHp <= 0)) {
+              const faintedBenchPokemon = current.player.bench.find(b => b.currentHp <= 0) || current.cpu.bench.find(b => b.currentHp <= 0);
+              const isPlayerTarget = current.player.bench.some(b => b.currentHp <= 0);
+              const bannerText = isPlayerTarget
+                ? `💀 Your Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`
+                : `💀 Opponent's Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`;
+              setActionBanner({ text: bannerText, type: 'knockout' });
+              setKnockoutAnimationActive(true);
+              setTimeout(() => {
+                setState(postHold => GameEngine.resolveKnockout(postHold));
+                setActionBanner(null);
+                setKnockoutAnimationActive(false);
+              }, 1300);
             } else {
               setActionBanner(null);
               // Release the held-back damage in the same frame the tick FX starts.
@@ -4201,7 +4298,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           attackerName: player.active!.card.name,
           attackerType: player.active!.card.types?.[0],
           selfTarget,
-          result: atkRes
+          result: atkRes,
+          attackerDamage: player.active!.damage,
+          attackerHp: player.active!.currentHp,
+          attackerMaxHp: player.active!.card.hp
         });
       }
 
@@ -4289,6 +4389,26 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               attackLockRef.current = false;
               setIsTurnLocked(false);
             }
+          }, 1300);
+        }, koAnimDelay);
+      } else if (next.player.bench.some(b => b.currentHp <= 0) || next.cpu.bench.some(b => b.currentHp <= 0)) {
+        setWithheldTicks([]);
+        setTimeout(() => {
+          const faintedBenchPokemon = next.player.bench.find(b => b.currentHp <= 0) || next.cpu.bench.find(b => b.currentHp <= 0);
+          const isPlayerTarget = next.player.bench.some(b => b.currentHp <= 0);
+          const bannerText = isPlayerTarget
+            ? `💀 Your Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`
+            : `💀 Opponent's Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`;
+          setActionBanner({ text: bannerText, type: 'knockout' });
+          setKnockoutAnimationActive(true);
+          setTimeout(() => {
+            setActiveFXList([]);
+            setIsPoisonSequenceActive(false);
+            setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+            setActionBanner(null);
+            setKnockoutAnimationActive(false);
+            attackLockRef.current = false;
+            setIsTurnLocked(false);
           }, 1300);
         }, koAnimDelay);
       } else {
@@ -4424,7 +4544,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         attackerName: player.active.card.name,
         attackerType: player.active.card.types?.[0],
         selfTarget,
-        result: atkRes
+        result: atkRes,
+        attackerDamage: player.active.damage,
+        attackerHp: player.active.currentHp,
+        attackerMaxHp: player.active.card.hp
       });
     }
 
@@ -4507,6 +4630,26 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             attackLockRef.current = false;
             setIsTurnLocked(false);
           }
+        }, 1300);
+      }, choiceKoAnimDelay);
+    } else if (next.player.bench.some(b => b.currentHp <= 0) || next.cpu.bench.some(b => b.currentHp <= 0)) {
+      setWithheldTicks([]);
+      setTimeout(() => {
+        const faintedBenchPokemon = next.player.bench.find(b => b.currentHp <= 0) || next.cpu.bench.find(b => b.currentHp <= 0);
+        const isPlayerTarget = next.player.bench.some(b => b.currentHp <= 0);
+        const bannerText = isPlayerTarget
+          ? `💀 Your Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`
+          : `💀 Opponent's Benched ${faintedBenchPokemon?.card.name || 'Pokémon'} was Knocked Out!`;
+        setActionBanner({ text: bannerText, type: 'knockout' });
+        setKnockoutAnimationActive(true);
+        setTimeout(() => {
+          setActiveFXList([]);
+          setIsPoisonSequenceActive(false);
+          setState(postKnockout => GameEngine.resolveKnockout(postKnockout));
+          setActionBanner(null);
+          setKnockoutAnimationActive(false);
+          attackLockRef.current = false;
+          setIsTurnLocked(false);
         }, 1300);
       }, choiceKoAnimDelay);
     } else {
@@ -6028,7 +6171,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                         return (
                           <div className="flex flex-col items-end">
                             <span className="text-xs sm:text-sm font-black text-yellow-400">
-                              {atk.damage > 0 || preview.totalDamage > 0
+                              {atk.damage > 0 || preview.totalDamage > 0 || (preview.isVariable && preview.displayDamage !== '0')
                                 ? `${preview.displayDamage} ${t.dmgText}`
                                 : t.effectText}
                             </span>

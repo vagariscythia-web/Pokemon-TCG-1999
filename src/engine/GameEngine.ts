@@ -1749,8 +1749,28 @@ export class GameEngine {
       }
     }
 
+    // 4b. Flitter (Dark Golbat), Dig Under (Diglett), Coin Hurl (Meowth), Stretch Kick (Hitmonlee), Super Fang (Raticate):
+    // Card data stores damage: 0 or special rules because the hit goes to a *chosen* Pokémon or scales dynamically.
+    // The preview must show the real number or variable scale, not generic "effect".
+    let customDisplayDamage: string | undefined = undefined;
+    if (attackName === 'flitter') baseDamage = 20;
+    else if (attackName === 'dig under') baseDamage = 10;
+    else if (attackName === 'coin hurl') baseDamage = 20;
+    else if (attackName === 'stretch kick') baseDamage = 20;
+    else if (attackName === 'super fang') {
+      if (defender && defender.currentHp > 0) {
+        baseDamage = Math.ceil(defender.currentHp / 20) * 10;
+      } else {
+        isVariable = true;
+        customDisplayDamage = '½ HP';
+      }
+    }
+
     // 2. PlusPower attached (+10 per PlusPower)
-    if (attacker.plusPowersAttached && attacker.plusPowersAttached > 0 && baseDamage > 0) {
+    // PlusPower reads "If this Pokémon's attack does damage to the Defending Pokémon",
+    // so attacks that exclusively target the Bench (Stretch Kick) do not receive the bonus.
+    const isBenchOnlyAttack = attackName === 'stretch kick';
+    if (attacker.plusPowersAttached && attacker.plusPowersAttached > 0 && baseDamage > 0 && !isBenchOnlyAttack) {
       bonusDamage += attacker.plusPowersAttached * 10;
     }
 
@@ -1769,13 +1789,6 @@ export class GameEngine {
         bonusDamage = defender.damage;
       }
     }
-
-    // 4b. Flitter (Dark Golbat), Dig Under (Diglett), Coin Hurl (Meowth):
-    // card data stores damage: 0 because the hit goes to a *chosen* Pokémon, but the
-    // amount itself is fixed. The preview must show the real number, not "effect".
-    if (attackName === 'flitter') baseDamage = 20;
-    else if (attackName === 'dig under') baseDamage = 10;
-    else if (attackName === 'coin hurl') baseDamage = 20;
 
     // 5. Karate Chop (50 - attacker damage taken)
     if (attackName === 'karate chop') {
@@ -1803,7 +1816,9 @@ export class GameEngine {
     const totalDamage = Math.max(0, baseDamage + bonusDamage);
 
     let displayDamage = '';
-    if (multiplierText) {
+    if (customDisplayDamage) {
+      displayDamage = customDisplayDamage;
+    } else if (multiplierText) {
       displayDamage = `${baseDamage} (${multiplierText})`;
     } else if (bonusDamage > 0) {
       displayDamage = `${baseDamage} (+${bonusDamage})`;
@@ -2093,9 +2108,18 @@ export class GameEngine {
     const stareTargetIndex = CHOOSE_TARGET_MOVES.includes(attackName)
       ? GameEngine.pickStareTargetIndex(defenderPlayer, next.turn, effectChoices?.stareTargetIndex)
       : 0;
+
+    // Stretch Kick: "If your opponent has any Benched Pokémon, choose 1 of them and this attack does 20 damage to it."
+    const isStretchKick = attackName === 'stretch kick';
+    const stretchKickBenchIndex = isStretchKick && defenderPlayer.bench.length > 0
+      ? (effectChoices?.benchTargetIndex !== undefined && effectChoices.benchTargetIndex >= 0 && effectChoices.benchTargetIndex < defenderPlayer.bench.length
+          ? effectChoices.benchTargetIndex
+          : pickBenchIndex(defenderPlayer.bench, 'first', 20))
+      : -1;
+
     const damageTarget: InPlayCard = stareTargetIndex > 0
       ? (defenderPlayer.bench[stareTargetIndex - 1] || defender)
-      : defender;
+      : (stretchKickBenchIndex >= 0 ? defenderPlayer.bench[stretchKickBenchIndex] : defender);
     const hitsBench = damageTarget !== defender;
 
     // 1. Multi-coin & Multiplier attacks
@@ -2246,16 +2270,6 @@ export class GameEngine {
         baseDamage = 30;
         attacker.damage += 10;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
-        GameEngine.addLog(next, `⚡ Thunderpunch check: TAILS! Electabuzz dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining).`, 'damage');
-      }
-    } else if (attackName === 'thunder attack' && attacker.card.name.includes('Dark Jolteon')) {
-      if (primaryFlip) {
-        defender.status = 'Paralyzed';
-        GameEngine.addLog(next, `⚡ Thunder Attack: HEADS! ${defender.card.name} is now Paralyzed!`, 'action');
-      } else {
-        attacker.damage += 10;
-        attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
-        GameEngine.addLog(next, `⚡ Thunder Attack: TAILS! Dark Jolteon dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining).`, 'damage');
       }
     } else if (attackName === 'water gun' || attackName === 'hydro pump') {
       const waterEnergies = attacker.attachedEnergy.filter(e => e.types && e.types.includes('Water')).length;
@@ -2309,6 +2323,11 @@ export class GameEngine {
       const allKoffings = [attacker, ...attackerPlayer.bench, defender, ...defenderPlayer.bench].filter(p => p && (p.card.name.includes('Koffing') || p.card.name.includes('Weezing'))).length;
       baseDamage = allKoffings * 20;
       GameEngine.addLog(next, `💣 Mass Explosion dealt ${baseDamage} damage (${allKoffings} Koffings/Weezings in play)!`, 'action');
+    } else if (attackName === 'stretch kick') {
+      baseDamage = defenderPlayer.bench.length > 0 ? 20 : 0;
+      if (defenderPlayer.bench.length === 0) {
+        GameEngine.addLog(next, `🥋 Stretch Kick: Opponent has no Benched Pokémon!`, 'action');
+      }
     } else if (attackName === 'magnetism') {
       const magnetsOnBench = attackerPlayer.bench.filter(b => b.card.name.includes('Magnemite') || b.card.name.includes('Magneton')).length;
       baseDamage = 10 + magnetsOnBench * 10;
@@ -2436,6 +2455,7 @@ export class GameEngine {
       'flitter',
       'dig under',
       'coin hurl',
+      'stretch kick',
       'bench manipulation'
     ].includes(attackName);
 
@@ -2590,12 +2610,12 @@ export class GameEngine {
       // Where the hit landed. The UI animates the struck card, so a Stare that picked the Bench
       // must not shake the Active one.
       damageTarget: hitsBench ? 'bench' : 'active',
-      damageTargetBenchIndex: hitsBench ? stareTargetIndex - 1 : undefined,
+      damageTargetBenchIndex: hitsBench ? (stareTargetIndex > 0 ? stareTargetIndex - 1 : stretchKickBenchIndex) : undefined,
       fxIntensity,
       multiHitCount,
       multiHitSequence,
       swordsDanceBoosted: swordsDanceWasActive,
-      whiffed: isWhiffed,
+      whiffed: isWhiffed || (isStretchKick && defenderPlayer.bench.length === 0),
       coinFlipSuccess
     };
 
@@ -2665,9 +2685,8 @@ export class GameEngine {
     if (attackName === 'gigaspark') {
       if (primaryFlip) {
         defender.status = 'Paralyzed';
-        defenderPlayer.bench.forEach(b => {
-          b.damage += 10;
-          b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+        defenderPlayer.bench.forEach((b, bIdx) => {
+          recordBenchHit(defenderPlayer.id, b, bIdx, hitBench(b, 10));
         });
         GameEngine.addLog(next, `⚡ Gigaspark: HEADS! ${defender.card.name} is now Paralyzed and 10 damage dealt to each opponent benched Pokémon!`, 'damage');
       } else {
@@ -2678,11 +2697,10 @@ export class GameEngine {
     // Thunderstorm (Zapdos - Fossil)
     if (attackName === 'thunderstorm') {
       let tailsCount = 0;
-      defenderPlayer.bench.forEach(b => {
+      defenderPlayer.bench.forEach((b, bIdx) => {
         const bFlip = (coinResults && coinResults[coinIdx] !== undefined) ? coinResults[coinIdx++] : (Math.random() >= 0.5);
         if (bFlip) {
-          b.damage += 20;
-          b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+          recordBenchHit(defenderPlayer.id, b, bIdx, hitBench(b, 20));
         } else {
           tailsCount++;
         }
@@ -2721,9 +2739,8 @@ export class GameEngine {
       const c2 = (coinResults && coinResults[coinIdx] !== undefined) ? coinResults[coinIdx++] : (Math.random() >= 0.5);
       if (c1) {
         const benchDmg = c2 ? 20 : 10;
-        defenderPlayer.bench.forEach(b => {
-          b.damage += benchDmg;
-          b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+        defenderPlayer.bench.forEach((b, bIdx) => {
+          recordBenchHit(defenderPlayer.id, b, bIdx, hitBench(b, benchDmg));
         });
         GameEngine.addLog(next, `⚡ Surprise Thunder: HEADS! Dealt ${benchDmg} damage to each opponent benched Pokémon!`, 'damage');
       }
@@ -2871,11 +2888,11 @@ export class GameEngine {
       }
     }
 
-    // 2. Pidgeot & Pidgeotto - Whirlwind ("switch the Defending Pokémon with 1 of your
+    // 2. Pidgeot & Pidgeotto - Whirlwind / Rhydon - Ram ("switch the Defending Pokémon with 1 of your
     // opponent's Benched Pokémon" - the attacker chooses, it is not a random pick)
-    if (attackName === 'whirlwind') {
+    if (attackName === 'whirlwind' || (attackName === 'ram' && attacker.card.name.includes('Rhydon'))) {
       if (defender.preventAllEffectsNextTurn) {
-        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented Whirlwind!`, 'status');
+        GameEngine.addLog(next, `🛡️ ${defender.card.name} protected itself and prevented ${attack.name}!`, 'status');
       } else if (defenderPlayer.bench.length > 0 && defenderPlayer.active) {
         const oldDefender = defenderPlayer.active;
         const newDefender = defenderPlayer.bench.splice(pickBenchIndex(defenderPlayer.bench, 'random'), 1)[0];
@@ -2883,7 +2900,7 @@ export class GameEngine {
         oldDefender.poisonType = undefined;
         defenderPlayer.bench.push(oldDefender);
         defenderPlayer.active = newDefender;
-        GameEngine.addLog(next, `💨 Whirlwind forced ${defenderPlayer.name}'s ${newDefender.card.name} into the Active position!`, 'action');
+        GameEngine.addLog(next, `💨 ${attack.name} forced ${defenderPlayer.name}'s ${newDefender.card.name} into the Active position!`, 'action');
       }
     }
 
@@ -3085,23 +3102,23 @@ export class GameEngine {
       GameEngine.addLog(next, `⚡ ${attack.name} dealt ${dealt} damage to benched ${b.card.name}!`, 'damage');
     }
 
-    // 17. Hitmonlee - Stretch Kick ("choose 1 of them")
-    if (attackName === 'stretch kick' && defenderPlayer.bench.length > 0) {
-      const bIdx = pickBenchIndex(defenderPlayer.bench, 'first', 20);
-      const b = defenderPlayer.bench[bIdx];
-      const dealt = hitBench(b, 20);
-      recordBenchHit(defenderPlayer.id, b, bIdx, dealt);
-      GameEngine.addLog(next, `🥋 Stretch Kick dealt ${dealt} damage to benched ${b.card.name}!`, 'damage');
-    }
+    // 17. Hitmonlee - Stretch Kick
+    // Resolved via the primary damageTarget pipeline above so damage, shake, and animation
+    // land exclusively on the chosen Benched Pokémon (hitsBench = true, damageTarget = 'bench'),
+    // while the active Pokémon remains completely untouched.
 
     // 18. Electrode - Chain Lightning
     if (attackName === 'chain lightning') {
       const defType = defender.card.types?.[0];
       if (defType && defType !== 'Colorless') {
-        [...attackerPlayer.bench, ...defenderPlayer.bench].forEach(b => {
+        attackerPlayer.bench.forEach((b, bIdx) => {
           if (b && b.card.types && b.card.types.includes(defType)) {
-            b.damage += 10;
-            b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+            recordBenchHit(attackerPlayer.id, b, bIdx, hitBench(b, 10));
+          }
+        });
+        defenderPlayer.bench.forEach((b, bIdx) => {
+          if (b && b.card.types && b.card.types.includes(defType)) {
+            recordBenchHit(defenderPlayer.id, b, bIdx, hitBench(b, 10));
           }
         });
         GameEngine.addLog(next, `⚡ Chain Lightning dealt 10 damage to each ${defType} benched Pokémon!`, 'damage');
@@ -3244,26 +3261,47 @@ export class GameEngine {
 
     // 10. Dugtrio - Earthquake
     if (attackName === 'earthquake') {
-      attackerPlayer.bench.forEach(b => {
-        b.damage += 10;
-        b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+      attackerPlayer.bench.forEach((b, bIdx) => {
+        recordBenchHit(attackerPlayer.id, b, bIdx, hitBench(b, 10));
       });
       GameEngine.addLog(next, `🌋 Earthquake dealt 10 damage to each benched Pokémon on ${attackerPlayer.name}'s side!`, 'damage');
     }
 
-    // 11. Magnemite - Selfdestruct
+    // 11. Selfdestruct (Magnemite, Magneton, Golem, Weezing)
     if (attackName === 'selfdestruct') {
-      attackerPlayer.bench.forEach(b => {
-        b.damage += 10;
-        b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+      const benchMatch = /does (\d+) damage to each (?:pok[eé]mon|pokemon) on each player['’]s bench/i.exec(attack.text || '');
+      const benchDmg = benchMatch ? Number(benchMatch[1]) : (attacker.card.name.includes('Golem') || attacker.card.name.includes('Magneton') ? 20 : 10);
+      const selfDmg = GameEngine.getSelfDamageFromText(attack) || (attacker.card.name.includes('Golem') ? 100 : attacker.card.name.includes('Magneton') ? (attacker.card.hp || 80) : attacker.card.name.includes('Weezing') ? 60 : 40);
+
+      attackerPlayer.bench.forEach((b, bIdx) => {
+        recordBenchHit(attackerPlayer.id, b, bIdx, hitBench(b, benchDmg));
       });
-      defenderPlayer.bench.forEach(b => {
-        b.damage += 10;
-        b.currentHp = Math.max(0, (b.card.hp || 0) - b.damage);
+      defenderPlayer.bench.forEach((b, bIdx) => {
+        recordBenchHit(defenderPlayer.id, b, bIdx, hitBench(b, benchDmg));
       });
-      attacker.damage += 40;
+      attacker.damage += selfDmg;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
-      GameEngine.addLog(next, `💥 Selfdestruct exploded! 10 damage to all benched Pokémon, 40 to ${attacker.card.name}!`, 'damage');
+      GameEngine.addLog(next, `💥 Selfdestruct exploded! ${benchDmg} damage to all benched Pokémon, ${selfDmg} to ${attacker.card.name}!`, 'damage');
+    }
+
+    // Dark Weezing - Mass Explosion (20 damage to each Koffing, Weezing, and Dark Weezing in play)
+    if (attackName === 'mass explosion') {
+      const isKoffingOrWeezing = (c: InPlayCard) => c && (c.card.name.includes('Koffing') || c.card.name.includes('Weezing'));
+      if (isKoffingOrWeezing(attacker)) {
+        attacker.damage += 20;
+        attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      }
+      attackerPlayer.bench.forEach((b, bIdx) => {
+        if (isKoffingOrWeezing(b)) {
+          recordBenchHit(attackerPlayer.id, b, bIdx, hitBench(b, 20));
+        }
+      });
+      defenderPlayer.bench.forEach((b, bIdx) => {
+        if (isKoffingOrWeezing(b)) {
+          recordBenchHit(defenderPlayer.id, b, bIdx, hitBench(b, 20));
+        }
+      });
+      GameEngine.addLog(next, `💣 Mass Explosion dealt 20 damage to each Koffing and Weezing in play!`, 'damage');
     }
 
     // 12. Gastly - Destiny Bond
@@ -3442,6 +3480,10 @@ export class GameEngine {
       attacker.damage += 20;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
       GameEngine.addLog(next, `💥 Submission recoil: ${attacker.card.name} dealt 20 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
+    } else if (attackName === 'ram' && attacker.card.name.includes('Rhydon')) {
+      attacker.damage += 20;
+      attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      GameEngine.addLog(next, `💥 Ram recoil: Rhydon dealt 20 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
     } else if (attackName === 'thunder jolt') {
       if (!primaryFlip) {
         attacker.damage += 10;
