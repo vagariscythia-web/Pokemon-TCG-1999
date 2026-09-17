@@ -2094,6 +2094,7 @@ export class GameEngine {
     /** Single-coin effect failure flag (Tails on Withdraw, Clamp, etc.) to drive rapid whiff FX. */
     let isWhiffed = false;
     let coinFlipSuccess: boolean | undefined = undefined;
+    let recoilDamage = 0;
 
     /**
      * Stare names its own victim: "Choose 1 of your opponent's Pokémon. This attack does 10
@@ -2265,11 +2266,14 @@ export class GameEngine {
     } else if (attackName === 'thunderpunch') {
       if (primaryFlip) {
         baseDamage = 40;
+        fxIntensity = 1.30;
         GameEngine.addLog(next, `⚡ Thunderpunch check: HEADS! +10 damage (40 damage)!`, 'action');
       } else {
         baseDamage = 30;
         attacker.damage += 10;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += 10;
+        GameEngine.addLog(next, `⚡ Thunderpunch recoil: TAILS! Electabuzz dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
       }
     } else if (attackName === 'water gun' || attackName === 'hydro pump') {
       const waterEnergies = attacker.attachedEnergy.filter(e => e.types && e.types.includes('Water')).length;
@@ -2392,6 +2396,7 @@ export class GameEngine {
         baseDamage = 30;
         attacker.damage += 10;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += 10;
         GameEngine.addLog(next, `⚡ Thrash: TAILS! ${attacker.card.name} dealt 10 recoil damage to itself!`, 'damage');
       }
     } else if (attackName === 'playing with fire') {
@@ -2589,6 +2594,7 @@ export class GameEngine {
     if (defenderHasActivePower('Strikes Back') && finalDamage > 0) {
       attacker.damage += 10;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += 10;
       GameEngine.addLog(next, `🥊 Strikes Back: Machamp dealt 10 recoil damage to ${attacker.card.name}!`, 'damage');
     }
 
@@ -2616,7 +2622,8 @@ export class GameEngine {
       multiHitSequence,
       swordsDanceBoosted: swordsDanceWasActive,
       whiffed: isWhiffed || (isStretchKick && defenderPlayer.bench.length === 0),
-      coinFlipSuccess
+      coinFlipSuccess,
+      selfDamage: recoilDamage > 0 ? recoilDamage : undefined
     };
 
     GameEngine.addLog(next, `⚔️ ${attackerPlayer.name}'s ${attacker.card.name} used ${attack.name} for ${finalDamage} damage! (${damageTarget.card.name}: ${damageTarget.currentHp}/${damageTarget.card.hp} HP remaining)`, 'damage');
@@ -2708,6 +2715,7 @@ export class GameEngine {
       if (tailsCount > 0) {
         attacker.damage += tailsCount * 10;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += tailsCount * 10;
         GameEngine.addLog(next, `⚡ Thunderstorm: ${tailsCount} tails! Zapdos dealt ${tailsCount * 10} recoil damage to itself!`, 'damage');
       }
       GameEngine.addLog(next, `⚡ Thunderstorm struck opponent's bench!`, 'damage');
@@ -2721,6 +2729,7 @@ export class GameEngine {
       } else {
         attacker.damage += 10;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += 10;
         GameEngine.addLog(next, `⚡ Thunder Attack: TAILS! Dark Jolteon dealt 10 damage to itself!`, 'damage');
       }
     }
@@ -2759,6 +2768,7 @@ export class GameEngine {
     if (attackName === 'rocket tackle') {
       attacker.damage += 10;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += 10;
       if (primaryFlip) {
         attacker.preventDamageNextTurn = true;
         GameEngine.addLog(next, `🚀 Rocket Tackle: HEADS! Protected from all damage next turn, dealt 10 self-damage!`, 'status');
@@ -3063,6 +3073,7 @@ export class GameEngine {
       }
       attacker.damage += 10;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += 10;
       GameEngine.addLog(next, `🔮 Energy Conversion: Recovered ${recovered} Energy cards from discard pile! (Gastly took 10 recoil damage)`, 'action');
     }
 
@@ -3281,6 +3292,7 @@ export class GameEngine {
       });
       attacker.damage += selfDmg;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += selfDmg;
       GameEngine.addLog(next, `💥 Selfdestruct exploded! ${benchDmg} damage to all benched Pokémon, ${selfDmg} to ${attacker.card.name}!`, 'damage');
     }
 
@@ -3290,6 +3302,7 @@ export class GameEngine {
       if (isKoffingOrWeezing(attacker)) {
         attacker.damage += 20;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += 20;
       }
       attackerPlayer.bench.forEach((b, bIdx) => {
         if (isKoffingOrWeezing(b)) {
@@ -3471,23 +3484,28 @@ export class GameEngine {
     if (attackName === 'double-edge') {
       attacker.damage += 80;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += 80;
       GameEngine.addLog(next, `💥 Double-edge recoil: ${attacker.card.name} dealt 80 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
     } else if (attackName === 'take down') {
       attacker.damage += 30;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += 30;
       GameEngine.addLog(next, `💥 Take Down recoil: ${attacker.card.name} dealt 30 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
     } else if (attackName === 'submission') {
       attacker.damage += 20;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += 20;
       GameEngine.addLog(next, `💥 Submission recoil: ${attacker.card.name} dealt 20 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
     } else if (attackName === 'ram' && attacker.card.name.includes('Rhydon')) {
       attacker.damage += 20;
       attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+      recoilDamage += 20;
       GameEngine.addLog(next, `💥 Ram recoil: Rhydon dealt 20 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
     } else if (attackName === 'thunder jolt') {
       if (!primaryFlip) {
         attacker.damage += 10;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += 10;
         GameEngine.addLog(next, `⚡ Thunder Jolt recoil: TAILS! ${attacker.card.name} dealt 10 damage to itself (${attacker.currentHp}/${attacker.card.hp} HP remaining)!`, 'damage');
       }
     } else if (attackName === 'thunder' && GameEngine.getSelfDamageFromText(attack) > 0) {
@@ -3499,12 +3517,14 @@ export class GameEngine {
       if (!primaryFlip) {
         attacker.damage += recoil;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += recoil;
         GameEngine.addLog(next, `⚡ Thunder recoil: TAILS! ${attacker.card.name} dealt ${recoil} damage to itself!`, 'damage');
       }
     } else if (attackName === 'electric shock') {
       if (!primaryFlip) {
         attacker.damage += 10;
         attacker.currentHp = Math.max(0, (attacker.card.hp || 0) - attacker.damage);
+        recoilDamage += 10;
         GameEngine.addLog(next, `⚡ Electric Shock recoil: TAILS! ${attacker.card.name} dealt 10 damage to itself!`, 'damage');
       }
     }
@@ -3621,6 +3641,10 @@ export class GameEngine {
     // the Active card makes the move look like it did nothing at all to the Bench.
     if (benchHits.length > 0 && next.lastAttackResult) {
       next.lastAttackResult.benchHits = benchHits;
+    }
+
+    if (recoilDamage > 0 && next.lastAttackResult) {
+      next.lastAttackResult.selfDamage = recoilDamage;
     }
 
     const hasAnyKnockout =
