@@ -42,3 +42,8 @@ Bu depoda herhangi bir saldırı animasyonu (Move Animation / Battle FX), görse
 
 8. **Varlık Üretim & Kırpma Protokolü (Strict Bounding-Box Cropping):**
    - Kullanıcının `public/assets/raw/` altında hazırladığı onaylı şeffaf PNG'ler, etrafında +8–16px güvenli pay bırakılarak sıkıca kırpılmalı (`tight crop`) ve öyle `/public/assets/` altına alınmalıdır.
+
+9. **Kod Teyidi ve Varlık Denetim Protokolü (Strict Codebase Verification Protocol):**
+   - Bir Pokémon'un, saldırı animasyonunun veya görsel varlığın mevcut durumunu analiz ederken veya kullanıcıya raporlarken; ASLA naif regex aramalarına veya geçici terminal script özetlerine körü körüne güvenilerek varsayımda bulunulamaz.
+   - Herhangi bir varlığın (`.png`/`.svg`) veya saldırının kodda aktif olup olmadığı, istisnasız olarak doğrudan `BattleFXOverlay.tsx` içindeki gerçek JSX satır numaraları (`<img src="..." />` ve `fx.type === ...`) ve `cards.json` eşleşmeleri okunarak KESİNLEŞTİRİLMELİDİR.
+   - Depoda zaten mevcut ve 5 katmanlı mimaride çalışan bir varlık (örneğin Pikachu, Nidoran ♂, Clefairy vb.) için kod teyidi yapılmadan "eksik", "yapılacak" veya "stok görsel adayı" şeklinde yanıltıcı iddialarda bulunulması KESİNLİKLE YASAKTIR. Her analiz doğrudan kod referansıyla (satır numarasıyla) belgelenmelidir.

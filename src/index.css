@@ -8842,6 +8842,53 @@ html, body {
   }
 }
 
+@keyframes gbaMeowthActorSwipe {
+  0% {
+    opacity: 0;
+    transform: translate(-18px, 12px) scale(0.75);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(6px, -6px) scale(1.06);
+    filter: drop-shadow(0 0 16px #fbbf24) brightness(1.25);
+  }
+  42% {
+    opacity: 1;
+    transform: translate(12px, -2px) scale(1.02);
+    filter: drop-shadow(0 0 20px #d97706) brightness(1.1);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(6px, 2px) scale(0.96);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0px, 10px) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaMeowthWhiff {
+  0% {
+    opacity: 0;
+    transform: translate(-10px, 8px) scale(0.7);
+  }
+  30% {
+    opacity: 0.75;
+    transform: translate(0px, 0px) scale(0.85);
+  }
+  65% {
+    opacity: 0.35;
+    transform: translate(-4px, 4px) scale(0.8);
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-8px, 8px) scale(0.75);
+    filter: blur(3px);
+  }
+}
+
 /* 4. SPEAROW: Peck & Mirror Move */
 @keyframes gbaSpearowTriplePeck {
   0% {
@@ -9059,80 +9106,519 @@ html, body {
   }
 }
 
-/* 7. VULPIX: Confuse Ray (Mystical Kitsunebi Fox-Fire Spiral) */
-@keyframes gbaVulpixFoxFireOrbit {
+/* 7. VULPIX: Confuse Ray (Mystical Japanese Kitsunebi Fox-Fire & Hypnotic Waves) */
+@keyframes gbaVulpixMysticFloat {
   0% {
     opacity: 0;
-    transform: rotate(0deg) scale(0.5);
+    transform: translateY(14px) scale(0.88);
   }
-  30% {
+  18% {
     opacity: 1;
-    transform: rotate(180deg) scale(0.95);
-    filter: drop-shadow(0 0 12px #f97316);
+    transform: translateY(-2px) scale(1.02);
+    filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.85)) drop-shadow(0 0 16px rgba(217, 70, 239, 0.5));
   }
-  65% {
-    opacity: 0.95;
-    transform: rotate(450deg) scale(1.05);
-    filter: drop-shadow(0 0 16px #a855f7);
+  36% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.05);
+    /* Psychic Eye & Forehead Trance Flash with high contrast */
+    filter: drop-shadow(0 0 14px #e879f9) drop-shadow(0 0 22px #f97316) brightness(1.22);
   }
-  85% {
-    opacity: 0.8;
-    transform: rotate(630deg) scale(1.08);
+  58% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.01);
+    filter: drop-shadow(0 0 12px #c084fc) brightness(1.1);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translateY(2px) scale(0.98);
+    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.6));
   }
   100% {
     opacity: 0;
-    transform: rotate(720deg) scale(1.12);
+    transform: translateY(10px) scale(0.88);
   }
 }
 
-@keyframes gbaVulpixHypnoWave {
+/* Hypnotic undulating dreamlike card blur for Vulpix Confuse Ray (Gentle Transparent Start -> Late Deep Confusion Blur) */
+@keyframes gbaVulpixConfuseCardBlur {
+  0%   { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); filter: hue-rotate(0deg); }
+  22%  { opacity: 0.5; backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px); filter: hue-rotate(10deg); }
+  45%  { opacity: 0.8; backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); filter: hue-rotate(20deg) brightness(1.05); }
+  65%  { opacity: 0.95; backdrop-filter: blur(5.0px); -webkit-backdrop-filter: blur(5.0px); filter: hue-rotate(35deg) brightness(1.15); }
+  82%  { opacity: 1; backdrop-filter: blur(6.0px); -webkit-backdrop-filter: blur(6.0px); filter: hue-rotate(-25deg) brightness(1.2); }
+  92%  { opacity: 0.55; backdrop-filter: blur(2.5px); -webkit-backdrop-filter: blur(2.5px); filter: hue-rotate(0deg); }
+  100% { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); filter: none; }
+}
+
+@keyframes gbaVulpixSpiritMist {
   0% {
     opacity: 0;
-    transform: scale(0.3);
-  }
-  35% {
-    opacity: 0.85;
     transform: scale(0.75);
-    filter: drop-shadow(0 0 12px #fb7185);
   }
-  70% {
-    opacity: 0.7;
-    transform: scale(0.95);
+  22% {
+    opacity: 0.5;
+    transform: scale(1.0);
   }
-  100% {
-    opacity: 0;
+  60% {
+    opacity: 0.65;
     transform: scale(1.1);
   }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
 }
 
-/* 8. ODDISH: Stun Spore & Sprout */
+/* 3 KITSUNEBI ORBITS: SLOW CRISP CW START -> ACCELERATING CCW SNAP -> LATE-PHASE VERTIGO MOTION BLUR */
+@keyframes gbaVulpixVertigoWisp1 {
+  /* Phase 1: Slow, Stately, Crystal-Clear Clockwise (CW) Sweep (0% - 45%) */
+  0% {
+    opacity: 1;
+    transform: translate(0px, -42px) scale(1);
+    filter: blur(0px) drop-shadow(0 0 10px #f97316);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(38px, -30px) scale(1.02);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  24% {
+    opacity: 1;
+    transform: translate(58px, 0px) scale(1.04);
+    filter: blur(0px) drop-shadow(0 0 14px #facc15);
+  }
+  36% {
+    opacity: 1;
+    transform: translate(35px, 32px) scale(1.02);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(0px, 42px) scale(1.0);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  /* Phase 2: Elastic Brake & Reverse Snap into CCW (45% - 68%) */
+  50% {
+    opacity: 1;
+    transform: translate(-22px, 36px) scale(1.06);
+    filter: blur(0px) drop-shadow(0 0 16px #facc15);
+  }
+  56% {
+    opacity: 1;
+    transform: translate(-52px, 16px) scale(1.10);
+    filter: blur(0.6px) drop-shadow(0 0 16px #f97316);
+  }
+  62% {
+    opacity: 1;
+    transform: translate(-58px, -15px) scale(1.14);
+    filter: blur(1.0px) drop-shadow(0 0 18px #facc15);
+  }
+  68% {
+    opacity: 1;
+    transform: translate(0px, -42px) scale(1.18);
+    filter: blur(1.5px) drop-shadow(0 0 20px #f97316);
+  }
+  /* Phase 3: Late-Phase Rapid Vertigo Spin & Progressive Motion Blur (68% - 92%) */
+  74% {
+    opacity: 1;
+    transform: translate(52px, -18px) scale(1.22);
+    filter: blur(2.2px) drop-shadow(0 0 22px #fef08a) brightness(1.2);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(15px, 38px) scale(1.26);
+    filter: blur(2.8px) drop-shadow(0 0 24px #f97316) brightness(1.28);
+  }
+  86% {
+    opacity: 1;
+    transform: translate(-58px, 0px) scale(1.30);
+    filter: blur(3.5px) drop-shadow(0 0 26px #facc15) brightness(1.35);
+  }
+  92% {
+    opacity: 1;
+    transform: translate(0px, -42px) scale(1.32);
+    filter: blur(4.0px) drop-shadow(0 0 28px #f97316) brightness(1.4);
+  }
+  /* Phase 4: Centrifugal Ember Scatter (92% - 100%) */
+  96% {
+    opacity: 0.6;
+    transform: translate(45px, 20px) scale(0.85);
+    filter: blur(2.5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(70px, 35px) scale(0.3);
+    filter: blur(1px);
+  }
+}
+
+@keyframes gbaVulpixVertigoWisp2 {
+  /* Phase 1: Slow, Stately, Crystal-Clear Clockwise (CW) Sweep (0% - 45%) */
+  0% {
+    opacity: 1;
+    transform: translate(50px, 21px) scale(1);
+    filter: blur(0px) drop-shadow(0 0 10px #f97316);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(20px, 38px) scale(1.02);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  24% {
+    opacity: 1;
+    transform: translate(-38px, 30px) scale(1.04);
+    filter: blur(0px) drop-shadow(0 0 14px #facc15);
+  }
+  36% {
+    opacity: 1;
+    transform: translate(-58px, 0px) scale(1.02);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(-35px, -32px) scale(1.0);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  /* Phase 2: Elastic Brake & Reverse Snap into CCW (45% - 68%) */
+  50% {
+    opacity: 1;
+    transform: translate(-45px, -20px) scale(1.06);
+    filter: blur(0px) drop-shadow(0 0 16px #facc15);
+  }
+  56% {
+    opacity: 1;
+    transform: translate(0px, 42px) scale(1.10);
+    filter: blur(0.6px) drop-shadow(0 0 16px #f97316);
+  }
+  62% {
+    opacity: 1;
+    transform: translate(58px, 0px) scale(1.14);
+    filter: blur(1.0px) drop-shadow(0 0 18px #facc15);
+  }
+  68% {
+    opacity: 1;
+    transform: translate(20px, -38px) scale(1.18);
+    filter: blur(1.5px) drop-shadow(0 0 20px #f97316);
+  }
+  /* Phase 3: Late-Phase Rapid Vertigo Spin & Progressive Motion Blur (68% - 92%) */
+  74% {
+    opacity: 1;
+    transform: translate(-50px, 0px) scale(1.22);
+    filter: blur(2.2px) drop-shadow(0 0 22px #fef08a) brightness(1.2);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(0px, 42px) scale(1.26);
+    filter: blur(2.8px) drop-shadow(0 0 24px #f97316) brightness(1.28);
+  }
+  86% {
+    opacity: 1;
+    transform: translate(58px, 0px) scale(1.30);
+    filter: blur(3.5px) drop-shadow(0 0 26px #facc15) brightness(1.35);
+  }
+  92% {
+    opacity: 1;
+    transform: translate(-20px, -38px) scale(1.32);
+    filter: blur(4.0px) drop-shadow(0 0 28px #f97316) brightness(1.4);
+  }
+  /* Phase 4: Centrifugal Ember Scatter (92% - 100%) */
+  96% {
+    opacity: 0.6;
+    transform: translate(-45px, 35px) scale(0.85);
+    filter: blur(2.5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-65px, 50px) scale(0.3);
+    filter: blur(1px);
+  }
+}
+
+@keyframes gbaVulpixVertigoWisp3 {
+  /* Phase 1: Slow, Stately, Crystal-Clear Clockwise (CW) Sweep (0% - 45%) */
+  0% {
+    opacity: 1;
+    transform: translate(-50px, 21px) scale(1);
+    filter: blur(0px) drop-shadow(0 0 10px #f97316);
+  }
+  12% {
+    opacity: 1;
+    transform: translate(-58px, 0px) scale(1.02);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  24% {
+    opacity: 1;
+    transform: translate(-20px, -38px) scale(1.04);
+    filter: blur(0px) drop-shadow(0 0 14px #facc15);
+  }
+  36% {
+    opacity: 1;
+    transform: translate(38px, -30px) scale(1.02);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(58px, 0px) scale(1.0);
+    filter: blur(0px) drop-shadow(0 0 12px #f97316);
+  }
+  /* Phase 2: Elastic Brake & Reverse Snap into CCW (45% - 68%) */
+  50% {
+    opacity: 1;
+    transform: translate(48px, -15px) scale(1.06);
+    filter: blur(0px) drop-shadow(0 0 16px #facc15);
+  }
+  56% {
+    opacity: 1;
+    transform: translate(15px, -38px) scale(1.10);
+    filter: blur(0.6px) drop-shadow(0 0 16px #f97316);
+  }
+  62% {
+    opacity: 1;
+    transform: translate(-52px, 15px) scale(1.14);
+    filter: blur(1.0px) drop-shadow(0 0 18px #facc15);
+  }
+  68% {
+    opacity: 1;
+    transform: translate(-30px, 35px) scale(1.18);
+    filter: blur(1.5px) drop-shadow(0 0 20px #f97316);
+  }
+  /* Phase 3: Late-Phase Rapid Vertigo Spin & Progressive Motion Blur (68% - 92%) */
+  74% {
+    opacity: 1;
+    transform: translate(0px, 42px) scale(1.22);
+    filter: blur(2.2px) drop-shadow(0 0 22px #fef08a) brightness(1.2);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-58px, 0px) scale(1.26);
+    filter: blur(2.8px) drop-shadow(0 0 24px #f97316) brightness(1.28);
+  }
+  86% {
+    opacity: 1;
+    transform: translate(0px, -42px) scale(1.30);
+    filter: blur(3.5px) drop-shadow(0 0 26px #facc15) brightness(1.35);
+  }
+  92% {
+    opacity: 1;
+    transform: translate(58px, 0px) scale(1.32);
+    filter: blur(4.0px) drop-shadow(0 0 28px #f97316) brightness(1.4);
+  }
+  /* Phase 4: Centrifugal Ember Scatter (92% - 100%) */
+  96% {
+    opacity: 0.6;
+    transform: translate(-20px, -50px) scale(0.85);
+    filter: blur(2.5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-35px, -70px) scale(0.3);
+    filter: blur(1px);
+  }
+}
+
+@keyframes gbaVulpixFlameFlicker {
+  0%, 100% {
+    transform: scaleY(1) skewX(0deg);
+  }
+  50% {
+    transform: scaleY(1.08) skewX(3deg);
+  }
+}
+
+@keyframes gbaVulpixPsyWave1 {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(0.7);
+    filter: drop-shadow(0 0 12px #38bdf8);
+  }
+  65% {
+    opacity: 0.45;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes gbaVulpixPsyWave2 {
+  0% {
+    opacity: 0;
+    transform: scale(0.18);
+  }
+  25% {
+    opacity: 0.8;
+    transform: scale(0.75);
+    filter: drop-shadow(0 0 14px #e879f9);
+  }
+  65% {
+    opacity: 0.4;
+    transform: scale(1.12);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.26);
+  }
+}
+
+@keyframes gbaVulpixPsyWave3 {
+  0% {
+    opacity: 0;
+    transform: scale(0.16);
+  }
+  25% {
+    opacity: 0.75;
+    transform: scale(0.8);
+    filter: drop-shadow(0 0 14px #fef08a);
+  }
+  65% {
+    opacity: 0.35;
+    transform: scale(1.18);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.32);
+  }
+}
+
+@keyframes gbaVulpixSpiritMote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(calc(var(--mote-x) * 0.4), calc(var(--mote-y) * 0.4)) scale(1.1);
+    filter: drop-shadow(0 0 8px #c084fc);
+  }
+  70% {
+    opacity: 0.65;
+    transform: translate(calc(var(--mote-x) * 0.8), calc(var(--mote-y) * 0.8)) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--mote-x), var(--mote-y)) scale(0.2);
+  }
+}
+
+@keyframes gbaVulpixWhiff {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.82);
+  }
+  30% {
+    opacity: 0.7;
+    transform: translateY(2px) scale(0.92);
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.85);
+    filter: blur(3.5px);
+  }
+}
+
+
+/* 8. ODDISH: Stun Spore & Sprout (Continuous Organic Momentum & Multi-Wave Cascade) */
 @keyframes gbaOddishBulbShake {
-  0%   { transform: rotate(0deg) scale(1); }
-  15%  { transform: rotate(-10deg) scale(1.04); }
-  30%  { transform: rotate(10deg) scale(1.06); }
-  45%  { transform: rotate(-8deg) scale(1.04); }
-  60%  { transform: rotate(8deg) scale(1.05); }
-  75%  { transform: rotate(-4deg) scale(1.02); }
-  100% { transform: rotate(0deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.7);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0px) scale(1.06);
+    filter: drop-shadow(0 0 10px #22c55e);
+  }
+  /* Wave 1 Spore Pulse */
+  18% {
+    transform: rotate(-14deg) scale(1.08, 0.94);
+    filter: drop-shadow(0 0 14px #4ade80);
+  }
+  28% {
+    transform: rotate(14deg) scale(0.95, 1.08);
+  }
+  /* Wave 2 Spore Pulse */
+  38% {
+    transform: rotate(-12deg) scale(1.06, 0.95);
+    filter: drop-shadow(0 0 14px #22c55e);
+  }
+  48% {
+    transform: rotate(12deg) scale(0.96, 1.06);
+  }
+  /* Wave 3 Spore Pulse */
+  58% {
+    transform: rotate(-10deg) scale(1.05, 0.96);
+    filter: drop-shadow(0 0 14px #4ade80);
+  }
+  68% {
+    transform: rotate(10deg) scale(0.97, 1.05);
+  }
+  78% {
+    transform: rotate(-6deg) scale(1.03, 0.98);
+  }
+  /* Residual Elastic Settling while spores shower downward */
+  86% {
+    opacity: 1;
+    transform: rotate(4deg) scale(0.99, 1.02);
+  }
+  92% {
+    opacity: 0.85;
+    transform: rotate(-2deg) scale(1);
+  }
+  /* Graceful Upward Dissipation */
+  100% {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.8);
+  }
 }
 
 @keyframes gbaOddishSporeFall {
   0% {
     opacity: 0;
-    transform: translate(var(--os-ox, 0px), -12px) scale(0.5);
+    transform: translate(var(--os-ox, 0px), -10px) scale(0.4);
   }
-  30% {
+  18% {
     opacity: 1;
-    transform: translate(calc(var(--os-ox, 0px) + var(--os-dx, 6px)), 4px) scale(1);
-    filter: drop-shadow(0 0 8px #facc15);
+    transform: translate(calc(var(--os-ox, 0px) + var(--os-dx, 6px) * 0.35), 8px) scale(1.18);
+    filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px #facc15);
   }
-  70% {
-    opacity: 0.9;
-    transform: translate(calc(var(--os-ox, 0px) + var(--os-dx, 6px) * 1.5), 18px) scale(0.9);
+  48% {
+    opacity: 0.95;
+    transform: translate(calc(var(--os-ox, 0px) + var(--os-dx, 6px) * 0.8), 28px) scale(1.0);
+    filter: drop-shadow(0 0 8px #f59e0b);
+  }
+  78% {
+    opacity: 0.88;
+    transform: translate(calc(var(--os-ox, 0px) + var(--os-dx, 6px) * 1.3), 48px) scale(0.85);
   }
   100% {
     opacity: 0;
-    transform: translate(calc(var(--os-ox, 0px) + var(--os-dx, 6px) * 1.8), 30px) scale(0.6);
+    transform: translate(calc(var(--os-ox, 0px) + var(--os-dx, 6px) * 1.6), 64px) scale(0.35);
+  }
+}
+
+@keyframes gbaOddishParalysisAura {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  30% {
+    opacity: 0.75;
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 14px #facc15);
+  }
+  75% {
+    opacity: 0.6;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.15);
   }
 }
 
@@ -9500,6 +9986,106 @@ html, body {
   100% {
     opacity: 0;
     transform: scale(1.12) translateY(-10px);
+  }
+}
+
+@keyframes gbaDrowzeeActorPalmThrust {
+  0% {
+    opacity: 0;
+    transform: translateY(14px) scale(0.8);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.08);
+    filter: drop-shadow(0 0 16px #a855f7) brightness(1.25);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.02);
+    filter: drop-shadow(0 0 20px #eab308) brightness(1.1);
+  }
+  75% {
+    opacity: 0.85;
+    transform: translateY(2px) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaDrowzeeActorTrance {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.82);
+  }
+  22% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.04);
+    filter: drop-shadow(0 0 18px #d946ef) brightness(1.2);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.0);
+    filter: drop-shadow(0 0 24px #a855f7) brightness(1.1);
+  }
+  75% {
+    opacity: 0.85;
+    transform: translateY(-2px) scale(0.98);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaDrowzeeActorNightmare {
+  0% {
+    opacity: 0;
+    transform: scale(0.78);
+    filter: brightness(0.6);
+  }
+  24% {
+    opacity: 1;
+    transform: scale(1.05) translateY(-4px);
+    filter: drop-shadow(0 0 20px #9333ea) brightness(1.2);
+  }
+  55% {
+    opacity: 0.95;
+    transform: scale(1.0) translateY(2px);
+    filter: drop-shadow(0 0 24px #e11d48) brightness(1.05);
+  }
+  80% {
+    opacity: 0.75;
+    transform: scale(0.95) translateY(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.82) translateY(6px);
+    filter: blur(3px);
+  }
+}
+
+@keyframes gbaDrowzeeWhiff {
+  0% {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  30% {
+    opacity: 0.75;
+    transform: scale(0.85);
+  }
+  65% {
+    opacity: 0.35;
+    transform: scale(0.8);
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.75);
+    filter: blur(3px);
   }
 }
 
@@ -11111,25 +11697,141 @@ html, body {
    ========================================================================== */
 
 /* 1. VENONAT: STUN SPORE (Ruby Compound Eye Flare & Golden Electrostatic Bug Dust) */
+@keyframes gbaVenonatFloorCharge {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  22% {
+    opacity: 0.85;
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 16px #f59e0b) drop-shadow(0 0 8px #fbbf24);
+  }
+  60% {
+    opacity: 0.7;
+    transform: scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.25);
+    filter: blur(5px);
+  }
+}
+
 @keyframes gbaVenonatRubyEyesGlow {
   0% {
     opacity: 0;
-    transform: scale(0.6);
-    filter: drop-shadow(0 0 4px #e11d48);
+    transform: scale(0.5) translateY(4px);
+    filter: blur(3px);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(1.15) translateY(-2px);
+    filter: drop-shadow(0 0 24px #f43f5e) drop-shadow(0 0 12px #e11d48);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(0.98) translateY(0);
+    filter: drop-shadow(0 0 20px #fda4af) drop-shadow(0 0 10px #e11d48);
+  }
+  70% {
+    opacity: 0.85;
+    transform: scale(1.04) translateY(-1px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18) translateY(-4px);
+    filter: blur(6px);
+  }
+}
+
+@keyframes gbaVenonatStunBurst {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
   }
   25% {
     opacity: 1;
-    transform: scale(1.15);
-    filter: drop-shadow(0 0 20px #f43f5e) drop-shadow(0 0 10px #fb7185);
+    transform: scale(1.25);
+    filter: drop-shadow(0 0 18px #facc15) drop-shadow(0 0 8px #ffffff);
+  }
+  55% {
+    opacity: 0.6;
+    transform: scale(1.6);
+  }
+  85% {
+    opacity: 0;
+    transform: scale(1.95);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.0);
+  }
+}
+
+@keyframes gbaVenonatPollenMote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.2);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(calc(var(--sd-x, 20px) * 0.4), calc(var(--sd-y, -20px) * 0.4)) scale(1.2);
+    filter: drop-shadow(0 0 10px #fbbf24) drop-shadow(0 0 5px #fef08a);
   }
   50% {
-    opacity: 1;
-    transform: scale(1.0);
-    filter: drop-shadow(0 0 25px #fda4af) drop-shadow(0 0 12px #e11d48);
+    opacity: 0.95;
+    transform: translate(var(--sd-x, 20px), var(--sd-y, -20px)) scale(1.0);
   }
   75% {
-    opacity: 0.85;
+    opacity: 0.7;
+    transform: translate(calc(var(--sd-x, 20px) * 1.3), calc(var(--sd-y, -20px) * 1.2 + 8px)) scale(0.85);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--sd-x, 20px) * 1.5), calc(var(--sd-y, -20px) * 1.4 + 18px)) scale(0.3);
+    filter: blur(3px);
+  }
+}
+
+@keyframes gbaVenonatFractalSpark {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.3) rotate(12deg);
+    filter: drop-shadow(0 0 12px #fde047) drop-shadow(0 0 6px #ffffff);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(0.9) rotate(-8deg);
+  }
+  75% {
+    opacity: 0.6;
+    transform: scale(1.1) rotate(6deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-14deg);
+  }
+}
+
+/* 2. VENONAT: LEECH LIFE (Insect Mandible Clamp & Bioluminescent Bio-Drain) */
+@keyframes gbaVenonatBioFloor {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  20% {
+    opacity: 0.8;
     transform: scale(1.05);
+    filter: drop-shadow(0 0 16px #34d399) drop-shadow(0 0 10px #a855f7);
+  }
+  60% {
+    opacity: 0.6;
+    transform: scale(1.0);
   }
   100% {
     opacity: 0;
@@ -11138,73 +11840,56 @@ html, body {
   }
 }
 
-@keyframes gbaVenonatStunDust {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0) scale(0.3) rotate(0deg);
-  }
-  20% {
-    opacity: 1;
-    transform: translate(calc(var(--sd-x, 20px) * 0.4), calc(var(--sd-y, -20px) * 0.4)) scale(1.1) rotate(45deg);
-    filter: drop-shadow(0 0 10px #fbbf24);
-  }
-  55% {
-    opacity: 0.95;
-    transform: translate(var(--sd-x, 20px), var(--sd-y, -20px)) scale(1) rotate(120deg);
-    filter: drop-shadow(0 0 14px #f59e0b);
-  }
-  80% {
-    opacity: 0.7;
-    transform: translate(calc(var(--sd-x, 20px) * 1.3), calc(var(--sd-y, -20px) * 1.3 + 8px)) scale(0.85) rotate(180deg);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(calc(var(--sd-x, 20px) * 1.5), calc(var(--sd-y, -20px) * 1.5 + 18px)) scale(0.4) rotate(240deg);
-  }
-}
-
-@keyframes gbaVenonatParalysisSpark {
-  0% {
-    opacity: 0;
-    transform: scale(0.4) rotate(0deg);
-  }
-  30% {
-    opacity: 1;
-    transform: scale(1.25) rotate(15deg);
-    filter: drop-shadow(0 0 12px #fde047);
-  }
-  60% {
-    opacity: 0.9;
-    transform: scale(0.95) rotate(-10deg);
-  }
-  100% {
-    opacity: 0;
-    transform: scale(0.5) rotate(30deg);
-  }
-}
-
-/* 2. VENONAT: LEECH LIFE (Insect Mandible Clamp & Bioluminescent Bio-Drain) */
 @keyframes gbaVenonatMandibleLatch {
   0% {
     opacity: 0;
     transform: scale(1.4) translateY(-14px);
   }
-  25% {
+  22% {
     opacity: 1;
-    transform: scale(0.95) translateY(2px);
-    filter: drop-shadow(0 0 14px #a855f7) drop-shadow(0 0 6px #34d399);
+    transform: scale(0.92) translateY(3px);
+    filter: drop-shadow(0 0 16px #a855f7) drop-shadow(0 0 8px #34d399);
   }
-  45% {
+  35% {
     opacity: 1;
-    transform: scale(1) translateY(0px);
+    transform: scale(0.96) translateY(1px);
+  }
+  48% {
+    opacity: 1;
+    transform: scale(0.93) translateY(2px);
   }
   75% {
-    opacity: 0.9;
-    transform: scale(1.02) translateY(-1px);
+    opacity: 0.85;
+    transform: scale(1.0) translateY(0px);
   }
   100% {
     opacity: 0;
-    transform: scale(0.85) translateY(6px);
+    transform: scale(0.8) translateY(8px);
+    filter: blur(5px);
+  }
+}
+
+@keyframes gbaVenonatPuncturePop {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 14px #6ee7b7) drop-shadow(0 0 6px #c084fc);
+  }
+  55% {
+    opacity: 0.55;
+    transform: scale(1.5);
+  }
+  85% {
+    opacity: 0;
+    transform: scale(1.85);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.0);
   }
 }
 
@@ -11213,154 +11898,304 @@ html, body {
     opacity: 0;
     transform: translate(0, 0) scale(0.3);
   }
-  25% {
+  22% {
     opacity: 1;
-    transform: translate(calc(var(--vb-x, -25px) * 0.3), calc(var(--vb-y, -20px) * 0.3)) scale(1.1);
+    transform: translate(calc(var(--vb-x, -25px) * 0.3), calc(var(--vb-y, -20px) * 0.3)) scale(1.2);
     filter: drop-shadow(0 0 12px #34d399) drop-shadow(0 0 6px #a855f7);
   }
-  60% {
+  55% {
     opacity: 0.95;
-    transform: translate(calc(var(--vb-x, -25px) * 0.7), calc(var(--vb-y, -20px) * 0.7)) scale(1);
+    transform: translate(calc(var(--vb-x, -25px) * 0.7), calc(var(--vb-y, -20px) * 0.7)) scale(1.0);
   }
-  85% {
-    opacity: 0.7;
-    transform: translate(var(--vb-x, -50px), var(--vb-y, -40px)) scale(0.7);
+  80% {
+    opacity: 0.65;
+    transform: translate(var(--vb-x, -50px), var(--vb-y, -40px)) scale(0.75);
   }
   100% {
     opacity: 0;
-    transform: translate(calc(var(--vb-x, -50px) * 1.2), calc(var(--vb-y, -40px) * 1.2)) scale(0.3);
+    transform: translate(calc(var(--vb-x, -50px) * 1.25), calc(var(--vb-y, -40px) * 1.25)) scale(0.25);
+  }
+}
+
+@keyframes gbaVenonatVitalOrb {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-18px, -14px) scale(1.1);
+    filter: drop-shadow(0 0 10px #10b981) drop-shadow(0 0 5px #34d399);
+  }
+  70% {
+    opacity: 0.85;
+    transform: translate(-38px, -28px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-55px, -40px) scale(0.4);
   }
 }
 
 /* 3. PARAS & PARASECT: SPORE (Tochukaso Mushroom Spore Cloud Eruption & Sleep Motes) */
-@keyframes gbaParasTochukasoErupt {
+@keyframes gbaParasMyceliumFloor {
   0% {
     opacity: 0;
-    transform: scale(0.3) translateY(20px);
+    transform: scale(0.4);
   }
-  22% {
-    opacity: 1;
-    transform: scale(1.15) translateY(-6px);
-    filter: drop-shadow(0 0 22px #10b981) drop-shadow(0 0 10px #6ee7b7);
+  18% {
+    opacity: 0.85;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 16px #10b981) drop-shadow(0 0 8px #34d399);
   }
-  50% {
-    opacity: 0.95;
-    transform: scale(1.0) translateY(0px);
+  45% {
+    opacity: 0.75;
+    transform: scale(1.0) translateY(-2px);
   }
-  78% {
-    opacity: 0.8;
-    transform: scale(1.08) translateY(-3px);
+  75% {
+    opacity: 0.55;
+    transform: scale(1.08) translateY(-4px);
   }
   100% {
     opacity: 0;
-    transform: scale(1.25) translateY(-12px);
+    transform: scale(1.2) translateY(-8px);
     filter: blur(6px);
   }
 }
 
-@keyframes gbaParasSporeCloud {
+@keyframes gbaParasBezierErupt {
   0% {
     opacity: 0;
-    transform: scale(0.4) rotate(0deg);
+    transform: scale(0.25) translateY(24px);
+    filter: blur(4px);
   }
-  25% {
-    opacity: 0.9;
-    transform: scale(0.95) rotate(45deg);
-    filter: drop-shadow(0 0 18px #34d399);
+  20% {
+    opacity: 1;
+    transform: scale(1.15, 0.95) translateY(-8px);
+    filter: drop-shadow(0 0 24px #10b981) drop-shadow(0 0 12px #34d399);
   }
-  60% {
-    opacity: 0.8;
-    transform: scale(1.15) rotate(110deg);
+  40% {
+    opacity: 0.95;
+    transform: scale(0.98, 1.03) translateY(-2px);
+  }
+  65% {
+    opacity: 0.85;
+    transform: scale(1.06, 1.02) translateY(-6px);
   }
   85% {
     opacity: 0.5;
-    transform: scale(1.25) rotate(160deg);
+    transform: scale(1.18, 1.1) translateY(-14px);
   }
   100% {
     opacity: 0;
-    transform: scale(1.35) rotate(200deg);
+    transform: scale(1.3, 1.18) translateY(-22px);
+    filter: blur(8px);
+  }
+}
+
+@keyframes gbaParasImpactBurst {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.2);
+    filter: drop-shadow(0 0 20px #6ee7b7) drop-shadow(0 0 10px #ffffff);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.6);
+  }
+  75% {
+    opacity: 0;
+    transform: scale(2.0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.2);
+  }
+}
+
+@keyframes gbaParasPearlDroplet {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(calc(var(--p-x, 20px) * 0.5), calc(var(--p-y, -20px) * 0.6 - 12px)) scale(1.2);
+    filter: drop-shadow(0 0 8px #a7f3d0) drop-shadow(0 0 4px #ffffff);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(var(--p-x, 20px), var(--p-y, -20px)) scale(1.0);
+  }
+  80% {
+    opacity: 0.6;
+    transform: translate(calc(var(--p-x, 20px) * 1.2), calc(var(--p-y, -20px) + 16px)) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--p-x, 20px) * 1.35), calc(var(--p-y, -20px) + 30px)) scale(0.3);
+    filter: blur(3px);
   }
 }
 
 @keyframes gbaParasSleepZzzFloat {
   0% {
     opacity: 0;
-    transform: translate(0, 10px) scale(0.5);
+    transform: translate(0, 8px) scale(0.4);
   }
-  30% {
+  25% {
     opacity: 1;
-    transform: translate(var(--zzz-x, 8px), -12px) scale(1);
-    filter: drop-shadow(0 0 6px #6ee7b7);
+    transform: translate(calc(var(--zzz-x, 8px) * 0.6), -14px) scale(1.05);
+    filter: drop-shadow(0 0 8px #34d399) drop-shadow(0 0 4px #6ee7b7);
   }
-  70% {
-    opacity: 0.85;
-    transform: translate(calc(var(--zzz-x, 8px) * 1.5), -28px) scale(1.08);
+  60% {
+    opacity: 0.9;
+    transform: translate(var(--zzz-x, 8px), -30px) scale(1.1);
+  }
+  85% {
+    opacity: 0.5;
+    transform: translate(calc(var(--zzz-x, 8px) * 1.4), -46px) scale(0.9);
   }
   100% {
     opacity: 0;
-    transform: translate(calc(var(--zzz-x, 8px) * 2), -44px) scale(0.7);
+    transform: translate(calc(var(--zzz-x, 8px) * 1.7), -60px) scale(0.6);
+    filter: blur(4px);
+  }
+}
+
+@keyframes gbaParasWhiffDissipate {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(10px);
+  }
+  30% {
+    opacity: 0.6;
+    transform: scale(0.65) translateY(-2px);
+  }
+  60% {
+    opacity: 0.35;
+    transform: scale(0.7) translateY(-6px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.75) translateY(-10px);
+    filter: blur(5px);
   }
 }
 
 /* 4. EXEGGCUTE: HYPNOSIS (Multi-Egg Telepathic Resonant Rings & Hypnotic Trance Spirals) */
-@keyframes gbaExeggcuteHypnoRing {
+@keyframes gbaExeggcuteFloorVortex {
   0% {
     opacity: 0;
-    transform: scale(0.2) rotate(0deg);
-    filter: drop-shadow(0 0 4px #d946ef);
+    transform: scale(0.3);
   }
-  28% {
-    opacity: 0.95;
-    transform: scale(0.85) rotate(60deg);
-    filter: drop-shadow(0 0 18px #ec4899) drop-shadow(0 0 8px #c084fc);
+  25% {
+    opacity: 0.85;
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 20px #a855f7) drop-shadow(0 0 10px #d946ef);
   }
   65% {
-    opacity: 0.9;
-    transform: scale(1.2) rotate(180deg);
-  }
-  85% {
-    opacity: 0.55;
-    transform: scale(1.35) rotate(260deg);
+    opacity: 0.7;
+    transform: scale(1.0);
   }
   100% {
     opacity: 0;
-    transform: scale(1.5) rotate(320deg);
+    transform: scale(1.25);
+    filter: blur(6px);
   }
 }
 
-@keyframes gbaExeggcuteSpiralRotate {
+@keyframes gbaExeggcuteHarmonicRings {
   0% {
     opacity: 0;
-    transform: scale(0.4) rotate(0deg);
+    transform: scale(0.25);
   }
   25% {
-    opacity: 0.9;
-    transform: scale(1) rotate(180deg);
-    filter: drop-shadow(0 0 16px #a855f7);
+    opacity: 0.95;
+    transform: scale(0.9);
+    filter: drop-shadow(0 0 16px #ec4899) drop-shadow(0 0 8px #c084fc);
   }
   60% {
     opacity: 0.85;
-    transform: scale(1.1) rotate(420deg);
+    transform: scale(1.25);
   }
   85% {
-    opacity: 0.5;
-    transform: scale(1.18) rotate(640deg);
+    opacity: 0.45;
+    transform: scale(1.45);
   }
   100% {
     opacity: 0;
-    transform: scale(1.25) rotate(780deg);
+    transform: scale(1.65);
   }
 }
 
-@keyframes gbaExeggcutePsychicPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.7;
+@keyframes gbaExeggcuteSpiralTrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+  22% {
+    opacity: 1;
+    transform: scale(1.1) rotate(140deg);
+    filter: drop-shadow(0 0 20px #d946ef) drop-shadow(0 0 10px #c084fc);
   }
   50% {
-    transform: scale(1.08);
+    opacity: 0.95;
+    transform: scale(0.98) rotate(320deg);
+  }
+  75% {
+    opacity: 0.75;
+    transform: scale(1.06) rotate(520deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.22) rotate(720deg);
+    filter: blur(7px);
+  }
+}
+
+@keyframes gbaExeggcuteTranceWave {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  30% {
+    opacity: 0.8;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 12px #a855f7);
+  }
+  70% {
+    opacity: 0.5;
+    transform: scale(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes gbaExeggcuteTranceMote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.3);
+  }
+  25% {
     opacity: 1;
-    filter: drop-shadow(0 0 14px #d946ef);
+    transform: translate(var(--tm-x, 15px), var(--tm-y, -15px)) scale(1.1);
+    filter: drop-shadow(0 0 8px #f472b6);
+  }
+  65% {
+    opacity: 0.8;
+    transform: translate(calc(var(--tm-x, 15px) * 1.3), calc(var(--tm-y, -15px) * 1.3)) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--tm-x, 15px) * 1.6), calc(var(--tm-y, -15px) * 1.6)) scale(0.3);
+    filter: blur(3px);
   }
 }
 
@@ -11762,6 +12597,57 @@ html, body {
   }
 }
 
+@keyframes gbaPsyduckActorHeadache {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.65); }
+  12%  { opacity: 1; transform: translateY(0px) scale(1.04); }
+  18%  { transform: translate(-3px, 2px) scale(1.02); }
+  26%  { transform: translate(3px, -2px) scale(0.99); }
+  34%  { transform: translate(-5px, -4px) scale(1.03); }
+  42%  { transform: translate(4px, 3px) scale(0.98); }
+  52%  { transform: translate(-4px, 2px) scale(1.02); }
+  62%  { transform: translate(3px, -2px) scale(1.0); }
+  72%  { transform: translate(-2px, 1px) scale(1.01); }
+  85%  { opacity: 1; transform: translateY(0px) scale(1.0); }
+  100% { opacity: 0; transform: translateY(8px) scale(0.88); }
+}
+
+@keyframes gbaPsyduckActorWhiff {
+  0%   { opacity: 0; transform: translateY(12px) scale(0.6); }
+  25%  { opacity: 0.75; transform: translateY(0px) scale(0.85); }
+  60%  { opacity: 0.6; transform: translateY(4px) scale(0.8); }
+  100% { opacity: 0; transform: translateY(12px) scale(0.7); }
+}
+
+@keyframes gbaPsyduckDizzySway {
+  0%   { transform: rotate(0deg) scale(1); }
+  25%  { transform: rotate(-7deg) translate(-4px, 2px) scale(1.02); }
+  50%  { transform: rotate(0deg) scale(0.98); }
+  75%  { transform: rotate(7deg) translate(4px, -2px) scale(1.02); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+
+@keyframes gbaSpinSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes gbaLaprasActorRise {
+  0%   { opacity: 0; transform: translateY(38px) scale(0.8); }
+  20%  { opacity: 1; transform: translateY(0px) scale(1.04); }
+  32%  { transform: translate(-2px, -3px) scale(1.02); }
+  48%  { transform: translate(2px, 2px) scale(1.0); }
+  68%  { transform: translate(-1px, -1px) scale(1.01); }
+  85%  { opacity: 1; transform: translateY(0px) scale(1.0); }
+  100% { opacity: 0; transform: translateY(22px) scale(0.92); }
+}
+
+@keyframes gbaLaprasActorWhiff {
+  0%   { opacity: 0; transform: translateY(28px) scale(0.75); }
+  30%  { opacity: 0.7; transform: translateY(4px) scale(0.85); }
+  70%  { opacity: 0.5; transform: translateY(12px) scale(0.8); }
+  100% { opacity: 0; transform: translateY(28px) scale(0.7); }
+}
+
 /* 2. LAPRAS: GLACIAL SURGE (WATER GUN) — pressurized flowing jet */
 /* Container kinematics: blur-in anticipation at the muzzle, acceleration along the arc,
    micro-settle at impact, then vaporize into mist. */
@@ -11950,191 +12836,320 @@ html, body {
    5. VOLTORB: Speed Ball (High-Velocity Electro-Sphere Roll & Friction Sparks)
    ========================================================================= */
 
-/* 1. GROWLITHE: Flare (Anamorphic Thermal Ignition & Fluid Flame Plumes) */
-@keyframes gbaGrowlitheThermalIgnition {
+/* 1. GROWLITHE: Flare (Ken Sugimori Pounce Stance, Mouth-Locked Fire Jet, Contained Shockwave & Trailing Cinders) */
+@keyframes gbaGrowlitheActorPounce {
   0% {
-    transform: scale(0.18) translateY(14px);
     opacity: 0;
-    filter: brightness(2.6) drop-shadow(0 0 14px #ffffff);
+    transform: translate(-10px, 8px) rotate(-4deg) scale(0.85);
   }
-  16% {
-    transform: scale(1.16) translateY(-6px);
+  12% {
     opacity: 1;
-    filter: brightness(1.7) drop-shadow(0 0 38px #f97316) drop-shadow(0 0 20px #fde047);
+    transform: translate(-4px, 4px) rotate(-2deg) scale(0.96);
+    filter: drop-shadow(0 0 14px #f97316) brightness(1.25);
   }
-  38% {
-    transform: scale(1.02) translateY(-2px);
+  28% {
     opacity: 1;
-    filter: brightness(1.2) drop-shadow(0 0 24px #ea580c);
+    transform: translate(18px, -16px) rotate(4deg) scale(1.08);
+    filter: drop-shadow(0 0 22px #ea580c) drop-shadow(0 0 14px #fef08a) brightness(1.4);
+  }
+  45% {
+    opacity: 1;
+    transform: translate(20px, -18px) rotate(3deg) scale(1.06);
+    filter: drop-shadow(0 0 26px #dc2626) brightness(1.3);
   }
   68% {
-    transform: scale(1.14) translateY(-12px);
-    opacity: 0.7;
+    opacity: 0.95;
+    transform: translate(16px, -12px) rotate(1deg) scale(1.0);
+  }
+  84% {
+    opacity: 0.8;
+    transform: translate(10px, -4px) rotate(0deg) scale(0.94);
   }
   100% {
-    transform: scale(1.28) translateY(-22px);
     opacity: 0;
-    filter: blur(4px);
+    transform: translate(4px, 2px) rotate(0deg) scale(0.86);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaGrowlitheMouthTorrent {
+  0% {
+    opacity: 0;
+    transform: scale(0.15) rotate(-16deg);
+  }
+  14% {
+    opacity: 0.95;
+    transform: scale(0.42) rotate(-15deg);
+    filter: brightness(2.0) drop-shadow(0 0 12px #ffffff);
+  }
+  28% {
+    opacity: 1;
+    transform: scale(0.96) translate(8px, -8px) rotate(-18deg);
+    filter: brightness(1.55) drop-shadow(0 0 26px #f97316) drop-shadow(0 0 16px #fde047);
+  }
+  46% {
+    opacity: 1;
+    transform: scale(1.08) translate(14px, -14px) rotate(-20deg);
+    filter: brightness(1.35) drop-shadow(0 0 22px #ea580c);
+  }
+  68% {
+    opacity: 0.85;
+    transform: scale(1.15) translate(18px, -18px) rotate(-22deg);
+  }
+  86% {
+    opacity: 0.45;
+    transform: scale(1.20) translate(22px, -22px) rotate(-23deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.24) translate(24px, -24px) rotate(-24deg);
+    filter: blur(3px);
   }
 }
 
 @keyframes gbaGrowlitheFlameWav1 {
   0%, 100% { transform: skewX(-5deg) scaleY(1); }
-  50%      { transform: skewX(7deg) scaleY(1.08) translateY(-2px); }
+  50%      { transform: skewX(6deg) scaleY(1.08) translateY(-2px); }
 }
 
 @keyframes gbaGrowlitheFlameWav2 {
-  0%, 100% { transform: skewX(6deg) scaleY(1.06); }
+  0%, 100% { transform: skewX(6deg) scaleY(1.05); }
   50%      { transform: skewX(-6deg) scaleY(0.96) translateY(2px); }
 }
 
-@keyframes gbaGrowlitheAnamorphicBeam {
+@keyframes gbaGrowlitheDiagonalBeam {
   0% {
-    transform: scaleX(0.04) scaleY(0.3);
+    transform: scaleX(0.05) scaleY(0.4) rotate(-22deg);
     opacity: 0;
   }
-  14% {
-    transform: scaleX(1.4) scaleY(1.25);
+  26% {
+    transform: scaleX(1.1) scaleY(1.15) rotate(-22deg);
     opacity: 1;
-    filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 30px #fde047);
+    filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 22px #fde047);
   }
-  36% {
-    transform: scaleX(1.8) scaleY(0.6);
-    opacity: 0.85;
+  48% {
+    transform: scaleX(1.2) scaleY(0.7) rotate(-22deg);
+    opacity: 0.9;
   }
-  65% {
-    transform: scaleX(2.15) scaleY(0.2);
+  75% {
+    transform: scaleX(1.25) scaleY(0.3) rotate(-22deg);
     opacity: 0.35;
   }
   100% {
-    transform: scaleX(2.35) scaleY(0);
+    transform: scaleX(1.25) scaleY(0) rotate(-22deg);
     opacity: 0;
   }
 }
 
-@keyframes gbaGrowlitheBlastRing {
+@keyframes gbaGrowlitheCombustionBurst {
   0% {
-    transform: scale(0.18);
+    transform: scale(0.18) rotate(-18deg);
+    opacity: 0;
+  }
+  18% {
+    transform: scale(0.65) rotate(-18deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 26px #fde047);
+  }
+  38% {
+    transform: scale(1.05) rotate(-20deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 22px #f97316) drop-shadow(0 0 32px #ea580c);
+  }
+  68% {
+    transform: scale(1.18) rotate(-22deg);
+    opacity: 0.65;
+  }
+  88% {
+    transform: scale(1.26) rotate(-24deg);
+    opacity: 0.25;
+  }
+  100% {
+    transform: scale(1.30) rotate(-25deg);
+    opacity: 0;
+  }
+}
+
+@keyframes gbaGrowlitheTurfScorch {
+  0% {
+    opacity: 0;
+    transform: scale(0.4) rotate(-18deg);
+  }
+  22% {
+    opacity: 0.85;
+    transform: scale(1.0) rotate(-18deg);
+  }
+  65% {
+    opacity: 0.6;
+    transform: scale(1.12) rotate(-18deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18) rotate(-18deg);
+  }
+}
+
+@keyframes gbaGrowlitheTrailingCinder {
+  0% {
+    transform: translate(0, 0) scale(0.3);
     opacity: 0;
   }
   22% {
-    transform: scale(1.08);
-    opacity: 0.95;
-    filter: drop-shadow(0 0 16px #f59e0b);
-  }
-  65% {
-    transform: scale(1.45);
-    opacity: 0.55;
-  }
-  100% {
-    transform: scale(1.85);
-    opacity: 0;
-  }
-}
-
-@keyframes gbaGrowlitheEmberAscent {
-  0% {
-    transform: translate(0, 0) scale(0.35);
-    opacity: 0;
-  }
-  20% {
-    transform: translate(calc(var(--emb-x) * 0.4), calc(var(--emb-y) * 0.4)) scale(1.25);
+    transform: translate(calc(var(--cnd-x) * 0.35), calc(var(--cnd-y) * 0.35)) scale(1.15);
     opacity: 1;
-    filter: drop-shadow(0 0 8px #fef08a);
+    filter: drop-shadow(0 0 6px #fef08a);
   }
-  65% {
-    transform: translate(calc(var(--emb-x) * 0.85), calc(var(--emb-y) * 0.85)) scale(0.9);
+  62% {
+    transform: translate(calc(var(--cnd-x) * 0.75), calc(var(--cnd-y) * 0.75)) scale(0.85);
     opacity: 0.85;
   }
   100% {
-    transform: translate(var(--emb-x), var(--emb-y)) scale(0.25);
+    transform: translate(var(--cnd-x), var(--cnd-y)) scale(0.2);
     opacity: 0;
   }
-}
-
-@keyframes gbaGrowlitheHeatAura {
-  0% { transform: scale(0.25); opacity: 0; }
-  18% { transform: scale(1.1); opacity: 0.85; }
-  55% { transform: scale(1.3); opacity: 0.45; }
-  100% { transform: scale(1.55); opacity: 0; }
 }
 
 @keyframes gbaGrowlitheFlareWhiff {
   0% {
-    transform: scale(0.2);
     opacity: 0;
+    transform: translate(-10px, 8px) scale(0.8);
   }
-  30% {
-    transform: scale(0.65) translateY(-4px);
+  35% {
     opacity: 0.75;
+    transform: translate(4px, 2px) scale(0.88);
     filter: blur(1.5px);
   }
   100% {
-    transform: scale(0.85) translateY(-14px);
     opacity: 0;
-    filter: blur(5px);
+    transform: translate(8px, 6px) scale(0.82);
+    filter: blur(4px);
   }
 }
 
+
 /* 2. SLOWPOKE: Spacing Out & Afternoon Nap */
-@keyframes gbaSlowpokeQuestionPop {
-  0% { transform: translate(var(--q-x), calc(var(--q-y) + 14px)) scale(0.2) rotate(var(--q-rot)); opacity: 0; }
-  25% { transform: translate(var(--q-x), var(--q-y)) scale(1.28) rotate(var(--q-rot)); opacity: 1; }
-  45% { transform: translate(var(--q-x), var(--q-y)) scale(1) rotate(var(--q-rot)); opacity: 1; }
-  75% { transform: translate(var(--q-x), calc(var(--q-y) - 6px)) scale(1.05) rotate(var(--q-rot)); opacity: 0.88; }
-  100% { transform: translate(var(--q-x), calc(var(--q-y) - 18px)) scale(0.6) rotate(var(--q-rot)); opacity: 0; }
+@keyframes gbaSlowpokeVacantBob {
+  0%   { opacity: 0; transform: translateY(36px) scale(0.85); }
+  22%  { opacity: 1; transform: translateY(0px) scale(1.0); }
+  35%  { transform: translateY(-4px) scale(1.015); }
+  52%  { transform: translateY(0px) scale(0.99); }
+  68%  { transform: translateY(-3px) scale(1.01); }
+  85%  { opacity: 1; transform: translateY(0px) scale(1.0); }
+  100% { opacity: 0; transform: translateY(24px) scale(0.9); }
 }
 
-@keyframes gbaSlowpokeDazeRipple {
-  0% { transform: scale(0.2); opacity: 0; }
-  28% { transform: scale(0.9); opacity: 0.75; }
-  70% { transform: scale(1.25); opacity: 0.35; }
-  100% { transform: scale(1.52); opacity: 0; }
+@keyframes gbaSlowpokeVacantWhiff {
+  0%   { opacity: 0; transform: translateY(28px) scale(0.8); }
+  30%  { opacity: 0.7; transform: translateY(4px) scale(0.88); }
+  70%  { opacity: 0.5; transform: translateY(12px) scale(0.84); }
+  100% { opacity: 0; transform: translateY(28px) scale(0.75); }
 }
 
-@keyframes gbaSlowpokeCardWobble {
-  0% { transform: rotate(0deg); }
-  20% { transform: rotate(-3deg) translateY(-2px); }
-  45% { transform: rotate(3deg) translateY(-2px); }
-  70% { transform: rotate(-1.5deg); }
-  100% { transform: rotate(0deg); }
+@keyframes gbaSlowpokeFog {
+  0%   { opacity: 0; transform: scale(0.4); }
+  25%  { opacity: 0.85; transform: scale(1.0); }
+  65%  { opacity: 0.65; transform: scale(1.18); }
+  85%  { opacity: 0.35; transform: scale(1.28); }
+  100% { opacity: 0; transform: scale(1.38); }
 }
 
-@keyframes gbaSlowpokeSleepBubble {
-  0% { transform: translate(0, 12px) scale(0.3); opacity: 0; }
-  22% { transform: translate(calc(var(--zb-x) * 0.28), calc(var(--zb-y) * 0.28)) scale(1.15); opacity: 1; }
-  58% { transform: translate(calc(var(--zb-x) * 0.68), calc(var(--zb-y) * 0.68)) scale(1); opacity: 0.9; }
-  100% { transform: translate(var(--zb-x), var(--zb-y)) scale(0.85); opacity: 0; }
+@keyframes gbaSlowpokeRipple {
+  0%   { opacity: 0; transform: scale(0.25); }
+  30%  { opacity: 0.9; transform: scale(0.92); }
+  70%  { opacity: 0.45; transform: scale(1.32); }
+  100% { opacity: 0; transform: scale(1.65); }
 }
 
-@keyframes gbaSlowpokeRestGlow {
-  0% { opacity: 0; transform: scale(0.75); }
-  32% { opacity: 0.85; transform: scale(1.06); }
-  72% { opacity: 0.45; transform: scale(1.16); }
-  100% { opacity: 0; transform: scale(1.26); }
+@keyframes gbaSlowpokeQuestionMark {
+  0%   { opacity: 0; transform: translateY(24px) scale(0.25) rotate(-12deg); }
+  22%  { opacity: 1; transform: translateY(0px) scale(1.28) rotate(4deg); }
+  42%  { opacity: 1; transform: translateY(-4px) scale(1.0) rotate(0deg); }
+  72%  { opacity: 0.9; transform: translateY(-8px) scale(1.05) rotate(-3deg); }
+  100% { opacity: 0; transform: translateY(-22px) scale(0.65) rotate(8deg); }
+}
+
+@keyframes gbaSlowpokeQuestionMarkMinor {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.25) rotate(14deg); }
+  24%  { opacity: 1; transform: translateY(0px) scale(1.22) rotate(-5deg); }
+  45%  { opacity: 1; transform: translateY(-3px) scale(1.0) rotate(0deg); }
+  75%  { opacity: 0.85; transform: translateY(-7px) scale(1.04) rotate(4deg); }
+  100% { opacity: 0; transform: translateY(-18px) scale(0.6) rotate(-8deg); }
+}
+
+@keyframes gbaSlowpokeDotBob {
+  0%   { opacity: 0; transform: translateY(12px) scale(0.3); }
+  28%  { opacity: 1; transform: translateY(0px) scale(1.15); }
+  65%  { opacity: 0.85; transform: translateY(-6px) scale(1.0); }
+  100% { opacity: 0; transform: translateY(-18px) scale(0.5); }
+}
+
+@keyframes gbaSlowpokeNapGlow {
+  0%   { opacity: 0; transform: scale(0.65); }
+  28%  { opacity: 0.85; transform: scale(1.05); }
+  68%  { opacity: 0.55; transform: scale(1.18); }
+  100% { opacity: 0; transform: scale(1.32); }
+}
+
+@keyframes gbaSlowpokeNapZFloat {
+  0%   { opacity: 0; transform: translateY(16px) scale(0.35) rotate(-8deg); }
+  25%  { opacity: 1; transform: translateY(0px) scale(1.2) rotate(4deg); }
+  60%  { opacity: 0.95; transform: translateY(-18px) scale(1.0) rotate(-2deg); }
+  85%  { opacity: 0.6; transform: translateY(-36px) scale(0.88) rotate(3deg); }
+  100% { opacity: 0; transform: translateY(-52px) scale(0.6) rotate(-5deg); }
+}
+
+@keyframes gbaSlowpokeNapSparkle {
+  0%   { opacity: 0; transform: scale(0.1) rotate(0deg); }
+  35%  { opacity: 1; transform: scale(1.28) rotate(45deg); filter: drop-shadow(0 0 10px #86efac); }
+  70%  { opacity: 0.75; transform: scale(1.0) rotate(90deg); }
+  100% { opacity: 0; transform: scale(0.3) rotate(135deg); }
 }
 
 /* 3. MANKEY: Anger */
-@keyframes gbaMankeyAngerVein {
-  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
-  16% { transform: translate(-50%, -50%) scale(1.36); opacity: 1; filter: drop-shadow(0 0 16px #ef4444); }
-  34% { transform: translate(-50%, -50%) scale(0.94); opacity: 1; }
-  52% { transform: translate(-50%, -50%) scale(1.28); opacity: 1; }
-  72% { transform: translate(-50%, -50%) scale(1.04); opacity: 0.88; }
-  100% { transform: translate(-50%, -50%) scale(0.75); opacity: 0; }
+@keyframes gbaMankeyRageLeap {
+  0%   { opacity: 0; transform: translateY(28px) scale(0.65); }
+  16%  { opacity: 1; transform: translateY(-14px) scale(1.16); }
+  22%  { transform: translateY(-8px) scale(1.02); }
+  28%  { transform: translate(-3.5px, -10px) scale(1.04); }
+  36%  { transform: translate(3.5px, -6px) scale(0.98); }
+  44%  { transform: translate(-4px, -11px) scale(1.05); }
+  54%  { transform: translate(4px, -7px) scale(0.99); }
+  64%  { transform: translate(-3px, -10px) scale(1.03); }
+  76%  { transform: translate(3px, -8px) scale(1.0); }
+  88%  { opacity: 1; transform: translateY(-14px) scale(1.12); }
+  100% { opacity: 0; transform: translateY(-4px) scale(0.88); }
 }
 
-@keyframes gbaMankeyRageTremor {
-  0%, 100% { transform: translate(0, 0); }
-  10%, 30%, 50%, 70%, 90% { transform: translate(-3.5px, 2px); }
-  20%, 40%, 60%, 80% { transform: translate(3.5px, -2px); }
+@keyframes gbaMankeyRageWhiff {
+  0%   { opacity: 0; transform: translateY(22px) scale(0.6); }
+  28%  { opacity: 0.7; transform: translateY(0px) scale(0.85); }
+  65%  { opacity: 0.5; transform: translateY(6px) scale(0.8); }
+  100% { opacity: 0; transform: translateY(18px) scale(0.7); }
 }
 
-@keyframes gbaMankeyRageAura {
-  0% { transform: scale(0.65); opacity: 0; }
-  22% { transform: scale(1.1); opacity: 0.8; }
-  60% { transform: scale(1.2); opacity: 0.5; }
-  100% { transform: scale(1.34); opacity: 0; }
+@keyframes gbaMankeyRageFlash {
+  0%   { opacity: 0; transform: scale(0.5); }
+  18%  { opacity: 0.95; transform: scale(1.15); filter: drop-shadow(0 0 24px #ef4444); }
+  55%  { opacity: 0.6; transform: scale(1.24); }
+  80%  { opacity: 0.35; transform: scale(1.32); }
+  100% { opacity: 0; transform: scale(1.42); }
+}
+
+@keyframes gbaMankeyAngerPulse {
+  0%   { opacity: 0; transform: scale(0.2) rotate(-10deg); }
+  16%  { opacity: 1; transform: scale(1.42) rotate(4deg); filter: drop-shadow(0 0 20px #ef4444) drop-shadow(0 0 8px #ffffff); }
+  32%  { opacity: 0.95; transform: scale(0.96) rotate(-2deg); }
+  50%  { opacity: 1; transform: scale(1.32) rotate(3deg); filter: drop-shadow(0 0 18px #ef4444); }
+  72%  { opacity: 0.9; transform: scale(1.06) rotate(0deg); }
+  86%  { opacity: 0.65; transform: scale(1.14) rotate(-2deg); }
+  100% { opacity: 0; transform: scale(0.7) rotate(6deg); }
+}
+
+@keyframes gbaMankeySteamRise {
+  0%   { opacity: 0; transform: translate(var(--stm-x, 0), calc(var(--stm-y, 0) + 12px)) scale(0.3) rotate(var(--stm-rot, 0deg)); }
+  22%  { opacity: 0.9; transform: translate(var(--stm-x, 0), var(--stm-y, 0)) scale(1.05) rotate(var(--stm-rot, 0deg)); }
+  65%  { opacity: 0.7; transform: translate(calc(var(--stm-x, 0) * 1.2), calc(var(--stm-y, 0) - 18px)) scale(1.22) rotate(var(--stm-rot, 0deg)); }
+  100% { opacity: 0; transform: translate(calc(var(--stm-x, 0) * 1.4), calc(var(--stm-y, 0) - 34px)) scale(1.45) rotate(var(--stm-rot, 0deg)); }
 }
 
 /* 4. DRATINI: Pound (Tail Whip Strike) */
@@ -12384,6 +13399,442 @@ html, body {
   55%     { transform: translateY(-18px) scale(1.15); opacity: 0.85; }
   80%     { transform: translateY(-42px) scale(1.45); opacity: 0.5; }
   100%    { transform: translateY(-68px) scale(1.75); opacity: 0; }
+}
+
+/* =========================================================================
+   KULVAR B: FOSSIL & SIGNATURE APEX MOVE ANIMATIONS
+   1. AERODACTYL: Prehistoric Wing Attack
+   ========================================================================= */
+@keyframes gbaAerodactylGaleAura {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) rotate(-15deg);
+  }
+  20% {
+    opacity: 0.85;
+    transform: scale(1.05) rotate(0deg);
+    filter: drop-shadow(0 0 20px #38bdf8);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15) rotate(10deg);
+  }
+  80% {
+    opacity: 0.4;
+    transform: scale(1.3) rotate(20deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45) rotate(30deg);
+  }
+}
+
+@keyframes gbaAerodactylRazorWing {
+  0% {
+    opacity: 0;
+    transform: translate(-45px, -35px) rotate(-35deg) scale(0.7);
+    filter: blur(4px) brightness(1.4);
+  }
+  22% {
+    opacity: 1;
+    transform: translate(-10px, -8px) rotate(-15deg) scale(1.08);
+    filter: drop-shadow(0 0 24px #38bdf8) brightness(1.3);
+  }
+  32% {
+    transform: translate(6px, 8px) rotate(8deg) scale(1.15, 0.9);
+    filter: drop-shadow(0 0 35px #ffffff) drop-shadow(0 0 45px #0284c7) brightness(1.6);
+  }
+  48% {
+    transform: translate(2px, 4px) rotate(4deg) scale(1.0, 1.05);
+    filter: drop-shadow(0 0 20px #38bdf8) brightness(1.15);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate(14px, 18px) rotate(14deg) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(28px, 32px) rotate(24deg) scale(0.85);
+    filter: blur(3px);
+  }
+}
+
+@keyframes gbaAerodactylSonicBoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1.0);
+    filter: drop-shadow(0 0 20px #ffffff);
+  }
+  60% {
+    opacity: 0.65;
+    transform: scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.85);
+  }
+}
+
+@keyframes gbaAerodactylSlipstream1 {
+  0% {
+    opacity: 0;
+    transform: translate(-40px, -20px) rotate(25deg) scaleX(0.2);
+  }
+  24% {
+    opacity: 1;
+    transform: translate(-5px, 0px) rotate(25deg) scaleX(1.1);
+    filter: drop-shadow(0 0 16px #38bdf8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(15px, 10px) rotate(25deg) scaleX(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(45px, 25px) rotate(25deg) scaleX(0.8);
+  }
+}
+
+@keyframes gbaAerodactylSlipstream2 {
+  0% {
+    opacity: 0;
+    transform: translate(-30px, -30px) rotate(25deg) scaleX(0.2);
+  }
+  28% {
+    opacity: 1;
+    transform: translate(0px, -5px) rotate(25deg) scaleX(1.15);
+    filter: drop-shadow(0 0 16px #ffffff);
+  }
+  55% {
+    opacity: 0.9;
+    transform: translate(25px, 10px) rotate(25deg) scaleX(1.35);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(55px, 25px) rotate(25deg) scaleX(0.8);
+  }
+}
+
+@keyframes gbaAerodactylSlipstream3 {
+  0% {
+    opacity: 0;
+    transform: translate(-20px, -40px) rotate(25deg) scaleX(0.2);
+  }
+  32% {
+    opacity: 1;
+    transform: translate(5px, -10px) rotate(25deg) scaleX(1.1);
+    filter: drop-shadow(0 0 16px #38bdf8);
+  }
+  60% {
+    opacity: 0.85;
+    transform: translate(35px, 5px) rotate(25deg) scaleX(1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(65px, 20px) rotate(25deg) scaleX(0.7);
+  }
+}
+
+/* 2. KABUTOPS: Prehistoric Sickle Cleave & Absorb */
+@keyframes gbaKabutopsResifAura {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  25% {
+    opacity: 0.9;
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 24px #ea580c);
+  }
+  60% {
+    opacity: 0.7;
+    transform: scale(1.25);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes gbaKabutopsImpactFlash {
+  0% {
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+  26% {
+    opacity: 1;
+    transform: scale(1.15) rotate(45deg);
+    filter: drop-shadow(0 0 30px #ffffff);
+  }
+  60% {
+    opacity: 0.7;
+    transform: scale(1.45) rotate(90deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8) rotate(135deg);
+  }
+}
+
+@keyframes gbaKabutopsBioOrb {
+  0% {
+    opacity: 0;
+    transform: translate(var(--bo-ox), var(--bo-oy)) scale(0.4);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(calc(var(--bo-ox) * 0.5), calc(var(--bo-oy) * 0.5)) scale(1.2);
+    filter: drop-shadow(0 0 12px #4ade80);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translate(0px, 0px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0px, 0px) scale(0.2);
+    filter: brightness(2);
+  }
+}
+
+/* 3. OMASTAR: Spike Cannon */
+@keyframes gbaOmastarAbyssalAura {
+  0% { opacity: 0; transform: scale(0.4); }
+  25% { opacity: 0.85; transform: scale(1.1); filter: drop-shadow(0 0 20px #0284c7); }
+  65% { opacity: 0.6; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+@keyframes gbaOmastarSpikeLunge {
+  0% {
+    opacity: 0;
+    transform: translate(var(--sp-ox), var(--sp-oy)) rotate(var(--sp-rot)) scale(0.4);
+    filter: blur(3px);
+  }
+  26% {
+    opacity: 1;
+    transform: translate(calc(var(--sp-tx) * 0.7), calc(var(--sp-ty) * 0.7)) rotate(var(--sp-rot)) scale(1.1);
+    filter: drop-shadow(0 0 20px #38bdf8) brightness(1.3);
+  }
+  34% {
+    transform: translate(var(--sp-tx), var(--sp-ty)) rotate(var(--sp-rot)) scale(1.15, 0.88);
+    filter: drop-shadow(0 0 26px #ffffff) brightness(1.5);
+  }
+  48% {
+    transform: translate(calc(var(--sp-tx) + 2px), calc(var(--sp-ty) + 2px)) rotate(var(--sp-rot)) scale(1.0);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate(calc(var(--sp-tx) + 6px), calc(var(--sp-ty) + 6px)) rotate(var(--sp-rot)) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--sp-tx) + 12px), calc(var(--sp-ty) + 12px)) rotate(var(--sp-rot)) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaOmastarPiercePop {
+  0% { opacity: 0; transform: scale(0.2); }
+  30% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 16px #38bdf8); }
+  70% { opacity: 0.6; transform: scale(1.35); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+/* 4. DODRIO: Tri-Fury Rage */
+@keyframes gbaDodrioDustRing {
+  0% { opacity: 0; transform: scale(0.3); }
+  25% { opacity: 0.9; transform: scale(1.1); filter: drop-shadow(0 0 16px #f97316); }
+  65% { opacity: 0.55; transform: scale(1.35); }
+  100% { opacity: 0; transform: scale(1.6); }
+}
+
+@keyframes gbaDodrioBeakLeft {
+  0% {
+    opacity: 0;
+    transform: translate(-42px, -36px) rotate(42deg) scale(0.65);
+    filter: blur(3px);
+  }
+  24% {
+    opacity: 1;
+    transform: translate(-14px, -10px) rotate(42deg) scale(1.08);
+    filter: drop-shadow(0 0 18px #f97316) brightness(1.3);
+  }
+  34% {
+    transform: translate(4px, 6px) rotate(42deg) scale(1.16, 0.9);
+    filter: drop-shadow(0 0 28px #ffffff) drop-shadow(0 0 35px #ea580c) brightness(1.5);
+  }
+  50% {
+    transform: translate(0px, 2px) rotate(42deg) scale(1.0);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate(8px, 12px) rotate(42deg) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(16px, 22px) rotate(42deg) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaDodrioBeakCenter {
+  0% {
+    opacity: 0;
+    transform: translateY(-50px) rotate(0deg) scale(0.65);
+    filter: blur(3px);
+  }
+  24% {
+    opacity: 1;
+    transform: translateY(-12px) rotate(0deg) scale(1.08);
+    filter: drop-shadow(0 0 18px #facc15) brightness(1.3);
+  }
+  34% {
+    transform: translateY(8px) rotate(0deg) scale(0.9, 1.18);
+    filter: drop-shadow(0 0 28px #ffffff) drop-shadow(0 0 35px #eab308) brightness(1.5);
+  }
+  50% {
+    transform: translateY(2px) rotate(0deg) scale(1.0);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translateY(14px) rotate(0deg) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(26px) rotate(0deg) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaDodrioBeakRight {
+  0% {
+    opacity: 0;
+    transform: translate(42px, -36px) rotate(-42deg) scale(0.65);
+    filter: blur(3px);
+  }
+  24% {
+    opacity: 1;
+    transform: translate(14px, -10px) rotate(-42deg) scale(1.08);
+    filter: drop-shadow(0 0 18px #38bdf8) brightness(1.3);
+  }
+  34% {
+    transform: translate(-4px, 6px) rotate(-42deg) scale(1.16, 0.9);
+    filter: drop-shadow(0 0 28px #ffffff) drop-shadow(0 0 35px #0284c7) brightness(1.5);
+  }
+  50% {
+    transform: translate(0px, 2px) rotate(-42deg) scale(1.0);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate(-8px, 12px) rotate(-42deg) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-16px, 22px) rotate(-42deg) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaDodrioTriBurst {
+  0% { opacity: 0; transform: scale(0.2); }
+  30% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 20px #ffffff); }
+  65% { opacity: 0.65; transform: scale(1.4); }
+  100% { opacity: 0; transform: scale(1.75); }
+}
+
+/* 5. TENTACRUEL: Crimson Lash & Poison Sting */
+@keyframes gbaTentacruelToxicAura {
+  0% { opacity: 0; transform: scale(0.35); }
+  22% { opacity: 0.9; transform: scale(1.08); filter: drop-shadow(0 0 24px #9333ea); }
+  60% { opacity: 0.65; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(1.55); }
+}
+
+@keyframes gbaTentacruelRubyPulse {
+  0% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.5);
+    filter: brightness(1);
+  }
+  24% {
+    opacity: 1;
+    transform: translateY(-10px) scale(1.15);
+    filter: drop-shadow(0 0 26px #f43f5e) drop-shadow(0 0 40px #e11d48) brightness(1.6);
+  }
+  45% {
+    transform: translateY(-12px) scale(1.0);
+    filter: drop-shadow(0 0 18px #f43f5e) brightness(1.2);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translateY(-14px) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.85);
+  }
+}
+
+@keyframes gbaTentacruelWhipLash {
+  0% {
+    opacity: 0;
+    transform: translate(-35px, 25px) rotate(-35deg) scaleX(0.3);
+    filter: blur(3px);
+  }
+  26% {
+    opacity: 1;
+    transform: translate(-10px, 6px) rotate(-10deg) scaleX(1.1);
+    filter: drop-shadow(0 0 20px #c084fc) brightness(1.3);
+  }
+  35% {
+    transform: translate(8px, -4px) rotate(15deg) scale(1.15, 0.9);
+    filter: drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 35px #e11d48) brightness(1.6);
+  }
+  50% {
+    transform: translate(2px, 0px) rotate(8deg) scale(1.0);
+  }
+  75% {
+    opacity: 0.8;
+    transform: translate(14px, -10px) rotate(22deg) scale(0.95);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(26px, -18px) rotate(32deg) scale(0.85);
+    filter: blur(2px);
+  }
+}
+
+@keyframes gbaTentacruelAcidBurst {
+  0% { opacity: 0; transform: scale(0.2); }
+  30% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 20px #f43f5e); }
+  65% { opacity: 0.65; transform: scale(1.45); }
+  100% { opacity: 0; transform: scale(1.8); }
+}
+
+@keyframes gbaTentacruelAcidMote {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.4);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(calc(var(--tm-x) * 0.4), calc(var(--tm-y) * 0.4 - 10px)) scale(1.2);
+    filter: drop-shadow(0 0 10px #c084fc);
+  }
+  60% {
+    opacity: 0.85;
+    transform: translate(calc(var(--tm-x) * 0.8), calc(var(--tm-y) * 0.8 + 8px)) scale(1.0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tm-x), calc(var(--tm-y) + 24px)) scale(0.3);
+    filter: blur(1.5px);
+  }
 }
 
 
