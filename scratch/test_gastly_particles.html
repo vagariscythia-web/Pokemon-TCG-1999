@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gastly Sleeping Gas Refined Particle & Wave Bench</title>
+  <style>
+    body {
+      background: #090d16;
+      color: #f8fafc;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    .stage {
+      width: 220px;
+      height: 300px;
+      background: #0f172a;
+      border: 3px solid #f59e0b;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.9);
+      margin-top: 20px;
+    }
+    @keyframes gbaGastlyDreamWave {
+      0%   { opacity: 0; transform: scale(0.3); filter: blur(2px); }
+      30%  { opacity: 0.85; transform: scale(0.9); filter: blur(0px) drop-shadow(0 0 12px #c084fc); }
+      65%  { opacity: 0.55; transform: scale(1.3); filter: blur(1.5px) drop-shadow(0 0 18px #9333ea); }
+      100% { opacity: 0; transform: scale(1.65); filter: blur(4px); }
+    }
+    @keyframes gbaGastlyDreamMoteA {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      20%  { opacity: 0.95; transform: translate(calc(var(--gm-x) * 0.4), calc(var(--gm-y) * 0.4)) scale(1.15); }
+      60%  { opacity: 0.9; transform: translate(var(--gm-x), var(--gm-y)) scale(1.0); }
+      82%  { opacity: 0.5; transform: translate(calc(var(--gm-x) * 1.15 - 6px), calc(var(--gm-y) * 1.15 - 14px)) scale(0.75); }
+      100% { opacity: 0; transform: translate(calc(var(--gm-x) * 1.25 - 12px), calc(var(--gm-y) * 1.25 - 26px)) scale(0.2); }
+    }
+    @keyframes gbaGastlyDreamMoteB {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      20%  { opacity: 0.95; transform: translate(calc(var(--gm-x) * 0.4), calc(var(--gm-y) * 0.4)) scale(1.1); }
+      60%  { opacity: 0.85; transform: translate(var(--gm-x), var(--gm-y)) scale(0.95); }
+      82%  { opacity: 0.45; transform: translate(calc(var(--gm-x) * 1.15 + 6px), calc(var(--gm-y) * 1.15 - 16px)) scale(0.7); }
+      100% { opacity: 0; transform: translate(calc(var(--gm-x) * 1.25 + 10px), calc(var(--gm-y) * 1.25 - 28px)) scale(0.2); }
+    }
+    @keyframes gbaGastlyDreamMoteMicro {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.2); }
+      25%  { opacity: 1; transform: translate(calc(var(--gm-x) * 0.5), calc(var(--gm-y) * 0.5)) scale(1.3); }
+      50%  { opacity: 0.6; }
+      75%  { opacity: 0.9; transform: translate(var(--gm-x), calc(var(--gm-y) - 10px)) scale(1.0); }
+      100% { opacity: 0; transform: translate(calc(var(--gm-x) * 1.2), calc(var(--gm-y) - 28px)) scale(0.1); }
+    }
+  </style>
+</head>
+<body>
+  <h2>Gastly: Sleeping Gas Refined Atmosphere & Particles</h2>
+  <div class="stage" id="stage"></div>
+  <button onclick="play()" style="margin-top:20px; padding: 8px 16px; background:#7c3aed; color:white; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">Trigger Effect</button>
+
+  <script>
+    const golden_angle = 137.5 * (Math.PI / 180);
+    const particles = [];
+    for (let i = 0; i < 18; i++) {
+      let tier, size, r, delay, anim, bg;
+      if (i < 8) {
+        tier = 'micro';
+        size = 2.5 + (i % 3) * 0.6;
+        r = 30 + i * 4.2;
+        delay = 0.16 + i * 0.05;
+        anim = 'gbaGastlyDreamMoteMicro';
+        bg = i % 2 === 0 ? '#e9d5ff' : '#a5f3fc';
+      } else if (i < 15) {
+        tier = 'medium';
+        size = 4.8 + (i % 3) * 0.7;
+        r = 24 + (i - 8) * 5.8;
+        delay = 0.12 + (i - 8) * 0.07;
+        anim = i % 2 === 0 ? 'gbaGastlyDreamMoteA' : 'gbaGastlyDreamMoteB';
+        bg = i % 3 === 0 
+          ? 'radial-gradient(circle, #ffffff 15%, #c084fc 60%, rgba(147, 51, 234, 0.2) 100%)'
+          : 'radial-gradient(circle, #ffffff 15%, #a5f3fc 50%, #818cf8 85%)';
+      } else {
+        tier = 'major';
+        size = 7.8 + (i - 15) * 0.8;
+        r = 20 + (i - 15) * 12.0;
+        delay = 0.2 + (i - 15) * 0.1;
+        anim = 'gbaGastlyDreamMoteA';
+        bg = 'radial-gradient(circle, #ffffff 20%, #f5d0fe 45%, #c084fc 80%, rgba(124, 58, 237, 0) 100%)';
+      }
+      const angle = i * golden_angle;
+      const x = (Math.cos(angle) * r).toFixed(1);
+      const y = (Math.sin(angle) * r).toFixed(1);
+      particles.push({ id: i, tier, size, x, y, delay, anim, bg });
+    }
+
+    function play() {
+      const stage = document.getElementById('stage');
+      stage.innerHTML = `
+        <!-- Ectoplasm cloud mock background -->
+        <div style="position:absolute; width:120px; height:120px; border-radius:50%; background: radial-gradient(circle, #2e1065 0%, #581c87 40%, transparent 70%); filter:blur(10px); opacity:0.85;"></div>
+        
+        <!-- Refined Undulating Somnolence Wave (Zero dashed CAD lines!) -->
+        <div style="position:absolute; display:flex; align-items:center; justify-content:center; animation: gbaGastlyDreamWave 1.7s ease-out 0.18s forwards; opacity:0; pointer-events:none;">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <defs>
+              <linearGradient id="somnoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#c084fc" stop-opacity="0.85" />
+                <stop offset="50%" stop-color="#e0e7ff" stop-opacity="0.9" />
+                <stop offset="100%" stop-color="#a855f7" stop-opacity="0.75" />
+              </linearGradient>
+              <linearGradient id="somnoGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#a5f3fc" stop-opacity="0.8" />
+                <stop offset="60%" stop-color="#818cf8" stop-opacity="0.75" />
+                <stop offset="100%" stop-color="#c084fc" stop-opacity="0.6" />
+              </linearGradient>
+            </defs>
+            <!-- Outer undulating harmonic ripple -->
+            <circle cx="75" cy="75" r="58" fill="none" stroke="url(#somnoGrad1)" stroke-width="2" opacity="0.8" style="filter: drop-shadow(0 0 8px #c084fc);" />
+            <!-- Inner secondary ripple -->
+            <circle cx="75" cy="75" r="42" fill="none" stroke="url(#somnoGrad2)" stroke-width="1.6" opacity="0.85" style="filter: drop-shadow(0 0 6px #a5f3fc);" />
+          </svg>
+        </div>
+
+        <!-- 18 Organic Somnific Spores & Dream Motes -->
+        ${particles.map(p => `
+          <div style="
+            position: absolute;
+            width: ${p.size}px;
+            height: ${p.size}px;
+            border-radius: 50%;
+            background: ${p.bg};
+            box-shadow: 0 0 ${p.size * 1.8}px ${p.tier === 'micro' ? '#a5f3fc' : '#c084fc'};
+            opacity: 0;
+            pointer-events: none;
+            --gm-x: ${p.x}px;
+            --gm-y: ${p.y}px;
+            animation: ${p.anim} 1.7s ease-out ${p.delay}s forwards;
+          "></div>
+        `).join('')}
+      `;
+    }
+    setTimeout(play, 300);
+  </script>
+</body>
+</html>

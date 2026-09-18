@@ -315,4 +315,6 @@ export interface GameState {
   };
   lastAttackResult?: AttackResult;
   lastStatusTicks?: StatusTick[];
+  prizesFaceUp?: boolean;
+  pokemonPowersBlockedUntilTurn?: number;
 }

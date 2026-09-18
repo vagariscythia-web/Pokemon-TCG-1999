@@ -219,6 +219,25 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     handIndex: number;
     isGustOfWind: boolean;
   } | null>(null);
+  const [pokedexModal, setPokedexModal] = useState<{
+    isOpen: boolean;
+    card: Card;
+    handIndex: number;
+    topCards: Card[];
+  } | null>(null);
+  const [rocketsSneakAttackModal, setRocketsSneakAttackModal] = useState<{
+    isOpen: boolean;
+    card: Card;
+    handIndex: number;
+    oppHand: Card[];
+  } | null>(null);
+  const [garbageRunModal, setGarbageRunModal] = useState<{
+    isOpen: boolean;
+    card: Card;
+    handIndex: number;
+    eligibleCards: { card: Card; originalDiscardIndex: number }[];
+    selectedDiscardIndices: number[];
+  } | null>(null);
   /**
    * Dark Arbok's Stare reads "Choose 1 of your opponent's Pokémon", so the player - not the
    * engine - names the victim, and the pick can be any Benched body as well as the Active one.
@@ -548,7 +567,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       slot,
       benchIndex,
       // Self-targeting moves are buffs / heals - nothing recoils, so nothing shakes.
-      shake: !isSelfTarget
+      shake: !isSelfTarget,
+      whiffed: isBlocked || damageText === '0' || damageText === 'ISKA' || damageText === 'MISS' || damageText === 'BLOCKED'
     };
     setActiveFXList([fx]);
   };
@@ -3626,6 +3646,166 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       return;
     }
 
+    // 9. Pokédex
+    if (card.name.includes('Pokédex') || card.name.includes('Pokedex')) {
+      if (player.deck.length === 0) {
+        setActionBanner({ text: lang === 'tr' ? 'Destede hiç kart yok!' : 'Deck is empty!', type: 'info' });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+      const topCount = Math.min(5, player.deck.length);
+      const topCards = player.deck.slice(0, topCount);
+      setPokedexModal({
+        isOpen: true,
+        card,
+        handIndex,
+        topCards: [...topCards]
+      });
+      return;
+    }
+
+    // 10. Rocket's Sneak Attack
+    if (card.name.includes("Rocket's Sneak Attack") || card.name.includes("Rocket’s Sneak Attack")) {
+      if (cpu.hand.length === 0) {
+        setActionBanner({ text: lang === 'tr' ? 'Rakibin eli tamamen boş!' : "Opponent's hand is empty!", type: 'info' });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+      setRocketsSneakAttackModal({
+        isOpen: true,
+        card,
+        handIndex,
+        oppHand: [...cpu.hand]
+      });
+      return;
+    }
+
+    // 11. Nightly Garbage Run
+    if (card.name.includes('Nightly Garbage Run')) {
+      const eligible = player.discard
+        .map((c, i) => ({ card: c, originalDiscardIndex: i }))
+        .filter(x => x.card.supertype === 'Pokemon' || (x.card.supertype === 'Energy' && (!x.card.subtype || x.card.subtype.includes('Basic'))));
+
+      if (eligible.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Mezarlıkta uygun Pokémon veya Temel Enerji kartı yok!' : 'No eligible Pokémon or Basic Energy in discard pile!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+
+      setGarbageRunModal({
+        isOpen: true,
+        card,
+        handIndex,
+        eligibleCards: eligible,
+        selectedDiscardIndices: []
+      });
+      return;
+    }
+
+    // 12. Imposter Oak's Revenge
+    if (card.name.includes("Imposter Oak's Revenge") || card.name.includes("Imposter Oak’s Revenge")) {
+      const otherHandCards = player.hand
+        .map((c, i) => ({ card: c, originalDeckIndex: i }))
+        .filter(x => x.originalDeckIndex !== handIndex);
+
+      if (otherHandCards.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Elinizde feda edilecek başka kart yok!' : 'You have no other cards in hand to discard!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+
+      chooseCardFromList(
+        card,
+        handIndex,
+        lang === 'tr' ? "Imposter Oak's Revenge: Feda Edilecek Kart" : "Imposter Oak's Revenge: Choose Card to Discard",
+        lang === 'tr'
+          ? "Imposter Oak's Revenge oynamak için elinizden feda edilecek 1 kart seçin:"
+          : "Choose 1 card from your hand to discard in order to play Imposter Oak's Revenge:",
+        otherHandCards,
+        (chosenHandIdx) => {
+          executeTrainerPlay(card, handIndex, undefined, undefined, undefined, { chosenDiscardHandIndex: chosenHandIdx });
+        },
+        undefined,
+        true
+      );
+      return;
+    }
+
+    // 13. Devolution Spray
+    if (card.name === 'Devolution Spray') {
+      const evolvedCards = [player.active, ...player.bench]
+        .filter((p): p is InPlayCard => !!p && p.evolutionHistory.length > 0);
+
+      if (evolvedCards.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Sahada geriye evrimleştirilecek (Devolve) evrimli Pokémon yok!' : 'No evolved Pokémon in play to devolve!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+
+      if (evolvedCards.length === 1 && !targetPokemon) {
+        executeTrainerPlay(card, handIndex, undefined, evolvedCards[0]);
+        return;
+      }
+
+      if (!targetPokemon) {
+        chooseCardFromList(
+          card,
+          handIndex,
+          lang === 'tr' ? 'Devolution Spray: Hedef Pokémon Seçin' : 'Devolution Spray: Choose Pokémon to Devolve',
+          lang === 'tr'
+            ? 'Geriye evrimleştirmek istediğiniz Pokémonu seçin:'
+            : 'Select which evolved Pokémon you want to devolve:',
+          evolvedCards.map((p, idx) => ({ card: p.card, originalDeckIndex: idx })),
+          (chosenIdx) => {
+            const chosenPokemon = evolvedCards[chosenIdx];
+            executeTrainerPlay(card, handIndex, undefined, chosenPokemon);
+          }
+        );
+        return;
+      }
+    }
+
+    // 14. Scoop Up
+    if (card.name === 'Scoop Up') {
+      const inPlayPokemon = [player.active, ...player.bench]
+        .filter((p): p is InPlayCard => !!p && p.card.name !== 'Mysterious Fossil' && p.card.name !== 'Clefairy Doll');
+
+      if (inPlayPokemon.length === 0) {
+        setActionBanner({
+          text: lang === 'tr' ? 'Sahada ele geri alınabilecek Pokémon yok!' : 'No Pokémon in play to scoop up!',
+          type: 'info'
+        });
+        setTimeout(() => setActionBanner(null), 2500);
+        return;
+      }
+
+      if (!targetPokemon) {
+        chooseCardFromList(
+          card,
+          handIndex,
+          lang === 'tr' ? 'Scoop Up: Ele Alınacak Pokémon' : 'Scoop Up: Choose Pokémon to Return to Hand',
+          lang === 'tr'
+            ? 'Ele geri döndürmek istediğiniz Pokémonu seçin (Tüm ekli kartlar mezarlığa gidecektir):'
+            : 'Select which Pokémon to return to your hand (all attached cards will be discarded):',
+          inPlayPokemon.map((p, idx) => ({ card: p.card, originalDeckIndex: idx })),
+          (chosenIdx) => {
+            const chosenPokemon = inPlayPokemon[chosenIdx];
+            executeTrainerPlay(card, handIndex, undefined, chosenPokemon);
+          }
+        );
+        return;
+      }
+    }
+
     // Default immediate play
     executeTrainerPlay(card, handIndex, targetBenchIdx, targetPokemon);
   };
@@ -3754,8 +3934,17 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const handleActivatePokemonPower = (inPlay: InPlayCard, power: { name: string; text: string }) => {
     if (!isPlayerTurn || isTurnLocked || inPlay.powerUsedThisTurn) return;
     // Stare's shutdown lasts through the opponent's next turn, so this can be true on a turn the
-    // player is otherwise allowed to use the power.
-    if (GameEngine.isPowerDisabled(inPlay, state.turn)) return;
+    // player is otherwise allowed to use the power. Also checks Goop Gas Attack.
+    if (GameEngine.isPowerDisabled(inPlay, state.turn, state)) {
+      setActionBanner({
+        text: lang === 'tr'
+          ? 'Bu Pokémon Gücü şu anda engellenmiş durumda!'
+          : 'This Pokémon Power is currently disabled!',
+        type: 'info'
+      });
+      setTimeout(() => setActionBanner(null), 2500);
+      return;
+    }
 
     if (inPlay.status === 'Asleep' || inPlay.status === 'Paralyzed' || inPlay.status === 'Confused') {
       const statusLabel = inPlay.status;
@@ -3769,10 +3958,22 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       return;
     }
 
+    // Goop Gas Attack check
+    if (state.pokemonPowersBlockedUntilTurn && state.turn < state.pokemonPowersBlockedUntilTurn) {
+      setActionBanner({
+        text: lang === 'tr'
+          ? 'Goop Gas Attack devrede! Pokémon Güçleri bir sonraki turun sonuna kadar engellendi!'
+          : 'Goop Gas Attack is active! Pokémon Powers are disabled until the end of next turn!',
+        type: 'info'
+      });
+      setTimeout(() => setActionBanner(null), 2500);
+      return;
+    }
+
     // Muk's Toxic Gas check
     const allCards = [player.active, ...player.bench, cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
     const isToxicGasActive = allCards.some(
-      p => p.card.name === 'Muk' && (p.card.power?.name === 'Toxic Gas' || p.card.pokemonPower?.name === 'Toxic Gas') && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' && !GameEngine.isPowerDisabled(p, state.turn)
+      p => p.card.name === 'Muk' && (p.card.power?.name === 'Toxic Gas' || p.card.pokemonPower?.name === 'Toxic Gas') && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' && !GameEngine.isPowerDisabled(p, state.turn, state)
     );
     if (isToxicGasActive && inPlay.card.name !== 'Muk') {
       setActionBanner({
@@ -4146,10 +4347,33 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     );
     setState(next);
     setSelectedHandIndex(null);
-    setBreederModal(null);
   };
 
-    const executeTrainerPlay = (
+  const handleConfirmPokedex = (reorderedCards: Card[]) => {
+    if (!pokedexModal) return;
+    const { card, handIndex } = pokedexModal;
+    sounds.playCardDraw();
+    setPokedexModal(null);
+    executeTrainerPlay(card, handIndex, undefined, undefined, undefined, { rearrangedDeckTop: reorderedCards });
+  };
+
+  const handleConfirmRocketsSneakAttack = (chosenOppTrainerIdx?: number) => {
+    if (!rocketsSneakAttackModal) return;
+    const { card, handIndex } = rocketsSneakAttackModal;
+    sounds.playCardDraw();
+    setRocketsSneakAttackModal(null);
+    executeTrainerPlay(card, handIndex, undefined, undefined, undefined, { chosenOppTrainerIndex: chosenOppTrainerIdx });
+  };
+
+  const handleConfirmGarbageRun = (chosenDiscardIndices: number[]) => {
+    if (!garbageRunModal) return;
+    const { card, handIndex } = garbageRunModal;
+    sounds.playCardDraw();
+    setGarbageRunModal(null);
+    executeTrainerPlay(card, handIndex, undefined, undefined, undefined, { chosenDiscardIndices });
+  };
+
+  const executeTrainerPlay = (
       card: Card,
       handIdx: number,
       targetBenchIndex?: number,
@@ -4172,6 +4396,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         /** Pokémon Trader: the hand / deck Pokémon taking part in the trade. */
         chosenTraderHandIndex?: number;
         chosenTraderDeckIndex?: number;
+        rearrangedDeckTop?: Card[];
+        chosenOppTrainerIndex?: number;
+        chosenDiscardIndices?: number[];
+        chosenDiscardHandIndex?: number;
       }
     ) => {
     sounds.playCardDraw();
@@ -4219,6 +4447,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       chosenOppDiscardIndex: extraParams?.chosenOppDiscardIndex,
       chosenTraderHandIndex: extraParams?.chosenTraderHandIndex,
       chosenTraderDeckIndex: extraParams?.chosenTraderDeckIndex,
+      rearrangedDeckTop: extraParams?.rearrangedDeckTop,
+      chosenOppTrainerIndex: extraParams?.chosenOppTrainerIndex,
+      chosenDiscardIndices: extraParams?.chosenDiscardIndices,
+      chosenDiscardHandIndex: extraParams?.chosenDiscardHandIndex,
     };
 
     const next = GameEngine.playTrainer(state, 'player', handIdx, trainerParams);
@@ -5604,9 +5836,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 {t.opponentPrizes} ({cpu.prizes.length})
               </div>
               <div className="grid grid-cols-3 gap-1">
-                {cpu.prizes.map((_, i) => (
+                {cpu.prizes.map((card, i) => (
                   <div key={i} className="w-8 sm:w-10 md:w-12 lg:w-13 aspect-[600/825] rounded-md overflow-hidden shadow-md">
-                    <img src="/assets/card_back.png" alt="Prize" className="w-full h-full object-contain" />
+                    {state.prizesFaceUp ? (
+                      <img
+                        src={card.originalImageUrl || card.image || `/cards/${card.number}.jpg`}
+                        alt={card.name}
+                        className="w-full h-full object-fill cursor-pointer hover:scale-105 transition"
+                        onClick={() => handleInspect(card)}
+                        title={card.name}
+                      />
+                    ) : (
+                      <img src="/assets/card_back.png" alt="Prize" className="w-full h-full object-contain" />
+                    )}
                   </div>
                 ))}
               </div>
@@ -5743,9 +5985,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             <div className="flex flex-col items-center">
               <div className="text-[10px] font-bold text-yellow-300 mb-1">{t.yourPrizes} ({player.prizes.length})</div>
               <div className="grid grid-cols-3 gap-1">
-                {player.prizes.map((_, i) => (
+                {player.prizes.map((card, i) => (
                   <div key={i} className="w-11 md:w-13 aspect-[600/825] rounded-md overflow-hidden shadow-md">
-                    <img src="/assets/card_back.png" alt="Prize" className="w-full h-full object-contain" />
+                    {state.prizesFaceUp ? (
+                      <img
+                        src={card.originalImageUrl || card.image || `/cards/${card.number}.jpg`}
+                        alt={card.name}
+                        className="w-full h-full object-fill cursor-pointer hover:scale-105 transition"
+                        onClick={() => handleInspect(card)}
+                        title={card.name}
+                      />
+                    ) : (
+                      <img src="/assets/card_back.png" alt="Prize" className="w-full h-full object-contain" />
+                    )}
                   </div>
                 ))}
               </div>
@@ -6072,10 +6324,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
                 if (pokemonsWithPower.length === 0 && inPlayDollsAndFossils.length === 0) return null;
 
-                // Check if Muk's Toxic Gas is active
+                // Check if Muk's Toxic Gas or Goop Gas Attack is active
+                const isGoopGasSilenced = Boolean(state.pokemonPowersBlockedUntilTurn && state.turn < state.pokemonPowersBlockedUntilTurn);
                 const allInPlayForToxic = [player.active, ...player.bench, cpu.active, ...cpu.bench].filter(Boolean) as InPlayCard[];
-                const isToxicGasInPlay = allInPlayForToxic.some(
-                  p => p.card.name === 'Muk' && (p.card.power?.name === 'Toxic Gas' || p.card.pokemonPower?.name === 'Toxic Gas') && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' && !GameEngine.isPowerDisabled(p, state.turn)
+                const isToxicGasInPlay = isGoopGasSilenced || allInPlayForToxic.some(
+                  p => p.card.name === 'Muk' && (p.card.power?.name === 'Toxic Gas' || p.card.pokemonPower?.name === 'Toxic Gas') && p.status !== 'Asleep' && p.status !== 'Paralyzed' && p.status !== 'Confused' && !GameEngine.isPowerDisabled(p, state.turn, state)
                 );
 
                 // Group and deduplicate duplicate powers by power.name
@@ -6095,8 +6348,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   if (!power) return;
                   const isPassive = isPassivePower(power.name);
                   const isAsleepOrParalyzedOrConfused = inPlay.status === 'Asleep' || inPlay.status === 'Paralyzed' || inPlay.status === 'Confused';
-                  const isStareDisabled = GameEngine.isPowerDisabled(inPlay, state.turn);
-                  const isToxicGasSilenced = isToxicGasInPlay && inPlay.card.name !== 'Muk';
+                  const isStareDisabled = GameEngine.isPowerDisabled(inPlay, state.turn, state);
+                  const isToxicGasSilenced = isGoopGasSilenced || (isToxicGasInPlay && inPlay.card.name !== 'Muk');
                   const isDisabled = isStareDisabled || isToxicGasSilenced;
                   const canUse = Boolean(isPlayerTurn && !inPlay.powerUsedThisTurn && !isAsleepOrParalyzedOrConfused && !isDisabled);
                   const statusCondition = isAsleepOrParalyzedOrConfused ? (inPlay.status as 'Confused' | 'Asleep' | 'Paralyzed') : undefined;
@@ -7618,6 +7871,210 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           forceSelection
           lang={lang}
         />
+      )}
+
+      {/* POKÉDEX MODAL: View and reorder top cards of deck */}
+      {pokedexModal && pokedexModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fade-in safe-area-padding">
+          <div className="bg-slate-900 border-2 border-red-500/80 rounded-3xl p-6 max-w-xl w-full text-white shadow-2xl flex flex-col">
+            <h3 className="text-base sm:text-lg font-black text-red-400 mb-1 text-center">
+              {lang === 'tr' ? 'Pokédex: Deste Sıralama' : 'Pokédex: Rearrange Deck'}
+            </h3>
+            <p className="text-xs text-gray-300 mb-4 text-center">
+              {lang === 'tr'
+                ? 'Destenizin en üstündeki kartları dilediğiniz sıraya yerleştirin (En sol/üstteki kart bir sonraki çekilecek karttır):'
+                : 'Arrange the top cards of your deck in any order (Leftmost card will be drawn next):'}
+            </p>
+
+            <div className="flex flex-wrap gap-2 justify-center items-center p-3 bg-slate-950/70 rounded-2xl border border-slate-800 mb-4">
+              {pokedexModal.topCards.map((c, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-1">
+                  <span className="text-[10px] font-mono text-gray-400">#{idx + 1}</span>
+                  <div className="w-16 sm:w-20 aspect-[600/825] rounded overflow-hidden shadow border border-slate-700">
+                    <img src={c.originalImageUrl || c.image || `/cards/${c.number}.jpg`} alt={c.name} className="w-full h-full object-fill" />
+                  </div>
+                  <div className="flex gap-1 mt-1">
+                    <button
+                      disabled={idx === 0}
+                      onClick={() => {
+                        const newCards = [...pokedexModal.topCards];
+                        const temp = newCards[idx - 1];
+                        newCards[idx - 1] = newCards[idx];
+                        newCards[idx] = temp;
+                        setPokedexModal({ ...pokedexModal, topCards: newCards });
+                      }}
+                      className="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 rounded text-xs font-bold"
+                    >
+                      ◀
+                    </button>
+                    <button
+                      disabled={idx === pokedexModal.topCards.length - 1}
+                      onClick={() => {
+                        const newCards = [...pokedexModal.topCards];
+                        const temp = newCards[idx + 1];
+                        newCards[idx + 1] = newCards[idx];
+                        newCards[idx] = temp;
+                        setPokedexModal({ ...pokedexModal, topCards: newCards });
+                      }}
+                      className="px-1.5 py-0.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-30 rounded text-xs font-bold"
+                    >
+                      ▶
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2 border-t border-slate-800">
+              <button
+                onClick={() => setPokedexModal(null)}
+                className="bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-bold px-5 py-2 rounded-xl border border-slate-700 active:scale-95"
+              >
+                {t.cancel}
+              </button>
+              <button
+                onClick={() => handleConfirmPokedex(pokedexModal.topCards)}
+                className="bg-red-600 hover:bg-red-500 text-white text-xs font-bold px-6 py-2 rounded-xl shadow-lg active:scale-95"
+              >
+                {lang === 'tr' ? 'Sıralamayı Onayla' : 'Confirm Order'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ROCKET'S SNEAK ATTACK MODAL: View opponent's hand and choose a Trainer */}
+      {rocketsSneakAttackModal && rocketsSneakAttackModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fade-in safe-area-padding">
+          <div className="bg-slate-900 border-2 border-purple-500/80 rounded-3xl p-6 max-w-xl w-full text-white shadow-2xl flex flex-col max-h-[85vh]">
+            <h3 className="text-base sm:text-lg font-black text-purple-400 mb-1 text-center">
+              {lang === 'tr' ? "Rocket's Sneak Attack: Rakibin Eli" : "Rocket's Sneak Attack: Opponent's Hand"}
+            </h3>
+            <p className="text-xs text-gray-300 mb-4 text-center">
+              {lang === 'tr'
+                ? 'Rakibin elindeki bir Eğitmen (Trainer) kartını seçerek destesine geri karıştırın:'
+                : "Choose a Trainer card from your opponent's hand to shuffle into their deck:"}
+            </p>
+
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 overflow-y-auto p-2 bg-slate-950/70 rounded-2xl border border-slate-800 flex-grow max-h-72 mb-4">
+              {rocketsSneakAttackModal.oppHand.map((c, idx) => {
+                const isTrainer = c.supertype === 'Trainer';
+                return (
+                  <button
+                    key={idx}
+                    disabled={!isTrainer}
+                    onClick={() => handleConfirmRocketsSneakAttack(idx)}
+                    className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1.5 transition text-center ${
+                      isTrainer
+                        ? 'bg-slate-800 hover:bg-purple-950/80 border-purple-500 hover:border-purple-300 cursor-pointer active:scale-95 group'
+                        : 'bg-slate-900/40 border-slate-800 opacity-40 cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="w-full aspect-[600/825] rounded-lg overflow-hidden shadow">
+                      <img src={c.originalImageUrl || c.image || `/cards/${c.number}.jpg`} alt={c.name} className="w-full h-full object-fill pointer-events-none" />
+                    </div>
+                    <span className="text-[11px] font-bold text-gray-300 truncate w-full group-hover:text-white">
+                      {c.name}
+                    </span>
+                    {isTrainer && (
+                      <span className="text-[9px] font-semibold text-purple-300">
+                        {lang === 'tr' ? 'Seç & Karıştır' : 'Select'}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-between items-center pt-2 border-t border-slate-800">
+              <button
+                onClick={() => setRocketsSneakAttackModal(null)}
+                className="bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-bold px-5 py-2 rounded-xl border border-slate-700 active:scale-95"
+              >
+                {t.cancel}
+              </button>
+              {!rocketsSneakAttackModal.oppHand.some(c => c.supertype === 'Trainer') && (
+                <button
+                  onClick={() => handleConfirmRocketsSneakAttack(undefined)}
+                  className="bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold px-6 py-2 rounded-xl shadow-lg active:scale-95"
+                >
+                  {lang === 'tr' ? 'Eğitmen Yok (Devam Et)' : 'No Trainers (Proceed)'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NIGHTLY GARBAGE RUN MODAL: Select up to 3 cards from discard */}
+      {garbageRunModal && garbageRunModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-fade-in safe-area-padding">
+          <div className="bg-slate-900 border-2 border-emerald-500/80 rounded-3xl p-6 max-w-xl w-full text-white shadow-2xl flex flex-col max-h-[85vh]">
+            <h3 className="text-base sm:text-lg font-black text-emerald-400 mb-1 text-center">
+              {lang === 'tr' ? 'Nightly Garbage Run' : 'Nightly Garbage Run'}
+            </h3>
+            <p className="text-xs text-gray-300 mb-4 text-center">
+              {lang === 'tr'
+                ? `Mezarlığınızdan destenize geri karıştırılacak en fazla 3 Temel Enerji veya Pokémon kartı seçin (${garbageRunModal.selectedDiscardIndices.length}/3 seçildi):`
+                : `Choose up to 3 Basic Energy or Pokémon cards from your discard pile to shuffle into your deck (${garbageRunModal.selectedDiscardIndices.length}/3 selected):`}
+            </p>
+
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 overflow-y-auto p-2 bg-slate-950/70 rounded-2xl border border-slate-800 flex-grow max-h-72 mb-4">
+              {garbageRunModal.eligibleCards.map(({ card: c, originalDiscardIndex }, idx) => {
+                const isSelected = garbageRunModal.selectedDiscardIndices.includes(originalDiscardIndex);
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      let nextSelected = [...garbageRunModal.selectedDiscardIndices];
+                      if (isSelected) {
+                        nextSelected = nextSelected.filter(i => i !== originalDiscardIndex);
+                      } else {
+                        if (nextSelected.length < 3) {
+                          nextSelected.push(originalDiscardIndex);
+                        }
+                      }
+                      setGarbageRunModal({ ...garbageRunModal, selectedDiscardIndices: nextSelected });
+                    }}
+                    className={`p-2 rounded-2xl border-2 flex flex-col items-center gap-1.5 transition text-center cursor-pointer active:scale-95 ${
+                      isSelected
+                        ? 'bg-emerald-950/80 border-emerald-400 ring-2 ring-emerald-500'
+                        : 'bg-slate-800 hover:bg-slate-700 border-slate-700'
+                    }`}
+                  >
+                    <div className="w-full aspect-[600/825] rounded-lg overflow-hidden shadow relative">
+                      <img src={c.originalImageUrl || c.image || `/cards/${c.number}.jpg`} alt={c.name} className="w-full h-full object-fill pointer-events-none" />
+                      {isSelected && (
+                        <div className="absolute top-1 right-1 bg-emerald-500 text-slate-950 font-black rounded-full w-5 h-5 flex items-center justify-center text-xs shadow">
+                          ✓
+                        </div>
+                      )}
+                    </div>
+                    <span className="text-[11px] font-bold text-gray-300 truncate w-full">
+                      {c.name}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2 border-t border-slate-800">
+              <button
+                onClick={() => setGarbageRunModal(null)}
+                className="bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-bold px-5 py-2 rounded-xl border border-slate-700 active:scale-95"
+              >
+                {t.cancel}
+              </button>
+              <button
+                disabled={garbageRunModal.selectedDiscardIndices.length === 0}
+                onClick={() => handleConfirmGarbageRun(garbageRunModal.selectedDiscardIndices)}
+                className="bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 text-white text-xs font-bold px-6 py-2 rounded-xl shadow-lg active:scale-95"
+              >
+                {lang === 'tr' ? `Seçilenleri Karıştır (${garbageRunModal.selectedDiscardIndices.length})` : `Shuffle In (${garbageRunModal.selectedDiscardIndices.length})`}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <CardZoomModal

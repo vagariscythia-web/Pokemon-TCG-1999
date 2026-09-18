@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Flame Tail & Gastly Sleeping Gas Prototypes</title>
+  <style>
+    body {
+      background: #090d16;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      width: 100%;
+    }
+    .card-box {
+      background: #1e293b;
+      border: 2px solid #3b82f6;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .card-stage {
+      width: 180px;
+      height: 252px;
+      background: #0f172a;
+      border: 3px solid #f59e0b;
+      border-radius: 10px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 15px 0;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .label {
+      position: absolute;
+      top: 8px;
+      left: 10px;
+      font-size: 10px;
+      font-weight: bold;
+      color: #94a3b8;
+      letter-spacing: 1px;
+    }
+    button {
+      padding: 8px 16px;
+      background: #ea580c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #c2410c; }
+
+    /* Flame Tail Keyframes */
+    @keyframes gbaFlameTailArc {
+      0%   { transform: translateX(-52px) translateY(-14px) rotate(-34deg) scale(0.42); opacity: 0; filter: drop-shadow(0 0 8px #f97316); }
+      18%  { transform: translateX(-26px) translateY(-8px) rotate(-18deg) scale(0.85); opacity: 0.95; filter: drop-shadow(0 0 18px #ea580c); }
+      36%  { transform: translateX(6px) translateY(2px) rotate(8deg) scaleX(1.04) scaleY(1.02); opacity: 1; filter: drop-shadow(0 0 24px #fbbf24); }
+      46%  { transform: translateX(18px) translateY(6px) rotate(22deg) scaleX(1.08) scaleY(1.06); opacity: 1; filter: drop-shadow(0 0 28px #ffffff); }
+      52%  { transform: translateX(15px) translateY(5px) rotate(20deg) scaleX(1.04) scaleY(1.03); opacity: 1; }
+      72%  { transform: translateX(28px) translateY(10px) rotate(32deg) scale(0.95); opacity: 0.85; filter: drop-shadow(0 0 16px #ea580c); }
+      100% { transform: translateX(45px) translateY(16px) rotate(42deg) scale(0.72); opacity: 0; filter: drop-shadow(0 0 4px #7f1d1d); }
+    }
+    @keyframes gbaFlameTailTrail {
+      0%   { transform: translateX(-20px) scaleX(0.4); opacity: 0; }
+      20%  { transform: translateX(0px) scaleX(1.0); opacity: 0.95; filter: drop-shadow(0 0 16px #fbbf24); }
+      50%  { transform: translateX(18px) scaleX(1.18); opacity: 0.8; }
+      80%  { transform: translateX(32px) scaleX(0.85); opacity: 0.4; }
+      100% { transform: translateX(48px) scaleX(0.5); opacity: 0; }
+    }
+    @keyframes gbaFlameTailImpactStar {
+      0%   { transform: scale(0.15) rotate(0deg); opacity: 0; }
+      22%  { transform: scale(1.32) rotate(25deg); opacity: 1; filter: drop-shadow(0 0 22px #ffffff); }
+      45%  { transform: scale(1.06) rotate(45deg); opacity: 0.88; filter: drop-shadow(0 0 15px #fef08a); }
+      75%  { transform: scale(1.22) rotate(65deg); opacity: 0.45; filter: drop-shadow(0 0 8px #f97316); }
+      100% { transform: scale(1.36) rotate(85deg); opacity: 0; }
+    }
+    @keyframes gbaFlameLickWave1 {
+      0%, 100% { transform: skewX(0deg) scaleY(1); }
+      50%      { transform: skewX(6deg) scaleY(1.1); }
+    }
+    @keyframes gbaFlameLickWave2 {
+      0%, 100% { transform: skewX(0deg) scaleY(1); }
+      50%      { transform: skewX(-6deg) scaleY(1.12); }
+    }
+
+    /* Gastly Sleeping Gas Keyframes (Organic Fluid Ectoplasm) */
+    @keyframes gbaGastlyVignette {
+      0%   { opacity: 0; transform: scale(0.5); }
+      25%  { opacity: 0.95; transform: scale(1.02); }
+      70%  { opacity: 0.85; transform: scale(1.0); }
+      100% { opacity: 0; transform: scale(0.7); }
+    }
+    @keyframes gbaGastlyFluidBillow {
+      0%   { opacity: 0; transform: scale(0.35) rotate(-8deg); filter: blur(4px); }
+      25%  { opacity: 0.95; transform: scale(0.92) rotate(2deg); filter: blur(1px) drop-shadow(0 0 24px #7c3aed); }
+      50%  { opacity: 1; transform: scale(1.08) rotate(-3deg); filter: blur(0px) drop-shadow(0 0 32px #9333ea) drop-shadow(0 0 16px #c084fc); }
+      75%  { opacity: 0.8; transform: scale(1.18) rotate(4deg); filter: blur(2px); }
+      100% { opacity: 0; transform: scale(1.28) rotate(8deg); filter: blur(6px); }
+    }
+    @keyframes gbaGastlyFluidSwirl1 {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50%      { transform: rotate(15deg) scale(1.06); }
+    }
+    @keyframes gbaGastlyFluidSwirl2 {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      50%      { transform: rotate(-18deg) scale(1.08); }
+    }
+    @keyframes gbaGastlyHypnoWave {
+      0%   { opacity: 0; transform: scale(0.2); }
+      30%  { opacity: 0.85; transform: scale(1.0); filter: drop-shadow(0 0 14px #a855f7); }
+      70%  { opacity: 0.5; transform: scale(1.4); }
+      100% { opacity: 0; transform: scale(1.8); }
+    }
+    @keyframes gbaGastlyDreamMote {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      25%  { opacity: 1; transform: translate(calc(var(--mx) * 0.5), calc(var(--my) * 0.5)) scale(1.2); filter: drop-shadow(0 0 8px #c084fc); }
+      70%  { opacity: 0.85; transform: translate(var(--mx), var(--my)) scale(1.0); }
+      100% { opacity: 0; transform: translate(calc(var(--mx) * 1.25), calc(var(--my) * 1.25 - 18px)) scale(0.2); }
+    }
+  </style>
+</head>
+<body>
+  <h2>Interactive Prototype: Flame Tail Mirror Flip & Gastly Ectoplasmic Gas</h2>
+  <div class="grid">
+    <!-- Box 1: Flame Tail Mirrored -->
+    <div class="card-box">
+      <h3>Ponyta: Flame Tail (Mirrored: Tip Trailing Flame Trails)</h3>
+      <p>Kuyruk ucu (tip) sol tarafa alındı; sağ taraftaki kök (dock) harekete öncülük ederken, alev trail'leri doğrudan kuyruğun alevli ucunu takip ediyor!</p>
+      <div class="card-stage" id="stageFlameTail">
+        <span class="label">OPPONENT CARD (180px)</span>
+        <div id="flameTailTarget" style="position: absolute; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"></div>
+      </div>
+      <button onclick="playFlameTail()">Trigger Mirrored Flame Tail</button>
+    </div>
+
+    <!-- Box 2: Gastly Sleeping Gas (Pure Fluid Ectoplasm, Zero Emoji/Eyes) -->
+    <div class="card-box">
+      <h3>Gastly: Sleeping Gas (Pure Fluid Ectoplasm)</h3>
+      <p>Çocuksu karikatür gözler ve sahte Gastly çizimi tamamen kaldırıldı. Gerçekçi akışkan dinamiklere sahip çok katmanlı ektoplazmik uyku gazı, girdaplar ve hipnotik rüya zerreleri.</p>
+      <div class="card-stage" id="stageGastly">
+        <span class="label">OPPONENT CARD (180px)</span>
+        <div id="gastlyTarget" style="position: absolute; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;"></div>
+      </div>
+      <button onclick="playGastlyGas()">Trigger Sleeping Gas</button>
+    </div>
+  </div>
+
+  <script>
+    // --- FLAME TAIL MIRRORED SVG ---
+    function getMirroredFlameTailSvg() {
+      return `
+      <svg width="112" height="52" viewBox="0 0 160 75" class="overflow-visible select-none drop-shadow-[0_0_16px_#f97316]">
+        <defs>
+          <linearGradient id="pnyFireGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stop-color="#991b1b" stop-opacity="0.85" />
+            <stop offset="18%" stop-color="#dc2626" />
+            <stop offset="45%" stop-color="#ea580c" />
+            <stop offset="70%" stop-color="#f97316" />
+            <stop offset="88%" stop-color="#facc15" />
+            <stop offset="100%" stop-color="#ffffff" />
+          </linearGradient>
+
+          <linearGradient id="pnyHairGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ea580c" stop-opacity="0.4" />
+            <stop offset="50%" stop-color="#fde047" stop-opacity="0.85" />
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.95" />
+          </linearGradient>
+
+          <linearGradient id="pnySpineGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+            <stop offset="0%" stop-color="#f97316" stop-opacity="0.1" />
+            <stop offset="35%" stop-color="#fef08a" stop-opacity="0.85" />
+            <stop offset="75%" stop-color="#ffffff" stop-opacity="0.98" />
+          </linearGradient>
+
+          <filter id="pnyTailGlow" x="-25%" y="-25%" width="150%" height="150%">
+            <feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="#f97316" flood-opacity="0.85" />
+            <feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#dc2626" flood-opacity="0.5" />
+          </filter>
+        </defs>
+
+        <!-- Mirrored horizontally: x' = 160 - x -->
+        <g filter="url(#pnyTailGlow)" transform="scale(-1, 1) translate(-160, 0)">
+          <!-- 1. Tail Dock Root (Now on the leading right side) -->
+          <path d="M 4 36 C 8 33, 14 34, 18 36 C 14 39, 8 40, 4 37 Z" fill="#fef3c7" stroke="#d97706" stroke-width="0.9" />
+
+          <!-- 2. Tress 1: Top High-Arching Feathered Lock -->
+          <g style="transform-origin: 40px 24px; animation: gbaFlameLickWave1 0.45s ease-in-out infinite alternate;">
+            <path
+              d="M 16 35 C 28 18, 48 12, 70 18 C 58 24, 46 26, 36 32 C 50 25, 68 24, 86 30 C 72 35, 58 37, 44 40 C 28 42, 18 38, 16 35 Z"
+              fill="url(#pnyFireGrad)"
+              stroke="#991b1b"
+              stroke-width="0.8"
+            />
+            <path d="M 24 28 C 42 18, 62 20, 78 24" fill="none" stroke="#fef08a" stroke-width="1" stroke-linecap="round" opacity="0.9" />
+          </g>
+
+          <!-- 3. Tress 2: Lower Sweeping Feathered Under-Lock -->
+          <g style="transform-origin: 45px 48px; animation: gbaFlameLickWave2 0.42s ease-in-out infinite alternate;">
+            <path
+              d="M 16 37 C 28 48, 44 58, 66 56 C 54 52, 44 48, 38 42 C 52 50, 70 52, 88 44 C 74 42, 60 40, 46 38 C 30 36, 20 36, 16 37 Z"
+              fill="url(#pnyFireGrad)"
+              stroke="#991b1b"
+              stroke-width="0.8"
+            />
+            <path d="M 26 44 C 44 52, 64 52, 80 46" fill="none" stroke="#f97316" stroke-width="1" stroke-linecap="round" opacity="0.85" />
+          </g>
+
+          <!-- 4. Tress 3: Main S-Curved Central Plume -->
+          <path
+            d="M 28 36 C 48 28, 72 40, 98 28 C 118 18, 134 22, 148 30 C 136 34, 122 32, 108 38 C 86 46, 62 44, 42 38 Z"
+            fill="url(#pnyHairGoldGrad)"
+            stroke="#ea580c"
+            stroke-width="0.7"
+            opacity="0.95"
+          />
+
+          <!-- 5. Tress 4: Whispy Feathered Tip Strands (Now trailing on the left side) -->
+          <path d="M 112 26 C 126 18, 138 20, 150 26 C 138 28, 128 30, 118 31 Z" fill="#ffffff" stroke="#facc15" stroke-width="0.6" />
+          <path d="M 124 30 C 138 28, 148 30, 158 32 C 146 34, 136 35, 126 34 Z" fill="#ffffff" stroke="#fef08a" stroke-width="0.7" />
+          <path d="M 108 36 C 122 38, 134 38, 144 42 C 132 41, 122 40, 112 38 Z" fill="#fde047" stroke="#f97316" stroke-width="0.6" />
+
+          <!-- 6. Hair Texture Filament Strands -->
+          <path d="M 36 34 C 60 28, 88 36, 116 28" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" opacity="0.9" />
+          <path d="M 50 38 C 76 38, 104 34, 132 30" fill="none" stroke="#fef08a" stroke-width="1.0" stroke-linecap="round" opacity="0.85" />
+          <path d="M 68 42 C 92 44, 118 38, 142 33" fill="none" stroke="#facc15" stroke-width="0.8" stroke-linecap="round" opacity="0.8" />
+
+          <!-- 7. Incandescent White Spine Filament -->
+          <path d="M 20 36 C 46 26, 76 38, 106 28 C 124 22, 140 26, 156 32" fill="none" stroke="url(#pnySpineGrad)" stroke-width="2.2" stroke-linecap="round" />
+          <circle cx="156" cy="32" r="2.2" fill="#ffffff" filter="drop-shadow(0 0 6px #fef08a)" />
+        </g>
+      </svg>`;
+    }
+
+    function playFlameTail() {
+      const container = document.getElementById('flameTailTarget');
+      container.innerHTML = '';
+
+      // Layer 1: Floor thermal scorch
+      const floor = document.createElement('div');
+      floor.style.position = 'absolute';
+      floor.style.filter = 'blur(4px)';
+      floor.innerHTML = `<svg width="170" height="40" viewBox="0 0 170 40">
+        <defs>
+          <radialGradient id="ftwFloorGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+            <stop offset="25%" stop-color="#fef08a" stop-opacity="0.7" />
+            <stop offset="55%" stop-color="#f97316" stop-opacity="0.5" />
+            <stop offset="85%" stop-color="#dc2626" stop-opacity="0.25" />
+            <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+        <ellipse cx="85" cy="20" rx="80" ry="14" fill="url(#ftwFloorGrad)" />
+      </svg>`;
+      container.appendChild(floor);
+
+      // Layer 2: Primary Actor (Mirrored Flame Tail)
+      const actor = document.createElement('div');
+      actor.style.position = 'absolute';
+      actor.style.animation = 'gbaFlameTailArc 1.35s cubic-bezier(0.18, 0.88, 0.32, 1.15) forwards';
+      actor.innerHTML = getMirroredFlameTailSvg();
+      container.appendChild(actor);
+
+      // Layer 3: Starburst Pop at Whip Tip
+      const star = document.createElement('div');
+      star.style.position = 'absolute';
+      star.style.left = 'calc(50% - 30px)';
+      star.style.top = 'calc(50% + 2px)';
+      star.style.animation = 'gbaFlameTailImpactStar 0.65s cubic-bezier(0.15, 0.9, 0.3, 1) 0.44s forwards';
+      star.style.opacity = '0';
+      star.innerHTML = `<svg width="68" height="68" viewBox="0 0 68 68">
+        <circle cx="34" cy="34" r="24" fill="none" stroke="#f97316" stroke-width="2" opacity="0.6" />
+        <path d="M 34 2 L 39 26 L 66 34 L 39 42 L 34 66 L 29 42 L 2 34 L 29 26 Z" fill="#ffffff" stroke="#fde047" stroke-width="1.2" filter="drop-shadow(0 0 10px #ffffff)" />
+        <path d="M 34 12 L 37 29 L 56 34 L 37 39 L 34 56 L 31 39 L 12 34 L 31 29 Z" fill="#fef08a" opacity="0.8" />
+        <circle cx="34" cy="34" r="6" fill="#ffffff" filter="drop-shadow(0 0 8px #fef08a)" />
+      </svg>`;
+      container.appendChild(star);
+
+      // Layer 4: Cavitation Whip Trails (Trailing behind the tip on the left)
+      const trail = document.createElement('div');
+      trail.style.position = 'absolute';
+      trail.style.left = '-26px';
+      trail.style.animation = 'gbaFlameTailTrail 1.35s ease-out 0.08s forwards';
+      trail.style.opacity = '0';
+      trail.innerHTML = `<svg width="100" height="46" viewBox="0 0 100 46">
+        <path d="M 2 14 C 28 4, 62 8, 92 16" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" opacity="0.85" filter="drop-shadow(0 0 6px #facc15)" />
+        <path d="M 8 24 C 36 20, 68 22, 96 26" fill="none" stroke="#f97316" stroke-width="3.8" stroke-linecap="round" opacity="0.9" filter="drop-shadow(0 0 8px #ea580c)" />
+        <path d="M 4 34 C 32 36, 60 34, 88 30" fill="none" stroke="#dc2626" stroke-width="2.8" stroke-linecap="round" opacity="0.7" />
+      </svg>`;
+      container.appendChild(trail);
+    }
+
+    // --- GASTLY SLEEPING GAS: PURE FLUID ECTOPLASM ---
+    function playGastlyGas() {
+      const container = document.getElementById('gastlyTarget');
+      container.innerHTML = '';
+
+      // Layer 1: Ethereal Twilight Abyss Vignette
+      const vig = document.createElement('div');
+      vig.style.position = 'absolute';
+      vig.style.inset = '0';
+      vig.style.borderRadius = '12px';
+      vig.style.background = 'radial-gradient(circle at 50% 50%, rgba(46,16,101,0.85) 0%, rgba(76,29,149,0.5) 45%, rgba(15,23,42,0.3) 70%, transparent 88%)';
+      vig.style.animation = 'gbaGastlyVignette 1.7s ease-out forwards';
+      container.appendChild(vig);
+
+      // Layer 2: Multi-Lobed Volumetric Ectoplasmic Gas Cloud (Zero cartoon eyes!)
+      const gasCloud = document.createElement('div');
+      gasCloud.style.position = 'absolute';
+      gasCloud.style.animation = 'gbaGastlyFluidBillow 1.7s cubic-bezier(0.16, 0.85, 0.25, 1) forwards';
+      gasCloud.innerHTML = `
+      <svg width="124" height="124" viewBox="0 0 140 140" class="overflow-visible select-none">
+        <defs>
+          <radialGradient id="ectoDeepCore" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#0f051d" stop-opacity="0.98" />
+            <stop offset="35%" stop-color="#2e1065" stop-opacity="0.95" />
+            <stop offset="70%" stop-color="#581c87" stop-opacity="0.8" />
+            <stop offset="90%" stop-color="#7c3aed" stop-opacity="0.4" />
+            <stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+          </radialGradient>
+
+          <radialGradient id="ectoVaporRim" cx="45%" cy="45%" r="55%">
+            <stop offset="0%" stop-color="#e9d5ff" stop-opacity="0.8" />
+            <stop offset="30%" stop-color="#c084fc" stop-opacity="0.6" />
+            <stop offset="65%" stop-color="#9333ea" stop-opacity="0.35" />
+            <stop offset="100%" stop-color="#3b0764" stop-opacity="0" />
+          </radialGradient>
+
+          <radialGradient id="ectoHypnoGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#a5f3fc" stop-opacity="0.75" />
+            <stop offset="40%" stop-color="#38bdf8" stop-opacity="0.4" />
+            <stop offset="100%" stop-color="#818cf8" stop-opacity="0" />
+          </radialGradient>
+
+          <filter id="ectoFluidGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#7c3aed" flood-opacity="0.8" />
+            <feDropShadow dx="0" dy="0" stdDeviation="14" flood-color="#9333ea" flood-opacity="0.45" />
+          </filter>
+        </defs>
+
+        <g filter="url(#ectoFluidGlow)">
+          <!-- Outer Expanding Kelvin-Helmholtz Vapor Lobes -->
+          <path
+            d="M 70,12 
+               C 96,8, 122,24, 128,48 
+               C 134,72, 126,98, 106,116 
+               C 86,134, 52,132, 32,114 
+               C 12,96, 8,68, 22,44 
+               C 36,20, 52,14, 70,12 Z"
+            fill="url(#ectoVaporRim)"
+          />
+
+          <!-- Secondary Interlocking Fluid Vortex Plume (Swirling eddy) -->
+          <g style="transform-origin: 70px 70px; animation: gbaGastlyFluidSwirl1 2.2s ease-in-out infinite alternate;">
+            <path
+              d="M 74,22 
+                 C 102,18, 124,38, 126,64 
+                 C 128,90, 108,114, 82,122 
+                 C 54,128, 26,110, 20,84 
+                 C 14,56, 34,30, 60,24 
+                 C 66,22, 70,23, 74,22 Z"
+              fill="url(#ectoDeepCore)"
+            />
+          </g>
+
+          <!-- Internal Counter-Rotating Fluid Eddy -->
+          <g style="transform-origin: 70px 70px; animation: gbaGastlyFluidSwirl2 1.8s ease-in-out infinite alternate;">
+            <path
+              d="M 68,36 
+                 C 90,32, 108,48, 106,70 
+                 C 104,90, 86,106, 68,104 
+                 C 48,102, 34,86, 36,66 
+                 C 38,48, 52,38, 68,36 Z"
+              fill="url(#ectoDeepCore)"
+              opacity="0.9"
+            />
+            <!-- Wispy Hydrodynamic Vapor Tendril Streamlines -->
+            <path d="M 40,60 C 46,42, 68,38, 88,46" fill="none" stroke="#c084fc" stroke-width="1.2" stroke-linecap="round" opacity="0.6" />
+            <path d="M 34,74 C 42,94, 66,100, 94,90" fill="none" stroke="#e9d5ff" stroke-width="1.0" stroke-linecap="round" opacity="0.5" />
+            <path d="M 88,52 C 104,66, 98,88, 78,98" fill="none" stroke="#a855f7" stroke-width="1.4" stroke-linecap="round" opacity="0.5" />
+          </g>
+
+          <!-- Somnolent Cyan Core Energy Mist (Hypnotic center) -->
+          <ellipse cx="70" cy="70" rx="26" ry="24" fill="url(#ectoHypnoGlow)" filter="blur(3px)" />
+          <circle cx="70" cy="70" rx="14" ry="13" fill="#0f051d" opacity="0.85" />
+        </g>
+      </svg>`;
+      container.appendChild(gasCloud);
+
+      // Layer 3: Concentric Hypnotic Somnolence Dream Waves
+      const waves = document.createElement('div');
+      waves.style.position = 'absolute';
+      waves.style.animation = 'gbaGastlyHypnoWave 1.7s ease-out 0.15s forwards';
+      waves.style.opacity = '0';
+      waves.innerHTML = `
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle cx="65" cy="65" r="54" fill="none" stroke="#c084fc" stroke-width="2.2" stroke-dasharray="12 7" opacity="0.8" />
+        <circle cx="65" cy="65" r="38" fill="none" stroke="#a5f3fc" stroke-width="1.6" stroke-dasharray="7 5" opacity="0.85" />
+      </svg>`;
+      container.appendChild(waves);
+
+      // Layer 4: Luminous Somnific Dream Motes
+      const motes = [
+        { x: '-30px', y: '-32px', d: 0.18 },
+        { x: '32px', y: '-28px', d: 0.28 },
+        { x: '-22px', y: '24px', d: 0.38 },
+        { x: '24px', y: '28px', d: 0.46 },
+        { x: '-6px', y: '-38px', d: 0.34 },
+        { x: '10px', y: '36px', d: 0.52 }
+      ];
+      motes.forEach((m, idx) => {
+        const moteEl = document.createElement('div');
+        moteEl.style.position = 'absolute';
+        moteEl.style.setProperty('--mx', m.x);
+        moteEl.style.setProperty('--my', m.y);
+        moteEl.style.animation = `gbaGastlyDreamMote 1.7s ease-out ${m.d}s forwards`;
+        moteEl.style.opacity = '0';
+        moteEl.innerHTML = `<div style="width: 10px; height: 10px; border-radius: 50%; background: #e0e7ff; border: 1px solid #ffffff; box-shadow: 0 0 10px #c084fc; display: flex; align-items: center; justify-content: center;">
+          <div style="width: 4px; height: 4px; border-radius: 50%; background: #a855f7;"></div>
+        </div>`;
+        container.appendChild(moteEl);
+      });
+    }
+
+    // Auto-play
+    setTimeout(playFlameTail, 300);
+    setTimeout(playGastlyGas, 600);
+  </script>
+</body>
+</html>

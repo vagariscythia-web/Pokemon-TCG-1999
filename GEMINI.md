@@ -6,8 +6,8 @@ Bu depoda herhangi bir saldırı animasyonu (Move Animation / Battle FX), görse
 
 ### Asla İhlal Edilemeyecek Temel İlkeler:
 
-1. **5 Katmanlı Mimari Şablonu (The 5-Layer FX Architecture):**
-   Her saldırı overlay'i istisnasız şu 5 katmandan oluşmalıdır:
+1. **5 Katmanlı Mimari Hiyerarşisi (The 5-Layer Modular Architecture):**
+   Efektler bu 5 katmanlı mimari hiyerarşisine sadık kalmalıdır (saldırının doğasına göre 2 ila 5 katman modüler seçilir; her saldırıya zorla lüzumsuz katman sokulup görsel çamur yaratılamaz):
    - `[Katman 1]` Ambient Card Floor / Atmosphere (Zemin aurası, termal kavrulma, iyonize zemin veya sürtünme tozu).
    - `[Katman 2]` Primary Visual Actor (Otantik 1996 Ken Sugimori suluboya görseli veya çok parçalı organik Bézier SVG).
    - `[Katman 3]` Impact Flash & Shockwaves (Starburst pop, kesme parlaması, akkor flaş ve eşmerkezli şok halkaları).
@@ -47,3 +47,9 @@ Bu depoda herhangi bir saldırı animasyonu (Move Animation / Battle FX), görse
    - Bir Pokémon'un, saldırı animasyonunun veya görsel varlığın mevcut durumunu analiz ederken veya kullanıcıya raporlarken; ASLA naif regex aramalarına veya geçici terminal script özetlerine körü körüne güvenilerek varsayımda bulunulamaz.
    - Herhangi bir varlığın (`.png`/`.svg`) veya saldırının kodda aktif olup olmadığı, istisnasız olarak doğrudan `BattleFXOverlay.tsx` içindeki gerçek JSX satır numaraları (`<img src="..." />` ve `fx.type === ...`) ve `cards.json` eşleşmeleri okunarak KESİNLEŞTİRİLMELİDİR.
    - Depoda zaten mevcut ve 5 katmanlı mimaride çalışan bir varlık (örneğin Pikachu, Nidoran ♂, Clefairy vb.) için kod teyidi yapılmadan "eksik", "yapılacak" veya "stok görsel adayı" şeklinde yanıltıcı iddialarda bulunulması KESİNLİKLE YASAKTIR. Her analiz doğrudan kod referansıyla (satır numarasıyla) belgelenmelidir.
+   - `public/assets/` altındaki bir görselin (örneğin `ThunderPunch_Fist.png`), `raw/` klasöründeki bir varlığın (`Electabuzz_raw_edited.png`) önceden onaylanıp sıkı kırpılmış nihai versiyonu olabileceği hesaba katılmalı; dosya içeriği ve görsel kökeni teyit edilmeden varsayımda bulunulmamalıdır.
+
+10. **Görev Kapsamı, Bağlam Tazeleme ve İstem Dışı Müdahale Yasağı (Strict Scope Locking & Anti-Drift Directive):**
+    - Bir oturum kota dolumu, sunucu yeniden başlatılması veya uzun mesaj geçmişi (context compaction) sonrasında kesintiye uğrayıp devam ettirildiğinde; model ASLA aktif görevin/kullanıcı prompt'unun kapsamı dışındaki eski test loglarına, geçmiş terminal hatalarına (`FAIL` sonuçlarına) veya alakasız dosyalara otonom olarak müdahale edemez (*regression anchor / drift yasağı*).
+    - Eski test koşucuların ürettiği hatalar veya regex uyumsuzlukları, kullanıcının o anki açık talebi olmadıkça düzeltilmeye çalışılamaz; test regex'ine yaranmak adına projenin çalışan diğer bileşenlerindeki parametreler, stiller veya fonksiyon imzaları (örneğin `BattleFXOverlay.tsx`, `index.css`, `GameBoard.tsx`) asla sessizce değiştirilemez.
+    - Bir göreve devam edilirken çalışma belleğinde veya görev odağında şüphe oluşursa; kodlarda rastgele değişiklik yapmak yerine, öncelikle son durumda nerede kalındığı kullanıcıya maddeler halinde raporlanmalı (*Read-Only Audit First*) ve kullanıcının onayı alınmadan hiçbir dosyada `replace`/`edit` işlemi uygulanmamalıdır.

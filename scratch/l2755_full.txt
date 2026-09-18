@@ -1,0 +1,29 @@
+Dratini'nin ***Wrap*** (`dratini_tail_wrap`) saldırısı için hazırladığınız görsel üzerinde son uygunluk kontrolü yapılmış, onayınız doğrultusunda sıkı kırpma ve 5 katmanlı mimari entegrasyonu eksiksiz tamamlanmıştır:
+
+---
+
+### 1. Varlık İşleme & Sıkı Kırpma (`public/assets/Dratini_Wrap.png`)
+* **Kaynak:** `public/assets/raw/Dratini_raw_edited.png` ($1024 \times 1024$ px).
+* **Piksel Denetimi:** 4 köşe alfası `[0, 0, 0, 0]`, dış boşluklarda sıfır leke, 174.251 opak piksel ve 9.815 pürüzsüz anti-aliased kenar pikseli doğrulandı.
+* **Sıkı Kırpma:** [ANIMATION_DESIGN_SYSTEM.md](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/ANIMATION_DESIGN_SYSTEM.md) Kural 8 uyarınca içerik $+12\text{px}$ payla **$564 \times 608$ px** boyutuna optimize edilerek `public/assets/Dratini_Wrap.png` altına alındı.
+
+---
+
+### 2. Uygulanan 5 Katmanlı Mimari (`BattleFXOverlay.tsx` [L10655](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx#L10655))
+* **Katman 1 (Zemin):** Hedef kart konteynerine hapsedilmiş, `gbaDragonRageAura` ile parıldayan koyu camgöbeği/çivit radyal zemin aurası.
+* **Katman 2 (Birincil Aktör - Dratini):**
+  * Eski yapay SVG elipsleri kaldırıldı; yerine Ken Sugimori Dratini stok aktörü entegre edildi (`w-[104px] h-[104px]`, Tier 1 kuralına uygun olarak kart genişliğinin ~%64'ü).
+  * **Kinetik Dinamik (`gbaDratiniTailWrap`):** Yay çizerek iniş $\rightarrow$ elastik sıkma gerilimi $\rightarrow$ $44\%\text{–}64\%$ temas anında yüksek gerilimli **boğma mikro-titremesi (`shudder tremor`)** $\rightarrow$ zarifçe çözülerek sönümlenme.
+* **Katman 3 (Sıkma Basıncı / İmpakt):**
+  * Dratini'nin açık sarma halkasının tam merkezinden dışa patlayan çift gradyanlı (`#38bdf8` $\rightarrow$ `#0284c7`), pürüzsüz konsantrik basınç şok halkaları (`gbaDratiniTightenPulse`). Sıfır kesik çizgi!
+* **Katman 4 & 5 (Ejderha Parçacıkları):**
+  * 360° filotaksis (altın açı) saçılımıyla halkadan dışarı fışkıran 14 adet organik camgöbeği ve derin mavi ejderha zerresi (mikro zerreler, orta boy ışık küreleri ve büyük akkor inciler, `gbaDratiniSparkDrift`).
+* **Whiff Standartları (`fx.whiffed === true`):**
+  * Iska durumunda aktör `w-[64px] h-[64px]` boyutuna küçülür, `gbaDratiniWrapWhiff` ile hedefe ulaşamadan havada dağılır; tüm ikincil şok dalgaları koşulsuz bastırılır.
+
+---
+
+### 3. Doğrulama ve Canlı Test Tezgâhı
+* **TypeScript:** `npx tsc --noEmit` sıfır hatayla geçti (Code 0).
+* **Production Build:** `npm run build` 37 saniyede tertemiz derlendi (Code 0).
+* **Canlı Test:** Tarayıcınızda açık olan **[preview_ponyta.html](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/scratch/preview_ponyta.html)** dosyasını yenileyerek, yeni eklenen **5. kutudaki** (*Dratini: Wrap*) sarma kinetiğini, titreme gerilimini ve ejderha zerrelerini hemen deneyimleyebilirsiniz.

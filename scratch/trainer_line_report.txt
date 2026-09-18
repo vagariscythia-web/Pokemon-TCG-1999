@@ -1,0 +1,59 @@
+=== ENGINE MATCHES ===
+L1254: } else if (card.name === 'Scoop Up') {
+L1266: } else if (card.name === 'Devolution Spray') {
+L1275: GameEngine.addLog(next, `${player.name} devolved ${target.card.name} with Devolution Spray!`, 'action');
+L1383: } else if (card.name.includes('Here Comes Team Rocket')) {
+L1385: GameEngine.addLog(next, `🚀 Here Comes Team Rocket! All Prize cards are revealed face-up for the rest of the game!`, 'act
+L1386: } else if (card.name.includes("Rocket's Sneak Attack") || card.name.includes("Rocket’s Sneak Attack")) {
+L1395: GameEngine.addLog(next, `🕵️ Rocket's Sneak Attack! Shuffled ${removed.name} from ${opponent.name}'s hand into their deck
+L1397: GameEngine.addLog(next, `Rocket's Sneak Attack: No Trainer cards found in ${opponent.name}'s hand.`, 'action');
+L1427: } else if (card.name.includes("Imposter Oak's Revenge") || card.name.includes("Imposter Oak’s Revenge")) {
+L1444: GameEngine.addLog(next, `😈 Imposter Oak's Revenge! ${opponent.name} shuffled hand into deck and drew 4 cards!`, 'action'
+L1445: } else if (card.name.includes('Nightly Garbage Run')) {
+L1471: GameEngine.addLog(next, `🗑️ Nightly Garbage Run! Recycled ${recycledNames.length} card(s) (${recycledNames.join(', ')}) 
+L1472: } else if (card.name.includes('Goop Gas Attack')) {
+L1474: GameEngine.addLog(next, `💨 Goop Gas Attack! All Pokémon Powers are disabled until the end of next turn!`, 'action');
+L1508: } else if (card.name.includes('Pokédex') || card.name.includes('Pokedex')) {
+
+=== BOARD MATCHES ===
+L222: const [pokedexModal, setPokedexModal] = useState<{
+L3650: if (card.name.includes('Pokédex') || card.name.includes('Pokedex')) {
+L3658: setPokedexModal({
+L3667: // 10. Rocket's Sneak Attack
+L3668: if (card.name.includes("Rocket's Sneak Attack") || card.name.includes("Rocket’s Sneak Attack")) {
+L3683: // 11. Nightly Garbage Run
+L3684: if (card.name.includes('Nightly Garbage Run')) {
+L3708: // 12. Imposter Oak's Revenge
+L3709: if (card.name.includes("Imposter Oak's Revenge") || card.name.includes("Imposter Oak’s Revenge")) {
+L3726: lang === 'tr' ? "Imposter Oak's Revenge: Feda Edilecek Kart" : "Imposter Oak's Revenge: Choose Card to Discard",
+L3728: ? "Imposter Oak's Revenge oynamak için elinizden feda edilecek 1 kart seçin:"
+L3729: : "Choose 1 card from your hand to discard in order to play Imposter Oak's Revenge:",
+L3740: // 13. Devolution Spray
+L3741: if (card.name === 'Devolution Spray') {
+L3763: lang === 'tr' ? 'Devolution Spray: Hedef Pokémon Seçin' : 'Devolution Spray: Choose Pokémon to Devolve',
+L3777: // 14. Scoop Up
+L3778: if (card.name === 'Scoop Up') {
+L3784: text: lang === 'tr' ? 'Sahada ele geri alınabilecek Pokémon yok!' : 'No Pokémon in play to scoop up!',
+L3795: lang === 'tr' ? 'Scoop Up: Ele Alınacak Pokémon' : 'Scoop Up: Choose Pokémon to Return to Hand',
+L3937: // player is otherwise allowed to use the power. Also checks Goop Gas Attack.
+L3961: // Goop Gas Attack check
+L3965: ? 'Goop Gas Attack devrede! Pokémon Güçleri bir sonraki turun sonuna kadar engellendi!'
+L3966: : 'Goop Gas Attack is active! Pokémon Powers are disabled until the end of next turn!',
+L4352: const handleConfirmPokedex = (reorderedCards: Card[]) => {
+L4353: if (!pokedexModal) return;
+L4354: const { card, handIndex } = pokedexModal;
+L4356: setPokedexModal(null);
+L6327: // Check if Muk's Toxic Gas or Goop Gas Attack is active
+L7877: {pokedexModal && pokedexModal.isOpen && (
+L7890: {pokedexModal.topCards.map((c, idx) => (
+L7900: const newCards = [...pokedexModal.topCards];
+L7904: setPokedexModal({ ...pokedexModal, topCards: newCards });
+L7911: disabled={idx === pokedexModal.topCards.length - 1}
+L7913: const newCards = [...pokedexModal.topCards];
+L7917: setPokedexModal({ ...pokedexModal, topCards: newCards });
+L7930: onClick={() => setPokedexModal(null)}
+L7936: onClick={() => handleConfirmPokedex(pokedexModal.topCards)}
+L7946: {/* ROCKET'S SNEAK ATTACK MODAL: View opponent's hand and choose a Trainer */}
+L7951: {lang === 'tr' ? "Rocket's Sneak Attack: Rakibin Eli" : "Rocket's Sneak Attack: Opponent's Hand"}
+L8009: {/* NIGHTLY GARBAGE RUN MODAL: Select up to 3 cards from discard */}
+L8014: {lang === 'tr' ? 'Nightly Garbage Run' : 'Nightly Garbage Run'}

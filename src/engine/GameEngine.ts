@@ -1381,9 +1381,13 @@ export class GameEngine {
       }
       GameEngine.addLog(next, `🥸 Imposter Professor Oak! ${opponent.name} shuffled hand into deck and drew 7 cards!`, 'action');
     } else if (card.name.includes('Here Comes Team Rocket')) {
-      GameEngine.addLog(next, `🚀 Here Comes Team Rocket! All Prize cards are revealed face-up!`, 'action');
+      next.prizesFaceUp = true;
+      GameEngine.addLog(next, `🚀 Here Comes Team Rocket! All Prize cards are revealed face-up for the rest of the game!`, 'action');
     } else if (card.name.includes("Rocket's Sneak Attack") || card.name.includes("Rocket’s Sneak Attack")) {
-      const oppTrainerIdx = opponent.hand.findIndex(c => c.supertype === 'Trainer');
+      const wantedIdx = params?.chosenOppTrainerIndex;
+      const oppTrainerIdx = (wantedIdx !== undefined && wantedIdx >= 0 && wantedIdx < opponent.hand.length && opponent.hand[wantedIdx]?.supertype === 'Trainer')
+        ? wantedIdx
+        : opponent.hand.findIndex(c => c.supertype === 'Trainer');
       if (oppTrainerIdx !== -1) {
         const removed = opponent.hand.splice(oppTrainerIdx, 1)[0];
         opponent.deck.push(removed);
@@ -1421,6 +1425,15 @@ export class GameEngine {
         GameEngine.addLog(next, `⛏️ Digger coin flip: TAILS! Digger failed.`, 'action');
       }
     } else if (card.name.includes("Imposter Oak's Revenge") || card.name.includes("Imposter Oak’s Revenge")) {
+      // Discard 1 chosen card from hand
+      const discardHandIdx = params?.chosenDiscardHandIndex;
+      if (discardHandIdx !== undefined && discardHandIdx >= 0 && discardHandIdx < player.hand.length) {
+        const discarded = player.hand.splice(discardHandIdx, 1)[0];
+        player.discard.push(discarded);
+      } else if (player.hand.length > 0) {
+        const discarded = player.hand.pop()!;
+        player.discard.push(discarded);
+      }
       const oppHand = [...opponent.hand];
       opponent.hand = [];
       opponent.deck.push(...oppHand);
@@ -1430,17 +1443,34 @@ export class GameEngine {
       }
       GameEngine.addLog(next, `😈 Imposter Oak's Revenge! ${opponent.name} shuffled hand into deck and drew 4 cards!`, 'action');
     } else if (card.name.includes('Nightly Garbage Run')) {
-      const eligible = player.discard.filter(c => c.supertype === 'Pokemon' || c.supertype === 'Energy');
-      const count = Math.min(3, eligible.length);
-      for (let i = 0; i < count; i++) {
-        const idx = player.discard.findIndex(c => c.supertype === 'Pokemon' || c.supertype === 'Energy');
-        if (idx !== -1) {
-          player.deck.push(player.discard.splice(idx, 1)[0]);
+      const chosenIndices = params?.chosenDiscardIndices as number[] | undefined;
+      const recycledNames: string[] = [];
+      if (chosenIndices && Array.isArray(chosenIndices) && chosenIndices.length > 0) {
+        // Sort descending so splice doesn't shift remaining indices
+        const sortedIndices = [...chosenIndices].sort((a, b) => b - a);
+        sortedIndices.forEach(idx => {
+          if (idx >= 0 && idx < player.discard.length) {
+            const recycled = player.discard.splice(idx, 1)[0];
+            player.deck.push(recycled);
+            recycledNames.push(recycled.name);
+          }
+        });
+      } else {
+        // Fallback: auto-pick up to 3 eligible cards
+        const count = Math.min(3, player.discard.filter(c => c.supertype === 'Pokemon' || (c.supertype === 'Energy' && (!c.subtype || c.subtype.includes('Basic')))).length);
+        for (let i = 0; i < count; i++) {
+          const idx = player.discard.findIndex(c => c.supertype === 'Pokemon' || (c.supertype === 'Energy' && (!c.subtype || c.subtype.includes('Basic'))));
+          if (idx !== -1) {
+            const recycled = player.discard.splice(idx, 1)[0];
+            player.deck.push(recycled);
+            recycledNames.push(recycled.name);
+          }
         }
       }
       player.deck = GameEngine.shuffle(player.deck);
-      GameEngine.addLog(next, `🗑️ Nightly Garbage Run! Recycled ${count} Pokémon/Energy cards into the deck!`, 'action');
+      GameEngine.addLog(next, `🗑️ Nightly Garbage Run! Recycled ${recycledNames.length} card(s) (${recycledNames.join(', ')}) into the deck!`, 'action');
     } else if (card.name.includes('Goop Gas Attack')) {
+      next.pokemonPowersBlockedUntilTurn = next.turn + 2;
       GameEngine.addLog(next, `💨 Goop Gas Attack! All Pokémon Powers are disabled until the end of next turn!`, 'action');
     } else if (card.name === 'Sleep!') {
       const flip = (params?.coinResults && params.coinResults.length > 0) ? params.coinResults[0] : (Math.random() >= 0.5);
@@ -1476,7 +1506,15 @@ export class GameEngine {
         GameEngine.addLog(next, `🎶 Pokémon Flute! Revived ${opponent.name}'s ${basicCard.name} to their Bench!`, 'action');
       }
     } else if (card.name.includes('Pokédex') || card.name.includes('Pokedex')) {
-      GameEngine.addLog(next, `📱 Pokédex! Examined and rearranged top 5 cards of the deck!`, 'action');
+      const rearranged = params?.rearrangedDeckTop as Card[] | undefined;
+      if (rearranged && Array.isArray(rearranged) && rearranged.length > 0) {
+        const count = rearranged.length;
+        player.deck = [...rearranged, ...player.deck.slice(count)];
+        GameEngine.addLog(next, `📱 Pokédex! Examined top ${count} cards of the deck and rearranged their order!`, 'action');
+      } else {
+        const count = Math.min(5, player.deck.length);
+        GameEngine.addLog(next, `📱 Pokédex! Examined top ${count} cards of the deck!`, 'action');
+      }
     } else if (card.name.includes('Pokémon Trader') || card.name.includes('Pokemon Trader')) {
       // "Discard a Pokémon card in your hand and put a Pokémon card from your deck into your hand"
       const wantHand = params?.chosenTraderHandIndex;
@@ -1849,7 +1887,10 @@ export class GameEngine {
    * True while a Pokémon Power has been shut down. Dark Arbok's Stare is the only move that does
    * this today: "that power stops working until the end of your opponent's next turn".
    */
-  static isPowerDisabled(pokemon: InPlayCard | null | undefined, turn: number): boolean {
+  static isPowerDisabled(pokemon: InPlayCard | null | undefined, turn: number, state?: GameState): boolean {
+    if (state && state.pokemonPowersBlockedUntilTurn && turn < state.pokemonPowersBlockedUntilTurn) {
+      return true;
+    }
     if (!pokemon || pokemon.powerDisabledUntilTurn === undefined) return false;
     return turn <= pokemon.powerDisabledUntilTurn;
   }
@@ -1861,7 +1902,7 @@ export class GameEngine {
   static isThickSkinnedActive(state: GameState, pokemon: InPlayCard | null | undefined): boolean {
     if (!pokemon || pokemon.card.name !== 'Snorlax') return false;
     if (pokemon.status === 'Asleep' || pokemon.status === 'Paralyzed' || pokemon.status === 'Confused') return false;
-    if (GameEngine.isPowerDisabled(pokemon, state.turn)) return false;
+    if (GameEngine.isPowerDisabled(pokemon, state.turn, state)) return false;
     // Toxic Gas check
     const opponent = state[pokemon === state.player.active || state.player.bench.includes(pokemon) ? 'cpu' : 'player'];
     const owner = pokemon === state.player.active || state.player.bench.includes(pokemon) ? state.player : state.cpu;

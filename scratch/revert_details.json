@@ -1,0 +1,50 @@
+[
+  {
+    "line_idx": 3075,
+    "tool": "replace_file_content",
+    "file": "\"c:\\\\Users\\\\KaanS\\\\.gemini\\\\antigravity\\\\scratch\\\\pokemon-tcg-1999_demo\\\\src\\\\components\\\\BattleFXOverlay.tsx\"",
+    "target": "\"const CONFUSE_SPIRAL_BASE =\\n  'M26 26 C 26 20, 32 20, 32 26 C 32 34, 20 34, 20 26 C 20 14, 38 14, 38 26 C 38 40, 14 40, 14 26 C 14 8, 44 8, 44 26';\\nconst CONFUSE_SPIRAL_EXTENDED =\\n  'M26 26 C 26 20, 32 20, 32 26 C 32 34, 20 34, 20 26 C 20 14, 38 14, 38 26 C 38 40, 14 40, 14 26 C 14 8, 44 8, 44 26 C 44 47, 6 47, 6 26 C 6 3, 49 3, 49 26';\"",
+    "replacement": "\"const CONFUSE_SPIRAL_BASE =\\n  'M26 26 C 26 20, 32 20, 32 26 C 32 34, 20 34, 20 26 C 20 14, 38 14, 38 26 C 38 40, 14 40, 14 26 C 14 8, 44 8, 44 26';\\nconst CONFUSE_SPIRAL_EXTENDED =\\n  'M26 26 C 26 20, 32 20, 32 26 C 32 34, 20 34, 20 26 C 20 14, 38 14, 38 26 C 38 40, 14 40, 14 26 C 14 8, 44 8, 44 26 C 44 47, 6 47, 6 26 C 6 3, 49 3, 49 26';\\nconst CONFUSE_RAY_ARM_A = CONFUSE_SPIRAL_EXTENDED;\\nconst CONFUSE_RAY_INNER_A = CONFUSE_SPIRAL_BASE;\"",
+    "chunks": null
+  },
+  {
+    "line_idx": 3081,
+    "tool": "multi_replace_file_content",
+    "file": "\"c:\\\\Users\\\\KaanS\\\\.gemini\\\\antigravity\\\\scratch\\\\pokemon-tcg-1999_demo\\\\src\\\\components\\\\BattleFXOverlay.tsx\"",
+    "target": null,
+    "replacement": null,
+    "chunks": "[{\"AllowMultiple\":false,\"EndLine\":412,\"ReplacementContent\":\"    if (name.includes('confuse ray') || name.includes('confusion'))\\n      return 'drowzee_confuse_ray';\",\"StartLine\":409,\"TargetContent\":\"    if (name.includes('confuse ray') || name.includes('confusion')) return 'drowzee_confuse_ray';\"},{\"AllowMultiple\":false,\"EndLine\":544,\"ReplacementContent\":\"    if (name.includes('confuse ray'))\\n      return 'lapras_aurora_ray';\",\"StartLine\":541,\"TargetContent\":\"    if (name.includes('confuse ray')) return 'lapras_aurora_ray';\"}]"
+  },
+  {
+    "line_idx": 3085,
+    "tool": "replace_file_content",
+    "file": "\"c:\\\\Users\\\\KaanS\\\\.gemini\\\\antigravity\\\\scratch\\\\pokemon-tcg-1999_demo\\\\src\\\\components\\\\BattleFXOverlay.tsx\"",
+    "target": "\"            className=\\\"flex items-center justify-center\\\"\\n            style={{ animation: 'gbaFlamethrowerStream 1.2s ease-out forwards' }}\"",
+    "replacement": "\"            className=\\\"flex items-center justify-center\\\"\\n            style={{ animation: 'gbaFlamethrowerStream 1.2s ease-out forwards', fontSize: '48px' }}\"",
+    "chunks": null
+  },
+  {
+    "line_idx": 3214,
+    "tool": "replace_file_content",
+    "file": "\"c:\\\\Users\\\\KaanS\\\\.gemini\\\\antigravity\\\\scratch\\\\pokemon-tcg-1999_demo\\\\src\\\\components\\\\BattleFXOverlay.tsx\"",
+    "target": "\"          {/* Layer 1: Frosted Confusion Card Block (Restricted cleanly to card below HP bar, 100% crisp HP readout, no rectangular leakage) */}\\n          <div\\n            className=\\\"card-fx-block-overlay z-10 border border-fuchsia-400/25 rounded-xl\\\"\\n            style={{\\n              animation: 'gbaConfuseCardBlur 1.65s ease-in-out forwards',\\n              background: 'radial-gradient(ellipse at center, rgba(192, 132, 252, 0.28) 0%, rgba(147, 51, 234, 0.22) 50%, rgba(88, 28, 135, 0.16) 80%, transparent 100%)',\\n              backdropFilter: 'blur(3.5px)',\\n              WebkitBackdropFilter: 'blur(3.5px)'\\n            }}\\n          />\\n\\n          {/* Layer 2: Eerie hypnotic central card aura */}\\n          <div\\n            className=\\\"absolute w-44 h-44 rounded-full pointer-events-none z-10\\\"\\n            style={{\\n              animation: 'gbaConfuseRayGlow 1.65s ease-out forwards',\\n              background: 'radial-gradient(circle, rgba(192, 132, 252, 0.32) 0%, rgba(147, 51, 234, 0.20) 45%, rgba(88, 28, 135, 0.10) 70%, transparent 100%)'\\n            }}\\n          />\\n          {/* Eerie glow blooming behind the swirl */}\\n          <div\\n            className=\\\"absolute w-20 h-20 rounded-full\\\"\\n            style={{\\n              background:\\n                'radial-gradient(circle, rgba(200,140,255,0.5) 0%, rgba(147,51,234,0.3) 45%, rgba(88,28,135,0) 72%)',\\n              animation: 'gbaConfuseRayGlow 1.65s ease-out forwards'\\n            }}\\n          />\\n          {/* Main confusion spiral - faithful B\u00e9zier coil derived from in-game confusion self-hit, elevated with luminous depth */}\\n          <div\\n            className=\\\"absolute z-20\\\"\\n            style={{ animation: 'gbaConfuseRaySpiral 1.65s linear forwards' }}\\n          >\\n            <svg width=\\\"92\\\" height=\\\"92\\\" viewBox=\\\"0 0 52 52\\\" className=\\\"overflow-visible\\\">\\n              <defs>\\n                <linearGradient id=\\\"confuseRayGrad\\\" x1=\\\"0\\\" y1=\\\"0\\\" x2=\\\"1\\\" y2=\\\"1\\\">\\n                  <stop offset=\\\"0%\\\" stopColor=\\\"#f\n<truncated 3012 bytes>",
+    "replacement": "\"          {/* Layer 1: Frosted Confusion Card Block (Restricted cleanly to card below HP bar, 100% crisp HP readout, no rectangular leakage) */}\\n          <div\\n            className=\\\"card-fx-block-overlay z-10 border border-fuchsia-400/25 rounded-xl backdrop-blur-[1px]\\\"\\n            style={{\\n              animation: 'gbaConfuseCardBlur 1.65s ease-in-out forwards',\\n              background: 'radial-gradient(ellipse at center, rgba(192, 132, 252, 0.28) 0%, rgba(147, 51, 234, 0.22) 50%, rgba(88, 28, 135, 0.16) 80%, transparent 100%)',\\n              backdropFilter: 'blur(3.5px)',\\n              WebkitBackdropFilter: 'blur(3.5px)'\\n            }}\\n          />\\n\\n          {/* Layer 2: Eerie hypnotic central card aura */}\\n          <div\\n            className=\\\"absolute w-44 h-44 rounded-full pointer-events-none z-10\\\"\\n            style={{\\n              animation: 'gbaConfuseRayGlow 1.65s ease-out forwards',\\n              background: 'radial-gradient(circle, rgba(192, 132, 252, 0.32) 0%, rgba(147, 51, 234, 0.20) 45%, rgba(88, 28, 135, 0.10) 70%, transparent 100%)'\\n            }}\\n          />\\n          {/* Eerie glow blooming behind the swirl */}\\n          <div\\n            className=\\\"absolute w-20 h-20 rounded-full\\\"\\n            style={{\\n              background:\\n                'radial-gradient(circle, rgba(200,140,255,0.5) 0%, rgba(147,51,234,0.3) 45%, rgba(88,28,135,0) 72%)',\\n              animation: 'gbaConfuseRayGlow 1.65s ease-out forwards'\\n            }}\\n          />\\n          {/* Main confusion spiral - faithful B\u00e9zier coil derived from in-game confusion self-hit, elevated with luminous depth */}\\n          <div\\n            className=\\\"absolute z-20\\\"\\n            style={{ animation: 'gbaConfuseRaySpiral 1.65s linear forwards' }}\\n          >\\n            <svg width=\\\"92\\\" height=\\\"92\\\" viewBox=\\\"0 0 52 52\\\" className=\\\"overflow-visible\\\">\\n              <defs>\\n                <linearGradient id=\\\"confuseRayGrad\\\" x1=\\\"0\\\" y1=\\\"0\\\" x2=\\\"1\\\" y2=\\\"1\\\">\\n                  <stop offset=\\\n<truncated 3014 bytes>",
+    "chunks": null
+  },
+  {
+    "line_idx": 3218,
+    "tool": "replace_file_content",
+    "file": "\"c:\\\\Users\\\\KaanS\\\\.gemini\\\\antigravity\\\\scratch\\\\pokemon-tcg-1999_demo\\\\src\\\\index.css\"",
+    "target": "\"@keyframes gbaConfuseRaySpiral {\\n  0%   { transform: scale(0.30) rotate(0deg); opacity: 0; filter: drop-shadow(0 0 6px #7e22ce); }\\n  14%  { transform: scale(1.00) rotate(145deg); opacity: 1; filter: drop-shadow(0 0 18px #c084fc); }\\n  30%  { transform: scale(0.84) rotate(320deg); opacity: 0.98; filter: drop-shadow(0 0 20px #e879f9); }\\n  48%  { transform: scale(0.68) rotate(520deg); opacity: 0.95; filter: drop-shadow(0 0 18px #c084fc); }\\n  68%  { transform: scale(0.50) rotate(730deg); opacity: 0.85; filter: drop-shadow(0 0 14px #a855f7); }\\n  85%  { transform: scale(0.34) rotate(900deg); opacity: 0.55; filter: drop-shadow(0 0 10px #9333ea); }\\n  100% { transform: scale(0.20) rotate(1040deg); opacity: 0; filter: drop-shadow(0 0 4px #7e22ce); }\\n}\"",
+    "replacement": "\"@keyframes gbaConfuseRaySpiral {\\n  0%   { transform: scale(0.20) rotate(0deg); opacity: 0; filter: drop-shadow(0 0 6px #7e22ce); }\\n  14%  { transform: scale(0.88) rotate(145deg); opacity: 1; filter: drop-shadow(0 0 18px #c084fc); }\\n  30%  { transform: scale(0.76) rotate(320deg); opacity: 0.98; filter: drop-shadow(0 0 20px #e879f9); }\\n  48%  { transform: scale(0.64) rotate(520deg); opacity: 0.95; filter: drop-shadow(0 0 18px #c084fc); }\\n  68%  { transform: scale(0.50) rotate(730deg); opacity: 0.85; filter: drop-shadow(0 0 14px #a855f7); }\\n  85%  { transform: scale(0.34) rotate(900deg); opacity: 0.55; filter: drop-shadow(0 0 10px #9333ea); }\\n  100% { transform: scale(0.18) rotate(1040deg); opacity: 0; filter: drop-shadow(0 0 4px #7e22ce); }\\n}\"",
+    "chunks": null
+  },
+  {
+    "line_idx": 3222,
+    "tool": "replace_file_content",
+    "file": "\"c:\\\\Users\\\\KaanS\\\\.gemini\\\\antigravity\\\\scratch\\\\pokemon-tcg-1999_demo\\\\src\\\\components\\\\GameBoard.tsx\"",
+    "target": "\"    // Stare's shutdown lasts through the opponent's next turn, so this can be true on a turn the\\n    // player is otherwise allowed to use the power. Also checks Goop Gas Attack.\\n    if (GameEngine.isPowerDisabled(inPlay, state.turn, state)) {\"",
+    "replacement": "\"    // Stare's shutdown lasts through the opponent's next turn, so this can be true on a turn the\\n    // player is otherwise allowed to use the power. Also checks Goop Gas Attack.\\n    if (GameEngine.isPowerDisabled(inPlay, state.turn)) {\"",
+    "chunks": null
+  }
+]

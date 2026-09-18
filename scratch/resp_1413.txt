@@ -1,0 +1,32 @@
+Move animasyonu düzenlemelerimizde katettiğimiz aşamaları, kod tabanındaki güncel durumu ve önümüzdeki turlar için öne çıkan adayları doğrudan kod doğrulamalarıyla ([BattleFXOverlay.tsx](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx)) özetliyorum:
+
+---
+
+### 1. Neler Yaptık? (Son Tamamlanan Düzenlemeler)
+
+1. **Vulpix (*Confuse Ray* — [BattleFXOverlay.tsx:L10972-11080](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx#L10972-L11080)):**
+   - **Bulanıklık İzolasyonu:** Kart bluru yalnızca Katman 1'e (`.card-fx-block-overlay z-10`) sınırlandırıldı; kök konteyner `overflow-visible` yapılarak Vulpix ve alev parçacıkları kart dışına taşan dinamik derinliğe kavuştu.
+   - **Kitsunebi Alev Parıltıları & Hipnotik Kinematik:** Alevler başlangıçta kristal netliğinde (`blur(0px)`) ve yavaş bir saat yönü dönüşü (%0–%45) ile başlıyor; ardından ani bir ters ivmelenme (%45–%68) ve son evrede tepe noktasına ulaşan baş döndürücü bir vertigo burgacı (%68–%92, progressive `blur(4.0px)`) sergileyip merkezkaç kıvılcımlarla sönümleniyor. Renk paleti akkor beyaz-altın çekirdek (`#ffffff` $\rightarrow$ `#fef08a` $\rightarrow$ `#ea580c`) ve beyaz konturla belirginleştirildi.
+   - **Ölçekleme:** Sugimori Vulpix gövdesi Tier 1 tam vücut standardına (`112px × 108px`, whiff: `82px × 78px`) oturtuldu.
+
+2. **Growlithe (*Flare* — [BattleFXOverlay.tsx:L3534-3630](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx#L3534-L3630)):**
+   - Pozisyonlandırma kartın üst-orta bölgesine taşındı (`left: 7%, bottom: 18%`).
+   - Çocuksu kesikli çember çizgileri (`strokeDasharray`) tamamen kaldırıldı; yerine Katman 4 kromatik patlama halkası (`gbaGrowlitheCombustionBurst`) eklendi.
+   - Püskürme orijini Growlithe'ın ağız anatomisine kilitlendi (`left: 29%, bottom: 33%`), süre 1.7
+<truncated 3862 bytes>
+/c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx#L3416)):** Düz alev konisi yerine kademeli yayılan çok loblu Bézier alev püskürmesi.
+2. **Elektrik Grubu (Keiji Kinebuchi Ekolü):**
+   - **`thunder_wave` ([L2893](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx#L2893)):** Hem Kural 7 ihlali olan `✦` metin karakterleri (L2919-2925) hem de kaba bir yıldız poligonu (`polygon points=...`) içeriyor. İyonize halkalar, dinamik parazitik arklar ve akkor çekirdekli şimşek deşarjıyla modernleştirilmeli.
+3. **Su / Buz Grubu (Sugimori & Kinebuchi Ekolü):**
+   - **`water_gun_stream` ([L4165](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx#L4165)):** Squirtle, Wartortle, Golduck, Seadra gibi çok sayıda kartın kullandığı temel saldırı. Şu an tek bir ince SVG yay çizgisi (`Q25 18...`). Yüksek tazyikli, akışkan sıvı jeti ve köpük kinetiğine dönüştürülebilir.
+4. **Çim / Doğa Grubu (Kagemaru Himeno Ekolü):**
+   - **`vine_whip_lash` ([L5146](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx#L5146)):** Ivysaur ve Bellsprout'un kamçısı. İki sert çizgi yerine gövdeden şaklayarak çıkan, yaprak dokulu organik Bézier sarmaşık kamçıları yapılabilir.
+
+---
+
+### Nasıl İlerleyelim?
+
+Önümüzdeki adım için hangi adayı önceliklendirmeyi tercih edersiniz?
+- **Seçenek 1 (Stok Aktör):** `Electabuzz` görselini `public/assets/raw/`'dan hazırlayıp *Thunderpunch* (L3007) ve *Thundershock* için sahneye sürmek.
+- **Seçenek 2 (Apex Ateş SVG):** Charizard'ın meşhur *Fire Spin* (`fire_spin_vortex` — L3857) saldırısını Arita ekolünde görkemli bir alev burgacına dönüştürmek.
+- **Seçenek 3 (Elektrik SVG & Temizlik):** *Thunder Wave* (L2893) içerisindeki yasaklı sembolleri temizleyip Kinebuchi tarzı akışkan şimşek arklarına kavuşturmak.

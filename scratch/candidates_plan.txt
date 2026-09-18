@@ -1,0 +1,36 @@
+=== L466 ===
+
+
+=== L482 ===
+Mevcut kod tabanını ([`BattleFXOverlay.tsx`](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx), [`src/index.css`](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/index.css), [`cards.json`](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/data/cards.json)) ve **[ANIMATION_DESIGN_SYSTEM.md](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/ANIMATION_DESIGN_SYSTEM.md)** kurallarını tarayarak detaylı bir durum envanteri ve yol haritası çıkardım.
+
+---
+
+### 1. Mevcut Durum Özeti (Kod Teyitli Envanter)
+
+* **Toplam Pokémon Türü:** Oyundaki 5 sette (Base, Jungle, Fossil, Team Rocket, Base Set 2) toplam **150 Gen 1 türü** yer alıyor.
+* **Aktif Stok Görsel (Ken Sugimori) Aktörleri:** Depoda şu an tam **59 farklı tür** (toplam 74 görsel varyantı) `BattleFXOverlay.tsx` içinde 5 katmanlı mimaride canlı birincil aktör olarak çalışıyor.
+  *(Pikachu, Clefairy, Nidoran ♂, Lapras, Slowpoke, Psyduck, Mankey, Growlithe, Vulpix, Meowth, Drowzee, Snorlax, Machamp, Gengar, Arbok, Gyarados vb. hepsi kodda aktif).*
+* **Özel Çok Katmanlı SVG'ye Sahip Olanlar:** Henüz stok
+
+=== L1334 ===
+
+
+=== L1350 ===
+
+
+=== L1519 ===
+**Drowzee'nin *Pound* saldırısındaki düzeltmeler ve 5 katmanlı mimari yenilemesi tamamlandı:**
+
+### Yapılanlar:
+1. **Eğreti Duran Stok Görsel Temizlendi:**
+   - `Drowzee_Hypnosis_Trance.png` görseli `drowzee_pound` içerisinden tamamen çıkarıldı.
+   - Bu görsel yalnızca ait olduğu zihinsel saldırılarda (`drowzee_confuse_ray` ve `drowzee_nightmare`) muhafaza edildi.
+2. **Otantik Sugimori Anatomik Avuç İçi (Bézier SVG):**
+   - 5 adet kopuk elips şeklindeki ilkel çizim kaldırıldı.
+   - Drowzee'nin tombul, güçlü sarı el anatomisine uygun; başparmak ve 4 parmağın tok duruşunu sergileyen, Sugimori çini mürekkebi konturlu (`#713f12`), kehribar-altın gradyanlı (`#fef08a` $\rightarrow$ `#facc15` $\rightarrow$ `#ca8a04`), eklem ve avuç içi çizgilerine sahip birleşik bir Bézier SVG aktörü oluşturuldu.
+   - Boyutlandırma **Tier 2** organ standardına (`82px × 82px`, whiff: `58px × 58px`) bağlandı.
+3. **5 Katmanlı Fiziksel Darbe Hiyerarşisi & Kinematik:**
+   - **Katman 1:** Temas anında kart tabanında radyal yayılan yer sarsıntısı aurası (`gbaDrowzeeGroundShock 0.85s`).
+   - **Katman 2:** Geri çekilip hızla atılan, temas anında elastik basılma & esneme (`scale(1.18, 0.88)`) ve fiziksel sarsıntı s
+

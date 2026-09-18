@@ -1,0 +1,37 @@
+Vurguladığınız felsefe, bu projenin ruhunu ve kalitesini belirleyen **en temel sanatsal vizyondur**. 
+
+Tam da belirttiğiniz gibi; bir yandan gereksiz kuralların sistemi körü körüne kısıtlamasını engellerken, diğer yandan **kolaya kaçan, kabataslak, çalakalem veya çocuksu çizimlerle yetinilmesini kesinlikle yasaklayan** ve orijinal 1996–1999 TCG döneminin efsanevi sanat ekollerini referans alan düzenlemeler kılavuza hassasiyetle işlendi.
+
+Herhangi bir metin şişkinliği yaratmadan, var olan yapının içine şu kritik düzenlemeler entegre edildi:
+
+---
+
+### 1. Klasik 1996–1999 Sanatçı Mirası ve Zanaat İlkesi (*[ANIMATION_DESIGN_SYSTEM.md](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/ANIMATION_DESIGN_SYSTEM.md)* — Bölüm 1.A)
+
+Retro GBA nostaljisini aşarak doğrudan Base Set / Jungle / Fossil döneminin büyük ustalarının görsel dili resmi anayasaya işlendi:
+
+- **Ken Sugimori:** Otantik suluboya ebrulisi, temiz mürekkep hatları ve yumuşak organik gölgelendirmeler.
+- **Mitsuhiro Arita:** Viseral fiziksel darbe dinamizmi, dramatik ışık-gölge kontrastı ve sinematik akkor parlama.
+- **Kagemaru Himeno:** Doğal zengin dokular, yumuşak atmosferik parçacıklar ve lirik mistisizm.
+- **Keiji Kinebuchi:** Erken dönem retro-CGI 3D enerji küreleri, geometrik prizmalar ve parlak optik ışımalar.
+- **Zanaat & Bütüncül Estetik (Anti-Doodle):** Çalakalem karalama, kabataslak ve çocuksu çizimler koşulsuz yasaklandı; her animasyonun akıcı 60fps dinamikleriyle, bitmiş hissettiren, oyuncuya görsel tatmin ve vuruş ağırlığı sunan bir özenle inşa edilmesi zorunlu kılındı.
+
+---
+
+### 2. İki Temel Sütun İlkesi (*Two Pillars Philosophy* — Kılavuz Girişi)
+
+Aşırı kuralcılığın sistemi saçma sapan şeyleri her yere zorla tıkıştırmaya itmesini engellemek için sistemin çalışma mantığı ikiye ayrıldı:
+
+1. **Non-Negotiable Invariants (Kırmızı Çizgiler):** Teknik stabilite, milisaniyelik süre senkronizasyonu (`getFXDuration`), kart çerçevesi bütünlüğü (anti-bleed), whiff bastırması ve emoji/ilkel şekil yasağı gibi kurallar katıdır; asla taviz verilemez.
+2. **Modular Creative Toolset (Tasarım Alet Çantası):** Katman şablonları, uydu hareketleri, jet akıntıları ve stok aktörler her saldırıya körü körüne zorlanacak kalıplar değil; saldırının doğasına (fiziksel vuruş, doğa olayı, mistik psişik büyü vb.) göre raftan seçilecek **modüler zenginleştirme araçlarıdır**.
+
+---
+
+### 3. 5 Katmanlı Mimari: "Kalıp" Değil, "Modüler Orkestra Tavanı" (*Bölüm 4 & [GEMINI.md](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/GEMINI.md)*)
+
+- *Eski İfade:* "Her saldırı overlay'i istisnasız şu 5 katmandan oluşmalıdır." *(Sistemi basit bir uyku veya psişik saldırıya bile zorla yanık izi veya şok dalgası sokmaya itiyordu).*
+- *Yeni İlke:* **5 Katman Modüler Orkestra Tavanıdır.** Saldırının doğasına göre **2 ila 5 katman arasında** seçim yapılır (örneğin zarif bir uyku/psişik saldırı 2–3 katmanla minimalist bir derinlik yakalarken, devasa bir patlama 5 katmanın tümünü kullanır). Amaç her saldırıyı aynılaştırmak değil, **görsel çamuru önleyip** sinematik derinliği korumaktır.
+
+---
+
+Bu düzenlemeler sayesinde sistem artık alakasız bir saldırıya zorla uygunsuz görsel ögeler sokmaya çalışmayacak; ancak bir animasyon yaparken asla kolaya kaçamayacak, klasik TCG ustalarının zanaat titizliğiyle ve yüksek görsel tatminle çalışacaktır.

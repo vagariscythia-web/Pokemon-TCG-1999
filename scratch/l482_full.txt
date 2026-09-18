@@ -1,0 +1,53 @@
+Mevcut kod tabanını ([`BattleFXOverlay.tsx`](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/components/BattleFXOverlay.tsx), [`src/index.css`](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/index.css), [`cards.json`](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/src/data/cards.json)) ve **[ANIMATION_DESIGN_SYSTEM.md](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/ANIMATION_DESIGN_SYSTEM.md)** kurallarını tarayarak detaylı bir durum envanteri ve yol haritası çıkardım.
+
+---
+
+### 1. Mevcut Durum Özeti (Kod Teyitli Envanter)
+
+* **Toplam Pokémon Türü:** Oyundaki 5 sette (Base, Jungle, Fossil, Team Rocket, Base Set 2) toplam **150 Gen 1 türü** yer alıyor.
+* **Aktif Stok Görsel (Ken Sugimori) Aktörleri:** Depoda şu an tam **59 farklı tür** (toplam 74 görsel varyantı) `BattleFXOverlay.tsx` içinde 5 katmanlı mimaride canlı birincil aktör olarak çalışıyor.
+  *(Pikachu, Clefairy, Nidoran ♂, Lapras, Slowpoke, Psyduck, Mankey, Growlithe, Vulpix, Meowth, Drowzee, Snorlax, Machamp, Gengar, Arbok, Gyarados vb. hepsi kodda aktif).*
+* **Özel Çok Katmanlı SVG'ye Sahip Olanlar:** Henüz stok görseli eklenmemiş olsa da **~60 Pokémon**, zengin ve özgün SVG animasyonlarına sahip (örn. *Bulbasaur, Charizard, Blastoise, Dragonite, Mewtwo, Raichu, Zapdos, Articuno, Moltres, Voltorb, Geodude, Abra, Gastly vb.*).
+* **Hâlâ Genel/Fallback Kullananlar:** Yalnızca **~15–20 tür** (örn. *Aerodactyl, Kabutops, Omastar, Tentacruel, Dodrio, Magneton, Slowbro*) kısmen jenerik saldırıları (generic claw, tackle, wing attack vb.) paylaşıyor.
+
+---
+
+### 2. Bundan Sonrası İçin Yapılabilecekler (3 Ana Kulvar)
+
+---
+
+#### KULVAR A: Yeni 4'lü Ken Sugimori Stok Görsel Paketleri (Önerilen)
+Mevcut SVG altyapısı zaten kusursuz çalışan ve bir Ken Sugimori aktörüyle (`[Katman 2]`) doğrudan A+ seviyesine fırlayacak hazır adaylar:
+
+* **Paket 1: "Kanto Electric & Kinetic Surge" (Elektri
+<truncated 908 bytes>
+**Oddish** (*Stun Spore / Sprout*): Kafasındaki yapraklardan polen saçan sevimli kök.
+  2. **Poliwag** (*Water Gun*): Göbeğindeki girdap deseni dönen minik kurbağa larvası.
+  3. **Bellsprout** (*Vine Whip / Wrap*): Çan biçimli açık ağızlı etobur bitki.
+  4. **Spearow** (*Peck / Mirror Move*): Yırtıcı sivri gagalı minik kuş.
+
+---
+
+#### KULVAR B: SVG İyileştirmeleri (Henüz Özel Animasyonu Olmayanlar)
+Hâlâ genel/fallback animasyonları kullanan az sayıdaki Pokémon için sıfırdan **Özgün 5 Katmanlı SVG** tasarlamak:
+
+1. **Aerodactyl (*Wing Attack*):** Jenerik kanat yerine; tarih öncesi bir pterodactyl silüeti, sonik çığlık halkaları (`concentric sonic rings`) ve kartı boydan boya kesen jilet rüzgârı fırtınası.
+2. **Kabutops (*Slash / Hydrocutter*):** Jenerik pençe yerine; fosilleşmiş çift kavisli tırpan bıçağı darbesi ve su kavitasyonu.
+3. **Omastar (*Spike Cannon*):** Çok loblu helezon kabuğundan makineli tüfek gibi fırlayan sivri organik mızrak dizisi.
+4. **Dodrio (*Tri Attack*):** Üç kafanın aynı anda farklı açılardan (Ateş, Buz, Şimşek) vurduğu 3 eksenli hibrit darbe.
+5. **Tentacruel (*Acid / Poison Sting*):** 80 adet kamçı dokunaç dalgası ve başındaki kırmızı yakut kürelerin akkor ışıması.
+
+---
+
+#### KULVAR C: Apex Canavarlar & Sinematik İyileştirmeler
+Oyunun en büyük efsaneleri için (*Charizard, Blastoise, Mewtwo, Dragonite*):
+- Vuruş anında ekranı milisaniyelik titreten mikro kromatik sapma (`chromatic aberration`) veya SVG kavitasyon kırılması (`feDisplacementMap`).
+- Ekran genelinde kritik vuruş flaşları.
+
+---
+
+### Sizin Tercihiniz?
+
+Hangi yönde ilerlemek istersiniz?
+1. **Kulvar A'dan yeni bir 4'lü Sugimori Paketi seçip** (örn. *Voltorb, Magnemite, Electabuzz, Raichu* veya *Abra, Gastly, Geodude, Dratini*) görsel üretim & analiz adımına geçebiliriz.
+2. **Kulvar B'ye odaklanıp**, henüz özel animasyonu olmayan *Aerodactyl, Kabutops, Omastar* gibi fosil canavarların SVG mimarilerini inşa edebiliriz.

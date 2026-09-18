@@ -1,0 +1,6 @@
+L2665 USER: <USER_REQUEST>
+Ekteki görseli kullanmaya karar verdim, ve ilgili dosyayı "Dratini_raw_edited" adıyla "raw" klasörüne ekledim. Son bir uygunluk kontrol
+L2679 PLANNER: `public/assets/raw/Dratini_raw_edited.png` dosyası üzerinde gerçekleştirilen dijital analiz sonuçları:  1. **Dekupe & Piksel Bütünlüğü:** 4 köşe alfas
+L2755 PLANNER: Dratini'nin ***Wrap*** (`dratini_tail_wrap`) saldırısı için hazırladığınız görsel üzerinde son uygunluk kontrolü yapılmış, onayınız doğrultusunda sıkı
+L2756 USER: <USER_REQUEST>
+"Pokedex" trainer kart herhangi bir işleve sahip değil. Kartın açıklamasında yer alan: "Look at up to 5 cards from the top of your deck

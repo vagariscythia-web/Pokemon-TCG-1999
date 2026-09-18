@@ -1,0 +1,88 @@
+=== KABUTOPS BLOCK ===
+fx.type === 'kabutops_sickle_slash' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 1: Ancient Resif Shoreline Tidal Foam & Amber Aura */}
+          <div
+            className="absolute rounded-full pointer-events-none z-10"
+            style={{
+              width: fx.whiffed ? '100px' : '150px',
+              height: fx.whiffed ? '100px' : '150px',
+              animation: 'gbaKabutopsResifAura 1.65s ease-out forwards',
+              background: 'radial-gradient(circle, rgba(234, 88, 12, 0.35) 0%, rgba(34, 197, 94, 0.18) 50%, transparent 75%)'
+            }}
+          />
+
+          {/* Layer 2: Dual Curved Obsidian Scythe Blades (X-Scissor Cleave) */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+            {/* Left Scythe Blade (Top-Left to Bottom-Right) */}
+            <div
+              className="absolute flex items-center justify-center pointer-events-none"
+              style={{ animation: 'gbaKabutopsScytheLeft 1.65s cubic-bezier(0.15, 0.95, 0.25, 1) forwards' }}
+            >
+              <svg width="136" height="136" viewBox="0 0 130 130" className="drop-shadow-[0_0_24px_#ea580c] overflow-visible">
+                <defs>
+                  <linearGradient id="kabutopsScytheLeftGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="30%" stopColor="#fef08a" />
+                    <stop offset="65%" stopColor="#ea580c" />
+                    <stop offset="100%" stopColor="#78350f" />
+                  </linearGradient>
+                </defs>
+                {/* Serrated Chitin Blade */}
+                <path
+                  d="M18 18 C52 14, 98 28, 118 72 C106 62, 78 46, 44 46 L18 18 Z"
+                  fill="url(#kabutopsScytheLeftGrad)"
+                  stroke="#ffffff"
+                  strokeWidth="2.2"
+                />
+                {/* Incandescent Razor Edge Spine */}
+                <path d="M18 18 C52 14, 98 28, 118 72" stroke="#ffffff" strokeWidth="3" fill="none" filter="drop-shadow(0 0 8px #fef08a)" />
+                {/* Micro Serration Teeth */}
+                <path d="M48 46 L52 40 L58 46 L64 39 L70 46" stroke="#ea580c" strokeWidth="1.8" fill="none" opacity="0.8" />
+              </svg>
+            </div>
+
+            {/* Right Scythe Blade (Top-Right to Bottom-Left) */}
+            <div
+             
+
+=== SCYTHER BLOCK ===
+fx.type === 'scyther_blade_dance' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Left scythe arm sweeping in */}
+          <div className="absolute" style={{ animation: 'gbaScytherBladeLeft 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
+            <img
+              src="/assets/Scyther_Scythe_Blade.png"
+              alt="Scyther Blade Left"
+              className={`${fx.whiffed ? 'w-[80px] h-[56px]' : 'w-[108px] h-[76px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_28px_rgba(163,230,53,0.7)]`}
+            />
+          </div>
+          {/* Right scythe arm sweeping in (mirrored) */}
+          <div className="absolute" style={{ animation: 'gbaScytherBladeRight 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) 0.1s forwards', opacity: 0 }}>
+            <img
+              src="/assets/Scyther_Scythe_Blade.png"
+              alt="Scyther Blade Right"
+              className={`${fx.whiffed ? 'w-[80px] h-[56px]' : 'w-[108px] h-[76px]'} object-contain pointer-events-none -scale-x-100 drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_28px_rgba(163,230,53,0.7)]`}
+            />
+          </div>
+          {/* Crossing slash flash at center */}
+          <div className="absolute" style={{ animation: 'gbaScytherSlashFlash 1.2s ease-out 0.35s forwards', opacity: 0 }}>
+            <svg width={fx.whiffed ? "64" : "88"} height={fx.whiffed ? "64" : "88"} viewBox="0 0 88 88">
+              <line x1="12" y1="12" x2="76" y2="76" stroke="#fefce8" strokeWidth="4" strokeLinecap="round" opacity="0.95" className="drop-shadow-[0_0_10px_#ffffff]" />
+              <line x1="76" y1="12" x2="12" y2="76" stroke="#bef264" strokeWidth="4" strokeLinecap="round" opacity="0.95" className="drop-shadow-[0_0_14px_#a3e635]" />
+            </svg>
+          </div>
+          {/* Green energy sparks */}
+          {!fx.whiffed && (
+            <div className="absolute -top-2" style={{ animation: 'gbaScytherSpark 1.2s ease-out 0.5s forwards', opacity: 0 }}>
+              <span className="text-xl text-lime-300 select-none drop-shadow-[0_0_10px_#a3e635]">✦</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 46b. SUPERSONIC WAVES (Zubat Supersonic - GBA-style concentric sound arcs + confusion) */}
+      {fx.type === 'supersonic_waves' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+         
+

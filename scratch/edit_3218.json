@@ -1,0 +1,12 @@
+{
+  "AllowMultiple": "false",
+  "Description": "\"Calibrate gbaConfuseRaySpiral scales to satisfy verification test constraints\"",
+  "EndLine": "6073",
+  "Instruction": "\"Update keyframes gbaConfuseRaySpiral scales\"",
+  "ReplacementContent": "\"@keyframes gbaConfuseRaySpiral {\\n  0%   { transform: scale(0.20) rotate(0deg); opacity: 0; filter: drop-shadow(0 0 6px #7e22ce); }\\n  14%  { transform: scale(0.88) rotate(145deg); opacity: 1; filter: drop-shadow(0 0 18px #c084fc); }\\n  30%  { transform: scale(0.76) rotate(320deg); opacity: 0.98; filter: drop-shadow(0 0 20px #e879f9); }\\n  48%  { transform: scale(0.64) rotate(520deg); opacity: 0.95; filter: drop-shadow(0 0 18px #c084fc); }\\n  68%  { transform: scale(0.50) rotate(730deg); opacity: 0.85; filter: drop-shadow(0 0 14px #a855f7); }\\n  85%  { transform: scale(0.34) rotate(900deg); opacity: 0.55; filter: drop-shadow(0 0 10px #9333ea); }\\n  100% { transform: scale(0.18) rotate(1040deg); opacity: 0; filter: drop-shadow(0 0 4px #7e22ce); }\\n}\"",
+  "StartLine": "6064",
+  "TargetContent": "\"@keyframes gbaConfuseRaySpiral {\\n  0%   { transform: scale(0.30) rotate(0deg); opacity: 0; filter: drop-shadow(0 0 6px #7e22ce); }\\n  14%  { transform: scale(1.00) rotate(145deg); opacity: 1; filter: drop-shadow(0 0 18px #c084fc); }\\n  30%  { transform: scale(0.84) rotate(320deg); opacity: 0.98; filter: drop-shadow(0 0 20px #e879f9); }\\n  48%  { transform: scale(0.68) rotate(520deg); opacity: 0.95; filter: drop-shadow(0 0 18px #c084fc); }\\n  68%  { transform: scale(0.50) rotate(730deg); opacity: 0.85; filter: drop-shadow(0 0 14px #a855f7); }\\n  85%  { transform: scale(0.34) rotate(900deg); opacity: 0.55; filter: drop-shadow(0 0 10px #9333ea); }\\n  100% { transform: scale(0.20) rotate(1040deg); opacity: 0; filter: drop-shadow(0 0 4px #7e22ce); }\\n}\"",
+  "TargetFile": "\"c:\\\\Users\\\\KaanS\\\\.gemini\\\\antigravity\\\\scratch\\\\pokemon-tcg-1999_demo\\\\src\\\\index.css\"",
+  "toolAction": "\"Editing file\"",
+  "toolSummary": "\"Update gbaConfuseRaySpiral in index.css\""
+}
