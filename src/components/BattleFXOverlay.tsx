@@ -10837,123 +10837,150 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20av. CHARMANDER EMBER FLAME (Charmander Lv. 10 — 1996 Ken Sugimori Teardrop Tail Flame & Incandescent Ember Burst) */}
+      {/* 20av. CHARMANDER EMBER FLAME (Charmander Lv. 10 — Full-Body 1996 Ken Sugimori Lunge & Kinetic Ember Burst) */}
       {fx.type === 'charmander_ember_flame' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Layer 1: Scorched Ground Magma Aura Patch (Impact-synchronized, branded at apex strike) */}
-          {!fx.whiffed && (
-            <div
-              className="absolute w-36 h-36 rounded-full pointer-events-none z-10"
-              style={{
-                animation: 'gbaCharmanderScorchPatch 1.6s ease-out forwards',
-                background: 'radial-gradient(circle, rgba(249,115,22,0.6) 0%, rgba(220,38,38,0.35) 50%, rgba(127,29,29,0.15) 70%, transparent 85%)'
-              }}
-            />
-          )}
-
-          {/* Layer 2: Authentic 1996 Ken Sugimori Charmander Tail Flame (Unbroken single-arc whip trajectory — zero jerky stutter!) */}
+          {/* Layer 1: Scorched Ground Magma Aura Floor (Foot stance to target trail) */}
           <div
-            className="absolute flex items-center justify-center pointer-events-none z-30"
+            className="absolute pointer-events-none z-10 rounded-full"
             style={{
+              left: '8%',
+              bottom: '16%',
+              width: fx.whiffed ? '70px' : '110px',
+              height: fx.whiffed ? '34px' : '48px',
+              transform: 'rotate(-15deg)',
+              animation: 'gbaCharmanderScorchFloor 1.6s ease-out forwards',
+              background: 'radial-gradient(ellipse at center, rgba(249,115,22,0.6) 0%, rgba(239,68,68,0.35) 45%, rgba(185,28,28,0.15) 75%, transparent 100%)'
+            }}
+          />
+
+          {/* Layer 2: Primary Visual Actor (1996 Ken Sugimori Full-Body Charmander) */}
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{
+              left: '4%',
+              bottom: '12%',
+              width: fx.whiffed ? '78px' : '106px',
+              height: fx.whiffed ? '68px' : '92px',
               animation: fx.whiffed
-                ? 'gbaCharmanderTailWhiff 1.4s ease-out forwards'
-                : 'gbaCharmanderTailSweep 1.6s cubic-bezier(0.18, 0.95, 0.28, 1) forwards'
+                ? 'gbaCharmanderActorWhiff 1.4s ease-out forwards'
+                : 'gbaCharmanderActorLunge 1.6s cubic-bezier(0.18, 0.95, 0.28, 1) forwards'
             }}
           >
             <img
-              src="/assets/Charmander_Tail_Flame.png"
-              alt="Charmander Tail Flame"
-              className="w-[110px] h-[110px] object-contain drop-shadow-[0_0_24px_#ea580c] drop-shadow-[0_0_12px_#facc15] select-none pointer-events-none"
+              src="/assets/Charmander_Ember_Stance.png"
+              alt="Charmander Ember Stance"
+              className="w-full h-full object-contain filter drop-shadow-[0_0_18px_rgba(249,115,22,0.9)] drop-shadow-[0_0_10px_rgba(254,240,138,0.6)] select-none pointer-events-none"
               draggable={false}
             />
+
+            {/* Layer 3: Mouth Origin Incandescent Starburst Flash (Anchored at Charmander's mouth: left 70%, top 40%) */}
+            {!fx.whiffed && (
+              <div
+                className="absolute pointer-events-none z-35 flex items-center justify-center"
+                style={{
+                  left: '70%',
+                  top: '40%',
+                  transform: 'translate(-50%, -50%)',
+                  animation: 'gbaCharmanderMouthFlash 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards'
+                }}
+              >
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-white via-amber-200 to-orange-500 shadow-[0_0_20px_#fde047] flex items-center justify-center">
+                  <div className="w-3.5 h-3.5 rounded-full bg-white blur-[0.5px]" />
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Layer 3: Searing Arcing Flame Ribbon (Trails the tail sweep trajectory seamlessly) */}
+          {/* Layer 4: 3-Stage Parabolic Kinetic Ember Projectiles (Launching from mouth toward target) */}
           {!fx.whiffed && (
             <div
-              className="absolute pointer-events-none z-25 flex items-center justify-center"
-              style={{ animation: 'gbaCharmanderFlameWake 1.6s ease-out 0.1s forwards', opacity: 0 }}
+              className="absolute pointer-events-none z-35"
+              style={{
+                left: '26%',
+                bottom: '36%'
+              }}
             >
-              <svg width="130" height="90" viewBox="0 0 130 90" className="overflow-visible">
-                <defs>
-                  <linearGradient id="cmFlameWakeGrad" x1="0" y1="1" x2="1" y2="0">
-                    <stop offset="0%" stopColor="#ef4444" stopOpacity="0" />
-                    <stop offset="35%" stopColor="#f97316" stopOpacity="0.85" />
-                    <stop offset="70%" stopColor="#fde047" stopOpacity="0.95" />
-                    <stop offset="100%" stopColor="#ffffff" stopOpacity="1" />
-                  </linearGradient>
-                </defs>
-                <path
-                  d="M 12 75 Q 45 68, 75 42 Q 105 16, 120 4"
-                  fill="none"
-                  stroke="url(#cmFlameWakeGrad)"
-                  strokeWidth="6"
-                  strokeLinecap="round"
-                  style={{ strokeDasharray: '90', strokeDashoffset: '80' }}
-                />
-                <path
-                  d="M 12 75 Q 45 68, 75 42 Q 105 16, 120 4"
-                  fill="none"
-                  stroke="#ffffff"
-                  strokeWidth="2.2"
-                  strokeLinecap="round"
-                  style={{ strokeDasharray: '90', strokeDashoffset: '80' }}
-                />
-              </svg>
-            </div>
-          )}
-
-          {/* Layer 4: Tangential Ballistic Ember Projectiles (Bursting from whip apex at ~0.34s) */}
-          {!fx.whiffed && (
-            <>
-              {/* Ember Arc 1: Forward-Right Streaking Coal */}
+              {/* Ember Arc 1: Centerline direct coal streak */}
               <div
-                className="absolute pointer-events-none z-35"
+                className="absolute pointer-events-none"
                 style={{ animation: 'gbaCharmanderEmberArc1 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
               >
                 <div className="relative flex items-center justify-center">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-white via-amber-300 to-rose-600 shadow-[0_0_16px_#f97316]" />
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-white via-amber-300 to-rose-600 shadow-[0_0_18px_#f97316]" />
                   <div className="absolute w-2.5 h-2.5 rounded-full bg-white blur-[0.5px]" />
                 </div>
               </div>
 
-              {/* Ember Arc 2: Forward-Center Heavy Spark */}
+              {/* Ember Arc 2: Lower sweeping heavy spark */}
               <div
-                className="absolute pointer-events-none z-35"
+                className="absolute pointer-events-none"
                 style={{ animation: 'gbaCharmanderEmberArc2 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
               >
                 <div className="relative flex items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-white via-yellow-200 to-orange-600 shadow-[0_0_18px_#ea580c]" />
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-white via-yellow-200 to-orange-600 shadow-[0_0_20px_#ea580c]" />
                   <div className="absolute w-3 h-3 rounded-full bg-white blur-[0.5px]" />
                 </div>
               </div>
 
-              {/* Ember Arc 3: High-Trajectory Arcing Ember */}
+              {/* Ember Arc 3: High-trajectory arcing ember */}
               <div
-                className="absolute pointer-events-none z-35"
+                className="absolute pointer-events-none"
                 style={{ animation: 'gbaCharmanderEmberArc3 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
               >
                 <div className="relative flex items-center justify-center">
-                  <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-white via-orange-300 to-red-600 shadow-[0_0_14px_#ef4444]" />
+                  <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-white via-orange-300 to-red-600 shadow-[0_0_16px_#ef4444]" />
                   <div className="absolute w-2 h-2 rounded-full bg-white blur-[0.5px]" />
                 </div>
               </div>
-            </>
+            </div>
+          )}
+
+          {/* Layer 4: Target Impact Thermal Scorch & Shockwave (Anchored near center-right defending target) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-20 flex items-center justify-center"
+              style={{
+                left: '52%',
+                top: '38%'
+              }}
+            >
+              {/* Branded Target Scorch Patch */}
+              <div
+                className="w-32 h-32 rounded-full pointer-events-none"
+                style={{
+                  animation: 'gbaCharmanderScorchPatch 1.6s ease-out forwards',
+                  background: 'radial-gradient(circle, rgba(249,115,22,0.65) 0%, rgba(220,38,38,0.4) 48%, rgba(127,29,29,0.18) 72%, transparent 88%)'
+                }}
+              />
+              {/* Concentric Thermal Shockwave Rings (Zero dashed hack!) */}
+              <div
+                className="absolute flex items-center justify-center pointer-events-none"
+                style={{ animation: 'gbaCharmanderThermalShock 1.6s cubic-bezier(0.14, 0.85, 0.28, 1) forwards' }}
+              >
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="42" fill="none" stroke="#fde047" strokeWidth="2.2" opacity="0.85" style={{ filter: 'drop-shadow(0 0 8px #ea580c)' }} />
+                  <circle cx="60" cy="60" r="28" fill="none" stroke="#ffffff" strokeWidth="1.6" opacity="0.9" />
+                </svg>
+              </div>
+            </div>
           )}
 
           {/* Layer 5: Ascending Convection Carbon Cinders */}
           {!fx.whiffed && [
-            { x: '-32px', y: '-38px' }, { x: '34px', y: '-40px' },
-            { x: '-22px', y: '22px' },  { x: '24px', y: '26px' },
-            { x: '-8px',  y: '-48px' }, { x: '12px', y: '-52px' }
+            { x: '-28px', y: '-36px' }, { x: '32px', y: '-42px' },
+            { x: '-18px', y: '18px' },  { x: '26px', y: '22px' },
+            { x: '-6px',  y: '-48px' }, { x: '16px', y: '-56px' }
           ].map((p, i) => (
             <div
               key={`cm-cind-${i}`}
               className="absolute pointer-events-none z-40"
               style={{
+                left: '60%',
+                top: '42%',
                 '--cm-x': p.x,
                 '--cm-y': p.y,
-                animation: `gbaCharmanderCinders 1.6s ease-out ${0.40 + i * 0.08}s forwards`,
+                animation: `gbaCharmanderCinders 1.6s ease-out ${0.36 + i * 0.08}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
