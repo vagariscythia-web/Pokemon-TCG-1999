@@ -8,6 +8,7 @@ import { MainMenu } from './components/MainMenu';
 import { GameBoard } from './components/GameBoard';
 import { DeckBuilder } from './components/DeckBuilder';
 import { MultiplayerLobby } from './components/MultiplayerLobby';
+import { net } from './network/MultiplayerManager';
 
 export function App() {
   const [screen, setScreen] = useState<'menu' | 'game' | 'builder' | 'multiplayer'>('menu');
@@ -128,6 +129,7 @@ export function App() {
     opponentName?: string;
     playerDeckName?: string;
     opponentDeckName?: string;
+    seed?: number;
   }) => {
     const pTheme = GameEngine.getDeckTheme(params.playerDeck, params.playerDeckName || 'Custom Deck');
     const oTheme = GameEngine.getDeckTheme(params.opponentDeck, params.opponentDeckName || 'Opponent Deck');
@@ -160,6 +162,14 @@ export function App() {
   };
 
   const handleRematch = () => {
+    if (isMultiplayer) {
+      // Generate a new deterministic seed for the rematch and broadcast it so both
+      // players shuffle identically. The receiving side applies it in GameBoard's
+      // GAME_ACTION handler (MULLIGAN with _rematchSeed).
+      const newSeed = (Date.now() ^ (Math.random() * 0xFFFFFFFF)) >>> 0;
+      GameEngine.setMultiplayerSeed(newSeed);
+      net.sendMessage('GAME_ACTION', { type: 'MULLIGAN', _rematchSeed: newSeed });
+    }
     const init = isMultiplayer
       ? GameEngine.initMultiplayerGame(
           activePlayerDeck,

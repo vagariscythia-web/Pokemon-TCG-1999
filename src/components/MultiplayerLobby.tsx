@@ -7,6 +7,7 @@ import { NetworkMessage } from '../types/multiplayer';
 import { sounds } from './SoundManager';
 import { ArrowLeft, Copy, Check, Users, Play, Shield, Sparkles, MessageSquare, Zap, Radio, Loader2, Dices, Shuffle } from 'lucide-react';
 import { loadSavedCustomDecks, convertCardIdsToCards } from '../utils/customDeckStorage';
+import { GameEngine } from '../engine/GameEngine';
 
 interface MultiplayerLobbyProps {
   onBack: () => void;
@@ -20,6 +21,7 @@ interface MultiplayerLobbyProps {
     opponentName?: string;
     playerDeckName?: string;
     opponentDeckName?: string;
+    seed?: number;
   }) => void;
   initialRoomCode?: string;
   lang?: Language;
@@ -93,6 +95,14 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
   };
 
   const hasStartedRef = useRef(false);
+  // Refs to avoid unstable object references in the useEffect dependency array.
+  // currentDeck is a new array every render; including it in deps causes the effect to
+  // unsubscribe/resubscribe listeners on every render, creating a gap where the
+  // one-shot markConnected() event can be missed by the host.
+  const currentDeckRef = useRef(currentDeck);
+  currentDeckRef.current = currentDeck;
+  const onStartRef = useRef(onStartMultiplayerGame);
+  onStartRef.current = onStartMultiplayerGame;
 
   // Host: Create Room
   const handleCreateRoom = async () => {
@@ -137,6 +147,14 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
 
   // Setup event subscriptions
   useEffect(() => {
+    // If already connected (e.g. effect re-ran after connection was established),
+    // immediately reflect the connected state since markConnected() only fires once.
+    if (net.isConnected) {
+      setIsRoomConnected(true);
+      setIsConnecting(false);
+      setStatus(t.opponentConnected);
+    }
+
     const unsubConnect = net.onConnect(() => {
       setIsRoomConnected(true);
       setIsConnecting(false);
@@ -216,9 +234,12 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
           : buildDeckFromList(
               PREBUILT_DECKS.find(d => d.id === (msg.payload?.hostDeckId || hostDeckId))?.cards || PREBUILT_DECKS[0].cards
             );
-        const guestDeck = currentDeck;
+        const guestDeck = currentDeckRef.current;
 
-        onStartMultiplayerGame({
+        if (msg.payload?.seed !== undefined) {
+          GameEngine.setMultiplayerSeed(msg.payload.seed);
+        }
+        onStartRef.current({
           role: 'guest',
           playerDeck: guestDeck,
           opponentDeck: hostDeck,
@@ -227,7 +248,8 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
           playerName: username || 'Guest',
           opponentName: msg.payload?.hostUsername || opponentUsername || 'Host',
           playerDeckName: currentDeckName,
-          opponentDeckName: msg.payload?.hostCustomDeckName || 'Opponent Deck'
+          opponentDeckName: msg.payload?.hostCustomDeckName || 'Opponent Deck',
+          seed: msg.payload?.seed
         });
       } else if (msg.type === 'EMOTE') {
         setChatMessages(prev => [...prev, { sender: opponentUsername || 'Opponent', text: msg.payload?.emote || '' }]);
@@ -240,7 +262,7 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
       unsubError();
       unsubMessage();
     };
-  }, [selectedDeckId, prizeCount, hostDeckId, guestDeckId, currentDeck, onStartMultiplayerGame, username, opponentUsername, lang, t]);
+  }, [selectedDeckId, prizeCount, hostDeckId, guestDeckId, username, opponentUsername, lang, t]);
 
   // Copy shareable room link
   const copyRoomLink = () => {
@@ -256,6 +278,7 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
     hasStartedRef.current = true;
 
     const firstTurnIsHost = Math.random() >= 0.5;
+    const gameSeed = (Date.now() ^ (Math.random() * 0xFFFFFFFF)) >>> 0;
 
     const startPayload = {
       hostDeckId: selectedDeckId,
@@ -266,7 +289,8 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
       guestCustomDeckName,
       prizeCount,
       firstTurnIsHost,
-      hostUsername: username
+      hostUsername: username,
+      seed: gameSeed
     };
 
     net.sendMessage('GAME_START', startPayload);
@@ -281,6 +305,7 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
         );
 
     sounds.playEvolution();
+    GameEngine.setMultiplayerSeed(gameSeed);
     onStartMultiplayerGame({
       role: 'host',
       playerDeck: hostDeck,
@@ -290,7 +315,8 @@ export const MultiplayerLobby: React.FC<MultiplayerLobbyProps> = ({
       playerName: username || 'Host',
       opponentName: opponentUsername || 'Guest',
       playerDeckName: currentDeckName,
-      opponentDeckName: guestCustomDeckName || 'Opponent Deck'
+      opponentDeckName: guestCustomDeckName || 'Opponent Deck',
+      seed: gameSeed
     });
   };
 

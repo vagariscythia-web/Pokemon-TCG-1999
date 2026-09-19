@@ -8,6 +8,8 @@ interface CoinFlipModalProps {
   reason: string;
   count?: number;
   mode?: 'fixed' | 'until_tails';
+  /** Pre-determined results to replay (remote multiplayer coin flip display) */
+  presetResults?: boolean[];
   onComplete: (results: boolean[]) => void;
   lang?: Language;
 }
@@ -17,6 +19,7 @@ export const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
   reason,
   count = 1,
   mode = 'fixed',
+  presetResults,
   onComplete,
   lang = 'tr'
 }) => {
@@ -56,7 +59,7 @@ export const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
 
       const runUntilTailsFlip = (flipIdx: number) => {
         if (isCancelled) return;
-        const isHeads = Math.random() >= 0.5;
+        const isHeads = presetResults ? (presetResults[flipIdx] ?? false) : Math.random() >= 0.5;
         results.push(isHeads);
         setFlipResults([...results]);
         setCurrentFlipIdx(flipIdx);
@@ -80,7 +83,7 @@ export const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
           setPhase('landed');
           sounds.playCoinFlip();
 
-          if (isHeads && flipIdx < 10) {
+          if (isHeads && flipIdx < 10 && (!presetResults || flipIdx < presetResults.length - 1)) {
             // Heads! Flip again after pause
             timers.push(setTimeout(() => {
               if (isCancelled) return;
@@ -100,10 +103,9 @@ export const CoinFlipModal: React.FC<CoinFlipModalProps> = ({
       runUntilTailsFlip(0);
     } else {
       // Fixed count mode
-      const results: boolean[] = [];
-      for (let i = 0; i < count; i++) {
-        results.push(Math.random() >= 0.5);
-      }
+      const results: boolean[] = presetResults
+        ? [...presetResults]
+        : Array.from({ length: count }, () => Math.random() >= 0.5);
       setFlipResults(results);
 
       const runFlipAnimation = (flipIdx: number) => {

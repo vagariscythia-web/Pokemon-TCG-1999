@@ -32,7 +32,8 @@ export interface GameActionPayload {
     | 'RETREAT'
     | 'ATTACK'
     | 'PASS_TURN'
-    | 'SELECT_BENCH_REPLACEMENT';
+    | 'SELECT_BENCH_REPLACEMENT'
+    | 'MULLIGAN';
   card?: Card;
   handIndex?: number;
   targetIsActive?: boolean;
@@ -41,6 +42,8 @@ export interface GameActionPayload {
   trainerParams?: any;
   coinResults?: boolean[];
   effectChoices?: AttackEffectChoices;
+  /** Rematch seed sent by the player who initiated the rematch */
+  _rematchSeed?: number;
 }
 
 export interface NetworkMessage {

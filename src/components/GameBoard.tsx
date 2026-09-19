@@ -294,6 +294,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     reason: string;
     count: number;
     mode?: 'fixed' | 'until_tails';
+    presetResults?: boolean[];
     onComplete: (results: boolean[]) => void;
   }>({
     isOpen: false,
@@ -1601,6 +1602,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     // the HP bar has not been released yet. Releasing the lock here would let the player
     // act (and start new choreography) on top of the tick FX.
     if (isPoisonSequenceActive) return;
+    // In multiplayer, the remote action handlers (ATTACK, PASS_TURN) manage their own
+    // lock/unlock timing with explicit setIsTurnLocked calls. The FX gate would race
+    // them and can permanently lock the turn if the FX cleanup timer is interrupted.
+    if (isMultiplayer) {
+      playerTurnFxGateRef.current = false;
+      return;
+    }
     // Symmetric gate: executeAttack() hands the turn back synchronously, but the CPU's attack
     // beats may still be animating. Hold the turn lock ONLY for beats that were already on
     // screen at the handoff (once engaged, the gate holds until the queue fully drains); FX
@@ -1654,6 +1662,13 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               return updated;
             });
           }
+        } else if (action.type === 'MULLIGAN') {
+          // Rematch seed sync: if the remote player sent a new seed, apply it before re-init
+          if (action._rematchSeed !== undefined) {
+            GameEngine.setMultiplayerSeed(action._rematchSeed);
+          }
+          setActionBanner({ text: lang === 'tr' ? '🔄 Rakip Mulligan yaptı - elini karıp 7 yeni kart çekti.' : '🔄 Opponent mulliganed - reshuffled and drew 7 new cards.', type: 'info' });
+          setTimeout(() => setActionBanner(null), 2500);
         } else if (action.type === 'BENCH_BASIC') {
           setActionBanner({ text: `Opponent benched ${action.card?.name}.`, type: 'info' });
           setTimeout(() => setActionBanner(null), 2500);
@@ -1717,6 +1732,11 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           }, 650);
         } else if (action.type === 'ATTACK') {
           sounds.playAttackHit();
+          // Lock the turn while the remote attack animation plays; explicit unlocks
+          // happen at the end of each resolution path below.
+          setIsTurnLocked(true);
+
+          const executeRemoteAttack = () => {
           // Mirrors the local attack path. executeAttack() also ends the turn, so any
           // between-turns Poison/Toxic damage is already inside the returned state; hold it
           // back on the HP bar and release it together with its own poison_tick FX, otherwise
@@ -1905,13 +1925,41 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                       attackLockRef.current = false;
                       setIsTurnLocked(false);
                     }, 1300);
+                  } else {
+                    // Poison/toxic tick was not lethal — release the turn lock.
+                    attackLockRef.current = false;
+                    setIsTurnLocked(false);
                   }
                 }, 1600);
               } else {
                 setIsPoisonSequenceActive(false);
+                // No ticks, no KO — release the turn lock so the player can act.
+                attackLockRef.current = false;
+                setIsTurnLocked(false);
               }
             }
           }, 1000);
+          };
+
+          // Show coin flip animation to the remote viewer before executing the attack
+          if (action.coinResults && action.coinResults.length > 0) {
+            const atkForCoins = stateRef.current.cpu.active?.card.attacks?.[action.attackIndex];
+            const atkTextForCoins = (atkForCoins?.text || '').toLowerCase();
+            const isUntilTails = atkTextForCoins.includes('until you get tails') || (atkForCoins?.name || '').toLowerCase() === 'stone barrage';
+            setCoinFlipData({
+              isOpen: true,
+              reason: `⚔️ ${stateRef.current.cpu.active?.card.name || 'Opponent'} — ${atkForCoins?.name || 'Attack'}: ${lang === 'tr' ? 'Yazı-Tura' : 'Coin Flip'}`,
+              count: action.coinResults.length,
+              mode: isUntilTails ? 'until_tails' : 'fixed',
+              presetResults: action.coinResults,
+              onComplete: () => {
+                setCoinFlipData(prev => ({ ...prev, isOpen: false }));
+                executeRemoteAttack();
+              }
+            });
+          } else {
+            executeRemoteAttack();
+          }
         } else if (action.type === 'PASS_TURN') {
           setActionBanner({ text: 'Opponent ended turn.', type: 'info' });
           // Same beat as the local handleEndTurn(): commit the engine state and play the
@@ -2023,7 +2071,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
 
   // Mulligan detection: ONLY during initial setup - ONLY true Basic Pokémon count!
   const playerBasicsInHand = player.hand.filter(c => c.supertype === 'Pokemon' && c.subtype === 'Basic');
-  const showMulligan = isInitialSetup && playerBasicsInHand.length === 0;
+  const showMulligan = isInitialSetup && playerBasicsInHand.length === 0 && !player.active;
   const selectedCard = selectedHandIndex !== null ? player.hand[selectedHandIndex] : null;
 
   // Persistent tracking of hand card group order (preserves column positions until completely exhausted)
@@ -2674,6 +2722,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setState(next);
     setSelectedHandIndex(null);
     setTimeout(() => setActionBanner(null), 2000);
+
+    if (isMultiplayer) {
+      net.sendAction({ type: 'MULLIGAN' });
+    }
   };
 
   const handleSetStartingActive = (index: number) => {
@@ -5314,6 +5366,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     setSelectedHandIndex(null);
     setSelectedBenchIndex(null);
 
+    if (isMultiplayer) {
+      net.sendAction({ type: 'PASS_TURN' });
+    }
+
     if (ticks.length > 0) {
       setWithheldTicks(ticks);
       setIsPoisonSequenceActive(true);
@@ -6865,7 +6921,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   )}
                 </div>
 
-                {isInitialSetup && isBasic && (
+                {isInitialSetup && isBasic && !player.active && (
                   <button
                     onClick={(e) => {
                       if (Date.now() - handScrollJustScrolledRef.current < 300) {
@@ -7808,6 +7864,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         reason={coinFlipData.reason}
         count={coinFlipData.count}
         mode={coinFlipData.mode}
+        presetResults={coinFlipData.presetResults}
         onComplete={coinFlipData.onComplete}
         lang={lang}
       />

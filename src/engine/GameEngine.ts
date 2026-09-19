@@ -28,6 +28,16 @@ export const STAGE_2_TO_BASIC_MAP: Record<string, string> = {
 import { GameState, PlayerState, Card, InPlayCard, Attack, GameLogEntry, EnergyType, AIDifficulty, StatusTick, AttackEffectChoices, AttackBlockReason, BenchHit } from '../types/game';
 import cardsData from '../data/cards.json';
 
+/** mulberry32 – fast deterministic 32-bit PRNG for multiplayer sync */
+function mulberry32(a: number): () => number {
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 const allCards: Card[] = cardsData as Card[];
 
 export interface TrainerEffectParams {
@@ -303,10 +313,26 @@ export class GameEngine {
     return deck;
   }
 
+  /** Multiplayer deterministic PRNG state */
+  private static _mpRng: (() => number) | null = null;
+
+  static setMultiplayerSeed(seed: number) {
+    GameEngine._mpRng = mulberry32(seed);
+  }
+
+  static clearMultiplayerSeed() {
+    GameEngine._mpRng = null;
+  }
+
+  /** Returns next random [0,1). Uses seeded PRNG in multiplayer, Math.random() otherwise. */
+  static rng(): number {
+    return GameEngine._mpRng ? GameEngine._mpRng() : Math.random();
+  }
+
   static shuffle<T>(array: T[]): T[] {
     const arr = [...array];
     for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(GameEngine.rng() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
@@ -350,13 +376,14 @@ export class GameEngine {
     // Official Rule: Only true Basic Pokémon can be chosen as the starting Active Pokémon
     const isBasicPkmn = card?.supertype === 'Pokemon' && card?.subtype === 'Basic';
     if (!card || !isBasicPkmn) return next;
+    if (player.active) return next; // Already have an active Pokémon - don't replace
 
     player.hand.splice(handIndex, 1);
     player.active = GameEngine.createInPlayCard(card);
     GameEngine.addLog(next, `You placed ${card.name} as your Active Pokémon.`, 'action');
 
     if (next.cpu.active) {
-      next.phase = 'SETUP_ACTIVE';
+      next.phase = 'MAIN_PHASE';
     }
     return next;
   }
@@ -959,7 +986,7 @@ export class GameEngine {
     if (!isToxicGasInPlay && opponent.active && opponent.active.card.name === 'Dark Dugtrio' &&
       opponent.active.status !== 'Asleep' && opponent.active.status !== 'Paralyzed' && opponent.active.status !== 'Confused' &&
       !GameEngine.isPowerDisabled(opponent.active, next.turn)) {
-      const sinkholeFlip = Math.random() >= 0.5;
+      const sinkholeFlip = GameEngine.rng() >= 0.5;
       if (!sinkholeFlip) {
         oldActive.damage += 20;
         oldActive.currentHp = Math.max(0, (oldActive.card.hp || 0) - oldActive.damage);
@@ -2027,7 +2054,7 @@ export class GameEngine {
         });
         return bestIdx;
       }
-      return fallback === 'random' ? Math.floor(Math.random() * list.length) : 0;
+      return fallback === 'random' ? Math.floor(GameEngine.rng() * list.length) : 0;
     };
 
     // 0. Pre-attack blocked checks (Tail Wag, Leer, Amnesia). These switch the move off before
@@ -2177,7 +2204,7 @@ export class GameEngine {
           }
         }
       } else {
-        while (Math.random() >= 0.5) {
+        while (GameEngine.rng() >= 0.5) {
           heads++;
           if (heads >= 10) break;
         }
@@ -2599,7 +2626,7 @@ export class GameEngine {
 
     // Transparency (Haunter - Fossil): Flip a coin. If heads, prevent all damage!
     if (defenderHasActivePower('Transparency')) {
-      const transparencyFlip = Math.random() >= 0.5;
+      const transparencyFlip = GameEngine.rng() >= 0.5;
       if (transparencyFlip) {
         finalDamage = 0;
         GameEngine.addLog(next, `👻 Transparency check: HEADS! Prevented all attack damage to Haunter!`, 'status');
@@ -3202,7 +3229,7 @@ export class GameEngine {
     // 22. Porygon - Conversion 1
     if (attackName === 'conversion 1') {
       const types: EnergyType[] = ['Grass', 'Fire', 'Water', 'Lightning', 'Psychic', 'Fighting'];
-      const chosen = (effectChoices?.conversionType as EnergyType) || types[Math.floor(Math.random() * types.length)];
+      const chosen = (effectChoices?.conversionType as EnergyType) || types[Math.floor(GameEngine.rng() * types.length)];
       defender.card.weakness = { type: chosen, value: 2 };
       GameEngine.addLog(next, `🔮 Conversion 1: Changed ${defender.card.name}'s Weakness to ${chosen}!`, 'status');
     }
@@ -3210,7 +3237,7 @@ export class GameEngine {
     // 23. Porygon - Conversion 2
     if (attackName === 'conversion 2') {
       const types: EnergyType[] = ['Grass', 'Fire', 'Water', 'Lightning', 'Psychic', 'Fighting'];
-      const chosen = (effectChoices?.conversionType as EnergyType) || types[Math.floor(Math.random() * types.length)];
+      const chosen = (effectChoices?.conversionType as EnergyType) || types[Math.floor(GameEngine.rng() * types.length)];
       attacker.card.resistance = { type: chosen, value: -30 };
       GameEngine.addLog(next, `🔮 Conversion 2: Changed Porygon's Resistance to ${chosen}!`, 'status');
     }
@@ -3730,7 +3757,7 @@ export class GameEngine {
         if (fbPower && fbPower.name.toLowerCase() === 'final beam' &&
             defender.status !== 'Asleep' && defender.status !== 'Paralyzed' && defender.status !== 'Confused' &&
             !GameEngine.isPowerDisabled(defender, next.turn)) {
-          const fbFlip = Math.random() >= 0.5;
+          const fbFlip = GameEngine.rng() >= 0.5;
           if (fbFlip) {
             const waterCount = defender.attachedEnergy.filter(e => e.types?.includes('Water') || e.name.includes('Water')).length;
             if (waterCount > 0) {
@@ -4011,7 +4038,7 @@ export class GameEngine {
       }
 
       if (pokemon.status === 'Asleep') {
-        if (Math.random() >= 0.5) {
+        if (GameEngine.rng() >= 0.5) {
           pokemon.status = 'None';
           GameEngine.addLog(next, `💤 Sleep check: HEADS! ${pokemon.card.name} woke up!`, 'status');
         } else {
@@ -4547,7 +4574,7 @@ export class GameEngine {
     // or one of either player's Prizes."
     else if (normPower === 'peek') {
       if (opponent.hand.length > 0) {
-        const randomIdx = Math.floor(Math.random() * opponent.hand.length);
+        const randomIdx = Math.floor(GameEngine.rng() * opponent.hand.length);
         const peekedCard = opponent.hand[randomIdx];
         GameEngine.addLog(next, `👀 Peek! ${player.name} looked at opponent's hand and saw: ${peekedCard.name}!`, 'action');
       } else if (opponent.deck.length > 0) {

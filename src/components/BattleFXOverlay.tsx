@@ -10892,7 +10892,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             )}
           </div>
 
-          {/* Layer 4: 3-Stage Parabolic Kinetic Ember Projectiles (Launching from mouth toward target) */}
+          {/* Layer 4: 3-Stage Parabolic Aerodynamic Teardrop Ember Comets */}
           {!fx.whiffed && (
             <div
               className="absolute pointer-events-none z-35"
@@ -10901,66 +10901,147 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 bottom: '36%'
               }}
             >
-              {/* Ember Arc 1: Centerline direct coal streak */}
+              {/* Ember Comet 1: Centerline Fast Scout Dart */}
               <div
                 className="absolute pointer-events-none"
-                style={{ animation: 'gbaCharmanderEmberArc1 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
+                style={{ animation: 'gbaCharmanderEmberComet1 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
               >
-                <div className="relative flex items-center justify-center">
-                  <div className="w-5 h-5 rounded-full bg-gradient-to-br from-white via-amber-300 to-rose-600 shadow-[0_0_18px_#f97316]" />
-                  <div className="absolute w-2.5 h-2.5 rounded-full bg-white blur-[0.5px]" />
-                </div>
+                <svg width="34" height="20" viewBox="0 0 34 20" className="overflow-visible">
+                  <defs>
+                    <linearGradient id="cmEmberGrad1" x1="1" y1="0" x2="0" y2="0">
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="30%" stopColor="#fef08a" />
+                      <stop offset="65%" stopColor="#f97316" />
+                      <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M 28 10 C 22 15, 8 16, 0 10 C 8 4, 22 5, 28 10 Z" fill="url(#cmEmberGrad1)" />
+                  <circle cx="26" cy="10" r="4.5" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 8px #facc15) drop-shadow(0 0 14px #ea580c)' }} />
+                  <circle cx="28" cy="10" r="2.2" fill="#ffffff" />
+                </svg>
               </div>
 
-              {/* Ember Arc 2: Lower sweeping heavy spark */}
+              {/* Ember Comet 2: Heavy Core Coal */}
               <div
                 className="absolute pointer-events-none"
-                style={{ animation: 'gbaCharmanderEmberArc2 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
+                style={{ animation: 'gbaCharmanderEmberComet2 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
               >
-                <div className="relative flex items-center justify-center">
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-white via-yellow-200 to-orange-600 shadow-[0_0_20px_#ea580c]" />
-                  <div className="absolute w-3 h-3 rounded-full bg-white blur-[0.5px]" />
-                </div>
+                <svg width="40" height="24" viewBox="0 0 40 24" className="overflow-visible">
+                  <defs>
+                    <linearGradient id="cmEmberGrad2" x1="1" y1="0" x2="0" y2="0">
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="25%" stopColor="#fde047" />
+                      <stop offset="60%" stopColor="#ea580c" />
+                      <stop offset="100%" stopColor="#991b1b" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M 32 12 C 24 18, 10 20, 0 12 C 10 4, 24 6, 32 12 Z" fill="url(#cmEmberGrad2)" />
+                  <circle cx="30" cy="12" r="5.5" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 10px #facc15) drop-shadow(0 0 18px #ea580c)' }} />
+                  <circle cx="32" cy="12" r="2.6" fill="#ffffff" />
+                </svg>
               </div>
 
-              {/* Ember Arc 3: High-trajectory arcing ember */}
+              {/* Ember Comet 3: High Arcing Trailing Flame */}
               <div
                 className="absolute pointer-events-none"
-                style={{ animation: 'gbaCharmanderEmberArc3 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
+                style={{ animation: 'gbaCharmanderEmberComet3 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards' }}
               >
-                <div className="relative flex items-center justify-center">
-                  <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-br from-white via-orange-300 to-red-600 shadow-[0_0_16px_#ef4444]" />
-                  <div className="absolute w-2 h-2 rounded-full bg-white blur-[0.5px]" />
-                </div>
+                <svg width="32" height="18" viewBox="0 0 32 18" className="overflow-visible">
+                  <defs>
+                    <linearGradient id="cmEmberGrad3" x1="1" y1="0" x2="0" y2="0">
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="30%" stopColor="#fef08a" />
+                      <stop offset="70%" stopColor="#ef4444" />
+                      <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M 26 9 C 20 14, 8 15, 0 9 C 8 3, 20 4, 26 9 Z" fill="url(#cmEmberGrad3)" />
+                  <circle cx="24" cy="9" r="4.0" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 8px #fde047) drop-shadow(0 0 14px #ef4444)' }} />
+                </svg>
               </div>
             </div>
           )}
 
-          {/* Layer 4: Target Impact Thermal Scorch & Shockwave (Anchored near center-right defending target) */}
+          {/* Layer 4: Target Impact Organic Thermal Bloom & Directional Heat Wave */}
           {!fx.whiffed && (
             <div
-              className="absolute pointer-events-none z-20 flex items-center justify-center"
+              className="absolute pointer-events-none z-25 flex items-center justify-center"
               style={{
-                left: '52%',
-                top: '38%'
+                left: '54%',
+                top: '36%'
               }}
             >
-              {/* Branded Target Scorch Patch */}
-              <div
-                className="w-32 h-32 rounded-full pointer-events-none"
-                style={{
-                  animation: 'gbaCharmanderScorchPatch 1.6s ease-out forwards',
-                  background: 'radial-gradient(circle, rgba(249,115,22,0.65) 0%, rgba(220,38,38,0.4) 48%, rgba(127,29,29,0.18) 72%, transparent 88%)'
-                }}
-              />
-              {/* Concentric Thermal Shockwave Rings (Zero dashed hack!) */}
+              {/* Organic Multi-Lobed Volcanic Thermal Bloom */}
               <div
                 className="absolute flex items-center justify-center pointer-events-none"
-                style={{ animation: 'gbaCharmanderThermalShock 1.6s cubic-bezier(0.14, 0.85, 0.28, 1) forwards' }}
+                style={{ animation: 'gbaCharmanderOrganicBloom 1.6s cubic-bezier(0.16, 0.85, 0.25, 1) forwards' }}
               >
-                <svg width="120" height="120" viewBox="0 0 120 120">
-                  <circle cx="60" cy="60" r="42" fill="none" stroke="#fde047" strokeWidth="2.2" opacity="0.85" style={{ filter: 'drop-shadow(0 0 8px #ea580c)' }} />
-                  <circle cx="60" cy="60" r="28" fill="none" stroke="#ffffff" strokeWidth="1.6" opacity="0.9" />
+                <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
+                  <defs>
+                    <radialGradient id="cmOrganicBloomGrad" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                      <stop offset="22%" stopColor="#fef08a" stopOpacity="0.95" />
+                      <stop offset="50%" stopColor="#f97316" stopOpacity="0.85" />
+                      <stop offset="80%" stopColor="#dc2626" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="#991b1b" stopOpacity="0" />
+                    </radialGradient>
+                    <radialGradient id="cmBloomCorePop" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="#ffffff" />
+                      <stop offset="45%" stopColor="#fde047" stopOpacity="0.9" />
+                      <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+
+                  {/* Multi-Lobed Volcanic Flame Petals (Fluid turbulent blast bloom!) */}
+                  <path
+                    d="M 60 18 C 76 12, 94 24, 96 42 C 110 52, 108 74, 94 88 C 86 102, 66 108, 52 102 C 34 106, 18 92, 20 74 C 10 60, 14 38, 30 30 C 38 16, 50 16, 60 18 Z"
+                    fill="url(#cmOrganicBloomGrad)"
+                    style={{ filter: 'drop-shadow(0 0 14px #ea580c)' }}
+                  />
+
+                  {/* Inner High-Heat Core Petals */}
+                  <path
+                    d="M 60 30 C 70 24, 82 34, 84 46 C 92 54, 90 70, 80 78 C 74 88, 60 90, 52 86 C 40 88, 30 78, 32 66 C 26 56, 28 42, 40 36 C 46 26, 54 26, 60 30 Z"
+                    fill="url(#cmBloomCorePop)"
+                    opacity="0.92"
+                  />
+
+                  {/* 8-Point Needle Starburst Glint (Bursting at primary impact epicenter) */}
+                  <polygon
+                    points="60,18 63,52 97,60 63,68 60,102 57,68 23,60 57,52"
+                    fill="#ffffff"
+                    style={{ filter: 'drop-shadow(0 0 8px #fde047) drop-shadow(0 0 14px #ffffff)' }}
+                  />
+                </svg>
+              </div>
+
+              {/* Directional Feathered Heat Wavefronts (Zero geometric cookie-cutter circles!) */}
+              <div
+                className="absolute flex items-center justify-center pointer-events-none"
+                style={{ animation: 'gbaCharmanderHeatRipple 1.6s cubic-bezier(0.14, 0.85, 0.28, 1) forwards' }}
+              >
+                <svg width="130" height="130" viewBox="0 0 130 130" className="overflow-visible">
+                  <ellipse
+                    cx="65"
+                    cy="65"
+                    rx="52"
+                    ry="42"
+                    fill="none"
+                    stroke="#fde047"
+                    strokeWidth="2.4"
+                    opacity="0.88"
+                    style={{ filter: 'drop-shadow(0 0 12px #ea580c) drop-shadow(0 0 6px #ffffff)' }}
+                  />
+                  <ellipse
+                    cx="65"
+                    cy="65"
+                    rx="36"
+                    ry="28"
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="1.8"
+                    opacity="0.92"
+                  />
                 </svg>
               </div>
             </div>
