@@ -89,3 +89,8 @@
 ## 9. Safety Before Destructive Actions
 * Before running commands that modify global dependencies (e.g., `npm install`, `pip install`), delete files in bulk, or perform wide refactoring across multiple files, verify that the current workspace is stable.
 * Avoid `git stash` (to prevent unresolvable stash conflicts). Instead, establish a clean rollback point using a temporary commit (`git commit -m "wip: checkpoint before major change"`) or a temporary branch (`git checkout -b temp-wip-checkpoint`).
+
+## 10. Stock Asset Integrity
+* Use user-provided stock images (and other provided binary assets) UNPROCESSED. Never crop, trim, resize, flood-fill, strip backgrounds, or otherwise alter them without explicit prior approval.
+* If processing appears necessary, FIRST present the animation/implementation plan and exactly how the asset would be used/modified, and WAIT for approval before touching the asset.
+* Prefer referencing original files in place (e.g., `public/assets/raw/...`); any derivative copies require explicit approval.

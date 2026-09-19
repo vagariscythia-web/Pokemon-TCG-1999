@@ -265,3 +265,215 @@ Bu 5 katman zorla doldurulacak statik bir kalıp değil, **modüler bir orkestra
 3. **Multi-Target & Bench Slot Awareness:**
    - Special moves (e.g., Gengar *Dark Mind*, Ninetales *Lure*, Arbok *Stare*) can target either the Active card or a Bench slot (`slot === 'bench'`, `benchIndex`).
    - Coordinate logic must gracefully support bench transposition without visual clipping.
+
+---
+
+## 7. Expansion Principles: From Static Art to Living Motion (Genişletici İlkeler & Ufuk Açıcı Yaklaşımlar)
+
+Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu bir alet çantasıdır**: tek pozlu raster sanatın baş aktör olduğu saldırılar ve birden çok kart baskısının aynı adı paylaştığı durumlar gibi yeni senaryolarda modeli düşünmeye davet eder. Bir saldırının doğası bu ilkelerden biriyle çelişirse, §4'ün modüler felsefesi gereği **saldırının doğası önceliklidir**; ilkeler varsayılan rehber, yaratıcılık istisnadır.
+
+### A. Kinetic Decomposition of Single-Pose Raster Actors (Statik Pozun Kinetik Ayrıştırması)
+- Donmuş bir PNG tek bir "apex anı" içerir; hareket onun etrafında **inşa edilir**, görselin kendisi döndürülerek üretilmez (tüm gövdeyi çevirmek "sticker spin" hissi verir).
+- Önerilen ayrıştırma rafı: (1) ölçülmüş pivot etrafında salınım/coil, (2) süpürme yayını anlatan vektör iz katmanı (`pathLength` + `stroke-dashoffset` crescent trace), (3) yayın ucunda impact flash, (4) ikincil ejecta (kor, kıvılcım, mote), (5) zemin tepkisi (scorch ring).
+- Esneklik notu: Gerçekten balistik hareketlerde (dash, leap, tackle) aktörün tüm gövdesiyle ötelenmesi hâlâ doğru seçimdir; ilke "hareketi katmanlara ayır, çıkartmayı döndürme" biçiminde okunmalıdır.
+
+### B. Measured Pivot & Anchor Discipline (Ölçülmüş Pivot İlkesi)
+- `transform-origin` göz kararı değil, alpha bounding-box'tan türetilmelidir (crop script'i bbox, aspect ve önerilen pivot yüzdesini raporlar; değer implementasyon notuna/scratchpad'e yazılır).
+- Bu, §3.D'nin kırpma disiplininin doğal devamıdır: kırpma yalnız görseli sıkılaştırmaz, kinematik çapaları da ölçülebilir kılar.
+
+### C. Identity-Safe Dispatch (Kimlik-Güvenli Yönlendirme)
+- Ad-tabanlı dispatch hızlıdır; ancak aynı Pokémon adını paylaşan baskılar (Base Set vs. Team Rocket vb.) için belirsizdir. Bir saldırı belirli bir baskıya aitse, kararlı kart kimliği (örn. `pokemonCard.id === 'tr-50'`) ek guard olarak kullanılır ve **özel guard, jenerik dispatch satırından önce** yerleştirilir.
+- Katılık içermez: belirsizlik yoksa ad-tabanlı dispatch varsayılan olarak kalır; kimlik guard'ı yalnız varyant sadakati gerektiğinde raftan alınır.
+
+### D. Raster Actor Registration (Çift-Ölçekleme Tuzaklarından Kaçınma)
+- Baş aktörü raster görsel olan her yeni FX tipi, stok-görsel kümesine kaydedilir; böylece global SVG konteyner transformu aktörü ikinci kez ölçeklemez. Aktör SVG ise kayıt gerekmez. Bu bir tasarım kısıtı değil, tek satırlık bir entegrasyon kontrol listesidir.
+
+### E. Sweep Reach via Trails, Not Actor Scale (Menzili İzle Anlatmak)
+- Whip, spin, arc gibi geniş yaylı saldırılarda erişim, aktörü büyüterek değil **iz/şok katmanlarıyla** anlatılır; §3.F tavanları korunurken sinematik geniş yaylar kazanılır. İz katmanı kart içinde kalmak koşuluyla (§6.2) aktörden bağımsız ölçeklenebilir.
+- Deney alanı: dashoffset hız eğrileri, sivrilen stroke uçları, faz kaymalı afterimage'ler — hepsi bu ilkenin doğal uzantılarıdır.
+
+### F. Whiff Choreography for Sweep Moves (Iska Koreografisi)
+- §3.C/E'nin süpürme hareketlerine genişletmesi: iz katmanı yay ortasında durur (örn. pathLength'in ~%58'i), aktör overshoot + stumble ile sendeler, impact katmanları koşulsuz bastırılır. Iska, "sönük vuruş" değil **fiziksel menzil yetmezliği** olarak okunmalıdır.
+
+### G. Light-Based Amplification of Canonical Art (Sanatı Boyamadan Güçlendirmek)
+- Onaylı suluboya sanat yeniden boyanmaz; akkorluk, §1.C sıcaklık hiyerarşisini izleyen katmanlı `drop-shadow` haleleri ile eklenir. `wi` (intensity) kutu boyutunu değil ışık yarıçapını, stroke kalınlığını ve parçacık sayısını modüle eder (§3.E ile uyumlu).
+
+### H. Verification Bench as a First-Class Deliverable (Doğrulama Tezgâhı)
+- Aktör odaklı her yeni FX; kart ölçekli mock, hit & whiff panelleri ve replay düğmesi içeren bağımsız bir preview ile hafif bir assertion scriptini standart çıktı olarak getirir. Nihai söz hakkı her zaman kullanıcı görsel onayındadır (§3.B human-in-the-loop).
+
+> **Terfi Notu:** Bu ilkeler zamanla kanıtlanıp kullanıcı onayıyla olgunlaştıkça §§1–6'nın kanonik maddelerine terfi ettirilebilir; tersine, yeni bir teknik ekranda daha iyisini kanıtlarsa bu bölüm onunla genişletilir. Amaç kuralları dondurmak değil, toolset'i birlikte büyütmektir.
+
+---
+
+## 8. Density, Timing & Phasing: Why More ≠ Better (Yoğunluk, Zamanlama ve Fazlama İlkeleri)
+
+> Bu bölüm, §7'nin "ne eklemeli?" sorusuna karşılık **"ne kadar eklemeli, nereye eklemeli ve eklemek yerine ne yapmalı?"** sorusunu yanıtlar. Temel tez: animasyon kalitesini belirleyen şey keyframe veya katman sayısı değil, fiziksel fazların doğru zamanlamayla doğru easing üzerinden sunulmasıdır.
+
+### A. Keyframe Count ≠ Quality (Fiziksel Faz Sayısı Kadar Keyframe)
+
+- CSS `@keyframes` blokları **kontrol noktasıdır**; aralarındaki geçiş `animation-timing-function` (cubic-bezier) ile interpolate edilir. Asıl soru "daha fazla nokta mı lazım?" değil, **"mevcut iki nokta arasındaki tarayıcı interpolasyonu istediğim hareket eğrisini üretiyor mu?"** sorusudur.
+- **Pratik kural:** 1.75 sn'lik bir zarfta 5 keyframe ≈ 350 ms arayla kontrol noktası demektir. İki nokta arasındaki hareket **monoton** (sürekli hızlanan veya yavaşlayan) ise ekstra keyframe gereksizdir; tarayıcının bezier interpolasyonu zaten pürüzsüz geçer. Hareket **monoton değilse** — önce hızlanıp sonra aniden yavaşlayıp tekrar ivmelenen bir kırbaç ucu gibi — araya kontrol noktası koymak gözle görülür iyileştirme sağlar.
+- **Faz kontrol listesi:** Her keyframe bir fiziksel fazı temsil etmelidir: `anticipation → strike → follow-through → settle → fade`. Bu 5 faz varsa 5 keyframe yeterlidir. "Strike" kendi içinde overshoot + rebound yapıyorsa orayı ikiye bölmek (6–7 keyframe) anlamlıdır.
+- **Tavan:** 8+ keyframe'lik bir CSS animasyonu, muhtemelen JS/SVG SMIL veya `requestAnimationFrame` tabanlı bir yaklaşımın sinyalidir; CSS'in interpolasyon gücünü zorlamak yerine teknolojiyi değiştirmek daha sağlıklıdır.
+
+### B. Layer Count Ceiling (Katman Sayısı Tavanı)
+
+- Katmanlar **görsel bilgi kanalıdır**. Her katman izleyiciye ayrı bir "şey oldu" sinyali verir. Soru: *"N. katman, izleyiciye (N−1). katmanın söylemediği ne söylüyor?"*
+- **GBA estetiği kasıtlı olarak kısıtlıdır.** 4–6 katman ideal aralık, 7 tavan, 8+ ise farklı bir sanat yönetmenliği (modern anime, cinematic) gerektirir.
+- **Zararlı katman çoğaltma örnekleri:**
+  - İki farklı cinder sistemi (biri turuncu biri sarı, farklı yörüngelerle) → görsel gürültü, göz hangi parçacığı takip edeceğini bilemez.
+  - İki ayrı glow katmanı (biri aktörün üstünde biri altında) → aynı bilgiyi iki kez vermek, sadece GPU yükü artar.
+  - Efekt katmanlarının kartın kendisini bastırması → piksel sanatının okunabilirliği bozulur.
+- **Faydalı 6. veya 7. katman adayları** (bkz. §8.F): ısı bozulması, ikincil motion trail, screen shake. Bunlar mevcut 5 katmanın söylemediği **yeni bir fiziksel bilgi** taşır.
+
+### C. Anticipation Phase Priority (Ön Hazırlık Fazının Birincil Önceliği)
+
+- Stok görsel animasyonlarında en sık eksik kalan faz **anticipation**'dır. Saldırı başlamadan önce aktörün 2–3 frame hafifçe geri çekilmesi (`translateX(-4px) scale(0.95)`, `rotate(-2°)`) → sonra patlaması, tek bir keyframe eklemekle 2 katman eklemekten **çok daha fazla** "ağırlık" ve "niyet" hissi verir.
+- Anticipation fazı izleyiciye "bir şey geliyor" sinyali verir; bu sinyal olmadan vuruş "aniden olan" bir şey gibi okunur ve fiziksel ağırlık hissi kaybolur.
+- **Uygulama:** Mevcut spin-actor keyframe'inin %0 noktasını hafif geri çekilme, %8–10 arasını maksimum geri çekilme (coil), %14'ten itibaren mevcut başlangıç olarak yeniden yapılandırmak genellikle yeterlidir. Bu, toplam keyframe sayısını artırmadan faz sayısını artırır.
+
+### D. Stagger Offsets as Dynamism Multiplier (Kademeli Gecikmelerin Dinamizm Çarpanı)
+
+- Aynı 5 katmanla bile, her katmanın `animation-delay`'ini fiziksel nedenselliğe bağlamak bambaşka bir dinamizm hissi verir: **çarpma → enkaz → toz → kalıntı**.
+- **Nedensellik zinciri:** Impact flash (0 ms) → cinders fırlama (+80–120 ms) → scorch ring oturma (+150 ms) → ember motes yükselme (+250–350 ms). Bu zincir, "her şey aynı anda oluyor" hissini kırar ve izleyiciye olayın **sıralı bir fiziksel süreç** olduğunu anlatır.
+- **Cinder stagger'ı genişletme:** Üç cinder'ın delay'lerini eşit aralıklı (0.10s) yerine hafif açılı (0.12s → 0.22s → 0.34s) yapmak, "tek seferde değil, ardışık kopan" parçacık hissi verir. Bu, yeni katman eklemekten çok daha ucuz ve etkilidir.
+- **Whiff'te stagger:** Whiff senaryosunda stagger zinciri **bozulur** — impact ve cinder'lar bastırılır, sadece stumble + puff kalır. Bu bozulma, "bir şey eksik" hissini vererek whiff'i anlatır.
+
+### E. Easing Selection Over Keyframe Addition (Easing Seçimi Keyframe Eklemekten Önce Gelir)
+
+- `ease-out` yerine `cubic-bezier(0.22, 1, 0.36, 1)` (expo-out) kullanmak, bir cinder'ın "fırlayıp yavaşlamasını" çok daha inandırıcı yapar. Bu, keyframe eklemekten **daha ucuz ve daha etkilidir**.
+- **Easing karar tablosu:**
+  - Fırlayan nesne (cinder, spark): `cubic-bezier(0.22, 1, 0.36, 1)` (hızlı çıkış, yavaş durulma)
+  - Büyüyen halka (scorch ring): `cubic-bezier(0.16, 1, 0.3, 1)` (expo-out, organik genişleme)
+  - Fade-out (motes, trace): `ease-in` veya `cubic-bezier(0.55, 0, 1, 0.45)` (yavaş başla, hızla kaybol)
+  - Overshoot gerektiren (whip ucu): `cubic-bezier(0.34, 1.56, 0.64, 1)` (back-out)
+- **Kural:** Yeni keyframe eklemeden önce, mevcut iki keyframe arasındaki easing'i değiştirmenin yeterli olup olmadığını test edin. Çoğu durumda yeterlidir.
+
+### F. Expansion Layer Candidates (Genişletme Katmanı Adayları)
+
+5 katmanlık bir yapıyı 6 veya 7'ye çıkarmak gerektiğinde, aşağıdaki adaylar **öncelik sırasıyla** değerlendirilmelidir:
+
+| Öncelik | Katman | Fiziksel Bilgi | Uygulama |
+|---|---|---|---|
+| 1 | **Isı bozulması (heat shimmer)** | "Hava ısınıyor, ışık kırılıyor" | Aktörün arkasına `position:absolute; inset:-8px; border-radius:50%; backdrop-filter:blur(1.5px); opacity:0→0.3→0` animasyonu |
+| 2 | **İkincil motion trail** | "Hareket ağır, iz bırakıyor" | Ana crescent trace'in 80–120 ms gerisinde, daha soluk ve daha geniş bir ikinci iz (`opacity: 0.3`, `stroke-width: +3`) |
+| 3 | **Screen shake (kart sarsıntısı)** | "Darbe güçlü, zemin titriyor" | Kart konteynerine 2–3 px'lik `translate` jitter, sadece hit'te, sadece 120–200 ms, `animation-delay` = çarpma anı |
+| 4 | **Afterimage (hareket hayaleti)** | "Hız o kadar yüksek ki iz bırakıyor" | Aktörün 2 kopyası, `opacity: 0.15/0.08`, `animation-delay: +40ms/+80ms`, aynı yörüngede |
+
+- **Kaçınılacak:** Aynı bilgiyi veren paralel katmanlar (iki glow, iki cinder sistemi), 7+ parçacık sistemi, katman ekleyerek aktörü "daha parlak" yapmaya çalışmak (bunun yerine §7.G'deki `filter: brightness/saturate` animasyonu kullanın).
+
+### G. Timing & Phasing Over Numbers (Sayı Değil, Zamanlama ve Fazlama)
+
+- **Meta-ilke:** 5 katman + doğru stagger + anticipation, 7 katman + lineer zamanlama'dan **her zaman** daha iyi görünür.
+- Bir animasyonu iyileştirmek istediğinizde öncelik sırası:
+  1. Anticipation fazı ekle (§8.C)
+  2. Stagger offset'lerini fiziksel nedenselliğe bağla (§8.D)
+  3. Easing'i gözden geçir (§8.E)
+  4. Ancak bunlardan sonra katman veya keyframe ekle (§8.A, §8.B, §8.F)
+- Bu sıralama, "daha fazla şey ekleyeyim" refleksine karşı bir **karar ağacı** işlevi görür.
+
+### H. Stock Image Actors: Special Notes (Stok Görsel Aktörler İçin Özel Notlar)
+
+- Raster görselde iskelet animasyonu yoktur; aktör tek parçadır. Bu durumda aktöre 5 yerine 7 keyframe eklemek genellikle **sadece daha pürüzsüz bir rotasyon/çevirme** üretir — ki bunu `cubic-bezier` zaten yapar.
+- Gerçek kazanç, aktörün **çevresindeki** ikincil hareketlerin (trace, cinders, motes) zamanlama ofsetlerinde ve easing seçimlerinde yatar.
+- Aktörün kendisine `filter: brightness(1.4) saturate(1.3)` animasyonu bindirmek, çarpma anında "parlama" hissi verir. Bu, 6. katman eklemekten çok daha hafif ve GBA'ya daha uygundur.
+- Stok görsel aktörlerde **en kritik iyileştirme** neredeyse her zaman anticipation fazıdır (§8.C); çünkü donmuş bir poz, "niyet" anlatamaz — onu animasyonun kendisi vermelidir.
+
+### I. Pounce-Type Anticipation Morphology (Sıçrama Tipi Ön Hazırlık Morfolojisi)
+
+- §8.C anticipation'ın **varlığını** şart koşar, ancak her saldırı tipi farklı bir anticipation **geometrisi** gerektirir. Yanlış geometri, "yanlış kas grubu" hissi vererek fiziksel inandırıcılığı bozar:
+  - **Spin / Kırbaç saldırıları** (Charmander Fire Tail, Ponyta Flame Tail): Aktör geriye doğru döner veya çevrilir → *coil* (rotasyonel geri sarım) → savurma. Anticipation ekseni **rotasyoneldir**.
+  - **Pounce / Sıçrama saldırıları** (Growlithe Flare, Rapidash Stomp): Aktör aşağıya çömelir (`scaleY` compress, `translateY` down) → yay gibi sıkışır → ileri/yukarı fırlar. Anticipation ekseni **dikey compress + yatay geri çekilme**dir.
+  - **Jet / Püskürtme saldırıları** (Horsea Ink Jet, Squirtle Water Gun): Aktör hafifçe geriye yaslanır (*expulsion recoil*, §1.C) → püskürtme. Anticipation ekseni **gövde geri eğimi**dir.
+- **Kural:** Anticipation fazının geometrisi, saldırının fiziksel mekaniğiyle eşleşmelidir. Bir pounce'a spin anticipation (veya tersi) koymak, izleyicinin "bu hareket nereden geldi?" sorusunu yanlış cevaplamasına yol açar.
+- **Growlithe mevcut durumu:** `gbaGrowlitheActorPounce` keyframe'inde 0%→12% arası sadece fade-in + hafif translate vardır; gerçek bir çömelme/compress fazı yoktur. İyileştirme: 0% appear → 6% `scaleY(0.88) translateY(4px)` (çömelme) → 12% mevcut pozisyon → 28% fırlama.
+
+### J. Particle Count vs. Spacing Trade-off (Parçacık Sayısı – Aralık Dengesi)
+
+- §8.D stagger'ın nedenselliğe bağlanmasını söyler, ancak **parçacık sayısı ile aralık arasındaki dengeye** değinmez:
+  - **6+ parçacık × eşit Δt** (ör. 6 cinder × 0.06s): Mekanik, makine tüfeği hissi verir. Göz bireysel parçacıkları takip edemez; tek bir "taneleme" olarak algılar.
+  - **4–5 parçacık × nedensellik-bağlı Δt** (ör. 0.12s, 0.22s, 0.34s, 0.48s): Her parçacık ayrı bir "olay" olarak okunur; izleyici "birinci koptu, ikincisi biraz sonra, üçüncüsü en son" diye sıralı takip eder.
+- **Pratik tavan:** GBA estetiğinde tek bir cinder/ember sistemi için **4–5 parçacık** yeterlidir. 6+ gerekiyorsa, bunları iki ayrı nedensellik grubuna bölün (ör. "pençe kalkışı cinder'ları" + "yele savrulması cinder'ları") ve **gruplar arası boşluğu grup içi boşluktan büyük** tutun.
+- **Growlithe mevcut durumu:** 6 cinder, eşit 0.06s aralıkla (0.12→0.18→0.24→0.30→0.36→0.42). İyileştirme: 4–5 cinder'a düşürüp delay'leri nedensellik zincirine bağlamak (ör. 0.12, 0.22, 0.34, 0.48).
+
+### K. Duration Envelope Coordination (Süre Zarflarının Koordinasyonu)
+
+- Birden fazla bağımsız animasyonun aynı anda çalıştığı katmanlı yapılarda, her katmanın kendi süresi + delay'i **toplam zarfı aşmamalıdır**:
+  - **Formül:** Her katman için `animation-delay + animation-duration ≤ total envelope`.
+  - Envelope'ı aşan katmanlar, aktör kaybolduktan sonra "havada asılı" kalır ve sahnenin bittiği hissini geciktirir.
+- **Growlithe mevcut durumu (denetim — son iterasyon sonrası):**
+  - Aktör pounce: 1.75s ✓ (zarfın kendisi)
+  - MouthTorrent: 0s + 1.75s = 1.75s ✓ (child-nested, §8.M)
+  - CombustionBurst: 0.85s + 0.8s = 1.65s ✓
+  - DiagonalBeam: 0.95s + 0.6s = 1.55s ✓
+  - TrailingCinder (son parçacık): 0.46s + 1.3s = 1.76s ≈ 1.75s ✓ (düzeltildi; öncesi 0.42+1.5=1.92s ✗)
+- **Not:** §8.N gereği accent delay'leri ileri kaydırıldığında (ör. Beam 0.18s → 0.95s), `delay + duration` toplamı envelope'a karşı **yeniden** kontrol edilmelidir. Delay'i artırmak peak'i geciktirir ama toplam süreyi de uzatır; envelope aşımı riski doğurur.
+- **Kural:** Yeni bir katman veya parçacık eklerken, `delay + duration` toplamını mevcut envelope'a karşı kontrol etmek **zorunlu** bir denetim adımıdır.
+
+### L. Internal Keyframe Hold Budget (Keyframe-İçi Bekleme Bütçesi)
+
+- §8.K formülü (`external delay + duration ≤ envelope`) yalnızca CSS `animation-delay` ile katman süresini denetler. Ancak keyframe gövdesinin **içinde** bir `%0 → %N` aralığı "boş hold" (opacity 0, scale küçük, transform değişimsiz) olarak tanımlanmışsa, bu hold da toplam algılanabilir aksiyon bütçesinden yer.
+- **Formül:** `hold% × duration` kadar süre "ölü" geçer. Efektif aksiyon süresi = `duration × (1 − hold%)`. Bu süre sahnenin algılanabilir temposunu doğrudan düşürür.
+- **Eşik:** Tek bir katmanda hold bütçesi `%25`'i aşmamalıdır. `%25` üzeri hold'lar, izleyicinin "bir şey bekliyor" hissini kırar ve sahnenin ritmini bozar.
+- **Charmander Ember tespit:** `gbaCharmanderOrganicBloom` `%28` hold (0.448s ölü süre), `gbaCharmanderHeatRipple` `%30` hold (0.48s ölü süre) → her ikisi de %25 eşiğini aşıyordu. Düzeltme: Bloom → `%18`, Ripple → `%22`.
+- **Kural:** Yeni bir keyframe yazarken veya mevcut birini denetlerken, `0%` ile ilk anlamlı aksiyon keyframe'i arasındaki yüzdelik hold'u hesaplamak ve `%25` eşiğine karşı kontrol etmek **zorunlu** bir denetim adımıdır. Hold'u azaltmak, aynı `duration` değerinde daha erken ve daha dinamik bir giriş sağlar; envelope'ı uzatmaya gerek kalmaz.
+
+### M. Actor–Emitter Trajectory Synchronization (Aktör–Emisyon Yörünge Senkronizasyonu)
+
+- Bir aktör hareket ederken aynı anda bir efekt yayıyorsa (ağızdan alev, kuyruktan kıvılcım, pençeden şok dalgası), emisyon katmanının translate yörüngesi aktörün hareket vektörünü **her ortak keyframe yüzdesinde** takip etmelidir.
+- **Yaygın hata:** Emisyon katmanı kendi bağımsız translate eğrisine sahiptir ve aktörden daha yavaş hareket eder. Sonuç: efekt, aktörün gövdesi üzerinde "geride kalır", boyun/kürk/gövde bölgesini kaplar ve aktörün okunabilirliğini bozar.
+- **Kural:** Her ortak keyframe yüzdesinde (ör. %28, %46, %68) emisyon katmanının translate değeri, aktörün translate değerinden **en fazla ±4px** sapmalıdır. Aktör geri çekilirken emisyon da aynı yönde geri çekilmelidir.
+- **Tercih edilen yaklaşım — DOM hiyerarşisi (child-nesting):** Emisyon katmanı bağımsız bir kardeş (sibling) katman olduğunda manuel translate senkronizasyonu (±4px kuralı) gerekir. Bunun yerine emisyon katmanı **aktör katmanının child'ı olarak yuvalanırsa**, emisyon aktörün transform'unu (translate/scale/rotate) otomatik devralır ve emisyon noktası kilidi (ör. ağız) manuel keyframe yazmadan korunur. Bu yaklaşım senkronizasyon hatası riskini ortadan kaldırır ve **öncelikli tercih**tir. Emisyon katmanının keyframe'i bu durumda **saf volumetrik büyüme** (yalnızca scale + rotate, translate yok) olmalıdır. Child-nesting yalnızca emisyonun aktörden tamamen ayrılıp bağımsız bir yörünge izlemesi gereken durumlarda (ör. projeksiyon/menzilli saldırı) kullanılmaz; o durumda ±4px translate kuralı devreye girer.
+- **Transform-origin:** Emisyon katmanının `transform-origin` değeri, emisyon noktasına (ağız, pençe ucu, kuyruk sonu) sabitlenmelidir. Böylece `scale` büyümesi aktöre doğru değil, dışa doğru genişler. Varsayılan `center` origin kullanılmamalıdır.
+- **Scale oranı sınırı:** Emisyon katmanının maksimum scale değeri, aktörün maksimum scale değerinin **3 katını** aşmamalıdır. Aksi halde volumetrik genişleme aktörü görsel olarak yutar.
+- **Opacity decay:** Aktörün geri çekilme fazından itibaren emisyon katmanının opacity'si hızla düşürülmelidir (ör. %75'te 0.8, %88'de 0.4). Bu, kalan taşmayı görsel olarak önemsiz kılar.
+- **Growlithe Flare tespit (öncesi/sonrası):**
+  - Önceki: Torrent bağımsız sibling katman; 28%'de `translate(8,-8)`, aktör 28%'de `translate(18,-16)` → **Δ10px sapma**. Torrent max scale 1.24, aktör max 1.08 → oran 1.15 ✓ ama mutlak boyut 96px×1.24=119px aktörün 106px genişliğini aşıyordu. Transform-origin varsayılan `center`.
+  - Sonrası: Torrent, aktör katmanının **child'ı** olarak yuvalandı → aktörün pounce transform'unu devralır, ağız kilidi otomatik korunur. Keyframe saf volumetrik büyüme (translate yok, yalnızca scale + rotate), transform-origin ağız noktası (%15, %85), 120px kutu, peak scale 1.22 (oran 1.22/1.08 = 1.13 < 3.0), rotate -24°→-32° (dik diyagonal çıkış), tam opaklık penceresi %32–%60, %75 sonrası hızlı opacity decay.
+
+### N. Accent Layer Peak Sequencing (Vurgu Katmanlarının Peak Sıralaması)
+
+- Katmanlı efekt kompozisyonlarında kısa süreli, yüksek z-index'li **vurgu (accent)** katmanları (lens flare beam, combustion burst, yıldız flaş, şok halkası) birincil efekti **vurgulamak** için vardır; birincil efektin yerini almak için değil. Bu nedenle accent peak'i, birincil efektin peak'inden **sonra** gelmelidir.
+- **Formül:** Her katman için `peak_time = animation-delay + duration × peak%`. Accent katmanları için **kural:** `accent peak_time ≥ primary peak_time + 0.15s` (en az 150ms marj).
+- **Yaygın hata:** Accent katmanları erken başlar (0.18–0.22s gibi kısa delay'ler) ve birincil efektin peak'inden önce veya aynı anda peak yapar. Z-index'leri de yüksek olduğundan, birincil efektin en görünür olması gereken anda üzerini tamamen örter. Sonuç: saldırı farklı bir hareket gibi okunur (ör. alev saldırısı yerine kafa vurma gibi) ve efektin kimliği kaybolur.
+- **Okunabilirlik bütçesi:** Birincil saldırı efektinin, duration'ın **en az %25'i** kadar süren bir tam opaklık (opacity 1) penceresi olmalıdır. Bu pencere süresince hiçbir accent katmanı peak opacity fazında olmamalıdır.
+- **Z-index sıralaması:** Birincil efektin peak penceresi boyunca, accent katmanları ya henüz başlamamış (opacity 0) ya da düşük opacity'de olmalıdır. Accent'lerin z-index'inin yüksek olması sorun değildir — sorun, peak zamanlarının çakışmasıdır.
+- **Growlithe Flare tespit (öncesi/sonrası):**
+  - Önceki: Torrent peak 0.81s (1.75s × %46). Beam peak 0.49s (0.18 + 1.2×%26), Burst peak 0.75s (0.22 + 1.4×%38) → her ikisi de torrent'in yükseliş/peak fazını örtüyordu; alev "tam parlayacakken" yıldız parlaması üzerini kapatıyordu.
+  - Sonrası: Beam → 0.95s delay + 0.6s duration → peak ≈ 1.11s; Burst → 0.85s delay + 0.8s duration → peak ≈ 1.15s. Her iki accent de torrent'in 0.81s peak'inden ~0.3s sonra geliyor ve alevin sönümlenme fazında "impact accent" olarak çalışıyor. Torrent tam opaklık penceresi %32–%60'a (0.56–1.05s) uzatıldı.
+
+
+### O. Actor Materialize & Exit Keyframe Density (Aktör Belirme/Çekilme Keyframe Yoğunluğu)
+
+- Bir aktörün (stok görsel, sprite) sahneye girişi ve çıkışı, tek bir `opacity 0→1` veya `opacity 1→0` geçişiyle değil, **en az 3 ara keyframe** ile modellenmelidir.
+- **Belirme (Materialize) kuralı:**
+  - `%0` (invisible) ile ilk anlamlı aksiyon keyframe'i arasında en az **1 ara keyframe** olmalıdır (ör. `%6`'da `opacity: 0.45, blur: 1.5px`). Bu, "pop-in" hissini ortadan kaldırır.
+  - Belirme anında hafif **overshoot + settle** (ör. `%12`'de `scale(1.03)`, `%16`'da `scale(0.98)`) canlı bir "snap" hissi verir. Mekanik doğrusal büyüme yerine elastik bir giriş sağlar.
+  - Blur geçişi: `blur(3px)` → `blur(1.5px)` → `blur(0)` şeklinde kademeli olmalıdır. Doğrudan `blur` → `drop-shadow` geçişi ani bir filter kopukluğu yaratır.
+- **Çekilme (Exit) kuralı:**
+  - Çıkış tamamen doğrusal bir küçülme + solma olmamalıdır. En az bir **"nefes alma" duraksaması** (micro breath-pause) içermelidir: exit'in başlamasından hemen önce scale'de hafif bir bump (ör. `0.97 → 0.99`) ve translate'de kısa bir duraksama.
+  - **Filter bridge:** `drop-shadow` ile `blur` arasında ani bir geçiş olmamalıdır. İkisinin bir arada olduğu bir ara keyframe (ör. `drop-shadow(..., 0.25) blur(0.5px)`) filter kopukluğunu önler.
+  - **Per-segment timing-function:** Çıkış segmentlerinde `animation-timing-function: ease-in` kullanılmalıdır. Global easing (ör. `cubic-bezier(0.18, 0.95, 0.28, 1)`) her segmente uygulanır ve çıkış segmentlerinde "hızlı başla, yavaş bitir" hissi yaratarak stutter benzeri bir etki üretir. `ease-in` çıkışta "yavaş başla, hızlanarak kaybol" hissi verir.
+- **Sustained power hold:** Aktörün "savaş duruşu" fazı ile çıkış fazı arasında en az bir **güç koruma keyframe'i** olmalıdır. Bu, aktörün erken "sarkmasını" önler ve izleyicinin karakteri güçlü algılamasını uzatır.
+- **Charmander Ember ActorLunge tespit (öncesi/sonrası):**
+  - Önceki: 9 keyframe; belirme `0%→12%` tek sıçrama (opacity 0→0.95, scale 0.72→0.96); çıkış `70%→86%→100%` doğrusal sönümleme; filter `drop-shadow` → `blur` ani geçiş; 50%→70% arası erken sarkma.
+  - Sonrası: 14 keyframe; belirme `0%→6%→12%→16%` (smooth materialize + overshoot settle); çıkış `70%→75%→78%→86%→100%` (breath-pause + filter bridge + ease-in); 60% sustained power hold.
+- **Kural:** Bir aktör animasyonu yazarken veya denetlerken, belirme ve çekilme fazlarındaki keyframe sayısını ve filter geçiş sürekliliğini kontrol etmek **zorunlu** bir denetim adımıdır.
+
+### P. Card-Level Reaction Shudder (Kart Düzeyinde Tepki İrkilmesi)
+
+- Bir kart üzerinde iyileştirme, hasar veya durum değişikliği gerçekleştiğinde, **efekt katmanı** (ikon, parçacık) ile **kart konteyneri** eş zamanlı tepki vermelidir. Yalnızca ikon sallanması, kartın "dış dünyadan kopuk" hissettirmesine neden olur.
+- **Desen:** Kart konteynerine hafif bir `translateY` + `scale` + mikro `rotate` kombinasyonu uygulanır. İrkilme, "canlanma" hissi vermelidir — sert bir sarsıntı değil, hafif bir yukarı kalkma + bloom + sönümlenen titreşim.
+- **Senkronizasyon kuralı:** Kart shudder'ının `animation-delay` değeri, mevcut ikon/efekt shudder'ının delay'i ile **birebir eşleştirilmelidir**. Böylece kart ve ikon aynı anda irkilir.
+- **Keyframe yapısı (örnek — `fxHealCardShudder`):**
+  - `0%`: nötr (transform: none)
+  - `~15%`: hafif yukarı kalkma (`translateY(-2px)`) + scale bloom (`1.012`)
+  - `~30%`: mikro geri dönüş (`translateY(0.5px)`) + scale settle (`0.998`)
+  - `~50%`: ikinci mikro titreşim (`translateY(-0.5px) rotate(0.3deg)`)
+  - `100%`: nötr
+- **Uygulama noktası:** `GameBoard.tsx`'de her kart slotunun render'ında `shakeType` union tipine yeni bir değer eklenir (ör. `'heal'`). Trigger noktaları (CPU AI + Player elden oynama) `triggerSlotShake(slotIndex, 'heal', delay, duration)` çağrısı yapar.
+- **Kural:** Yeni bir kart tepki efekti eklerken: (1) CSS keyframe + class tanımla, (2) `activeShakes`/`slotShakes` tipini genişlet, (3) tüm render noktalarına branch ekle, (4) tüm trigger noktalarına çağrı ekle, (5) delay'i mevcut ikon efektiyle senkronize et.
+
+> **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir.
+
+> **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir.

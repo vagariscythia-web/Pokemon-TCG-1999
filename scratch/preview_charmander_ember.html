@@ -180,62 +180,84 @@
 
     /* Keyframes (Imported from src/index.css) */
     @keyframes gbaCharmanderScorchFloor {
-      0%   { opacity: 0; transform: scale(0.3) rotate(-15deg); }
-      22%  { opacity: 0.85; transform: scale(1.05) rotate(-15deg); filter: blur(2px); }
-      60%  { opacity: 0.80; transform: scale(1.0) rotate(-15deg); filter: blur(1.5px); }
-      82%  { opacity: 0.40; transform: scale(0.95) rotate(-15deg); filter: blur(3px); }
-      100% { opacity: 0; transform: scale(0.7) rotate(-15deg); filter: blur(5px); }
+      0%   { opacity: 0; transform: scale(0.4) rotate(-15deg); filter: blur(4px); }
+      20%  { opacity: 0.75; transform: scale(1.02) rotate(-15deg); filter: blur(2px); }
+      58%  { opacity: 0.70; transform: scale(1.0) rotate(-15deg); filter: blur(2px); }
+      80%  { opacity: 0.35; transform: scale(0.95) rotate(-15deg); filter: blur(4px); }
+      100% { opacity: 0; transform: scale(0.8) rotate(-15deg); filter: blur(6px); }
     }
     @keyframes gbaCharmanderActorLunge {
       0% {
-        transform: translate(-20px, 20px) scale(0.7);
+        transform: translate(-18px, 16px) scale(0.72) rotate(-2deg);
         opacity: 0;
         filter: blur(3px);
       }
-      18% {
-        transform: translate(0px, 0px) scale(1.06);
-        opacity: 1;
-        filter: drop-shadow(0 0 16px rgba(249, 115, 22, 0.85)) drop-shadow(0 0 8px rgba(254, 240, 138, 0.5));
+      12% {
+        transform: translate(-10px, 10px) scale(0.96, 1.04) rotate(-1.5deg);
+        opacity: 0.95;
+        filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.7));
       }
-      30% {
-        transform: translate(-4px, 3px) scale(0.98);
+      22% {
+        transform: translate(2px, -2px) scale(1.07, 0.96) rotate(1.5deg);
+        opacity: 1;
+        filter: drop-shadow(0 0 18px rgba(249, 115, 22, 0.9)) drop-shadow(0 0 8px rgba(254, 240, 138, 0.6));
+      }
+      28% {
+        transform: translate(-3px, 2px) scale(0.98, 1.01) rotate(0.5deg);
         opacity: 1;
         filter: drop-shadow(0 0 24px #ea580c) drop-shadow(0 0 14px #facc15);
       }
+      35% {
+        transform: translate(-1px, 0px) scale(1.01, 0.99) rotate(1deg);
+        opacity: 1;
+      }
       50% {
-        transform: translate(0px, 0px) scale(1.02);
+        transform: translate(0px, 0px) scale(1.01, 1.0) rotate(0.5deg);
         opacity: 0.98;
-        filter: drop-shadow(0 0 18px rgba(249, 115, 22, 0.8));
+        filter: drop-shadow(0 0 16px rgba(249, 115, 22, 0.75));
       }
-      72% {
-        transform: translate(-6px, 8px) scale(0.96);
+      70% {
+        transform: translate(-5px, 6px) scale(0.97) rotate(0deg);
         opacity: 0.85;
-        filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.5));
+        filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.45));
       }
-      88% {
-        transform: translate(-14px, 16px) scale(0.82);
+      86% {
+        transform: translate(-12px, 14px) scale(0.85) rotate(-1deg);
         opacity: 0.45;
         filter: blur(2px);
       }
       100% {
-        transform: translate(-22px, 24px) scale(0.65);
+        transform: translate(-18px, 20px) scale(0.68) rotate(-2deg);
         opacity: 0;
-        filter: blur(4px);
+        filter: blur(5px);
       }
     }
     @keyframes gbaCharmanderActorWhiff {
       0% {
-        transform: translate(-20px, 20px) scale(0.65);
+        transform: translate(-18px, 16px) scale(0.65);
         opacity: 0;
         filter: blur(3px);
       }
-      25% {
-        transform: translate(0px, 0px) scale(0.82);
+      14% {
+        /* Inhale anticipation that goes nowhere */
+        transform: translate(-10px, 10px) scale(0.82, 0.92);
+        opacity: 0.85;
+      }
+      30% {
+        /* Aborted lunge: half-step forward, no ignition */
+        transform: translate(-2px, 4px) scale(0.86, 0.95) rotate(1deg);
         opacity: 0.75;
       }
-      55% {
-        transform: translate(-3px, 3px) scale(0.78);
-        opacity: 0.45;
+      48% {
+        /* Stumble & sputter: chest deflates */
+        transform: translate(-4px, 6px) scale(0.80) rotate(-1.5deg);
+        opacity: 0.55;
+        filter: blur(1px);
+      }
+      72% {
+        transform: translate(-8px, 9px) scale(0.70) rotate(-1deg);
+        opacity: 0.3;
+        filter: blur(2.5px);
       }
       100% {
         transform: translate(-12px, 12px) scale(0.55);
@@ -243,134 +265,62 @@
         filter: blur(4px);
       }
     }
+
+    /* Hit-only: 2px screen shake at ember comet impact moment (§8.F priority 3) */
+    @keyframes gbaCharmanderEmberHitShake {
+      0%   { transform: translate(0, 0); }
+      20%  { transform: translate(2px, -1px); }
+      40%  { transform: translate(-2px, 1px); }
+      60%  { transform: translate(1px, -1px); }
+      80%  { transform: translate(-1px, 1px); }
+      100% { transform: translate(0, 0); }
+    }
     @keyframes gbaCharmanderMouthFlash {
-      0%, 20% { transform: scale(0.1); opacity: 0; }
-      30% {
-        transform: scale(1.35);
-        opacity: 1;
-        filter: drop-shadow(0 0 18px #ffffff) drop-shadow(0 0 26px #facc15);
-      }
-      42% {
-        transform: scale(1.0);
-        opacity: 0.85;
-        filter: drop-shadow(0 0 14px #f97316);
-      }
-      62% { transform: scale(0.4); opacity: 0; }
-      100% { transform: scale(0.1); opacity: 0; }
+      0%, 16% { transform: scale(0.1); opacity: 0; }
+      26%     { transform: scale(1.4) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 24px #facc15); }
+      38%     { transform: scale(0.95) rotate(-10deg); opacity: 0.85; filter: drop-shadow(0 0 12px #f97316); }
+      52%     { transform: scale(0.4) rotate(5deg); opacity: 0; }
+      100%    { transform: scale(0.1); opacity: 0; }
     }
-    @keyframes gbaCharmanderThermalShock {
-      0%, 32% { transform: scale(0.2); opacity: 0; }
-      42% {
-        transform: scale(1.0);
-        opacity: 0.9;
-        filter: drop-shadow(0 0 12px #facc15);
-      }
-      70% {
-        transform: scale(1.35);
-        opacity: 0.45;
-        filter: blur(1.5px);
-      }
-      100% {
-        transform: scale(1.55);
-        opacity: 0;
-        filter: blur(4px);
-      }
+    @keyframes gbaCharmanderEmberComet1 {
+      0%, 20% { transform: translate(0, 0) scale(0.2) rotate(22deg); opacity: 0; }
+      26%     { transform: translate(25px, -18px) scale(1.3, 0.8) rotate(26deg); opacity: 1; filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 22px #ea580c); }
+      32%     { transform: translate(65px, -45px) scale(1.4, 1.2) rotate(30deg); opacity: 1; filter: drop-shadow(0 0 24px #ffffff) drop-shadow(0 0 32px #facc15); }
+      42%     { transform: translate(78px, -52px) scale(0.6) rotate(35deg); opacity: 0.5; filter: blur(1.5px); }
+      100%    { transform: translate(88px, -58px) scale(0.1); opacity: 0; filter: blur(4px); }
     }
-    @keyframes gbaCharmanderEmberArc1 {
-      0%, 24% { transform: translate(0, 0) scale(0.3); opacity: 0; }
-      34% {
-        transform: translate(32px, -24px) scale(1.35) scaleX(1.4);
-        opacity: 1;
-        filter: drop-shadow(0 0 18px #ffffff) drop-shadow(0 0 26px #ea580c);
-      }
-      55% {
-        transform: translate(75px, -52px) scale(1.2);
-        opacity: 0.95;
-        filter: drop-shadow(0 0 20px #f97316);
-      }
-      76% {
-        transform: translate(105px, -70px) scale(0.85);
-        opacity: 0.6;
-        filter: blur(1px);
-      }
-      100% {
-        transform: translate(120px, -80px) scale(0.3);
-        opacity: 0;
-        filter: blur(3px);
-      }
+    @keyframes gbaCharmanderEmberComet2 {
+      0%, 24% { transform: translate(0, 0) scale(0.2) rotate(15deg); opacity: 0; }
+      32%     { transform: translate(32px, -8px) scale(1.35, 0.85) rotate(18deg); opacity: 1; filter: drop-shadow(0 0 18px #ffffff) drop-shadow(0 0 24px #f97316); }
+      40%     { transform: translate(75px, -24px) scale(1.5, 1.25) rotate(24deg); opacity: 1; filter: drop-shadow(0 0 28px #ffffff) drop-shadow(0 0 38px #ea580c); }
+      54%     { transform: translate(92px, -32px) scale(0.65) rotate(28deg); opacity: 0.45; filter: blur(1.5px); }
+      100%    { transform: translate(104px, -38px) scale(0.1); opacity: 0; filter: blur(4px); }
     }
-    @keyframes gbaCharmanderEmberArc2 {
-      0%, 28% { transform: translate(0, 0) scale(0.3); opacity: 0; }
-      38% {
-        transform: translate(28px, -10px) scale(1.25) scaleX(1.3);
-        opacity: 1;
-        filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 24px #facc15);
-      }
-      60% {
-        transform: translate(65px, -28px) scale(1.1);
-        opacity: 0.9;
-        filter: drop-shadow(0 0 18px #f97316);
-      }
-      80% {
-        transform: translate(95px, -38px) scale(0.75);
-        opacity: 0.55;
-        filter: blur(1px);
-      }
-      100% {
-        transform: translate(112px, -45px) scale(0.25);
-        opacity: 0;
-        filter: blur(3px);
-      }
+    @keyframes gbaCharmanderEmberComet3 {
+      0%, 26% { transform: translate(0, 0) scale(0.2) rotate(42deg); opacity: 0; }
+      36%     { transform: translate(22px, -34px) scale(1.25, 0.8) rotate(48deg); opacity: 1; filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 22px #ef4444); }
+      48%     { transform: translate(56px, -72px) scale(1.3, 1.1) rotate(54deg); opacity: 1; filter: drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 30px #f59e0b); }
+      62%     { transform: translate(72px, -88px) scale(0.55) rotate(58deg); opacity: 0.4; filter: blur(1.5px); }
+      100%    { transform: translate(84px, -98px) scale(0.1); opacity: 0; filter: blur(4px); }
     }
-    @keyframes gbaCharmanderEmberArc3 {
-      0%, 26% { transform: translate(0, 0) scale(0.3); opacity: 0; }
-      36% {
-        transform: translate(25px, -36px) scale(1.3) scaleX(1.3);
-        opacity: 1;
-        filter: drop-shadow(0 0 18px #ffffff) drop-shadow(0 0 24px #ef4444);
-      }
-      58% {
-        transform: translate(58px, -75px) scale(1.05);
-        opacity: 0.9;
-        filter: drop-shadow(0 0 18px #f97316);
-      }
-      78% {
-        transform: translate(82px, -98px) scale(0.7);
-        opacity: 0.5;
-        filter: blur(1px);
-      }
-      100% {
-        transform: translate(96px, -112px) scale(0.25);
-        opacity: 0;
-        filter: blur(3px);
-      }
+    @keyframes gbaCharmanderOrganicBloom {
+      0%, 18% { transform: scale(0.15) rotate(-10deg); opacity: 0; }
+      30%     { transform: scale(1.18) rotate(8deg); opacity: 0.98; filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 35px #ea580c) drop-shadow(0 0 50px #f97316); }
+      52%     { transform: scale(1.35) rotate(16deg); opacity: 0.80; filter: drop-shadow(0 0 22px #ea580c); }
+      72%     { transform: scale(1.48) rotate(22deg); opacity: 0.40; filter: blur(2.5px); }
+      100%    { transform: scale(1.62) rotate(28deg); opacity: 0; filter: blur(6px); }
     }
-    @keyframes gbaCharmanderScorchPatch {
-      0%, 28% { transform: scale(0.2); opacity: 0; }
-      38% {
-        transform: scale(1.08);
-        opacity: 0.95;
-        filter: drop-shadow(0 0 22px #ea580c) drop-shadow(0 0 35px #f97316);
-      }
-      65% { transform: scale(1.22); opacity: 0.7; }
-      85% { transform: scale(1.35); opacity: 0.35; }
-      100% { transform: scale(1.5); opacity: 0; }
+    @keyframes gbaCharmanderHeatRipple {
+      0%, 22% { transform: scale(0.25) rotate(-5deg); opacity: 0; }
+      36%     { transform: scale(1.05) rotate(5deg); opacity: 0.92; filter: drop-shadow(0 0 10px #fde047); }
+      64%     { transform: scale(1.38) rotate(12deg); opacity: 0.45; filter: blur(1.5px); }
+      100%    { transform: scale(1.65) rotate(18deg); opacity: 0; filter: blur(4px); }
     }
     @keyframes gbaCharmanderCinders {
-      0%, 30% { opacity: 0; transform: translate(0, 0) scale(0.4); }
-      45% {
-        opacity: 1;
-        transform: translate(calc(var(--cm-x) * 0.5), calc(var(--cm-y) * 0.5 - 12px)) scale(1.2);
-        filter: drop-shadow(0 0 6px #facc15);
-      }
-      75% {
-        opacity: 0.85;
-        transform: translate(var(--cm-x), calc(var(--cm-y) - 28px)) scale(0.95);
-      }
-      100% {
-        opacity: 0;
-        transform: translate(calc(var(--cm-x) * 1.25), calc(var(--cm-y) - 48px)) scale(0.4);
-      }
+      0%, 28% { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      42%     { opacity: 1; transform: translate(calc(var(--cm-x) * 0.4), calc(var(--cm-y) * 0.4 - 14px)) scale(1.25); filter: drop-shadow(0 0 8px #fde047); }
+      72%     { opacity: 0.85; transform: translate(var(--cm-x), calc(var(--cm-y) - 34px)) scale(0.9); filter: drop-shadow(0 0 4px #ea580c); }
+      100%    { opacity: 0; transform: translate(calc(var(--cm-x) * 1.3), calc(var(--cm-y) - 56px)) scale(0.3); filter: blur(2px); }
     }
 
     /* Old Tail Sweep Keyframe for Comparison */
@@ -386,7 +336,7 @@
   <header>
     <h1>🔥 Charmander Lv. 10 — Ember Overhaul</h1>
     <p class="subtitle">
-      Replacing the disembodied tail flame with the full-body authentic 1996 Ken Sugimori Charmander actor, mouth-origin starburst flash, and kinetic parabolic ember projectile streams.
+      Organic Multi-Lobed Volcanic Thermal Bloom, Aerodynamic Teardrop Ember Comets & Ken Sugimori Full-Body Kinetic Battle Lunge.
     </p>
   </header>
 
@@ -410,11 +360,12 @@
       </div>
 
       <div class="layers-breakdown">
-        <div class="layer-item"><span class="layer-num">L1</span> Magma Scorch Trail across Card Floor</div>
-        <div class="layer-item"><span class="layer-num">L2</span> Ken Sugimori Full-Body Lunge & Recoil</div>
-        <div class="layer-item"><span class="layer-num">L3</span> Mouth Starburst Flash & Thermal Waves</div>
-        <div class="layer-item"><span class="layer-num">L4</span> 3 Parabolic Kinetic Ember Projectiles</div>
-        <div class="layer-item"><span class="layer-num">L5</span> Ascending Convection Carbon Cinders</div>
+        <div class="layer-item"><span class="layer-num">L1</span> Feathered Magma Floor Trail</div>
+        <div class="layer-item"><span class="layer-num">L2</span> Ken Sugimori Inhale, Lunge & Recoil Shudder</div>
+        <div class="layer-item"><span class="layer-num">L3</span> Mouth Starburst Flash (Glint core)</div>
+        <div class="layer-item"><span class="layer-num">L4</span> 3 Aerodynamic Teardrop Ember Comets</div>
+        <div class="layer-item"><span class="layer-num">L4</span> Organic Multi-Lobe Bloom & Thermal Wave</div>
+        <div class="layer-item"><span class="layer-num">L5</span> Sinusoidal Buoyant Carbon Cinders</div>
       </div>
     </div>
 
@@ -436,8 +387,8 @@
 
       <div class="layers-breakdown" style="color: #94a3b8;">
         <div class="layer-item" style="border-left-color: #64748b;"><span class="layer-num" style="color: #94a3b8;">⚠️</span> Only tail flame was visible (no body)</div>
-        <div class="layer-item" style="border-left-color: #64748b;"><span class="layer-num" style="color: #94a3b8;">⚠️</span> Resembled "Flame Tail" rather than Ember</div>
-        <div class="layer-item" style="border-left-color: #64748b;"><span class="layer-num" style="color: #94a3b8;">⚠️</span> Lacked mouth-exhale kinetic storytelling</div>
+        <div class="layer-item" style="border-left-color: #64748b;"><span class="layer-num" style="color: #94a3b8;">⚠️</span> Blunt heavy orange circles on impact</div>
+        <div class="layer-item" style="border-left-color: #64748b;"><span class="layer-num" style="color: #94a3b8;">⚠️</span> Lacked aerodynamic comet flow</div>
       </div>
     </div>
   </div>
@@ -483,62 +434,125 @@
         </div>
 
         ${!isWhiffed ? `
-          <!-- Layer 4: 3-Stage Parabolic Kinetic Ember Projectiles -->
+          <!-- Layer 4: 3-Stage Parabolic Aerodynamic Teardrop Ember Comets -->
           <div style="position: absolute; pointer-events: none; z-index: 35; left: 26%; bottom: 36%;">
-            <!-- Ember Arc 1 -->
-            <div style="position: absolute; pointer-events: none; animation: gbaCharmanderEmberArc1 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;">
-              <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-                <div style="width: 20px; height: 20px; border-radius: 9999px; background: linear-gradient(135deg, #ffffff, #fde047, #e11d48); box-shadow: 0 0 18px #f97316;"></div>
-                <div style="position: absolute; width: 10px; height: 10px; border-radius: 9999px; background: #ffffff; filter: blur(0.5px);"></div>
-              </div>
+            <!-- Ember Comet 1: Fast Scout Dart -->
+            <div style="position: absolute; pointer-events: none; animation: gbaCharmanderEmberComet1 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;">
+              <svg width="34" height="20" viewBox="0 0 34 20" style="overflow: visible;">
+                <defs>
+                  <linearGradient id="cmEmberGrad1" x1="1" y1="0" x2="0" y2="0">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="30%" stop-color="#fef08a" />
+                    <stop offset="65%" stop-color="#f97316" />
+                    <stop offset="100%" stop-color="#dc2626" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M 28 10 C 22 15, 8 16, 0 10 C 8 4, 22 5, 28 10 Z" fill="url(#cmEmberGrad1)" />
+                <circle cx="26" cy="10" r="4.5" fill="#ffffff" style="filter: drop-shadow(0 0 8px #facc15) drop-shadow(0 0 14px #ea580c);" />
+                <circle cx="28" cy="10" r="2.2" fill="#ffffff" />
+              </svg>
             </div>
 
-            <!-- Ember Arc 2 -->
-            <div style="position: absolute; pointer-events: none; animation: gbaCharmanderEmberArc2 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;">
-              <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-                <div style="width: 24px; height: 24px; border-radius: 9999px; background: linear-gradient(135deg, #ffffff, #fef08a, #ea580c); box-shadow: 0 0 20px #ea580c;"></div>
-                <div style="position: absolute; width: 12px; height: 12px; border-radius: 9999px; background: #ffffff; filter: blur(0.5px);"></div>
-              </div>
+            <!-- Ember Comet 2: Heavy Core Coal -->
+            <div style="position: absolute; pointer-events: none; animation: gbaCharmanderEmberComet2 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;">
+              <svg width="40" height="24" viewBox="0 0 40 24" style="overflow: visible;">
+                <defs>
+                  <linearGradient id="cmEmberGrad2" x1="1" y1="0" x2="0" y2="0">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="25%" stop-color="#fde047" />
+                    <stop offset="60%" stop-color="#ea580c" />
+                    <stop offset="100%" stop-color="#991b1b" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M 32 12 C 24 18, 10 20, 0 12 C 10 4, 24 6, 32 12 Z" fill="url(#cmEmberGrad2)" />
+                <circle cx="30" cy="12" r="5.5" fill="#ffffff" style="filter: drop-shadow(0 0 10px #facc15) drop-shadow(0 0 18px #ea580c);" />
+                <circle cx="32" cy="12" r="2.6" fill="#ffffff" />
+              </svg>
             </div>
 
-            <!-- Ember Arc 3 -->
-            <div style="position: absolute; pointer-events: none; animation: gbaCharmanderEmberArc3 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;">
-              <div style="position: relative; display: flex; align-items: center; justify-content: center;">
-                <div style="width: 18px; height: 18px; border-radius: 9999px; background: linear-gradient(135deg, #ffffff, #fdba74, #ef4444); box-shadow: 0 0 16px #ef4444;"></div>
-                <div style="position: absolute; width: 8px; height: 8px; border-radius: 9999px; background: #ffffff; filter: blur(0.5px);"></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Layer 4: Target Impact Thermal Scorch & Shockwave -->
-          <div style="position: absolute; pointer-events: none; z-index: 20; display: flex; align-items: center; justify-content: center; left: 52%; top: 38%;">
-            <div style="
-              width: 128px; height: 128px; border-radius: 9999px; pointer-events: none;
-              animation: gbaCharmanderScorchPatch 1.6s ease-out forwards;
-              background: radial-gradient(circle, rgba(249,115,22,0.65) 0%, rgba(220,38,38,0.4) 48%, rgba(127,29,29,0.18) 72%, transparent 88%);
-            "></div>
-            <div style="position: absolute; display: flex; align-items: center; justify-content: center; pointer-events: none; animation: gbaCharmanderThermalShock 1.6s cubic-bezier(0.14, 0.85, 0.28, 1) forwards;">
-              <svg width="120" height="120" viewBox="0 0 120 120">
-                <circle cx="60" cy="60" r="42" fill="none" stroke="#fde047" stroke-width="2.2" opacity="0.85" style="filter: drop-shadow(0 0 8px #ea580c);" />
-                <circle cx="60" cy="60" r="28" fill="none" stroke="#ffffff" stroke-width="1.6" opacity="0.9" />
+            <!-- Ember Comet 3: High Arcing Trailing Flame -->
+            <div style="position: absolute; pointer-events: none; animation: gbaCharmanderEmberComet3 1.6s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;">
+              <svg width="32" height="18" viewBox="0 0 32 18" style="overflow: visible;">
+                <defs>
+                  <linearGradient id="cmEmberGrad3" x1="1" y1="0" x2="0" y2="0">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="30%" stop-color="#fef08a" />
+                    <stop offset="70%" stop-color="#ef4444" />
+                    <stop offset="100%" stop-color="#7f1d1d" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <path d="M 26 9 C 20 14, 8 15, 0 9 C 8 3, 20 4, 26 9 Z" fill="url(#cmEmberGrad3)" />
+                <circle cx="24" cy="9" r="4.0" fill="#ffffff" style="filter: drop-shadow(0 0 8px #fde047) drop-shadow(0 0 14px #ef4444);" />
               </svg>
             </div>
           </div>
 
-          <!-- Layer 5: Ascending Cinders -->
+          <!-- Layer 4: Target Impact Organic Thermal Bloom & Directional Heat Wave -->
+          <div style="position: absolute; pointer-events: none; z-index: 25; display: flex; align-items: center; justify-content: center; left: 54%; top: 36%;">
+            <!-- Organic Multi-Lobed Volcanic Thermal Bloom -->
+            <div style="position: absolute; display: flex; align-items: center; justify-content: center; pointer-events: none; animation: gbaCharmanderOrganicBloom 1.6s cubic-bezier(0.16, 0.85, 0.25, 1) forwards;">
+              <svg width="120" height="120" viewBox="0 0 120 120" style="overflow: visible;">
+                <defs>
+                  <radialGradient id="cmOrganicBloomGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+                    <stop offset="22%" stop-color="#fef08a" stop-opacity="0.95" />
+                    <stop offset="50%" stop-color="#f97316" stop-opacity="0.85" />
+                    <stop offset="80%" stop-color="#dc2626" stop-opacity="0.5" />
+                    <stop offset="100%" stop-color="#991b1b" stop-opacity="0" />
+                  </radialGradient>
+                  <radialGradient id="cmBloomCorePop" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" />
+                    <stop offset="45%" stop-color="#fde047" stop-opacity="0.9" />
+                    <stop offset="100%" stop-color="#f97316" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+
+                <!-- Multi-Lobed Volcanic Flame Petals -->
+                <path
+                  d="M 60 18 C 76 12, 94 24, 96 42 C 110 52, 108 74, 94 88 C 86 102, 66 108, 52 102 C 34 106, 18 92, 20 74 C 10 60, 14 38, 30 30 C 38 16, 50 16, 60 18 Z"
+                  fill="url(#cmOrganicBloomGrad)"
+                  style="filter: drop-shadow(0 0 14px #ea580c);"
+                />
+
+                <!-- Inner High-Heat Core Petals -->
+                <path
+                  d="M 60 30 C 70 24, 82 34, 84 46 C 92 54, 90 70, 80 78 C 74 88, 60 90, 52 86 C 40 88, 30 78, 32 66 C 26 56, 28 42, 40 36 C 46 26, 54 26, 60 30 Z"
+                  fill="url(#cmBloomCorePop)"
+                  opacity="0.92"
+                />
+
+                <!-- 8-Point Needle Starburst Glint -->
+                <polygon
+                  points="60,18 63,52 97,60 63,68 60,102 57,68 23,60 57,52"
+                  fill="#ffffff"
+                  style="filter: drop-shadow(0 0 8px #fde047) drop-shadow(0 0 14px #ffffff);"
+                />
+              </svg>
+            </div>
+
+            <!-- Directional Feathered Heat Wavefronts -->
+            <div style="position: absolute; display: flex; align-items: center; justify-content: center; pointer-events: none; animation: gbaCharmanderHeatRipple 1.6s cubic-bezier(0.14, 0.85, 0.28, 1) forwards;">
+              <svg width="130" height="130" viewBox="0 0 130 130" style="overflow: visible;">
+                <ellipse cx="65" cy="65" rx="52" ry="42" fill="none" stroke="#fde047" stroke-width="2.4" opacity="0.88" style="filter: drop-shadow(0 0 12px #ea580c) drop-shadow(0 0 6px #ffffff);" />
+                <ellipse cx="65" cy="65" rx="36" ry="28" fill="none" stroke="#ffffff" stroke-width="1.8" opacity="0.92" />
+              </svg>
+            </div>
+          </div>
+
+          <!-- Layer 5: Ascending Cinders (§8.J: 5 causal-spaced, §8.K: max delay+dur ≤ 1.6s) -->
           ${[
             { x: -28, y: -36 }, { x: 32, y: -42 },
             { x: -18, y: 18 },  { x: 26, y: 22 },
-            { x: -6,  y: -48 }, { x: 16, y: -56 }
+            { x: -6,  y: -48 }
           ].map((p, i) => `
             <div style="
               position: absolute; pointer-events: none; z-index: 40;
               left: 60%; top: 42%;
               --cm-x: ${p.x}px; --cm-y: ${p.y}px;
-              animation: gbaCharmanderCinders 1.6s ease-out ${0.36 + i * 0.08}s forwards;
+              animation: gbaCharmanderCinders 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${[0.18, 0.26, 0.34, 0.42, 0.50][i]}s forwards;
               opacity: 0;
             ">
-              <div style="width: 10px; height: 10px; border-radius: 9999px; background: #fde047; box-shadow: 0 0 8px #f59e0b;"></div>
+              <div style="width: 8px; height: 8px; border-radius: 9999px; background: #fde047; box-shadow: 0 0 8px #f59e0b;"></div>
             </div>
           `).join('')}
         ` : ''}
@@ -561,6 +575,8 @@
       const container = document.getElementById('overlayNew');
       container.innerHTML = '';
       void container.offsetWidth;
+      /* Hit-only screen shake: 120ms at comet impact moment (§8.F), suppressed on whiff */
+      container.style.animation = isWhiffed ? 'none' : 'gbaCharmanderEmberHitShake 0.12s linear 0.42s 1';
       container.innerHTML = renderNewEmber(isWhiffed);
     }
 

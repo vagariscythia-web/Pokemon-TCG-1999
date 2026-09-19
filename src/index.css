@@ -209,6 +209,18 @@ html, body {
   100% { transform: scale(0.9) rotate(-1deg); opacity: 0; filter: contrast(2.2) brightness(1.4) blur(1.5px); }
 }
 
+/* GBA Potion/Super Potion: subtle vitality shudder on target card — gentle decaying tremor conveying life restored */
+@keyframes gbaPotionVitalityShudder {
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  15%  { transform: translate(1.5px, -1px) rotate(0.4deg); }
+  30%  { transform: translate(-1.5px, 1px) rotate(-0.4deg); }
+  45%  { transform: translate(1px, -0.5px) rotate(0.3deg); }
+  60%  { transform: translate(-1px, 0.5px) rotate(-0.3deg); }
+  75%  { transform: translate(0.5px, -0.5px) rotate(0.15deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+
 /* Grainy noise dissolve overlay for potion fade-out */
 @keyframes gbaGrainyFadeOut {
   0% { opacity: 0; }
@@ -1404,6 +1416,22 @@ html, body {
 
 .animate-recoil-card-shudder {
   animation: fxRecoilCardShudder 0.60s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Heal Card Shudder - gentle "life restored" awakening tremor (Potion / Super Potion) */
+@keyframes fxHealCardShudder {
+  0%   { transform: translate(0, 0) scale(1); }
+  12%  { transform: translate(0, -1.5px) scale(1.012) rotate(0.3deg); }
+  25%  { transform: translate(1px, 0.5px) scale(1.008) rotate(-0.2deg); }
+  38%  { transform: translate(-1px, -1px) scale(1.01) rotate(0.25deg); }
+  52%  { transform: translate(0.5px, 0.5px) scale(1.006) rotate(-0.15deg); }
+  66%  { transform: translate(-0.5px, -0.5px) scale(1.003) rotate(0.1deg); }
+  80%  { transform: translate(0.3px, 0.3px) scale(1.001) rotate(-0.05deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+}
+
+.animate-heal-card-shudder {
+  animation: fxHealCardShudder 0.7s ease-out both;
 }
 
 /* Impact Flash - white radial burst on hit */
@@ -8418,18 +8446,146 @@ html, body {
   100% { opacity: 0; transform: scale(0.8) rotate(-15deg); filter: blur(6px); }
 }
 
-/* Layer 2: Primary Visual Actor (Ken Sugimori Full-Body Charmander — Smooth Lunge, Anticipation & Recoil) */
+/* === CHARMANDER FIRE TAIL WHIP (tr-50) — pivot spin actor, crescent trace, burst, cinders, motes === */
+/* Layer 2: Anticipation coil -> accelerating swing -> snap -> recoil tremor -> settle (measured origin, §7.A/§7.B/§8.C) */
+@keyframes gbaCharmanderTailSpinActor {
+  0%   { transform: translate(-50%, -50%) rotate(-18deg) scale(0.84); opacity: 0; filter: blur(2px); }
+  8%   { transform: translate(-50%, -50%) rotate(-30deg) scale(0.76); opacity: 0.9; filter: blur(1px); }
+  14%  { transform: translate(-50%, -50%) rotate(-24deg) scale(0.86); opacity: 1; filter: drop-shadow(0 0 10px rgba(249,115,22,0.6)); }
+  30%  { transform: translate(-46%, -52%) rotate(-6deg) scale(0.98); filter: drop-shadow(0 0 16px rgba(249,115,22,0.85)); }
+  42%  { transform: translate(-42%, -54%) rotate(8deg) scale(1.06); filter: drop-shadow(0 0 22px #ea580c) drop-shadow(0 0 12px #facc15); }
+  50%  { transform: translate(-44%, -52%) rotate(4deg) scale(1.08); filter: drop-shadow(0 0 24px #ea580c); }
+  62%  { transform: translate(-48%, -51%) rotate(7deg) scale(1.04); }
+  72%  { transform: translate(-50%, -50%) rotate(3deg) scale(1.02); }
+  86%  { transform: translate(-50%, -50%) rotate(1deg) scale(0.96); opacity: 0.8; filter: drop-shadow(0 0 10px rgba(249,115,22,0.45)); }
+  100% { transform: translate(-50%, -48%) rotate(0deg) scale(0.88); opacity: 0; filter: blur(3px); }
+}
+
+/* Layer 2 whiff: overshoot stumble + grounded short-fall (§7.F) */
+@keyframes gbaCharmanderTailWhiffStumble {
+  0%   { transform: translate(-50%, -50%) rotate(-18deg) scale(0.8); opacity: 0; filter: blur(2px); }
+  20%  { transform: translate(-48%, -51%) rotate(-10deg) scale(0.9); opacity: 1; }
+  45%  { transform: translate(-44%, -50%) rotate(14deg) scale(1.0); }
+  60%  { transform: translate(-46%, -46%) rotate(10deg) scale(0.98); }
+  80%  { transform: translate(-50%, -48%) rotate(4deg) scale(0.92); opacity: 0.6; }
+  100% { transform: translate(-50%, -46%) rotate(2deg) scale(0.85); opacity: 0; filter: blur(3px); }
+}
+
+/* Layer 3a: Crescent trace draws the sweep arc, then dissipates */
+@keyframes gbaCharmanderCrescentTrace {
+  0%   { stroke-dashoffset: 100; opacity: 0; }
+  12%  { opacity: 1; }
+  45%  { stroke-dashoffset: 0; opacity: 1; }
+  75%  { stroke-dashoffset: 0; opacity: 0.9; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* Layer 3a whiff: trace halts mid-arc (~58%) and fades — physical short-fall */
+@keyframes gbaCharmanderCrescentWhiff {
+  0%   { stroke-dashoffset: 100; opacity: 0; }
+  12%  { opacity: 0.9; }
+  42%  { stroke-dashoffset: 42; opacity: 0.85; }
+  70%  { stroke-dashoffset: 42; opacity: 0.5; }
+  100% { stroke-dashoffset: 42; opacity: 0; }
+}
+
+/* Layer 3b: Impact starburst pop at arc terminus (centering translate kept inside keyframes
+   so the animation never overrides the -50%/-50% anchor — anti-bleed §6.2) */
+@keyframes gbaCharmanderTailBurst {
+  0%   { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+  12%  { transform: translate(-50%, -50%) scale(0.7); opacity: 1; }
+  35%  { transform: translate(-50%, -50%) scale(1.15); opacity: 0.95; }
+  65%  { transform: translate(-50%, -50%) scale(1.0); opacity: 0.7; }
+  100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+}
+
+/* Layer 1: Organic scorch ring breathe & fade */
+@keyframes gbaCharmanderTailScorchRing {
+  0%   { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  22%  { opacity: 0.85; }
+  60%  { transform: translate(-50%, -50%) scale(1.05); opacity: 0.5; }
+  100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0; }
+}
+
+/* Layer 4: Tangential cinder arcs (three independent ejecta vectors) */
+@keyframes gbaCharmanderCinderArc1 {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+  18%  { opacity: 1; }
+  55%  { transform: translate(26px, -16px) rotate(24deg) scale(1); }
+  100% { transform: translate(56px, -8px) rotate(40deg) scale(0.7); opacity: 0; }
+}
+@keyframes gbaCharmanderCinderArc2 {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(0.55); opacity: 0; }
+  20%  { opacity: 1; }
+  58%  { transform: translate(20px, -26px) rotate(-18deg) scale(0.95); }
+  100% { transform: translate(40px, -40px) rotate(-34deg) scale(0.6); opacity: 0; }
+}
+@keyframes gbaCharmanderCinderArc3 {
+  0%   { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 0; }
+  22%  { opacity: 0.95; }
+  60%  { transform: translate(28px, -2px) rotate(12deg) scale(0.9); }
+  100% { transform: translate(52px, 10px) rotate(26deg) scale(0.55); opacity: 0; }
+}
+
+/* Layer 5: Rising ember motes (delay-staggered, envelope-safe) */
+@keyframes gbaCharmanderTailMote {
+  0%   { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  22%  { opacity: 0.9; }
+  100% { transform: translate(7px, -34px) scale(1.05); opacity: 0; }
+}
+
+/* Whiff-only: sputtering organic smoke puff (scale-only breathe, no rigid rotate — §1.D) */
+@keyframes gbaCharmanderWhiffPuff {
+  0%   { transform: scale(0.4); opacity: 0; }
+  30%  { transform: scale(0.8); opacity: 0.7; }
+  65%  { transform: scale(1.1); opacity: 0.4; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Layer 6: Heat shimmer distortion halo behind actor (§8.F priority 1) */
+@keyframes gbaCharmanderHeatShimmer {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+  30%  { opacity: 0.3; transform: translate(-50%, -50%) scale(1.02); }
+  60%  { opacity: 0.25; transform: translate(-50%, -50%) scale(1.05); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.12); }
+}
+
+/* Hit-only: 2px screen shake on impact moment (§8.F priority 3) */
+@keyframes gbaCharmanderHitShake {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(2px, -1px); }
+  40%  { transform: translate(-2px, 1px); }
+  60%  { transform: translate(1px, -1px); }
+  80%  { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
+}
+
+
+/* Layer 2: Primary Visual Actor (Ken Sugimori Full-Body Charmander — Smooth Lunge, Anticipation & Recoil)
+   §8.O: Smooth materialize (A1), overshoot snap (C1), sustained power (B1), organic exit (A2/A3/A4) */
 @keyframes gbaCharmanderActorLunge {
   0% {
     transform: translate(-18px, 16px) scale(0.72) rotate(-2deg);
     opacity: 0;
     filter: blur(3px);
   }
+  6% {
+    /* A1: Smooth materialize midpoint — prevents pop-in */
+    transform: translate(-14px, 13px) scale(0.84) rotate(-1.8deg);
+    opacity: 0.45;
+    filter: blur(1.5px);
+  }
   12% {
-    /* Inhale anticipation: slight pull-back & chest puff */
-    transform: translate(-10px, 10px) scale(0.96, 1.04) rotate(-1.5deg);
+    /* C1: Inhale anticipation with overshoot snap */
+    transform: translate(-10px, 10px) scale(1.03, 1.06) rotate(-1.5deg);
     opacity: 0.95;
     filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.7));
+  }
+  16% {
+    /* C1: Overshoot settle — micro recoil from snap */
+    transform: translate(-10px, 10px) scale(0.98, 1.02) rotate(-1.2deg);
+    opacity: 1;
+    filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.8));
   }
   22% {
     /* Explosive forward battle lunge */
@@ -8454,16 +8610,37 @@ html, body {
     opacity: 0.98;
     filter: drop-shadow(0 0 16px rgba(249, 115, 22, 0.75));
   }
+  60% {
+    /* B1: Sustained power hold — prevents premature sag */
+    transform: translate(-1px, 1px) scale(1.0) rotate(0.3deg);
+    opacity: 0.95;
+    filter: drop-shadow(0 0 14px rgba(249, 115, 22, 0.65));
+  }
   70% {
-    /* Natural settling ease-out */
+    /* Natural settling ease-out begins */
     transform: translate(-5px, 6px) scale(0.97) rotate(0deg);
     opacity: 0.85;
     filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.45));
+    animation-timing-function: ease-in;
+  }
+  75% {
+    /* A2: Micro breath-pause before exit — organic hesitation */
+    transform: translate(-4px, 5px) scale(0.99) rotate(0deg);
+    opacity: 0.82;
+    filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.35));
+    animation-timing-function: ease-in;
+  }
+  78% {
+    /* A3: Filter bridge — drop-shadow fades while blur begins softly */
+    transform: translate(-8px, 10px) scale(0.91) rotate(-0.5deg);
+    opacity: 0.65;
+    filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.25)) blur(0.5px);
   }
   86% {
     transform: translate(-12px, 14px) scale(0.85) rotate(-1deg);
     opacity: 0.45;
     filter: blur(2px);
+    animation-timing-function: ease-in;
   }
   100% {
     transform: translate(-18px, 20px) scale(0.68) rotate(-2deg);
@@ -8478,19 +8655,42 @@ html, body {
     opacity: 0;
     filter: blur(3px);
   }
-  24% {
-    transform: translate(0px, 0px) scale(0.84);
+  14% {
+    /* Inhale anticipation that goes nowhere */
+    transform: translate(-10px, 10px) scale(0.82, 0.92);
+    opacity: 0.85;
+  }
+  30% {
+    /* Aborted lunge: half-step forward, no ignition */
+    transform: translate(-2px, 4px) scale(0.86, 0.95) rotate(1deg);
     opacity: 0.75;
   }
-  50% {
-    transform: translate(-2px, 2px) scale(0.80);
-    opacity: 0.45;
+  48% {
+    /* Stumble & sputter: chest deflates */
+    transform: translate(-4px, 6px) scale(0.80) rotate(-1.5deg);
+    opacity: 0.55;
+    filter: blur(1px);
+  }
+  72% {
+    transform: translate(-8px, 9px) scale(0.70) rotate(-1deg);
+    opacity: 0.3;
+    filter: blur(2.5px);
   }
   100% {
-    transform: translate(-10px, 10px) scale(0.55);
+    transform: translate(-12px, 12px) scale(0.55);
     opacity: 0;
     filter: blur(4px);
   }
+}
+
+/* Hit-only: 2px screen shake at ember comet impact moment (§8.F priority 3) */
+@keyframes gbaCharmanderEmberHitShake {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(2px, -1px); }
+  40%  { transform: translate(-2px, 1px); }
+  60%  { transform: translate(1px, -1px); }
+  80%  { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
 }
 
 /* Layer 3: Mouth Origin Incandescent Starburst Flash */
@@ -8591,12 +8791,12 @@ html, body {
 
 /* Layer 4: Multi-Lobed Organic Thermal Bloom Plume (Replaces blunt orange circle!) */
 @keyframes gbaCharmanderOrganicBloom {
-  0%, 28% {
+  0%, 18% {
     transform: scale(0.15) rotate(-10deg);
     opacity: 0;
   }
-  38% {
-    /* Violent blooming explosion apex */
+  30% {
+    /* Violent blooming explosion apex (hold reduced 28→18% to fit 1.6s envelope, §8.K) */
     transform: scale(1.18) rotate(8deg);
     opacity: 0.98;
     filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 35px #ea580c) drop-shadow(0 0 50px #f97316);
@@ -8621,7 +8821,7 @@ html, body {
 
 /* Layer 4: Concentric Directional Heat Ripples (Soft feathered shockwave) */
 @keyframes gbaCharmanderHeatRipple {
-  0%, 30% {
+  0%, 22% {
     transform: scale(0.25) rotate(-5deg);
     opacity: 0;
   }
@@ -8642,9 +8842,10 @@ html, body {
   }
 }
 
-/* Layer 5: Ascending Convection Carbon Cinders (Sinusoidal buoyant drift) */
+/* Layer 5: Ascending Convection Carbon Cinders (Sinusoidal buoyant drift)
+   §8.L: hold reduced 28→18% for faster reactive entrance */
 @keyframes gbaCharmanderCinders {
-  0%, 28% {
+  0%, 18% {
     opacity: 0;
     transform: translate(0, 0) scale(0.3);
   }
@@ -11196,27 +11397,106 @@ html, body {
 }
 
 /* 7. KANGASKHAN: Comet Punch & Fetch */
-@keyframes gbaKangaskhanCometPunch {
-  0% {
-    opacity: 0;
-    transform: translate(var(--kp-ox, -26px), var(--kp-oy, 16px)) scale(0.6) rotate(var(--kp-rot, -15deg));
-  }
-  35% {
-    opacity: 1;
-    transform: translate(0px, 0px) scale(1.15) rotate(0deg);
-    filter: drop-shadow(0 0 14px #f97316);
-  }
-  60% {
-    transform: translate(calc(var(--kp-ox, -26px) * -0.2), calc(var(--kp-oy, 16px) * -0.2)) scale(1.02);
-  }
-  80% {
-    opacity: 0.9;
-    transform: translate(0px, 0px) scale(0.95);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(calc(var(--kp-ox, -26px) * 0.4), calc(var(--kp-oy, 16px) * 0.4)) scale(0.8);
-  }
+/* Comet Punch multi-hit sweep set — one beat per coin (0.62 s each, 380 ms stagger).
+   Right fist sweeps in from the right edge; Left fist from the left edge. Section 8.O density:
+   materialize filter bridge, impact squash overshoot, retract settle, blur exit. */
+@keyframes gbaKangaskhanCometPunchRight {
+  0% { opacity: 0; transform: translate(48px, -12px) scale(0.62) rotate(14deg); filter: blur(2px) drop-shadow(0 0 6px rgba(249, 115, 22, 0.35)); animation-timing-function: ease-in; }
+  10% { opacity: 0.85; transform: translate(54px, -14px) scale(0.7) rotate(16deg); filter: blur(1px) drop-shadow(0 0 8px rgba(249, 115, 22, 0.5)); animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1); }
+  20% { opacity: 1; transform: translate(20px, -5px) scale(0.92) rotate(6deg); filter: blur(0px) drop-shadow(0 0 14px rgba(249, 115, 22, 0.75)); }
+  38% { opacity: 1; transform: translate(0px, 0px) scale(1.10, 0.88) rotate(0deg); filter: drop-shadow(0 0 22px rgba(249, 115, 22, 0.95)) drop-shadow(0 0 10px rgba(254, 240, 138, 0.9)); animation-timing-function: ease-out; }
+  48% { transform: translate(-3px, 2px) scale(0.96, 1.05) rotate(-2deg); }
+  62% { transform: translate(0px, 0px) scale(1); }
+  80% { opacity: 0.9; transform: translate(10px, -4px) scale(0.94) rotate(4deg); }
+  100% { opacity: 0; transform: translate(26px, -10px) scale(0.8) rotate(10deg); filter: blur(2px); }
+}
+
+@keyframes gbaKangaskhanCometPunchLeft {
+  0% { opacity: 0; transform: translate(-48px, 12px) scale(0.62) rotate(-14deg); filter: blur(2px) drop-shadow(0 0 6px rgba(249, 115, 22, 0.35)); animation-timing-function: ease-in; }
+  10% { opacity: 0.85; transform: translate(-54px, 14px) scale(0.7) rotate(-16deg); filter: blur(1px) drop-shadow(0 0 8px rgba(249, 115, 22, 0.5)); animation-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1); }
+  20% { opacity: 1; transform: translate(-20px, 5px) scale(0.92) rotate(-6deg); filter: blur(0px) drop-shadow(0 0 14px rgba(249, 115, 22, 0.75)); }
+  38% { opacity: 1; transform: translate(0px, 0px) scale(1.10, 0.88) rotate(0deg); filter: drop-shadow(0 0 22px rgba(249, 115, 22, 0.95)) drop-shadow(0 0 10px rgba(254, 240, 138, 0.9)); animation-timing-function: ease-out; }
+  48% { transform: translate(3px, -2px) scale(0.96, 1.05) rotate(2deg); }
+  62% { transform: translate(0px, 0px) scale(1); }
+  80% { opacity: 0.9; transform: translate(-10px, 4px) scale(0.94) rotate(-4deg); }
+  100% { opacity: 0; transform: translate(-26px, 10px) scale(0.8) rotate(-10deg); filter: blur(2px); }
+}
+
+/* Whiff sweeps: tails beats — full-size fist passes THROUGH the target without connecting.
+   No impact squash, no scale reduction; the fist enters at speed, crosses center, and exits
+   the opposite side. Reads clearly as a miss because there is no impact moment. */
+@keyframes gbaKangaskhanCometPunchRightWhiff {
+  0% { opacity: 0; transform: translate(52px, -14px) scale(0.72) rotate(12deg); }
+  20% { opacity: 0.9; transform: translate(16px, -4px) scale(1.02) rotate(4deg); }
+  45% { opacity: 1; transform: translate(-6px, 2px) scale(1.0) rotate(0deg); }
+  70% { opacity: 0.85; transform: translate(-28px, 8px) scale(0.92) rotate(-6deg); }
+  100% { opacity: 0; transform: translate(-48px, 16px) scale(0.78) rotate(-12deg); filter: blur(2px); }
+}
+
+@keyframes gbaKangaskhanCometPunchLeftWhiff {
+  0% { opacity: 0; transform: translate(-52px, 14px) scale(0.72) rotate(-12deg); }
+  20% { opacity: 0.9; transform: translate(-16px, 4px) scale(1.02) rotate(-4deg); }
+  45% { opacity: 1; transform: translate(6px, -2px) scale(1.0) rotate(0deg); }
+  70% { opacity: 0.85; transform: translate(28px, -8px) scale(0.92) rotate(6deg); }
+  100% { opacity: 0; transform: translate(48px, -16px) scale(0.78) rotate(12deg); filter: blur(2px); }
+}
+
+/* Comet wind wake trailing each sweep (direction matches the sweeping hand). */
+@keyframes gbaKangaskhanCometPunchWindRight {
+  0% { opacity: 0; transform: translate(34px, -10px) scale(0.6); }
+  30% { opacity: 0.95; transform: translate(8px, -2px) scale(1.05); filter: drop-shadow(0 0 10px #f97316); }
+  60% { opacity: 0.6; transform: translate(-12px, 4px) scale(0.9); }
+  100% { opacity: 0; transform: translate(-26px, 8px) scale(0.7); }
+}
+
+@keyframes gbaKangaskhanCometPunchWindLeft {
+  0% { opacity: 0; transform: translate(-34px, 10px) scale(0.6); }
+  30% { opacity: 0.95; transform: translate(-8px, 2px) scale(1.05); filter: drop-shadow(0 0 10px #f97316); }
+  60% { opacity: 0.6; transform: translate(12px, -4px) scale(0.9); }
+  100% { opacity: 0; transform: translate(26px, -8px) scale(0.7); }
+}
+
+/* Screen shake on impact — brief 2px jitter applied to the FX container (hit only). */
+@keyframes gbaKangaskhanCometPunchShake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(2px, -1.5px); }
+  40% { transform: translate(-2px, 1px); }
+  60% { transform: translate(1.5px, 0.5px); }
+  80% { transform: translate(-1px, -0.5px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Per-beat impact layers (TSX delays them to the 38% strike frame ~= 0.24 s).
+   Ref: ANIMATION_DESIGN_SYSTEM.md §8.E — expo-out easing over keyframe addition;
+        §3 Layer 3 — concentric rings + starburst pop; §1.C — chromatic hierarchy. */
+@keyframes gbaKangaskhanCometPunchRing {
+  0%   { opacity: 0; transform: scale(0.2); }
+  18%  { opacity: 1; transform: scale(0.65); filter: drop-shadow(0 0 14px #f59e0b); }
+  45%  { opacity: 0.85; transform: scale(1.0); filter: drop-shadow(0 0 8px #fbbf24); }
+  72%  { opacity: 0.45; transform: scale(1.28); filter: drop-shadow(0 0 4px #f59e0b); }
+  100% { opacity: 0; transform: scale(1.55); }
+}
+
+@keyframes gbaKangaskhanCometPunchStar {
+  0%   { opacity: 0; transform: scale(0.15) rotate(-12deg); }
+  25%  { opacity: 1; transform: scale(1.25) rotate(4deg); filter: drop-shadow(0 0 20px #f59e0b) drop-shadow(0 0 8px #fef08a); }
+  50%  { opacity: 0.9; transform: scale(1.05) rotate(8deg); filter: drop-shadow(0 0 12px #fef08a); }
+  75%  { opacity: 0.5; transform: scale(1.18) rotate(14deg); filter: drop-shadow(0 0 6px #f59e0b); }
+  100% { opacity: 0; transform: scale(1.35) rotate(20deg); }
+}
+
+@keyframes gbaKangaskhanCometPunchSpark {
+  0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+  22%  { opacity: 1; transform: translate(calc(var(--spk-x, 20px) * 0.4), calc(var(--spk-y, -20px) * 0.4)) scale(1.3); filter: drop-shadow(0 0 10px #fef08a); }
+  55%  { opacity: 0.85; transform: translate(calc(var(--spk-x, 20px) * 0.8), calc(var(--spk-y, -20px) * 0.8)) scale(0.9); filter: drop-shadow(0 0 5px #f59e0b); }
+  100% { opacity: 0; transform: translate(calc(var(--spk-x, 20px) * 1.3), calc(var(--spk-y, -20px) * 1.3)) scale(0.2); }
+}
+
+@keyframes gbaKangaskhanCometPunchDust {
+  0%   { opacity: 0; transform: translateY(26px) scale(0.35); }
+  28%  { opacity: 0.85; transform: translateY(24px) scale(1.0); filter: drop-shadow(0 0 6px rgba(251,191,36,0.4)); }
+  65%  { opacity: 0.5; transform: translateY(22px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(19px) scale(1.4); }
 }
 
 @keyframes gbaKangaskhanFetch {
@@ -13768,7 +14048,13 @@ html, body {
 @keyframes gbaGrowlitheActorPounce {
   0% {
     opacity: 0;
-    transform: translate(-10px, 8px) rotate(-4deg) scale(0.85);
+    transform: translate(-12px, 10px) rotate(-5deg) scale(0.82);
+  }
+  6% {
+    /* Pounce anticipation crouch: haunches compress, coiling energy (§8.I) */
+    opacity: 0.9;
+    transform: translate(-10px, 12px) rotate(-6deg) scaleY(0.86) scaleX(1.06);
+    filter: drop-shadow(0 0 10px rgba(249,115,22,0.55));
   }
   12% {
     opacity: 1;
@@ -13800,37 +14086,54 @@ html, body {
   }
 }
 
+/* §8.M: Torrent is a CHILD of the actor layer and inherits its pounce transform.
+   Pure volumetric growth from transform-origin '15% 85%' — no translate.
+   Peak scale 1.22 (ratio 1.22/1.08 = 1.13 < 3.0 §8.M budget); full-opacity window 32%–60%.
+   Beam/burst accents delayed to 0.95s/0.85s (arrive after the 0.81s peak, §8.N).
+   Rotate flattened by ~15° (-9°→-17° instead of -24°→-32°): the anchor sits at eye level,
+   so the gentler tilt makes the cone read as a forward-swept breath rather than a steep
+   upward plume, keeping the accidental "eye-breath" look aesthetically coherent. */
 @keyframes gbaGrowlitheMouthTorrent {
-  0% {
+  0%, 8% {
     opacity: 0;
-    transform: scale(0.15) rotate(-16deg);
+    transform: scale(0.06) rotate(-9deg);
   }
   14% {
-    opacity: 0.95;
-    transform: scale(0.42) rotate(-15deg);
+    opacity: 0.9;
+    transform: scale(0.34) rotate(-8deg);
     filter: brightness(2.0) drop-shadow(0 0 12px #ffffff);
   }
-  28% {
+  22% {
     opacity: 1;
-    transform: scale(0.96) translate(8px, -8px) rotate(-18deg);
+    transform: scale(0.66) rotate(-7deg);
+    filter: brightness(1.7) drop-shadow(0 0 18px #fef08a);
+  }
+  32% {
+    opacity: 1;
+    transform: scale(0.95) rotate(-10deg);
     filter: brightness(1.55) drop-shadow(0 0 26px #f97316) drop-shadow(0 0 16px #fde047);
   }
   46% {
     opacity: 1;
-    transform: scale(1.08) translate(14px, -14px) rotate(-20deg);
-    filter: brightness(1.35) drop-shadow(0 0 22px #ea580c);
+    transform: scale(1.16) rotate(-13deg);
+    filter: brightness(1.4) drop-shadow(0 0 24px #ea580c);
   }
-  68% {
-    opacity: 0.85;
-    transform: scale(1.15) translate(18px, -18px) rotate(-22deg);
+  60% {
+    opacity: 1;
+    transform: scale(1.22) rotate(-14deg);
+    filter: brightness(1.3) drop-shadow(0 0 20px #ea580c);
   }
-  86% {
-    opacity: 0.45;
-    transform: scale(1.20) translate(22px, -22px) rotate(-23deg);
+  75% {
+    opacity: 0.8;
+    transform: scale(1.22) rotate(-15deg);
+  }
+  88% {
+    opacity: 0.4;
+    transform: scale(1.2) rotate(-16deg);
   }
   100% {
     opacity: 0;
-    transform: scale(1.24) translate(24px, -24px) rotate(-24deg);
+    transform: scale(1.14) rotate(-17deg);
     filter: blur(3px);
   }
 }
@@ -13917,6 +14220,7 @@ html, body {
   }
 }
 
+/* Cinder duration 1.5s→1.3s: last cinder delay(0.46)+1.3=1.76s ≈ 1.75s envelope (§8.K) */
 @keyframes gbaGrowlitheTrailingCinder {
   0% {
     transform: translate(0, 0) scale(0.3);
@@ -13942,16 +14246,38 @@ html, body {
     opacity: 0;
     transform: translate(-10px, 8px) scale(0.8);
   }
-  35% {
+  18% {
+    /* Aborted crouch: pounce winds up but stalls */
+    opacity: 0.65;
+    transform: translate(-6px, 10px) rotate(-3deg) scaleY(0.88) scaleX(1.04);
+    filter: blur(1px);
+  }
+  38% {
+    /* Stumble forward without ignition */
     opacity: 0.75;
-    transform: translate(4px, 2px) scale(0.88);
+    transform: translate(6px, 4px) rotate(2deg) scale(0.88);
     filter: blur(1.5px);
+  }
+  62% {
+    opacity: 0.5;
+    transform: translate(8px, 5px) rotate(1deg) scale(0.84);
+    filter: blur(2.5px);
   }
   100% {
     opacity: 0;
-    transform: translate(8px, 6px) scale(0.82);
+    transform: translate(10px, 8px) scale(0.78);
     filter: blur(4px);
   }
+}
+
+/* Hit-only: 2px screen shake at combustion detonation moment (§8.F priority 3) */
+@keyframes gbaGrowlitheHitShake {
+  0%   { transform: translate(0, 0); }
+  20%  { transform: translate(2px, -1px); }
+  40%  { transform: translate(-2px, 1px); }
+  60%  { transform: translate(1px, -1px); }
+  80%  { transform: translate(-1px, 1px); }
+  100% { transform: translate(0, 0); }
 }
 
 

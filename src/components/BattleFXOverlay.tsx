@@ -187,6 +187,7 @@ export interface ActiveFX {
     | 'squirtle_shell_defense'
     | 'pikachu_thunder_jolt'
     | 'charmander_ember_flame'
+    | 'charmander_fire_tail_whip'
     | 'ekans_wrap_constrict'
     | 'ekans_poison_sting'
     | 'dratini_tail_wrap'
@@ -745,6 +746,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if ((name.includes('continuous fireball') || name.includes('fireball')) && pkm.includes('charizard')) return 'dark_charizard_fireball';
   if (name.includes('continuous fireball') || name.includes('fireball')) return 'fireball_barrage';
   if (name.includes('playing with fire')) return 'playing_with_fire';
+  if (name.includes('fire tail') && pokemonCard.id === 'tr-50') return 'charmander_fire_tail_whip';
   if ((name.includes('ember') || name.includes('fire tail')) && pkm.includes('charmander')) return 'charmander_ember_flame';
   if (name.includes('ember')) return 'ember_spark';
   if (name.includes('flame tail') || name.includes('fire tail')) return 'flame_tail_whip';
@@ -1156,6 +1158,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1650;
     case 'charmander_ember_flame':
       return 1600;
+    case 'charmander_fire_tail_whip':
+      return 1850;
     case 'ekans_wrap_constrict':
       return 1750;
     case 'ekans_poison_sting':
@@ -1221,7 +1225,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'lickitung_supersonic':
       return 1650;
     case 'kangaskhan_comet_punch':
-      return 1300;
+      return 620;
     case 'kangaskhan_fetch':
       return 1200;
     case 'tauros_stomp':
@@ -1439,7 +1443,7 @@ export function getSlashPalette(pokemonName = '', attackerType = ''): SlashPalet
  */
 const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'arbok_poison_fang', 'arbok_wrap_constrict', 'beedrill_twineedle', 'bulbasaur_leech_seed', 'bulbasaur_leech_replenish', 'caterpie_string_shot',
-  'charmander_ember_flame', 'claw_pinch', 'clefairy_metronome', 'cloyster_clamp', 'cobra_stare',
+  'charmander_ember_flame', 'charmander_fire_tail_whip', 'claw_pinch', 'clefairy_metronome', 'cloyster_clamp', 'cobra_stare',
   'crab_hammer_slam', 'cubone_bone_strike', 'doubleslap', 'dragon_rage', 'dugtrio_earthquake',
   'ekans_wrap_constrict', 'exeggutor_big_eggsplosion', 'farfetchd_leek_slap', 'fearow_drill_peck',
   'fish_flail', 'gengar_dark_mind', 'golbat_leech_life', 'haunter_dream_eater', 'hitmonchan_jab',
@@ -1449,7 +1453,7 @@ const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'scyther_blade_dance', 'snorlax_body_slam', 'squirtle_shell_defense', 'star_freeze',
   'starfish_slap', 'super_fang_guillotine', 'super_potion', 'tauros_rampage', 'tauros_stomp',
   'thunder_punch', 'victreebel_acid_melt', 'weedle_poison_sting', 'weezing_toxic_smog',
-  'rattata_quick_attack'
+  'rattata_quick_attack', 'kangaskhan_comet_punch'
 ]);
 
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
@@ -1474,12 +1478,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
   // SVG moves when whiffed scale down to 68.1% (0.681) with a subtle glancing offset/tilt
   let containerTransform: string | undefined = undefined;
   if (isWhiffedSvg) {
-    if (fx.mirrored && fx.type !== 'slash') {
+    if (fx.mirrored && fx.type !== 'slash' && fx.type !== 'kangaskhan_comet_punch') {
       containerTransform = 'translate(6px, -4px) scaleX(-0.681) scaleY(0.681) rotate(-2.5deg)';
     } else {
       containerTransform = 'translate(6px, -4px) scale(0.681) rotate(2.5deg)';
     }
-  } else if (fx.mirrored && fx.type !== 'slash') {
+  } else if (fx.mirrored && fx.type !== 'slash' && fx.type !== 'kangaskhan_comet_punch') {
     containerTransform = 'scaleX(-1)';
   }
 
@@ -3680,7 +3684,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
       {/* 12b. FLARE BURST (Growlithe — Ken Sugimori Pouncing Ignition, Mouth-Locked Fire Jet & Contained Detonation) */}
       {fx.type === 'flare_burst' && (
-        <div className="card-fx-block-overlay rounded-xl overflow-hidden pointer-events-none z-40 flex items-center justify-center">
+        <div className="card-fx-block-overlay rounded-xl overflow-hidden pointer-events-none z-40 flex items-center justify-center" style={{ animation: fx.whiffed ? 'none' : 'gbaGrowlitheHitShake 0.12s linear 0.5s 1' }}>
           {/* Layer 1: Directional Scorch Trail across Card Floor */}
           <div
             className="absolute pointer-events-none z-10 rounded-full"
@@ -3713,72 +3717,79 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               alt="Growlithe Flare Pounce"
               className="w-full h-full object-contain filter drop-shadow-[0_0_14px_rgba(249,115,22,0.85)] drop-shadow-[0_0_24px_rgba(254,240,138,0.5)]"
             />
-          </div>
+            {/* Layer 3 (mouth-locked, §8.M): Roaring Conical Flame Torrent nested INSIDE the actor layer.
+                It inherits the actor's pounce transform, so the flame stays anchored to the mouth for the
+                whole ascent instead of lagging over the mane. Pure volumetric growth (no translate) radiates
+                from transform-origin '15% 85%' (mouth ignition point): tiny bud at ignition (8%, synced with
+                the actor's 12% launch), blooming diagonally upward as Growlithe rises. z-30 keeps the jet
+                readable above the sprite while the capped 1.05 scale prevents mane blanketing. */}
+            {!fx.whiffed && (
+              <div
+                className="absolute pointer-events-none z-30 overflow-visible"
+                style={{
+                  left: '55%',
+                  bottom: '55%',
+                  width: '120px',
+                  height: '120px',
+                  transformOrigin: '15% 85%',
+                  animation: 'gbaGrowlitheMouthTorrent 1.75s cubic-bezier(0.18, 0.88, 0.28, 1) forwards'
+                }}
+              >
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_24px_#f97316]">
+                    <defs>
+                      <linearGradient id="growlitheTorrentGrad" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                        <stop offset="25%" stopColor="#fef08a" stopOpacity="0.95" />
+                        <stop offset="55%" stopColor="#f97316" stopOpacity="0.9" />
+                        <stop offset="85%" stopColor="#ea580c" stopOpacity="0.85" />
+                        <stop offset="100%" stopColor="#b91c1c" stopOpacity="0" />
+                      </linearGradient>
+                      <linearGradient id="growlithePlasmaCoreGrad" x1="0" y1="1" x2="0" y2="0">
+                        <stop offset="0%" stopColor="#ffffff" />
+                        <stop offset="50%" stopColor="#fde047" />
+                        <stop offset="100%" stopColor="#f97316" />
+                      </linearGradient>
+                    </defs>
 
-          {/* Layer 3: Mouth-Originating Roaring Conical Flame Torrent (Focused & Contained within Card) */}
-          {!fx.whiffed && (
-            <div
-              className="absolute pointer-events-none z-30 overflow-visible"
-              style={{
-                left: '29%',
-                bottom: '33%',
-                animation: 'gbaGrowlitheMouthTorrent 1.75s cubic-bezier(0.18, 0.88, 0.28, 1) forwards'
-              }}
-            >
-              <div className="relative w-24 h-24 flex items-center justify-center">
-                <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_24px_#f97316]">
-                  <defs>
-                    <linearGradient id="growlitheTorrentGrad" x1="0" y1="1" x2="0" y2="0">
-                      <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                      <stop offset="25%" stopColor="#fef08a" stopOpacity="0.95" />
-                      <stop offset="55%" stopColor="#f97316" stopOpacity="0.9" />
-                      <stop offset="85%" stopColor="#ea580c" stopOpacity="0.85" />
-                      <stop offset="100%" stopColor="#b91c1c" stopOpacity="0" />
-                    </linearGradient>
-                    <linearGradient id="growlithePlasmaCoreGrad" x1="0" y1="1" x2="0" y2="0">
-                      <stop offset="0%" stopColor="#ffffff" />
-                      <stop offset="50%" stopColor="#fde047" />
-                      <stop offset="100%" stopColor="#f97316" />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Broad Expanding Conical Flame Torrent */}
-                  <path
-                    d="M 12,85 C 24,70 45,55 68,38 C 88,22 96,12 98,6 C 85,18 70,38 52,62 C 35,80 20,90 12,85 Z"
-                    fill="url(#growlitheTorrentGrad)"
-                  />
-
-                  {/* Upper Swirling Thermal Tongue */}
-                  <g style={{ animation: 'gbaGrowlitheFlameWav1 0.45s ease-in-out infinite alternate', transformOrigin: '20px 75px' }}>
+                    {/* Broad Expanding Conical Flame Torrent */}
                     <path
-                      d="M 16,80 C 28,62 50,45 74,28 C 86,18 90,12 85,16 C 72,32 55,54 36,74 C 25,84 18,85 16,80 Z"
-                      fill="#f97316"
-                      opacity="0.92"
+                      d="M 12,85 C 24,70 45,55 68,38 C 88,22 96,12 98,6 C 85,18 70,38 52,62 C 35,80 20,90 12,85 Z"
+                      fill="url(#growlitheTorrentGrad)"
                     />
-                  </g>
 
-                  {/* Lower Swirling Thermal Tongue */}
-                  <g style={{ animation: 'gbaGrowlitheFlameWav2 0.5s ease-in-out infinite alternate', transformOrigin: '20px 75px' }}>
+                    {/* Upper Swirling Thermal Tongue */}
+                    <g style={{ animation: 'gbaGrowlitheFlameWav1 0.45s ease-in-out infinite alternate', transformOrigin: '20px 75px' }}>
+                      <path
+                        d="M 16,80 C 28,62 50,45 74,28 C 86,18 90,12 85,16 C 72,32 55,54 36,74 C 25,84 18,85 16,80 Z"
+                        fill="#f97316"
+                        opacity="0.92"
+                      />
+                    </g>
+
+                    {/* Lower Swirling Thermal Tongue */}
+                    <g style={{ animation: 'gbaGrowlitheFlameWav2 0.5s ease-in-out infinite alternate', transformOrigin: '20px 75px' }}>
+                      <path
+                        d="M 20,84 C 32,72 54,58 80,42 C 92,34 96,30 90,34 C 76,48 58,66 40,82 C 30,90 22,88 20,84 Z"
+                        fill="#ea580c"
+                        opacity="0.9"
+                      />
+                    </g>
+
+                    {/* Incandescent Plasma Throat Core */}
                     <path
-                      d="M 20,84 C 32,72 54,58 80,42 C 92,34 96,30 90,34 C 76,48 58,66 40,82 C 30,90 22,88 20,84 Z"
-                      fill="#ea580c"
-                      opacity="0.9"
+                      d="M 14,83 C 22,72 36,60 50,48 C 60,40 65,35 60,39 C 50,50 38,64 26,78 C 18,86 15,86 14,83 Z"
+                      fill="url(#growlithePlasmaCoreGrad)"
+                      opacity="0.98"
                     />
-                  </g>
 
-                  {/* Incandescent Plasma Throat Core */}
-                  <path
-                    d="M 14,83 C 22,72 36,60 50,48 C 60,40 65,35 60,39 C 50,50 38,64 26,78 C 18,86 15,86 14,83 Z"
-                    fill="url(#growlithePlasmaCoreGrad)"
-                    opacity="0.98"
-                  />
-
-                  {/* Mouth Ignition Spark Point */}
-                  <ellipse cx="15" cy="82" rx="5" ry="8" fill="#ffffff" filter="drop-shadow(0 0 10px #ffffff)" transform="rotate(-30 15 82)" />
-                </svg>
+                    {/* Mouth Ignition Spark Point */}
+                    <ellipse cx="15" cy="82" rx="5" ry="8" fill="#ffffff" filter="drop-shadow(0 0 10px #ffffff)" transform="rotate(-30 15 82)" />
+                  </svg>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Layer 3: Diagonal Anamorphic Lens Flare Beam & Diamond Ignition Core (Proportioned to Card Width) */}
           {!fx.whiffed && (
@@ -3787,7 +3798,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 left: '38%',
                 top: '26%',
-                animation: 'gbaGrowlitheDiagonalBeam 1.2s ease-out 0.18s forwards',
+                /* Delayed to 0.95s so the beam accents AFTER the flame's 0.81s peak instead of blanketing it */
+                animation: 'gbaGrowlitheDiagonalBeam 0.6s ease-out 0.95s forwards',
                 opacity: 0
               }}
             >
@@ -3818,7 +3830,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 left: '38%',
                 top: '22%',
-                animation: 'gbaGrowlitheCombustionBurst 1.4s ease-out 0.22s forwards',
+                /* Delayed to 0.85s so the burst lands after the flame's full-opacity window (30%–60%) */
+                animation: 'gbaGrowlitheCombustionBurst 0.8s ease-out 0.85s forwards',
                 opacity: 0
               }}
             >
@@ -3884,14 +3897,13 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </div>
           )}
 
-          {/* Layer 5: Trailing Mane & Paw Cinders (Slipstream Ballistics) */}
+          {/* Layer 5: Trailing Mane & Paw Cinders (Slipstream Ballistics, §8.J: 5 causal-spaced particles) */}
           {!fx.whiffed && [
             { x: -24, y: 18, del: 0.12, sz: 3.5, col: '#ffffff' },
-            { x: -18, y: 28, del: 0.18, sz: 4.0, col: '#fef08a' },
-            { x: -30, y: 12, del: 0.24, sz: 3.0, col: '#fde047' },
-            { x: -14, y: 32, del: 0.30, sz: 3.5, col: '#f97316' },
-            { x: -28, y: 22, del: 0.36, sz: 3.0, col: '#ea580c' },
-            { x: -20, y: 36, del: 0.42, sz: 3.5, col: '#fef08a' }
+            { x: -18, y: 28, del: 0.22, sz: 4.0, col: '#fef08a' },
+            { x: -30, y: 12, del: 0.34, sz: 3.0, col: '#fde047' },
+            { x: -14, y: 32, del: 0.40, sz: 3.5, col: '#f97316' },
+            { x: -26, y: 22, del: 0.46, sz: 3.0, col: '#ea580c' }
           ].map((cnd, cidx) => (
             <div
               key={`flare-cinder-${cidx}`}
@@ -3901,7 +3913,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 bottom: '26%',
                 '--cnd-x': `${cnd.x}px`,
                 '--cnd-y': `${cnd.y}px`,
-                animation: `gbaGrowlitheTrailingCinder 1.5s ease-out ${cnd.del}s forwards`,
+                animation: `gbaGrowlitheTrailingCinder 1.3s cubic-bezier(0.22, 1, 0.36, 1) ${cnd.del}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
@@ -10837,9 +10849,215 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
+      {/* 20au. CHARMANDER FIRE TAIL WHIP (Team Rocket Charmander tr-50 — Pivot Spin Actor, Crescent Trace & Cinder Scatter) */}
+      {fx.type === 'charmander_fire_tail_whip' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible" style={{ animation: fx.whiffed ? 'none' : 'gbaCharmanderHitShake 0.12s linear 0.72s 1' }}>
+          {/* Layer 1: Pivot Scorch Ring (organic Bézier lobes — no dashed mechanical circles) */}
+          <div
+            className="absolute pointer-events-none z-10"
+            style={{
+              left: '50%',
+              top: '64%',
+              transform: 'translate(-50%, -50%)',
+              animation: 'gbaCharmanderTailScorchRing 1.75s ease-out forwards'
+            }}
+          >
+            <svg width="118" height="44" viewBox="0 0 118 44" className="overflow-visible select-none">
+              <defs>
+                <radialGradient id="cftScorchGrad" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.75" />
+                  <stop offset="28%" stopColor="#fef08a" stopOpacity="0.6" />
+                  <stop offset="58%" stopColor="#f97316" stopOpacity="0.42" />
+                  <stop offset="85%" stopColor="#dc2626" stopOpacity="0.2" />
+                  <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              <path
+                d="M 59 4 C 84 2, 108 10, 112 22 C 116 34, 92 42, 59 41 C 26 42, 2 34, 6 22 C 10 10, 34 2, 59 4 Z"
+                fill="url(#cftScorchGrad)"
+                filter="blur(3px)"
+              />
+            </svg>
+          </div>
+
+          {/* Layer 6: Heat shimmer distortion halo behind actor (§8.F priority 1) — hit only */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                left: '50%',
+                top: '52%',
+                width: '128px',
+                height: '100px',
+                zIndex: 15,
+                borderRadius: '50%',
+                backdropFilter: 'blur(1.5px)',
+                animation: 'gbaCharmanderHeatShimmer 1.4s ease-out 0.2s forwards',
+                opacity: 0
+              }}
+            />
+          )}
+
+          {/* Layer 2: Primary Visual Actor (measured pivot 35% 88%, 112x89px base — §7.B, peak 121px Tier-1) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{
+              left: '50%',
+              top: '52%',
+              width: '112px',
+              height: '89px',
+              transformOrigin: '35% 88%',
+              animation: fx.whiffed
+                ? 'gbaCharmanderTailWhiffStumble 1.75s ease-out forwards'
+                : 'gbaCharmanderTailSpinActor 1.75s cubic-bezier(0.18, 0.92, 0.28, 1) forwards'
+            }}
+          >
+            <img
+              src="/assets/Charmander_Fire_Tail_Whip.png"
+              alt="Charmander Fire Tail Whip"
+              className="w-full h-full object-contain filter drop-shadow-[0_0_16px_rgba(249,115,22,0.85)] drop-shadow-[0_0_9px_rgba(254,240,138,0.55)] select-none pointer-events-none"
+              draggable={false}
+            />
+          </div>
+
+          {/* Layer 3a: Crescent Sweep Trace (pathLength 100 — sweep reach told by trail, not actor scale, §7.E) */}
+          <div
+            className="absolute pointer-events-none z-35"
+            style={{ left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+          >
+            <svg width="126" height="100" viewBox="0 0 126 100" className="overflow-visible select-none">
+              <defs>
+                <linearGradient id="cftCrescentGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#7f1d1d" stopOpacity="0.15" />
+                  <stop offset="35%" stopColor="#f97316" stopOpacity="0.85" />
+                  <stop offset="70%" stopColor="#fef08a" />
+                  <stop offset="100%" stopColor="#ffffff" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M 14 78 C 6 48, 26 16, 62 10 C 92 5, 114 22, 118 46"
+                fill="none"
+                stroke="url(#cftCrescentGrad)"
+                strokeWidth="7"
+                strokeLinecap="round"
+                pathLength={100}
+                strokeDasharray="100"
+                style={{
+                  animation: fx.whiffed
+                    ? 'gbaCharmanderCrescentWhiff 1.75s cubic-bezier(0.22, 0.9, 0.3, 1) forwards'
+                    : 'gbaCharmanderCrescentTrace 1.75s cubic-bezier(0.22, 0.9, 0.3, 1) forwards',
+                  filter: 'drop-shadow(0 0 8px #f97316) drop-shadow(0 0 14px #dc2626)',
+                  opacity: 0
+                }}
+              />
+            </svg>
+          </div>
+
+          {/* Layer 3b: Impact Starburst at arc terminus (unconditionally suppressed on whiff) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-35 flex items-center justify-center"
+              style={{
+                left: '70%',
+                top: '40%',
+                transform: 'translate(-50%, -50%)',
+                animation: 'gbaCharmanderTailBurst 1.75s cubic-bezier(0.16, 0.85, 0.25, 1) forwards'
+              }}
+            >
+              <svg width="64" height="64" viewBox="0 0 64 64" className="overflow-visible select-none">
+                <defs>
+                  <radialGradient id="cftBurstGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="30%" stopColor="#fef08a" stopOpacity="0.95" />
+                    <stop offset="62%" stopColor="#f97316" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <circle cx="32" cy="32" r="26" fill="url(#cftBurstGrad)" />
+                <path
+                  d="M 32 4 C 35 20, 44 29, 60 32 C 44 35, 35 44, 32 60 C 29 44, 20 35, 4 32 C 20 29, 29 20, 32 4 Z"
+                  fill="#fef08a"
+                  opacity="0.9"
+                />
+                <circle cx="32" cy="32" r="7" fill="#ffffff" />
+              </svg>
+            </div>
+          )}
+
+          {/* Layer 4: Tangential Cinder Ejecta (three independent vectors, suppressed on whiff) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-35"
+              style={{ left: '50%', top: '40%' }}
+            >
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="absolute pointer-events-none"
+                  style={{
+                    animation: `gbaCharmanderCinderArc${i + 1} 1.75s cubic-bezier(0.2, 0.85, 0.3, 1) ${[0.12, 0.22, 0.34][i]}s forwards`,
+                    opacity: 0
+                  }}
+                >
+                  <svg width="18" height="10" viewBox="0 0 18 10" className="overflow-visible select-none">
+                    <defs>
+                      <linearGradient id={`cftCinderGrad${i}`} x1="1" y1="0" x2="0" y2="0">
+                        <stop offset="0%" stopColor="#ffffff" />
+                        <stop offset="40%" stopColor="#fef08a" />
+                        <stop offset="100%" stopColor="#ea580c" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                    <path d="M 16 5 C 12 8, 6 9, 1 5 C 6 1, 12 2, 16 5 Z" fill={`url(#cftCinderGrad${i})`} />
+                    <circle cx="15" cy="5" r="2.4" fill="#ffffff" style={{ filter: 'drop-shadow(0 0 6px #facc15)' }} />
+                  </svg>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Layer 5: Rising Ember Motes (ambient dissipation; envelope-safe: 1.0s + max 0.57s delay < 1.75s) */}
+          <div
+            className="absolute pointer-events-none z-20"
+            style={{ left: '46%', top: '58%' }}
+          >
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="absolute rounded-full pointer-events-none"
+                style={{
+                  width: i % 2 === 0 ? 4 : 3,
+                  height: i % 2 === 0 ? 4 : 3,
+                  left: i * 9,
+                  background: 'radial-gradient(circle, #ffffff 0%, #fef08a 45%, rgba(249,115,22,0) 75%)',
+                  boxShadow: '0 0 6px #f97316',
+                  animation: `gbaCharmanderTailMote 1.0s ease-out ${(0.25 + i * 0.08).toFixed(2)}s forwards`,
+                  opacity: 0
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Whiff-only: sputtering organic smoke puff at the halted arc tip (§3.C / §7.F) */}
+          {fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-25 rounded-full"
+              style={{
+                left: '62%',
+                top: '46%',
+                width: '34px',
+                height: '26px',
+                background:
+                  'radial-gradient(ellipse at center, rgba(148,163,184,0.5) 0%, rgba(100,116,139,0.32) 55%, rgba(51,65,85,0) 100%)',
+                animation: 'gbaCharmanderWhiffPuff 1.75s ease-out forwards'
+              }}
+            />
+          )}
+        </div>
+      )}
+
       {/* 20av. CHARMANDER EMBER FLAME (Charmander Lv. 10 — Full-Body 1996 Ken Sugimori Lunge & Kinetic Ember Burst) */}
       {fx.type === 'charmander_ember_flame' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible" style={{ animation: fx.whiffed ? 'none' : 'gbaCharmanderEmberHitShake 0.12s linear 0.42s 1' }}>
           {/* Layer 1: Scorched Ground Magma Aura Floor (Foot stance to target trail) */}
           <div
             className="absolute pointer-events-none z-10 rounded-full"
@@ -11047,11 +11265,11 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </div>
           )}
 
-          {/* Layer 5: Ascending Convection Carbon Cinders */}
+          {/* Layer 5: Ascending Convection Carbon Cinders (§8.J: 5 causal-spaced, §8.K: max delay+dur ≤ 1.6s) */}
           {!fx.whiffed && [
             { x: '-28px', y: '-36px' }, { x: '32px', y: '-42px' },
             { x: '-18px', y: '18px' },  { x: '26px', y: '22px' },
-            { x: '-6px',  y: '-48px' }, { x: '16px', y: '-56px' }
+            { x: '-6px',  y: '-48px' }
           ].map((p, i) => (
             <div
               key={`cm-cind-${i}`}
@@ -11061,7 +11279,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 top: '42%',
                 '--cm-x': p.x,
                 '--cm-y': p.y,
-                animation: `gbaCharmanderCinders 1.6s ease-out ${0.36 + i * 0.08}s forwards`,
+                animation: `gbaCharmanderCinders 1.1s cubic-bezier(0.22, 1, 0.36, 1) ${[0.18, 0.26, 0.34, 0.42, 0.50][i]}s forwards`,
                 opacity: 0
               } as React.CSSProperties}
             >
@@ -11251,9 +11469,9 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             }}
           >
             <img
-              src="/assets/Dratini_Wrap.png"
+              src="/assets/raw/Dratini_raw_edited_001.png"
               alt="Dratini Wrap"
-              className={`${fx.whiffed ? 'w-[64px] h-[64px]' : 'w-[104px] h-[104px]'} object-contain drop-shadow-[0_0_20px_#38bdf8] select-none pointer-events-none`}
+              className={`${fx.whiffed ? 'w-[111px] h-[111px]' : 'w-[180px] h-[180px]'} object-contain drop-shadow-[0_0_20px_#38bdf8] select-none pointer-events-none`}
             />
           </div>
 
@@ -13750,40 +13968,145 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20ca. KANGASKHAN COMET PUNCH (Rapid Sequential Boxing Flurry & Comet Trails) */}
+      {/* 20ca. KANGASKHAN COMET PUNCH — DoubleSlap × Hitmonchan Jab hybrid multi-hit flurry.
+            Per-coin beats (GameBoard generic branch): even beats = RIGHT fist, odd = LEFT fist;
+            tails beats whiffed with impact layers suppressed. 5-layer stock architecture:
+            comet wind wake → fist actor → ring/star → spark motes → floor dust. */}
       {fx.type === 'kangaskhan_comet_punch' && (() => {
         const wi = Math.max(1, fx.intensity ?? 1);
-        const isMirrored = Boolean(fx.mirrored);
+        const hand = fx.mirrored ? 'Left' : 'Right';
         return (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-            {/* Punching Glove with Flaming Comet Trail (<= 60% Card Width) */}
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+            style={fx.whiffed ? undefined : { animation: 'gbaKangaskhanCometPunchShake 0.2s linear 0.24s' }}
+          >
+            {/* Layer 1: Comet Tail Wind Wake (+40ms causal delay) */}
             <div
-              className="absolute pointer-events-none z-35"
-              style={{
-                '--kp-ox': isMirrored ? '26px' : '-26px',
-                '--kp-oy': isMirrored ? '-14px' : '16px',
-                '--kp-rot': isMirrored ? '15deg' : '-15deg',
-                animation: 'gbaKangaskhanCometPunch 1.3s cubic-bezier(0.18, 0.9, 0.3, 1) forwards'
-              } as React.CSSProperties}
+              className="absolute pointer-events-none z-10"
+              style={{ animation: `gbaKangaskhanCometPunchWind${hand} 0.62s ease-out 0.04s forwards`, opacity: 0 }}
             >
-              <svg width="52" height="52" viewBox="0 0 70 70" className="drop-shadow-[0_0_12px_#f97316]">
-                <path d="M 12 35 Q 26 28 42 35" stroke="#fbbf24" strokeWidth="4" strokeLinecap="round" opacity="0.8" />
-                <path d="M 8 42 Q 24 38 40 42" stroke="#f97316" strokeWidth="5" strokeLinecap="round" opacity="0.7" />
-                <circle cx="46" cy="35" r="16" fill="#ea580c" stroke="#7c2d12" strokeWidth="2.5" />
-                <ellipse cx="40" cy="26" rx="6" ry="5" fill="#f97316" stroke="#7c2d12" strokeWidth="2" />
-                <circle cx="50" cy="31" r="3" fill="#ffffff" opacity="0.9" />
+              <svg width="76" height="46" viewBox="0 0 76 46" className="overflow-visible">
+                <path d="M 6 11 Q 36 8 70 13" fill="none" stroke="#fbbf24" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+                <path d="M 0 23 Q 38 20 76 23" fill="none" stroke="#f97316" strokeWidth="4.2" strokeLinecap="round" opacity="0.95" />
+                <path d="M 8 35 Q 38 32 66 35" fill="none" stroke="#fdba74" strokeWidth="2.5" strokeLinecap="round" opacity="0.75" />
               </svg>
             </div>
 
-            {/* Comic Impact Stars */}
+            {/* Layer 2: Fist Actor (dedicated right/left PNG) — Tier 1 scale */}
             <div
-              className="absolute pointer-events-none z-30"
-              style={{ animation: 'gbaGuillotineFlash 1.1s ease-out 0.28s forwards', opacity: 0 }}
+              className="absolute flex items-center justify-center pointer-events-none z-20"
+              style={{
+                animation: fx.whiffed
+                  ? `gbaKangaskhanCometPunch${hand}Whiff 0.62s ease-out forwards`
+                  : `gbaKangaskhanCometPunch${hand} 0.62s cubic-bezier(0.22, 1, 0.36, 1) forwards`
+              }}
             >
-              <svg width={Math.round(54 * wi)} height={Math.round(54 * wi)} viewBox="0 0 60 60">
-                <polygon points="30,5 37,22 55,22 41,34 46,51 30,41 14,51 19,34 5,22 23,22" fill="#fde047" stroke="#ea580c" strokeWidth="2" />
-              </svg>
+              <img
+                src={`/assets/raw/Kangaskhan_cometpunch_${hand.toLowerCase()}fist.png`}
+                alt=""
+                className="select-none pointer-events-none object-contain"
+                style={{
+                  width: '124px',
+                  height: 'auto',
+                  filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.45)) drop-shadow(0 0 18px rgba(249,115,22,0.65))'
+                }}
+                draggable={false}
+              />
             </div>
+
+            {/* Layer 2b: Afterimage Ghost Trail (hit only, +50ms) */}
+            {!fx.whiffed && (
+              <div className="absolute flex items-center justify-center pointer-events-none z-10" style={{ opacity: 0.14 }}>
+                <div
+                  style={{
+                    animation: `gbaKangaskhanCometPunch${hand} 0.62s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards`,
+                    opacity: 0
+                  }}
+                >
+                  <img
+                    src={`/assets/raw/Kangaskhan_cometpunch_${hand.toLowerCase()}fist.png`}
+                    alt=""
+                    className="select-none pointer-events-none object-contain"
+                    style={{ width: '124px', height: 'auto' }}
+                    draggable={false}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Layer 3: Concentric Shockwave Rings + Incandescent Starburst Pop (hit only)
+                Ref: ANIMATION_DESIGN_SYSTEM.md §3 Layer 3 — starburst pop, cross-flash, concentric rings;
+                     §1.C — chromatic temperature hierarchy (white → lemon → amber) */}
+            {!fx.whiffed && (
+              <>
+                {/* 3a: Smooth concentric hydraulic shockwave rings (SVG ellipses — zero div-border hack) */}
+                <div
+                  className="absolute pointer-events-none z-25 flex items-center justify-center"
+                  style={{ animation: 'gbaKangaskhanCometPunchRing 0.44s cubic-bezier(0.16, 1, 0.3, 1) 0.30s forwards', opacity: 0 }}
+                >
+                  <svg width={Math.round(76 * wi)} height={Math.round(76 * wi)} viewBox="0 0 76 76" className="overflow-visible">
+                    <ellipse cx="38" cy="38" rx="32" ry="24" fill="none" stroke="#f59e0b" strokeWidth={2 * wi} opacity="0.85" />
+                    <ellipse cx="38" cy="38" rx="22" ry="16" fill="none" stroke="#fbbf24" strokeWidth={1.6 * wi} opacity="0.7" />
+                    <ellipse cx="38" cy="38" rx="13" ry="9" fill="none" stroke="#ffffff" strokeWidth={1.2 * wi} opacity="0.9" />
+                  </svg>
+                </div>
+                {/* 3b: 12-point incandescent starburst pop (chromatic hierarchy: white core → lemon → amber) */}
+                <div
+                  className="absolute flex items-center justify-center pointer-events-none z-30"
+                  style={{ animation: 'gbaKangaskhanCometPunchStar 0.42s cubic-bezier(0.15, 0.85, 0.35, 1) 0.24s forwards', opacity: 0 }}
+                >
+                  <svg width={Math.round(64 * wi)} height={Math.round(64 * wi)} viewBox="0 0 64 64" className="overflow-visible drop-shadow-[0_0_18px_#f59e0b]">
+                    {/* Outer 12-point amber starburst */}
+                    <polygon
+                      points="32,2 37,21 56,11 46,29 62,32 46,35 56,53 37,43 32,62 27,43 8,53 18,35 2,32 18,29 8,11 27,21"
+                      fill="#f97316"
+                      stroke="#b45309"
+                      strokeWidth="1.8"
+                      strokeLinejoin="round"
+                    />
+                    {/* Mid lemon glow starburst */}
+                    <polygon
+                      points="32,10 36,24 50,18 42,30 54,32 42,34 50,46 36,40 32,54 28,40 14,46 22,34 10,32 22,30 14,18 28,24"
+                      fill="#fef08a"
+                      stroke="#fde047"
+                      strokeWidth="0.8"
+                      strokeLinejoin="round"
+                    />
+                    {/* Core white-hot flash */}
+                    <circle cx="32" cy="32" r="6" fill="#ffffff" />
+                  </svg>
+                </div>
+              </>
+            )}
+
+            {/* Layer 4: Kinetic Spark Motes (hit only) */}
+            {!fx.whiffed && [
+              { x: -30, y: -22, c: '#ffffff' }, { x: 28, y: -26, c: '#fef08a' }, { x: -26, y: 20, c: '#f59e0b' },
+              { x: 32, y: 16, c: '#f43f5e' }, { x: -36, y: -2, c: '#fef08a' }, { x: 4, y: -32, c: '#fde047' }
+            ].map((spk, i) => (
+              <div key={i} className="absolute pointer-events-none z-40"
+                style={{ '--spk-x': `${spk.x}px`, '--spk-y': `${spk.y}px`,
+                  animation: `gbaKangaskhanCometPunchSpark 0.5s cubic-bezier(0.22, 1, 0.36, 1) ${0.32 + i * 0.04}s forwards`, opacity: 0 } as React.CSSProperties}
+              >
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: spk.c, boxShadow: `0 0 8px ${spk.c}` }} />
+              </div>
+            ))}
+
+            {/* Layer 5: Floor Friction Dust (hit only) */}
+            {!fx.whiffed && (
+              <div
+                className="absolute pointer-events-none z-10"
+                style={{ animation: 'gbaKangaskhanCometPunchDust 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.36s forwards', opacity: 0 }}
+              >
+                <svg width="64" height="36" viewBox="0 0 64 36" className="overflow-visible">
+                  {/* Multi-lobed organic dust cloud (§1.D — no rigid shapes) */}
+                  <path d="M8 22 Q14 12 24 16 Q30 8 38 14 Q46 10 52 18 Q58 14 56 22 Q60 28 50 28 Q44 34 34 30 Q24 36 16 28 Q8 30 8 22 Z"
+                    fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinejoin="round" opacity="0.6" />
+                  <path d="M18 20 Q24 14 32 18 Q40 12 44 20 Q48 18 46 24 Q42 28 34 26 Q26 30 20 24 Q16 26 18 20 Z"
+                    fill="none" stroke="#fbbf24" strokeWidth="1.4" strokeLinejoin="round" opacity="0.45" />
+                </svg>
+              </div>
+            )}
           </div>
         );
       })()}
@@ -15445,6 +15768,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {fx.type === 'potion' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40"
           style={fx.slot === 'bench' ? { transform: 'scale(0.7)' } : undefined}>
+          {/* Vitality shudder: gentle GBA-style card tremor conveying life restored (§8.F priority 4) */}
+          <div style={{ animation: 'gbaPotionVitalityShudder 0.6s ease-out 0.35s 1' }}>
           <div
             className="relative flex flex-col items-center justify-center"
             style={{ animation: 'gbaPotionCardHolo 1.4s ease-out forwards' }}
@@ -15475,6 +15800,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <span className="text-xs font-black text-white">+20</span>
             </div>
           </div>
+          </div>
         </div>
       )}
 
@@ -15482,6 +15808,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {fx.type === 'super_potion' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40"
           style={fx.slot === 'bench' ? { transform: 'scale(0.7)' } : undefined}>
+          {/* Vitality shudder: gentle GBA-style card tremor conveying life restored (§8.F priority 4) */}
+          <div style={{ animation: 'gbaPotionVitalityShudder 0.6s ease-out 0.35s 1' }}>
           <div
             className="relative flex flex-col items-center justify-center"
             style={{ animation: 'gbaSuperPotionCardHolo 1.4s ease-out forwards' }}
@@ -15511,6 +15839,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div className="absolute -top-3 -right-6 w-9 h-9 rounded-full bg-emerald-400/90 flex items-center justify-center animate-ping border-2 border-emerald-200">
               <span className="text-xs font-black text-white">+40</span>
             </div>
+          </div>
           </div>
         </div>
       )}

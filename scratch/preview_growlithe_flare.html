@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Growlithe - Flare Burst (Pouncing Ignition Preview)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #080b11; color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 20px; }
+    header { text-align: center; margin-bottom: 26px; }
+    h1 { font-size: 24px; color: #f97316; margin-bottom: 6px; }
+    p.subtitle { color: #94a3b8; font-size: 13px; max-width: 680px; line-height: 1.5; }
+    .panel { background: #0f172a; border: 1px solid #1e293b; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .panel-title { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+    .panel-tag { display: inline-block; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 9999px; margin-top: 4px; text-transform: uppercase; }
+    .tag-new { background: #9a3412; color: #ffedd5; border: 1px solid #f97316; }
+    .card-stage { width: 180px; height: 252px; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 2px solid #334155; border-radius: 12px; position: relative; overflow: hidden; margin: 12px 0; }
+    .target-marker { position: absolute; top: 8px; right: 8px; font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+    .flare-overlay { position: absolute; inset: 0; pointer-events: none; }
+    .controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 12px; }
+    .controls button { padding: 8px 14px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; background: #f97316; color: #fff; transition: all 0.2s; }
+    .controls button:hover { background: #ea580c; transform: translateY(-1px); }
+    .controls button.secondary { background: #334155; color: #94a3b8; }
+    .controls button.secondary:hover { background: #475569; }
+    .controls button.active { background: #16a34a; color: #fff; }
+    .layers-breakdown { margin-top: 14px; width: 100%; }
+    .layer-item { font-size: 11px; color: #94a3b8; padding: 4px 8px; border-left: 3px solid #f97316; margin-bottom: 4px; background: rgba(249,115,22,0.06); border-radius: 0 4px 4px 0; }
+    .layer-num { color: #f97316; font-weight: 700; margin-right: 6px; }
+    @keyframes gbaGrowlitheActorPounce {
+      0% { opacity: 0; transform: translate(-12px, 10px) rotate(-5deg) scale(0.82); }
+      6% { opacity: 0.9; transform: translate(-10px, 12px) rotate(-6deg) scaleY(0.86) scaleX(1.06); filter: drop-shadow(0 0 10px rgba(249,115,22,0.55)); }
+      12% { opacity: 1; transform: translate(-4px, 4px) rotate(-2deg) scale(0.96); filter: drop-shadow(0 0 14px #f97316) brightness(1.25); }
+      28% { opacity: 1; transform: translate(18px, -16px) rotate(4deg) scale(1.08); filter: drop-shadow(0 0 22px #ea580c) drop-shadow(0 0 14px #fef08a) brightness(1.4); }
+      45% { opacity: 1; transform: translate(20px, -18px) rotate(3deg) scale(1.06); filter: drop-shadow(0 0 26px #dc2626) brightness(1.3); }
+      68% { opacity: 0.95; transform: translate(16px, -12px) rotate(1deg) scale(1.0); }
+      84% { opacity: 0.8; transform: translate(10px, -4px) rotate(0deg) scale(0.94); }
+      100% { opacity: 0; transform: translate(4px, 2px) rotate(0deg) scale(0.86); filter: blur(2px); }
+    }
+    @keyframes gbaGrowlitheFlareWhiff {
+      0% { opacity: 0; transform: translate(-10px, 8px) scale(0.8); }
+      18% { opacity: 0.65; transform: translate(-6px, 10px) rotate(-3deg) scaleY(0.88) scaleX(1.04); filter: blur(1px); }
+      38% { opacity: 0.75; transform: translate(6px, 4px) rotate(2deg) scale(0.88); filter: blur(1.5px); }
+      62% { opacity: 0.5; transform: translate(8px, 5px) rotate(1deg) scale(0.84); filter: blur(2.5px); }
+      100% { opacity: 0; transform: translate(10px, 8px) scale(0.78); filter: blur(4px); }
+    }
+    @keyframes gbaGrowlitheMouthTorrent {
+      0% { opacity: 0; transform: scale(0.15) rotate(-16deg); }
+      14% { opacity: 0.95; transform: scale(0.42) rotate(-15deg); filter: brightness(2.0) drop-shadow(0 0 12px #ffffff); }
+      28% { opacity: 1; transform: scale(0.96) translate(8px, -8px) rotate(-18deg); filter: brightness(1.55) drop-shadow(0 0 26px #f97316) drop-shadow(0 0 16px #fde047); }
+      46% { opacity: 1; transform: scale(1.08) translate(14px, -14px) rotate(-20deg); filter: brightness(1.35) drop-shadow(0 0 22px #ea580c); }
+      68% { opacity: 0.85; transform: scale(1.15) translate(18px, -18px) rotate(-22deg); }
+      86% { opacity: 0.45; transform: scale(1.20) translate(22px, -22px) rotate(-23deg); }
+      100% { opacity: 0; transform: scale(1.24) translate(24px, -24px) rotate(-24deg); filter: blur(3px); }
+    }
+    @keyframes gbaGrowlitheCombustionBurst {
+      0% { transform: scale(0.18) rotate(-18deg); opacity: 0; }
+      18% { transform: scale(0.65) rotate(-18deg); opacity: 1; filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 26px #fde047); }
+      38% { transform: scale(1.05) rotate(-20deg); opacity: 1; filter: drop-shadow(0 0 22px #f97316) drop-shadow(0 0 32px #ea580c); }
+      68% { transform: scale(1.18) rotate(-22deg); opacity: 0.65; }
+      88% { transform: scale(1.26) rotate(-24deg); opacity: 0.25; }
+      100% { transform: scale(1.30) rotate(-25deg); opacity: 0; }
+    }
+    @keyframes gbaGrowlitheTurfScorch {
+      0% { opacity: 0; transform: scale(0.4) rotate(-18deg); }
+      22% { opacity: 0.85; transform: scale(1.0) rotate(-18deg); }
+      65% { opacity: 0.6; transform: scale(1.12) rotate(-18deg); }
+      100% { opacity: 0; transform: scale(1.18) rotate(-18deg); }
+    }
+    @keyframes gbaGrowlitheTrailingCinder {
+      0% { transform: translate(0, 0) scale(0.3); opacity: 0; }
+      22% { transform: translate(calc(var(--cnd-x) * 0.35), calc(var(--cnd-y) * 0.35)) scale(1.15); opacity: 1; filter: drop-shadow(0 0 6px #fef08a); }
+      62% { transform: translate(calc(var(--cnd-x) * 0.75), calc(var(--cnd-y) * 0.75)) scale(0.85); opacity: 0.85; }
+      100% { transform: translate(var(--cnd-x), var(--cnd-y)) scale(0.2); opacity: 0; }
+    }
+    @keyframes gbaGrowlitheHitShake {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(2px, -1px); }
+      40% { transform: translate(-2px, 1px); }
+      60% { transform: translate(1px, -1px); }
+      80% { transform: translate(-1px, 1px); }
+      100% { transform: translate(0, 0); }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>&#128293; Growlithe Lv.22 — Flare Burst</h1>
+    <p class="subtitle">Ken Sugimori Pouncing Ignition: Mouth-Locked Fire Jet, Contained Shockwave &amp; Trailing Cinders. §8.I crouch anticipation, §8.J causal cinders, §8.K envelope compliance (1.75s).</p>
+  </header>
+  <div class="panel">
+    <div class="panel-title">Full-Body Sugimori Growlithe</div>
+    <span class="panel-tag tag-new">Current Implementation</span>
+    <div class="card-stage" id="stageNew">
+      <div class="target-marker">Defender</div>
+      <div class="flare-overlay" id="overlayNew"></div>
+    </div>
+    <div class="controls">
+      <button onclick="playNewFlare(false)">&#9654; Play Flare (1.75s)</button>
+      <button class="secondary" onclick="playNewFlare(true)">&#128168; Whiffed Mode</button>
+      <button class="secondary" id="btnLoop" onclick="toggleLoop()">&#128260; Loop</button>
+    </div>
+    <div class="layers-breakdown">
+      <div class="layer-item"><span class="layer-num">L1</span> Directional Scorch Trail</div>
+      <div class="layer-item"><span class="layer-num">L2</span> Pounce Actor (§8.I crouch @6%)</div>
+      <div class="layer-item"><span class="layer-num">L3</span> Mouth Conical Flame Torrent</div>
+      <div class="layer-item"><span class="layer-num">L4</span> Combustion Burst Shockwave</div>
+      <div class="layer-item"><span class="layer-num">L5</span> 5 Causal Trailing Cinders (§8.J/K)</div>
+    </div>
+  </div>
+  <script>
+    let loopInterval = null;
+    function renderFlare(w) {
+      const shake = w ? '' : 'animation: gbaGrowlitheHitShake 0.12s linear 0.5s 1;';
+      return '<div style="position:absolute;inset:0;pointer-events:none;' + shake + '">' +
+        renderScorch(w) + renderActor(w) + (w ? '' : renderTorrent() + renderBurst() + renderCinders()) + '</div>';
+    }
+    function renderScorch(w) {
+      return '<div style="position:absolute;z-index:10;border-radius:9999px;left:10%;bottom:22%;width:' + (w?'65px':'95px') + ';height:' + (w?'32px':'42px') + ';transform:rotate(-18deg);animation:gbaGrowlitheTurfScorch 1.7s ease-out forwards;background:radial-gradient(ellipse at center,rgba(249,115,22,0.5) 0%,rgba(239,68,68,0.3) 45%,rgba(185,28,28,0.12) 75%,transparent 100%);"></div>';
+    }
+    function renderActor(w) {
+      return '<div style="position:absolute;z-index:25;left:7%;bottom:18%;width:' + (w?'78px':'106px') + ';height:' + (w?'74px':'100px') + ';animation:' + (w?'gbaGrowlitheFlareWhiff 1.1s ease-out forwards':'gbaGrowlitheActorPounce 1.75s cubic-bezier(0.2,0.85,0.3,1) forwards') + ';"><img src="/assets/Growlithe_Flare_Pounce.png" alt="Growlithe" style="width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px rgba(249,115,22,0.85)) drop-shadow(0 0 24px rgba(254,240,138,0.5));"/></div>';
+    }
+    function renderTorrent() {
+      return '<div style="position:absolute;z-index:30;left:29%;bottom:33%;animation:gbaGrowlitheMouthTorrent 1.75s cubic-bezier(0.18,0.88,0.28,1) forwards;"><svg width="96" height="96" viewBox="0 0 100 100" style="overflow:visible;"><defs><linearGradient id="gT" x1="0" y1="1" x2="0" y2="0"><stop offset="0%" stop-color="#fff"/><stop offset="25%" stop-color="#fef08a" stop-opacity="0.95"/><stop offset="55%" stop-color="#f97316" stop-opacity="0.9"/><stop offset="100%" stop-color="#b91c1c" stop-opacity="0"/></linearGradient></defs><path d="M 50 92 C 30 72, 22 48, 30 24 C 38 8, 62 8, 70 24 C 78 48, 70 72, 50 92 Z" fill="url(#gT)" style="filter:drop-shadow(0 0 16px #f97316);"/></svg></div>';
+    }
+    function renderBurst() {
+      return '<div style="position:absolute;z-index:35;left:52%;top:28%;animation:gbaGrowlitheCombustionBurst 1.75s cubic-bezier(0.16,0.85,0.25,1) forwards;"><svg width="98" height="98" viewBox="0 0 98 98" style="overflow:visible;"><defs><radialGradient id="gH" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff" stop-opacity="0.9"/><stop offset="35%" stop-color="#fde047" stop-opacity="0.6"/><stop offset="100%" stop-color="#b91c1c" stop-opacity="0"/></radialGradient></defs><circle cx="49" cy="49" r="44" fill="url(#gH)"/><ellipse cx="49" cy="49" rx="42" ry="32" fill="none" stroke="#f97316" stroke-width="2.8" style="filter:drop-shadow(0 0 10px #f97316);"/><ellipse cx="49" cy="49" rx="26" ry="20" fill="none" stroke="#fff" stroke-width="1.8" opacity="0.95"/><polygon points="49,32 52,43 63,45 54,51 57,62 49,55 41,62 44,51 35,45 46,43" fill="#fff" style="filter:drop-shadow(0 0 8px #fff);"/></svg></div>';
+    }
+    function renderCinders() {
+      var cs = [
+        {x:-24,y:18,d:0.12,s:3.5,c:'#ffffff'},
+        {x:-18,y:28,d:0.22,s:4.0,c:'#fef08a'},
+        {x:-30,y:12,d:0.34,s:3.0,c:'#fde047'},
+        {x:-14,y:32,d:0.40,s:3.5,c:'#f97316'},
+        {x:-26,y:22,d:0.46,s:3.0,c:'#ea580c'}
+      ];
+      return cs.map(function(p) {
+        return '<div style="position:absolute;z-index:40;left:18%;bottom:26%;--cnd-x:' + p.x + 'px;--cnd-y:' + p.y + 'px;animation:gbaGrowlitheTrailingCinder 1.3s cubic-bezier(0.22,1,0.36,1) ' + p.d + 's forwards;opacity:0;"><div style="width:' + (p.s*2) + 'px;height:' + (p.s*2) + 'px;border-radius:9999px;background:' + p.c + ';box-shadow:0 0 6px ' + p.c + ';"></div></div>';
+      }).join('');
+    }
+    function playNewFlare(w) {
+      var c = document.getElementById('overlayNew');
+      c.innerHTML = '';
+      void c.offsetWidth;
+      c.innerHTML = renderFlare(w);
+    }
+    function toggleLoop() {
+      var btn = document.getElementById('btnLoop');
+      if (loopInterval) { clearInterval(loopInterval); loopInterval = null; btn.classList.remove('active'); btn.textContent = '\u{1F504} Loop'; }
+      else { playNewFlare(false); loopInterval = setInterval(function(){ playNewFlare(false); }, 2000); btn.classList.add('active'); btn.textContent = '\u23F9 Stop'; }
+    }
+    window.addEventListener('load', function(){ playNewFlare(false); });
+  </script>
+</body>
+</html>

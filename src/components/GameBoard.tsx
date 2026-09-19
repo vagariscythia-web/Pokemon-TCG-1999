@@ -133,7 +133,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   }, [clairvoyanceDrawerOpen]);
   const [opponentEmote, setOpponentEmote] = useState<string | null>(null);
   const [activeFXList, setActiveFXList] = useState<ActiveFX[]>([]);
-  const [activeShakes, setActiveShakes] = useState<Record<string, 'normal' | 'recoil'>>({});
+  const [activeShakes, setActiveShakes] = useState<Record<string, 'normal' | 'recoil' | 'heal'>>({});
   const shakeTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
   const [hoveredDropTarget, setHoveredDropTarget] = useState<{
@@ -874,7 +874,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     side: 'player' | 'cpu',
     slot: 'active' | 'bench',
     benchIndex: number | undefined,
-    shakeType: 'normal' | 'recoil',
+    shakeType: 'normal' | 'recoil' | 'heal',
     delayMs: number = 0,
     durationMs: number = 550
   ) => {
@@ -994,7 +994,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   /**
    * Active shake state for a slot: 'normal' (standard hit shake) or 'recoil' (heavy downward shudder).
    */
-  const slotShakes = (side: 'player' | 'cpu', slot: 'active' | 'bench', benchIndex?: number): 'normal' | 'recoil' | null => {
+  const slotShakes = (side: 'player' | 'cpu', slot: 'active' | 'bench', benchIndex?: number): 'normal' | 'recoil' | 'heal' | null => {
     const key = `${side}-${slot}-${benchIndex ?? 0}`;
     return activeShakes[key] || null;
   };
@@ -1199,15 +1199,19 @@ export const GameBoard: React.FC<GameBoardProps> = ({
         if (step.card.name === 'Super Potion') {
           if (step.benchIndex !== undefined && step.benchIndex >= 0) {
             triggerFX('super_potion', 'cpu', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', step.benchIndex);
+            triggerSlotShake('cpu', 'bench', step.benchIndex, 'heal', 350, 700);
           } else {
             triggerFX('super_potion', 'cpu');
+            triggerSlotShake('cpu', 'active', undefined, 'heal', 350, 700);
           }
         }
         else if (step.card.name.includes('Potion')) {
           if (step.benchIndex !== undefined && step.benchIndex >= 0) {
             triggerFX('potion', 'cpu', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', step.benchIndex);
+            triggerSlotShake('cpu', 'bench', step.benchIndex, 'heal', 350, 700);
           } else {
             triggerFX('potion', 'cpu');
+            triggerSlotShake('cpu', 'active', undefined, 'heal', 350, 700);
           }
         }
         else if (step.card.name === 'Gust of Wind') triggerFX('gust', 'player');
@@ -4471,16 +4475,20 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       const spBenchIdx = targetPokemon ? player.bench.findIndex(b => b.instanceId === targetPokemon.instanceId) : (targetBenchIndex !== undefined ? targetBenchIndex : -1);
       if (spBenchIdx !== -1) {
         triggerFX('super_potion', 'player', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', spBenchIdx);
+        triggerSlotShake('player', 'bench', spBenchIdx, 'heal', 350, 700);
       } else {
         triggerFX('super_potion', 'player');
+        triggerSlotShake('player', 'active', undefined, 'heal', 350, 700);
       }
     }
     else if (card.name.includes('Potion') || card.name === 'Full Heal') {
       const pBenchIdx = targetPokemon ? player.bench.findIndex(b => b.instanceId === targetPokemon.instanceId) : (targetBenchIndex !== undefined ? targetBenchIndex : -1);
       if (pBenchIdx !== -1) {
         triggerFX('potion', 'player', undefined, undefined, undefined, undefined, undefined, undefined, 'bench', pBenchIdx);
+        triggerSlotShake('player', 'bench', pBenchIdx, 'heal', 350, 700);
       } else {
         triggerFX('potion', 'player');
+        triggerSlotShake('player', 'active', undefined, 'heal', 350, 700);
       }
     }
     else if (card.name === 'PlusPower') triggerFX('pluspower', 'player');
@@ -5915,7 +5923,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               {cpu.bench.map((b, bIdx) => (
                 <div
                   key={b.instanceId}
-                  className={`relative ${slotShakes('cpu', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
+                  className={`relative ${slotShakes('cpu', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'heal' ? 'animate-heal-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
                 >
                   <CardView
                     inPlayCard={b}
@@ -5956,7 +5964,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           {/* 2. CENTER BATTLEFIELD: ACTIVE POKEMON */}
           <div data-drop-zone="center-field" className="my-auto py-2 flex items-center justify-around rounded-3xl transition-all duration-300">
             {/* CPU Active */}
-            <div className={`flex flex-col items-center transition-transform duration-200 ${slotShakes('cpu', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'cpu' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`} style={{ zoom: uiScale }}>
+            <div className={`flex flex-col items-center transition-transform duration-200 ${slotShakes('cpu', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'active') === 'heal' ? 'animate-heal-card-shudder' : slotShakes('cpu', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'cpu' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`} style={{ zoom: uiScale }}>
               <div className="text-xs font-bold text-blue-300 mb-1.5  tracking-wider">{t.opponentActive}</div>
               <div className="relative">
                 {cpu.active ? (
@@ -5992,7 +6000,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   data-drop-zone="in-play-pokemon"
                   data-instance-id={player.active.instanceId}
                   data-is-active="true"
-                  className={`w-full flex justify-center relative ${slotShakes('player', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'player' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`}
+                  className={`w-full flex justify-center relative ${slotShakes('player', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'active') === 'heal' ? 'animate-heal-card-shudder' : slotShakes('player', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'player' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`}
                 >
                   {/* Active Hover Target Indicator */}
                   {hoveredDropTarget?.type === 'active' && (
@@ -6071,7 +6079,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     onPointerDown={(e) => handleBenchCardPointerDown(e, b, bIdx)}
                     className={`relative touch-none select-none transition-opacity duration-200 ${
                       draggingBenchPokemon?.benchIndex === bIdx ? 'opacity-30' : ''
-                    } ${slotShakes('player', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
+                    } ${slotShakes('player', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'bench', bIdx) === 'heal' ? 'animate-heal-card-shudder' : slotShakes('player', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
                   >
                     {/* Bench Hover Target Indicator (Downward Triangle/Arrow) */}
                     {hoveredDropTarget?.type === 'bench' && hoveredDropTarget.benchIndex === bIdx && (
