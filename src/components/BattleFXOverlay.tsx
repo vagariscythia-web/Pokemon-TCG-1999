@@ -233,6 +233,7 @@ export interface ActiveFX {
     | 'hitmonlee_high_jump_kick'
     | 'articuno_freeze_dry'
     | 'articuno_blizzard'
+    | 'zapdos_thunder'
     | 'zapdos_thunderbolt'
     | 'zapdos_thunderstorm'
     | 'moltres_wildfire'
@@ -462,10 +463,11 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
     if (name.includes('freeze dry') || name.includes('freeze-dry')) return 'articuno_freeze_dry';
     if (name.includes('blizzard')) return 'articuno_blizzard';
   }
-  // Zapdos: Thunder, Thunderbolt & Thunderstorm
+  // Zapdos: Thunder (pure-SVG 60 DMG), Thunderbolt (stock actor 100 DMG) & Thunderstorm
   if (pkm.includes('zapdos')) {
     if (name.includes('thunderstorm')) return 'zapdos_thunderstorm';
-    if (name.includes('thunderbolt') || name.includes('thunder')) return 'zapdos_thunderbolt';
+    if (name.includes('thunderbolt')) return 'zapdos_thunderbolt';
+    if (name.includes('thunder')) return 'zapdos_thunder';
   }
   // Moltres: Wildfire & Dive Bomb
   if (pkm.includes('moltres')) {
@@ -1250,6 +1252,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1600;
     case 'articuno_blizzard':
       return 1750;
+    case 'zapdos_thunder':
+      return 1450;
     case 'zapdos_thunderbolt':
       return 1650;
     case 'zapdos_thunderstorm':
@@ -1453,7 +1457,8 @@ const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'scyther_blade_dance', 'snorlax_body_slam', 'squirtle_shell_defense', 'star_freeze',
   'starfish_slap', 'super_fang_guillotine', 'super_potion', 'tauros_rampage', 'tauros_stomp',
   'thunder_punch', 'victreebel_acid_melt', 'weedle_poison_sting', 'weezing_toxic_smog',
-  'rattata_quick_attack', 'kangaskhan_comet_punch'
+  'rattata_quick_attack', 'kangaskhan_comet_punch',
+  'articuno_blizzard', 'zapdos_thunderbolt'
 ]);
 
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
@@ -18894,67 +18899,148 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 60. ARTICUNO FREEZE DRY (Articuno — Instant Cryogenic Flash & Hexagonal Crystalline Ice Block) */}
+      {/* 60. ARTICUNO FREEZE DRY (Articuno — Cryogenic Flash-Freeze & Multi-Shard Crystalline Ice Formation) */}
       {fx.type === 'articuno_freeze_dry' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Hexagonal Faceted Ice Block Encasement */}
+          {/* Layer 1 (z-10): Cryogenic Flash — instant white-to-cyan radial burst (§1.C ice hierarchy) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute rounded-full pointer-events-none z-10"
+              style={{
+                width: '150px',
+                height: '150px',
+                animation: 'gbaFreezeDryCryoFlash 1.6s ease-out forwards',
+                background: 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(207,250,254,0.7) 30%, rgba(56,189,248,0.4) 55%, transparent 80%)'
+              }}
+            />
+          )}
+
+          {/* Layer 2 (z-25): Multi-Shard Crystalline Ice Formation — FAZ4: outer cryogenic glow halo on container */}
           <div
-            className="absolute pointer-events-none z-30"
-            style={{ animation: 'gbaArticunoIceEncase 1.6s cubic-bezier(0.18, 0.9, 0.28, 1) forwards' }}
+            className="absolute pointer-events-none z-25"
+            style={{
+              animation: 'gbaArticunoIceEncase 1.6s cubic-bezier(0.18, 0.9, 0.28, 1) forwards',
+              filter: 'drop-shadow(0 0 14px rgba(56,189,248,0.5)) drop-shadow(0 0 6px rgba(207,250,254,0.35))'
+            }}
           >
             <svg
-              width={fx.whiffed ? "88" : "118"}
-              height={fx.whiffed ? "110" : "148"}
+              width={fx.whiffed ? "80" : "120"}
+              height={fx.whiffed ? "100" : "150"}
               viewBox="0 0 120 150"
               className="overflow-visible"
             >
               <defs>
-                <linearGradient id="iceGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.85" />
-                  <stop offset="45%" stopColor="#7dd3fc" stopOpacity="0.65" />
-                  <stop offset="100%" stopColor="#0284c7" stopOpacity="0.8" />
+                <linearGradient id="fdIceShardA" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                  <stop offset="40%" stopColor="#cffafe" stopOpacity="0.8" />
+                  <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.7" />
+                </linearGradient>
+                <linearGradient id="fdIceShardB" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.9" />
+                  <stop offset="50%" stopColor="#7dd3fc" stopOpacity="0.65" />
+                  <stop offset="100%" stopColor="#0284c7" stopOpacity="0.75" />
+                </linearGradient>
+                <linearGradient id="fdIceCore" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+                  <stop offset="50%" stopColor="#bae6fd" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.7" />
                 </linearGradient>
               </defs>
-              {/* Outer Ice Crystal Prism */}
-              <polygon
-                points="60,6 110,35 110,115 60,144 10,115 10,35"
-                fill="url(#iceGradient)"
-                stroke="#ffffff"
-                strokeWidth="2.5"
-                className="drop-shadow-[0_0_16px_#38bdf8]"
-              />
-              {/* Internal Crystal Facet Lines */}
-              <line x1="60" y1="6" x2="60" y2="144" stroke="#ffffff" strokeWidth="1.5" opacity="0.75" />
-              <line x1="10" y1="35" x2="110" y2="115" stroke="#bae6fd" strokeWidth="1.2" opacity="0.65" />
-              <line x1="10" y1="115" x2="110" y2="35" stroke="#bae6fd" strokeWidth="1.2" opacity="0.65" />
-              {/* Frost Cracks */}
-              <polyline
-                points="60,65 72,50 85,55 92,42"
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="2"
-                strokeLinecap="round"
-                className="drop-shadow-[0_0_6px_#ffffff]"
-              />
+              {/* Central Ice Prism Core */}
+              <polygon points="60,8 85,30 90,75 60,142 30,75 35,30" fill="url(#fdIceCore)" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+              {/* Upper-Left Shard */}
+              <polygon points="35,30 60,8 50,0 28,22" fill="url(#fdIceShardA)" stroke="#e0f2fe" strokeWidth="1" opacity="0.85" />
+              {/* Upper-Right Shard */}
+              <polygon points="85,30 60,8 70,0 92,22" fill="url(#fdIceShardB)" stroke="#e0f2fe" strokeWidth="1" opacity="0.85" />
+              {/* Lower-Left Shard */}
+              <polygon points="30,75 60,142 42,150 18,90" fill="url(#fdIceShardA)" stroke="#bae6fd" strokeWidth="1" opacity="0.8" />
+              {/* Lower-Right Shard */}
+              <polygon points="90,75 60,142 78,150 102,90" fill="url(#fdIceShardB)" stroke="#bae6fd" strokeWidth="1" opacity="0.8" />
+              {/* Internal Refraction Lines */}
+              <line x1="60" y1="8" x2="60" y2="142" stroke="#ffffff" strokeWidth="1" opacity="0.6" />
+              <line x1="35" y1="30" x2="90" y2="75" stroke="#cffafe" strokeWidth="0.8" opacity="0.5" />
+              <line x1="85" y1="30" x2="30" y2="75" stroke="#cffafe" strokeWidth="0.8" opacity="0.5" />
+              {/* Frost Crack Fractals */}
+              {!fx.whiffed && (
+                <>
+                  <polyline points="60,65 72,50 85,55 92,42" fill="none" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" opacity="0.9" />
+                  <polyline points="60,80 48,92 38,88 30,98" fill="none" stroke="#e0f2fe" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
+                </>
+              )}
             </svg>
           </div>
 
-          {/* Expanding Cryogenic Frost Pulse */}
+          {/* Layer 3 (z-20): Expanding Cryogenic Frost Ring with crystalline SVG edge */}
           {!fx.whiffed && (
             <div
               className="absolute pointer-events-none z-20"
-              style={{ animation: 'gbaArticunoFrostPulse 1.2s ease-out 0.25s forwards', opacity: 0 }}
+              style={{ animation: 'gbaArticunoFrostPulse 1.2s ease-out 0.2s forwards', opacity: 0 }}
             >
-              <div className="w-28 h-36 rounded-full border-2 border-sky-300 shadow-[0_0_24px_#38bdf8]" />
+              <svg width="120" height="140" viewBox="0 0 120 140" className="overflow-visible">
+                <ellipse cx="60" cy="70" rx="55" ry="65" fill="none" stroke="#bae6fd" strokeWidth="2" className="drop-shadow-[0_0_12px_#38bdf8]" />
+                <ellipse cx="60" cy="70" rx="42" ry="52" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.7" />
+              </svg>
             </div>
           )}
 
-          {/* Floating Ice Diamond Glints */}
+          {/* Layer 4 (z-15): Cold Vapor Mist at Base (§1.D fluid atmospheric) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-15"
+              style={{ animation: 'gbaFreezeDryColdVapor 1.6s ease-out 0.4s forwards', opacity: 0 }}
+            >
+              <svg width="100" height="40" viewBox="0 0 100 40" className="overflow-visible">
+                <ellipse cx="50" cy="25" rx="45" ry="14" fill="rgba(207,250,254,0.3)" />
+                <ellipse cx="35" cy="20" rx="25" ry="10" fill="rgba(224,242,254,0.25)" />
+                <ellipse cx="68" cy="22" rx="28" ry="11" fill="rgba(186,230,253,0.2)" />
+              </svg>
+            </div>
+          )}
+
+          {/* FAZ7b: Satellite ice masses — homogeneous ring, left-side offsets pulled further out to compensate for left-edge anchoring (true visual centroid now symmetric); two tucked BEHIND the prism (z-18) for volumetric depth, two silhouette variants */}
           {!fx.whiffed && [
-            { x: '-35px', y: '-38px', delay: '0.3s', scale: 1.0 },
-            { x: '36px', y: '-30px', delay: '0.45s', scale: 1.2 },
-            { x: '-28px', y: '35px', delay: '0.6s', scale: 0.9 },
-            { x: '32px', y: '32px', delay: '0.7s', scale: 1.1 }
+            { x: '-92px', y: '2px', delay: '0.16s', w: 44, h: 50, r: '-12deg', z: 18, v: 0 },
+            { x: '-72px', y: '-40px', delay: '0.3s', w: 30, h: 34, r: '9deg', z: 26, v: 1 },
+            { x: '-56px', y: '44px', delay: '0.38s', w: 36, h: 42, r: '5deg', z: 26, v: 0 },
+            { x: '52px', y: '-18px', delay: '0.24s', w: 36, h: 42, r: '13deg', z: 26, v: 1 },
+            { x: '44px', y: '40px', delay: '0.34s', w: 30, h: 34, r: '-8deg', z: 18, v: 0 },
+            { x: '34px', y: '-52px', delay: '0.44s', w: 26, h: 30, r: '18deg', z: 26, v: 1 }
+          ].map((sat, idx) => (
+            <div
+              key={`fd-sat-${idx}`}
+              className="absolute pointer-events-none"
+              style={{
+                left: `calc(50% + ${sat.x})`,
+                top: `calc(50% + ${sat.y})`,
+                zIndex: sat.z,
+                animation: `gbaArticunoIceEncase 1.6s cubic-bezier(0.18, 0.9, 0.28, 1) ${sat.delay} forwards`,
+                opacity: 0,
+                filter: 'drop-shadow(0 0 10px rgba(56,189,248,0.45)) drop-shadow(0 0 4px rgba(207,250,254,0.3))'
+              }}
+            >
+              {sat.v === 0 ? (
+                <svg width={sat.w} height={sat.h} viewBox="0 0 48 56" className="overflow-visible" style={{ transform: `rotate(${sat.r})` }}>
+                  <polygon points="24,2 40,14 44,34 26,54 8,38 6,16" fill="url(#fdIceCore)" stroke="#bae6fd" strokeWidth="1.2" opacity="0.9" />
+                  <polygon points="24,8 34,17 36,32 25,46 13,34 12,18" fill="#e0f2fe" opacity="0.5" />
+                  <line x1="24" y1="2" x2="26" y2="54" stroke="#cffafe" strokeWidth="0.7" opacity="0.5" />
+                </svg>
+              ) : (
+                <svg width={sat.w} height={sat.h} viewBox="0 0 48 56" className="overflow-visible" style={{ transform: `rotate(${sat.r})` }}>
+                  <polygon points="22,3 38,10 46,28 34,50 12,52 4,30 10,12" fill="url(#fdIceCore)" stroke="#bae6fd" strokeWidth="1.1" opacity="0.88" />
+                  <polygon points="22,10 33,15 37,28 28,42 15,43 11,29" fill="#e0f2fe" opacity="0.45" />
+                  <line x1="22" y1="3" x2="30" y2="50" stroke="#cffafe" strokeWidth="0.6" opacity="0.5" />
+                </svg>
+              )}
+            </div>
+          ))}
+
+          {/* Layer 5 (z-35): Floating Ice Crystal Diamond Particles (proper SVG §1.B) */}
+          {!fx.whiffed && [
+            { x: '-38px', y: '-40px', delay: '0.25s', scale: 1.0 },
+            { x: '38px', y: '-32px', delay: '0.4s', scale: 1.2 },
+            { x: '-30px', y: '38px', delay: '0.55s', scale: 0.9 },
+            { x: '34px', y: '34px', delay: '0.65s', scale: 1.1 },
+            { x: '0px', y: '-48px', delay: '0.35s', scale: 0.8 }
           ].map((glint, idx) => (
             <div
               key={`fd-glint-${idx}`}
@@ -18962,20 +19048,133 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 left: `calc(50% + ${glint.x})`,
                 top: `calc(50% + ${glint.y})`,
-                animation: `gbaQuickKineticBurst 0.5s ease-out ${glint.delay} forwards`,
+                animation: `gbaFreezeDryGlint 0.7s ease-out ${glint.delay} forwards`,
                 opacity: 0,
                 transform: `scale(${glint.scale})`
               }}
             >
-              <span className="text-cyan-100 text-base select-none drop-shadow-[0_0_8px_#38bdf8]">✦</span>
+              <svg width="14" height="18" viewBox="0 0 14 18" className="drop-shadow-[0_0_6px_#38bdf8]">
+                <polygon points="7,0 14,9 7,18 0,9" fill="#e0f2fe" stroke="#ffffff" strokeWidth="1" />
+                <polygon points="7,3 11,9 7,15 3,9" fill="#ffffff" opacity="0.7" />
+              </svg>
             </div>
           ))}
+
+          {/* FAZ5: Ice shard rain — convergent barrage feeding the ice mass, micro-kinematic detail */}
+          {!fx.whiffed && [
+            { x: '-42px', y: '-55px', delay: '0.15s', rot: '-25deg', w: 7, h: 16 },
+            { x: '38px', y: '-48px', delay: '0.22s', rot: '20deg', w: 6, h: 14 },
+            { x: '-28px', y: '-60px', delay: '0.3s', rot: '-15deg', w: 8, h: 18 },
+            { x: '45px', y: '-40px', delay: '0.38s', rot: '30deg', w: 5, h: 12 },
+            { x: '10px', y: '-62px', delay: '0.26s', rot: '5deg', w: 7, h: 15 },
+            { x: '-50px', y: '-35px', delay: '0.44s', rot: '-35deg', w: 6, h: 13 }
+          ].map((sr, idx) => (
+            <div
+              key={`fd-shard-${idx}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                left: `calc(50% + ${sr.x})`,
+                top: `calc(50% + ${sr.y})`,
+                animation: `gbaFreezeDryShardRain 0.9s cubic-bezier(0.2, 0.7, 0.4, 1) ${sr.delay} forwards`,
+                opacity: 0,
+                '--fd-shard-x': sr.x,
+                '--fd-shard-y': sr.y,
+                '--fd-shard-rot': sr.rot
+              } as React.CSSProperties}
+            >
+              <svg width={sr.w} height={sr.h} viewBox="0 0 8 18" className="drop-shadow-[0_0_5px_#38bdf8]">
+                <polygon points="4,0 8,5 6,18 2,18 0,5" fill="#e0f2fe" stroke="#7dd3fc" strokeWidth="0.7" />
+                <polygon points="4,2 6,5 5,14 3,14 2,5" fill="#ffffff" opacity="0.65" />
+              </svg>
+            </div>
+          ))}
+
+          {/* Whiff variant: reduced crystal puff — thin cold vapor dissipates */}
+          {fx.whiffed && (
+            <div
+              className="absolute rounded-full pointer-events-none z-15"
+              style={{
+                width: '60px',
+                height: '60px',
+                animation: 'gbaFreezeDryWhiffPuff 1.6s ease-out forwards',
+                background: 'radial-gradient(circle, rgba(207,250,254,0.3) 0%, rgba(56,189,248,0.15) 50%, transparent 80%)'
+              }}
+            />
+          )}
         </div>
       )}
 
       {/* 61. ARTICUNO BLIZZARD (Articuno — Full-Card Howling Glacial Storm Vortex) */}
       {fx.type === 'articuno_blizzard' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 0: Raster Stock Actor — Articuno (ONLY on opposing ACTIVE card; bench cards receive particle-only frost scatter §6b) */}
+          {fx.slot !== 'bench' && (
+            <div
+              className="absolute pointer-events-none z-30"
+              style={{
+                left: '50%',
+                top: '48%',
+                width: fx.whiffed ? '78px' : '144px',
+                height: fx.whiffed ? '78px' : '144px',
+                transform: 'translate(-50%, -50%)',
+                filter: fx.whiffed ? 'saturate(0.4) brightness(0.85)' : undefined,
+                animation: fx.whiffed
+                  ? 'gbaBlizzardStockWhiff 1.75s ease-out forwards'
+                  : 'gbaBlizzardStockWingSpread 1.75s cubic-bezier(0.18, 0.92, 0.28, 1) forwards'
+              }}
+            >
+              <img
+                src="/assets/raw/Articuno_raw_edited.png"
+                alt="Articuno Blizzard"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_18px_rgba(56,189,248,0.75)] drop-shadow-[0_0_9px_rgba(207,250,254,0.5)] select-none pointer-events-none"
+                draggable={false}
+              />
+            </div>
+          )}
+
+          {/* FAZ7: Frost Veil — semi-transparent rime film laid over the stock actor on the ACTIVE slot, so the ice effects read clearly even on top of the dense artwork (opacity-only keyframe; no transform conflict) */}
+          {fx.slot !== 'bench' && !fx.whiffed && (
+            <div
+              className="absolute rounded-[20px] pointer-events-none"
+              style={{
+                left: '50%',
+                top: '48%',
+                width: '152px',
+                height: '152px',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 31,
+                opacity: 0,
+                animation: 'gbaBlizzardFrostVeil 1.75s ease-out 0.15s forwards',
+                background: 'radial-gradient(ellipse, rgba(224,242,254,0.45) 0%, rgba(186,230,253,0.28) 45%, rgba(56,189,248,0.14) 70%, transparent 92%)'
+              }}
+            />
+          )}
+
+          {/* Bench variant: compact frost impact burst — no stock actor, only ice particle scatter (§6b) */}
+          {fx.slot === 'bench' && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className="absolute rounded-full pointer-events-none z-15"
+                style={{
+                  width: '72px',
+                  height: '72px',
+                  animation: 'gbaBlizzardBenchFrostBurst 1.4s ease-out forwards',
+                  background: 'radial-gradient(circle, rgba(207,250,254,0.5) 0%, rgba(56,189,248,0.3) 40%, transparent 75%)'
+                }}
+              />
+              {/* Compact bench frost shimmer */}
+              <div
+                className="absolute pointer-events-none z-20"
+                style={{ animation: 'gbaBlizzardBenchFrostBurst 1.2s ease-out 0.15s forwards', opacity: 0 }}
+              >
+                <svg width="60" height="60" viewBox="0 0 60 60" className="overflow-visible">
+                  <circle cx="30" cy="30" r="24" fill="none" stroke="#bae6fd" strokeWidth="1.5" opacity="0.8" />
+                  <circle cx="30" cy="30" r="16" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.6" />
+                </svg>
+              </div>
+            </div>
+          )}
+
           {/* Card Cold Shiver */}
           {!fx.whiffed && (
             <div
@@ -18984,47 +19183,77 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             />
           )}
 
-          {/* Howling Snowstorm Wind Stream */}
+          {/* Howling Snowstorm Wind Stream — FAZ7: on the ACTIVE slot the ice-blue streaks sweep IN FRONT of the stock actor (z-33) so they stay legible over the art; bench keeps the original z-25 depth */}
           <div
-            className="absolute pointer-events-none z-25"
-            style={{ animation: 'gbaArticunoBlizzardVortex 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            className="absolute pointer-events-none"
+            style={{ zIndex: fx.slot !== 'bench' ? 33 : 25, animation: 'gbaArticunoBlizzardVortex 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
           >
             <svg width="180" height="150" viewBox="0 0 180 150" className="overflow-visible opacity-90">
               <path
                 d="M 170 15 C 130 35, 70 45, 10 95"
                 fill="none"
                 stroke="#e0f2fe"
-                strokeWidth="4"
+                strokeWidth="3.2"
                 strokeLinecap="round"
-                opacity="0.9"
+                opacity="0.78"
                 className="drop-shadow-[0_0_12px_#38bdf8]"
               />
               <path
                 d="M 180 40 C 130 65, 80 85, 20 135"
                 fill="none"
                 stroke="#ffffff"
-                strokeWidth="3.5"
+                strokeWidth="2.6"
                 strokeLinecap="round"
-                opacity="0.95"
+                opacity="0.72"
+                className="drop-shadow-[0_0_8px_#ffffff]"
               />
               <path
                 d="M 160 65 C 110 95, 60 115, 5 150"
                 fill="none"
                 stroke="#7dd3fc"
-                strokeWidth="2.5"
+                strokeWidth="2.4"
                 strokeLinecap="round"
-                opacity="0.8"
+                opacity="0.68"
+                className="drop-shadow-[0_0_10px_#7dd3fc]"
+              />
+              <path
+                d="M 175 25 C 125 50, 75 65, 12 115"
+                fill="none"
+                stroke="#bae6fd"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                opacity="0.6"
+                className="drop-shadow-[0_0_8px_#bae6fd]"
+              />
+              <path
+                d="M 150 78 C 100 102, 55 120, 10 145"
+                fill="none"
+                stroke="#e0f2fe"
+                strokeWidth="2"
+                strokeLinecap="round"
+                opacity="0.55"
               />
             </svg>
           </div>
 
-          {/* Spinning Crystalline Snowflakes */}
+          {/* FAZ4: Dense snowstorm haze body — soft frost cloud mass behind streaks, gives storm volume */}
+          <div
+            className="absolute rounded-full pointer-events-none z-20"
+            style={{
+              width: '150px',
+              height: '120px',
+              animation: 'gbaBlizzardStormHaze 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+              background: 'radial-gradient(ellipse, rgba(224,242,254,0.4) 0%, rgba(186,230,253,0.25) 45%, rgba(56,189,248,0.12) 70%, transparent 90%)'
+            }}
+          />
+
+          {/* Spinning Crystalline Snowflakes — FAZ5: 5 sparse flakes, aerodynamic drift, wider spread */}
           {[
-            { ox: '45px', oy: '-40px', delay: '0.1s', size: 18 },
-            { ox: '-35px', oy: '-30px', delay: '0.25s', size: 22 },
-            { ox: '38px', oy: '20px', delay: '0.4s', size: 16 },
-            { ox: '-42px', oy: '35px', delay: '0.55s', size: 20 },
-            { ox: '10px', oy: '-15px', delay: '0.35s', size: 24 }
+            { ox: '52px', oy: '-45px', delay: '0.1s', size: 22 },
+            { ox: '-40px', oy: '-28px', delay: '0.28s', size: 18 },
+            { ox: '15px', oy: '38px', delay: '0.42s', size: 24 },
+            { ox: '-50px', oy: '20px', delay: '0.55s', size: 16 },
+            { ox: '35px', oy: '-10px', delay: '0.7s', size: 20 }
           ].map((sn, i) => (
             <div
               key={`bliz-sn-${i}`}
@@ -19036,7 +19265,83 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 '--s-oy': sn.oy
               } as React.CSSProperties}
             >
-              <svg width={sn.size} height={sn.size} viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_#ffffff]">
+              <svg width={sn.size} height={sn.size} viewBox="0 0 24 24" className="drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_5px_#bae6fd]">
+                <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+                <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" strokeWidth="1.8" strokeLinecap="round" />
+                <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" strokeWidth="1.8" strokeLinecap="round" />
+                <circle cx="12" cy="12" r="2.5" fill="#38bdf8" />
+              </svg>
+            </div>
+          ))}
+
+          {/* FAZ5: Ice shard scatter — angular fragments tumbling with storm wind toward opponent */}
+          {[
+            { ox: '48px', oy: '-38px', delay: '0.12s', w: 8, h: 14 },
+            { ox: '-35px', oy: '-22px', delay: '0.25s', w: 6, h: 11 },
+            { ox: '25px', oy: '30px', delay: '0.38s', w: 7, h: 13 },
+            { ox: '-45px', oy: '10px', delay: '0.5s', w: 5, h: 10 },
+            { ox: '40px', oy: '-5px', delay: '0.18s', w: 9, h: 15 },
+            { ox: '-15px', oy: '42px', delay: '0.62s', w: 6, h: 12 }
+          ].map((sh, i) => (
+            <div
+              key={`bliz-shard-${i}`}
+              className="absolute pointer-events-none z-32"
+              style={{
+                animation: `gbaBlizzardIceShard 1.3s cubic-bezier(0.25, 0.8, 0.35, 1) ${sh.delay} forwards`,
+                opacity: 0,
+                '--shard-ox': sh.ox,
+                '--shard-oy': sh.oy
+              } as React.CSSProperties}
+            >
+              <svg width={sh.w} height={sh.h} viewBox="0 0 8 16" className="drop-shadow-[0_0_5px_#7dd3fc]">
+                <polygon points="4,0 8,6 6,16 2,16 0,6" fill="#e0f2fe" stroke="#bae6fd" strokeWidth="0.8" />
+                <polygon points="4,2 6,6 5,13 3,13 2,6" fill="#ffffff" opacity="0.6" />
+              </svg>
+            </div>
+          ))}
+
+          {/* FAZ6: Embed shards — fly in and STICK into the card with an impact wobble (impact intensity up) */}
+          {!fx.whiffed && [
+            { ox: '55px', oy: '-42px', delay: '0.16s', w: 9, h: 16 },
+            { ox: '-48px', oy: '-18px', delay: '0.3s', w: 8, h: 15 },
+            { ox: '30px', oy: '36px', delay: '0.44s', w: 7, h: 14 },
+            { ox: '-20px', oy: '-40px', delay: '0.52s', w: 6, h: 12 }
+          ].map((es, i) => (
+            <div
+              key={`bliz-embed-${i}`}
+              className="absolute pointer-events-none z-32"
+              style={{
+                animation: `gbaBlizzardIceShardEmbed 1.15s cubic-bezier(0.2, 0.85, 0.3, 1) ${es.delay} forwards`,
+                opacity: 0,
+                '--shard-ox': es.ox,
+                '--shard-oy': es.oy
+              } as React.CSSProperties}
+            >
+              <svg width={es.w} height={es.h} viewBox="0 0 8 16" className="drop-shadow-[0_0_7px_#7dd3fc]">
+                <polygon points="4,0 8,6 6,16 2,16 0,6" fill="#e0f2fe" stroke="#bae6fd" strokeWidth="0.9" />
+                <polygon points="4,2 6,6 5,13 3,13 2,6" fill="#ffffff" opacity="0.75" />
+              </svg>
+            </div>
+          ))}
+
+          {/* FAZ5: Sparse background micro-snow — 3 soft flakes for depth without clutter */}
+          {[
+            { ox: '-55px', oy: '-25px', delay: '0.2s' },
+            { ox: '45px', oy: '15px', delay: '0.45s' },
+            { ox: '-20px', oy: '35px', delay: '0.6s' }
+          ].map((ms, i) => (
+            <div
+              key={`bliz-micro-${i}`}
+              className="absolute pointer-events-none z-30"
+              style={{
+                animation: `gbaArticunoSnowflakeSpin 1.5s ease-out ${ms.delay} forwards`,
+                opacity: 0,
+                '--s-ox': ms.ox,
+                '--s-oy': ms.oy
+              } as React.CSSProperties}
+            >
+              <svg width="10" height="10" viewBox="0 0 24 24" className="drop-shadow-[0_0_4px_#e0f2fe]">
                 <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
                 <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
                 <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" strokeWidth="1.8" strokeLinecap="round" />
@@ -19048,9 +19353,262 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 62. ZAPDOS THUNDERBOLT & THUNDER (Zapdos — Colossal Sky Lightning Pillar & Ground Electric Burst) */}
+      {/* 62a. ZAPDOS THUNDER (Zapdos — 60 DMG Forked Sky Strike; FAZ7: pure-SVG, NO stock actor, deliberately leaner than the 100 DMG Thunderbolt) */}
+      {fx.type === 'zapdos_thunder' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Impact Screen Flash — brief cold-yellow wash behind everything (HIT only) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute inset-0 rounded-lg pointer-events-none"
+              style={{
+                zIndex: 5,
+                opacity: 0,
+                animation: 'gbaZapdosThunderFlash 1.45s ease-out forwards',
+                background: 'radial-gradient(circle, rgba(254,249,195,0.55) 0%, rgba(253,224,71,0.25) 55%, transparent 85%)'
+              }}
+            />
+          )}
+
+          {/* Card snap on strike (shorter than Thunderbolt's) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ animation: 'gbaQuickCardSnap 0.5s ease-out 0.22s forwards' }}
+            />
+          )}
+
+          {/* Rolling Charge Cloud — organic storm bank: billowing upper cumulus clusters, flattened dark base, depth shadows and internal voltage glow (whiff: dimmed drift) */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              zIndex: 28,
+              top: '3%',
+              opacity: 0,
+              animation: fx.whiffed
+                ? 'gbaZapdosThunderCloudWhiff 1.45s ease-out forwards'
+                : 'gbaZapdosThunderCloud 1.45s cubic-bezier(0.2, 0.8, 0.3, 1) forwards'
+            }}
+          >
+            <svg width="150" height="72" viewBox="0 0 150 72" className="overflow-visible">
+              <defs>
+                <radialGradient id="ztCloudGlow" cx="50%" cy="82%" r="55%">
+                  <stop offset="0%" stopColor="#fef9c3" stopOpacity="0.85" />
+                  <stop offset="45%" stopColor="#fde047" stopOpacity="0.45" />
+                  <stop offset="100%" stopColor="#facc15" stopOpacity="0" />
+                </radialGradient>
+              </defs>
+              {/* Flattened dark base slab */}
+              <ellipse cx="75" cy="52" rx="64" ry="13" fill="#0f172a" opacity="0.88" />
+              <ellipse cx="58" cy="50" rx="40" ry="10" fill="#1e293b" opacity="0.82" />
+              <ellipse cx="96" cy="51" rx="36" ry="9" fill="#1e293b" opacity="0.78" />
+              {/* Mid-tone body mass */}
+              <ellipse cx="44" cy="38" rx="28" ry="16" fill="#334155" opacity="0.96" />
+              <ellipse cx="100" cy="40" rx="30" ry="15" fill="#334155" opacity="0.92" />
+              <ellipse cx="72" cy="42" rx="34" ry="14" fill="#3f4f63" opacity="0.9" />
+              {/* Billowing upper cumulus puffs */}
+              <ellipse cx="58" cy="26" rx="24" ry="15" fill="#475569" opacity="0.97" />
+              <ellipse cx="92" cy="28" rx="22" ry="14" fill="#475569" opacity="0.94" />
+              <ellipse cx="75" cy="18" rx="26" ry="14" fill="#526078" opacity="0.95" />
+              <ellipse cx="40" cy="22" rx="15" ry="10" fill="#5a6a80" opacity="0.85" />
+              <ellipse cx="108" cy="24" rx="13" ry="9" fill="#5a6a80" opacity="0.8" />
+              {/* Rim highlights where internal lightning illuminates the belly */}
+              <ellipse cx="66" cy="34" rx="18" ry="8" fill="#64748b" opacity="0.6" />
+              <ellipse cx="88" cy="36" rx="14" ry="7" fill="#64748b" opacity="0.5" />
+              {/* Internal voltage glow bleeding through the base (HIT only) */}
+              {!fx.whiffed && (
+                <>
+                  <ellipse cx="75" cy="50" rx="48" ry="16" fill="url(#ztCloudGlow)" opacity="0.75" className="drop-shadow-[0_0_16px_#facc15]" />
+                  {/* Small crackle fringe under the cloud lip */}
+                  <path d="M 48 58 L 45 64 L 49 65 L 46 71" fill="none" stroke="#fde047" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" className="drop-shadow-[0_0_6px_#facc15]" />
+                  <path d="M 98 57 L 101 63 L 97 64 L 100 70" fill="none" stroke="#fde047" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" className="drop-shadow-[0_0_5px_#facc15]" />
+                </>
+              )}
+            </svg>
+          </div>
+
+          {/* Forked Lightning Bolt — Thunderbolt-inspired filled silhouette: jagged golden aura polygon over a white-hot core, plus two sharp fork slivers; snaps down with a voltage flicker (deliberately slimmer than Thunderbolt's colossal pillar) */}
+          <div className="absolute pointer-events-none" style={{ zIndex: 30 }}>
+            {!fx.whiffed && (
+              <div
+                style={{
+                  opacity: 0,
+                  transformOrigin: 'top center',
+                  animation: 'gbaZapdosThunderBoltStrike 1.45s cubic-bezier(0.2, 0.85, 0.3, 1) 0.08s forwards'
+                }}
+              >
+                <svg width="70" height="140" viewBox="0 0 70 140" className="overflow-visible">
+                  {/* Golden aura silhouette — jagged lightning body */}
+                  <polygon
+                    points="36,0 26,42 36,44 22,86 34,88 20,138 44,84 32,82 46,40 36,38 50,0"
+                    fill="#fde047"
+                    opacity="0.92"
+                    className="drop-shadow-[0_0_18px_#facc15] drop-shadow-[0_0_30px_rgba(234,179,8,0.5)]"
+                  />
+                  {/* White-hot core */}
+                  <polygon
+                    points="35,0 27,41 36,43 23,85 34,87 21,135 42,83 32,81 44,39 36,37 48,0"
+                    fill="#ffffff"
+                    className="drop-shadow-[0_0_10px_#ffffff]"
+                  />
+                  {/* Left fork — sharp sliver peeling off mid-channel */}
+                  <polygon
+                    points="28,60 12,94 17,94 31,66"
+                    fill="#facc15"
+                    opacity="0.85"
+                    className="drop-shadow-[0_0_8px_#facc15]"
+                  />
+                  {/* Right fork — sharp sliver near the top */}
+                  <polygon
+                    points="42,26 60,58 55,58 40,32"
+                    fill="#fde047"
+                    opacity="0.8"
+                    className="drop-shadow-[0_0_8px_#facc15]"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+
+          {/* Ground Discharge — hot radial glow pool, scorched crack arcs, dual staggered shockwave rings and dust kick-strokes (HIT only) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none"
+              style={{ zIndex: 22, bottom: '3%', opacity: 0, animation: 'gbaZapdosThunderImpact 1.1s ease-out 0.28s forwards' }}
+            >
+              <svg width="160" height="60" viewBox="0 0 160 60" className="overflow-visible">
+                <defs>
+                  <radialGradient id="ztImpactGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#fffbeb" stopOpacity="0.9" />
+                    <stop offset="35%" stopColor="#fde047" stopOpacity="0.55" />
+                    <stop offset="70%" stopColor="#facc15" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#facc15" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                {/* Hot glow pool at strike point */}
+                <ellipse cx="80" cy="32" rx="38" ry="12" fill="url(#ztImpactGlow)" />
+                {/* Scorch crack arcs radiating outward */}
+                <path d="M 80 32 Q 58 28 40 34" fill="none" stroke="#facc15" strokeWidth="1.8" strokeLinecap="round" opacity="0.75" className="drop-shadow-[0_0_6px_#facc15]" />
+                <path d="M 80 32 Q 104 26 122 33" fill="none" stroke="#facc15" strokeWidth="1.8" strokeLinecap="round" opacity="0.75" className="drop-shadow-[0_0_6px_#facc15]" />
+                <path d="M 80 32 Q 66 40 52 44" fill="none" stroke="#fde047" strokeWidth="1.2" strokeLinecap="round" opacity="0.55" />
+                <path d="M 80 32 Q 96 40 110 44" fill="none" stroke="#fde047" strokeWidth="1.2" strokeLinecap="round" opacity="0.55" />
+                {/* Primary shockwave ring */}
+                <ellipse cx="80" cy="32" rx="62" ry="18" fill="none" stroke="#fde047" strokeWidth="2.8" className="drop-shadow-[0_0_14px_#facc15]" />
+                {/* Secondary inner ring */}
+                <ellipse cx="80" cy="32" rx="40" ry="11" fill="none" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+                {/* Tertiary faint outer ring */}
+                <ellipse cx="80" cy="32" rx="72" ry="22" fill="none" stroke="#facc15" strokeWidth="1" opacity="0.4" />
+                {/* Dust kick-strokes flung sideways */}
+                <line x1="26" y1="36" x2="14" y2="40" stroke="#e2e8f0" strokeWidth="1.6" strokeLinecap="round" opacity="0.6" />
+                <line x1="134" y1="36" x2="146" y2="40" stroke="#e2e8f0" strokeWidth="1.6" strokeLinecap="round" opacity="0.6" />
+                <line x1="36" y1="26" x2="26" y2="22" stroke="#cbd5e1" strokeWidth="1.2" strokeLinecap="round" opacity="0.45" />
+                <line x1="124" y1="26" x2="134" y2="22" stroke="#cbd5e1" strokeWidth="1.2" strokeLinecap="round" opacity="0.45" />
+              </svg>
+            </div>
+          )}
+
+          {/* Small impact sparks — 3 thin fork filaments flung from the strike point (Thunderbolt fields 4 plasma nodes) */}
+          {!fx.whiffed && [
+            { x: '-34px', y: '24px', delay: '0.32s' },
+            { x: '32px', y: '20px', delay: '0.38s' },
+            { x: '-8px', y: '34px', delay: '0.46s' }
+          ].map((sp, idx) => (
+            <div
+              key={`zt-sp-${idx}`}
+              className="absolute pointer-events-none"
+              style={{
+                zIndex: 35,
+                left: `calc(50% + ${sp.x})`,
+                top: `calc(50% + ${sp.y})`,
+                animation: `gbaScytherSpark 0.6s ease-out ${sp.delay} forwards`,
+                opacity: 0
+              }}
+            >
+              <svg width="18" height="22" viewBox="0 0 22 26" className="overflow-visible drop-shadow-[0_0_8px_#fde047]">
+                <path d="M 11 1 L 8 8 L 12 9 L 7 17 L 10 18 L 6 25" fill="none" stroke="#fde047" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M 11 1 L 8 8 L 12 9 L 7 17 L 10 18 L 6 25" fill="none" stroke="#ffffff" strokeWidth="0.7" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          ))}
+
+          {/* Whiff: faint static crackle puff under the dimmed cloud */}
+          {fx.whiffed && (
+            <div
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                zIndex: 15,
+                width: '64px',
+                height: '40px',
+                opacity: 0,
+                animation: 'gbaZapdosThunderWhiffPuff 1.45s ease-out 0.2s forwards',
+                background: 'radial-gradient(ellipse, rgba(253,224,71,0.3) 0%, rgba(250,204,21,0.12) 55%, transparent 85%)'
+              }}
+            />
+          )}
+        </div>
+      )}
+
+
+      {/* 62. ZAPDOS THUNDERBOLT (Zapdos — Colossal Sky Lightning Pillar & Ground Electric Burst; 100 DMG stock-actor showcase) */}
       {fx.type === 'zapdos_thunderbolt' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 0: Raster Stock Actor — Zapdos (exempt from SVG 68.1% container transform §7.D; whiff: suppressed size+opacity+saturate §9.E) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{
+              left: '50%',
+              top: '46%',
+              width: fx.whiffed ? '80px' : '148px',
+              height: fx.whiffed ? '80px' : '148px',
+              transform: 'translate(-50%, -50%)',
+              filter: fx.whiffed ? 'saturate(0.4) brightness(0.85)' : undefined,
+              animation: fx.whiffed
+                ? 'gbaThunderboltStockWhiff 1.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards'
+                : 'gbaThunderboltStockStrike 1.65s cubic-bezier(0.22, 0.61, 0.36, 1) forwards'
+            }}
+          >
+            <img
+              src="/assets/raw/Zapdos_raw_edited.png"
+              alt="Zapdos Thunderbolt"
+              className="w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(250,204,21,0.8)] drop-shadow-[0_0_10px_rgba(251,191,36,0.55)] select-none pointer-events-none"
+              draggable={false}
+            />
+
+            {/* FAZ6: Wing vein trace flash — the lightning fractals under the wings ignite along the stock-art paths */}
+            {!fx.whiffed && (
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{ animation: 'gbaZapdosWingVeinFlash 1.6s ease-out forwards', opacity: 0 }}
+              >
+                <svg width="100%" height="100%" viewBox="0 0 100 100" className="overflow-visible">
+                  {[
+                    'M 25 40 L 22 48 L 26 55 L 20 64 L 24 72 L 18 82 L 21 92',
+                    'M 22 48 L 15 54 L 13 62 L 9 68',
+                    'M 20 64 L 12 70 L 10 78',
+                    'M 75 40 L 78 48 L 74 55 L 80 64 L 76 72 L 82 82 L 79 92',
+                    'M 78 48 L 85 54 L 87 62 L 91 68',
+                    'M 80 64 L 88 70 L 90 78'
+                  ].map((d, i) => (
+                    <path
+                      key={`vein-${i}`}
+                      d={d}
+                      fill="none"
+                      stroke={i % 3 === 0 ? '#ffffff' : '#fde047'}
+                      strokeWidth={i % 3 === 0 ? 1.6 : 1.1}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      pathLength={1}
+                      strokeDasharray="1"
+                      style={{
+                        animation: `gbaZapdosWingVeinDraw 1.6s ease-out ${0.28 + (i % 3) * 0.06}s forwards`,
+                        strokeDashoffset: '1'
+                      }}
+                    />
+                  ))}
+                </svg>
+              </div>
+            )}
+          </div>
+
           {/* Card Heavy Tilt & Electrical Shudder */}
           {!fx.whiffed && (
             <div
@@ -19134,19 +19692,68 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 opacity: 0
               }}
             >
-              <svg width="22" height="26" viewBox="0 0 22 26" className="overflow-visible drop-shadow-[0_0_12px_#fde047]">
-                {/* Outer Neon Gold Plasma Corona */}
+              <svg width="22" height="26" viewBox="0 0 22 26" className="overflow-visible drop-shadow-[0_0_10px_#fde047]">
+                {/* Thin forked arc bolt — stroke-only filament (replaces emoji-like filled blob) */}
                 <path
-                  d="M 12 1 L 5 11 L 11 11 L 4 25 L 18 10 L 11 10 L 17 1 Z"
-                  fill="#facc15"
-                  className="drop-shadow-[0_0_8px_#facc15]"
+                  d="M 11 1 L 8 8 L 12 9 L 7 17 L 10 18 L 6 25"
+                  fill="none"
+                  stroke="#fde047"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
-                {/* Pure White Core Arc */}
                 <path
-                  d="M 12 3 L 7 11 L 11 11 L 6 22 L 16 11 L 11 11 L 15 3 Z"
-                  fill="#ffffff"
-                  className="drop-shadow-[0_0_4px_#ffffff]"
+                  d="M 11 1 L 8 8 L 12 9 L 7 17 L 10 18 L 6 25"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="0.7"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 />
+                <path d="M 8 8 L 4 11 L 3 16" fill="none" stroke="#facc15" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M 12 9 L 16 12 L 17 17" fill="none" stroke="#facc15" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          ))}
+
+          {/* FAZ5: Wing-tip arc sparks — mid-animation peak, breaks static wing perception */}
+          {!fx.whiffed && [
+            { x: '-62px', y: '-18px', delay: '0.5s', rot: '-12deg' },
+            { x: '64px', y: '-14px', delay: '0.58s', rot: '10deg' },
+            { x: '-55px', y: '-28px', delay: '0.66s', rot: '-20deg' },
+            { x: '58px', y: '-24px', delay: '0.72s', rot: '15deg' }
+          ].map((wt, idx) => (
+            <div
+              key={`zap-wing-${idx}`}
+              className="absolute pointer-events-none z-32"
+              style={{
+                left: `calc(50% + ${wt.x})`,
+                top: `calc(50% + ${wt.y})`,
+                animation: `gbaZapdosWingTipSpark 0.7s ease-out ${wt.delay} forwards`,
+                opacity: 0,
+                transform: `rotate(${wt.rot})`
+              }}
+            >
+              <svg width="16" height="20" viewBox="0 0 16 20" className="overflow-visible drop-shadow-[0_0_7px_#fde047]">
+                {/* Thin forked arc filament (stroke-only, de-emoji-fied) */}
+                <path
+                  d="M 8 1 L 6 6 L 9 7 L 5 13 L 7 14 L 4 19"
+                  fill="none"
+                  stroke="#fde047"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M 8 1 L 6 6 L 9 7 L 5 13 L 7 14 L 4 19"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="0.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path d="M 6 6 L 3 9" fill="none" stroke="#facc15" strokeWidth="0.9" strokeLinecap="round" />
+                <path d="M 9 7 L 12 10" fill="none" stroke="#facc15" strokeWidth="0.9" strokeLinecap="round" />
               </svg>
             </div>
           ))}
@@ -21302,7 +21909,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         return (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* L1: Launch mist — muzzle puff as the jet breaks free */}
-          <div className="absolute pointer-events-none z-20" style={{ left: '14%', bottom: '20%', animation: 'gbaLaprasLaunchMist 0.7s ease-out forwards', opacity: 0 }}>
+          <div className="absolute pointer-events-none z-20" style={{ left: '48%', bottom: '20%', animation: 'gbaLaprasLaunchMist 0.7s ease-out forwards', opacity: 0 }}>
             <svg width={Math.round(52 * wi)} height={Math.round(36 * wi)} viewBox="0 0 52 36" className="overflow-visible">
               <defs>
                 <radialGradient id="laprasMistGrad" cx="0.5" cy="0.6" r="0.55">
@@ -21334,6 +21941,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               src="/assets/Lapras_Glacial_Surge.png"
               alt="Lapras Glacial Surge"
               className="w-full h-full object-contain filter drop-shadow-[0_0_18px_rgba(56,189,248,0.75)] drop-shadow-[0_0_8px_rgba(255,255,255,0.6)]"
+              style={{ transform: 'scaleX(-1)' }}
             />
           </div>
 

@@ -29,10 +29,15 @@ This document is the permanent, canonical design standard for all move animation
   - **Water / Ice:** Glacial White (`#ffffff`) $\rightarrow$ Crisp Frost (`#cffafe`) $\rightarrow$ Electric Cyan (`#38bdf8`) $\rightarrow$ Deep Oceanic Sapphire (`#0284c7`).
   - **Psychic:** Tachyon Center (`#ffffff`) $\rightarrow$ Mauve Mist (`#f3e8ff`) $\rightarrow$ Vibrant Violet (`#a855f7`) $\rightarrow$ Abyssal Dusk (`#581c87`).
   - **Electric:** Superconductive White $\rightarrow$ High-Voltage Neon Yellow (`#facc15`) $\rightarrow$ Amber Spark (`#fbbf24`).
+  - **Physical Impact / Punch (Comet Punch, Mega Punch, Double Slap):** Incandescent Flash Core (`#ffffff`) $\rightarrow$ Citrine Burst (`#fde68a`) $\rightarrow$ Warm Impact Amber (`#f59e0b`) $\rightarrow$ Dissipating Dust Umber (`#a8a29e` / `#78716c`). Fiziksel vuruşlarda kromatik sıcaklık, çarpma anında akkor beyazdan başlayarak dışa doğru toz-toprak tonlarına sönümlenir; bu, ateş veya elektrik saldırılarındaki spektral ışımadan farklı olarak **kinetik enerjinin mekanik ısıya ve partikül saçılımına dönüşümünü** anlatır.
 
 ### D. Fluid Atmospheric FX vs. Rigid Blocks (Akışkan Duman İlkesi)
 - Gas, mist, smoke, and ink clouds must NEVER be animated using rigid whole-body `rotate(...)` transforms (which visually turns them into spinning square cardboard cutouts).
 - Clouds must expand organically via multi-lobed SVG Bézier paths (`d="M..."`), internal hydrodynamic flow swirls, chromatic density layering (e.g. zifiri abyssal ink core `#020617` $\rightarrow$ translucent charcoal rim `#334155`), and independent floating dissipation motes.
+- **Impact FX Genelleştirmesi (Kangaskhan Comet Punch Dersi):** Bu ilke yalnızca gaz/duman bulutlarıyla sınırlı değildir. Fiziksel darbe efektlerinin **tüm Layer 3 alt bileşenleri** — şok halkaları (ring), yıldız patlamaları (starburst), toz bulutları (dust) — düz CSS primitiflerinden (`div border-radius`, `clip-path polygon`, basit `ellipse`) organik SVG geometrisine terfi ettirilmelidir:
+  - **Ring:** Tek bir `border` çemberi yerine, farklı `stroke-width`, `opacity` ve hafif `scale` offset'lerine sahip 2–3 eşmerkezli SVG elipsi (`<ellipse>`) kullanılmalıdır. Bu, şok dalgasının "tek bir çizgi" değil, **kalınlığı ve derinliği olan bir enerji cephesi** olarak okunmasını sağlar.
+  - **Starburst:** 5 noktalı düz `polygon` yerine, 10–12 noktalı ve kromatik hiyerarşiye sahip (beyaz merkez $\rightarrow$ limon orta $\rightarrow$ amber uç) incandescent starburst `<polygon>` veya `<path>` kullanılmalıdır. Her noktanın uzunluğu hafifçe farklılaştırılarak mekanik simetri kırılır ve organik bir parlama hissi elde edilir.
+  - **Dust:** Düz `border-radius: 50%` elipsler yerine, çok loblu kuadratik Bézier `Q`-path'leriyle (`d="M... Q... Q... Z"`) çizilen organik bulut formları kullanılmalıdır. Her lob farklı yarıçap ve açıyla konumlandırılarak "kes-yapıştır elips" hissinden uzaklaşılır.
 
 ### E. Thematic Form & Chromatic Integrity (Organik Doku vs. Kristal/Metal İllüzyonu)
 - **Kavramsal Uyumsuzluk Yasağı:** Ateş, ruh, hayalet veya psişik kökenli saldırılarda (Kitsunebi / Confuse Ray, Will-O-Wisp, Night Shade vb.) sivri, köşeli geometrik çokgenler (elmas, prizmatik baklava, keskin kristal parçaları) ve soluk gri/beyaz/açık mavi gradyanlar kullanılması KESİNLİKLE YASAKTIR. Bu hatalı yaklaşım, alev/ruh yerine "fırıldak gibi dönen metalik/gümüş kristal parçaları" veya "buz kütleleri" illüzyonu yaratarak saldırının tematik kimliğini zedeler.
@@ -148,6 +153,29 @@ This document is the permanent, canonical design standard for all move animation
   - Bir kuyruk, kırbaç, sarmaşık veya kılıç yay çizerek bir yöne doğru savrulurken (örneğin soldan sağa doğru bir kırbaç hareketi); nesnenin ucu, kıvılcımlar, alev dilleri ve kavitasyon izleri kesinlikle hareketin tersi yönünde arkadan sürüklenmelidir (`drag inertia`).
   - Uç kısmın hareket yönünün önüne doğru ters çıkıntı yapması ("tersine bakan kuyruk") fiziksel olarak doğal hissettirmez. SVG geometrisi ve keyframe dönüşümü; kökün hareketi başlattığı, esnek ucun ise havada bir yay çizerek peşinden geldiği kırbaç fiziğine (`whip-crack kinematics`) sadık kalmalıdır.
 
+### I. Sharp-Edge Phenomena: Filled Polygon Silhouette vs. Stroke Path (Keskin Kenar Fenomenleri: Dolu Poligon Silueti vs. Çizgi Yolu)
+
+- **Stroke-Based Lightning Fallacy (Çizgi Tabanlı Şimşek Yanılgısı):** Yıldırım, şimşek, elektrik deşarjı veya benzeri keskin-kenarlı doğa fenomenleri; `stroke-dashoffset` draw-on animasyonları veya Q-bezier (`Q`) kavisli stroke path'leriyle modellenemez. Bu yaklaşım, şimşeğin doğasındaki **ani, keskin, köşeli** enerji boşalmasını yumuşak, kıvrımlı, yapay S-eğrilerine dönüştürür ve "elektrik" yerine "kurdele" veya "ip" hissi verir.
+- **Filled Polygon Architecture (Dolu Poligon Mimarisi):** Keskin-kenarlı fenomenler, Thunderbolt referanslı **dolu (filled) jagged polygon** siluetleriyle modellenmelidir:
+  1. **Altın Aura Poligonu (Golden Aura Polygon):** Dış katman; `fill="#fde047"`, `opacity: 0.92`, çift `drop-shadow` (18px + 30px) ile volumetrik ışıma. Köşe noktaları zigzag düzensizliği taşır (her segment farklı uzunluk ve açı).
+  2. **Beyaz Çekirdek Poligonu (White-Hot Core):** İç katman; `fill="#fff"`, tek `drop-shadow(0 0 10px #fff)` ile akkor merkez. Aura poligonunun ~2–3px içeri çekilmiş versiyonu.
+  3. **Çatal Sliver'ları (Fork Slivers):** 2 adet ince, keskin üçgenimsi poligon (`fill="#facc15"` / `fill="#fde047"`, opacity 0.80–0.85); ana omurgadan farklı açılarda fırlayan kısa dallar. Her biri tek `drop-shadow(0 0 8px #facc15)` taşır.
+- **Geometrik Kurallar:**
+  - Her zigzag segmenti farklı uzunlukta olmalıdır (ör. 42px, 44px, 42px değil; 42px, 44px, 50px gibi asimetrik).
+  - Çatal noktaları ana omurganın %40–65'i arasında konumlanır; asla tepe veya taban yakınında değil.
+  - Poligon köşe sayısı 10–12 arası tutulur; 8'den az "basit ok" hissi verir, 14'ten fazla görsel gürültü yaratır.
+- **Zapdos Thunder FAZ7d doğrulaması:** Q-bezier stroke omurga (FAZ7c) kullanıcı tarafından "aşırı kıvrımlı/suni" bulunarak reddedildi. Filled polygon mimarisine geçiş (FAZ7d) ile 70×140 viewBox'ta 4 poligon (altın aura + beyaz çekirdek + 2 çatal) kullanılarak Thunderbolt'un kanıtlanmış estetik dili korundu; `npx tsc --noEmit` hatasız geçti.
+
+### J. Convergent Particle Choreography & Parametric CSS Custom Property Driving (Yakınsak Parçacık Koreografisi & Parametrik Sürücü)
+
+- **Yakınsak (Convergent) Parçacık Deseni:** "Oluşum" anlatan saldırılarda (buz kütlesi kristalleşmesi, enerji birikimi, madde oluşumu) parçacıkların **dışarıdan merkeze yakınsaması** fiziksel nedenselliği güçlendirir. İzleyici "parçalar birleşiyor, kütle oluşuyor" okuması yapar. Saçılma (scatter) deseninin tersidir; her ikisi de geçerlidir ancak farklı fiziksel anlatılara hizmet eder.
+- **CSS Custom Property Parametrik Sürücü:** N parçacığın her biri için ayrı `@keyframes` bloğu yazmak yerine, tek bir keyframe bloğu CSS custom property'leri (`--fd-shard-x`, `--fd-shard-y`, `--fd-shard-rot`) üzerinden parametrize edilir. TSX tarafında her parçacık kendi başlangıç offset'ini inline style ile atar (`'--fd-shard-x': sr.x`); keyframe içinde `calc(var(--fd-shard-x) * 0.6)` gibi çarpımsal ara konumlarla her parçacık farklı bir yörünge izler.
+  - **Avantaj:** 6 parçacık × 1 keyframe bloğu = 6 DOM elemanı + 1 CSS kuralı. 6 ayrı keyframe bloğu hem CSS boyutunu şişirir hem bakım maliyetini artırır.
+  - **Kısıt:** `calc()` içinde `var()` çarpımı yalnızca sayısal çarpanlarla çalışır; birim dönüşümü (px → %) için ayrı wrapper gerekir.
+- **Tumble Rotation Kuralı:** Yakınsak parçacıklar düz bir çizgide kaymaz; her keyframe stop'unda artan bir rotasyon (`+40°`, `+90°`, `+130°`, `+160°`) ile takla atarak ilerler. Bu, buz kırığı veya moloz parçasının aerodinamik olmayan savrulmasını taklit eder.
+- **Terminal Convergence (Son Nokta Birleşmesi):** Tüm parçacıkların son keyframe'i aynı koordinata (`translate(0px, 5px)`) converge olur. Bu, parçacıkların "hedefe yapıştığını" ve ana kütlenin parçası olduğunu anlatır.
+- **Freeze Dry FAZ5 doğrulaması:** `gbaFreezeDryShardRain` keyframe'i 6 shard'ı tek bir blokla sürer; her shard `--fd-shard-x/y/rot` ile parametrize edilir, 5 stop'ta (0%, 20%, 45%, 70%, 100%) yakınsak yörünge + tumble rotation + terminal convergence uygulanır. TSX L19063–19090, CSS L15565–15572. `npx tsc --noEmit` hatasız.
+
 ---
 
 ## 3. Scale, Proportion & Whiff Standards
@@ -214,6 +242,14 @@ This document is the permanent, canonical design standard for all move animation
 - **Anti-Bleed & Kart İçi Nefes Payı (Card Margin Safety):**
   - Tek hedefli saldırılarda aktörün görsel kütlesi kart sınırlarının içinde en az 15–25px güvenlik payı bırakmalı; yanındaki kartlara, deste veya sayaç alanlarına asla taşmamalıdır.
 
+### G. Satellite Distribution Symmetry, Z-Depth & Silhouette Variation (Uydu Dağılım Simetrisi, Z-Derinlik & Siluet Varyantı)
+
+- **Görsel Sentroid Simetrisi:** Çoklu uydu (satellite) yerleşiminde sol ve sağ taraflardaki uydu sayıları eşit olmalı (3 sol / 3 sağ), ancak sol uyduların x offset'leri prizmanın sol kenarına göre açıkça dışarıda konumlanmalıdır (`x + w < -20`). Bunun nedeni: SVG/HTML elemanlarının varsayılan anchor noktası sol-üst köşedir; sol uydular `left: calc(50% + x)` ile konumlandığında, sağ uydulara kıyasla görsel merkezden daha içe kayar. Bu offset asimetrisi, **görsel sentroidin** geometrik merkezle çakışmasını sağlar.
+- **Z-Derinlik Katmanlaşması:** Uyduların tümü aynı z-index'te olmamalıdır. En az 2 uydu ana prizmanın arkasına (`z-18`) yerleştirilerek hacim ve derinlik hissi yaratılır; kalan uydular önde (`z-26`) kalır. Bu, düz bir "halka" yerine üç boyutlu bir "küme" algısı üretir.
+- **Siluet Varyantı (Anti-Kalıp Baskı):** Tüm uydular aynı polygon geometrisini kullanmamalıdır. En az 2 farklı polygon siluet varyantı (`v: 0` ve `v: 1`) dönüşümlü olarak atanır. Her varyant farklı köşe sayısı, farklı iç detay çizgisi ve farklı opacity katmanına sahiptir. Bu, "kalıp baskı" veya "copy-paste" hissini önler.
+- **Stagger + Bağımsız Delay:** Her uydu kendi `animation-delay`'i ile stagger edilir (ör. 0.16s, 0.24s, 0.3s, 0.34s, 0.38s, 0.44s). Delay'ler eşit aralıklı değildir (§8.J parçacık aralığı kuralı); fiziksel nedenselliğe bağlıdır (merkezden dışa doğru kristalleşme sırası).
+- **Freeze Dry FAZ7b doğrulaması:** 6 uydu (3 sol: −92/−72/−56px; 3 sağ: +52/+44/+34px), 2 adet z-18'de arkada, 2 polygon varyantı, `gbaArticunoIceEncase` keyframe'i paylaşılır. TSX L19000–19035. Sol uyduların x offset'leri sağa kıyasla mutlak değerce daha büyük tutularak görsel sentroid simetrisi sağlanmıştır. `npx tsc --noEmit` hatasız.
+
 ---
 
 ## 4. The 5-Layer FX Architectural Template (Modular Orchestral Ceiling)
@@ -262,9 +298,13 @@ Bu 5 katman zorla doldurulacak statik bir kalıp değil, **modüler bir orkestra
    - **Z-Index & Okunabilirlik Hiyerarşisi:**
      - Hasar sayaçları, durum efekt rozetleri (Poison, Asleep, Paralyzed) ve HP göstergeleri her zaman en üstte (`z-50`) net ve okunabilir kalmalıdır.
      - FX overlay katmanları kesin olarak `z-10` (zemin aurası/yanık izi) ile `z-40` (çarpma patlaması/ön plandaki aktör) arasında katmanlanmalıdır.
-3. **Multi-Target & Bench Slot Awareness:**
+3. **Multi-Target & Bench Slot Awareness (Slot-Bilinçli FX Degradasyonu & Okunabilirlik Peçesi):**
    - Special moves (e.g., Gengar *Dark Mind*, Ninetales *Lure*, Arbok *Stare*) can target either the Active card or a Bench slot (`slot === 'bench'`, `benchIndex`).
    - Coordinate logic must gracefully support bench transposition without visual clipping.
+   - **Slot-Bilinçli FX Degradasyonu (Blizzard dersi):** Aynı saldırı active ve bench slotlarında farklı katman bütçesiyle icra edilmelidir. Active slot tam orkestrasyon alır (stok aktör + vortex streaks + embed shards + frost veil); bench slot yalnızca kompakt parçacık patlaması (stok aktör yok, vortex yok, yalnızca radyal frost burst + shimmer halkası). Bu, bench kartlarının "ikincil hedef" statüsünü görsel olarak korur ve GPU bütçesini aşmaz.
+   - **Z-Index Slot Farklılaştırması:** Aynı katman (ör. vortex streaks) active slotta aktörün önünde (`z-33`), bench'te arkada (`z-25`) render edilir. Bu, active slotta okunabilirliği, bench'te ise sadeliği korur.
+   - **Okunabilirlik Peçesi (Legibility Veil):** Yoğun raster sanat eseri üzerinde SVG parçacık efektlerinin okunabilirliğini korumak için, aktörün üzerine yarı saydam bir "peçe" katmanı eklenir. Frost Veil deseni: `radial-gradient` tabanlı, **opacity-only keyframe** (transform çakışması yok), peak opacity ~0.42, `backdrop-filter: blur(0.6px)` ile hafif buzlu cam etkisi. Peçe, efektin kendisi değil, efektin **okunabilirliğini sağlayan altyapı katmanıdır**.
+   - **Blizzard FAZ7 doğrulaması:** Active slot: stok Articuno (z-30) + Frost Veil (z-31, `gbaBlizzardFrostVeil` CSS L15487) + vortex streaks (z-33) + embed shards (z-32) + snowflakes (z-35). Bench slot: yalnızca `gbaBlizzardBenchFrostBurst` (72px radyal burst + 60px shimmer halkası, TSX L19153–19176). Her iki varyant `npx tsc --noEmit` hatasız.
 
 ---
 
@@ -300,6 +340,27 @@ Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu 
 
 ### H. Verification Bench as a First-Class Deliverable (Doğrulama Tezgâhı)
 - Aktör odaklı her yeni FX; kart ölçekli mock, hit & whiff panelleri ve replay düğmesi içeren bağımsız bir preview ile hafif bir assertion scriptini standart çıktı olarak getirir. Nihai söz hakkı her zaman kullanıcı görsel onayındadır (§3.B human-in-the-loop).
+
+### I. Sibling Move Differentiation (Kardeş Saldırı Farklılaştırması)
+
+- Aynı Pokémon'un aynı element ailesindeki birden fazla saldırısı (Zapdos: Thunderbolt 100 dmg vs. Thunder 60 dmg; Charizard: Flamethrower vs. Fire Spin vb.) **aynı görsel dili konuşmalı ama farklı şiddet kademelerinde** icra edilmelidir.
+- **Farklılaştırma Vektörleri (Öncelik Sırası):**
+  1. **Geometrik Ölçek:** Kardeş saldırının aktör boyutu, ana saldırının ~%70–80'i oranında tutulur (Thunder bolt 70×140 vs. Thunderbolt pillar 90×180). Siluet oranları korunur; yalnızca mutlak boyut küçülür.
+  2. **Katman Sayısı:** Ana saldırı 6–7 katman kullanıyorsa, kardeş 4–5 katmanla yetinir (Thunder: cloud + bolt + impact + 3 spark = 5 katman; Thunderbolt: pillar + wing-vein + wing-tip + plasma nodes + ground scorch + flash = 7 katman).
+  3. **Duration & Pacing:** Kardeş saldırı daha kısa süreli ve daha sıkıştırılmış bir zamanlama zarfı kullanır (Thunder 1.45s vs. Thunderbolt ~2.1s). Anticipation fazı kısalır veya bulut gibi daha hafif bir ön hazırlığa dönüşür.
+  4. **Stok Görsel Varlığı:** Yüksek hasarlı ana saldırı stok görsel aktör kullanırken, düşük hasarlı kardeş pure-SVG icra edilebilir (Thunderbolt: stok Zapdos PNG; Thunder: salt SVG bulut + şimşek + impact). Bu, görsel hiyerarşiyi hasar hiyerarşisiyle hizalar.
+  5. **Animasyon Tekniği Farkı:** Kardeş saldırı, ana saldırının animasyon tekniğinden bilinçli olarak farklı bir teknik kullanır (Thunderbolt: pillar scaleY + jitter; Thunder: top-origin scaleY snap + voltage flicker). Bu, "aynı animasyonun küçültülmüş kopyası" hissini önler.
+- **Kimlik Koruma:** Farklılaştırma ne kadar derin olursa olsun, element ailesinin kromatik imzası (§1.C Electric: akkor beyaz → `#facc15` → `#fbbf24`) ve temel geometrik dil (zigzag, keskin köşe) korunmalıdır. İzleyici iki saldırıyı da "Zapdos elektrik saldırısı" olarak tanıyabilmelidir.
+- **Zapdos Thunder/Thunderbolt doğrulaması:** Thunder (60 dmg), Thunderbolt'un (100 dmg) pillar-scaleY + jitter yaklaşımından bilinçli olarak ayrıştırıldı: stroke-dashoffset draw-on yerine filled polygon + top-origin scaleY snap; stok görsel yerine pure-SVG; 7 katman yerine 5 katman; 2.1s yerine 1.45s. Her iki saldırı da aynı altın/beyaz kromatik aileyi ve zigzag geometrik dili paylaşır.
+
+### J. Anatomical Line Tracing & Stock+SVG Hybrid Layering (Anatomik Hat İzleme & Stok+SVG Hibrit Katmanlaşma)
+
+- **Anatomik Hat İzleme (Wing Vein Trace):** Stok raster görselin mevcut anatomik hatları (kanat damarları, tüy çizgileri, kas lifleri) SVG `<path>` olarak izlenir ve `pathLength={1}` + `stroke-dasharray="1"` + `stroke-dashoffset: 1 → 0` draw-on animasyonu ile "ateşlenir". Bu teknik, aktörü yeniden boyamadan (§7.G) enerji akışını anatomik yapıya bağlar: izleyici "elektrik kanat damarlarında akıyor" okuması yapar.
+  - **Uygulama deseni (Thunderbolt wing vein):** 6 path (3 sol kanat, 3 sağ kanat), her biri farklı `stroke-width` (1.1–1.6) ve renk (`#ffffff` / `#fde047` dönüşümlü). Draw-on delay'leri `(i % 3) * 0.06s` ile kademeli; ana damarlar önce, yan damarlar sonra ateşlenir.
+  - **Kapsayıcı flash:** Draw-on'un üzerine bir `opacity` flash keyframe'i (`gbaZapdosWingVeinFlash`) bindirilir: 0%→18% görünmez, 26% tam parlama, 34% sönüm, 42% ikinci parlama, 55%→100% kademeli fade. Bu çift nabız, §8.S'deki voltage flicker deseninin anatomik versiyonudur.
+- **Stok+SVG Hibrit Katmanlaşma:** Raster `<img>` aktör ve SVG overlay aynı DOM konteyneri içinde nested olarak konumlanır. Raster aktör z-30'da, SVG overlay (wing vein) aynı konteynerin içinde `absolute inset-0` ile, wing-tip sparks ise ayrı z-32 katmanında. Bu, aktörün whole-actor transform'unun (§8.H) tüm child katmanlara otomatik olarak uygulanmasını sağlar.
+- **Raster Aktör Anticipation Yayı (Dense Stop Chain):** Stok aktör keyframe'lerinde anticipation fazı, tek bir geri çekilme noktası yerine **yoğun stop zinciri** ile modellenir: 0%→7%→14% (coil), 20%→26%→32% (rise), 40%→48% (peak hold), 56%→64%→72%→80% (decay), 88%→94%→100% (settle). 14+ stop'lu bu zincir, `cubic-bezier` interpolasyonunun üretemeyeceği "anticipation coil → explosive rise → sustained hold → graceful decay" dört fazlı yayı gerçekleştirir.
+- **Thunderbolt FAZ6 doğrulaması:** `gbaThunderboltStockStrike` 14 keyframe stop'u ile 1.65s zarfında dört fazlı yay (CSS L15604); `gbaZapdosWingVeinDraw` 4 stop (0%, 18%, 40%, 100%) ile draw-on (CSS L12286); `gbaZapdosWingVeinFlash` 8 stop ile çift nabız flash (CSS L12273). TSX L19576–19609. Tüm katmanlar `npx tsc --noEmit` hatasız.
 
 > **Terfi Notu:** Bu ilkeler zamanla kanıtlanıp kullanıcı onayıyla olgunlaştıkça §§1–6'nın kanonik maddelerine terfi ettirilebilir; tersine, yeni bir teknik ekranda daha iyisini kanıtlarsa bu bölüm onunla genişletilir. Amaç kuralları dondurmak değil, toolset'i birlikte büyütmektir.
 
@@ -347,6 +408,9 @@ Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu 
   - Büyüyen halka (scorch ring): `cubic-bezier(0.16, 1, 0.3, 1)` (expo-out, organik genişleme)
   - Fade-out (motes, trace): `ease-in` veya `cubic-bezier(0.55, 0, 1, 0.45)` (yavaş başla, hızla kaybol)
   - Overshoot gerektiren (whip ucu): `cubic-bezier(0.34, 1.56, 0.64, 1)` (back-out)
+  - Toz/enkaz saçılması ve sönümlenmesi (dust, debris settling): `cubic-bezier(0.22, 1, 0.36, 1)` (fırlayan nesne ile aynı expo-out ailesi; Kangaskhan Comet Punch dust ve spark katmanlarında doğrulanmıştır)
+  - Starburst parlama ve sönüm (incandescent pop): `cubic-bezier(0.15, 0.85, 0.35, 1)` (çok hızlı tepe, uzun kuyruklu sönüm; Kangaskhan Comet Punch star katmanında doğrulanmıştır)
+  - Yıldırım snap / ani beliren fenomen (lightning strike, instant materialize): `cubic-bezier(0.2, 0.85, 0.3, 1)` (çok hızlı tepe, minimal overshoot, kontrollü yerleşme; Zapdos Thunder BoltStrike top-origin scaleY snap'te doğrulanmıştır)
 - **Kural:** Yeni keyframe eklemeden önce, mevcut iki keyframe arasındaki easing'i değiştirmenin yeterli olup olmadığını test edin. Çoğu durumda yeterlidir.
 
 ### F. Expansion Layer Candidates (Genişletme Katmanı Adayları)
@@ -474,6 +538,107 @@ Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu 
 - **Uygulama noktası:** `GameBoard.tsx`'de her kart slotunun render'ında `shakeType` union tipine yeni bir değer eklenir (ör. `'heal'`). Trigger noktaları (CPU AI + Player elden oynama) `triggerSlotShake(slotIndex, 'heal', delay, duration)` çağrısı yapar.
 - **Kural:** Yeni bir kart tepki efekti eklerken: (1) CSS keyframe + class tanımla, (2) `activeShakes`/`slotShakes` tipini genişlet, (3) tüm render noktalarına branch ekle, (4) tüm trigger noktalarına çağrı ekle, (5) delay'i mevcut ikon efektiyle senkronize et.
 
-> **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir.
+### Q. Progressive Filter Depth in Keyframes (Keyframe'lerde Progresif Filter Derinliği)
+
+- Bir keyframe bloğu yalnızca `transform` ve `opacity` animasyonu taşımamalıdır; `filter` derinliği de keyframe boyunca **progresif olarak artmalı ve sönümlenmelidir**.
+- **Desen (Kangaskhan Comet Punch — 5-stop keyframe'ler):**
+  - `%0`: `filter: none` veya minimal `drop-shadow(0 0 2px rgba(..., 0.3))` — belirme anı, henüz enerji birikmemiş.
+  - `%25`: `filter: drop-shadow(0 0 4px ...)` — ilk enerji birikimi.
+  - `%50`: `filter: drop-shadow(0 0 8px ...) drop-shadow(0 0 14px ...)` — tepe parlama; **zincirleme çift drop-shadow** ile iç ve dış hale ayrışır.
+  - `%75`: `filter: drop-shadow(0 0 5px ...)` — sönümleme başlangıcı; tek drop-shadow'a geri dönüş.
+  - `%100`: `filter: none` veya `blur(1px)` — tamamen sönüm.
+- **Kural:** 4-stop'tan 5-stop'a geçiş, yalnızca bir ara keyframe eklemek değil, **filter zincirinin tepe noktasında çift katmana çıkmasını** sağlar. Bu, "parlama → sönüm" geçişinin lineer değil, **asimetrik ve organik** hissettirmesini sağlar.
+- **Uygulama maliyeti:** Sıfır yeni katman; yalnızca mevcut keyframe bloğuna bir `%50` stop'u ve `filter` değerleri eklenir. GPU maliyeti ihmal edilebilir düzeydedir (drop-shadow compositing).
+- **Kangaskhan Comet Punch doğrulaması:** 4 keyframe bloğu (`Ring`, `Star`, `Spark`, `Dust`) 4 stop'tan 5 stop'a genişletildi ve her birine progresif `drop-shadow` zincirleri eklendi. Sonuç: starburst'ın tepe anında çift haleli akkor parlama, sönümde ise tek haleli yumuşak kaybolma elde edildi.
+
+### R. Concentric Multi-Element Architecture (Eşmerkezli Çoklu Eleman Mimarisi)
+
+- Tek bir elemanla temsil edilen şok dalgası, yıldız patlaması veya toz halkası **yetersiz derinlik** sunar. Aynı bilgiyi veren 2–3 eşmerkezli eleman, tek bir elemanın yerine geçtiğinde katman sayısı artmaz ama **algılanan derinlik** önemli ölçüde artar.
+- **Ring deseni (Kangaskhan Comet Punch):**
+  - İç elips: `stroke-width: 2.5`, `opacity: 0.95`, `scale` peak `1.18` — keskin birincil şok cephesi.
+  - Orta elips: `stroke-width: 1.5`, `opacity: 0.6`, `scale` peak `1.32` — ikincil yankı dalgası; hafif `animation-delay: +30ms`.
+  - Dış elips: `stroke-width: 1`, `opacity: 0.35`, `scale` peak `1.45` — atmosferik dağılma halkası; `animation-delay: +60ms`.
+  - Üç elips aynı SVG `<svg>` konteyneri içinde olduğundan, tek bir `animation` uygulaması yeterlidir; gecikmeler `style` ile bireysel olarak atanır.
+- **Starburst deseni (Kangaskhan Comet Punch):**
+  - 12 noktalı polygon; noktalar dönüşümlü olarak uzun (`r_outer`) ve kısa (`r_inner`) yarıçaplara sahiptir.
+  - Kromatik hiyerarşi: Merkez `#ffffff` (akkor) $\rightarrow$ orta halka `#fef08a` (limon) $\rightarrow$ dış uçlar `#f59e0b` (amber).
+  - Her noktanın uzunluğu ±%8–12 rastgele varyasyonla farklılaştırılarak mekanik simetri kırılır.
+- **Dust deseni (Kangaskhan Comet Punch):**
+  - 3–4 çok loblu Bézier `Q`-path bulutu; her biri farklı `scale`, `opacity` ve `animation-delay` ile konumlandırılır.
+  - Loblar arası açı farkı eşit değildir (ör. 70°, 95°, 80°, 115°); bu, "kalıp baskı" hissini önler.
+- **Meta-ilke:** Eşmerkezli çoklu eleman, §8.F'deki "katman ekleme"den farklıdır: **yeni bir katman veya z-index eklenmez**; mevcut tek bir katmanın iç geometrisi zenginleştirilir. Bu, anti-bleed bütçesini ve DOM derinliğini etkilemez.
+- **Kangaskhan Comet Punch doğrulaması:** Ring (3 eşmerkezli elips), Star (12 noktalı incandescent starburst), Dust (çok loblu Bézier bulutlar) — tümü tek bir SVG konteyneri içinde, katman sayısı değişmeden, görsel derinlik önemli ölçüde artırıldı.
+
+### S. Strike-Snap Kinematics & Electrical Flicker Timing (Çarpma-Anı Kinematiği ve Elektriksel Titreşim Zamanlaması)
+
+- **Strike-Snap Deseni (Top-Origin ScaleY Snap):** Yıldırım, şimşek veya benzeri "gökten inen" fenomenlerde; nesnenin yukarıdan aşağıya doğru kademeli olarak çizilmesi (`stroke-dashoffset` draw-on) yerine, **ani bir snap** ile tam boyutta belirmesi fiziksel gerçekliğe daha uygundur. Gerçek şimşek "çizilmez"; **aniden vardır**.
+  - **Uygulama:** `transform-origin: top center`; `%0`'da `scaleY(0.15)` (neredeyse görünmez bir çizgi), `%8`'de `scaleY(1.04)` (hafif overshoot ile tam boyut). Bu 8%'lik pencere (~116ms, 1.45s duration'da), izleyicinin "bir anda belirdi" algısını üretir.
+  - **Overshoot:** `scaleY(1.04)` → `%14`'te `scaleY(1.0)` settle. Bu 4%'lük overshoot, "çarpma anında zemin hafifçe esnedi" hissi verir; mekanik `scaleY(1.0)` duruşundan daha organiktir.
+  - **Karşıt örnek (kaçınılacak):** `stroke-dashoffset: 1 → 0` draw-on animasyonu, şimşeği "yukarıdan aşağıya çizilen bir kalem" gibi gösterir; bu, elektrik deşarjının fiziksel doğasına aykırıdır ve "yapay, yavaş, dekoratif" hissi verir.
+- **Voltage Flicker Deseni (Voltaj Titreşimi):** Strike-snap'in hemen ardından, elektriksel kararsızlığı anlatan bir **opacity osilasyonu** gelir:
+  - `%8`: `opacity: 1` (tam parlama, peak `drop-shadow(0 0 22px rgba(253,224,71,0.8))`)
+  - `%14`: `opacity: 0.55` (ilk sönüm — voltaj düşüşü)
+  - `%22`: `opacity: 1` (ikinci parlama — voltaj toparlanması, `drop-shadow(0 0 18px #fde047)`)
+  - Bu 14%'lük pencere (~200ms), gerçek elektrik deşarjındaki "flicker" karakterini taklit eder. Tek bir `opacity: 1 → 0` fade-out yerine, **asimetrik bir çift nabız** izleyiciye "enerji hâlâ akıyor" sinyali verir.
+- **Dissipation Tail (Sönüm Kuyruğu):** Flicker'ın ardından gelen %42–%100 arası, kademeli opacity düşüşü + progresif `blur` artışı ile modellenir:
+  - `%42`: `opacity: 0.85`
+  - `%62`: `opacity: 0.7`
+  - `%82`: `opacity: 0.35; filter: blur(1px)`
+  - `%100`: `opacity: 0; transform: scaleY(1.02); filter: blur(2px)`
+  - Blur'ün kademeli artışı (0 → 1px → 2px), "enerji dağılıyor, ışık kırılıyor" hissi verir. Ani `opacity: 0` kesimi yerine, blur + opacity birlikte sönümlenir.
+- **Easing:** Strike-snap için `cubic-bezier(0.2, 0.85, 0.3, 1)` (hızlı çıkış, kontrollü durulma) kullanılır. Bu, §8.E tablosundaki "fırlayan nesne" easing'inden farklıdır; burada nesne fırlamıyor, **beliriyor ve yerinde kalıyor**.
+- **Cloud as Anticipation (Bulut Ön Hazırlık Fazı):** Strike-snap'ten önce gelen fırtına bulutu (§2.I'deki filled polygon bolt'un kaynağı), §8.C anticipation ilkesinin **çevresel** bir uygulamasıdır. Aktörün kendisi geri çekilmek yerine, sahnenin atmosferi (bulut) "bir şey geliyor" sinyalini verir: `translateY(-16px) scale(0.7)` → `translateY(0) scale(1.04)` ile 26%'da tam belirme, ardından 80%'de `translateY(4px) scale(0.96)` ile hafif çökme. Whiff'te bulut aynı zamanlamada ama sönük (`opacity: 0.4` peak) ve daha küçük (`scale(0.75)` peak) kalır; bolt ve impact bastırılır.
+- **Zapdos Thunder FAZ7d doğrulaması:** `gbaZapdosThunderBoltStrike` keyframe'i 8 stop içerir (0%, 8%, 14%, 22%, 42%, 62%, 82%, 100%). Strike-snap 0–8% arası (~116ms), flicker 8–22% arası (~200ms), dissipation 22–100% arası (~1.13s). Toplam 1.45s duration, `getFXDuration` ile senkronize. Impact katmanı 0.28s delay ile bolt'un çarpma anından ~200ms sonra başlar (nedensellik zinciri: bolt → impact → sparks).
+
+### T. Scatter vs. Embed Dual Particle Behaviour (Saçılma vs. Gömme İkili Parçacık Davranışı)
+
+- **İkili Parçacık Kaderi:** Aynı saldırı içinde iki farklı parçacık davranışı tanımlanabilir: **saçılma (scatter)** ve **gömme (embed)**. Her ikisi de aynı SVG geometrisini (buz shard polygon) kullanır, ancak farklı `@keyframes` bloklarıyla farklı fiziksel kaderler yaşar.
+  - **Scatter (`gbaBlizzardIceShard`):** Parçacık dışarıdan gelir (`translate(var(--shard-ox), var(--shard-oy))`), merkezden geçer ve karşı tarafa savrulur (`* -1.2`). Son keyframe'de `filter: blur(1px)` ile bulanıklaşarak kaybolur. Bu, "rüzgârla savrulan moloz" davranışıdır.
+  - **Embed (`gbaBlizzardIceShardEmbed`):** Parçacık dışarıdan gelir, hedef noktada **durur** (`translate → 0`), impact wobble ile "saplanır" (`scale(1.15)` overshoot → `scale(1.0)` settle), ardından `blur(1px)` ile fade-out. Bu, "karta saplanan buz kırığı" davranışıdır.
+- **Kader Keyframe'de Tanımlanır:** Parçacığın geometrisi (polygon points, boyut, renk) her iki davranışta da aynıdır; yalnızca keyframe'in terminal davranışı değişir. Bu, "aynı nesne, farklı fiziksel sonuç" prensibini kod düzeyinde gerçekleştirir ve DOM/SVG maliyetini artırmaz.
+- **CSS Custom Property Paylaşımı:** Her iki keyframe bloğu da aynı custom property şemasını kullanır (`--shard-ox`, `--shard-oy`). TSX tarafında parçacık yalnızca hangi keyframe'i kullanacağını seçer (`gbaBlizzardIceShard` vs `gbaBlizzardIceShardEmbed`); başlangıç offset'i aynı mekanizmayla iletilir. Bu, §2.J'deki parametrik sürücü prensibinin ikili davranış uzantısıdır.
+- **Blizzard FAZ6 doğrulaması:** 6 scatter shard (1.3s, `cubic-bezier(0.25, 0.8, 0.35, 1)`, CSS L15505) + 4 embed shard (1.15s, `cubic-bezier(0.2, 0.85, 0.3, 1)`, CSS L15522). Embed shard'lar daha kısa süreli ve daha keskin easing ile "saplanma" hissini güçlendirir. TSX L19278–19326. Her iki grup `npx tsc --noEmit` hatasız.
 
 > **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir.
+
+---
+
+## 9. Stock Image Generation Prompt Standards (Stok Görsel Üretim Prompt'ları Standart Referans Kılavuzu)
+
+> Bu bölüm, Articuno (Blizzard) ve Zapdos (Thunderbolt) stok görsel üretim turlarında kanıtlanan prompt mühendisliği kriterlerini, kanon doğrulama protokolünü ve teslim alma uygunluk kontrol listesini, gelecek tüm stok görsel istemleri için **genel geçer standart referans** olarak derler. §5'in işbirliği protokolünü tamamlar: asistan görsel üretmez; kullanıcı üretir, düzenler ve `public/assets/raw/` altına bırakır.
+
+### A. Prompt Anatomy (Zorunlu 5 Blok)
+Her stok görsel üretim prompt'u aşağıdaki 5 bloğu bu sırayla içerir:
+1. **CHARACTER REFERENCE:** Türün resmi Ken Sugimori artwork'ü görsel girdi olarak bağlanır ve "anatomi, oran, renk yerleşimi ve işaret desenleri için tek doğruluk kaynağı" ilan edilir; modele yalnızca poz, kamera açısı ve efektleri değiştirme izni verilir. Doğrulanmış arşiv URL deseni: `https://archives.bulbagarden.net/media/upload/<hash>/<NNN><Species>.png` (ör. `0144Articuno.png`, `0145Zapdos.png`).
+2. **STYLE:** 1996 Sugimori/Arita TCG suluboya ekolü (§1.A): şeffaf su boyası yıkamaları, kağıt dokusu, ince mürekkep hatları, vintage mat palet; saf beyaz veya şeffaf arka plan; çerçeve/metin/logo/filigran yasağı.
+3. **CANONICAL ANATOMY CHECKLIST:** Bulbapedia Biology wikitext'inden doğrulanmış türe özgü madde listesi (§9.B): gövde rengi tonu, ibik/yele tüylerinin sayısı ve şekli, göz şekli+renk, gaga/bacak rengi, kanat ön yüzü ile arka yüzü renk ayrımı, kuyruk biçimi. Sayılabilir özellikler açık sayıyla yazılır ("exactly three feathers, count them"); renk yerleşimi yalnız renk adıyla değil **yüzey oranı ve ön/arka ayrımı** ile ifade edilir (ör. Zapdos: görünür yüzeyin ~%70'i sarı, siyah ≤%20 ve yalnız bordür/astar).
+4. **POSE / COMPOSITION:** Animasyon katmanları için tasarlanır (§9.D): savaş ölçeğinde (~180px) okunur silüet (geniş V kanat açıklığı, net kafa/kuyruk), efekt yayın noktalarının (kanat kenarı, kuyruk ucu, pençe) keyframe'lerle hizalanması ve karakterin bedensel bütünlüğünün korunması (yalnız fırlatılan nesne değil, Pokémon'un kendisi görünür).
+5. **STRICTLY FORBIDDEN:** Önceki üretim turlarında gözlenen her sapma kalıcı bir negatif kısıta dönüşür ("no glowing eyes", "no black-dominant wings", "no brown beak"). Negatif blok, pozitif checklist kadar bağlayıcıdır.
+
+### B. Canon Verification Protocol (Kanon Doğruluk Protokolü)
+- Prompt yazılmadan önce tür anatomisi **Bulbapedia Biology wikitext** üzerinden doğrulanır (`action=parse&prop=wikitext&section=1`); model hafızasına asla güvenilmez.
+- Üretim sonrası görsel, resmi artwork ile görsel dife tabi tutulur; sapmalar üç sütunlu tabloda kaydedilir: *gözlenen hata → kanon gerçek → prompt karşılığı*.
+- Renk adları tek başına yeterli değildir: ton (pale sky blue ≠ indigo), yüzey (wing front ≠ wing backing) ve oran (~%70 yellow) birlikte belirtilir.
+- Kullanıcının referans-görsel slotunu kullanmadığı turlarda bile checklist + negatif blok metin düzeyinde anatomi kilidi sağlar; prompt seti o turda kullanılmış olmasa dahi **toolset referansı** olarak saklanır ve gelecek istemlere şablonluk eder.
+
+### C. Iteration & User Edit Loop (Yineleme ve Kullanıcı Düzenleme Döngüsü)
+- v1 çıktının sapması beklenen durumdur; revizyon döngüsü: sapma tablosu → v2 prompt (negatif kısıtlar genişletilmiş).
+- Oranlar/anatomi doğruysa yeniden üretim yerine **kullanıcının manuel düzeltmesi** tercih edilir (ör. Zapdos'ta sarı oranının kanon sınırlar içinde artırılması); düzenlenmiş dosya `_raw_edited.png` adıyla saklanır ve onaylı nihai girdi kabul edilir.
+- Asistan bu düzenlemelere asla müdahale etmez (.clinerules §10); görsel olduğu gibi kullanılır, post-processing uygulanmaz.
+
+### D. Asset Intake & Animation-Plan Suitability Checklist (Teslim Alma Uygunluk Kontrol Listesi)
+Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
+1. **Arka plan:** Köşe pikselleri alfa=0 (şeffaf) veya tekdüze saf beyaz olmalıdır; şeffaf tercih edilir (blend-mode desteğine ihtiyaç bırakmaz, GBA zemininde beyaz kutu riski yaratmaz).
+2. **Tuval & kırpma payı:** Kare tuval (tipik 2048×2048); içerik bounding box'ı, +8–16px güvenlik paylı tight-crop'a (§5) yetecek marj bırakır; efekt uzantıları (yıldırım, buz saçılımı) kırpma sonrası kompozisyonu bozmaz.
+3. **Silüet okunabilirliği:** Poz, ~180px savaş ölçeğinde tek bakışta okunur (V kanat, net kafa/kuyruk); ince detaylar ölçekle kaybolsa bile silüet saldırının doğasını anlatır.
+4. **Efekt-emitör hizası:** Boyalı efektler (yıldırım, kıymık, kar saçılımı) CSS keyframe'lerinin süreceği noktalara (kanat kenarı, kuyruk ucu, pençe) bağlıdır; ayrık parçalar whole-actor transform'larıyla tutarlı hareket eder.
+5. **Whiff uygunluğu:** Aktör tek bir bitişik gövdedir; whiff'te scale/opacity/saturate bastırması (§3) ayrık parça bırakmaz.
+6. **Kromatik bütçe:** Efekt renkleri §1.C hiyerarşisine oturur (buz: `#ffffff → #cffafe → #38bdf8 → #0284c7`; elektrik: akkor beyaz → `#facc15` → `#fbbf24`); düz primer kullanılmaz.
+
+### E. Registration & Pipeline Notes (Kayıt ve Hat Notları)
+- Onaylı görsel `STOCK_IMAGE_FX_TYPES` setine kaydedilir; raster aktörler evrensel SVG %68.1 konteyner transformundan muaftır (§7.D) — çift ölçekleme yasağı.
+- Whiff durumunda stok aktör: küçültülmüş boyut sınıfı + opacity/saturate bastırması; stagger zinciri bozulur (§8.D). Anticipation fazı stok aktörlerde de zorunludur (§8.C): keyframe %0–14 geri çekilme coil'u.
+- **Vaka notları (kanon sapma arşivi):** Articuno v1 — parlamalı camgöbeği göz, 4–5 bıçaklı ibik, çivit gövde, halat kuyruk → kanon: yuvarlak kırmızı göz, alında 3 baklava tüy, soluk gök mavisi, streamer kuyruk. Zapdos v1 — siyah ağırlıklı kanat, siyah yüz, kahve gaga/bacak, lamba göz → kanon: sarı ön kanat, siyah sivri yeleli sarı yüz, açık turuncu gaga/bacak, küçük üçgen göz. Zapdos nihai: kullanıcı sarı oranını kanon sınırlar içinde artırarak onaylamıştır.
+- **Doğrulanmış referans URL'leri:** Articuno `https://archives.bulbagarden.net/media/upload/d/d0/0144Articuno.png` · Zapdos `https://archives.bulbagarden.net/media/upload/c/c6/0145Zapdos.png`.
+
+> **Terfi Notu:** §9'un checklist'leri yeni türlerde kanıtlandıkça §5'in işbirliği protokolüne terfi ettirilir; §9 o tür için yalnızca vaka notunu saklar.

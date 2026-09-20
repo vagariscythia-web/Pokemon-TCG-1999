@@ -12230,53 +12230,177 @@ html, body {
   }
 }
 
+/* FAZ5: aerodynamic drift — lateral sine-wave sway + wind-aligned trajectory, 6 stops for fluid glide */
 @keyframes gbaArticunoSnowflakeSpin {
   0% {
     opacity: 0;
-    transform: translate(var(--s-ox, 40px), var(--s-oy, -30px)) rotate(0deg) scale(0.5);
+    transform: translate(var(--s-ox, 40px), var(--s-oy, -30px)) rotate(0deg) scale(0.4);
   }
-  20% {
+  12% {
+    opacity: 0.7;
+    transform: translate(calc(var(--s-ox, 40px) * 0.7), calc(var(--s-oy, -30px) * 0.7)) rotate(45deg) scale(0.8);
+  }
+  30% {
     opacity: 1;
-    transform: translate(calc(var(--s-ox, 40px) * 0.4), calc(var(--s-oy, -30px) * 0.4)) rotate(90deg) scale(1.1);
+    transform: translate(calc(var(--s-ox, 40px) * 0.25 + 4px), calc(var(--s-oy, -30px) * 0.25 + 2px)) rotate(130deg) scale(1.05);
   }
-  65% {
-    opacity: 0.9;
-    transform: translate(calc(var(--s-ox, 40px) * -0.4), calc(var(--s-oy, -30px) * -0.4)) rotate(240deg) scale(1.0);
+  55% {
+    opacity: 0.85;
+    transform: translate(calc(var(--s-ox, 40px) * -0.3 - 6px), calc(var(--s-oy, -30px) * -0.3 + 4px)) rotate(220deg) scale(0.95);
+  }
+  80% {
+    opacity: 0.5;
+    transform: translate(calc(var(--s-ox, 40px) * -0.7 - 8px), calc(var(--s-oy, -30px) * -0.7 + 6px)) rotate(310deg) scale(0.8);
   }
   100% {
     opacity: 0;
-    transform: translate(calc(var(--s-ox, 40px) * -1), calc(var(--s-oy, -30px) * -1)) rotate(360deg) scale(0.7);
+    transform: translate(calc(var(--s-ox, 40px) * -1.1 - 10px), calc(var(--s-oy, -30px) * -1.1 + 8px)) rotate(380deg) scale(0.6);
   }
 }
 
-/* 3. ZAPDOS: THUNDERBOLT & THUNDER (Colossal Vertical Lightning Pillar) */
+/* ZAPDOS THUNDERBOLT — WING-TIP ARC SPARK (FAZ5: mid-animation peak, breaks static wing perception) */
+@keyframes gbaZapdosWingTipSpark {
+  0%   { opacity: 0; transform: scale(0.2) rotate(0deg); }
+  15%  { opacity: 0.3; transform: scale(0.5) rotate(8deg); }
+  35%  { opacity: 0.7; transform: scale(0.9) rotate(-5deg); }
+  50%  { opacity: 1; transform: scale(1.2) rotate(3deg); filter: drop-shadow(0 0 10px #fde047) drop-shadow(0 0 4px #ffffff); }
+  65%  { opacity: 0.8; transform: scale(1.0) rotate(-8deg); filter: drop-shadow(0 0 6px #fde047); }
+  82%  { opacity: 0.35; transform: scale(0.6) rotate(5deg); }
+  100% { opacity: 0; transform: scale(0.25) rotate(0deg); }
+}
+
+/* ZAPDOS THUNDERBOLT — WING VEIN TRACE FLASH (FAZ6: the lightning fractals under the wings ignite along the stock-art paths) */
+@keyframes gbaZapdosWingVeinFlash {
+  0%   { opacity: 0; }
+  18%  { opacity: 0; }
+  26%  { opacity: 1; filter: drop-shadow(0 0 10px #fde047) drop-shadow(0 0 4px #ffffff); }
+  34%  { opacity: 0.35; }
+  42%  { opacity: 1; filter: drop-shadow(0 0 12px #facc15) drop-shadow(0 0 5px #ffffff); }
+  55%  { opacity: 0.85; filter: drop-shadow(0 0 8px #facc15); }
+  68%  { opacity: 0.4; }
+  80%  { opacity: 0.7; filter: drop-shadow(0 0 6px #fde047); }
+  100% { opacity: 0; }
+}
+
+/* ZAPDOS THUNDERBOLT — WING VEIN DRAW (pathLength=1 dash draw: bolt traces the fractal root pattern) */
+@keyframes gbaZapdosWingVeinDraw {
+  0%   { stroke-dashoffset: 1; }
+  18%  { stroke-dashoffset: 1; }
+  40%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ZAPDOS THUNDER (60 DMG) — FORKED SKY STRIKE (FAZ7: pure-SVG lean strike, no stock actor; deliberately distinct from Thunderbolt's colossal pillar) */
+@keyframes gbaZapdosThunderFlash {
+  0%, 14% { opacity: 0; }
+  20%     { opacity: 0.75; }
+  28%     { opacity: 0.35; }
+  36%     { opacity: 0.55; }
+  55%     { opacity: 0.2; }
+  100%    { opacity: 0; }
+}
+
+@keyframes gbaZapdosThunderCloud {
+  0%   { opacity: 0; transform: translateY(-16px) scale(0.7); }
+  14%  { opacity: 0.7; transform: translateY(-10px) scale(0.88); }
+  26%  { opacity: 1; transform: translateY(-4px) scale(1.04); filter: drop-shadow(0 0 12px rgba(250,204,21,0.35)); }
+  55%  { opacity: 0.95; transform: translateY(0px) scale(1); filter: drop-shadow(0 0 8px rgba(250,204,21,0.25)); }
+  80%  { opacity: 0.5; transform: translateY(4px) scale(0.96); }
+  100% { opacity: 0; transform: translateY(8px) scale(0.92); filter: blur(2px); }
+}
+
+@keyframes gbaZapdosThunderCloudWhiff {
+  0%   { opacity: 0; transform: translateY(-14px) scale(0.6); }
+  22%  { opacity: 0.4; transform: translateY(-8px) scale(0.75); }
+  55%  { opacity: 0.3; transform: translateY(-4px) scale(0.78); }
+  100% { opacity: 0; transform: translateY(2px) scale(0.7); filter: blur(2px); }
+}
+
+@keyframes gbaZapdosThunderBoltStrike {
+  0%   { opacity: 0; transform: scaleY(0.15); }
+  8%   { opacity: 1; transform: scaleY(1.04); filter: drop-shadow(0 0 22px rgba(253,224,71,0.8)); }
+  14%  { opacity: 0.55; transform: scaleY(1); }
+  22%  { opacity: 1; filter: drop-shadow(0 0 18px #fde047); }
+  42%  { opacity: 0.85; }
+  62%  { opacity: 0.7; }
+  82%  { opacity: 0.35; filter: blur(1px); }
+  100% { opacity: 0; transform: scaleY(1.02); filter: blur(2px); }
+}
+
+@keyframes gbaZapdosThunderImpact {
+  0%   { opacity: 0; transform: scale(0.2); }
+  12%  { opacity: 0.9; transform: scale(0.7); }
+  28%  { opacity: 1; transform: scale(1.06); filter: drop-shadow(0 0 16px rgba(250,204,21,0.7)); }
+  46%  { opacity: 0.75; transform: scale(1.3); }
+  68%  { opacity: 0.45; transform: scale(1.6); filter: drop-shadow(0 0 8px rgba(250,204,21,0.3)); }
+  100% { opacity: 0; transform: scale(2.05); filter: blur(2.5px); }
+}
+
+@keyframes gbaZapdosThunderWhiffPuff {
+  0%   { opacity: 0; transform: scale(0.4); }
+  30%  { opacity: 0.45; transform: scale(0.85); }
+  65%  { opacity: 0.25; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1.2); filter: blur(3px); }
+}
+
+
+/* 3. ZAPDOS: THUNDERBOLT & THUNDER (Colossal Vertical Lightning Pillar — FAZ4: smoothed entrance ramp + finer jitter granularity) */
 @keyframes gbaZapdosLightningPillar {
   0% {
     opacity: 0;
     transform: scaleY(0.1) translateY(-100px);
     filter: blur(4px);
   }
+  8% {
+    opacity: 0.6;
+    transform: scaleY(0.75) translateY(-42px);
+    filter: blur(1.5px);
+  }
   15% {
     opacity: 1;
     transform: scaleY(1.15) translateY(0px);
     filter: drop-shadow(0 0 28px #fde047) drop-shadow(0 0 16px #ffffff);
   }
-  30% { /* Heavy electric jitter */
+  22% {
+    opacity: 1;
+    transform: scaleY(1.03) translateX(-2px);
+    filter: drop-shadow(0 0 26px #fde047);
+  }
+  30% { /* Electric jitter — finer steps to avoid stutter */
     opacity: 1;
     transform: scaleY(1.0) translateX(-3px);
+  }
+  37% {
+    opacity: 1;
+    transform: scaleY(1.04) translateX(1px);
+    filter: drop-shadow(0 0 24px #facc15);
   }
   45% {
     opacity: 1;
     transform: scaleY(1.05) translateX(3px);
     filter: drop-shadow(0 0 22px #facc15);
   }
+  52% {
+    opacity: 0.95;
+    transform: scaleY(1.0) translateX(0px);
+    filter: drop-shadow(0 0 18px #facc15);
+  }
   60% {
     opacity: 0.9;
     transform: scaleY(0.98) translateX(-2px);
   }
+  70% {
+    opacity: 0.72;
+    transform: scaleY(0.94) translateY(4px);
+  }
   80% {
     opacity: 0.5;
     transform: scaleY(0.9) translateY(10px);
+  }
+  90% {
+    opacity: 0.22;
+    transform: scaleY(0.8) translateY(20px);
+    filter: blur(1px);
   }
   100% {
     opacity: 0;
@@ -12290,14 +12414,28 @@ html, body {
     opacity: 0;
     transform: scale(0.4);
   }
+  12% {
+    opacity: 0.7;
+    transform: scale(0.85);
+    filter: drop-shadow(0 0 12px #facc15);
+  }
   25% {
     opacity: 1;
     transform: scale(1.15);
     filter: drop-shadow(0 0 16px #facc15);
   }
+  42% {
+    opacity: 0.9;
+    transform: scale(1.26);
+  }
   60% {
     opacity: 0.8;
     transform: scale(1.35);
+  }
+  80% {
+    opacity: 0.4;
+    transform: scale(1.5);
+    filter: blur(1px);
   }
   100% {
     opacity: 0;
@@ -15343,6 +15481,157 @@ html, body {
   35%  { opacity: 0.55; transform: translateY(0px) scale(0.65); }
   70%  { opacity: 0.2; transform: translateY(16px) scale(0.5); filter: blur(3px); }
   100% { opacity: 0; transform: translateY(24px) scale(0.35); filter: blur(5px); }
+}
+
+/* ARTICUNO BLIZZARD — FROST VEIL (FAZ7: semi-transparent rime film over the stock actor on the ACTIVE slot so ice FX stay legible over the dense artwork; opacity-only keyframe) */
+@keyframes gbaBlizzardFrostVeil {
+  0%   { opacity: 0; }
+  22%  { opacity: 0.3; }
+  45%  { opacity: 0.42; backdrop-filter: blur(0.6px); }
+  70%  { opacity: 0.26; }
+  100% { opacity: 0; }
+}
+
+/* ARTICUNO BLIZZARD — STORM HAZE BODY (FAZ4: dense snow-cloud mass behind wind streaks, gives storm volume) */
+@keyframes gbaBlizzardStormHaze {
+  0%   { opacity: 0; transform: translate(30px, -20px) scale(0.7); }
+  25%  { opacity: 0.75; transform: translate(10px, -6px) scale(1.0); }
+  55%  { opacity: 0.6; transform: translate(-12px, 8px) scale(1.08); }
+  80%  { opacity: 0.25; transform: translate(-30px, 20px) scale(1.16); filter: blur(2px); }
+  100% { opacity: 0; transform: translate(-40px, 26px) scale(1.2); filter: blur(3px); }
+}
+
+/* ARTICUNO BLIZZARD — ICE SHARD SCATTER (FAZ5: angular ice fragments tumbling with storm wind toward opponent) */
+@keyframes gbaBlizzardIceShard {
+  0%   { opacity: 0; transform: translate(var(--shard-ox, 30px), var(--shard-oy, -25px)) rotate(0deg) scale(0.3); }
+  18%  { opacity: 0.85; transform: translate(calc(var(--shard-ox, 30px) * 0.5), calc(var(--shard-oy, -25px) * 0.5)) rotate(80deg) scale(0.9); }
+  45%  { opacity: 1; transform: translate(calc(var(--shard-ox, 30px) * -0.1 + 3px), calc(var(--shard-oy, -25px) * -0.1 + 5px)) rotate(190deg) scale(1.05); }
+  72%  { opacity: 0.6; transform: translate(calc(var(--shard-ox, 30px) * -0.6 - 5px), calc(var(--shard-oy, -25px) * -0.6 + 8px)) rotate(290deg) scale(0.85); }
+  100% { opacity: 0; transform: translate(calc(var(--shard-ox, 30px) * -1.2 - 8px), calc(var(--shard-oy, -25px) * -1.2 + 12px)) rotate(370deg) scale(0.5); filter: blur(1px); }
+}
+
+/* ARTICUNO BLIZZARD — BENCH FROST BURST (compact particle-only impact for bench cards §6b) */
+@keyframes gbaBlizzardBenchFrostBurst {
+  0%   { opacity: 0; transform: scale(0.3); }
+  25%  { opacity: 0.9; transform: scale(1.1); }
+  55%  { opacity: 0.7; transform: scale(1.3); }
+  100% { opacity: 0; transform: scale(1.6); filter: blur(2px); }
+}
+
+/* ARTICUNO BLIZZARD — ICE SHARD EMBED (FAZ6: shard flies in and STICKS into the card with impact wobble, then fades; impact intensity up) */
+@keyframes gbaBlizzardIceShardEmbed {
+  0%   { opacity: 0; transform: translate(var(--shard-ox, 30px), var(--shard-oy, -25px)) rotate(0deg) scale(0.35); }
+  30%  { opacity: 1; transform: translate(calc(var(--shard-ox, 30px) * 0.35), calc(var(--shard-oy, -25px) * 0.35)) rotate(120deg) scale(1.2); filter: drop-shadow(0 0 8px #7dd3fc); }
+  55%  { opacity: 1; transform: translate(calc(var(--shard-ox, 30px) * 0.08), calc(var(--shard-oy, -25px) * 0.08)) rotate(200deg) scale(1.15); filter: drop-shadow(0 0 10px #bae6fd); }
+  68%  { opacity: 1; transform: translate(0px, 0px) rotate(190deg) scale(1.05); }
+  82%  { opacity: 0.9; transform: translate(0px, 0px) rotate(193deg) scale(1.0); filter: drop-shadow(0 0 6px #7dd3fc); }
+  100% { opacity: 0; transform: translate(0px, 0px) rotate(190deg) scale(0.92); filter: blur(1px); }
+}
+
+
+/* ARTICUNO FREEZE DRY — CRYOGENIC FLASH (Layer 1: instant radial burst; FAZ4: smoother onset ramp + mid-hold stop) */
+@keyframes gbaFreezeDryCryoFlash {
+  0%   { opacity: 0; transform: scale(0.2); }
+  6%   { opacity: 0.55; transform: scale(0.7); }
+  12%  { opacity: 1; transform: scale(1.1); }
+  22%  { opacity: 0.92; transform: scale(1.18); }
+  30%  { opacity: 0.85; transform: scale(1.25); }
+  45%  { opacity: 0.62; transform: scale(1.33); }
+  60%  { opacity: 0.4; transform: scale(1.4); }
+  80%  { opacity: 0.18; transform: scale(1.5); filter: blur(2px); }
+  100% { opacity: 0; transform: scale(1.6); filter: blur(3px); }
+}
+
+/* ARTICUNO FREEZE DRY — COLD VAPOR MIST (Layer 4: atmospheric base fog §1.D; FAZ4: organic horizontal drift) */
+@keyframes gbaFreezeDryColdVapor {
+  0%   { opacity: 0; transform: translate(0px, 0px) scale(0.6); }
+  20%  { opacity: 0.65; transform: translate(-2px, 3px) scale(0.88); }
+  30%  { opacity: 0.8; transform: translate(-3px, 4px) scale(1.0); }
+  60%  { opacity: 0.6; transform: translate(3px, 8px) scale(1.15); }
+  82%  { opacity: 0.3; transform: translate(5px, 11px) scale(1.24); filter: blur(2px); }
+  100% { opacity: 0; transform: translate(6px, 14px) scale(1.3); filter: blur(3px); }
+}
+
+/* ARTICUNO FREEZE DRY — SVG DIAMOND GLINT (Layer 5: proper SVG particles §1.B; FAZ4: added tumble rotation + smoother tail) */
+@keyframes gbaFreezeDryGlint {
+  0%   { opacity: 0; transform: scale(0.4) translateY(0) rotate(0deg); }
+  20%  { opacity: 0.85; transform: scale(1.0) translateY(-2px) rotate(14deg); }
+  30%  { opacity: 1; transform: scale(1.15) translateY(-4px) rotate(22deg); }
+  55%  { opacity: 0.78; transform: scale(1.02) translateY(-7px) rotate(38deg); }
+  78%  { opacity: 0.4; transform: scale(0.8) translateY(-11px) rotate(52deg); }
+  100% { opacity: 0; transform: scale(0.55) translateY(-14px) rotate(62deg); filter: blur(1px); }
+}
+
+/* ARTICUNO FREEZE DRY — ICE SHARD RAIN (FAZ5: convergent shard barrage feeding the ice mass formation) */
+@keyframes gbaFreezeDryShardRain {
+  0%   { opacity: 0; transform: translate(var(--fd-shard-x, 0px), var(--fd-shard-y, -50px)) rotate(var(--fd-shard-rot, 0deg)) scale(0.3); }
+  20%  { opacity: 0.8; transform: translate(calc(var(--fd-shard-x, 0px) * 0.6), calc(var(--fd-shard-y, -50px) * 0.6)) rotate(calc(var(--fd-shard-rot, 0deg) + 40deg)) scale(0.85); }
+  45%  { opacity: 1; transform: translate(calc(var(--fd-shard-x, 0px) * 0.2), calc(var(--fd-shard-y, -50px) * 0.15)) rotate(calc(var(--fd-shard-rot, 0deg) + 90deg)) scale(1.0); }
+  70%  { opacity: 0.7; transform: translate(calc(var(--fd-shard-x, 0px) * -0.1), calc(var(--fd-shard-y, -50px) * -0.05)) rotate(calc(var(--fd-shard-rot, 0deg) + 130deg)) scale(0.9); filter: blur(0.5px); }
+  100% { opacity: 0; transform: translate(0px, 5px) rotate(calc(var(--fd-shard-rot, 0deg) + 160deg)) scale(0.5); filter: blur(1.5px); }
+}
+
+/* ARTICUNO FREEZE DRY — WHIFF PUFF (suppressed cold vapor) */
+@keyframes gbaFreezeDryWhiffPuff {
+  0%   { opacity: 0; transform: scale(0.4); }
+  25%  { opacity: 0.4; transform: scale(0.8); }
+  60%  { opacity: 0.25; transform: scale(1.0); }
+  100% { opacity: 0; transform: scale(1.2); filter: blur(3px); }
+}
+
+/* ARTICUNO BLIZZARD STOCK ACTOR (raster <img>, exempt from SVG 68.1% container transform §7.D) */
+@keyframes gbaBlizzardStockWingSpread {
+  0%   { transform: translate(-50%, -50%) scale(0.55) translateY(14px); opacity: 0; }
+  14%  { transform: translate(-50%, -50%) scale(0.62) translateY(18px); opacity: 0; }
+  32%  { transform: translate(-50%, -50%) scale(1.06) translateY(-4px); opacity: 1; }
+  46%  { transform: translate(-50%, -50%) scale(1.14) translateY(-8px); opacity: 1; }
+  60%  { transform: translate(-50%, -50%) scale(1.10) translateY(-6px); opacity: 1; }
+  80%  { transform: translate(-50%, -50%) scale(0.98) translateY(2px); opacity: 0.9; }
+  100% { transform: translate(-50%, -50%) scale(0.88) translateY(6px); opacity: 0; }
+}
+
+/* ARTICUNO BLIZZARD STOCK ACTOR — WHIFF (suppressed opacity peak ~0.45, §9.E) */
+@keyframes gbaBlizzardStockWhiff {
+  0%   { transform: translate(-50%, -50%) scale(0.5) translateY(16px); opacity: 0; }
+  14%  { transform: translate(-50%, -50%) scale(0.55) translateY(20px); opacity: 0; }
+  34%  { transform: translate(-50%, -50%) scale(0.82) translateY(-2px); opacity: 0.45; }
+  52%  { transform: translate(-50%, -50%) scale(0.86) translateY(-4px); opacity: 0.4; }
+  74%  { transform: translate(-50%, -50%) scale(0.78) translateY(4px); opacity: 0.25; }
+  100% { transform: translate(-50%, -50%) scale(0.68) translateY(10px); opacity: 0; }
+}
+
+/* ZAPDOS THUNDERBOLT STOCK ACTOR (FAZ4 kinematik smoothing: denser keyframe stops + smooth rise/hold/decay/settle arc) */
+@keyframes gbaThunderboltStockStrike {
+  0%   { transform: translate(-50%, -50%) scale(0.5) translateY(-18px); opacity: 0; }
+  7%   { transform: translate(-50%, -50%) scale(0.52) translateY(-20px); opacity: 0; }
+  14%  { transform: translate(-50%, -50%) scale(0.58) translateY(-22px); opacity: 0; }
+  20%  { transform: translate(-50%, -50%) scale(0.76) translateY(-12px); opacity: 0.35; }
+  26%  { transform: translate(-50%, -50%) scale(0.95) translateY(-4px); opacity: 0.85; }
+  32%  { transform: translate(-50%, -50%) scale(1.08) translateY(2px); opacity: 1; }
+  40%  { transform: translate(-50%, -50%) scale(1.14) translateY(4px); opacity: 1; }
+  48%  { transform: translate(-50%, -50%) scale(1.16) translateY(4px); opacity: 1; }
+  56%  { transform: translate(-50%, -50%) scale(1.13) translateY(3px); opacity: 1; }
+  64%  { transform: translate(-50%, -50%) scale(1.08) translateY(1px); opacity: 0.98; }
+  72%  { transform: translate(-50%, -50%) scale(1.03) translateY(-1px); opacity: 0.95; }
+  80%  { transform: translate(-50%, -50%) scale(0.99) translateY(-2px); opacity: 0.9; }
+  88%  { transform: translate(-50%, -50%) scale(0.95) translateY(-4px); opacity: 0.6; }
+  94%  { transform: translate(-50%, -50%) scale(0.92) translateY(-5px); opacity: 0.3; }
+  100% { transform: translate(-50%, -50%) scale(0.9) translateY(-6px); opacity: 0; }
+}
+
+/* ZAPDOS THUNDERBOLT STOCK ACTOR — WHIFF (suppressed opacity peak ~0.45, §9.E; FAZ4 denser stops) */
+@keyframes gbaThunderboltStockWhiff {
+  0%   { transform: translate(-50%, -50%) scale(0.48) translateY(-20px); opacity: 0; }
+  7%   { transform: translate(-50%, -50%) scale(0.5) translateY(-22px); opacity: 0; }
+  14%  { transform: translate(-50%, -50%) scale(0.52) translateY(-24px); opacity: 0; }
+  23%  { transform: translate(-50%, -50%) scale(0.68) translateY(-8px); opacity: 0.2; }
+  32%  { transform: translate(-50%, -50%) scale(0.84) translateY(3px); opacity: 0.45; }
+  42%  { transform: translate(-50%, -50%) scale(0.87) translateY(4px); opacity: 0.42; }
+  50%  { transform: translate(-50%, -50%) scale(0.88) translateY(5px); opacity: 0.4; }
+  62%  { transform: translate(-50%, -50%) scale(0.84) translateY(2px); opacity: 0.33; }
+  72%  { transform: translate(-50%, -50%) scale(0.8) translateY(-1px); opacity: 0.25; }
+  86%  { transform: translate(-50%, -50%) scale(0.75) translateY(-5px); opacity: 0.12; }
+  100% { transform: translate(-50%, -50%) scale(0.7) translateY(-8px); opacity: 0; }
 }
 
 

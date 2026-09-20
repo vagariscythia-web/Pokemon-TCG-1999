@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zapdos Thunderbolt — Stock Actor Preview (Hit &amp; Whiff)</title>
+  <style>
+    body {
+      background: #090d16;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      margin: 0;
+    }
+    h1 { color: #facc15; font-size: 18px; margin: 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+      max-width: 700px;
+      width: 100%;
+    }
+    .card-box {
+      background: #1e293b;
+      border: 2px solid #facc15;
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    h3 { margin: 0; color: #fde047; font-size: 14px; }
+    .card-stage {
+      width: 180px;
+      height: 252px;
+      background: #0f172a;
+      border: 3px solid #eab308;
+      border-radius: 10px;
+      position: relative;
+      overflow: visible;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    .actor {
+      position: absolute;
+      left: 50%;
+      top: 46%;
+      width: 148px;
+      height: 148px;
+      transform: translate(-50%, -50%);
+      animation: gbaThunderboltStockStrike 1.65s cubic-bezier(0.18, 0.92, 0.28, 1) forwards;
+    }
+    .actor.whiff {
+      width: 80px;
+      height: 80px;
+      filter: saturate(0.4) brightness(0.85);
+      animation: gbaThunderboltStockWhiff 1.65s ease-out forwards;
+    }
+    .actor img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 20px rgba(250,204,21,0.8)) drop-shadow(0 0 10px rgba(251,191,36,0.55));
+      pointer-events: none;
+      user-select: none;
+    }
+    button {
+      padding: 8px 16px;
+      background: #ca8a04;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover { background: #a16207; }
+    p { font-size: 11px; color: #94a3b8; margin: 0; text-align: center; }
+
+    @keyframes gbaThunderboltStockStrike {
+      0%   { transform: translate(-50%, -50%) scale(0.5) translateY(-18px); opacity: 0; }
+      14%  { transform: translate(-50%, -50%) scale(0.58) translateY(-22px); opacity: 0; }
+      30%  { transform: translate(-50%, -50%) scale(1.08) translateY(2px); opacity: 1; }
+      44%  { transform: translate(-50%, -50%) scale(1.16) translateY(4px); opacity: 1; }
+      58%  { transform: translate(-50%, -50%) scale(1.12) translateY(3px); opacity: 1; }
+      78%  { transform: translate(-50%, -50%) scale(0.99) translateY(-2px); opacity: 0.9; }
+      100% { transform: translate(-50%, -50%) scale(0.9) translateY(-6px); opacity: 0; }
+    }
+    @keyframes gbaThunderboltStockWhiff {
+      0%   { transform: translate(-50%, -50%) scale(0.48) translateY(-20px); opacity: 0; }
+      14%  { transform: translate(-50%, -50%) scale(0.52) translateY(-24px); opacity: 0; }
+      32%  { transform: translate(-50%, -50%) scale(0.84) translateY(3px); opacity: 0.45; }
+      50%  { transform: translate(-50%, -50%) scale(0.88) translateY(5px); opacity: 0.4; }
+      72%  { transform: translate(-50%, -50%) scale(0.8) translateY(-1px); opacity: 0.25; }
+      100% { transform: translate(-50%, -50%) scale(0.7) translateY(-8px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Zapdos — Thunderbolt (Stock Actor: /assets/raw/Zapdos_raw_edited.png)</h1>
+  <div class="grid">
+    <div class="card-box">
+      <h3>HIT</h3>
+      <div class="card-stage">
+        <div class="actor" id="hit-actor">
+          <img src="assets/raw/Zapdos_raw_edited.png" alt="Zapdos Thunderbolt" draggable="false">
+        </div>
+      </div>
+      <button onclick="replay('hit-actor')">Replay</button>
+      <p>gbaThunderboltStockStrike · 1.65s · anticipation %0-14 · peak %44</p>
+    </div>
+    <div class="card-box">
+      <h3>WHIFF</h3>
+      <div class="card-stage">
+        <div class="actor whiff" id="whiff-actor">
+          <img src="assets/raw/Zapdos_raw_edited.png" alt="Zapdos Thunderbolt (whiff)" draggable="false">
+        </div>
+      </div>
+      <button onclick="replay('whiff-actor')">Replay</button>
+      <p>gbaThunderboltStockWhiff · 1.65s · suppressed opacity/saturate · stagger kırık</p>
+    </div>
+  </div>
+  <script>
+    function replay(id) {
+      var el = document.getElementById(id);
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+    }
+  </script>
+</body>
+</html>
