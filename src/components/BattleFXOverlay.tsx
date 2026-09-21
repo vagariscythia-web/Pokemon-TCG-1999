@@ -1355,7 +1355,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'psyshock_waves':
       return 2500;
     case 'psyshock_lite_waves':
-      return 1900; // ring konveyörü 0.84+0.95≈1.79s, mottle 1.8s → en uzun aktif katman ~1.8s + buffer
+      return 2100; // ring konveyörü 0.05+7×0.131+1.045≈2.01s, mottle 1.95s → en uzun aktif katman ~2.01s + buffer (toplam ~2.1s sabit)
     default:
       return 1300;
   }
@@ -1937,18 +1937,21 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             • Faz kilitli konveyör (v4 formülü): delay = 0.05 + i*(D/N); her halka merkezde doğar,
               dışa ivmelenir ve dış kenarda söner → her karede büyükten küçüğe temiz konsantrik dizi.
             • v4'ün kalın 7 şeritli bantları yerine İNCE tek kontur, ancak kullanıcı isteğiyle
-              iki tur +%8 (kümülatif ≈+%16) kalın: ana border + dış/iç beyaz sıcak kenar + hafif glow.
+              üç tur +%8 (kümülatif ≈+%26) kalın: ana border + dış/iç beyaz sıcak kenar + hafif glow.
             • 80cqw ortalanmış sahne: tepe yayılım 72×1.04≈74.9cqw + glow ≈ %80 kart tavanı.
             • Suluboya benekleri ve zerre pırıltılar korunur (speck opacity-only → statik rotate).
-            • Toplam süre ≤1.8s (getFXDuration 1900); arc/çekirdek katmanı yok (yoğunluk düşük). */}
+            • Yoğunluk düzeltmesi: 8 faz kilitli halka (STAGGER = D/8 ≈ 0.131s); konveyör ucu
+              0.05+7×0.131+1.045 ≈ 2.01s → toplam pencere ~2.1s SABİT (getFXDuration 2100 değişmedi).
+            • arc/çekirdek katmanı yok → kalın bant+çekirdekli Super Psy yoğunluğunun altında kalır. */}
       {fx.type === 'psyshock_lite_waves' && (() => {
-        const RING_COUNT = 6;
-        const RING_DUR = 0.95;
+        const RING_COUNT = 8; // Yoğunluk düzeltmesi: 6 → 8 halka (roset boşluklarını doldurur, Super Psy'ın altında kalır)
+        const RING_DUR = 1.045; // +%10 sustain (0.95 → 1.045): keyframe yüzdesel → eğri dinamiği korunur
         const STAGGER = RING_DUR / RING_COUNT;
-        // Pastel lite palet (faz sırasıyla): pembe → mor → cyan → altın → menekşe → fuşya
-        const mains = ['#f472b6', '#c084fc', '#67e8f9', '#fde68a', '#a78bfa', '#f0abfc'];
-        // İnce tek kontur, kümülatif +%16 kalın (0.74-1.15 → 0.86-1.34 cqw; ikinci +%8 turu)
-        const bandWidths = [1.34, 1.22, 1.11, 1.03, 0.93, 0.86];
+        // Pastel lite palet (faz sırasıyla): pembe → mor → cyan → altın → menekşe → fuşya → gök mavisi → açık pembe
+        const mains = ['#f472b6', '#c084fc', '#67e8f9', '#fde68a', '#a78bfa', '#f0abfc', '#7dd3fc', '#f9a8d4'];
+        // İnce tek kontur, kümülatif +%26 kalın (0.74-1.15 → 0.93-1.45 cqw; üçüncü +%8 turu);
+        // 8 halkaya uçlar sabit kalacak şekilde lineer enterpolasyonla genişletildi (azalan hiyerarşi korunur)
+        const bandWidths = [1.45, 1.38, 1.3, 1.23, 1.15, 1.08, 1.0, 0.93];
         const specks = [
           { x: 8, y: 18, w: 2.6, h: 0.6, r: -30, c: '#fde68a', dl: 0.2 },
           { x: 14, y: 62, w: 2.2, h: 0.5, r: 20, c: '#f0abfc', dl: 0.5 },
@@ -2024,7 +2027,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                       flexShrink: 0,
                       opacity: 0,
                       border: `${bandWidths[i]}cqw solid ${mains[i]}`,
-                      boxShadow: `0 0 0 0.49cqw rgba(255, 255, 255, 0.55), 0 0 2.4cqw ${mains[i]}66, inset 0 0 0 0.49cqw rgba(255, 255, 255, 0.45)`,
+                      boxShadow: `0 0 0 0.53cqw rgba(255, 255, 255, 0.55), 0 0 2.4cqw ${mains[i]}66, inset 0 0 0 0.53cqw rgba(255, 255, 255, 0.45)`,
                       animation: `gbaPsyshockLiteRing ${RING_DUR}s cubic-bezier(0.33, 0.45, 0.4, 1) ${(0.05 + i * STAGGER).toFixed(3)}s forwards`
                     }}
                   />
