@@ -6991,7 +6991,7 @@ html, body {
    Faz kilidi TSX tarafında (delay = 0.05 + i*D/N) → her karede büyükten küçüğe temiz
    konsantrik dizi; offset roset kaynaklı girişim deseni oluşmaz. */
 @keyframes gbaPsyshockLiteRing {
-  0%   { transform: scale(0.05); opacity: 0; }
+  0%   { transform: scale(0.10); opacity: 0; }
   9%   { opacity: 0.95; }
   55%  { transform: scale(0.55); opacity: 0.85; }
   80%  { transform: scale(0.86); opacity: 0.6; }
@@ -7013,6 +7013,16 @@ html, body {
   35%  { opacity: 0.9; }
   70%  { opacity: 0.5; }
   100% { opacity: 0; }
+}
+
+/* Lite çekirdek halkaları (yoğunluk düzeltmesi): merkez anulus boşluğunu dolduran
+   3 sıkı halka — erken doğar, konveyör sustain fazı boyunca PARLAK kalır,
+   konveyör ucu dış kenara ulaşırken (~1.45s) yumuşakça söner. */
+@keyframes gbaPsyshockLiteCoreRing {
+  0%   { transform: scale(0.3); opacity: 0; }
+  18%  { transform: scale(0.72); opacity: 1; }
+  62%  { transform: scale(1.06); opacity: 0.92; }
+  100% { transform: scale(1.38); opacity: 0; }
 }
 
 /* TRAINER CARD EFFECTS */

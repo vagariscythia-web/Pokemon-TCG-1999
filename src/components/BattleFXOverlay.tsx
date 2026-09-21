@@ -1940,12 +1940,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               dört tur +%8 (kümülatif ≈+%36) kalın: ana border + dış/iç beyaz sıcak kenar + hafif glow.
             • 80cqw ortalanmış sahne: tepe yayılım 72×1.04≈74.9cqw + glow ≈ %80 kart tavanı.
             • Suluboya benekleri ve zerre pırıltılar korunur (speck opacity-only → statik rotate).
-            • Yoğunluk düzeltmesi: 8 faz kilitli halka (STAGGER = D/8 ≈ 0.131s); konveyör ucu
-              0.05+7×0.131+1.045 ≈ 2.01s → toplam pencere ~2.1s SABİT (getFXDuration 2100 değişmedi).
-            • arc/çekirdek katmanı yok → kalın bant+çekirdekli Super Psy yoğunluğunun altında kalır. */}
+            • Yoğunluk düzeltmesi: 8 faz kilitli halka (STAGGER = D/8 ≈ 0.135s); konveyör ucu
+              0.05+7×0.135+1.08 ≈ 2.08s → toplam pencere ~2.1s SABİT (getFXDuration 2100 değişmedi).
+            • Merkez yoğunluk katmanı: sustain'li parlak çekirdek + 3 sıkı çekirdek halkası
+              (gbaPsyshockLiteCoreRing) iç anulus boşluğunu doldurur; lite kalın bant+çekirdekli
+              Super Psy yoğunluğunun bilinçli olarak altında kalır. */}
       {fx.type === 'psyshock_lite_waves' && (() => {
         const RING_COUNT = 8; // Yoğunluk düzeltmesi: 6 → 8 halka (roset boşluklarını doldurur, Super Psy'ın altında kalır)
-        const RING_DUR = 1.045; // +%10 sustain (0.95 → 1.045): keyframe yüzdesel → eğri dinamiği korunur
+        const RING_DUR = 1.08; // sustain + erken doğuş telafisi (1.045 → 1.08): keyframe yüzdesel → eğri dinamiği korunur
         const STAGGER = RING_DUR / RING_COUNT;
         // Pastel lite palet (faz sırasıyla): pembe → mor → cyan → altın → menekşe → fuşya → gök mavisi → açık pembe
         const mains = ['#f472b6', '#c084fc', '#67e8f9', '#fde68a', '#a78bfa', '#f0abfc', '#7dd3fc', '#f9a8d4'];
@@ -1983,10 +1985,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 WebkitBackdropFilter: 'blur(2.5px)'
               }}
             />
-            {/* 80cqw sahne: %80 tavanı — tüm rosetler/benekler/zerreler bu çerçevede konumlanır */}
+            {/* 80cqw sahne: %80 tavanı — tüm rosetler/benekler/zerreler bu çerçevede konumlanır.
+                zIndex: 20 KRİTİK: translate(-50%,-50%) kendi stacking context'ini yaratır ve onu
+                z=0'a sabitler; explicit z-index verilmezse z-10 blur overlay'in ALTINDA kalır ve
+                backdrop-filter kartla birlikte halkaları da bulandırır (animasyon başında bulanık,
+                sonda net görünümün kök nedeni). z-20 → halkalar buzlu camın üstünde keskin kalır. */}
             <div
               className="absolute left-1/2 top-1/2 pointer-events-none"
-              style={{ width: '80cqw', height: '80cqw', transform: 'translate(-50%, -50%)' }}
+              style={{ width: '80cqw', height: '80cqw', transform: 'translate(-50%, -50%)', zIndex: 20 }}
             >
               {/* Suluboya benekleri — solda sarı-yeşil yıkanma + ortada pembe/mor (referans) */}
               <div
@@ -2025,6 +2031,41 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   }}
                 />
               </div>
+
+              {/* Layer 5.5: Merkez Psychic Core + 3 çekirdek halkası (yoğunluk düzeltmesi) —
+                  konveyörün iç bandındaki anulus boşluğunu doldurur; halka/conveyör elemanları
+                  z-20'de keskin kalırken çekirdek z-30'da üstte parlak sustain yapar. */}
+              <div className="absolute inset-0 flex items-center justify-center z-30">
+                <div
+                  className="rounded-full"
+                  style={{
+                    width: '11cqw',
+                    height: '11cqw',
+                    opacity: 0,
+                    flexShrink: 0,
+                    background: 'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 30%, rgba(253, 224, 71, 0.8) 55%, rgba(240, 171, 252, 0.5) 75%, transparent 100%)',
+                    boxShadow: '0 0 4.5cqw rgba(255, 255, 255, 0.9), 0 0 8.5cqw rgba(253, 224, 71, 0.55)',
+                    animation: 'gbaPsyshockCoreTick 1.9s ease-out 0.05s forwards'
+                  }}
+                />
+              </div>
+              {[0, 1, 2].map((k) => (
+                <div key={`lite-core-ring-${k}`} className="absolute inset-0 flex items-center justify-center z-30">
+                  <div
+                    className="rounded-full"
+                    style={{
+                      width: `${(15 + k * 4.75).toFixed(2)}cqw`,
+                      height: `${(15 + k * 4.75).toFixed(2)}cqw`,
+                      boxSizing: 'border-box',
+                      flexShrink: 0,
+                      opacity: 0,
+                      border: `${(1.33 - k * 0.205).toFixed(2)}cqw solid rgba(255, 255, 255, 0.9)`,
+                      boxShadow: `0 0 0 0.5cqw ${k === 1 ? 'rgba(240, 171, 252, 0.7)' : 'rgba(253, 230, 138, 0.8)'}, 0 0 3cqw rgba(255, 255, 255, 0.65)`,
+                      animation: `gbaPsyshockLiteCoreRing 1.45s ease-out ${(0.15 + k * 0.225).toFixed(3)}s forwards`
+                    }}
+                  />
+                </div>
+              ))}
 
               {/* Faz kilitli halka konveyörü (v4 dinamiği, lite konturlar): TEK merkezden
                   büyükten küçüğe konsantrik akış — offset roset yok, girişim deseni yok. */}
