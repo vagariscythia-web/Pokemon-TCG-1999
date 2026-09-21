@@ -1342,6 +1342,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1500;
     case 'doubleslap':
       return 1350;
+    case 'meditate_zen':
+      return 1750;
     case 'confuse_ray_spiral':
       return 1650;
     case 'super_psy_blast':
@@ -2182,8 +2184,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   alt=""
                   className="select-none pointer-events-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
                   style={{
-                    width: '60%',
-                    maxWidth: '162px',
+                    width: fx.whiffed ? '22%' : '40%',
+                    maxWidth: fx.whiffed ? '59px' : '108px',
                     height: 'auto',
                     objectFit: 'contain',
                     filter: auraFilter
@@ -2327,8 +2329,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   alt=""
                   className="select-none pointer-events-none drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]"
                   style={{
-                    width: '60%',
-                    maxWidth: '162px',
+                    width: fx.whiffed ? '22%' : '40%',
+                    maxWidth: fx.whiffed ? '59px' : '108px',
                     height: 'auto',
                     objectFit: 'contain',
                     transform: 'scaleX(-1)',
@@ -15585,37 +15587,79 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 27. MEDITATE ZEN (GBA-style concentric psychic rings pulsing outward) */}
+      {/* 27. MEDITATE ZEN (Enriched GBA-style concentric psychic rings, orbit motes, mandala veil — 1.75s envelope) */}
       {fx.type === 'meditate_zen' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Inner psychic core */}
-          <div className="absolute" style={{ animation: 'gbaMeditateCorePulse 1.3s ease-in-out forwards' }}>
-            <svg width="28" height="28" viewBox="0 0 28 28" className="drop-shadow-[0_0_12px_#818cf8]">
-              <circle cx="14" cy="14" r="10" fill="#4f46e5" opacity="0.7" />
-              <circle cx="14" cy="14" r="6" fill="#818cf8" opacity="0.9" />
-              <circle cx="14" cy="14" r="3" fill="#e0e7ff" opacity="0.8" />
+          {/* Inner psychic core — breathing radial with §1.C psychic chromatic hierarchy */}
+          <div className="absolute" style={{ animation: 'gbaMeditateCoreBreathe 1.75s ease-in-out forwards', opacity: fx.whiffed ? 0.45 : undefined }}>
+            <svg width="36" height="36" viewBox="0 0 36 36" className="drop-shadow-[0_0_14px_#818cf8]">
+              <circle cx="18" cy="18" r="14" fill="#4f46e5" opacity="0.6" />
+              <circle cx="18" cy="18" r="10" fill="#818cf8" opacity="0.85" />
+              <circle cx="18" cy="18" r="6" fill="#c7d2fe" opacity="0.9" />
+              <circle cx="18" cy="18" r="3" fill="#ffffff" opacity="0.95" />
             </svg>
           </div>
-          {/* Concentric zen rings expanding outward */}
-          {[0, 1, 2].map(i => (
-            <div key={`zen-ring-${i}`} className="absolute" style={{ animation: `gbaMeditateRingExpand 1.3s ease-out ${0.15 + i * 0.2}s forwards`, opacity: 0 }}>
-              <svg width={64 + i * 24} height={64 + i * 24} viewBox={`0 0 ${64 + i * 24} ${64 + i * 24}`}>
-                <circle cx={(64 + i * 24) / 2} cy={(64 + i * 24) / 2} r={(52 + i * 20) / 2}
-                  fill="none" stroke={i === 0 ? '#818cf8' : i === 1 ? '#a5b4fc' : '#c7d2fe'}
-                  strokeWidth={3 - i * 0.5} opacity={0.8 - i * 0.15} />
+
+          {/* Concentric zen rings expanding outward — 4 staggered rings */}
+          {[0, 1, 2, 3].map(i => (
+            <div key={`zen-ring-${i}`} className="absolute" style={{ animation: `gbaMeditateRingExpand 1.75s ease-out ${0.12 + i * 0.18}s forwards`, opacity: 0 }}>
+              <svg width={60 + i * 26} height={60 + i * 26} viewBox={`0 0 ${60 + i * 26} ${60 + i * 26}`}>
+                <circle cx={(60 + i * 26) / 2} cy={(60 + i * 26) / 2} r={(48 + i * 22) / 2}
+                  fill="none" stroke={i === 0 ? '#818cf8' : i === 1 ? '#a5b4fc' : i === 2 ? '#c7d2fe' : '#e0e7ff'}
+                  strokeWidth={3.5 - i * 0.6} opacity={0.85 - i * 0.12} />
               </svg>
             </div>
           ))}
-          {/* Rising psychic sparkles */}
+
+          {/* Orbit psychic motes — elliptical rotation around core (§4 satellite motion) */}
+          {!fx.whiffed && (
+            <div className="absolute w-20 h-20" style={{ animation: 'gbaMeditateOrbitSpin 1.75s linear forwards', opacity: 0 }}>
+              {[0, 1, 2, 3, 4].map(i => {
+                const angle = (i / 5) * 360;
+                const rad = (angle * Math.PI) / 180;
+                const ox = 40 + Math.cos(rad) * 34;
+                const oy = 40 + Math.sin(rad) * 26;
+                return (
+                  <div
+                    key={`orbit-mote-${i}`}
+                    className="absolute rounded-full"
+                    style={{
+                      left: `${ox}px`,
+                      top: `${oy}px`,
+                      width: i % 2 === 0 ? '7px' : '5px',
+                      height: i % 2 === 0 ? '7px' : '5px',
+                      background: i % 3 === 0 ? '#c084fc' : i % 3 === 1 ? '#a5b4fc' : '#e0e7ff',
+                      boxShadow: `0 0 6px ${i % 3 === 0 ? '#c084fc' : '#a5b4fc'}`
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
+
+          {/* Zen Mandala Halo — slow-rotating dashed circle barrier */}
+          {!fx.whiffed && (
+            <div className="absolute" style={{ animation: 'gbaMeditateMandalaSpin 1.75s ease-in-out forwards', opacity: 0 }}>
+              <svg width="110" height="110" viewBox="0 0 110 110">
+                <circle cx="55" cy="55" r="48" fill="none" stroke="#a5b4fc" strokeWidth="1.4"
+                  strokeDasharray="8 6" opacity="0.6" />
+                <circle cx="55" cy="55" r="38" fill="none" stroke="#c7d2fe" strokeWidth="1"
+                  strokeDasharray="5 8" opacity="0.45" />
+              </svg>
+            </div>
+          )}
+
+          {/* Rising psychic sparkles — timing synced to 1.75s window */}
           {[0, 1, 2, 3].map(i => (
-            <div key={`zen-spark-${i}`} className="absolute" style={{ animation: `gbaMeditateSparkle 1.3s ease-out ${0.3 + i * 0.15}s forwards`, opacity: 0 }}>
+            <div key={`zen-spark-${i}`} className="absolute" style={{ animation: `gbaMeditateSparkle 1.1s ease-out ${0.3 + i * 0.12}s forwards`, opacity: 0 }}>
               <svg width="8" height="8" viewBox="0 0 8 8">
                 <circle cx="4" cy="4" r={3 - i * 0.4} fill={i % 2 === 0 ? '#a5b4fc' : '#e0e7ff'} opacity="0.8" />
               </svg>
             </div>
           ))}
-          {/* Soft indigo aura glow */}
-          <div className="absolute inset-0 rounded-2xl" style={{ animation: 'gbaMeditateAura 1.3s ease-in-out forwards', background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.15) 0%, rgba(79,70,229,0.08) 60%, transparent 100%)' }} />
+
+          {/* Aura Veil — full-card indigo radial breath (opacity-only, no transform conflict) */}
+          <div className="absolute inset-0 rounded-2xl" style={{ animation: 'gbaMeditateVeilBreath 1.75s ease-in-out forwards', background: 'radial-gradient(ellipse at center, rgba(99,102,241,0.18) 0%, rgba(79,70,229,0.10) 55%, transparent 100%)' }} />
         </div>
       )}
 

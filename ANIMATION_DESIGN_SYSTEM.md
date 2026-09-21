@@ -186,6 +186,7 @@ This document is the permanent, canonical design standard for all move animation
   - Target Solid Mass: **~4,500 – 5,500 px²** of rendered non-transparent pixels.
   - Whiffed Scale: **~54.5% of card width** (`~78px – 84px`).
   - Examples: Gyarados dragon head (`108x108`, ~4,914 px²), Scyther scythe blade (`108x76`, ~2,092 px²), Eevee sprint, Rattata tackle, Machamp chop.
+  - **Attacking Limb Precedent (Saldıran Uzuv Emsali):** Fiziksel olarak hedefe çarpan uzuvlar (el, pençe, yumruk, kuyruk darbesi) fırlatılan nesnelerden farklı olarak **Tier 1**'e tabidir. Machamp chop emsaliyle sabitlenmiştir. Double Slap el görseli (Jynx psychic hand, Poliwhirl boxing glove, Wartortle clawed paw) bu emsal gereği `108px` (normal) / `59px` (whiff) olarak boyutlandırılmıştır; orijinal görselin 2/3 oranında küçültülmesiyle elde edilmiştir. Küçük bio-organlar (kuyruk alevi, zehir iğnesi) ve fırlatılan mermiler (kemik, kaya) **Tier 2**'de kalır.
 - **Tier 2 — Basic Pokémon Heads, Snouts & Small Bio-Organs (~45%–50% Effective Width):**
   - Standard Scale: **~45% – 50% of card width** (Effective rendered width: `~76px – 84px`).
   - Target Solid Mass: **~2,000 – 2,800 px²** of rendered non-transparent pixels.
@@ -599,7 +600,121 @@ Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu 
 - **CSS Custom Property Paylaşımı:** Her iki keyframe bloğu da aynı custom property şemasını kullanır (`--shard-ox`, `--shard-oy`). TSX tarafında parçacık yalnızca hangi keyframe'i kullanacağını seçer (`gbaBlizzardIceShard` vs `gbaBlizzardIceShardEmbed`); başlangıç offset'i aynı mekanizmayla iletilir. Bu, §2.J'deki parametrik sürücü prensibinin ikili davranış uzantısıdır.
 - **Blizzard FAZ6 doğrulaması:** 6 scatter shard (1.3s, `cubic-bezier(0.25, 0.8, 0.35, 1)`, CSS L15505) + 4 embed shard (1.15s, `cubic-bezier(0.2, 0.85, 0.3, 1)`, CSS L15522). Embed shard'lar daha kısa süreli ve daha keskin easing ile "saplanma" hissini güçlendirir. TSX L19278–19326. Her iki grup `npx tsc --noEmit` hatasız.
 
-> **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir.
+### U. Concentric Psychic Ring Architecture & Layered Meditation (Eşmerkezli Psişik Halka Mimarisi ve Katmanlı Meditasyon)
+
+- **İlke:** Psişik/mistik saldırılarda (Meditate, Confuse Ray, Psychic) eşmerkezli halka genişlemesi, tek bir halka yerine **kademeli stagger'lı 3–4 halka** olarak modellenmelidir. Her halka farklı `stroke-width`, `opacity` ve `animation-delay` ile konumlandırılır; bu, "tek bir enerji dalgası" yerine "katmanlı psişik rezonans" hissi verir.
+- **Meditate Zen 6-Katman Mimarisi (doğrulanmış desen):**
+  1. **Core Breathe:** İç psişik çekirdek — radyal gradyan SVG, `scale(0.3→1.15→1.0)` nefes döngüsü, §1.C psişik kromatik hiyerarşi (`#ffffff → #c7d2fe → #818cf8 → #4f46e5`).
+  2. **4 Staggered Ring:** Eşmerkezli halkalar; `animation-delay: 0.12 + i × 0.18s` formülüyle kademeli; her halkanın çapı `60 + i × 26` px, stroke kalınlığı `3.5 − i × 0.6` px, opacity `0.85 − i × 0.12`. Bu formül, halkaların "aynı anda değil, ardışık rezonans dalgaları" olarak okunmasını sağlar.
+  3. **5 Orbit Motes:** Eliptik yörüngede dönen psişik parçacıklar; §4 uydu hareketi prensibiyle bağımsız konumlandırma (her mote farklı `left/top` ile trigonometrik dağılım). Whiff'te **bastırılır**.
+  4. **Zen Mandala Halo:** Yavaş dönen kesikli çember bariyeri (`strokeDasharray: "8 6"` ve `"5 8"`); iç ve dış halka farklı dash pattern'lerle "kutsal geometri" hissi verir. Whiff'te **bastırılır**.
+  5. **4 Sparkles:** Yükselen psişik zerreler; `animation-delay: 0.3 + i × 0.12s`, duration `1.1s` (toplam bitiş `0.3 + 3×0.12 + 1.1 = 1.76s ≈ 1.75s` envelope). Sparkle bitiş süreleri envelope'a uydurulmalıdır (§8.K).
+  6. **Aura Veil:** Tam kart radial gradyan nefes (`radial-gradient(ellipse at center, rgba(99,102,241,0.18) ...)`); yalnızca `opacity` animasyonu, `transform` yok (çakışma önleme).
+- **Whiff Bastırma Kuralı:** Orbit Motes ve Mandala Halo katmanları whiff'te koşulsuz bastırılır (render edilmez); Core Breathe opacity `0.45`'e düşürülür. Bu, "meditasyon başarısız oldu, enerji dağıldı" anlatısını verir.
+- **Kural:** Yeni bir psişik halka animasyonu yazarken: (1) halka sayısı 3–4 arası (Meditate Zen) veya 6–8 (Konveyör varyantı, §U.2), (2) stagger formülü `base + i × step` (step ≥ 0.15s) veya konveyör için `RING_DUR / RING_COUNT` (§U.2), (3) her halkanın stroke/opacity'si dışa doğru azalır, (4) toplam `delay + duration` envelope'ı aşmaz (§8.K).
+- **Meditate Zen doğrulaması:** 6 katman, 1.75s envelope, 4 sparkle × 1.1s + max delay 0.66s = 1.76s ≈ 1.75s ✓. Orbit ve Mandala whiff'te bastırılmış. TSX L15590–15664, CSS L2925–2964. `npx tsc --noEmit` hatasız.
+
+#### U.2 — Phase-Locked Conveyor Variant (Faz Kilitli Konveyör Varyantı — Abra Psyshock Lite/Dense)
+
+- **Bağlam:** Abra'nın `psyshock_lite_waves` (TSX L1950–2112) ve Kadabra'ya transfer edilen `psyshock_waves` (TSX L1733–1810), yukarıdaki Meditate Zen `base + i × step` formülünden **temelden farklı** bir stagger mimarisi kullanır. Bu varyant, "katmanlı rezonans" yerine "tek organizma gibi akan konveyör" hissi hedefler.
+- **Konveyör Stagger Formülü:** `STAGGER = RING_DUR / RING_COUNT`. Halkalar eşit faz aralıklıdır; her halka bir öncekinin tam `1/N` oranı kadar gecikir. Bu, Meditate Zen'in `base + i × step` (step ≥ 0.15s sabit) formülünden ayrılır:
+  - **Meditate Zen:** Sabit step → dış halkalar giderek daha geç başlar → "yayılım" hissi.
+  - **Konveyör:** Oransal step (`D/N`) → tüm halkalar aynı hızda akar → "tünel/konveyör" hissi.
+- **Halka Sayısı:** Konveyör varyantı 6–8 halka gerektirir (Meditate Zen'in 3–4'ünden fazla). Neden: eşit faz aralığında yeterli "doluluk" için minimum 6 halka gerekir; 4 halka ile konveyör akışı kesikli görünür.
+- **Container Query Units (cqw) Zorunluluğu:**
+  - Konveyör blokları `containerType: 'inline-size'` ile sarılır; tüm boyutlar `cqw` biriminde tanımlanır (`1cqw = kart genişliğinin %1'i`).
+  - `PX2CQW = 0.343406` dönüşüm faktörü, referans görseldeki px değerlerini cqw'ya çevirir.
+  - **Kural:** 6+ halkalı konveyör animasyonlarında `px` yerine `cqw` kullanılmalıdır; bu, kart genişliği değiştiğinde oranların korunmasını sağlar (§2.D DOM bütçesi ile uyumlu — responsive maliyet sıfır).
+  - Kart yüksekliği `137.5cqw` olduğundan, `80cqw` tepe yayılım dikeyde taşma yapmaz.
+- **Yoğunluk Hiyerarşisi (Lite vs Dense):**
+  - Aynı konveyör mimarisi, aşağıdaki parametrelerle "lite" (Abra) ve "dense" (Kadabra/Super Psy) olarak ayrıştırılır:
+
+  | Parametre | Lite (Abra) | Dense (Kadabra) |
+  |-----------|-------------|-----------------|
+  | RING_COUNT | 8 | 6 |
+  | RING_DUR | 1.08s | 1.25s |
+  | Bant kalınlığı | 1.0–1.57 cqw (ince kontur) | 7–14 px (kalın bant) |
+  | Renk doygunluğu | Pastel (#f472b6, #67e8f9, #fde68a) | Vivid (#d946ef, #a855f7, #ec4899) |
+  | Toplam pencere | ~2.1s | ~2.2s |
+  | Ek katman | 2 mottle + 12 speck + 3 core ring | Conic sheen + aura bloom + 8 spark |
+
+  - **Kural:** Lite→Dense geçişinde halka sayısı **azalır** (8→6) ama bant kalınlığı **artar**; bu, "daha az ama daha güçlü" görsel okuması verir.
+- **Suluboya Doku Katmanı (Referans Sadakati):**
+  - Lite varyant, referans görseldeki suluboya pigment lekelerini taklit eder: 2 büyük mottle blot (`blur(2.6cqw)`, çoklu `radial-gradient`, opacity-only `gbaPsyshockLiteMottle` keyframe) + 12 küçük speck (nokta/çizgi, `gbaPsyshockLiteSpeck 0.8s ease-out`, stagger 0.15–1.0s).
+  - **Kural:** Doku katmanları yalnızca `opacity` animasyonu kullanır; `transform` veya `scale` kullanılmaz (konveyör halkalarının `scale` animasyonuyla çakışmayı önler).
+- **Merkez Yoğunluk Kompansasyonu:**
+  - Konveyör halkaları dışa doğru aktığında merkezde "anulus boşluğu" oluşur. Bu boşluk, 3 sıkı çekirdek halkası (`gbaPsyshockLiteCoreRing`, çap `15 + k × 4.75` cqw) + parlak merkez çekirdeği (`gbaPsyshockCoreTick`) ile doldurulur.
+  - Çekirdek katmanı `z-30`'da (halkaların `z-20`'si üzerinde) konumlanır; bu, halkalar keskin kalırken merkezde parlak sustain sağlar.
+- **Abra Psyshock doğrulaması:** Lite: 8 halka, STAGGER = 1.08/8 ≈ 0.135s, toplam pencere 0.05 + 7×0.135 + 1.08 ≈ 2.08s ≈ 2.1s (getFXDuration 2100) ✓. Dense: 6 halka, STAGGER = 1.25/6 ≈ 0.208s, toplam ~2.2s ✓. Her iki varyant `containerType: 'inline-size'` + `cqw` kullanır. TSX L1950–2112 (lite), L1733–1810 (dense). `npx tsc --noEmit` hatasız.
+
+### V. Elemental Branching in Shared Move Templates (Paylaşılan Hareket Şablonlarında Elementel Dallanma)
+
+- **İlke:** Aynı hareket adı birden fazla Pokémon tarafından kullanıldığında (örn. Double Slap: Jynx, Poliwhirl, Wartortle), **tek bir animasyon şablonu** yazılır ve Pokémon tipine göre koşullu katmanlar eklenir. Bu, kod tekrarını önler ve tutarlılığı garanti eder.
+- **Double Slap Elementel Dallanma Deseni (doğrulanmış):**
+  1. **Ortak Taban:** Tüm Pokémon'lar için paylaşılan slap etkisi (impact flash, directional sparks, screen shake). Sparks `gbaDoubleSlapSparkPop 0.5s ease-out 0.71s forwards` ile 8 yöne dağılır.
+  2. **Jynx Dalı (`isJynx`):** Psişik distorsiyon halkaları — `w-26 h-26` fuchsia border + `w-18 h-18` purple border, `gbaPsychicRing` keyframe'i ile genişler. Psikik tip kimliğini vurgular.
+  3. **Wartortle Dalı (`isWartortle`):** Üçlü pençe kesik izleri — SVG `80x55` viewBox, 3 diagonal path (`strokeWidth: 3.5/3/3`), `scaleX(-1)` ile ayna, `gbaClawSlash 0.45s ease-out 0.71s forwards`. Su tipi pençe kimliğini vurgular.
+  4. **Poliwhirl & Wartortle Dalı (`isPoliwhirl || isWartortle`):** Su damlası sıçrama yayları — 5 adet `w-3 h-3 rounded-full bg-cyan-100` parçacık, `gbaWaterSplashDrop 0.52s ease-out 0.71s forwards`. Su tipi elementel imza.
+- **Dallanma Kuralları:**
+  - Ortak taban her zaman render edilir; elementel katmanlar **yalnızca** ilgili Pokémon koşulu sağlandığında eklenir.
+  - Elementel katmanlar ortak tabanın `animation-delay`'ini takip eder (burada `0.71s`); bağımsız zamanlama kullanılmaz.
+  - Her dal en fazla 2 ek katman ekleyebilir (DOM bütçesi §2.D).
+  - Whiff durumunda elementel katmanlar da bastırılır (ortak `fx.whiffed` kontrolü yeterli).
+- **Double Slap doğrulaması:** Ortak 8 spark + Jynx 2 ring + Wartortle 3 slash + Poliwhirl/Wartortle 5 droplet = max 16 ek DOM node. TSX L2380–2460. `npx tsc --noEmit` hatasız.
+
+### W. Dimensional Choreography & Teleport Layer Stacking (Boyutsal Koreografi ve Işınlanma Katman İstifleme)
+
+- **İlke:** Boyutsal geçiş / ışınlanma animasyonları (Teleport, Vanish, Dimensional Warp) tek bir "kaybolma" efekti yerine **3 katmanlı bir koreografi** olarak modellenmelidir: (1) dış çevresel portal, (2) merkezi tekillik, (3) kaçan parçacıklar. Her katman farklı z-index, farklı easing ve farklı delay ile konumlandırılır.
+- **Abra Vanish 3-Katman Deseni (doğrulanmış):**
+  1. **Layer 1 — Dimensional Warp Tunnel (z-25):** Genişleyen portal diski; SVG `96x96`, radyal gradyan (`#ffffff → #e879f9 → #a855f7 → #581c87`), 3 eşmerkezli çember + 4 çapraz boyutsal yarıklar (`strokeDasharray`). Easing: `cubic-bezier(0.22, 1, 0.36, 1)` — hızlı başlangıç, yumuşak yerleşme. Duration: `1.35s`.
+  2. **Layer 2 — Psychic Singularity (z-30):** Merkezi yoğun çekirdek; `w-14 h-14 rounded-full`, `bg-gradient-to-tr from-purple-900 via-fuchsia-500 to-white`, iç `w-6 h-6 bg-white` nokta. Easing: `cubic-bezier(0.25, 1, 0.5, 1)`. Duration: `1.3s`. Bu katman "her şey buradan kayboluyor" odak noktasını verir.
+  3. **Layer 3 — Tachyon Sparks (z-35):** 6 adet yıldız parçacık; CSS custom properties (`--tx`, `--ty`) ile hedef offset, `cubic-bezier(0.2, 0.9, 0.3, 1)`, stagger delay `0.12–0.38s`. "Konverj → saçılma" davranışı: parçacıklar merkeze doğru çekilir, sonra dışarı savrulur.
+- **Katman İstifleme Kuralları:**
+  - z-index sıralaması **dıştan içe** artar: portal (en alt) → tekillik → parçacıklar (en üst).
+  - Her katmanın easing'i farklıdır; aynı easing 3 katmanda kullanılmaz.
+  - Toplam envelope: max(delay + duration) ≤ animasyon süresi. Abra Vanish: `0.38 + 1.25 = 1.63s ≤ 1.35s` envelope'ı aşmaz çünkü parçacıklar portal kapanmadan saçılır.
+  - Whiff'te Layer 3 (parçacıklar) bastırılır; Layer 1–2 opacity düşürülerek "başarısız ışınlanma" hissi verilir.
+- **Abra Vanish doğrulaması:** 3 katman, 6 parçacık × 1.25s + max delay 0.38s. TSX L13746–13810. `npx tsc --noEmit` hatasız.
+
+### X. Attacking Limb Tier Precedent & Whiff Scaling (Saldıran Uzuv Tier Emsali ve Whiff Ölçeklendirme)
+
+- **İlke:** Fiziksel olarak hedefe **çarpan** uzuvlar (el, pençe, yumruk, kuyruk darbesi) ile hedefe **fırlatılan** nesneler (kemik, kaya, mermi) farklı tier sınıflandırmasına tabidir. Çarpan uzuv **Tier 1**'dir; fırlatılan nesne **Tier 2**'dir.
+- **Machamp Chop Emsali (kurucu vaka):** Machamp'ın 4 kollu chop animasyonu, saldıran uzvun kart genişliğinin ~%68'i oranında render edilmesi gerektiğini kanıtlamıştır. Bu emsal, tüm fiziksel çarpma animasyonları için bağlayıcıdır.
+- **Double Slap Doğrulaması (Jynx / Poliwhirl / Wartortle):**
+  - Orijinal el görseli: `~162px` genişlik (stok asset).
+  - Tier 1 standardı: `108px` (normal) / `59px` (whiff) → orijinal görselin **2/3 oranında küçültülmesi**.
+  - Whiff oranı: `59/108 ≈ 0.546` → §3.A'daki Tier 1 whiff bandı (`~54.5%`) ile tutarlı.
+  - Görsel kütle: `108 × 138` box × ~%42 fill ≈ **6,266 px²** solid mass → Tier 1 üst bandında.
+- **Sınıflandırma Karar Ağacı:**
+  1. Uzuv hedefe fiziksel temas ediyor mu? → **Evet** → Tier 1.
+  2. Nesne fırlatılıyor / atılıyor mu? → **Evet** → Tier 2.
+  3. Küçük bio-organ (kuyruk alevi, zehir iğnesi) mı? → **Evet** → Tier 2.
+  4. Belirsiz ise: "Bu nesne hedefin yüzeyine çarpıyor mu?" sorusuna göre karar ver.
+- **Whiff Ölçeklendirme Kuralı:** Whiff durumunda saldıran uzuv, normal boyutun **~%54–55**'ine düşürülür. Bu, "ıskalayan darbe daha küçük görünür" algısını verir ve §3.A Tier 1 whiff bandıyla uyumludur.
+- **Double Slap doğrulaması:** `108px` normal / `59px` whiff, 2/3 küçültme oranı, §3.A emsal notu eklendi. TSX L2300–2460. `npx tsc --noEmit` hatasız.
+
+### Y. Keyframe Reuse, Evolution-Based Routing & Stock Asset Whiff Scaling (Keyframe Yeniden Kullanım, Evrim Bazlı Yönlendirme ve Stok Görsel Whiff Ölçeklendirme)
+
+- **İlke:** Aynı görsel davranış (card blur, shockwave, aura) birden fazla hareket tarafından paylaşıldığında **aynı keyframe bloğu** yeniden kullanılmalı; yeni keyframe yazılmamalıdır. Evrim hattı boyunca yoğunluk artışı, routing katmanında (TSX `resolveFX`) çözülmeli; render katmanında değil.
+- **Ders 1 — Keyframe Reuse (Super Psy Blast):**
+  - Super Psy Blast'ın tam-kart `backdrop-filter: blur(3.5px)` overlay'i, Amnesia Mind Wipe'ın `gbaAmnesiaMindWipeCardBlur` keyframe'ini birebir yeniden kullanır (TSX L15440). Yalnızca `background` radyal gradyan renkleri psişik palette özelleştirilmiştir.
+  - **Kural:** Aynı davranış (card blur + radial overlay) için ikinci bir keyframe yazmak gereksizdir. Renk/opacity farklılıkları `background` property'siyle çözümlenir; keyframe timing/easing profili paylaşılır.
+  - Bu, CSS keyframe sayısını kontrol altında tutar ve §2.D DOM/CSS bütçesi ilkesine uyumludur.
+- **Ders 2 — Evolution-Based Intensity Routing (Abra → Kadabra):**
+  - Abra'nın `psyshock` hareketi `psyshock_lite_waves` (seyrek pastel halka rosetleri) olarak yönlendirilirken, Kadabra'nın aynı isimli hareketi **özel guard** ile `psyshock_waves` (yoğun faz kilitli v4 vortex konveyörü) olarak yönlendirilir (TSX L405–412).
+  - **Kural:** Evrim hattı boyunca artan güç, routing fonksiyonunda **Pokémon adı koşulu** ile ayrıştırılır: `if (name.includes('psyshock')) return 'psyshock_lite_waves'` (Abra bloğu içinde) → `if (name.includes('super psy') && pkm.includes('kadabra')) return 'psyshock_waves'` (genel satırdan önce).
+  - **Routing Öncelik Kuralı:** Spesifik (Pokémon-adı + hareket-adı) guard'lar, jenerik (yalnızca hareket-adı) satırlardan **önce** gelmelidir. Aksi halde jenerik satır spesifik guard'ı gölgeler (shadowing).
+- **Ders 3 — Stock Image Whiff Scaling (Psybeam Kaleidoscope):**
+  - Psybeam Kaleidoscope'ta stok görsel (`Alakazam_Psychic_Spoons.png`) whiff durumunda className koşulu ile küçültülür: `fx.whiffed ? 'w-[76px] h-[98px]' : 'w-[106px] h-[138px]'` (TSX L6073).
+  - Whiff oranı: `76/106 ≈ 0.717` → görsel kütle oranı `(76×98)/(106×138) ≈ 0.512` → ~%51 küçülme. Bu, §3.A Tier 1 whiff bandıyla (`~54.5%`) uyumludur.
+  - **Kural:** Stok görsel kullanan animasyonlarda whiff ölçeklendirmesi, `fx.whiffed` koşuluyla className'de yapılır; ayrı bir görsel dosyası oluşturulmaz.
+- **Ders 4 — Whiff-Existence Anti-Pattern (Super Psy Blast):**
+  - Super Psy Blast implementasyonunda (TSX L15431–15518) `fx.whiffed` kontrolü **bulunmamaktadır**. Hiçbir katman (card blur, core sphere, rings, warp wave, sparks) whiff durumunda bastırılmaz veya küçültülmez.
+  - Bu bir **anti-pattern**'dir: her animasyon bloğu, whiff durumunda en az bir katmanı bastırmalı veya opacity/scale düşürmelidir. Aksi halde "ıskalayan" ve "isabet eden" saldırılar görsel olarak ayırt edilemez.
+  - **Kural:** Yeni bir animasyon yazarken, her katman için `fx.whiffed` davranışı tanımlanmalıdır. Minimum: bir katman `opacity: 0.45` veya `scale(0.75)` ile bastırılmalıdır.
+- **Kadabra doğrulaması:** Super Psy Blast keyframe reuse ✓, evolution routing guard önceliği ✓, Psybeam stock whiff `76x98/106x138` ✓. Super Psy Blast whiff-existence gap: bilinen anti-pattern, düzeltme adayı. TSX L15431–15518, L6063–6100, L405–412. `npx tsc --noEmit` hatasız.
+
+> **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir. §8.U (psişik halka mimarisi) ve §8.V (elementel dallanma) olgunlaştığında sırasıyla §2 ve §3'e terfi adaylarıdır. §8.X (saldıran uzuv tier emsali) §3.A'ya entegre edilmiştir. §8.Y Ders 2 (evrim bazlı routing) olgunlaştığında §4 routing mimarisine terfi adayıdır.
 
 ---
 

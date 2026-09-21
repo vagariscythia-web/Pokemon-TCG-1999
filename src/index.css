@@ -2922,30 +2922,46 @@ html, body {
 }
 
 
-/* GBA MEDITATE ZEN (concentric psychic rings) */
-@keyframes gbaMeditateCorePulse {
-  0% { transform: scale(0.3); opacity: 0; }
-  30% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 14px #818cf8); }
-  60% { transform: scale(1); opacity: 0.9; }
-  100% { transform: scale(1.1); opacity: 0; }
+/* GBA MEDITATE ZEN (enriched concentric psychic rings — 1.75s envelope) */
+@keyframes gbaMeditateCoreBreathe {
+  0%   { transform: scale(0.3); opacity: 0; }
+  18%  { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 16px #818cf8) drop-shadow(0 0 6px #c7d2fe); }
+  42%  { transform: scale(0.92); opacity: 0.95; filter: drop-shadow(0 0 12px #818cf8); }
+  62%  { transform: scale(1.08); opacity: 0.9; filter: drop-shadow(0 0 14px #a5b4fc); }
+  82%  { transform: scale(0.96); opacity: 0.55; filter: drop-shadow(0 0 8px #818cf8); }
+  100% { transform: scale(1.0); opacity: 0; }
 }
 @keyframes gbaMeditateRingExpand {
-  0% { transform: scale(0.2); opacity: 0; }
-  30% { transform: scale(0.7); opacity: 0.9; }
-  60% { transform: scale(1.1); opacity: 0.6; }
-  100% { transform: scale(1.5); opacity: 0; }
+  0%   { transform: scale(0.2); opacity: 0; }
+  22%  { transform: scale(0.7); opacity: 0.9; }
+  50%  { transform: scale(1.1); opacity: 0.65; }
+  76%  { transform: scale(1.4); opacity: 0.3; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+@keyframes gbaMeditateOrbitSpin {
+  0%   { transform: rotate(0deg); opacity: 0; }
+  12%  { opacity: 0.9; }
+  70%  { opacity: 0.75; }
+  100% { transform: rotate(270deg); opacity: 0; }
+}
+@keyframes gbaMeditateMandalaSpin {
+  0%   { transform: rotate(0deg) scale(0.6); opacity: 0; }
+  18%  { transform: rotate(8deg) scale(0.9); opacity: 0.7; }
+  60%  { transform: rotate(28deg) scale(1.0); opacity: 0.55; }
+  100% { transform: rotate(45deg) scale(1.05); opacity: 0; }
+}
+@keyframes gbaMeditateVeilBreath {
+  0%   { opacity: 0; }
+  28%  { opacity: 0.35; }
+  55%  { opacity: 0.25; }
+  80%  { opacity: 0.12; }
+  100% { opacity: 0; }
 }
 @keyframes gbaMeditateSparkle {
-  0% { transform: translateY(10px) scale(0.4); opacity: 0; }
-  30% { transform: translateY(0px) scale(1); opacity: 1; }
-  70% { transform: translateY(-14px) scale(0.8); opacity: 0.6; }
-  100% { transform: translateY(-26px) scale(0.4); opacity: 0; }
-}
-@keyframes gbaMeditateAura {
-  0% { opacity: 0; }
-  35% { opacity: 1; }
-  70% { opacity: 0.7; }
-  100% { opacity: 0; }
+  0%   { transform: translateY(10px) scale(0.4); opacity: 0; }
+  22%  { transform: translateY(0px) scale(1); opacity: 1; }
+  58%  { transform: translateY(-14px) scale(0.8); opacity: 0.6; }
+  100% { transform: translateY(-28px) scale(0.35); opacity: 0; }
 }
 
 /* GBA CLOYSTER CLAMP (Sugimori Bivalve Body — Hydraulic Vice Clamp) */
