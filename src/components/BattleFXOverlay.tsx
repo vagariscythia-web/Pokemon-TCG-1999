@@ -1760,8 +1760,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 animation: 'gbaPsyshockHazeSoft 2.2s ease-in-out forwards',
                 background: 'radial-gradient(ellipse at center, rgba(168, 85, 247, 0.22) 0%, rgba(124, 58, 237, 0.17) 50%, rgba(76, 29, 149, 0.09) 80%, transparent 100%)',
-                backdropFilter: 'blur(1.5px)',
-                WebkitBackdropFilter: 'blur(1.5px)'
+                backdropFilter: 'blur(3.5px)',
+                WebkitBackdropFilter: 'blur(3.5px)'
               }}
             />
 
@@ -1937,7 +1937,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             • Faz kilitli konveyör (v4 formülü): delay = 0.05 + i*(D/N); her halka merkezde doğar,
               dışa ivmelenir ve dış kenarda söner → her karede büyükten küçüğe temiz konsantrik dizi.
             • v4'ün kalın 7 şeritli bantları yerine İNCE tek kontur, ancak kullanıcı isteğiyle
-              üç tur +%8 (kümülatif ≈+%26) kalın: ana border + dış/iç beyaz sıcak kenar + hafif glow.
+              dört tur +%8 (kümülatif ≈+%36) kalın: ana border + dış/iç beyaz sıcak kenar + hafif glow.
             • 80cqw ortalanmış sahne: tepe yayılım 72×1.04≈74.9cqw + glow ≈ %80 kart tavanı.
             • Suluboya benekleri ve zerre pırıltılar korunur (speck opacity-only → statik rotate).
             • Yoğunluk düzeltmesi: 8 faz kilitli halka (STAGGER = D/8 ≈ 0.131s); konveyör ucu
@@ -1949,9 +1949,9 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         const STAGGER = RING_DUR / RING_COUNT;
         // Pastel lite palet (faz sırasıyla): pembe → mor → cyan → altın → menekşe → fuşya → gök mavisi → açık pembe
         const mains = ['#f472b6', '#c084fc', '#67e8f9', '#fde68a', '#a78bfa', '#f0abfc', '#7dd3fc', '#f9a8d4'];
-        // İnce tek kontur, kümülatif +%26 kalın (0.74-1.15 → 0.93-1.45 cqw; üçüncü +%8 turu);
+        // İnce tek kontur, kümülatif +%36 kalın (0.74-1.15 → 1.0-1.57 cqw; dördüncü +%8 turu);
         // 8 halkaya uçlar sabit kalacak şekilde lineer enterpolasyonla genişletildi (azalan hiyerarşi korunur)
-        const bandWidths = [1.45, 1.38, 1.3, 1.23, 1.15, 1.08, 1.0, 0.93];
+        const bandWidths = [1.57, 1.49, 1.4, 1.33, 1.24, 1.17, 1.08, 1.0];
         const specks = [
           { x: 8, y: 18, w: 2.6, h: 0.6, r: -30, c: '#fde68a', dl: 0.2 },
           { x: 14, y: 62, w: 2.2, h: 0.5, r: 20, c: '#f0abfc', dl: 0.5 },
@@ -1971,6 +1971,18 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
             style={{ containerType: 'inline-size' } as React.CSSProperties}
           >
+            {/* Layer 0: Frosted-glass card blur — rakip kart, halkaların ALTINDA amber-violet
+                telekinetik buzlu cam haze'i alır (eski abra_psyshock overlay deseni geri yüklendi;
+                gbaConfuseCardBlur yüzdesel → 2.1s lite penceresine ölçekli, tepe ~1.26s konveyör ortası). */}
+            <div
+              className="card-fx-block-overlay z-10"
+              style={{
+                animation: 'gbaConfuseCardBlur 2.1s ease-in-out forwards',
+                background: 'radial-gradient(ellipse at center, rgba(234, 179, 8, 0.25) 0%, rgba(168, 85, 247, 0.25) 50%, rgba(88, 28, 135, 0.15) 80%, transparent 100%)',
+                backdropFilter: 'blur(2.5px)',
+                WebkitBackdropFilter: 'blur(2.5px)'
+              }}
+            />
             {/* 80cqw sahne: %80 tavanı — tüm rosetler/benekler/zerreler bu çerçevede konumlanır */}
             <div
               className="absolute left-1/2 top-1/2 pointer-events-none"
@@ -2027,7 +2039,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                       flexShrink: 0,
                       opacity: 0,
                       border: `${bandWidths[i]}cqw solid ${mains[i]}`,
-                      boxShadow: `0 0 0 0.53cqw rgba(255, 255, 255, 0.55), 0 0 2.4cqw ${mains[i]}66, inset 0 0 0 0.53cqw rgba(255, 255, 255, 0.45)`,
+                      boxShadow: `0 0 0 0.57cqw rgba(255, 255, 255, 0.55), 0 0 2.4cqw ${mains[i]}66, inset 0 0 0 0.57cqw rgba(255, 255, 255, 0.45)`,
                       animation: `gbaPsyshockLiteRing ${RING_DUR}s cubic-bezier(0.33, 0.45, 0.4, 1) ${(0.05 + i * STAGGER).toFixed(3)}s forwards`
                     }}
                   />
@@ -15376,6 +15388,18 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 26c. SUPER PSY BLAST (Kadabra - signature high-impact telekinetic spoon blast) */}
       {fx.type === 'super_psy_blast' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 1: Frosted-glass telekinetic card blur — eski Super Psy tam kart backdrop-filter
+              overlay'i geri yüklendi (statik 3.5px → 1.35s blast penceresine senkron
+              gbaAmnesiaMindWipeCardBlur profili, tepe 3.5px @%42). */}
+          <div
+            className="card-fx-block-overlay z-10"
+            style={{
+              animation: 'gbaAmnesiaMindWipeCardBlur 1.35s ease-in-out forwards',
+              background: 'radial-gradient(ellipse at center, rgba(192, 132, 252, 0.30) 0%, rgba(147, 51, 234, 0.20) 50%, rgba(88, 28, 135, 0.14) 80%, transparent 100%)',
+              backdropFilter: 'blur(3.5px)',
+              WebkitBackdropFilter: 'blur(3.5px)'
+            }}
+          />
           {/* Intense Psionic Core Sphere */}
           <div
             className="absolute flex items-center justify-center pointer-events-none"
