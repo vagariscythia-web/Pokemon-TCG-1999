@@ -6890,24 +6890,129 @@ html, body {
   100% { transform: translateY(50px) translateX(0px); opacity: 0; }
 }
 
-/* PSYSHOCK RINGS */
-@keyframes gbaPsyshockRing1 {
-  0% { transform: scale(0.2); opacity: 0; }
-  30% { transform: scale(0.7); opacity: 1; }
-  60% { transform: scale(1.1); opacity: 0.6; }
+/* GBA PSYSHOCK PSYCHIC VORTEX TUNNEL (Abra — front perspective concentric bands)
+   Referans görseldeki halka-tünelinin karşıdan görünümü: tek merkez, faz kilitli konveyör.
+   • Tüm halkalar AYNI master keyframe'i kullanır; delay = i * (duration / N) →
+     herhangi bir anda halkalar yaşam döngüsü üzerinde eşit faz aralıklı dizilir (koordine akış).
+   • Bantlar çok katmanlıdır: border (ana bant) + dış/iç kontrast konturlar (box-shadow ringleri).
+     Animasyon yalnızca transform: scale olduğu için tüm konturlar birlikte ölçeklenir →
+     çizgi kalınlığı oranı her karede sabit kalır (orantısızlık yok).
+   • Merkez sabittir: translate YOK. Açısal hareket yalnızca conic sheen katmanında (girdap kıvrımı).
+   • Tüm son kareler opacity:0 → kalıntı yok. */
+
+@keyframes gbaPsyshockHazeSoft {
+  0%   { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
+  22%  { opacity: 0.8; backdrop-filter: blur(1.5px); -webkit-backdrop-filter: blur(1.5px); }
+  55%  { opacity: 1; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); filter: brightness(1.06); }
+  80%  { opacity: 0.45; backdrop-filter: blur(0.8px); -webkit-backdrop-filter: blur(0.8px); }
+  100% { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); filter: none; }
+}
+
+/* Master halka konveyörü: merkezde doğar (scale ~0), kameraya doğru ivmelenerek
+   genişler, dış kenara ulaşırken söner. Tek keyframe → tüm halkalar faz kilitli. */
+@keyframes gbaPsyshockVortexRing {
+  0%   { transform: scale(0.05); opacity: 0; }
+  9%   { opacity: 1; }
+  55%  { transform: scale(0.55); opacity: 0.96; }
+  80%  { transform: scale(0.86); opacity: 0.7; }
+  100% { transform: scale(1.04); opacity: 0; }
+}
+
+/* Girdap kıvrımı: conic-gradient sheen, merkez sabit kalırken yalnızca açısal döner */
+@keyframes gbaPsyshockVortexSpin {
+  0%   { transform: rotate(0deg) scale(0.45); opacity: 0; }
+  14%  { opacity: 0.95; }
+  65%  { transform: rotate(340deg) scale(0.95); opacity: 0.8; }
+  100% { transform: rotate(540deg) scale(1.1); opacity: 0; }
+}
+
+/* Merkez çekirdek: halka doğuş ritmiyle (≈0.21s periyot) senkron tikleyen parlak nabız */
+@keyframes gbaPsyshockCoreTick {
+  0%   { transform: scale(0.25); opacity: 0; }
+  8%   { transform: scale(0.8); opacity: 1; filter: brightness(2.4) drop-shadow(0 0 20px #fdf4ff); }
+  21%  { transform: scale(0.6); opacity: 0.9; }
+  34%  { transform: scale(0.95); opacity: 1; filter: brightness(2.1) drop-shadow(0 0 22px #f0abfc); }
+  47%  { transform: scale(0.7); opacity: 0.92; }
+  60%  { transform: scale(1.05); opacity: 1; filter: brightness(1.8) drop-shadow(0 0 24px #c084fc); }
+  78%  { transform: scale(0.9); opacity: 0.75; }
+  100% { transform: scale(1.2); opacity: 0; filter: blur(2px); }
+}
+
+/* Dış psişik aura: halka tünelinin arkasında yumuşak mor ışıma nefesi */
+@keyframes gbaPsyshockAuraBloom {
+  0%   { transform: scale(0.5); opacity: 0; }
+  30%  { transform: scale(0.9); opacity: 0.5; }
+  60%  { transform: scale(1.1); opacity: 0.35; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+/* Işıltı zerreleri: referanstaki saçılmış sparkle'lar, zamanlanmış parlayıp söner */
+@keyframes gbaPsyshockSparkle {
+  0%   { transform: scale(0.2); opacity: 0; }
+  30%  { transform: scale(1.15); opacity: 1; filter: drop-shadow(0 0 6px #fdf4ff); }
+  65%  { transform: scale(0.85); opacity: 0.65; }
+  100% { transform: scale(0.4); opacity: 0; }
+}
+
+/* Suluboya pigment benekleri: halkalar arası boşluklarda referanstaki düzensiz
+   lekelenme; yumuşakça belirir, tünel çözülürken dağılır */
+@keyframes gbaPsyshockMottle {
+  0%   { transform: scale(0.85); opacity: 0; }
+  25%  { opacity: 0.85; }
+  70%  { transform: scale(1.02); opacity: 0.6; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+
+/* Girdap fırça yayları: saat yönünde dönen yarım yay vuruşu */
+@keyframes gbaPsyshockArcCW {
+  0%   { transform: rotate(0deg) scale(0.5); opacity: 0; }
+  18%  { opacity: 0.95; }
+  70%  { transform: rotate(300deg) scale(0.95); opacity: 0.7; }
+  100% { transform: rotate(430deg) scale(1.08); opacity: 0; }
+}
+
+/* Girdap fırça yayları: saat yönünün tersine dönen yarım yay vuruşu */
+@keyframes gbaPsyshockArcCCW {
+  0%   { transform: rotate(0deg) scale(0.45); opacity: 0; }
+  20%  { opacity: 0.9; }
+  70%  { transform: rotate(-280deg) scale(0.9); opacity: 0.65; }
+  100% { transform: rotate(-410deg) scale(1.05); opacity: 0; }
+}
+
+/* Çekirdeği saran dar halkalar: parlak noktadan dışa sıkı halkalar */
+@keyframes gbaPsyshockCoreRing {
+  0%   { transform: scale(0.3); opacity: 0; }
+  22%  { opacity: 1; }
   100% { transform: scale(1.5); opacity: 0; }
 }
-@keyframes gbaPsyshockRing2 {
-  0% { transform: scale(0.3); opacity: 0; }
-  30% { transform: scale(0.8); opacity: 0.9; }
-  60% { transform: scale(1.2); opacity: 0.5; }
-  100% { transform: scale(1.6); opacity: 0; }
+
+/* LITE PSYSHOCK (Abra) — v4 konveyörüyle (gbaPsyshockVortexRing) BİREBİR aynı dinamik:
+   tam karşı perspektif; halka merkezde doğar (scale ~0), dışa ivmelenir, dış kenarda söner.
+   Faz kilidi TSX tarafında (delay = 0.05 + i*D/N) → her karede büyükten küçüğe temiz
+   konsantrik dizi; offset roset kaynaklı girişim deseni oluşmaz. */
+@keyframes gbaPsyshockLiteRing {
+  0%   { transform: scale(0.05); opacity: 0; }
+  9%   { opacity: 0.95; }
+  55%  { transform: scale(0.55); opacity: 0.85; }
+  80%  { transform: scale(0.86); opacity: 0.6; }
+  100% { transform: scale(1.04); opacity: 0; }
 }
-@keyframes gbaPsyshockRing3 {
-  0% { transform: scale(0.25); opacity: 0; }
-  30% { transform: scale(0.75); opacity: 0.85; }
-  60% { transform: scale(1.15); opacity: 0.55; }
-  100% { transform: scale(1.55); opacity: 0; }
+
+/* Lite suluboya beneği: yumuşakça belirir, tünel çözülürken dağılır (wrapper içinde scale) */
+@keyframes gbaPsyshockLiteMottle {
+  0%   { transform: scale(0.8); opacity: 0; }
+  30%  { opacity: 0.75; }
+  70%  { transform: scale(1.02); opacity: 0.5; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+
+/* Lite pırıltı zerreleri: opacity-only keyframe → elemandaki statik
+   translate(-50%,-50%) rotate(...) transformu bozulmaz. */
+@keyframes gbaPsyshockLiteSpeck {
+  0%   { opacity: 0; }
+  35%  { opacity: 0.9; }
+  70%  { opacity: 0.5; }
+  100% { opacity: 0; }
 }
 
 /* TRAINER CARD EFFECTS */

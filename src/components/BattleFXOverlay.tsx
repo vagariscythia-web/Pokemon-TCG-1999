@@ -124,6 +124,7 @@ export interface ActiveFX {
     | 'bubble_gentle'
     | 'sticky_hands_grab'
     | 'hyper_beam_ice'
+    | 'psyshock_lite_waves'
     | 'super_psy_blast'
     | 'amnesia_mind_wipe'
     | 'seismic_toss_machamp'
@@ -401,9 +402,14 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   }
   // Abra: Psyshock & Vanish
   if (pkm.includes('abra')) {
-    if (name.includes('psyshock')) return 'psyshock_waves';
+    // Abra'nın Psyshock'u artık referans görseldeki seyrek pastel halka rosetleri (lite varyant);
+    // yoğun v4 konveyör bloğu Kadabra Super Psy'a transfer edildi (aşağıdaki guard).
+    if (name.includes('psyshock')) return 'psyshock_lite_waves';
     if (name.includes('vanish') || name.includes('teleport')) return 'abra_vanish';
   }
+  // Kadabra Super Psy: Abra'dan transfer edilen yoğun faz kilitli v4 vortex konveyörü.
+  // (Jenerik 'super psy' → super_psy_blast satırından ÖNCE gelmelidir.)
+  if (name.includes('super psy') && pkm.includes('kadabra')) return 'psyshock_waves';
   // Drowzee: Pound, Confuse Ray & Nightmare
   if (pkm.includes('drowzee')) {
     if (name.includes('pound')) return 'drowzee_pound';
@@ -1346,6 +1352,10 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1150;
     case 'fish_flail':
       return 1300;
+    case 'psyshock_waves':
+      return 2500;
+    case 'psyshock_lite_waves':
+      return 1900; // ring konveyörü 0.84+0.95≈1.79s, mottle 1.8s → en uzun aktif katman ~1.8s + buffer
     default:
       return 1300;
   }
@@ -1710,44 +1720,338 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 3. ABRA PSYSHOCK */}
-      {fx.type === 'psyshock_waves' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Layer 1: Psyshock Psychic Shock Card Block (Restricted cleanly to card, HP bar 100% crisp) */}
+      {/* 3. ABRA PSYSHOCK — GBA Psychic Vortex Tunnel (front perspective, phase-locked conveyor):
+            • Referans görseldeki halka tünelinin KARŞIDAN görünümü: tek merkez, translate/yalpa YOK.
+            • 6 çok katmanlı bant (ana border + dış/iç kontrast konturlar) AYNI master keyframe'i
+              paylaşır; delay = i * (D / N) → halkalar eşit faz aralıklı, tek organizma gibi akar.
+            • Animasyon yalnızca scale olduğu için bant kalınlıkları birlikte ölçeklenir → oran sabit.
+            • Conic-gradient sheen katmanı merkez sabitken açısal dönerek girdap kıvrımı verir.
+            • Çekirdek, halka doğuş periyoduyla senkron tikler; sparkle'lar zamanlanmış parlar.
+            • Tüm katmanlar forwards + son kare opacity:0 → leke/kalıntı yok. */}
+      {fx.type === 'psyshock_waves' && (() => {
+        const RING_COUNT = 6;
+        const RING_DUR = 1.25;
+        // px→cqw: overlay kökü container (inline-size) → 1cqw = %1 kart genişliği.
+        // Super Psy tavanı %100 kart genişliği: aura tepe çapı 76.93cqw × 1.3 = 100.00cqw.
+        // Kart yüksekliği 137.5cqw olduğundan dikeyde taşma yok; en geniş sert öğe ~83cqw.
+        const PX2CQW = 0.343406;
+        const STAGGER = RING_DUR / RING_COUNT;
+        const mains = ['#d946ef', '#a855f7', '#ec4899', '#8b5cf6', '#e879f9', '#c084fc'];
+        const edgesOut = ['#fde68a', '#67e8f9', '#f0abfc', '#f472b6', '#67e8f9', '#fde68a'];
+        const edgesIn = ['#f0abfc', '#e9d5ff', '#fde68a', '#67e8f9', '#fde68a', '#f0abfc'];
+        const bandWidths = [14, 12, 11, 9, 8, 7];
+        const darks = ['#4c1d95cc', '#831843cc', '#4c1d95cc', '#831843cc', '#4c1d95cc', '#831843cc'];
+        const sparkGlyphs = ['✦', '✧', '✦', '✧', '✦', '✧', '✦', '✧'];
+        const sparkSizes = [12, 16, 11, 15, 13, 10, 14, 12];
+        const sparkColors = ['#ffffff', '#fde68a', '#a5f3fc', '#ffffff', '#fde68a', '#ffffff', '#a5f3fc', '#f0abfc'];
+        const sparks = [
+          { x: 18, y: 26, d: 0.35 }, { x: 76, y: 22, d: 0.55 }, { x: 84, y: 58, d: 0.75 },
+          { x: 68, y: 80, d: 0.95 }, { x: 30, y: 78, d: 1.15 }, { x: 12, y: 52, d: 0.65 },
+          { x: 50, y: 12, d: 0.85 }, { x: 50, y: 88, d: 1.05 }
+        ];
+        return (
           <div
-            className="card-fx-block-overlay z-10"
-            style={{
-              animation: 'gbaConfuseCardBlur 1.15s ease-in-out forwards',
-              background: 'radial-gradient(ellipse at center, rgba(234, 179, 8, 0.25) 0%, rgba(168, 85, 247, 0.25) 50%, rgba(88, 28, 135, 0.15) 80%, transparent 100%)',
-              backdropFilter: 'blur(2.5px)',
-              WebkitBackdropFilter: 'blur(2.5px)'
-            }}
-          />
-          <div
-            className="absolute w-36 h-36 rounded-full border-4 border-amber-400/90 flex items-center justify-center shadow-[0_0_25px_#f59e0b]"
-            style={{ animation: 'gbaPsyshockRing1 1.15s ease-out forwards' }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+            style={{ containerType: 'inline-size' } as React.CSSProperties}
           >
-            <div className="w-full h-full rounded-full border-2 border-dashed border-yellow-200/60" />
+            {/* Layer 1: Yumuşak psişik atmosfer — kart üzerinde mor haze (temiz in→out) */}
+            <div
+              className="card-fx-block-overlay z-10"
+              style={{
+                animation: 'gbaPsyshockHazeSoft 2.2s ease-in-out forwards',
+                background: 'radial-gradient(ellipse at center, rgba(168, 85, 247, 0.22) 0%, rgba(124, 58, 237, 0.17) 50%, rgba(76, 29, 149, 0.09) 80%, transparent 100%)',
+                backdropFilter: 'blur(1.5px)',
+                WebkitBackdropFilter: 'blur(1.5px)'
+              }}
+            />
+
+            {/* Layer 2: Dış psişik aura nefesi — tünelin arkasında yumuşak mor ışıma */}
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div
+                className="rounded-full"
+                style={{
+                  width: '76.93cqw',
+                  height: '76.93cqw',
+                  flexShrink: 0,
+                  opacity: 0,
+                  background: 'radial-gradient(circle, rgba(192, 132, 252, 0.32) 0%, rgba(147, 51, 234, 0.20) 45%, rgba(88, 28, 135, 0.09) 75%, transparent 100%)',
+                  animation: 'gbaPsyshockAuraBloom 2s ease-out 0.05s forwards'
+                }}
+              />
+            </div>
+
+            {/* Layer 3: Girdap kıvrımı — radial mask'lı dönen conic sheen (merkez sabit, yalnız açısal) */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div
+                className="rounded-full"
+                style={{
+                  width: '82.41cqw',
+                  height: '82.41cqw',
+                  flexShrink: 0,
+                  opacity: 0,
+                  background: 'conic-gradient(from 0deg, transparent 0deg, rgba(240, 171, 252, 0.30) 35deg, transparent 80deg, rgba(103, 232, 249, 0.24) 140deg, transparent 190deg, rgba(253, 230, 138, 0.26) 250deg, transparent 310deg, rgba(232, 121, 249, 0.22) 345deg, transparent 360deg)',
+                  WebkitMaskImage: 'radial-gradient(circle, transparent 10%, black 32%, black 80%, transparent 94%)',
+                  maskImage: 'radial-gradient(circle, transparent 10%, black 32%, black 80%, transparent 94%)',
+                  animation: 'gbaPsyshockVortexSpin 2s cubic-bezier(0.3, 0.4, 0.4, 1) 0.1s forwards'
+                }}
+              />
+            </div>
+
+            {/* Layer 3b: Suluboya benekleri — halkalar arası boşluklarda referanstaki
+                  düzensiz pigment lekeleri (blur'lu çoklu radial-gradient). */}
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div
+                className="rounded-full"
+                style={{
+                  width: '87.91cqw',
+                  height: '87.91cqw',
+                  opacity: 0,
+                  flexShrink: 0,
+                  filter: 'blur(3.09cqw)',
+                  background: 'radial-gradient(circle at 30% 28%, rgba(244, 114, 182, 0.34) 0%, transparent 26%), radial-gradient(circle at 70% 34%, rgba(167, 139, 250, 0.32) 0%, transparent 24%), radial-gradient(circle at 76% 68%, rgba(103, 232, 249, 0.26) 0%, transparent 22%), radial-gradient(circle at 28% 70%, rgba(253, 230, 138, 0.24) 0%, transparent 20%), radial-gradient(circle at 50% 50%, rgba(217, 70, 239, 0.22) 0%, transparent 34%)',
+                  animation: 'gbaPsyshockMottle 2.2s ease-in-out 0.1s forwards'
+                }}
+              />
+            </div>
+
+            {/* Layer 4: Faz kilitli halka konveyörü — 6 ÇOK ŞERİTLİ bant (referanstaki gibi her bant
+                  7 konsantrik çizgiden oluşur: beyaz sıcak kenar + kontrast kenar + ana gövde +
+                  iç beyaz/ kontrast / koyu şeritler). Kalınlık dıştan içe 14→7px azalır;
+                  tümü scale ile birlikte ölçeklenir → oran her karede sabit. */}
+            {Array.from({ length: RING_COUNT }, (_, i) => (
+              <div key={`vortex-ring-${i}`} className="absolute inset-0 flex items-center justify-center z-20">
+                <div
+                  className="rounded-full"
+                  style={{
+                    width: '72.11cqw',
+                    height: '72.11cqw',
+                    boxSizing: 'border-box',
+                    flexShrink: 0,
+                    opacity: 0,
+                    border: `${(bandWidths[i] * PX2CQW).toFixed(2)}cqw solid ${mains[i]}`,
+                    boxShadow: `0 0 0 0.69cqw rgba(255, 255, 255, 0.75), 0 0 0 1.38cqw ${edgesOut[i]}, 0 0 7.55cqw ${mains[i]}88, inset 0 0 0 0.69cqw rgba(255, 255, 255, 0.7), inset 0 0 0 1.38cqw ${edgesIn[i]}, inset 0 0 0 2.06cqw ${darks[i]}, inset 0 0 4.81cqw ${mains[i]}66`,
+                    animation: `gbaPsyshockVortexRing ${RING_DUR}s cubic-bezier(0.33, 0.45, 0.4, 1) ${(0.12 + i * STAGGER).toFixed(3)}s forwards`
+                  }}
+                />
+              </div>
+            ))}
+
+            {/* Layer 4b: Girdap fırça yayları — merkez sabitken zıt yönlerde dönen yarım yaylar,
+                  referanstaki elle çizilmiş kıvrım vuruşlarını verir. */}
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div
+                className="rounded-full"
+                style={{
+                  width: '76.93cqw',
+                  height: '76.93cqw',
+                  opacity: 0,
+                  flexShrink: 0,
+                  border: '1.03cqw solid transparent',
+                  borderTopColor: 'rgba(255, 255, 255, 0.75)',
+                  borderRightColor: 'rgba(240, 171, 252, 0.55)',
+                  filter: 'drop-shadow(0 0 6px rgba(255, 255, 255, 0.6))',
+                  animation: 'gbaPsyshockArcCW 1.9s cubic-bezier(0.4, 0.1, 0.4, 0.9) 0.2s forwards'
+                }}
+              />
+            </div>
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div
+                className="rounded-full"
+                style={{
+                  width: '54.95cqw',
+                  height: '54.95cqw',
+                  opacity: 0,
+                  flexShrink: 0,
+                  border: '0.86cqw solid transparent',
+                  borderBottomColor: 'rgba(103, 232, 249, 0.7)',
+                  borderLeftColor: 'rgba(253, 230, 138, 0.55)',
+                  filter: 'drop-shadow(0 0 5px rgba(103, 232, 249, 0.55))',
+                  animation: 'gbaPsyshockArcCCW 1.7s cubic-bezier(0.4, 0.1, 0.4, 0.9) 0.45s forwards'
+                }}
+              />
+            </div>
+
+            {/* Layer 5: Merkez Psychic Core — referanstaki gibi SIKI parlak nokta + onu saran
+                  2 dar altın/beyaz çekirdek halkası; halka doğuş periyoduyla senkron tikler. */}
+            <div className="absolute inset-0 flex items-center justify-center z-30">
+              <div
+                className="rounded-full"
+                style={{
+                  width: '13.74cqw',
+                  height: '13.74cqw',
+                  opacity: 0,
+                  flexShrink: 0,
+                  background: 'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 30%, rgba(253, 224, 71, 0.8) 55%, rgba(240, 171, 252, 0.5) 75%, transparent 100%)',
+                  boxShadow: '0 0 6.19cqw rgba(255, 255, 255, 0.9), 0 0 11.68cqw rgba(253, 224, 71, 0.6)',
+                  animation: 'gbaPsyshockCoreTick 1.6s ease-out 0.05s forwards'
+                }}
+              />
+            </div>
+            {[0, 1].map((k) => (
+              <div key={`core-ring-${k}`} className="absolute inset-0 flex items-center justify-center z-30">
+                <div
+                  className="rounded-full"
+                  style={{
+                    width: `${(19.23 + k * 8.93).toFixed(2)}cqw`,
+                    height: `${(19.23 + k * 8.93).toFixed(2)}cqw`,
+                    boxSizing: 'border-box',
+                    flexShrink: 0,
+                    opacity: 0,
+                    border: `${((3 - k) * PX2CQW).toFixed(2)}cqw solid rgba(255, 255, 255, 0.9)`,
+                    boxShadow: `0 0 0 0.69cqw ${k === 0 ? 'rgba(253, 230, 138, 0.8)' : 'rgba(240, 171, 252, 0.7)'}, 0 0 4.13cqw rgba(255, 255, 255, 0.7)`,
+                    animation: `gbaPsyshockCoreRing 1.15s ease-out ${(0.15 + k * 0.22).toFixed(2)}s forwards`
+                  }}
+                />
+              </div>
+            ))}
+
+            {/* Layer 6: Işıltı zerreleri — referanstaki 4 uçlu yıldız pırıltıları */}
+            <div
+              className="absolute left-1/2 top-1/2 z-30 pointer-events-none"
+              style={{ width: '100cqw', height: '100cqw', transform: 'translate(-50%, -50%)' }}
+            >
+              {sparks.map((s, i) => (
+                <span
+                  key={`spark-${i}`}
+                  className="absolute select-none leading-none"
+                  style={{
+                    left: `${s.x}%`,
+                    top: `${s.y}%`,
+                    opacity: 0,
+                    fontSize: `${(sparkSizes[i] * PX2CQW).toFixed(2)}cqw`,
+                    color: sparkColors[i],
+                    textShadow: `0 0 1.65cqw ${sparkColors[i]}, 0 0 3.3cqw rgba(255, 255, 255, 0.8)`,
+                    animation: `gbaPsyshockSparkle 1s ease-out ${s.d}s forwards`
+                  }}
+                >
+                  {sparkGlyphs[i]}
+                </span>
+              ))}
+            </div>
           </div>
+        );
+      })()}
+
+      {/* 3b. ABRA PSYSHOCK (LITE) — v4'ün onaylı tam karşı perspektif halka konveyörü, lite estetikle:
+            • TEK MERKEZ (sahne ortası): offset roset YOK → açısal girişim / boyut karmaşası imkânsız.
+            • Faz kilitli konveyör (v4 formülü): delay = 0.05 + i*(D/N); her halka merkezde doğar,
+              dışa ivmelenir ve dış kenarda söner → her karede büyükten küçüğe temiz konsantrik dizi.
+            • v4'ün kalın 7 şeritli bantları yerine İNCE tek kontur, ancak kullanıcı isteğiyle
+              iki tur +%8 (kümülatif ≈+%16) kalın: ana border + dış/iç beyaz sıcak kenar + hafif glow.
+            • 80cqw ortalanmış sahne: tepe yayılım 72×1.04≈74.9cqw + glow ≈ %80 kart tavanı.
+            • Suluboya benekleri ve zerre pırıltılar korunur (speck opacity-only → statik rotate).
+            • Toplam süre ≤1.8s (getFXDuration 1900); arc/çekirdek katmanı yok (yoğunluk düşük). */}
+      {fx.type === 'psyshock_lite_waves' && (() => {
+        const RING_COUNT = 6;
+        const RING_DUR = 0.95;
+        const STAGGER = RING_DUR / RING_COUNT;
+        // Pastel lite palet (faz sırasıyla): pembe → mor → cyan → altın → menekşe → fuşya
+        const mains = ['#f472b6', '#c084fc', '#67e8f9', '#fde68a', '#a78bfa', '#f0abfc'];
+        // İnce tek kontur, kümülatif +%16 kalın (0.74-1.15 → 0.86-1.34 cqw; ikinci +%8 turu)
+        const bandWidths = [1.34, 1.22, 1.11, 1.03, 0.93, 0.86];
+        const specks = [
+          { x: 8, y: 18, w: 2.6, h: 0.6, r: -30, c: '#fde68a', dl: 0.2 },
+          { x: 14, y: 62, w: 2.2, h: 0.5, r: 20, c: '#f0abfc', dl: 0.5 },
+          { x: 22, y: 84, w: 1.0, h: 1.0, r: 0, c: '#fde68a', dl: 0.8 },
+          { x: 30, y: 8, w: 0.8, h: 0.8, r: 0, c: '#ffffff', dl: 0.35 },
+          { x: 46, y: 6, w: 1.6, h: 0.5, r: 40, c: '#fde68a', dl: 0.65 },
+          { x: 62, y: 10, w: 0.9, h: 0.9, r: 0, c: '#f0abfc', dl: 0.15 },
+          { x: 78, y: 16, w: 2.4, h: 0.6, r: -20, c: '#f472b6', dl: 0.45 },
+          { x: 88, y: 34, w: 0.8, h: 0.8, r: 0, c: '#67e8f9', dl: 0.75 },
+          { x: 90, y: 58, w: 1.8, h: 0.5, r: 60, c: '#fde68a', dl: 0.3 },
+          { x: 82, y: 80, w: 0.9, h: 0.9, r: 0, c: '#ffffff', dl: 0.9 },
+          { x: 58, y: 90, w: 2.0, h: 0.5, r: -40, c: '#f0abfc', dl: 0.55 },
+          { x: 36, y: 92, w: 0.8, h: 0.8, r: 0, c: '#67e8f9', dl: 1.0 }
+        ];
+        return (
           <div
-            className="absolute w-28 h-28 rounded-full border-4 border-fuchsia-500/95 flex items-center justify-center shadow-[0_0_28px_#d946ef]"
-            style={{ animation: 'gbaPsyshockRing2 1.15s ease-out forwards' }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+            style={{ containerType: 'inline-size' } as React.CSSProperties}
           >
-            <svg width="36" height="36" viewBox="0 0 36 36" className="animate-spin text-fuchsia-300 drop-shadow-[0_0_10px_#f472b6]" style={{ animationDuration: '1.2s' }}>
-              <path d="M18 4 A14 14 0 0 1 32 18 A14 14 0 0 1 20 32 A12 12 0 0 1 8 20 A10 10 0 0 1 18 10 A8 8 0 0 1 26 18 A6 6 0 0 1 20 24 A4 4 0 0 1 16 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
-            </svg>
+            {/* 80cqw sahne: %80 tavanı — tüm rosetler/benekler/zerreler bu çerçevede konumlanır */}
+            <div
+              className="absolute left-1/2 top-1/2 pointer-events-none"
+              style={{ width: '80cqw', height: '80cqw', transform: 'translate(-50%, -50%)' }}
+            >
+              {/* Suluboya benekleri — solda sarı-yeşil yıkanma + ortada pembe/mor (referans) */}
+              <div
+                className="absolute"
+                style={{
+                  left: '24%', top: '42%', width: '34cqw', height: '30cqw',
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
+                <div
+                  className="rounded-full"
+                  style={{
+                    width: '100%', height: '100%',
+                    opacity: 0,
+                    filter: 'blur(2.6cqw)',
+                    background: 'radial-gradient(circle at 40% 45%, rgba(190, 242, 100, 0.30) 0%, rgba(163, 230, 53, 0.18) 45%, transparent 70%), radial-gradient(circle at 65% 60%, rgba(253, 224, 71, 0.22) 0%, transparent 60%)',
+                    animation: 'gbaPsyshockLiteMottle 1.8s ease-in-out forwards'
+                  }}
+                />
+              </div>
+              <div
+                className="absolute"
+                style={{
+                  left: '52%', top: '48%', width: '30cqw', height: '28cqw',
+                  transform: 'translate(-50%, -50%)'
+                }}
+              >
+                <div
+                  className="rounded-full"
+                  style={{
+                    width: '100%', height: '100%',
+                    opacity: 0,
+                    filter: 'blur(2.6cqw)',
+                    background: 'radial-gradient(circle at 45% 40%, rgba(244, 114, 182, 0.26) 0%, transparent 60%), radial-gradient(circle at 60% 65%, rgba(167, 139, 250, 0.24) 0%, transparent 62%)',
+                    animation: 'gbaPsyshockLiteMottle 1.8s ease-in-out 0.15s forwards'
+                  }}
+                />
+              </div>
+
+              {/* Faz kilitli halka konveyörü (v4 dinamiği, lite konturlar): TEK merkezden
+                  büyükten küçüğe konsantrik akış — offset roset yok, girişim deseni yok. */}
+              {Array.from({ length: RING_COUNT }, (_, i) => (
+                <div key={`lite-ring-${i}`} className="absolute inset-0 flex items-center justify-center z-20">
+                  <div
+                    className="rounded-full"
+                    style={{
+                      width: '72cqw',
+                      height: '72cqw',
+                      boxSizing: 'border-box',
+                      flexShrink: 0,
+                      opacity: 0,
+                      border: `${bandWidths[i]}cqw solid ${mains[i]}`,
+                      boxShadow: `0 0 0 0.49cqw rgba(255, 255, 255, 0.55), 0 0 2.4cqw ${mains[i]}66, inset 0 0 0 0.49cqw rgba(255, 255, 255, 0.45)`,
+                      animation: `gbaPsyshockLiteRing ${RING_DUR}s cubic-bezier(0.33, 0.45, 0.4, 1) ${(0.05 + i * STAGGER).toFixed(3)}s forwards`
+                    }}
+                  />
+                </div>
+              ))}
+
+              {/* Zerre pırıltılar: nokta + ince çizgi formunda (referans); opacity-only keyframe */}
+              {specks.map((s, i) => (
+                <div
+                  key={`lite-speck-${i}`}
+                  className="absolute"
+                  style={{
+                    left: `${s.x}%`, top: `${s.y}%`,
+                    width: `${s.w}cqw`, height: `${s.h}cqw`,
+                    transform: `translate(-50%, -50%) rotate(${s.r}deg)`,
+                    borderRadius: s.w === s.h ? '50%' : '9999px',
+                    background: s.c,
+                    boxShadow: `0 0 1.2cqw ${s.c}`,
+                    opacity: 0,
+                    animation: `gbaPsyshockLiteSpeck 0.8s ease-out ${s.dl}s forwards`
+                  }}
+                />
+              ))}
+            </div>
           </div>
-          <div
-            className="absolute w-20 h-20 rounded-full border-4 border-purple-400/90 bg-purple-950/70 flex items-center justify-center shadow-[0_0_35px_#a855f7]"
-            style={{ animation: 'gbaPsyshockRing3 1.15s ease-out forwards' }}
-          >
-            <svg width="28" height="28" viewBox="0 0 28 28" className="animate-ping drop-shadow-[0_0_12px_#fde047]">
-              <path d="M14 2 L17 11 L26 14 L17 17 L14 26 L11 17 L2 14 L11 11 Z" fill="#fde047" />
-            </svg>
-          </div>
-          <div className="absolute w-40 h-40 rounded-full bg-gradient-to-tr from-amber-500/20 via-purple-600/25 to-transparent pointer-events-none animate-pulse" />
-        </div>
-      )}
+        );
+      })()}
 
       {/* 4. DOUBLESLAP — Authentic 1999 Ken Sugimori Watercolor Art & GBA Anime Battle Choreography:
             • Poliwhirl: Official Ken Sugimori round white boxing glove with watercolor shading & ink lines
