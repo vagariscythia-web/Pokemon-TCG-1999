@@ -217,6 +217,7 @@ export interface ActiveFX {
     | 'abra_vanish'
     | 'drowzee_pound'
     | 'drowzee_confuse_ray'
+    | 'alakazam_confuse_ray'
     | 'drowzee_nightmare'
     | 'snorlax_body_slam'
     | 'lickitung_tongue_wrap'
@@ -780,6 +781,8 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('dream eater')) return 'haunter_dream_eater';
   if (name.includes('super psy')) return 'super_psy_blast';
   if (name.includes('amnesia')) return 'amnesia_mind_wipe';
+  // Alakazam: Confuse Ray (Sugimori watercolor trance actor + golden telekinetic vortex; species guard BEFORE generic rule)
+  if (pkm.includes('alakazam') && (name.includes('confuse ray') || name.includes('confusion ray'))) return 'alakazam_confuse_ray';
   if (name.includes('confuse ray') || name.includes('confusion ray') || name.includes('eerie light')) return 'confuse_ray_spiral';
   if (name.includes('prophecy') || (pkm.includes('hypno') && (name.includes('hypno') || name.includes('mind shock')))) return 'hypno_hypnotic_pendulum';
   if (name.includes('psychic') || name.includes('hypnosis') || name.includes('night shade')) return 'psychic_distortion';
@@ -1344,6 +1347,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1350;
     case 'meditate_zen':
       return 1750;
+    case 'alakazam_confuse_ray':
+      return 2200;
     case 'confuse_ray_spiral':
       return 1650;
     case 'super_psy_blast':
@@ -1470,7 +1475,8 @@ const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'starfish_slap', 'super_fang_guillotine', 'super_potion', 'tauros_rampage', 'tauros_stomp',
   'thunder_punch', 'victreebel_acid_melt', 'weedle_poison_sting', 'weezing_toxic_smog',
   'rattata_quick_attack', 'kangaskhan_comet_punch',
-  'articuno_blizzard', 'zapdos_thunderbolt'
+  'articuno_blizzard', 'zapdos_thunderbolt',
+  'alakazam_confuse_ray'
 ]);
 
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
@@ -15299,6 +15305,157 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </svg>
           </div>
           <div className="absolute w-44 h-44 rounded-full bg-fuchsia-600/15 animate-pulse blur-md pointer-events-none" />
+        </div>
+      )}
+
+      {/* 26b-AL. ALAKAZAM CONFUSE RAY (Sugimori watercolor stock actor trance + golden telekinetic vortex) */}
+      {fx.type === 'alakazam_confuse_ray' && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          {/* Layer 1: Frosted Confusion Card Block (restricted below HP bar, crisp HP readout) with golden saturate lift */}
+          <div
+            className="card-fx-block-overlay z-10 border border-amber-300/25 rounded-xl"
+            style={{
+              animation: 'gbaConfuseCardBlur 1.8s ease-in-out forwards, gbaAlakazamCardPulse 2.2s ease-in-out forwards',
+              background: 'radial-gradient(ellipse at center, rgba(253, 230, 138, 0.26) 0%, rgba(245, 158, 11, 0.18) 50%, rgba(180, 83, 9, 0.12) 80%, transparent 100%)',
+              backdropFilter: 'blur(3.5px) saturate(1.3)',
+              WebkitBackdropFilter: 'blur(3.5px) saturate(1.3)'
+            }}
+          />
+
+          {/* Layer 3: Golden telekinetic vortex (3 staggered spiral arms, golden-core palette §1.C) */}
+          <div className="absolute z-20 w-40 h-40 flex items-center justify-center">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                className="absolute inset-0 flex items-center justify-center"
+                style={{ animation: `gbaAlakazamConfuseVortex 1.95s linear ${i * 0.12}s forwards`, opacity: 0 }}
+              >
+                <svg width="150" height="150" viewBox="0 0 150 150" className="overflow-visible" style={{ transform: `rotate(${i * 120}deg)` }}>
+                  <defs>
+                    <linearGradient id={`alakazamConfuseVortexGrad${i}`} x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#fff7d6" />
+                      <stop offset="35%" stopColor="#fde68a" />
+                      <stop offset="70%" stopColor="#f59e0b" />
+                      <stop offset="100%" stopColor="#b45309" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M75 75 C 95 55, 115 60, 122 78 C 128 94, 116 108, 100 106" fill="none" stroke={`url(#alakazamConfuseVortexGrad${i})`} strokeWidth="6" strokeLinecap="round" opacity="0.9" />
+                </svg>
+              </div>
+            ))}
+            {/* Counter-rotating inner psi-ring (dashed parallax layer against the 3 spiral arms) */}
+            <div
+              className="absolute inset-0 flex items-center justify-center"
+              style={{ animation: 'gbaAlakazamVortexCounter 2s linear 0.1s forwards', opacity: 0 }}
+            >
+              <svg width="96" height="96" viewBox="0 0 96 96" className="overflow-visible">
+                <circle cx="48" cy="48" r="34" fill="none" stroke="#fde68a" strokeWidth="3.5" strokeDasharray="10 14" strokeLinecap="round" opacity="0.9" />
+                <circle cx="48" cy="48" r="26" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="6 10" strokeLinecap="round" opacity="0.7" />
+              </svg>
+            </div>
+            {/* Expanding psychic pressure rings (staggered shockwave pulse; skipped on whiff) */}
+            {!fx.whiffed &&
+              [0, 1, 2].map((r) => (
+                <div
+                  key={`aura-${r}`}
+                  className="absolute w-28 h-28 rounded-full border-2 border-amber-300/80"
+                  style={{
+                    animation: `gbaAlakazamAuraRing 1.45s ease-out ${0.25 + r * 0.25}s forwards`,
+                    opacity: 0,
+                    boxShadow: 'inset 0 0 22px rgba(250, 204, 21, 0.5), 0 0 12px rgba(253, 230, 138, 0.4)'
+                  }}
+                />
+              ))}
+            {/* Spoon-bowl telekinetic glints (emit from the boxed spoon bowls, converge inward-up toward the forehead) */}
+            {[
+              { left: '30%', top: '40%', gx: '16px', gy: '-26px', delay: 0.35 },
+              { left: '62%', top: '40%', gx: '-16px', gy: '-26px', delay: 0.5 }
+            ].map((s, i) => (
+              <div
+                key={`glint-${i}`}
+                className="absolute w-4 h-4 rounded-full"
+                style={{
+                  left: s.left, top: s.top,
+                  ['--gx' as string]: s.gx,
+                  ['--gy' as string]: s.gy,
+                  background: 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(253,230,138,0.7) 45%, transparent 100%)',
+                  animation: `gbaAlakazamConfuseSpoonDrift 1.7s ease-in-out ${s.delay}s forwards`,
+                  opacity: 0
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Layer 2: Sugimori watercolor stock actor (raster: exempt from SVG 68.1% transform §7.D; whiff = smaller class + suppression) */}
+          <div className={`absolute z-30 flex items-center justify-center ${fx.whiffed ? 'opacity-70 saturate-50' : ''}`}>
+            <div
+              className={`relative ${fx.whiffed ? 'w-[99px] h-[98px]' : 'w-[138px] h-[136px]'} flex items-center justify-center`}
+              style={{ animation: 'gbaAlakazamConfuseTrance 2.2s cubic-bezier(0.2, 0.85, 0.3, 1) forwards' }}
+            >
+              <img
+                src="/assets/raw/Alakazam_raw_edited_002.png"
+                alt="Alakazam Confuse Ray Trance"
+                className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_0_18px_rgba(250,204,21,0.55)] drop-shadow-[0_0_9px_rgba(253,230,138,0.45)]"
+                style={{ transform: fx.mirrored ? 'scaleX(-1)' : undefined }}
+                draggable={false}
+              />
+              {/* Layer 4: Third-eye psychic ignition (forehead core + anamorphic slit + twin eye glows; hidden on whiff) */}
+              {!fx.whiffed && (
+                <>
+                  <div
+                    className="absolute w-6 h-6 rounded-full pointer-events-none"
+                    style={{
+                      left: '50%', top: '24%', marginLeft: '-12px',
+                      background: 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(253,230,138,0.75) 40%, rgba(245,158,11,0.35) 65%, transparent 100%)',
+                      animation: 'gbaAlakazamThirdEyeFlash 1.4s ease-out 0.4s forwards',
+                      opacity: 0
+                    }}
+                  />
+                  <div
+                    className="absolute w-1 h-14 pointer-events-none"
+                    style={{
+                      left: '50%', top: '10%', marginLeft: '-2px',
+                      background: 'linear-gradient(to bottom, transparent 0%, rgba(253,230,138,0.9) 30%, rgba(255,255,255,0.95) 50%, rgba(253,230,138,0.9) 70%, transparent 100%)',
+                      animation: 'gbaAlakazamThirdEyeSlit 1.5s ease-out 0.5s forwards',
+                      opacity: 0,
+                      filter: 'blur(0.6px)'
+                    }}
+                  />
+                  {[{ left: '44%' }, { left: '56%' }].map((e, ei) => (
+                    <div
+                      key={`eye-${ei}`}
+                      className="absolute w-2.5 h-2.5 rounded-full pointer-events-none"
+                      style={{
+                        left: e.left, top: '35%', marginLeft: '-5px',
+                        background: 'radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(250,204,21,0.8) 50%, transparent 100%)',
+                        animation: `gbaAlakazamEyeGlow 1.3s ease-in-out ${0.55 + ei * 0.08}s forwards`,
+                        opacity: 0
+                      }}
+                    />
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Layer 5: Telekinetic debris conveyor (6 staggered shards rising from the mustache tips) */}
+          <div className="absolute z-20 w-40 h-40 flex items-center justify-center">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={`shard-${i}`}
+                className="absolute"
+                style={{
+                  left: `${i % 2 === 0 ? 20 : 72}%`,
+                  top: `${58 + (i % 3) * 4}%`,
+                  ['--dx' as string]: i % 2 === 0 ? '-14px' : '14px',
+                  animation: `gbaAlakazamConfuseDebris 1.5s ease-out ${0.2 + i * 0.1}s forwards`,
+                  opacity: 0
+                }}
+              >
+                <div className="w-2 h-3 bg-gradient-to-b from-amber-200 to-amber-600" style={{ transform: `rotate(${i * 47}deg)`, borderRadius: '2px' }} />
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
