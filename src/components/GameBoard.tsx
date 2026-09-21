@@ -137,7 +137,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   const shakeTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
   const [hoveredDropTarget, setHoveredDropTarget] = useState<{
-    type: 'active' | 'bench';
+    type: 'active' | 'bench' | 'opponent-bench';
     benchIndex?: number;
     instanceId?: string;
   } | null>(null);
@@ -2447,6 +2447,14 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           return;
         }
 
+        // Opponent (CPU) bench hover detection
+        const oppBenchEl = hitEl?.closest('[data-drop-zone="opponent-bench-pokemon"]') as HTMLElement | null;
+        if (oppBenchEl) {
+          const obIdx = oppBenchEl.getAttribute('data-bench-index');
+          setHoveredDropTarget({ type: 'opponent-bench', benchIndex: obIdx ? parseInt(obIdx, 10) : 0 });
+          return;
+        }
+
         setHoveredDropTarget(null);
       }
     };
@@ -2564,6 +2572,30 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               setDraggingCard(null);
               return;
             }
+          }
+          break;
+        }
+      }
+
+      // 2b. Check Opponent (CPU) Bench Pokémon elements
+      const oppBenchElements = document.querySelectorAll('[data-drop-zone="opponent-bench-pokemon"]');
+      for (let i = 0; i < oppBenchElements.length; i++) {
+        const el = oppBenchElements[i] as HTMLElement;
+        const rect = el.getBoundingClientRect();
+        const isHit = el.contains(hitEl) || (
+          dropX >= rect.left - 25 &&
+          dropX <= rect.right + 25 &&
+          dropY >= rect.top - 25 &&
+          dropY <= rect.bottom + 25
+        );
+        if (isHit) {
+          const benchIndexStr = el.dataset.benchIndex;
+          const benchIndex = benchIndexStr !== undefined ? parseInt(benchIndexStr, 10) : i;
+          if (card.supertype === 'Trainer') {
+            const oppInPlay = cpu.bench[benchIndex];
+            triggerTrainerCardPlay(card, handIndex, benchIndex, oppInPlay || undefined, true);
+            setDraggingCard(null);
+            return;
           }
           break;
         }
@@ -5923,12 +5955,16 @@ export const GameBoard: React.FC<GameBoardProps> = ({
               {cpu.bench.map((b, bIdx) => (
                 <div
                   key={b.instanceId}
+                  data-drop-zone="opponent-bench-pokemon"
+                  data-instance-id={b.instanceId}
+                  data-bench-index={bIdx}
                   className={`relative ${slotShakes('cpu', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'heal' ? 'animate-heal-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
                 >
                   <CardView
                     inPlayCard={b}
                     size="sm"
                     isAscending={ascendingCpuBenchIdx === bIdx}
+                    isDropHovered={hoveredDropTarget?.type === 'opponent-bench' && hoveredDropTarget.benchIndex === bIdx}
                     isTargetable={!!selectedCard && selectedCard.supertype === 'Trainer' && OPPONENT_TARGET_TRAINERS.includes(selectedCard.name)}
                     onClick={() => handleOpponentInPlayClick(b, true)}
                     onInspect={() => handleInspect(b.card, b)}
