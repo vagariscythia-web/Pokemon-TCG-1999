@@ -248,6 +248,7 @@ export interface ActiveFX {
     | 'grimer_nasty_goo'
     | 'grimer_minimize'
     | 'zubat_leech_life'
+    | 'zubat_leech_replenish'
     | 'tangela_bind'
     | 'venonat_stun_spore'
     | 'venonat_leech_life'
@@ -1184,7 +1185,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'weedle_poison_sting':
       return 1550;
     case 'zubat_supersonic':
-      return 1600;
+      return 1750;
     case 'gastly_sleeping_gas':
       return 1700;
     case 'rattata_quick_attack':
@@ -1286,6 +1287,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'grimer_minimize':
       return 1500;
     case 'zubat_leech_life':
+      return 1850;
+    case 'zubat_leech_replenish':
       return 1600;
     case 'tangela_bind':
       return 1600;
@@ -12086,44 +12089,133 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20ba. ZUBAT SUPERSONIC (Zubat Lv. 10 — Concentric Ultrasonic Echolocation Rings & Trance Warp) */}
-      {fx.type === 'zubat_supersonic' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Triple Concentric High-Frequency Sonic Wave Rings */}
-          <div
-            className="absolute w-24 h-24 rounded-full border-2 border-cyan-300 pointer-events-none z-30"
-            style={{ animation: 'gbaZubatSonicRings1 1.6s ease-out forwards' }}
-          />
-          <div
-            className="absolute w-24 h-24 rounded-full border-2 border-indigo-400 pointer-events-none z-30"
-            style={{ animation: 'gbaZubatSonicRings2 1.6s ease-out 0.15s forwards' }}
-          />
-          <div
-            className="absolute w-24 h-24 rounded-full border-2 border-teal-200 pointer-events-none z-30"
-            style={{ animation: 'gbaZubatSonicRings3 1.6s ease-out 0.3s forwards' }}
-          />
+      {/* 20ba. ZUBAT SUPERSONIC (Zubat Lv. 10 — Concentric Ultrasonic Echolocation Rings & Confusion Trance) */}
+      {fx.type === 'zubat_supersonic' && (() => {
+        const sonicDirY = fx.target === 'cpu' ? 1 : -1;
+        const dur = fx.whiffed ? 1.2 : 1.75;
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Layer 1: Echolocation Ping Core — bright flash at Zubat's mouth */}
+            <div
+              className="absolute w-8 h-8 rounded-full pointer-events-none z-40"
+              style={{
+                animation: `gbaZubatSonarPing ${dur}s ease-out forwards`,
+                background: 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(56,189,248,0.6) 50%, transparent 80%)'
+              }}
+            />
 
-          {/* Frequency Oscillation Sound Bar Waves */}
-          <div
-            className="absolute flex items-center justify-center pointer-events-none z-35"
-            style={{ animation: 'gbaZubatFrequencyBars 1.6s ease-out forwards' }}
-          >
-            <svg width="140" height="80" viewBox="0 0 140 80">
-              <path d="M 10 40 Q 30 10 50 40 Q 70 70 90 40 Q 110 10 130 40" fill="none" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" className="drop-shadow-[0_0_12px_#38bdf8]" />
-              <path d="M 20 40 Q 40 20 60 40 Q 80 60 100 40 Q 120 20 140 40" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-            </svg>
+            {/* Layer 2a: Background horizontal spread wash — 6 in-place expanding
+                perspective ellipses for the late-frame horizontal bloom. Solid
+                smooth strokes only (dashed CAD wavefronts forbidden by design guide). */}
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={`sonic-wash-${i}`}
+                className="absolute pointer-events-none z-20"
+                style={{
+                  width: `${48 + i * 26}px`,
+                  height: `${48 + i * 26}px`,
+                  animation: `gbaZubatSonicRing ${dur}s cubic-bezier(0.2, 0.8, 0.4, 1) ${0.04 + i * 0.1}s forwards`,
+                  opacity: 0
+                }}
+              >
+                <svg width="100%" height="100%" viewBox="0 0 100 100" className="overflow-visible">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke={['#67e8f9', '#38bdf8', '#818cf8', '#a78bfa', '#6366f1', '#c4b5fd'][i]}
+                    strokeWidth={3.4 - i * 0.45}
+                    strokeLinecap="round"
+                    opacity={0.78 - i * 0.10}
+                  />
+                </svg>
+              </div>
+            ))}
+
+            {/* Layer 2b: Foreground sonic depth-train — Round 9 definitive fix:
+                5 INDEPENDENT traveling ellipse divs (no wrapper, no SVG).
+                Each ring owns its base diameter (--d) and a cascaded delay;
+                gbaZubatSonicDepthRing animates width/height in px (calc from
+                --d) + translateY travel, so the 3px border edge stays a crisp
+                constant thickness at every frame and the inter-ring gaps can
+                never be bridged by group scale/glow. Alternating dark/light
+                borders keep adjacent edges distinguishable; the delay cascade
+                + gentler easing make the descent gradual, not one abrupt drop. */}
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div
+                key={`train-ring-${i}`}
+                className="absolute left-1/2 top-1/2 pointer-events-none z-30"
+                style={{
+                  ['--d' as string]: `${[140, 106, 76, 50, 28][i]}px`,
+                  ['--depth-dir' as string]: `${sonicDirY}`,
+                  border: `3px solid ${['#0284c7', '#f0fdff', '#0ea5e9', '#e0f2fe', '#0369a1'][i]}`,
+                  borderRadius: '50%',
+                  boxShadow: `0 0 3px ${['#0284c7', '#f0fdff', '#0ea5e9', '#e0f2fe', '#0369a1'][i]}`,
+                  animation: `gbaZubatSonicDepthRing ${dur * 0.82}s cubic-bezier(0.3, 0.1, 0.3, 1) ${0.05 + i * 0.07}s both`,
+                  opacity: 0
+                }}
+              />
+            ))}
+
+            {/* Layer 3: Dense Sinusoidal Sound Wave Lines traveling toward target —
+                7 interleaved ultrasonic strands with varied origins, travel depths
+                and 3-crest bezier control points for a richer nested wave field. */}
+            {!fx.whiffed && [0, 1, 2, 3, 4, 5, 6].map((i) => (
+              <div
+                key={`wave-line-${i}`}
+                className="absolute pointer-events-none z-25"
+                style={{
+                  ['--wave-dy' as string]: `${sonicDirY * (34 + (i % 4) * 14)}px`,
+                  animation: `gbaZubatWaveLine ${dur}s ease-out ${0.12 + i * 0.11}s forwards`,
+                  opacity: 0,
+                  left: `${8 + i * 13}%`,
+                  top: `${46 + (i % 3) * 4}%`
+                }}
+              >
+                <svg width={24 + (i % 3) * 5} height="40" viewBox="0 0 28 40" className="overflow-visible">
+                  <path
+                    d={`M14 0 Q${20 + (i % 3) * 4} 7, 14 14 Q${8 - (i % 3) * 4} 21, 14 28 Q${20 + (i % 2) * 5} 35, 14 40`}
+                    fill="none"
+                    stroke={['#67e8f9', '#818cf8', '#c4b5fd', '#38bdf8', '#a78bfa', '#7dd3fc', '#a5f3fc'][i]}
+                    strokeWidth={2.6 - (i % 4) * 0.35}
+                    strokeLinecap="round"
+                    opacity={0.9 - (i % 5) * 0.1}
+                  />
+                </svg>
+              </div>
+            ))}
+
+            {/* Layer 4: Frequency Distortion Field */}
+            {!fx.whiffed && (
+              <div
+                className="absolute w-36 h-36 rounded-full pointer-events-none z-20"
+                style={{
+                  animation: `gbaZubatConfusionDistort ${dur}s ease-out 0.2s forwards`,
+                  background: 'radial-gradient(circle, rgba(56,189,248,0.28) 0%, rgba(99,102,241,0.18) 55%, transparent 75%)'
+                }}
+              />
+            )}
+
+            {/* Layer 5: Confusion Orbit Stars — Supersonic inflicts confusion */}
+            {!fx.whiffed && [
+              { delay: '0.4s', sz: 20, color: '#fde047', stroke: '#eab308' },
+              { delay: '0.55s', sz: 16, color: '#c084fc', stroke: '#a855f7' },
+              { delay: '0.7s', sz: 14, color: '#67e8f9', stroke: '#22d3ee' }
+            ].map((star, idx) => (
+              <div
+                key={`confuse-star-${idx}`}
+                className="absolute pointer-events-none z-35"
+                style={{ animation: `gbaZubatConfuseOrbit${idx + 1} ${dur}s linear ${star.delay} forwards`, opacity: 0 }}
+              >
+                <svg width={star.sz} height={star.sz} viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_#fde047]">
+                  <polygon points="12,2 15,8 22,9 17,14 18,21 12,17 6,21 7,14 2,9 9,8" fill={star.color} stroke={star.stroke} strokeWidth="1" />
+                </svg>
+              </div>
+            ))}
           </div>
-
-          {/* Layer 1: Concentric Sonic Focus Pulse */}
-          <div
-            className="absolute w-36 h-36 rounded-full pointer-events-none z-20"
-            style={{
-              animation: 'gbaZubatConfusionDistort 1.6s ease-out forwards',
-              background: 'radial-gradient(circle, rgba(56,189,248,0.28) 0%, rgba(99,102,241,0.18) 55%, transparent 75%)'
-            }}
-          />
-        </div>
-      )}
+        );
+      })()}
 
       {/* 20bb. GASTLY SLEEPING GAS (Gastly Lv. 8 — Billowing Spectral Ectoplasm & Hypnotic Somnolence Waves) */}
       {fx.type === 'gastly_sleeping_gas' && (
@@ -21083,95 +21175,159 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       )}
 
       {/* 3. ZUBAT: LEECH LIFE (Vampire Fang Clamp & Vitality Drain Siphon) */}
-      {fx.type === 'zubat_leech_life' && (
+      {fx.type === 'zubat_leech_life' && (() => {
+        const drainDirY = fx.target === 'cpu' ? 1 : -1;
+        return (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+            {/* Layer 1: Vampiric Crimson Floor Aura */}
+            <div
+              className="absolute inset-0 rounded-xl pointer-events-none z-10"
+              style={{
+                animation: 'gbaZubatLeechFloor 1.7s ease-out forwards',
+                background: 'radial-gradient(ellipse at 50% 50%, rgba(127,29,29,0.55) 0%, rgba(153,27,27,0.3) 45%, rgba(185,28,28,0.12) 70%, transparent 90%)'
+              }}
+            />
+
+            {/* Layer 2: Top Vampire Fangs dropping down */}
+            <div
+              className="absolute pointer-events-none z-35 flex items-center justify-center top-0"
+              style={{ animation: 'gbaZubatFangTop 1.85s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+            >
+              <svg width="86" height="42" viewBox="0 0 86 42" className="overflow-visible drop-shadow-[0_0_14px_#ef4444]">
+                <path
+                  d="M 22 2 Q 24 16 28 36 Q 18 20 12 2 Z"
+                  fill="#ffffff"
+                  stroke="#e2e8f0"
+                  strokeWidth="1.5"
+                  className="drop-shadow-[0_0_6px_#fca5a5]"
+                />
+                <path d="M 20 6 Q 22 18 26 30" fill="none" stroke="#f87171" strokeWidth="1" opacity="0.75" />
+                <path
+                  d="M 64 2 Q 62 16 58 36 Q 68 20 74 2 Z"
+                  fill="#ffffff"
+                  stroke="#e2e8f0"
+                  strokeWidth="1.5"
+                  className="drop-shadow-[0_0_6px_#fca5a5]"
+                />
+                <path d="M 66 6 Q 64 18 60 30" fill="none" stroke="#f87171" strokeWidth="1" opacity="0.75" />
+              </svg>
+            </div>
+
+            {/* Layer 3: Bottom Vampire Fangs clamping up */}
+            <div
+              className="absolute pointer-events-none z-35 flex items-center justify-center bottom-0"
+              style={{ animation: 'gbaZubatFangBottom 1.85s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+            >
+              <svg width="86" height="42" viewBox="0 0 86 42" className="overflow-visible drop-shadow-[0_0_14px_#ef4444]">
+                <path
+                  d="M 24 40 Q 26 26 30 6 Q 20 22 14 40 Z"
+                  fill="#ffffff"
+                  stroke="#e2e8f0"
+                  strokeWidth="1.5"
+                  className="drop-shadow-[0_0_6px_#fca5a5]"
+                />
+                <path
+                  d="M 62 40 Q 60 26 56 6 Q 66 22 72 40 Z"
+                  fill="#ffffff"
+                  stroke="#e2e8f0"
+                  strokeWidth="1.5"
+                  className="drop-shadow-[0_0_6px_#fca5a5]"
+                />
+              </svg>
+            </div>
+
+            {/* Layer 4: Bite Impact Shockwave */}
+            <div
+              className="absolute w-28 h-28 rounded-full pointer-events-none z-20"
+              style={{
+                animation: 'gbaShockwaveScale 0.7s ease-out 0.25s forwards',
+                background: 'radial-gradient(circle, rgba(239,68,68,0.45) 0%, rgba(185,28,28,0.2) 60%, transparent 80%)',
+                opacity: 0
+              }}
+            />
+
+            {/* Layer 5: Siphoning Drain Orbs toward attacker */}
+            {!fx.whiffed && [
+              { orbX: '-18px', orbY: '-6px', delay: '0.3s', sz: '14px' },
+              { orbX: '16px', orbY: '4px', delay: '0.45s', sz: '12px' },
+              { orbX: '-10px', orbY: '8px', delay: '0.6s', sz: '15px' },
+              { orbX: '12px', orbY: '-4px', delay: '0.75s', sz: '11px' }
+            ].map((orb, idx) => (
+              <div
+                key={`drain-orb-${idx}`}
+                className="absolute rounded-full pointer-events-none z-40 border border-rose-200"
+                style={{
+                  width: orb.sz,
+                  height: orb.sz,
+                  background: 'radial-gradient(circle at 35% 35%, #ffffff 0%, #ef4444 55%, #991b1b 100%)',
+                  ['--orb-x' as string]: orb.orbX,
+                  ['--orb-start-y' as string]: orb.orbY,
+                  ['--drain-dy' as string]: `${drainDirY * 150}px`,
+                  animation: `gbaZubatLeechOrbTravel 1.1s cubic-bezier(0.22, 0.9, 0.35, 1) ${orb.delay} forwards`,
+                  opacity: 0
+                }}
+              />
+            ))}
+
+
+          </div>
+        );
+      })()}
+
+      {/* 3b. ZUBAT: LEECH LIFE REPLENISH (Vitality Convergence & Emerald Heal Bloom on Attacker) */}
+      {fx.type === 'zubat_leech_replenish' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Top Vampire Fangs dropping down */}
-          <div
-            className="absolute pointer-events-none z-35 flex items-center justify-center -top-3"
-            style={{ animation: 'gbaZubatFangTop 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
-          >
-            <svg width="86" height="42" viewBox="0 0 86 42" className="overflow-visible drop-shadow-[0_0_14px_#ef4444]">
-              {/* Left Upper Fang */}
-              <path
-                d="M 22 2 Q 24 16 28 36 Q 18 20 12 2 Z"
-                fill="#ffffff"
-                stroke="#e2e8f0"
-                strokeWidth="1.5"
-                className="drop-shadow-[0_0_6px_#fca5a5]"
-              />
-              <path d="M 20 6 Q 22 18 26 30" fill="none" stroke="#f87171" strokeWidth="1" opacity="0.75" />
-              {/* Right Upper Fang */}
-              <path
-                d="M 64 2 Q 62 16 58 36 Q 68 20 74 2 Z"
-                fill="#ffffff"
-                stroke="#e2e8f0"
-                strokeWidth="1.5"
-                className="drop-shadow-[0_0_6px_#fca5a5]"
-              />
-              <path d="M 66 6 Q 64 18 60 30" fill="none" stroke="#f87171" strokeWidth="1" opacity="0.75" />
-            </svg>
-          </div>
-
-          {/* Bottom Vampire Fangs clamping up */}
-          <div
-            className="absolute pointer-events-none z-35 flex items-center justify-center -bottom-3"
-            style={{ animation: 'gbaZubatFangBottom 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
-          >
-            <svg width="86" height="42" viewBox="0 0 86 42" className="overflow-visible drop-shadow-[0_0_14px_#ef4444]">
-              {/* Left Lower Fang */}
-              <path
-                d="M 24 40 Q 26 26 30 6 Q 20 22 14 40 Z"
-                fill="#ffffff"
-                stroke="#e2e8f0"
-                strokeWidth="1.5"
-                className="drop-shadow-[0_0_6px_#fca5a5]"
-              />
-              {/* Right Lower Fang */}
-              <path
-                d="M 62 40 Q 60 26 56 6 Q 66 22 72 40 Z"
-                fill="#ffffff"
-                stroke="#e2e8f0"
-                strokeWidth="1.5"
-                className="drop-shadow-[0_0_6px_#fca5a5]"
-              />
-            </svg>
-          </div>
-
-          {/* Bite Wound Crimson Impact Shockwave */}
-          <div
-            className="absolute w-28 h-28 rounded-full pointer-events-none z-20"
-            style={{
-              animation: 'gbaShockwaveScale 0.7s ease-out 0.25s forwards',
-              background: 'radial-gradient(circle, rgba(239,68,68,0.45) 0%, rgba(185,28,28,0.2) 60%, transparent 80%)',
-              opacity: 0
-            }}
-          />
-
-          {/* Siphoning Crimson Life Vitality Orbs */}
-          {!fx.whiffed && [
-            { midX: '-18px', midY: '-22px', endX: '-42px', endY: '-40px', destX: '-70px', destY: '-60px', delay: '0.3s', sz: '14px' },
-            { midX: '16px', midY: '-20px', endX: '-28px', endY: '-48px', destX: '-62px', destY: '-68px', delay: '0.45s', sz: '12px' },
-            { midX: '-12px', midY: '18px', endX: '-46px', endY: '-24px', destX: '-76px', destY: '-52px', delay: '0.6s', sz: '15px' },
-            { midX: '14px', midY: '14px', endX: '-32px', endY: '-30px', destX: '-68px', destY: '-58px', delay: '0.75s', sz: '11px' }
+          {/* Arriving drain orbs converging to center */}
+          {[
+            { fromX: '-40px', fromY: '-50px', delay: '0s', sz: '13px' },
+            { fromX: '38px', fromY: '-44px', delay: '0.08s', sz: '11px' },
+            { fromX: '-34px', fromY: '42px', delay: '0.16s', sz: '14px' },
+            { fromX: '42px', fromY: '38px', delay: '0.24s', sz: '12px' }
           ].map((orb, idx) => (
             <div
-              key={`vitality-orb-${idx}`}
+              key={`replenish-orb-${idx}`}
               className="absolute rounded-full pointer-events-none z-40 border border-rose-200"
               style={{
                 width: orb.sz,
                 height: orb.sz,
                 background: 'radial-gradient(circle at 35% 35%, #ffffff 0%, #ef4444 55%, #991b1b 100%)',
-                ['--drain-mid-x' as string]: orb.midX,
-                ['--drain-mid-y' as string]: orb.midY,
-                ['--drain-end-x' as string]: orb.endX,
-                ['--drain-end-y' as string]: orb.endY,
-                ['--drain-dest-x' as string]: orb.destX,
-                ['--drain-dest-y' as string]: orb.destY,
-                animation: `gbaLifeVitalityOrb 0.9s cubic-bezier(0.2, 0.8, 0.4, 1) ${orb.delay} forwards`,
+                ['--arrive-from-x' as string]: orb.fromX,
+                ['--arrive-from-y' as string]: orb.fromY,
+                animation: `gbaZubatReplenishOrbArrive 0.7s cubic-bezier(0.22, 0.9, 0.35, 1) ${orb.delay} forwards`,
                 opacity: 0
               }}
             />
           ))}
+
+          {/* Main emerald heal aura */}
+          <div
+            className="absolute w-20 h-20 rounded-full pointer-events-none z-30"
+            style={{
+              animation: 'gbaZubatHealBloom 1.6s ease-out 0.35s forwards',
+              background: 'radial-gradient(circle, rgba(34,197,94,0.7) 0%, rgba(74,222,128,0.45) 40%, rgba(52,211,153,0.2) 65%, transparent 85%)',
+              opacity: 0
+            }}
+          />
+
+          {/* Rising sparkles */}
+          <div className="absolute left-1/2 -translate-x-1/2 pointer-events-none z-50">
+            <div className="absolute left-1 -top-10" style={{ animation: 'gbaZubatHealSparkle 0.9s ease-out 0.5s forwards', opacity: 0 }}>
+              <span className="text-base text-emerald-300 select-none drop-shadow-[0_0_6px_#4ade80]">✦</span>
+            </div>
+            <div className="absolute -left-5 -top-7" style={{ animation: 'gbaZubatHealSparkle 0.85s ease-out 0.6s forwards', opacity: 0 }}>
+              <span className="text-xs text-emerald-200 select-none drop-shadow-[0_0_6px_#34d399]">✦</span>
+            </div>
+            <div className="absolute left-6 -top-6" style={{ animation: 'gbaZubatHealSparkle 0.8s ease-out 0.65s forwards', opacity: 0 }}>
+              <span className="text-sm text-green-300 select-none drop-shadow-[0_0_6px_#22c55e]">✦</span>
+            </div>
+            {/* Green cross icon (Recover indicator) */}
+            <div className="absolute -top-13 left-1/2 -translate-x-1/2" style={{ animation: 'gbaZubatHealSparkle 1.0s ease-out 0.45s forwards', opacity: 0 }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" className="drop-shadow-[0_0_6px_#22c55e]">
+                <rect x="5" y="1" width="4" height="12" rx="1" fill="#4ade80" />
+                <rect x="1" y="5" width="12" height="4" rx="1" fill="#4ade80" />
+              </svg>
+            </div>
+          </div>
         </div>
       )}
 

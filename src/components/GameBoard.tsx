@@ -133,7 +133,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   }, [clairvoyanceDrawerOpen]);
   const [opponentEmote, setOpponentEmote] = useState<string | null>(null);
   const [activeFXList, setActiveFXList] = useState<ActiveFX[]>([]);
-  const [activeShakes, setActiveShakes] = useState<Record<string, 'normal' | 'recoil' | 'heal'>>({});
+  const [activeShakes, setActiveShakes] = useState<Record<string, 'normal' | 'recoil' | 'heal' | 'vitality'>>({});
   const shakeTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   const [isRetreatMode, setIsRetreatMode] = useState(false);
   const [hoveredDropTarget, setHoveredDropTarget] = useState<{
@@ -826,6 +826,23 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       }
     }
 
+    // Zubat Leech Life: After the vampiric drain strikes the opponent, vitality orbs converge
+    // on the attacking Zubat and a lush emerald heal bloom appears on its card.
+    if (spec.fxType === 'zubat_leech_life' && !spec.result?.whiffed && !spec.isBlocked) {
+      const oppSide: 'player' | 'cpu' = spec.target === 'player' ? 'cpu' : 'player';
+      beats.push({
+        id: uid(),
+        type: 'zubat_leech_replenish',
+        target: oppSide,
+        slot: 'active',
+        pokemonName: spec.attackerName,
+        attackerType: spec.attackerType,
+        isSelfTarget: true,
+        delayMs: 900,
+        intensity: moveIntensity
+      });
+    }
+
     // Recoil / Self-Damage (e.g. Electabuzz Thunderpunch tails, Double-Edge, Take Down, Submission, etc.)
     // Visual recoil animation ignites first, followed ~90ms later by the heavy recoil card shudder!
     if (spec.result && spec.result.selfDamage && spec.result.selfDamage > 0) {
@@ -859,6 +876,10 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       if (b.shake && b.type !== 'recoil_self_hit') {
         triggerSlotShake(b.target, b.slot || 'active', b.benchIndex, 'normal', b.delayMs ?? 0, 550);
       }
+      // Zubat Leech Replenish: vitality shudder on the attacker card as orbs converge
+      if (b.type === 'zubat_leech_replenish') {
+        triggerSlotShake(b.target, b.slot || 'active', b.benchIndex, 'vitality', (b.delayMs ?? 0) + 300, 650);
+      }
     });
 
     setActiveFXList(beats);
@@ -874,7 +895,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     side: 'player' | 'cpu',
     slot: 'active' | 'bench',
     benchIndex: number | undefined,
-    shakeType: 'normal' | 'recoil' | 'heal',
+    shakeType: 'normal' | 'recoil' | 'heal' | 'vitality',
     delayMs: number = 0,
     durationMs: number = 550
   ) => {
@@ -994,7 +1015,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
   /**
    * Active shake state for a slot: 'normal' (standard hit shake) or 'recoil' (heavy downward shudder).
    */
-  const slotShakes = (side: 'player' | 'cpu', slot: 'active' | 'bench', benchIndex?: number): 'normal' | 'recoil' | 'heal' | null => {
+  const slotShakes = (side: 'player' | 'cpu', slot: 'active' | 'bench', benchIndex?: number): 'normal' | 'recoil' | 'heal' | 'vitality' | null => {
     const key = `${side}-${slot}-${benchIndex ?? 0}`;
     return activeShakes[key] || null;
   };
@@ -5958,7 +5979,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   data-drop-zone="opponent-bench-pokemon"
                   data-instance-id={b.instanceId}
                   data-bench-index={bIdx}
-                  className={`relative ${slotShakes('cpu', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'heal' ? 'animate-heal-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
+                  className={`relative ${slotShakes('cpu', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'heal' ? 'animate-heal-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'vitality' ? 'animate-vitality-card-shudder' : slotShakes('cpu', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
                 >
                   <CardView
                     inPlayCard={b}
@@ -6000,7 +6021,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
           {/* 2. CENTER BATTLEFIELD: ACTIVE POKEMON */}
           <div data-drop-zone="center-field" className="my-auto py-2 flex items-center justify-around rounded-3xl transition-all duration-300">
             {/* CPU Active */}
-            <div className={`flex flex-col items-center transition-transform duration-200 ${slotShakes('cpu', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'active') === 'heal' ? 'animate-heal-card-shudder' : slotShakes('cpu', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'cpu' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`} style={{ zoom: uiScale }}>
+            <div className={`flex flex-col items-center transition-transform duration-200 ${slotShakes('cpu', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('cpu', 'active') === 'heal' ? 'animate-heal-card-shudder' : slotShakes('cpu', 'active') === 'vitality' ? 'animate-vitality-card-shudder' : slotShakes('cpu', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'cpu' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`} style={{ zoom: uiScale }}>
               <div className="text-xs font-bold text-blue-300 mb-1.5  tracking-wider">{t.opponentActive}</div>
               <div className="relative">
                 {cpu.active ? (
@@ -6036,7 +6057,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                   data-drop-zone="in-play-pokemon"
                   data-instance-id={player.active.instanceId}
                   data-is-active="true"
-                  className={`w-full flex justify-center relative ${slotShakes('player', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'active') === 'heal' ? 'animate-heal-card-shudder' : slotShakes('player', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'player' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`}
+                  className={`w-full flex justify-center relative ${slotShakes('player', 'active') === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'active') === 'heal' ? 'animate-heal-card-shudder' : slotShakes('player', 'active') === 'vitality' ? 'animate-vitality-card-shudder' : slotShakes('player', 'active') === 'normal' ? 'animate-fx-card-shake' : ''} ${activeFXList.some(f => f.target === 'player' && f.type === 'poison_tick') ? 'animate-poison-card-tremble' : ''}`}
                 >
                   {/* Active Hover Target Indicator */}
                   {hoveredDropTarget?.type === 'active' && (
@@ -6115,7 +6136,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                     onPointerDown={(e) => handleBenchCardPointerDown(e, b, bIdx)}
                     className={`relative touch-none select-none transition-opacity duration-200 ${
                       draggingBenchPokemon?.benchIndex === bIdx ? 'opacity-30' : ''
-                    } ${slotShakes('player', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'bench', bIdx) === 'heal' ? 'animate-heal-card-shudder' : slotShakes('player', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
+                    } ${slotShakes('player', 'bench', bIdx) === 'recoil' ? 'animate-recoil-card-shudder' : slotShakes('player', 'bench', bIdx) === 'heal' ? 'animate-heal-card-shudder' : slotShakes('player', 'bench', bIdx) === 'vitality' ? 'animate-vitality-card-shudder' : slotShakes('player', 'bench', bIdx) === 'normal' ? 'animate-fx-card-shake' : ''}`}
                   >
                     {/* Bench Hover Target Indicator (Downward Triangle/Arrow) */}
                     {hoveredDropTarget?.type === 'bench' && hoveredDropTarget.benchIndex === bIdx && (

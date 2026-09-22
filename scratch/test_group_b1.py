@@ -19,13 +19,13 @@ for pkm, attack, expected_fx in tests:
     print(f"[{'PASS' if match else 'FAIL'}] Dispatch: {pkm} + {attack} -> {expected_fx}")
 
 # Check durations
-durations = ['grimer_nasty_goo', 'grimer_minimize', 'zubat_leech_life', 'tangela_bind']
+durations = ['grimer_nasty_goo', 'grimer_minimize', 'zubat_leech_life', 'zubat_leech_replenish', 'tangela_bind']
 for fx in durations:
     dur_match = re.search(rf"case '{fx}':\s*return (\d+);", code)
     print(f"[{'PASS' if dur_match else 'FAIL'}] Duration: {fx} -> {dur_match.group(1) if dur_match else 'None'}ms")
 
 # Check JSX rendering blocks
-jsx_types = ['grimer_nasty_goo', 'grimer_minimize', 'zubat_leech_life', 'tangela_bind']
+jsx_types = ['grimer_nasty_goo', 'grimer_minimize', 'zubat_leech_life', 'zubat_leech_replenish', 'tangela_bind']
 for fx in jsx_types:
     has_jsx = f"fx.type === '{fx}'" in code
     print(f"[{'PASS' if has_jsx else 'FAIL'}] JSX rendering block: {fx}")
@@ -42,7 +42,20 @@ keyframes = [
     'gbaGrimerMeltRipple',
     'gbaZubatFangTop',
     'gbaZubatFangBottom',
-    'gbaLifeVitalityOrb',
+    'gbaZubatLeechFloor',
+    'gbaZubatLeechOrbTravel',
+    'gbaZubatHealBloom',
+    'gbaZubatHealSparkle',
+    'gbaZubatReplenishOrbArrive',
+    'gbaZubatSonarPing',
+    'gbaZubatSonicRing',
+    'gbaZubatSonicDepthRing',
+    'gbaZubatWaveLine',
+    'gbaZubatConfusionDistort',
+    'gbaZubatConfuseOrbit1',
+    'gbaZubatConfuseOrbit2',
+    'gbaZubatConfuseOrbit3',
+    'fxVitalityCardShudder',
     'gbaTangelaVineConstrict',
     'gbaTangelaSporeErupt'
 ]
