@@ -19805,13 +19805,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           {/* Layer 0: Raster Stock Actor — Articuno (ONLY on opposing ACTIVE card; bench cards receive particle-only frost scatter §6b) */}
           {fx.slot !== 'bench' && (
             <div
-              className="absolute pointer-events-none z-30"
+              className="absolute pointer-events-none"
               style={{
                 left: '50%',
                 top: '48%',
-                width: fx.whiffed ? '78px' : '144px',
-                height: fx.whiffed ? '78px' : '144px',
+                width: fx.whiffed ? '90px' : '168px',
+                height: fx.whiffed ? '90px' : '168px',
                 transform: 'translate(-50%, -50%)',
+                zIndex: 26,
                 filter: fx.whiffed ? 'saturate(0.4) brightness(0.85)' : undefined,
                 animation: fx.whiffed
                   ? 'gbaBlizzardStockWhiff 1.75s ease-out forwards'
@@ -19827,20 +19828,20 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             </div>
           )}
 
-          {/* FAZ7: Frost Veil — semi-transparent rime film laid over the stock actor on the ACTIVE slot, so the ice effects read clearly even on top of the dense artwork (opacity-only keyframe; no transform conflict) */}
+          {/* FAZ7: Frost Veil — semi-transparent rime film laid over the stock actor on the ACTIVE slot (opacity-only keyframe; no transform conflict) */}
           {fx.slot !== 'bench' && !fx.whiffed && (
             <div
-              className="absolute rounded-[20px] pointer-events-none"
+              className="absolute rounded-[24px] pointer-events-none"
               style={{
                 left: '50%',
                 top: '48%',
-                width: '152px',
-                height: '152px',
+                width: '176px',
+                height: '176px',
                 transform: 'translate(-50%, -50%)',
-                zIndex: 31,
+                zIndex: 28,
                 opacity: 0,
                 animation: 'gbaBlizzardFrostVeil 1.75s ease-out 0.15s forwards',
-                background: 'radial-gradient(ellipse, rgba(224,242,254,0.45) 0%, rgba(186,230,253,0.28) 45%, rgba(56,189,248,0.14) 70%, transparent 92%)'
+                background: 'radial-gradient(ellipse, rgba(224,242,254,0.38) 0%, rgba(186,230,253,0.22) 45%, rgba(56,189,248,0.1) 70%, transparent 92%)'
               }}
             />
           )}
@@ -19878,10 +19879,22 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             />
           )}
 
-          {/* Howling Snowstorm Wind Stream — FAZ7: on the ACTIVE slot the ice-blue streaks sweep IN FRONT of the stock actor (z-33) so they stay legible over the art; bench keeps the original z-25 depth */}
+          {/* FAZ4: Dense snowstorm haze body — positioned in front of Articuno (z-32) so storm cloud envelops opponent */}
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: '168px',
+              height: '136px',
+              zIndex: 32,
+              animation: 'gbaBlizzardStormHaze 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+              background: 'radial-gradient(ellipse, rgba(224,242,254,0.55) 0%, rgba(186,230,253,0.35) 45%, rgba(56,189,248,0.18) 70%, transparent 92%)'
+            }}
+          />
+
+          {/* Howling Snowstorm Wind Stream — sweeps IN FRONT of Articuno & Haze (z-34) */}
           <div
             className="absolute pointer-events-none"
-            style={{ zIndex: fx.slot !== 'bench' ? 33 : 25, animation: 'gbaArticunoBlizzardVortex 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            style={{ zIndex: fx.slot !== 'bench' ? 34 : 25, animation: 'gbaArticunoBlizzardVortex 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
           >
             <svg width="180" height="150" viewBox="0 0 180 150" className="overflow-visible opacity-90">
               <path
@@ -19890,16 +19903,16 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 stroke="#e0f2fe"
                 strokeWidth="3.2"
                 strokeLinecap="round"
-                opacity="0.78"
+                opacity="0.85"
                 className="drop-shadow-[0_0_12px_#38bdf8]"
               />
               <path
                 d="M 180 40 C 130 65, 80 85, 20 135"
                 fill="none"
                 stroke="#ffffff"
-                strokeWidth="2.6"
+                strokeWidth="2.8"
                 strokeLinecap="round"
-                opacity="0.72"
+                opacity="0.8"
                 className="drop-shadow-[0_0_8px_#ffffff]"
               />
               <path
@@ -19908,7 +19921,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 stroke="#7dd3fc"
                 strokeWidth="2.4"
                 strokeLinecap="round"
-                opacity="0.68"
+                opacity="0.75"
                 className="drop-shadow-[0_0_10px_#7dd3fc]"
               />
               <path
@@ -19917,7 +19930,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 stroke="#bae6fd"
                 strokeWidth="2.2"
                 strokeLinecap="round"
-                opacity="0.6"
+                opacity="0.68"
                 className="drop-shadow-[0_0_8px_#bae6fd]"
               />
               <path
@@ -19926,101 +19939,72 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 stroke="#e0f2fe"
                 strokeWidth="2"
                 strokeLinecap="round"
-                opacity="0.55"
+                opacity="0.6"
               />
             </svg>
           </div>
 
-          {/* FAZ4: Dense snowstorm haze body — soft frost cloud mass behind streaks, gives storm volume */}
-          <div
-            className="absolute rounded-full pointer-events-none z-20"
-            style={{
-              width: '150px',
-              height: '120px',
-              animation: 'gbaBlizzardStormHaze 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
-              background: 'radial-gradient(ellipse, rgba(224,242,254,0.4) 0%, rgba(186,230,253,0.25) 45%, rgba(56,189,248,0.12) 70%, transparent 90%)'
-            }}
-          />
-
-          {/* Spinning Crystalline Snowflakes — FAZ5: 5 sparse flakes, aerodynamic drift, wider spread */}
+          {/* FAZ5: Ice shard scatter — 8 razor-sharp crystalline needles slicing along the down-left wind stream */}
           {[
-            { ox: '52px', oy: '-45px', delay: '0.1s', size: 22 },
-            { ox: '-40px', oy: '-28px', delay: '0.28s', size: 18 },
-            { ox: '15px', oy: '38px', delay: '0.42s', size: 24 },
-            { ox: '-50px', oy: '20px', delay: '0.55s', size: 16 },
-            { ox: '35px', oy: '-10px', delay: '0.7s', size: 20 }
-          ].map((sn, i) => (
-            <div
-              key={`bliz-sn-${i}`}
-              className="absolute pointer-events-none z-35"
-              style={{
-                animation: `gbaArticunoSnowflakeSpin 1.4s ease-out ${sn.delay} forwards`,
-                opacity: 0,
-                '--s-ox': sn.ox,
-                '--s-oy': sn.oy
-              } as React.CSSProperties}
-            >
-              <svg width={sn.size} height={sn.size} viewBox="0 0 24 24" className="drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_5px_#bae6fd]">
-                <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
-                <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
-                <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" strokeWidth="1.8" strokeLinecap="round" />
-                <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" strokeWidth="1.8" strokeLinecap="round" />
-                <circle cx="12" cy="12" r="2.5" fill="#38bdf8" />
-              </svg>
-            </div>
-          ))}
-
-          {/* FAZ5: Ice shard scatter — angular fragments tumbling with storm wind toward opponent */}
-          {[
-            { ox: '48px', oy: '-38px', delay: '0.12s', w: 8, h: 14 },
-            { ox: '-35px', oy: '-22px', delay: '0.25s', w: 6, h: 11 },
-            { ox: '25px', oy: '30px', delay: '0.38s', w: 7, h: 13 },
-            { ox: '-45px', oy: '10px', delay: '0.5s', w: 5, h: 10 },
-            { ox: '40px', oy: '-5px', delay: '0.18s', w: 9, h: 15 },
-            { ox: '-15px', oy: '42px', delay: '0.62s', w: 6, h: 12 }
+            { ox: '58px', oy: '-46px', delay: '0.08s', w: 8, h: 16, angle: '232deg' },
+            { ox: '44px', oy: '-34px', delay: '0.18s', w: 7, h: 15, angle: '228deg' },
+            { ox: '-20px', oy: '-32px', delay: '0.26s', w: 8, h: 17, angle: '225deg' },
+            { ox: '50px', oy: '-18px', delay: '0.34s', w: 7, h: 14, angle: '235deg' },
+            { ox: '26px', oy: '-26px', delay: '0.42s', w: 9, h: 18, angle: '230deg' },
+            { ox: '-10px', oy: '-12px', delay: '0.50s', w: 7, h: 15, angle: '226deg' },
+            { ox: '38px', oy: '2px', delay: '0.58s', w: 8, h: 16, angle: '233deg' },
+            { ox: '8px', oy: '-8px', delay: '0.66s', w: 7, h: 14, angle: '227deg' }
           ].map((sh, i) => (
             <div
               key={`bliz-shard-${i}`}
-              className="absolute pointer-events-none z-32"
+              className="absolute pointer-events-none z-36"
               style={{
-                animation: `gbaBlizzardIceShard 1.3s cubic-bezier(0.25, 0.8, 0.35, 1) ${sh.delay} forwards`,
+                animation: `gbaBlizzardIceShard 1.25s cubic-bezier(0.18, 0.88, 0.32, 1) ${sh.delay} forwards`,
                 opacity: 0,
                 '--shard-ox': sh.ox,
-                '--shard-oy': sh.oy
+                '--shard-oy': sh.oy,
+                '--shard-angle': sh.angle
               } as React.CSSProperties}
             >
-              <svg width={sh.w} height={sh.h} viewBox="0 0 8 16" className="drop-shadow-[0_0_5px_#7dd3fc]">
-                <polygon points="4,0 8,6 6,16 2,16 0,6" fill="#e0f2fe" stroke="#bae6fd" strokeWidth="0.8" />
-                <polygon points="4,2 6,6 5,13 3,13 2,6" fill="#ffffff" opacity="0.6" />
+              <svg width={sh.w} height={sh.h} viewBox="0 0 8 20" className="drop-shadow-[0_0_6px_#ffffff] drop-shadow-[0_0_9px_#0284c7]">
+                <polygon points="4,0 7,6 5.5,20 2.5,20 1,6" fill="#f0f9ff" stroke="#0284c7" strokeWidth="0.8" />
+                <polygon points="4,1 6.5,6 5,17 4,19 4,1" fill="#ffffff" opacity="0.95" />
+                <polygon points="4,1 4,19 3,17 1.5,6 4,1" fill="#7dd3fc" opacity="0.8" />
               </svg>
             </div>
           ))}
 
-          {/* FAZ6: Embed shards — fly in and STICK into the card with an impact wobble (impact intensity up) */}
+          {/* FAZ6: Embed shards — 6 ballistic icicles impaling across distinct card quadrants tip-first with kinetic shudder */}
           {!fx.whiffed && [
-            { ox: '55px', oy: '-42px', delay: '0.16s', w: 9, h: 16 },
-            { ox: '-48px', oy: '-18px', delay: '0.3s', w: 8, h: 15 },
-            { ox: '30px', oy: '36px', delay: '0.44s', w: 7, h: 14 },
-            { ox: '-20px', oy: '-40px', delay: '0.52s', w: 6, h: 12 }
+            { ox: '64px', oy: '-52px', tx: '32px', ty: '-28px', delay: '0.14s', w: 9, h: 19, angle: '232deg' },
+            { ox: '-36px', oy: '-42px', tx: '-38px', ty: '-16px', delay: '0.24s', w: 8, h: 17, angle: '226deg' },
+            { ox: '52px', oy: '-16px', tx: '18px', ty: '12px', delay: '0.34s', w: 9, h: 18, angle: '234deg' },
+            { ox: '12px', oy: '-38px', tx: '-22px', ty: '32px', delay: '0.44s', w: 8, h: 17, angle: '228deg' },
+            { ox: '40px', oy: '8px', tx: '26px', ty: '38px', delay: '0.54s', w: 9, h: 19, angle: '230deg' },
+            { ox: '-18px', oy: '-24px', tx: '-12px', ty: '-36px', delay: '0.62s', w: 8, h: 16, angle: '225deg' }
           ].map((es, i) => (
             <div
               key={`bliz-embed-${i}`}
-              className="absolute pointer-events-none z-32"
+              className="absolute pointer-events-none z-36"
               style={{
-                animation: `gbaBlizzardIceShardEmbed 1.15s cubic-bezier(0.2, 0.85, 0.3, 1) ${es.delay} forwards`,
+                animation: `gbaBlizzardIceShardEmbed 1.2s cubic-bezier(0.18, 0.88, 0.32, 1) ${es.delay} forwards`,
                 opacity: 0,
                 '--shard-ox': es.ox,
-                '--shard-oy': es.oy
+                '--shard-oy': es.oy,
+                '--shard-tx': es.tx,
+                '--shard-ty': es.ty,
+                '--shard-angle': es.angle
               } as React.CSSProperties}
             >
-              <svg width={es.w} height={es.h} viewBox="0 0 8 16" className="drop-shadow-[0_0_7px_#7dd3fc]">
-                <polygon points="4,0 8,6 6,16 2,16 0,6" fill="#e0f2fe" stroke="#bae6fd" strokeWidth="0.9" />
-                <polygon points="4,2 6,6 5,13 3,13 2,6" fill="#ffffff" opacity="0.75" />
+              <svg width={es.w} height={es.h} viewBox="0 0 8 20" className="drop-shadow-[0_0_7px_#ffffff] drop-shadow-[0_0_10px_#0284c7]">
+                <polygon points="4,0 7,6 5.5,20 2.5,20 1,6" fill="#f0f9ff" stroke="#0284c7" strokeWidth="0.85" />
+                <polygon points="4,1 6.5,6 5,17 4,19 4,1" fill="#ffffff" opacity="0.95" />
+                <polygon points="4,1 4,19 3,17 1.5,6 4,1" fill="#7dd3fc" opacity="0.8" />
               </svg>
             </div>
           ))}
 
-          {/* FAZ5: Sparse background micro-snow — 3 soft flakes for depth without clutter */}
+          {/* FAZ5: Sparse background micro-snow — depth layer (z-37) */}
           {[
             { ox: '-55px', oy: '-25px', delay: '0.2s' },
             { ox: '45px', oy: '15px', delay: '0.45s' },
@@ -20028,7 +20012,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           ].map((ms, i) => (
             <div
               key={`bliz-micro-${i}`}
-              className="absolute pointer-events-none z-30"
+              className="absolute pointer-events-none z-37"
               style={{
                 animation: `gbaArticunoSnowflakeSpin 1.5s ease-out ${ms.delay} forwards`,
                 opacity: 0,
@@ -20036,12 +20020,40 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 '--s-oy': ms.oy
               } as React.CSSProperties}
             >
-              <svg width="10" height="10" viewBox="0 0 24 24" className="drop-shadow-[0_0_4px_#e0f2fe]">
-                <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
-                <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
+              <svg width="12" height="12" viewBox="0 0 24 24" className="drop-shadow-[0_0_6px_#ffffff] drop-shadow-[0_0_4px_#38bdf8]">
+                <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
+                <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
                 <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" strokeWidth="1.8" strokeLinecap="round" />
                 <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" strokeWidth="1.8" strokeLinecap="round" />
                 <circle cx="12" cy="12" r="2.5" fill="#38bdf8" />
+              </svg>
+            </div>
+          ))}
+
+          {/* Spinning Crystalline Snowflakes — large foreground snowflakes sweeping across (z-38) */}
+          {[
+            { ox: '52px', oy: '-45px', delay: '0.1s', size: 26 },
+            { ox: '-40px', oy: '-28px', delay: '0.28s', size: 22 },
+            { ox: '15px', oy: '38px', delay: '0.42s', size: 28 },
+            { ox: '-50px', oy: '20px', delay: '0.55s', size: 20 },
+            { ox: '35px', oy: '-10px', delay: '0.7s', size: 24 }
+          ].map((sn, i) => (
+            <div
+              key={`bliz-sn-${i}`}
+              className="absolute pointer-events-none z-38"
+              style={{
+                animation: `gbaArticunoSnowflakeSpin 1.4s ease-out ${sn.delay} forwards`,
+                opacity: 0,
+                '--s-ox': sn.ox,
+                '--s-oy': sn.oy
+              } as React.CSSProperties}
+            >
+              <svg width={sn.size} height={sn.size} viewBox="0 0 24 24" className="drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_6px_#38bdf8]">
+                <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
+                <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
+                <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" strokeWidth="2" strokeLinecap="round" />
+                <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" strokeWidth="2" strokeLinecap="round" />
+                <circle cx="12" cy="12" r="2.8" fill="#38bdf8" stroke="#ffffff" strokeWidth="0.8" />
               </svg>
             </div>
           ))}
