@@ -12093,11 +12093,22 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {fx.type === 'zubat_supersonic' && (() => {
         const sonicDirY = fx.target === 'cpu' ? 1 : -1;
         const dur = fx.whiffed ? 1.2 : 1.75;
+        const fxDebug = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('fxdebug');
+        /* Round 13: foreground ripple field timing. Each ring lives
+           RIPPLE_PERIOD seconds on an infinite linear loop; the rings are
+           phase-shifted by negative delays (-i * PERIOD / COUNT) so the
+           steady state always shows several discrete radii at once. */
+        const RIPPLE_COUNT = 9;
+        const RIPPLE_PERIOD = 1.6;
         return (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
+          /* Round 14 (Anti-Bleed protocol): the overlay is mounted inside the
+             target CardView, so inset-0 === card bounds; clipping here keeps
+             every ripple/wash arc inside the card frame (no bench/mat bleed)
+             while duration, ring count and density stay untouched. */
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-hidden rounded-xl">
             {/* Layer 1: Echolocation Ping Core — bright flash at Zubat's mouth */}
             <div
-              className="absolute w-8 h-8 rounded-full pointer-events-none z-40"
+              className="absolute w-8 h-8 rounded-full pointer-events-none z-10"
               style={{
                 animation: `gbaZubatSonarPing ${dur}s ease-out forwards`,
                 background: 'radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(56,189,248,0.6) 50%, transparent 80%)'
@@ -12112,8 +12123,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 key={`sonic-wash-${i}`}
                 className="absolute pointer-events-none z-20"
                 style={{
-                  width: `${48 + i * 26}px`,
-                  height: `${48 + i * 26}px`,
+                  width: `${56 + i * 30}px`,
+                  height: `${56 + i * 30}px`,
                   animation: `gbaZubatSonicRing ${dur}s cubic-bezier(0.2, 0.8, 0.4, 1) ${0.04 + i * 0.1}s forwards`,
                   opacity: 0
                 }}
@@ -12133,30 +12144,44 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </div>
             ))}
 
-            {/* Layer 2b: Foreground sonic depth-train — Round 9 definitive fix:
-                5 INDEPENDENT traveling ellipse divs (no wrapper, no SVG).
-                Each ring owns its base diameter (--d) and a cascaded delay;
-                gbaZubatSonicDepthRing animates width/height in px (calc from
-                --d) + translateY travel, so the 3px border edge stays a crisp
-                constant thickness at every frame and the inter-ring gaps can
-                never be bridged by group scale/glow. Alternating dark/light
-                borders keep adjacent edges distinguishable; the delay cascade
-                + gentler easing make the descent gradual, not one abrupt drop. */}
-            {[0, 1, 2, 3, 4].map((i) => (
-              <div
-                key={`train-ring-${i}`}
-                className="absolute left-1/2 top-1/2 pointer-events-none z-30"
-                style={{
-                  ['--d' as string]: `${[140, 106, 76, 50, 28][i]}px`,
-                  ['--depth-dir' as string]: `${sonicDirY}`,
-                  border: `3px solid ${['#0284c7', '#f0fdff', '#0ea5e9', '#e0f2fe', '#0369a1'][i]}`,
-                  borderRadius: '50%',
-                  boxShadow: `0 0 3px ${['#0284c7', '#f0fdff', '#0ea5e9', '#e0f2fe', '#0369a1'][i]}`,
-                  animation: `gbaZubatSonicDepthRing ${dur * 0.82}s cubic-bezier(0.3, 0.1, 0.3, 1) ${0.05 + i * 0.07}s both`,
-                  opacity: 0
-                }}
-              />
-            ))}
+            {/* Layer 2b: Foreground sonic ripple field — Round 13 redesign.
+                Head-on concentric interference ripples emitted from Zubat's
+                mouth: RIPPLE_COUNT phase-shifted rings on an infinite linear
+                loop (negative delays -i*PERIOD/COUNT) so from the very first
+                frame the field is in steady state and 4-5 discrete thin
+                rings of different radii are ALWAYS on screen, small-to-large
+                — the same principle that makes the background wash read as
+                an interference pattern, but viewed head-on. Expansion is
+                carried by width/height keyframes (14px→420px) so the 2px
+                border stays razor-thin at every radius (transform scale
+                would thin inner rings to subpixel and fatten outer ones).
+                Shared mouth center (left-1/2, top 50%+dir*6px), perfect
+                circles (head-on view), no boxShadow glow (RC1 ban) so rings
+                never fuse optically. The block root clips at the card frame
+                (overflow-hidden rounded-xl — Anti-Bleed protocol) so ripples
+                never leak onto the bench or the mat. ?fxdebug=1 swaps in 9
+                flat high-contrast colors for ring-count verification. */}
+            {Array.from({ length: RIPPLE_COUNT }, (_, i) => {
+              const fgPalette = fxDebug
+                ? ['#f43f5e', '#f59e0b', '#22c55e', '#3b82f6', '#a855f7', '#f43f5e', '#f59e0b', '#22c55e', '#3b82f6']
+                : ['#67e8f9', '#a78bfa', '#e0f2fe', '#22d3ee', '#8b5cf6', '#67e8f9', '#c4b5fd', '#38bdf8', '#a78bfa'];
+              return (
+                <div
+                  key={`ripple-ring-${i}`}
+                  className="absolute left-1/2 pointer-events-none z-30"
+                  style={{
+                    width: '14px',
+                    height: '14px',
+                    top: `calc(50% + ${sonicDirY * 6}px)`,
+                    border: `2px solid ${fgPalette[i]}`,
+                    borderRadius: '50%',
+                    boxShadow: 'none',
+                    animation: `gbaZubatSonicDepthRing ${RIPPLE_PERIOD}s linear ${(-(i * RIPPLE_PERIOD) / RIPPLE_COUNT).toFixed(3)}s infinite`,
+                    opacity: 0
+                  }}
+                />
+              );
+            })}
 
             {/* Layer 3: Dense Sinusoidal Sound Wave Lines traveling toward target —
                 7 interleaved ultrasonic strands with varied origins, travel depths
@@ -12164,7 +12189,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             {!fx.whiffed && [0, 1, 2, 3, 4, 5, 6].map((i) => (
               <div
                 key={`wave-line-${i}`}
-                className="absolute pointer-events-none z-25"
+                className="absolute pointer-events-none z-[25]"
                 style={{
                   ['--wave-dy' as string]: `${sonicDirY * (34 + (i % 4) * 14)}px`,
                   animation: `gbaZubatWaveLine ${dur}s ease-out ${0.12 + i * 0.11}s forwards`,
@@ -12189,10 +12214,10 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             {/* Layer 4: Frequency Distortion Field */}
             {!fx.whiffed && (
               <div
-                className="absolute w-36 h-36 rounded-full pointer-events-none z-20"
+                className="absolute w-24 h-24 rounded-full pointer-events-none z-20"
                 style={{
                   animation: `gbaZubatConfusionDistort ${dur}s ease-out 0.2s forwards`,
-                  background: 'radial-gradient(circle, rgba(56,189,248,0.28) 0%, rgba(99,102,241,0.18) 55%, transparent 75%)'
+                  background: 'radial-gradient(circle, rgba(56,189,248,0.14) 0%, rgba(99,102,241,0.09) 55%, transparent 75%)'
                 }}
               />
             )}
@@ -12205,7 +12230,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             ].map((star, idx) => (
               <div
                 key={`confuse-star-${idx}`}
-                className="absolute pointer-events-none z-35"
+                className="absolute pointer-events-none z-[35]"
                 style={{ animation: `gbaZubatConfuseOrbit${idx + 1} ${dur}s linear ${star.delay} forwards`, opacity: 0 }}
               >
                 <svg width={star.sz} height={star.sz} viewBox="0 0 24 24" className="drop-shadow-[0_0_8px_#fde047]">

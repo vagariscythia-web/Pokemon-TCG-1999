@@ -9731,6 +9731,9 @@ html, body {
 
 /* 3. Zubat Supersonic */
 @keyframes gbaZubatSonarPing {
+  /* Round 12 P3 (RC2): bloom capped at scale 1.15 and glow reduced to 6px so
+     the ping core can no longer paint a ~96px bright disc over the foreground
+     depth-train rings; the core sits beneath them (z-10 < z-30) as well. */
   0% {
     opacity: 0;
     transform: scale(0.3);
@@ -9738,8 +9741,8 @@ html, body {
   }
   15% {
     opacity: 1;
-    transform: scale(1.2);
-    filter: blur(0) drop-shadow(0 0 12px #67e8f9);
+    transform: scale(1.0);
+    filter: blur(0) drop-shadow(0 0 6px #67e8f9);
   }
   30% {
     opacity: 0.9;
@@ -9747,17 +9750,17 @@ html, body {
   }
   45% {
     opacity: 1;
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 16px #38bdf8);
+    transform: scale(1.0);
+    filter: drop-shadow(0 0 6px #38bdf8);
   }
   70% {
     opacity: 0.6;
-    transform: scale(1.4);
+    transform: scale(1.05);
     filter: blur(1px);
   }
   100% {
     opacity: 0;
-    transform: scale(2.0);
+    transform: scale(1.15);
     filter: blur(3px);
   }
 }
@@ -9787,36 +9790,32 @@ html, body {
 }
 
 @keyframes gbaZubatSonicDepthRing {
-  /* Round 9: per-ring traveling ellipse. Each ring div carries its own base
-     diameter in --d; width/height animate in px via calc() (height = width *
-     0.55 fixed perspective ratio) so the 3px CSS border stays a constant,
-     crisp, sub-pixel-proof edge at every frame — no SVG viewBox/stroke
-     scaling, no group scale, no glow large enough to bridge ring gaps.
-     translateY travel follows --depth-dir; the inline per-ring delay cascade
-     makes the descent gradual instead of one abrupt group drop. */
+  /* Round 13 redesign: head-on concentric interference ripples emitted from
+     Zubat's mouth. Expansion is carried by width/height (NOT transform
+     scale) so the 2px border stays razor-thin at every radius; linear
+     timing gives constant wave speed and evenly spaced wavefronts. The loop
+     is infinite and each ring gets a negative inline delay
+     (-i * 1.6s / 9), so from the very first frame the field is in steady
+     state: 4-5 discrete thin rings of different radii are always on screen,
+     small-to-large, exactly like the background wash but viewed head-on.
+     No glow/boxShadow (RC1 ban) so rings never fuse optically. */
   0% {
+    width: 14px;
+    height: 14px;
     opacity: 0;
-    width: calc(var(--d, 100px) * 0.35);
-    height: calc(var(--d, 100px) * 0.19);
-    transform: translate(-50%, -50%) translateY(calc(var(--depth-dir, 1) * -10px));
+    transform: translateX(-50%) translateY(-50%);
   }
-  14% {
-    opacity: 1;
-    width: calc(var(--d, 100px) * 0.62);
-    height: calc(var(--d, 100px) * 0.34);
-    transform: translate(-50%, -50%) translateY(calc(var(--depth-dir, 1) * 2px));
+  6% {
+    opacity: 0.95;
   }
   55% {
-    opacity: 0.95;
-    width: calc(var(--d, 100px) * 1);
-    height: calc(var(--d, 100px) * 0.55);
-    transform: translate(-50%, -50%) translateY(calc(var(--depth-dir, 1) * 30px));
+    opacity: 0.62;
   }
   100% {
+    width: 420px;
+    height: 420px;
     opacity: 0;
-    width: calc(var(--d, 100px) * 1.45);
-    height: calc(var(--d, 100px) * 0.8);
-    transform: translate(-50%, -50%) translateY(calc(var(--depth-dir, 1) * 68px));
+    transform: translateX(-50%) translateY(-50%);
   }
 }
 
