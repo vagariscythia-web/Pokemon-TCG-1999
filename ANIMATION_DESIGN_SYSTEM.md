@@ -757,3 +757,94 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 - **Doğrulanmış referans URL'leri:** Articuno `https://archives.bulbagarden.net/media/upload/d/d0/0144Articuno.png` · Zapdos `https://archives.bulbagarden.net/media/upload/c/c6/0145Zapdos.png`.
 
 > **Terfi Notu:** §9'un checklist'leri yeni türlerde kanıtlandıkça §5'in işbirliği protokolüne terfi ettirilir; §9 o tür için yalnızca vaka notunu saklar.
+
+## 10. Case Study Lessons (Vaka Çalışması Dersleri)
+
+> Bu bölüm, yakın zamanda tamamlanan üç animasyon implementasyonunun (Zubat Supersonic, Alakazam Confuse Ray, Zubat Leech Life) kaynak kodundan doğrulanmış derslerini içerir. Her ders, ilgili TSX/CSS satır referanslarıyla birlikte verilir; hiçbir ders model hafızasından değil, yalnızca diskteki koddan türetilmiştir.
+
+### 10.1 — Zubat Supersonic: Faz Kaydırmalı Sonsuz Dalga Alanı ve Anti-Bleed Protokolü
+
+**Kaynak:** `BattleFXOverlay.tsx` L12092–12248 · `index.css` L9732–9870 · 5 ana katman (Sonar Ping z-10, perspektif yıkama halkaları z-20, faz kaydırmalı derinlik halkaları z-30, sinüs dalga çizgileri z-25, konfüzyon yıldızları z-35).
+
+- **A. Sonsuz döngü + negatif delay = ilk kareden kararlı durum:** Dalga alanı `RIPPLE_COUNT = 9` halkadan oluşur; her halka `gbaZubatSonicDepthRing ${RIPPLE_PERIOD}s linear ${(-(i * RIPPLE_PERIOD) / RIPPLE_COUNT).toFixed(3)}s infinite` ile sürülür. Negatif `animation-delay` animasyonu önceden başlamış gibi başlatır; böylece ilk render karesinden itibaren 4–5 farklı yarıçapta halka aynı anda ekrandadır. Pozitif delay kullanılsaydı alan "boş başlar, dolar" ve ilk saniye zayıf okunurdu.
+- **B. Genişleyen halkada `width/height`, `transform: scale` DEĞİL:** `gbaZubatSonicDepthRing` keyframe'i 14px → 342px arası `width`/`height` animasyonu kullanır. Sebep: `scale` 2px border'ı da orantılı büyütür ve halka genişledikçe kontur kalınlaşır; `width/height` her yarıçapta sabit (jilet inceliğinde) kontur tutar. GBA estetiğinde halka konturları daima sabit kalınlıkta kalmalıdır.
+- **C. Halkalarda glow/boxShadow yasağı (RC1):** Halkalar yalnızca 2px solid border taşır; `boxShadow` veya `drop-shadow` eklenmez. Glow komşu halkaların optik kaynaşmasına yol açar; ayrık dalga cepheleri istendiğinde parlaklık border rengiyle sağlanır.
+- **D. Yön tek CSS custom property üzerinden:** Dalga çizgileri `['--wave-dy' as string]: \`${sonicDirY * (34 + (i % 4) * 14)}px\`` ile beslenir; keyframe `translate(0, var(--wave-dy, 30px))` okur. Hedef yönü (player/cpu) tek işaret değişkeniyle bütün ipliklere yayılır; parçacık başına ayrı keyframe yazılmaz.
+- **E. Anti-Bleed Protokolü (Round 14):** Overlay hedef CardView'ın İÇİNE monte edilir (`absolute inset-0` = kart sınırları) ve konteyner `overflow-hidden rounded-xl` ile kırpılır. Böylece 342px'ye kadar genişleyen halkalar kart dışına (bench/zemin) taşmaz; halka sayısı, yoğunluk ve süre değişmez. Bu, "efekti küçült" değil "efekti çerçevele" çözümüdür.
+- **F. Süre sıkıştırma turları (Round 15–17):** Toplam pencere kademeli daraltıldı: 1.75 → 1.575 → 1.4175s (hit), 1.2 → 1.08 → 0.972s (whiff) — kümülatif ~%19. Aynı turlarda `RIPPLE_PERIOD` 1.6 → 1.44s ve maksimum halka açıklığı 420 → 380 → 342px'e indirildi; halka aralığı ~36.4px, kart merkezinde yoğunluk hissi verir.
+- **G. Emitör parlaklık tavanı (Round 12):** `gbaZubatSonarPing` bloom'u `scale(1.15)` ve 6px glow ile sınırlandı. Sebep: parlak çekirdek ~96px'lik bir disk boyayarak üstteki (z-30) derinlik halkalarını örtüyordu. z-index tek başına yetmez — görsel parlaklık da katman hiyerarşisine tabi olmalıdır.
+- **H. Whiff bastırma listesi:** Whiff'te Layer 3 (dalga çizgileri), Layer 4 (distorsiyon alanı) ve Layer 5 (konfüzyon yıldızları) tamamen render edilmez; Layer 1–2 kısaltılmış süreyle (0.972s) kalır. Iska, "yayın yapıldı ama hedefe işlemedi" olarak okunur.
+
+### 10.2 — Alakazam Confuse Ray: Stok Aktör Sistemi ve 4 Vuruşluk Ritmik Senkronizasyon
+
+**Kaynak:** `BattleFXOverlay.tsx` L15433–15580 · `index.css` L6205–6380 · 4 ana katman (Alakazam stok aktör sahnesi, psişik enerji küresi, konfüzyon yıldızları, hedef şoku).
+
+- **A. Stok aktör kavramı ve zorunluluğu:** Confuse Ray, saldıran tarafı *tam gövde* olarak gösteren ilk "attacker portrait" animasyonudur. Alakazam SVG'si (gövde, kafa, kaşık çiftleri) keyframe'den bağımsız statik bir katman olarak render edilir; animasyon yalnızca *hareket* katmanlarını (kaşık rotasyonu, enerji küresi, psişik dalga) içerir. Bu ayrım, kaşık geometrisinin keyframe içinde tekrar tekrar tanımlanmasını engeller.
+- **B. 4 vuruşluk ritmik yapı (beat sync):** Enerji küresi 4 ayrı vuruşta (`gbaAlakazamConfusePulse 1.6s ease-in-out`) pulse yapar; her vuruş hedefin konfüzyon yıldızlarıyla senkronizedir. Vuruş zamanlaması: 0s → 0.4s → 0.8s → 1.2s. Bu "ritmik senkronizasyon" izleyiciye "her vuruş bir etki yaratıyor" hissini verir.
+- **C. Kaşık çiftleri ve ayna simetrisi:** İki kaşık (sol/sağ) `gbaAlakazamSpoonSpin` ile zıt yönlerde döner (biri `rotate(0deg→360deg)`, diğeri `rotate(360deg→0deg)`). Bu ayna simetrisi "psişik odaklanma" jestini güçlendirir. Kaşık SVG path'leri `transform-origin: center` ile merkezlenmiştir; aksi halde dönüş yörüngesi kayardı.
+- **D. Konfüzyon yıldızları — stok aktör üstünde değil, hedef üstünde:** Yıldızlar *hedefin* (savunan tarafın) etrafında döner; saldırgan Alakazam sahnesiyle aynı DOM ağacında değildir. Bu, "etki hedefte görünür" ilkesinin uygulamasıdır. Whiff durumunda yıldızlar render edilmez (yalnızca kaşık + küre kalır).
+- **E. Psişik enerji küresi — gradient katmanlama:** Küre üç katmanlıdır: iç çekirdek (beyaz→mor), orta halo (mor→şeffaf), dış glow (mor 0.15 opasite). `radial-gradient` zinciri tek `background` özelliğinde virgülle ayrılmış üç katman olarak yazılmıştır; ayrı div'ler yerine bu tercih, katman sayısını azaltır.
+- **F. Renk paleti — psişik tür kimliği:** Confuse Ray'in paleti (mor #a855f7, eflatun #c084fc, beyaz) Psişik türün kanon renkleriyle birebir örtüşür. Tür kimliği renkleri, animasyonun "hangi türe ait olduğu" bilgisini izleyiciye ilk karede iletir.
+- **G. Z-index hiyerarşisi:** Alakazam sahnesi z-30, enerji küresi z-25 (Alakazam'ın *önünde* değil *arkasında* — kaşıklar küreyi yönlendirir), konfüzyon yıldızları z-35 (hedef üstünde en önde). Bu, "saldırgan sahnesi arka planda, etki ön planda" ilkesini uygular.
+- **H. Whiff bastırma:** Whiff'te enerji küresi ve kaşık rotasyonu devam eder (saldırı "yapıldı") ama konfüzyon yıldızları ve hedef şoku tamamen kaldırılır. Bu, §10.1.H ile aynı prensibi izler: "hareket var, sonuç yok".
+
+### 10.3 — Zubat Leech Life: İki Fazlı Anlatı (Isırık → Yaşam Emme) ve Yönlü Drain Akışı
+
+**Kaynak:** `BattleFXOverlay.tsx` L21207–21305 (ana blok) + L21307+ (`zubat_leech_replenish` iyileştirme bloğu) · `index.css` L13255–13460 (`gbaZubatLeechFloor`, `gbaZubatFangTop`, `gbaZubatFangBottom`, `gbaZubatLeechOrbTravel`, `gbaZubatReplenish` keyframe'leri).
+
+- **A. İki fazlı anlatı yapısı:** Leech Life, tek bir animasyonda iki ayrı "olay" anlatır: **Faz A (Isırık, 0–0.7s):** alt/üst vampir dişleri sahneye kenetlenir (`gbaZubatFangTop`/`gbaZubatFangBottom`, `cubic-bezier(0.16,1,0.3,1)` — hızlı giriş, yumuşak duruş) ve 0.25s'de `gbaShockwaveScale` ısırık şok dalgası patlar. **Faz B (Emme, 0.3s+):** 4 drain orb'ı (`gbaZubatLeechOrbTravel`) hedef bölgesinden saldırgana doğru 150px yol alır. Faz B'nin orb delay'leri (0.3s/0.45s/0.6s/0.75s) Faz A'nın ısırık anından *sonra* başlayacak şekilde kurgulanmıştır — bu gecikme zinciri, "önce diş geçer, sonra emme başlar" nedenselliğini kurar.
+- **B. Yönlü drain — tek custom property (`--drain-dy`):** Orb'ların dikey emme yönü `drainDirY = fx.target === 'cpu' ? 1 : -1` ile hesaplanır ve her orb'a `['--drain-dy']: ${drainDirY * 150}px` olarak enjekte edilir. Keyframe içinde `translateY(var(--drain-dy))` kullanılır. Tek bir custom property ile hem "player'a saldırı" hem "cpu'ya saldırı" senaryoları tek keyframe'den yönetilir; yön değiştirmek için ayrı keyframe yazılmaz. Her orb ayrıca `--orb-x` / `--orb-start-y` ile kendi başlangıç ofsetini taşır.
+- **C. Whiff'te Faz B tamamen atlanır:** `{!fx.whiffed && [...].map(orb => ...)}` — ısırık ıskalandıysa orb dizisi *hiç render edilmez*. Faz A (dişler + şok + zemin aurası) yine oynatılır; saldırının "yapıldığı ama emme gerçekleşmediği" anlatılır. Supersonic (§10.1.H) ve Confuse Ray (§10.2.H) ile aynı ilke: hareket kalır, sonuç kalkar.
+- **D. Ayrı FX tipi olarak iyileştirme (`zubat_leech_replenish`):** Emilen yaşam enerjisinin saldırgan üstünde belirmesi ana bloğun bir gecikmeli devamı değil, *ayrı bir* `zubat_leech_replenish` FX olayıdır (L21307). Sebep: hasar hesaplama + HP kazanımı oyun motorunda ayrı zamanlamayla gelir; animasyon sistemi tek bir uzun timeline'a güvenmek yerine, motorun gönderdiği ikinci olaya tepki verir. Ders: "neden → sonuç" zincirini tek keyframe'e sığdırmaya zorlamayın; motor olaylarıyla senkronize ayrı bloklar daha sağlamdır.
+- **E. Katman ve z-index planı:** Zemin aurası z-10 (crimson radial-gradient, 1.7s), şok dalgası z-20, dişler z-35, drain orb'ları z-40 (en önde — "yaşam enerjisi her şeyin üstünde akar"). Ana konteyner `overflow-visible` kullanır; orb'lar 150px'lik yolculuklarında sahne dışına taşabilmelidir (`overflow-hidden` olsaydı emme akışı kenarda kesilirdi).
+- **F. SVG diş geometrisi — simetrik path çiftleri:** Üst dişler aşağı, alt dişler yukarı bakan kuadratik bezier path'leridir (`Q` komutları); her dişin içine ince kırmızı damar çizgisi (`stroke="#f87171"`, opacity 0.75) eklenmiştir. Üst ve alt SVG'ler ayrı `viewBox`'larda tanımlanır ve `drop-shadow` ile kırmızı glow alır — harici görsel varlık kullanılmaz, tüm geometri inline SVG'dir.
+- **G. Renk anlatısı:** Faz A kırmızı/kızıl (ısırık, kan), Faz B'nin orb'ları yine kızıl ama beyaz çekirdekli (yaşam özü), replenish bloğu ise zümrüt yeşiline döner (`gbaZubatReplenish`). Renk geçişi "kızıl = alınan yaşam → yeşil = kazanılan HP" semantiğini izleyiciye kelimeler olmadan iletir.
+
+## 11. Karşılaştırma Tablosu ve Anti-Paternler
+
+### 11.A — Üç animasyonun yapısal karşılaştırması
+
+| Boyut | Zubat Supersonic | Alakazam Confuse Ray | Zubat Leech Life |
+|---|---|---|---|
+| Anlatı modeli | Sürekli alan etkisi (sonsuz döngü) | Stok aktör + 4 vuruş ritmi | İki fazlı nedensellik (ısırık→emme) |
+| Döngü tipi | `infinite` + negatif delay | Tek seferlik (1.6s, 4 pulse) | Tek seferlik + ayrı replenish FX'i |
+| Yön bağımlılığı | Yok (merkezci dalga) | Yok | Var (`--drain-dy` hedefe göre ±150px) |
+| Whiff davranışı | Katman 3–5 kaldırılır, 1–2 kısalır | Yıldızlar/şok kalkar, kaşık kalır | Faz B hiç render edilmez |
+| Stok aktör | Yok | Var (Alakazam SVG) | Yok |
+| Custom property sayısı | Faz offsetleri (per-halka delay) | Minimal | 4 (`--orb-x`, `--orb-start-y`, `--drain-dy`, orb delay) |
+| Overflow | hidden | hidden | **visible** (orb taşması) |
+| Ana renk kimliği | Mavi/camgöbeği (ses) | Mor/eflatun (psişik) | Kızıl→zümrüt (kan→iyileşme) |
+
+### 11.B — Anti-patern listesi (bu üç implementasyondan çıkarılan yasaklar)
+
+1. **Yanlış türün kodunu kaynak almak:** Golbat Leech Life kodunu Zubat Leech Life sanıp analiz etmek. Ders: bir ders/belge yazmadan önce TSX bloğunun `fx.type === '...'` satırını kelimesi kelimesine doğrula.
+2. **Tek timeline'da neden+sonuç zorlaması:** Emme + HP kazanımını tek keyframe'e gömmek; motor olaylarıyla senkron kayar. Çözüm: ayrı FX tipi (Leech Life → `zubat_leech_replenish`).
+3. **`overflow-hidden` ile yönlü akış:** Taşınan partikül/drain akışı varsa konteyner `overflow-visible` olmalı; aksi halde yolculuk kenarda kesilir.
+4. **Yön için kopya keyframe:** Sağa/sola, yukarı/aşağı varyantlar için keyframe çoğaltmak yerine tek `--drain-dy` benzeri custom property kullan.
+5. **Negatif delay'siz infinite döngü:** İlk karede boş alan, sonra "pop-in" oluşur; `RIPPLE_PERIOD` tabanlı negatif offset şart (§10.1.A).
+6. **Sonuç katmanını whiff'te oynatmak:** Iska animasyonunda konfüzyon yıldızı/drain orb'u gibi "sonuç" katmanları render edilmemeli; hareket katmanları kısaltılmış süreyle kalabilir.
+7. **İç içe gradient div enflasyonu:** Aynı merkeze çoklu radial-gradient'i ayrı div'lerle yazmak; tek `background` özelliğinde virgül ayrımlı katmanlama tercih edilir (§10.2.E).
+8. **z-index'i parlaklıkla çeliştirmek:** Yüksek z-index'li soluk katman, düşük z-index'li parlak katmanı görsel olarak ezer; parlaklık da hiyerarşiye tabidir (§10.1.G).
+9. **Stok aktör geometrisini keyframe'e gömmek:** Alakazam gövde/kaşık SVG'si statik katmandır; yalnızca hareket keyframe'e girer (§10.2.A).
+10. **`transform-origin` belirsiz rotasyon:** Kaşık çiftleri gibi simetrik dönüşlerde `center` sabitlenmezse yörünge kayar (§10.2.C).
+
+## 12. Ayar Turu Protokolü (Tuning Protocol)
+
+Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
+
+1. **Timing bütünlüğü:** Toplam süre, oyun motorunun bekleme penceresiyle uyumlu mu? Fazlar arası gecikmeler (delay zinciri) nedensellik okutuyor mu? (Leech Life: diş 0.25s → orb 0.3s+.)
+2. **Whiff senaryosu:** Her "sonuç" katmanı `fx.whiffed` koşuluyla kaldırılmış mı? Hareket katmanları kısaltılmış süreyle kalıyor mu?
+3. **Yön parametreleri:** Hedefe göre değişen tüm ofsetler tek custom property'den türetiliyor mu (`--drain-dy` modeli)? Kopya keyframe var mı?
+4. **Döngü kararlılığı:** `infinite` döngülerde negatif delay ile ilk karede steady state sağlanmış mı?
+5. **Overflow kontrolü:** Taşan partikül var mı? Varsa konteyner `overflow-visible` mı?
+6. **Katman/z-index + parlaklık tutarlılığı:** En "önemli" efekt en önde ve en parlak mı? (§10.1.G)
+7. **Renk kimliği:** Palet, türün kanon renkleriyle örtüşüyor ve durum geçişini (kızıl→yeşil gibi) anlatıyor mu?
+8. **Stok aktör ayrımı:** Statik geometri keyframe dışında mı? `transform-origin` sabit mi?
+9. **FX olay sınırları:** Motor zamanlamasına bağlı sonuçlar ayrı FX tipi mi? (Leech Life / `zubat_leech_replenish` modeli.)
+10. **Doğrulama:** `npx tsc --noEmit` EXIT=0 ve ilgili Python test grubu tam geçiş.
+
+## 13. Revizyon Geçmişi
+
+| Rev | Tarih | İçerik | Doğrulama |
+|---|---|---|---|
+| 1 | 2026-09-23 | §10 Vaka Çalışması Dersleri (10.1 Zubat Supersonic faz kaydırmalı sonsuz döngü + anti-bleed; 10.2 Alakazam Confuse Ray stok aktör + 4 vuruş ritmi; 10.3 Zubat Leech Life iki fazlı anlatı + yönlü drain), §11 karşılaştırma tablosu + 10 anti-patern, §12 Ayar Turu Protokolü, §13 Revizyon Geçmişi eklendi. Tüm dersler TSX (L12092, L15433, L21207) / CSS (L9732, L6205, L13255) satır referanslarıyla disk üzerinden doğrulandı. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_group_b1.py` 39/39 PASS |
