@@ -1185,7 +1185,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'weedle_poison_sting':
       return 1550;
     case 'zubat_supersonic':
-      return 1750;
+      return 1575;
     case 'gastly_sleeping_gas':
       return 1700;
     case 'rattata_quick_attack':
@@ -12092,14 +12092,17 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 20ba. ZUBAT SUPERSONIC (Zubat Lv. 10 — Concentric Ultrasonic Echolocation Rings & Confusion Trance) */}
       {fx.type === 'zubat_supersonic' && (() => {
         const sonicDirY = fx.target === 'cpu' ? 1 : -1;
-        const dur = fx.whiffed ? 1.2 : 1.75;
+        /* Round 15: total FX window trimmed ~10% (1.75→1.575s, whiff
+           1.2→1.08s) so the looped ripple field feels snappier and stops
+           reading as a repetition. */
+        const dur = fx.whiffed ? 1.08 : 1.575;
         const fxDebug = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('fxdebug');
         /* Round 13: foreground ripple field timing. Each ring lives
            RIPPLE_PERIOD seconds on an infinite linear loop; the rings are
            phase-shifted by negative delays (-i * PERIOD / COUNT) so the
            steady state always shows several discrete radii at once. */
         const RIPPLE_COUNT = 9;
-        const RIPPLE_PERIOD = 1.6;
+        const RIPPLE_PERIOD = 1.44;
         return (
           /* Round 14 (Anti-Bleed protocol): the overlay is mounted inside the
              target CardView, so inset-0 === card bounds; clipping here keeps
@@ -12152,7 +12155,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 rings of different radii are ALWAYS on screen, small-to-large
                 — the same principle that makes the background wash read as
                 an interference pattern, but viewed head-on. Expansion is
-                carried by width/height keyframes (14px→420px) so the 2px
+                carried by width/height keyframes (14px→380px, Round 15
+                −10% span → ~40.7px inter-ring gap) so the 2px
                 border stays razor-thin at every radius (transform scale
                 would thin inner rings to subpixel and fatten outer ones).
                 Shared mouth center (left-1/2, top 50%+dir*6px), perfect

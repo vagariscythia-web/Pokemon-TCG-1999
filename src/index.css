@@ -9795,9 +9795,12 @@ html, body {
      scale) so the 2px border stays razor-thin at every radius; linear
      timing gives constant wave speed and evenly spaced wavefronts. The loop
      is infinite and each ring gets a negative inline delay
-     (-i * 1.6s / 9), so from the very first frame the field is in steady
+     (-i * 1.44s / 9), so from the very first frame the field is in steady
      state: 4-5 discrete thin rings of different radii are always on screen,
      small-to-large, exactly like the background wash but viewed head-on.
+     Round 15: period 1.6→1.44s and max span 420→380px (−10% each) tighten
+     the inter-ring gap to ~40.7px so the field reads denser at the card
+     center; ring count (9) and palette are unchanged.
      No glow/boxShadow (RC1 ban) so rings never fuse optically. */
   0% {
     width: 14px;
@@ -9812,8 +9815,8 @@ html, body {
     opacity: 0.62;
   }
   100% {
-    width: 420px;
-    height: 420px;
+    width: 380px;
+    height: 380px;
     opacity: 0;
     transform: translateX(-50%) translateY(-50%);
   }
