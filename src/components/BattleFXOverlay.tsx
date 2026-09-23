@@ -12155,8 +12155,9 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 rings of different radii are ALWAYS on screen, small-to-large
                 — the same principle that makes the background wash read as
                 an interference pattern, but viewed head-on. Expansion is
-                carried by width/height keyframes (14px→380px, Round 15
-                −10% span → ~40.7px inter-ring gap) so the 2px
+                carried by width/height keyframes (14px→342px, Round 16
+                −10% span → ~36.4px inter-ring gap, ~10% slower radial
+                propagation) so the 2px
                 border stays razor-thin at every radius (transform scale
                 would thin inner rings to subpixel and fatten outer ones).
                 Shared mouth center (left-1/2, top 50%+dir*6px), perfect
