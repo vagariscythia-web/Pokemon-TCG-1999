@@ -1185,7 +1185,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'weedle_poison_sting':
       return 1550;
     case 'zubat_supersonic':
-      return 1575;
+      return 1418;
     case 'gastly_sleeping_gas':
       return 1700;
     case 'rattata_quick_attack':
@@ -12092,10 +12092,10 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 20ba. ZUBAT SUPERSONIC (Zubat Lv. 10 — Concentric Ultrasonic Echolocation Rings & Confusion Trance) */}
       {fx.type === 'zubat_supersonic' && (() => {
         const sonicDirY = fx.target === 'cpu' ? 1 : -1;
-        /* Round 15: total FX window trimmed ~10% (1.75→1.575s, whiff
-           1.2→1.08s) so the looped ripple field feels snappier and stops
-           reading as a repetition. */
-        const dur = fx.whiffed ? 1.08 : 1.575;
+        /* Round 15+17: total FX window trimmed ~19% cumulative
+           (1.75→1.575→1.4175s, whiff 1.2→1.08→0.972s) so the looped
+           ripple field feels snappier and stops reading as a repetition. */
+        const dur = fx.whiffed ? 0.972 : 1.4175;
         const fxDebug = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('fxdebug');
         /* Round 13: foreground ripple field timing. Each ring lives
            RIPPLE_PERIOD seconds on an infinite linear loop; the rings are
