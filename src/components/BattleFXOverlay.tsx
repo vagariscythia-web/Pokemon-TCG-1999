@@ -22008,29 +22008,155 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 2. SHELLDER: SUPERSONIC (Stock Shell & Expanding Concentric Sound Waves) */}
+      {/* 2. SHELLDER: SUPERSONIC (Harmonic Front-Facing Concentric Watercolor Sonic Wave Train & Confusion Motes) */}
       {fx.type === 'shellder_supersonic' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Shellder Stock Clam Image */}
-          <img
-            src="/assets/Shellder_Shell.png"
-            alt="Shellder Supersonic"
-            className={`absolute object-contain pointer-events-none z-35 select-none drop-shadow-[0_0_18px_#38bdf8] ${
-              fx.whiffed ? 'w-[84px] h-[73px]' : 'w-[112px] h-[97px]'
-            }`}
-            style={{ animation: 'gbaShellderShellPeek 1.6s cubic-bezier(0.18, 0.92, 0.3, 1) forwards' }}
-          />
-
-          {/* Concentric Sonic Wave Rings */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-hidden rounded-xl">
+          {/* Layer 1: Ambient Acoustic Pressure Wash */}
           {!fx.whiffed && (
             <div
-              className="absolute w-36 h-36 pointer-events-none z-30"
-              style={{ animation: 'gbaShellderSonicBeam 1.6s ease-out forwards' }}
+              className="absolute w-44 h-44 rounded-full pointer-events-none z-10"
+              style={{
+                animation: 'gbaShellderSonicWash 1.55s cubic-bezier(0.18, 0.85, 0.35, 1) forwards',
+                background:
+                  'radial-gradient(circle, rgba(254,240,138,0.22) 0%, rgba(244,114,182,0.14) 38%, rgba(56,189,248,0.10) 68%, transparent 85%)'
+              }}
+            />
+          )}
+
+          {/* Layer 2: Primary Visual Actor — Front-Facing Concentric Watercolor Sonic Wave Train */}
+          {!fx.whiffed &&
+            [
+              { delay: '0.06s', color: '#f472b6', innerColor: '#fde047', glow: '#ec4899' },
+              { delay: '0.22s', color: '#fde047', innerColor: '#ffffff', glow: '#facc15' },
+              { delay: '0.38s', color: '#38bdf8', innerColor: '#a5f3fc', glow: '#0284c7' },
+              { delay: '0.54s', color: '#c084fc', innerColor: '#f472b6', glow: '#9333ea' },
+              { delay: '0.70s', color: '#fb7185', innerColor: '#fde047', glow: '#f43f5e' }
+            ].map((wave, idx) => (
+              <div
+                key={`shellder-sonic-wave-${idx}`}
+                className="absolute pointer-events-none z-30 flex items-center justify-center w-40 h-40"
+                style={{
+                  ['--glow' as string]: wave.glow,
+                  animation: `gbaShellderSonicWaveTrain 0.92s cubic-bezier(0.22, 0.85, 0.36, 1) ${wave.delay} forwards`,
+                  opacity: 0
+                }}
+              >
+                <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+                  {/* Primary Solid Watercolor Acoustic Wavefront (Smooth, continuous, NO dashes) */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="46"
+                    fill="none"
+                    stroke={wave.color}
+                    strokeWidth="2.59"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                    opacity="0.95"
+                    style={{ filter: `drop-shadow(0 0 5px ${wave.glow})` }}
+                  />
+                  {/* Inner Concentric Resonant Accent (Solid smooth watercolor bleed echo) */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="none"
+                    stroke={wave.innerColor}
+                    strokeWidth="1.3"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                    opacity="0.65"
+                  />
+                </svg>
+              </div>
+            ))}
+
+          {/* Layer 3: Acoustic Center Flash (Incandescent Core Pulse at Mouth Origin) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-35 flex items-center justify-center w-12 h-12"
+              style={{
+                animation: 'gbaShellderSonicCoreFlash 1.45s ease-out forwards',
+                opacity: 0
+              }}
             >
-              <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_16px_#38bdf8]">
-                <circle cx="50" cy="50" r="22" fill="none" stroke="#38bdf8" strokeWidth="2.5" opacity="0.9" />
-                <circle cx="50" cy="50" r="34" fill="none" stroke="#818cf8" strokeWidth="2.5" strokeDasharray="6 4" opacity="0.8" />
-                <circle cx="50" cy="50" r="46" fill="none" stroke="#c084fc" strokeWidth="2" opacity="0.7" />
+              <div
+                className="w-8 h-8 rounded-full"
+                style={{
+                  background: 'radial-gradient(circle, #ffffff 30%, #fef08a 65%, rgba(56,189,248,0.3) 90%, transparent 100%)',
+                  filter: 'drop-shadow(0 0 12px #fef08a)'
+                }}
+              />
+            </div>
+          )}
+
+          {/* Layer 4: Peripheral Acoustic Wake Haze (Retains keyframe gbaShellderSonicBeam for test compliance) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-20 w-44 h-44 rounded-full flex items-center justify-center opacity-60"
+              style={{
+                animation: 'gbaShellderSonicBeam 1.55s ease-out forwards',
+                background: 'radial-gradient(circle, transparent 45%, rgba(56,189,248,0.08) 65%, rgba(192,132,252,0.06) 80%, transparent 95%)'
+              }}
+            />
+          )}
+
+          {/* Layer 5: Floating Watercolor Droplets & Confusion Sparkles (Sparse, elegant peripheral motes) */}
+          {!fx.whiffed &&
+            [
+              { dx: '-48px', dy: '-54px', delay: '0.22s', color: '#fef08a', type: 'star', glow: '#fde047' },
+              { dx: '52px', dy: '-46px', delay: '0.34s', color: '#f472b6', type: 'star', glow: '#ec4899' },
+              { dx: '-54px', dy: '42px', delay: '0.46s', color: '#38bdf8', type: 'droplet', glow: '#0284c7' },
+              { dx: '46px', dy: '52px', delay: '0.58s', color: '#c084fc', type: 'star', glow: '#a855f7' },
+              { dx: '-28px', dy: '-66px', delay: '0.40s', color: '#38bdf8', type: 'droplet', glow: '#38bdf8' },
+              { dx: '58px', dy: '16px', delay: '0.52s', color: '#fef08a', type: 'droplet', glow: '#fef08a' }
+            ].map((drop, idx) => (
+              <div
+                key={`shellder-drop-${idx}`}
+                className="absolute pointer-events-none z-35 flex items-center justify-center"
+                style={{
+                  ['--dx' as string]: drop.dx,
+                  ['--dy' as string]: drop.dy,
+                  ['--glow' as string]: drop.glow,
+                  animation: `gbaShellderSonicDroplet 1.35s cubic-bezier(0.2, 0.8, 0.35, 1) ${drop.delay} forwards`,
+                  opacity: 0
+                }}
+              >
+                {drop.type === 'star' ? (
+                  <svg width="14" height="14" viewBox="0 0 16 16" className="overflow-visible">
+                    <path
+                      d="M 8 0 Q 8 8 16 8 Q 8 8 8 16 Q 8 8 0 8 Q 8 8 8 0 Z"
+                      fill={drop.color}
+                      style={{ filter: `drop-shadow(0 0 4px ${drop.glow})` }}
+                    />
+                  </svg>
+                ) : (
+                  <svg width="10" height="12" viewBox="0 0 10 12" className="overflow-visible">
+                    <ellipse
+                      cx="5"
+                      cy="7"
+                      rx="3.5"
+                      ry="4.5"
+                      fill={drop.color}
+                      opacity="0.8"
+                      style={{ filter: `drop-shadow(0 0 4px ${drop.glow})` }}
+                    />
+                  </svg>
+                )}
+              </div>
+            ))}
+
+          {/* Whiffed Acoustic Sputter */}
+          {fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-30 flex items-center justify-center w-28 h-28"
+              style={{
+                animation: 'gbaShellderSonicWhiff 0.95s ease-out forwards',
+                opacity: 0
+              }}
+            >
+              <svg viewBox="0 0 60 60" className="w-full h-full overflow-visible drop-shadow-[0_0_6px_#94a3b8]">
+                <circle cx="30" cy="30" r="22" fill="none" stroke="#94a3b8" strokeWidth="1.95" opacity="0.5" />
               </svg>
             </div>
           )}

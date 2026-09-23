@@ -353,6 +353,7 @@ Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu 
   5. **Animasyon Tekniği Farkı:** Kardeş saldırı, ana saldırının animasyon tekniğinden bilinçli olarak farklı bir teknik kullanır (Thunderbolt: pillar scaleY + jitter; Thunder: top-origin scaleY snap + voltage flicker). Bu, "aynı animasyonun küçültülmüş kopyası" hissini önler.
 - **Kimlik Koruma:** Farklılaştırma ne kadar derin olursa olsun, element ailesinin kromatik imzası (§1.C Electric: akkor beyaz → `#facc15` → `#fbbf24`) ve temel geometrik dil (zigzag, keskin köşe) korunmalıdır. İzleyici iki saldırıyı da "Zapdos elektrik saldırısı" olarak tanıyabilmelidir.
 - **Zapdos Thunder/Thunderbolt doğrulaması:** Thunder (60 dmg), Thunderbolt'un (100 dmg) pillar-scaleY + jitter yaklaşımından bilinçli olarak ayrıştırıldı: stroke-dashoffset draw-on yerine filled polygon + top-origin scaleY snap; stok görsel yerine pure-SVG; 7 katman yerine 5 katman; 2.1s yerine 1.45s. Her iki saldırı da aynı altın/beyaz kromatik aileyi ve zigzag geometrik dili paylaşır.
+- **Shellder Hide in Shell / Supersonic doğrulaması:** Hide in Shell savunma hamlesinde stok kabuk aktörü (`Shellder_Shell.png`, snap & inci ışıltısı) kullanılırken; durum saldırısı olan Supersonic'te kapalı kabuk kaldırılmış, yerine rakip kart üzerinde tam karşı perspektiften (front-facing) genleşen 4 fazlı eşmerkezli suluboya akustik dalga treni (`gbaShellderSonicWaveTrain`, gül pembesi `#f472b6`, limon sarısı `#fde047`, aqua `#38bdf8`, lavanta `#c084fc`), hız çizgileri ve süzülen sersemlik zerreleri/droplet'ler konumlandırılmıştır. Böylece iki saldırının aynı stok görseli mükerrer kullanması önlenmiş ve tematik ayrışma sağlanmıştır.
 
 ### J. Anatomical Line Tracing & Stock+SVG Hybrid Layering (Anatomik Hat İzleme & Stok+SVG Hibrit Katmanlaşma)
 
@@ -714,7 +715,28 @@ Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu 
   - **Kural:** Yeni bir animasyon yazarken, her katman için `fx.whiffed` davranışı tanımlanmalıdır. Minimum: bir katman `opacity: 0.45` veya `scale(0.75)` ile bastırılmalıdır.
 - **Kadabra doğrulaması:** Super Psy Blast keyframe reuse ✓, evolution routing guard önceliği ✓, Psybeam stock whiff `76x98/106x138` ✓. Super Psy Blast whiff-existence gap: bilinen anti-pattern, düzeltme adayı. TSX L15431–15518, L6063–6100, L405–412. `npx tsc --noEmit` hatasız.
 
-> **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir. §8.U (psişik halka mimarisi) ve §8.V (elementel dallanma) olgunlaştığında sırasıyla §2 ve §3'e terfi adaylarıdır. §8.X (saldıran uzuv tier emsali) §3.A'ya entegre edilmiştir. §8.Y Ders 2 (evrim bazlı routing) olgunlaştığında §4 routing mimarisine terfi adayıdır.
+### Z. Harmonic Acoustic Wave Train & Non-Scaling Front-Facing Radiations (Harmonik Akustik Dalga Treni ve Sabit-Piksel Vektörel Karşı-Perspektif Işımaları)
+
+- **İlke:** Ağızdan veya kaynaktan doğrudan izleyiciye/hedefe (tam karşı perspektiften / head-on) patlayan akustik veya süpersonik ses dalgaları (Supersonic, Screech, Sonic Boom, Roar vb.), ekranı karmaşık çizgilerle boğan rastgele rotasyonlu bir "görsel çorba" yerine; **tek merkezden yayılan, sabit kontur kalınlığına sahip ve ekranda aynı anda en fazla 2–3 halkanın seyahat ettiği harmonik bir dalga treni** olarak inşa edilmelidir.
+- **Anti-Pattern — The Visual Soup & Arbitrary Rotations (Görsel Çorba ve Rastgele Açı Tuzağı):**
+  - Birden fazla dalga fazının her birine iç içe 3 çember + serbest açılı Bézier yayları koyup, bunları farklı açılarda (`rotate(28deg)`, `rotate(-22deg)`) döndürerek CSS `scale()` ile büyütmek; ekranda 12+ çember ve yay parçasının birbirini kesmesine ve rakip kartın yüzeyinin anlamsız bir çizgi karmaşasına / çorbaya dönüşmesine yol açar.
+  - **Kural (Tek Merkez & Sıfır Açı Çarpıklığı):** Karşı perspektifli akustik yayılımlarda tüm dalgalar **tek bir ortak merkezden (single shared emission center)** çıkmalıdır. Dairesel akustik cepheler asla farklı açılarla döndürülmemeli (`rotate(0deg)` sabit kalmalı); eşmerkezlilik (concentricity) geometrik olarak bozulmamalıdır.
+- **Anti-Pattern — The Stroke-Fattening Scale Trap (`vector-effect="non-scaling-stroke"` Koruması):**
+  - CSS `transform: scale(0.18 → 1.78)` ile büyütülen SVG çemberlerinde; `vector-effect="non-scaling-stroke"` tanımlanmazsa, çemberin stroke kalınlığı da ölçekle birlikte katlanarak (ör. 2.4px $\rightarrow$ 4.3px $\rightarrow$ 6px) kaba, çamurlu ve pikselli şeritlere dönüşür.
+  - **Kural:** Karşıdan izleyiciye doğru genleşen tüm vektörel halkalarda `vectorEffect="non-scaling-stroke"` zorunludur. Bu özellik, çember merkezden kart sınırına kadar ne kadar büyürse büyüsün, kontur kalınlığının ekran pikseli bazında kilitli (ör. 2.59px ana dalga + 1.3px iç rezonans) ve keskin kalmasını sağlar.
+- **Anti-Pattern — Kesik Çizgili CAD Çemberi Yasağının İhlali:**
+  - Hipnotik, sonik veya psiyonik dalgalarda `strokeDasharray` kullanımı (§1.I) kesinlikle yasaktır. Kesikli çizgiler ses dalgasını teknik çizim programı veya radar retikülü gibi hissettirir. Akustik cepheler, suluboyanın akışkan doğasına sadık, pürüzsüz, kesintisiz ve katı (`fill="none"`, `strokeLinecap="round"`) konturlarla çizilmelidir.
+- **Harmonik Faz Zamanlaması ve Eşzamanlı Varlık Bütçesi (The 2–3 Simultaneous Ring Budget):**
+  - 5 sıralı dalga cephesi (Gül Pembesi `#f472b6`, Limon Sarısı `#fde047`, Camgöbeği `#38bdf8`, Lavanta `#c084fc`, Mercan Pembesi `#fb7185`) düzenli `0.16s` aralıklarla (`0.06s`, `0.22s`, `0.38s`, `0.54s`, `0.70s`) doğar.
+  - Her halkanın ömrü ~0.92s'dir ve terminal fazda (`%75` sonrasında) kademeli sönümleme (`opacity: 0.88 → 0.55 → 0.2 → 0`) yaşar.
+  - Bu matematiksel zarf, ekranda aynı anda **kesinlikle en fazla 2 ila 3 halkanın** aktif görünmesini sağlar. Biri doğarken, biri zirvededir, biri ise kart sınırında kaybolur. Dalgalar kart sınırlarında asla birikmez ve kart illüstrasyonunu örtmez.
+- **Suluboya Rezonans Çift Konturu (Dual-Contour Watercolor Bleed):**
+  - Dış ana çember (`strokeWidth: 2.59px`, `%100` radius, `%95` opacity) + İç rezonans çemberi (`strokeWidth: 1.3px`, `~87%` radius, `%65` opacity, uyumlu açık renk). Bu çift kontur, suluboya kâğıdında suyun kururken kenarlara birikerek oluşturduğu doğal boya yoğunluğunu (watercolor edge bleed) taklit eder ve sıfır karmaşayla yüksek algılanan derinlik sunar.
+- **Periferik Partikül Disiplini (Damlacık & Yıldız):**
+  - Sersemlik yıldızları (`✦` 4-point Bézier) ve su damlacıkları merkezde dalgaların önüne geçmemeli; dalga konisinin dış periferisinde (`dx/dy: ~45–65px`) seyrek ve zarif (6 adet) süzülmelidir (`gbaShellderSonicDroplet`).
+- **Shellder Supersonic Doğrulaması:** 5 sıralı pürüzsüz dalga, `strokeWidth="2.59"` (+%8 kalibrasyonlu) ana + `1.30` rezonans konturu, `vectorEffect="non-scaling-stroke"` koruması, sıfır `strokeDasharray`, tek merkez, 1.65s envelope (TSX L22011–22165, CSS L14089–14220). `npx tsc --noEmit` hatasız.
+
+> **Terfi Notu:** §8'in ilkeleri, §7 gibi, kanıtlandıkça §§1–6'ya terfi ettirilebilir. Özellikle §8.G (zamanlama önceliği) ve §8.C (anticipation) evrensel animasyon ilkeleri olup, olgunlaştığında §1 veya §3'e taşınması beklenir. §8.U (psişik halka mimarisi), §8.V (elementel dallanma) ve §8.Z (harmonik akustik dalga treni) olgunlaştığında sırasıyla §2 ve §3'e terfi adaylarıdır. §8.X (saldıran uzuv tier emsali) §3.A'ya entegre edilmiştir. §8.Y Ders 2 (evrim bazlı routing) olgunlaştığında §4 routing mimarisine terfi adayıdır.
 
 ---
 
