@@ -110,6 +110,25 @@ This document is the permanent, canonical design standard for all move animation
   3. *Faz C — Dikişsiz Tam Çözünme (Seamless Stage Dissolve: %97–%100):* Opaklık `%0`, `blur(4px)` ve `translateY(-3px)` ile aktör hiçbir görsel sıçrama veya sert sınır bırakmaksızın sahne zeminine emilir.
 - **Senkron Çevresel Sönümleme:** Dönen spektral bıçaklar, zemin auraları ve kıvılcımlar da aktörün bu 3 fazlı dissolve eğrisiyle milisaniyesi milisaniyesine senkronize biçimde yumuşayarak dağılmalıdır.
 
+### M. Viscous Fluid Mechanics: Necking, Pinch-Off & Coaxial Cascade (Viskoz Sıvı Mekaniği: Boyunlaşma, Kopma ve Eş Eksenli Akış İlkesi — Grimer/Muk Dersi)
+- **Kopuk/Rastgele Blok Balçık Yasağı (Disjointed Floating Slime Prohibition):**
+  Balçık, çamur, zehirli asit veya mukus gibi yoğun viskoz sıvı efektlerinde (Grimer *Nasty Goo*, Muk *Sludge Deluge* vb.); ana kütleden bağımsız, havada rastgele asılı duran geometrik daireler veya dikdörtgen parçacıkların aşağı kaydırılması KESİNLİKLE YASAKTIR. Bu yaklaşım, viskoz bir sıvı yerine "kesilmiş plastik parçaları" veya "bozuk pikseller" hissi uyandırır.
+- **Gerçek Sıvı Dinamiği Mimarisi (Fluid Necking & Pinch-Off Kinematics):**
+  Viskoz damlama, akışkanlar mekaniğinin 3 zorunlu fazına sadık kalınarak inşa edilmelidir:
+  1. *Viskoz Boyunlaşma (Liquid Necking):* Ana balçık kütlesinden ayrılmakta olan sıvı, önce yerçekimi etkisiyle esneyip incelen kuadratik/kübik Bézier iplikçikleri (`<path d="M... Q... Z">`) oluşturur (`gbaGrimerNeckingThread`). İplikçik kopma anına kadar ana kütleye organik olarak bağlı kalır.
+  2. *Damla Kopması (Pinch-Off):* İplikçiğin kritik incelmeye ulaştığı tepe gerilim anında sıvı boynu kopar; ayrılan parça yerçekimi ivmesiyle (`cubic-bezier(0.4, 0, 0.2, 1)`) hızla aşağı düşen damla formuna (`teardrop` SVG) dönüşür (`gbaGrimerPinchDrop`).
+  3. *Taban Taç Sıçraması (Impact Floor Splatter Crown):* Damlanın kart zeminine temas ettiği milisaniyede (`~65–75%` zamanlama damgası), zeminde yatay olarak çevreye yayılan çok loblu balçık taçları (`gbaGrimerFloorSplat`) patlar. Bu temas patlaması olmadan damlalar zeminde "yutulmuş" gibi kaybolamaz.
+- **Eş Eksenli Hizalama Kuralı (Coaxial Cascade Alignment Rule):**
+  Sıvı damlaları ve sarkan mukus lifleri, ana kütlenin (`blob`) dikey merkez aksıyla (`left: 50%`, `transform: translateX(-50%)`) pikseli pikseline eş eksenli olmalıdır. Ana kütlenin yanından, boşluktan veya alakasız koordinatlardan damlama başlaması (ofset damlama kusuru) fiziksel nedensellik algısını yok eder.
+
+### N. Organic Bio-Electric Sparks vs. Wireframe CAD Capillaries (Organik Biyoelektrik Arklar vs. CAD Tel Kafes Yasağı — Grimer Sticky Hands Dersi)
+- **Yeşil Kesikli Çizgi ve Tel Kafes Yasağı (No Dashed Wireframe Capillaries):**
+  Zehir, felç, statik elektrik veya mukus gerilimi içeren yakın dövüş saldırılarında (Grimer *Sticky Hands*, Muk vb.); kartın sınırlarından dışarı taşan, teknik çizim/CAD programı izlenimi veren kesikli yeşil kılcal çizgiler (`stroke-dasharray="4 3"` vb.) veya geometrik elips yayları KESİNLİKLE YASAKTIR. Bu tür yapay çizgiler TCG kartının estetik çerçeve bütünlüğünü bozar ve ucuz bir mühendislik şablonu algısı yaratır.
+- **Organik Biyoelektrik & Mukus Lifleri Standardı (Viscoelastic Tendrils & True Arc Sparks):**
+  1. *Viskoelastik Mukus Gerilimi (Viscoelastic Tendril Snap):* İki uzvun veya yüzeyin ayrılması esnasında gerilen yapışkan bağlar; kesik çizgiler yerine organik incelen Bézier mukus köprüleri (`strokeLinecap="round"`, `url(#stickyGradient)`) ile çizilmeli ve gerilip kopma anında elastik bir sönümle geri çekilmelidir (`gbaStickyTendrilSnap`).
+  2. *Organik Biyoelektrik Kıvılcımlar (Branching Arc Sparks):* Felç veya zehir şoku yaratan deşarjlar; CAD elipsleri yerine çatallanan, çok kırılmalı ve değişken açılı SVG yıldırım iplikçikleri (`<polygon points="...">`) ve akkor merkezli mikro kürelerle (`gbaStickyParalysisSpark`) hedefin üzerine çakmalıdır.
+  3. *Tavizsiz Kart İçi Hapsedilme (Strict Card-Boundary Containment):* Biyoelektrik arklar ve uzuv kolları hiçbir koşulda hedef kartın sınırlarının dışına (sağ-alt arenaya veya deste panellerine) taşamaz (`overflow-hidden`, Kural §6.2).
+
 ---
 
 ## 2. Motion Dynamics & Kinematics (The Anti-Idle Engine)
@@ -222,6 +241,14 @@ This document is the permanent, canonical design standard for all move animation
   - %89'a kadar net odakla taşınan Poz 4; %89 $\rightarrow$ %93 (opaklık %70, `blur(1.2px)`, `translateY(-1px)`), %93 $\rightarrow$ %97 (opaklık %28, `blur(2.5px)`, `translateY(-2px)`), %97 $\rightarrow$ %100 (opaklık 0, `blur(4px)`, `translateY(-3px)`) ile sahadan pürüzsüzce buharlaşarak ayrılır (§1.L). Ani pop-out tamamen engellenir.
 - **Unicode Sembol Yasağı & Akkor Elmas Standardı:** Silah uçlarında parlayan ki/keskinlik ışıltılarında kesinlikle `✦` gibi unicode metin karakterleri kullanılamaz (§1.B). Parlamalar; 8 noktalı akkor sarı/beyaz SVG elmas yıldız (`<polygon points="8,0 10,6 16,8 10,10 8,16 6,10 0,8 6,6" fill="#fef08a" />`) ve merkezinde beyaz ışık küresi (`<circle cx="8" cy="8" r="2.5" fill="#ffffff" />`) ile inşa edilmelidir.
 
+### L. Amorphous Appendage Clamp & Fluid Surface Tension (Amorf Uzuv Kıskacı & Yüzey Gerilimi Dalgalanmaları — Grimer Dersi)
+- **Bilateral Amorphous Lunging (İki Yanlı Amorf Kıskaç Atılımı):**
+  Amorf balçık veya sıvı uzuvların (Grimer *Sticky Hands* kollarının) hedefe sarılması; insan eli gibi sert eklemli ve mafsallı mekanik kollarla değil, kartın sol ve sağ kenarlarından uzanan akışkan kütleler (`gbaStickyArmLungeL` ve `gbaStickyArmLungeR`) olarak yürütülmelidir. Kolların buluşma anında katı bir "el çırpma" yerine viskoz bir kütle kaynaşması ve ardından elastik mikro-titreme (`gbaStickyClampTremor`) yaşanmalıdır.
+- **Yüzey Gerilimi Girişim Dalgaları (Organic Surface Tension Ripples vs. CAD Concentric Rings):**
+  Bir sıvı birikintisi, gölet veya amorf kütle çöküşünde (Grimer *Minimize*, Muk balçık göleti vb.); sıvının yayılma dalgaları asla tekdüze kesik çizgili CAD elipsleri veya teknik çizim çemberleri olamaz. Dalgalar iç içe geçen, farklı sönümleme sürelerine sahip, Gaussian yumuşatmalı (`filter: blur(2px)`) ve kromatik sıcaklık gradyanlı organik yüzey gerilimi membranları (`gbaGrimerMeltRipple1/2`) ile titreşmeli ve zemine kademeli sönümlenmelidir.
+- **Süre Boşluğu ve Akıcılık Dengelemesi (Post-Removal Timing Smoothing):**
+  Bir animasyondan görsel estetiği bozan yapay ögeler (ör. taşan CAD çizgileri) temizlendiğinde, oluşan zaman boşluğu animasyonun ani bitmesine izin verilerek bırakılamaz. Kalan sürede hareket pürüzsüzleştirilmeli (smoothing); viskoz uzuvların geri çekilme sönümü, zemin aurasının nefes alması ve parçacıkların dağılım eğrisi genişletilerek animasyonun tokluğu ve ritmi korunmalıdır.
+
 ---
 
 ## 3. Scale, Proportion & Whiff Standards
@@ -231,13 +258,13 @@ This document is the permanent, canonical design standard for all move animation
   - Standard Scale: **~68.1% of card width** (`~108px – 120px`).
   - Target Solid Mass: **~4,500 – 5,500 px²** of rendered non-transparent pixels.
   - Whiffed Scale: **~54.5% of card width** (`~78px – 84px`).
-  - Examples: Gyarados dragon head (`108x108`, ~4,914 px²), Scyther scythe blade (`108x76`, ~2,092 px²), Eevee sprint, Rattata tackle, Machamp chop.
+  - Examples: Gyarados dragon head (`108x108`, ~4,914 px²), Scyther scythe blade (`108x76`, ~2,092 px²), Muk Sludge Deluge (`Muk_Sludge_Actor.png`, `114x82px`, Tier 1 Apex amorf kütle), Eevee sprint, Rattata tackle, Machamp chop.
   - **Attacking Limb Precedent (Saldıran Uzuv Emsali):** Fiziksel olarak hedefe çarpan uzuvlar (el, pençe, yumruk, kuyruk darbesi) fırlatılan nesnelerden farklı olarak **Tier 1**'e tabidir. Machamp chop emsaliyle sabitlenmiştir. Double Slap el görseli (Jynx psychic hand, Poliwhirl boxing glove, Wartortle clawed paw) bu emsal gereği `108px` (normal) / `59px` (whiff) olarak boyutlandırılmıştır; orijinal görselin 2/3 oranında küçültülmesiyle elde edilmiştir. Küçük bio-organlar (kuyruk alevi, zehir iğnesi) ve fırlatılan mermiler (kemik, kaya) **Tier 2**'de kalır.
 - **Tier 2 — Basic Pokémon Heads, Snouts & Small Bio-Organs (~45%–50% Effective Width):**
   - Standard Scale: **~45% – 50% of card width** (Effective rendered width: `~76px – 84px`).
   - Target Solid Mass: **~2,000 – 2,800 px²** of rendered non-transparent pixels.
   - Whiffed Scale: **~35% – 38% of card width** (`~58px – 64px`).
-  - Examples: Horsea snout (`80x64`, ~2,613 px²), Weedle poison stinger (`110x110` box, but slender 45° diagonal with only 18.4% fill $\rightarrow$ ~2,227 px² solid mass), Bulbasaur seed pod (`98x98` box, vertical 1:1.74 aspect ratio $\rightarrow$ renders at `56x98`, ~2,476 px²), Charmander tail flame (`110x110` box $\rightarrow$ renders at `53x110`, ~2,819 px²).
+  - Examples: Horsea snout (`80x64`, ~2,613 px²), Weedle poison stinger (`110x110` box, but slender 45° diagonal with only 18.4% fill $\rightarrow$ ~2,227 px² solid mass), Bulbasaur seed pod (`98x98` box, vertical 1:1.74 aspect ratio $\rightarrow$ renders at `56x98`, ~2,476 px²), Charmander tail flame (`110x110` box $\rightarrow$ renders at `53x110`, ~2,819 px²), Grimer Sticky Hands (`Grimer_Sticky_Hands_Actor.png`, ikili amorf uzuv ve Nasty Goo damlacıkları).
   - **Comparative Rule:** A basic/small Pokémon's head or organ must NEVER overpower or exceed an apex monster in solid visual mass (e.g., Horsea's head at 5,302 px² was larger than Gyarados at 4,914 px², which caused visual imbalance; corrected to 2,613 px²).
 
 ### B. Visual Mass & Silhouette Density Principle (Görsel Kütle Prensibi)
@@ -304,11 +331,11 @@ This document is the permanent, canonical design standard for all move animation
 Bu 5 katman zorla doldurulacak statik bir kalıp değil, **modüler bir orkestra tavanıdır**. Saldırının doğasına göre 2 ila 5 katman seçilerek orkestre edilir (örneğin zarif bir uyku/psişik saldırı 2–3 katmanla minimalist bir derinlik yakalarken, kataklizm bir patlama 5 katmanın tümünü devreye sokar). Amaç her saldırıyı aynılaştırmak değil, görsel çamuru önleyip sinematik katman hiyerarşisini korumaktır:
 
 ```
-[LAYER 5] Ambient Dissipating Particles (Floating embers, Zzz runes, thought dots, sparks)
-[LAYER 4] Secondary Scatter & Cavitation (Water droplets, ice shards, dust rocks, steam plumes)
-[LAYER 3] Impact Flash & Shockwaves (Starburst pop, slash cross-flash, concentric rings)
-[LAYER 2] Primary Visual Actor (Ken Sugimori stock asset OR multi-path Bézier SVG)
-[LAYER 1] Ambient Card Floor / Atmosphere (Radial thermal aura, psychic fog, scorch rune, lens streak)
+[LAYER 5] Ambient Dissipating Particles (Floating embers, Zzz runes, thought dots, sparks, toxic bubbles/acid sizzle)
+[LAYER 4] Secondary Scatter & Cavitation (Water droplets, ice shards, dust rocks, steam plumes, ballistic sludge globs)
+[LAYER 3] Impact Flash & Shockwaves (Starburst pop, slash cross-flash, concentric rings, surface tension ripples, fluid necking/pinch drops)
+[LAYER 2] Primary Visual Actor (Ken Sugimori stock asset OR multi-path Bézier SVG, bilateral amorphous arms)
+[LAYER 1] Ambient Card Floor / Atmosphere (Radial thermal aura, psychic fog, scorch rune, lens streak, toxic bubbling swamp pool)
 ```
 
 ---
@@ -924,23 +951,37 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 
 ### 10.6 Vaka Çalışması: Grimer & Muk Toksik Balçık & Sıvı Dinamiği (Muk Sludge, Grimer Nasty Goo, Sticky Hands, Minimize)
 
+**Kaynak:** `BattleFXOverlay.tsx` L1293–1297 (dispatch ve `getFXDuration`: `grimer_nasty_goo` = 1550, `grimer_sticky_hands` = 1650, `muk_sludge_deluge` = 1750, `grimer_minimize` = 1500), L18080–18350 · `index.css` L3200–3550 · Görsel Varlıklar: `Muk_Sludge_Actor.png` (Tier 1 Apex 114px, `public/assets/raw/Muk_raw_edited.png`), `Grimer_Sticky_Hands_Actor.png` (`public/assets/raw/Grimer_raw_edited_001.png`).
+
 - **A. Muk Sludge Deluge: 1996 Ken Sugimori Tier 1 Apex Stok Varlık Mimarisi (`muk_sludge_deluge`, 1750ms):**
-  - **Katman 1 (z-15):** Kaynayan zehirli bataklık taban aurası (`gbaMukSludgeFloor 1.75s`), kart zemininde derin mor/lacivert kütle.
-  - **Katman 2 (z-25):** Otantik 1996 Ken Sugimori suluboya Muk stok görseli (`Muk_Sludge_Actor.png`, Tier 1 Apex `114px x 82px`), kart tabanından iki kolunu iki yana açarak kabaran devasa kütle (`gbaMukSludgeActorSurge 1.75s`).
-  - **Katman 3 (z-30):** Çok loblu, derin mor gradyanlı (`#3b0764` $\rightarrow$ `#c084fc`) ve asit yeşili/açık lila köpük çizgili akışkan tsunami dalgası (`gbaMukDelugeSurge 1.75s`).
-  - **Katman 4 (z-35):** Balistik balçık sıçrama topakları (`gbaMukSludgeGlob 1.25s`), yöne bağlı custom property'lerle (`--glob-x`, `--glob-y`) havaya fırlayan asimetrik damlalar.
-  - **Katman 5 (z-40):** Şişip patlayan kavitasyon asit baloncukları (`gbaMukToxicBubble 1.75s`) ve kartı saran zümrüt asit dumanı buharlaşması (`gbaMukAcidSizzle 1.75s`).
-- **B. Grimer Nasty Goo: Gerçek Sıvı Dinamiği (Fluid Necking, Pinch-Off Droplets & Splatter Crowns) (`grimer_nasty_goo`, 1550ms):**
-  - Yapay dikdörtgen kutular tamamen terk edildi.
-  - **Viskoz Boyunlaşma (Necking):** Ana balçık loblarına bağlı 3 organik Bézier iplikçiği (`gbaGrimerNeckingThread 1.55s`) yerçekimiyle uzar, incelir ve kopma anında geri büzülür.
-  - **Damla Kopması (Pinch-Off):** Teardrop SVG geometrisine sahip 3 bağımsız sıvı damlası (`gbaGrimerPinchDrop1/2/3 1.55s`) ivmelenerek kart tabanına düşer.
-  - **Taban Taç Sıçraması (Floor Splatter Crown):** Damlaların yere temas anında (`~65–75%`) tabanda yatay yayılan balçık sıçramaları (`gbaGrimerFloorSplat 1.55s`) patlar.
-- **C. Grimer Sticky Hands: İkili Amorf Mor Balçık Kol Kıskacı (`grimer_sticky_hands`, 1650ms):**
-  - Zeytin yeşili yapay kollar kaldırıldı; Grimer kanon mor paleti (`#3b0764` $\rightarrow$ `#a855f7`) uygulandı.
-  - Kartın iki yanından uzanan iki amorf balçık kolu (`gbaStickyArmLungeL`/`R 1.65s`) ortada birleşir, temas anında elastik titreşim (`gbaStickyClampTremor 1.65s`) ve çekilme mukus lifleri (`gbaStickyTendrilSnap 1.65s`) devreye girer.
-  - Başarılı kafa vuruşunda (`!fx.whiffed`) kart üzerinde statik felç kıvılcımları (`gbaStickyParalysisSpark 0.6s`) çakar.
-- **D. Grimer Minimize: Amorf Gölet Çöküşü & Yüzey Gerilimi Dalgalanmaları (`grimer_minimize`, 1500ms):**
-  - Düz elips yerine üç fazlı sıvı çöküşü: Eriyerek yayılan gölet (`gbaGrimerPuddleMelt 1.5s`), içine batan sıvılaşmış göz nodları, eşmerkezli çift yüzey gerilimi dalgası (`gbaGrimerMeltRipple1/2 1.5s`) ve evasive savunma buhar kalkanı (`gbaGrimerShieldAura 1.5s`).
+  - **Sorun:** Mevcut Muk atağı, ikonik amorf apex çamur canavarının heybetini ve zehirli tsunami gücünü yansıtamayan zayıf mor partiküllerden ibaretti.
+  - **Mimari Çözüm:** 5 katmanlı viskoz bataklık tsunamisi inşa edildi:
+    - *Katman 1 (z-15):* Kaynayan zehirli bataklık taban aurası (`gbaMukSludgeFloor 1.75s`), kart zemininde derin mor/lacivert kütle ve fokurdayan zemin aurası.
+    - *Katman 2 (z-25):* Otantik 1996 Ken Sugimori suluboya Muk stok görseli (`Muk_Sludge_Actor.png`, Tier 1 Apex `114px x 82px`), kart tabanından iki kolunu iki yana açarak kabaran devasa kütle (`gbaMukSludgeActorSurge 1.75s`).
+    - *Katman 3 (z-30):* Çok loblu, derin mor gradyanlı (`#3b0764` $\rightarrow$ `#c084fc`) ve asit yeşili/açık lila köpük çizgili akışkan tsunami dalgası (`gbaMukDelugeSurge 1.75s`).
+    - *Katman 4 (z-35):* Balistik balçık sıçrama topakları (`gbaMukSludgeGlob 1.25s`), yöne bağlı custom property'lerle (`--glob-x`, `--glob-y`) havaya fırlayan asimetrik damlalar.
+    - *Katman 5 (z-40):* Şişip patlayan kavitasyon asit baloncukları (`gbaMukToxicBubble 1.75s`) ve kartı saran zümrüt asit dumanı buharlaşması (`gbaMukAcidSizzle 1.75s`).
+- **B. Grimer Nasty Goo: Sıvı Boyunlaşması, Eş Eksenli Damlama & Taban Taç Sıçraması (`grimer_nasty_goo`, 1550ms):**
+  - **Sorun 1 (Yapay Dikdörtgenler):** Damlayan parçacıklar akışkan dinamiğinden yoksun, kesilmiş plastik bloklar gibi görünüyordu.
+  - **Sorun 2 (Eksen Kayması / Disconnected Droplets):** Damlalar ana balçık kütlesinin merkez ekseniyle örtüşmüyor; boşluktan, ana kütlenin yanından damlıyormuş gibi eğreti bir görüntü yaratıyordu.
+  - **Mimari Çözüm:**
+    1. *Eş Eksenli Kilitlenme (Coaxial Alignment):* Damlama katmanı ana kütlenin dikey merkezine (`left: 50%`, `transform: translateX(-50%)`) pikseli pikseline hizalandı (§1.M).
+    2. *Viskoz Boyunlaşma (Liquid Necking):* Ana kütleden ayrılan sıvı, önce uzayıp incelen 3 organik Bézier iplikçiği (`gbaGrimerNeckingThread 1.55s`) oluşturur.
+    3. *Damla Kopması (Pinch-Off):* Tepe gerilimde boyun koparak 3 bağımsız damlaya (`teardrop` SVG) dönüşür (`gbaGrimerPinchDrop1/2/3 1.55s`).
+    4. *Taban Taç Sıçraması (Floor Splatter Crown):* Damlaların yere temas anında (`~65–75%`) tabanda yatay yayılan çok loblu balçık taçları (`gbaGrimerFloorSplat 1.55s`) patlatıldı.
+- **C. Grimer Sticky Hands: Biyoelektrik Arklar, Viskoelastik Lifler ve Zamanlama Dengelemesi (`grimer_sticky_hands`, 1650ms):**
+  - **Sorun 1 (CAD Tel Kafes & Dışa Taşma):** Kollar birleştiğinde ortaya çıkan kesik çizgili yeşil elipsler ve kartın sağ-alt dışına taşan kılcal yeşil çizgiler görsel estetiği bozuyor, CAD programı izlenimi veriyordu.
+  - **Sorun 2 (Süre Boşluğu Hissi):** Yapay çizgiler kaldırıldığında animasyonun sonunda boşluk ve ritim düşüşü hissediliyordu.
+  - **Mimari Çözüm:**
+    1. *CAD Çizgilerinin Temizlenmesi:* Yeşil kesikli elipsler tamamen kaldırıldı. Yerine kart sınırları içinde hapsedilmiş organik çatallanan biyoelektrik felç arkları (`gbaStickyParalysisSpark 0.6s`) ve viskoelastik mukus lifleri (`gbaStickyTendrilSnap 1.65s`) entegre edildi (§1.N).
+    2. *İkili Amorf Kol Kıskacı:* Kartın iki yanından uzanan iki amorf mor balçık kolu (`gbaStickyArmLungeL`/`R 1.65s`), temas anında elastik kütle titreşimi (`gbaStickyClampTremor 1.65s`) ile birleşir (§2.L).
+    3. *Zamanlama Dengelemesi (Timing Smoothing):* Çizgilerin kaldırılmasıyla açılan zaman penceresi, viskoz kolların sönümlenerek çekilmesi ve taban aurasının nefes almasına paylaştırılarak animasyonun tokluğu ve akıcılığı korundu.
+- **D. Grimer Minimize: Amorf Gölet Çöküşü & Organik Yüzey Gerilimi Dalgaları (`grimer_minimize`, 1500ms):**
+  - **Sorun:** Balçığın etrafında beliren dairesel girişim deseni halkaları, teknik çizim/CAD halkaları gibi mekanik ve yapay duruyordu.
+  - **Mimari Çözüm:**
+    1. Düz elips yerine üç fazlı sıvı çöküşü: Eriyerek yayılan gölet (`gbaGrimerPuddleMelt 1.5s`) ve içine batan sıvılaşmış göz nodları modellendi.
+    2. *Organik Yüzey Gerilimi Dalgaları:* Mekanik CAD çemberleri yerine Gaussian yumuşatmalı (`filter: blur(2px)`), radyal gradyan düşüşlü ve faz kaymalı çift yüzey gerilimi dalgası (`gbaGrimerMeltRipple1/2 1.5s`) uygulandı (§2.L).
+    3. Savunma kaçınmasını simgeleyen evasive buhar kalkanı (`gbaGrimerShieldAura 1.5s`) ile savunma kimliği mühürlendi.
 
 ### 10.7 Vaka Çalışması: Scyther Kılıç Dansı (Swords Dance / Blade Dance Ritual) (`scyther_blade_dance`, 1820ms)
 
@@ -1009,6 +1050,19 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 | Overflow | hidden | hidden | **visible** (orb taşması) | **visible** (fırtına ve kristaller) |
 | Ana renk kimliği | Mavi/camgöbeği (ses) | Mor/eflatun (psişik) | Kızıl→zümrüt (kan→iyileşme) | Buzul beyazı/gök mavisi (soğuk) |
 
+### 11.A.2 — Akışkan & Dövüş Sanatları Animasyonlarının Yapısal Karşılaştırması (Grimer, Muk, Scyther, Mewtwo)
+
+| Boyut | Grimer Nasty Goo | Grimer Sticky Hands | Muk Sludge Deluge | Scyther Blade Dance | Mewtwo Psychic |
+|---|---|---|---|---|---|
+| Anlatı modeli | Viskoz boyunlaşma → kopma → taç sıçraması | Bilateral amorf kıskaç + biyoelektrik deşarj | Apex amorf kütle + toksik bataklık tsunamisi | 4-Fazlı Zootrop Mantis dansı + 3 odaklı glint | Psişik kara delik tekilliği + volumetrik eter |
+| Döngü / Süre | Tek seferlik (1.55s, 1550ms) | Tek seferlik (1.65s, 1650ms) | Tek seferlik (1.75s, 1750ms) | Tek seferlik (1.82s, 1820ms) | Tek seferlik (1.75s, 1750ms) |
+| Kinetik Faz | 3 aşamalı akışkan fazı | İki yanlı amorf atılma + elastik mikro-titreme | 5 katmanlı kabarma + kavitasyon baloncukları | %72–%89 apeks sustain (~420ms) + nefes tansiyonu | Telekinetik süzülme + 3 eşmerkezli şok dalgası |
+| Çıkış / Dissolve | Taban taç sıçramasıyla zemine dağılma | Geri çekilme sönümü (timing smoothing) | Asit dumanı ve köpük süblimasyonu | %89–%100 feathered ease-out dissolve (blur 0→4px) | Psişik tekillik çöküşü ve aura emilimi |
+| Whiff davranışı | Boyun uzamadan kurur, damla ve zemin sıçraması yok | Kıskaç ıskalar, biyoelektrik ark ve şok bastırılır | Kütle kabarmaz, tsunami ve asit baloncukları yok | Duruşlar küçülür, spektral bıçak ve kılıç parıltıları yok | Aktör 88px'e küçülür, şok ve zemin aurası yok |
+| Stok aktör | Özel Bézier SVG boyun/damla geometrisi | Grimer_Sticky_Hands_Actor.png | Muk_Sludge_Actor.png (Tier 1 Apex 114px) | Scyther_SwordsDance_Actor (4 poz zootrop) | Mewtwo_Psychic_Actor.png (Tier 1 Apex 120px) |
+| Özel Teknik | Eş eksenli dikey kilitlenme (`left: 50%`) | Taşan CAD elipsleri yerine organik ark poligonları | Multi-lobed Bézier asit tsunamisi | 3 noktalı anatomik kılıç parıltı takımyıldızı | Video-to-sprite kosinüs karartması + hasar katsayısı |
+| Ana renk kimliği | Zehirli mor / lila damlacık | Koyu amorf mor + neon sarı elektrik | Toksik derin mor + zümrüt asit yeşili | Orman yeşili + akkor limon/kehribar kılıç ışıltısı | İmperyal derin mor + akkor magenta/lila buhar |
+
 ### 11.B — Anti-patern listesi (bu implementasyonlardan çıkarılan yasaklar)
 
 1. **Yanlış türün kodunu kaynak almak:** Golbat Leech Life kodunu Zubat Leech Life sanıp analiz etmek. Ders: bir ders/belge yazmadan önce TSX bloğunun `fx.type === '...'` satırını kelimesi kelimesine doğrula.
@@ -1028,12 +1082,15 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 15. **Düşük Alfa Unmultiply Gürültü ve Fringe Tuzağı (Low-Alpha Black Noise Bleed):** Siyah arka plandan alfa kanalı ayıklanırken (unmultiply), videonun sıkıştırma artefaktlarından kaynaklanan çok düşük parlaklıktaki siyah/gri gürültülerin (`luma < 0.04`) filtrelenmeden bırakılması; şeffaf zeminde soluk gri-yeşil kenar pisliklerine yol açar. Çözüm: `smoothstep(0.04, 0.15, luma)` eşik filtrelemesi ve taban gürültü kesimi (§1.K).
 16. **Ani Kare Kesilmesi ve Sert Pop-Out Tuzağı (Abrupt Frame Cut-Off / Pop-Out Anti-Pattern):** Bir aktörün veya apeks vuruş karesinin animasyon biterken son <100ms içinde aniden `%95` opaklıktan `%0`'a kesilerek kaybolması, animasyonun tokluk seviyesini düşürür ve ham bir izlenim bırakır. Çözüm: Zarfın son %10–12'lik diliminde (180–220ms) aşamalı opaklık düşüşü, progresif Gaussian blur (`blur(1.2px) → blur(2.5px) → blur(4px)`) ve hafif süzülme (`translateY(-1px) → translateY(-3px)`) içeren 3 aşamalı feathered ease-out dissolve uygulanmalıdır (§1.L).
 17. **Hasar-Yoğunluk Ölçek Kopukluğu (Damage-Intensity Decoupling Anti-Pattern):** Bir saldırı motor düzeyinde değişken hasar verirken (örneğin Mewtwo *Psychic* rakip enerjisine bağlı olarak 10, 20, 30, 40+ hasar verirken), görsel efektin her hasar değerinde aynı standart şok dalgası ve aynı sarsıntı şiddetiyle oynaması. Çözüm: Hasar artışı doğrudan `fxIntensity` katsayısına (`1.0 + Math.max(0, baseDamage - 10) * 0.01`) bağlanmalı; şok dalgası kalınlığı, ışık halesi, ark dallanma sayısı ve kart sarsıntı genliği hasarla doğru orantılı olarak ölçeklenmelidir (§10.8.D).
+18. **Ayrık/Ofset Damlama ve Eksen Kayması Tuzağı (Disconnected/Off-Axis Droplet Cascade Anti-Pattern):** Viskoz sıvı damlama efektlerinde (örn. Grimer Nasty Goo), damlacıkların veya mukus liflerinin ana balçık kütlesinin merkez aksından (`left: 50%`, `transform: translateX(-50%)`) bağımsız koordinatlarda başlatılması; damlaların ana kütle yerine yanındaki boşluktan damladığı illüzyonunu yaratarak fiziksel nedenselliği yok eder. Çözüm: Sıvı emitörleri ve damlama yolları ana kütlenin dikey merkezine pikseli pikseline eş eksenli (coaxial) kilitlenmeli, damla kopmadan önce Bézier boyunlaşması (necking) ile kütleye bağlı kalmalıdır (§1.M).
+19. **CAD Tarzı Yeşil Tel Kafes ve Dışa Taşma Tuzağı (CAD Wireframe Capillary Bleed Anti-Pattern):** Mukus, yapışkanlık veya elektrik arkı betimlerken kesik çizgili yeşil konturlar (`stroke-dasharray="4 3"` vb.) ve teknik çizim elipsleri kullanılması; ayrıca bu ögelerin hedef kart sınırlarının dışına (sağ-alt arenaya, deste alanına) kontrolsüzce taşması. Bu, hem Kural 7 (İlkel CAD/vektör yasağı) hem de Kural 6.2 / §1.N (Anti-bleed kart bütünlüğü) ihlalidir. Çözüm: Kesikli çizgiler tamamen temizlenmeli; kart sınırları içinde hapsedilmiş çatallanan organik biyoelektrik arklar (`<polygon points="...">`) ve viskoelastik Bézier mukus köprüleri kullanılmalıdır (§1.N).
+20. **Mekanik Dairesel Girişim Halkası Tuzağı (Mechanical Concentric Ring Artifact):** Amorf bir kütle sıvılaşarak yere çöktüğünde veya yayıldığında (örn. Grimer Minimize göleti), etrafında mekanik hedefler veya radar halkaları gibi düzgün, sert ve kesik çizgili eşmerkezli daireler patlatılması. Çözüm: Kesikli geometrik çemberler yerine, Gaussian yumuşatmalı (`filter: blur(2px)`), kromatik sıcaklık düşüşlü ve asimetrik faz kaymalı organik yüzey gerilimi dalgalanmaları (`gbaGrimerMeltRipple1/2`) kullanılmalıdır (§2.L).
 
 ## 12. Ayar Turu Protokolü (Tuning Protocol)
 
 Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 
-1. **Timing bütünlüğü:** Toplam süre, oyun motorunun bekleme penceresiyle uyumlu mu? Fazlar arası gecikmeler (delay zinciri) nedensellik okutuyor mu? (Leech Life: diş 0.25s → orb 0.3s+; Blizzard: 2120ms; Cloyster Clamp: 1550ms; Cloyster Spike Cannon: 1650ms; Scyther Blade Dance: 1820ms; Mewtwo Psychic: 1750ms tam envelope.)
+1. **Timing bütünlüğü:** Toplam süre, oyun motorunun bekleme penceresiyle uyumlu mu? Fazlar arası gecikmeler (delay zinciri) nedensellik okutuyor mu? (Leech Life: diş 0.25s → orb 0.3s+; Blizzard: 2120ms; Cloyster Clamp: 1550ms; Cloyster Spike Cannon: 1650ms; Grimer Nasty Goo: 1550ms; Grimer Sticky Hands: 1650ms; Muk Sludge Deluge: 1750ms; Scyther Blade Dance: 1820ms; Mewtwo Psychic: 1750ms tam envelope.)
 2. **Whiff senaryosu:** Her "sonuç" katmanı `fx.whiffed` koşuluyla kaldırılmış mı? Hareket katmanları kısaltılmış süreyle kalıyor mu?
 3. **Yön parametreleri:** Hedefe göre değişen tüm ofsetler tek custom property'den türetiliyor mu (`--drain-dy` modeli)? Kopya keyframe var mı?
 4. **Döngü kararlılığı:** `infinite` döngülerde negatif delay ile ilk karede steady state sağlanmış mı?
@@ -1046,6 +1103,7 @@ Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 11. **Çerçevesiz Kenar Kontrolü (Borderless Vignette Check):** Sis/duman veya video varlıklarının 4 kenarında sert raster kesintisi veya "kutuda video" hissi var mı? Dört kenar kosinüs karartması ve kart genişliği tam örtüşü (`width: 100%–108%`) sağlandı mı? (§1.K)
 12. **Zemin Aurası Akkorluğu Kontrolü (Ground Aura Incandescence Check):** Tabanda sert `border`, düşük blur'lu kapsül veya yapay CAD ovalleri var mı? İki kademeli difüzyon havuzu (`blur(16px)` + `blur(8px)`) uygulandı mı? (§1.J)
 13. **Apeks Sustain ve Çıkış Dissolve Kontrolü (Apex Sustain & Exit Dissolve Check):** Son stok görsel veya vuruş karesi oyuncunun algılayabileceği toklukta ekranda sustain edildi mi? Animasyon biterken aktör birdenbire ekrandan kesilip fırlatıldı mı (pop-out), yoksa en az 180–220ms'lik yumuşak feathered ease-out dissolve ile sahneye yedirildi mi? (§1.L)
+14. **Viskoz Akışkan Hizalaması ve Kopma Kontrolü (Viscous Fluid Necking & Alignment Check):** Sıvı/balçık damlaları ana kütlenin merkez aksına eş eksenli kilitlenmiş mi (boşluktan damlama var mı)? Damlalar havada serbest dikdörtgen/daireler olarak kaymak yerine; 3 fazlı fiziksel akışa (Bézier boyunlaşma $\rightarrow$ kopma $\rightarrow$ zemin taç sıçraması) sadık kalıyor mu? Taşan yapay CAD çizgileri temizlendikten sonra zamanlama boşluğu (timing void) oluştu mu; kalan sürede hareket pürüzsüzleştirildi mi (§1.M, §1.N, §2.L)?
 
 ## 13. Revizyon Geçmişi
 
@@ -1059,4 +1117,5 @@ Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 | 6 | 2026-09-24 | §10.6 Grimer & Muk Toksik Balçık ve Sıvı Dinamiği Modernizasyonu: Muk Sludge için 1996 Ken Sugimori suluboya stok varlığı (`Muk_Sludge_Actor.png`, 114px, Tier 1 Apex), kaynayan bataklık taban aurası, yükselen çok loblu balçık tsunamisi ve kavitasyon asit baloncukları (1750ms); Grimer Nasty Goo için yapay dikdörtgenler kaldırılarak Bézier sıvı boyunlaşması (necking), yerçekimli damla kopması (pinch-off) ve zemin taç sıçramaları (1550ms); Grimer Sticky Hands için bağımsız FX tipi (`grimer_sticky_hands`, 1650ms), ikili amorf mor balçık kol kıskacı, gerilen mukus lifleri ve felç kıvılcımları; Grimer Minimize için amorf gölet çöküşü ve eşmerkezli yüzey gerilimi dalgalanmaları (1500ms) implemente edildi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_grimer_muk_animations.py` 35/35 PASS |
 | 7 | 2026-09-24 | §10.7 Scyther Blade Dance (4-Fazlı Zootrop Mantis duruş alternasyonu, 3D merkezli yörünge bıçakları, akkor elmas ki-parlamaları, 1650ms) ve §10.8 Mewtwo Psychic (Çift kademeli akkor iyonize taban, 30-karelik çerçevesiz akışkan psişik eter, ters girdap paralaksı, telekinetik yükselme ve tekillik çekirdeği, 1750ms) vaka analizleri eklendi. §1.J (Zemin aurası ve yassı kapsül yasağı), §1.K (Çerçevesiz VFX & video penceresi illüzyonunu kırma) ve §2.K (Zootrop çift poz kinematiği) anayasaya işlendi. Anti-patern #13 (Video penceresi tuzağı), #14 (Yassı kapsül tuzağı) ve #15 (Düşük alfa unmultiply gürültüsü) ile Ayar Turu #11 ve #12 maddeleri eklendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_scyther_mewtwo_animations.py` 33/33 PASS · `python scratch/test_grimer_muk_animations.py` 35/35 PASS |
 | 8 | 2026-09-24 | §10.7 Scyther Blade Dance süresi 1820ms'ye (+%10.3) genişletildi, Poz 4 apeks kilitlenme sustain penceresi ~420ms'ye (%72–%89) çıkarıldı; Kural 2 (Anti-Idle) uyumlu mikro-elastik tansiyon nefesi (`scale(1.06, 0.99)`), 3 odaklı kılıç parıltı geometrisi (merkezi starburst 0.46s @ 1.22s, sol namlu 0.44s @ 1.20s, sağ namlu 0.44s @ 1.26s) ve 3 aşamalı feathered ease-out dissolve (%89–%100, blur 0px→4px) ile ani pop-out tamamen engellendi. §10.8 Mewtwo Psychic'e GameEngine hasar orantılı yoğunluk ölçeklendirme formülü (`fxIntensity = 1.0 + max(0, baseDamage - 10) * 0.01`) ve 3 kademeli kinematik psişik şok dalgaları entegre edildi. §1.L (Feathered Ease-Out Dissolve) ve §2.K (Zootrop çoklu poz & sustain kinematiği) kanonlaştırıldı. Anti-patern #16 (Pop-out tuzağı), #17 (Hasar-yoğunluk kopukluğu) ve Ayar Turu #13 eklendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_scyther_mewtwo_animations.py` 40/40 PASS |
+| 9 | 2026-09-24 | Grimer & Muk Toksik Balçık ve Sıvı Dinamiği nihai anayasal aktarımı tamamlandı: §1.M (Viskoz Sıvı Mekaniği: Boyunlaşma, Kopma ve Eş Eksenli Akış), §1.N (Organik Biyoelektrik Arklar vs. CAD Tel Kafes Yasağı) ve §2.L (Amorf Uzuv Kıskacı & Yüzey Gerilimi Dalgalanmaları) anayasaya mühürlendi. §10.6 vaka analizi kullanıcı geri bildirimleri, problem tanımları ve mimari çözümleriyle derinleştirildi. §3.A (Tier 1/2 örnekleri), §4 (5-katman şablonu) ve §11.A.2 (Karşılaştırma tablosu) akışkan mekanikleriyle zenginleştirildi. Anti-patern #18 (Ayrık/ofset damlama tuzağı), #19 (CAD tel kafes ve dışa taşma tuzağı) ve #20 (Mekanik dairesel girişim halkası tuzağı) ile Ayar Turu #14 maddesi eklendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_grimer_muk_animations.py` 35/35 PASS · `python scratch/test_scyther_mewtwo_animations.py` 40/40 PASS |
 
