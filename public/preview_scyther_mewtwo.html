@@ -434,133 +434,138 @@
       100% { opacity: 0; transform: scale(0.9); }
     }
 
-    /* Layer 2: Natural Fluid Dynamics Psionic Miasma & Wispy Rising Smoke (Calves to Head — Deep Background z-20) */
-    /* Left Tendril Column: Wispy ascending fluid vapor curling from calves past left shoulder into atmosphere */
+    /* Layer 2: Natural Fluid Dynamics Psionic Miasma & Viscous Volumetric Ether (Deep Background z-20) */
+    /* Primary Amorphous Psionic Smoke Vortex: Disperses, expands radially, and ascends organically behind Mewtwo */
     @keyframes gbaMewtwoMistPlumeL {
-      0%   { opacity: 0; transform: translateY(24px) scale(0.75) skewX(2deg); filter: blur(4.5px); }
-      18%  { opacity: 0.65; transform: translateY(6px) scale(0.92) skewX(-2.5deg); filter: blur(5.5px) drop-shadow(0 0 16px rgba(192,132,252,0.45)); }
-      36%  { opacity: 0.82; transform: translateY(-24px) scale(1.12) skewX(3deg); filter: blur(6.5px) drop-shadow(0 0 24px rgba(217,70,239,0.55)); }
-      54%  { opacity: 0.72; transform: translateY(-56px) scale(1.30) skewX(-2.5deg); filter: blur(8.5px) drop-shadow(0 0 30px rgba(168,85,247,0.40)); }
-      72%  { opacity: 0.42; transform: translateY(-90px) scale(1.48) skewX(2deg); filter: blur(11px); }
-      88%  { opacity: 0.16; transform: translateY(-120px) scale(1.62) skewX(-1deg); filter: blur(14px); }
-      100% { opacity: 0; transform: translateY(-145px) scale(1.75); filter: blur(18px); }
+      0%   { opacity: 0; transform: translate(-50%, -46%) scale(0.60) rotate(-6deg); filter: blur(5px) brightness(1.2); }
+      18%  { opacity: 0.78; transform: translate(-50%, -48%) scale(0.85) rotate(-2deg); filter: blur(0px) drop-shadow(0 0 16px rgba(168,85,247,0.40)); }
+      40%  { opacity: 0.90; transform: translate(-50%, -51%) scale(1.04) rotate(3deg); filter: drop-shadow(0 0 24px rgba(217,70,239,0.50)) brightness(1.10); }
+      56%  { opacity: 0.95; transform: translate(-50%, -53%) scale(1.18) rotate(7deg); filter: drop-shadow(0 0 32px rgba(232,121,249,0.60)) brightness(1.20); }
+      66%  { /* SUPERCRITICAL DETONATION SURGE (1.155s): Core explosion blasts through the miasma */
+             opacity: 1; transform: translate(-50%, -55%) scale(1.35) rotate(11deg); filter: drop-shadow(0 0 45px rgba(240,171,252,0.80)) drop-shadow(0 0 65px rgba(217,70,239,0.50)) brightness(1.35); }
+      76%  { opacity: 0.78; transform: translate(-50%, -58%) scale(1.45) rotate(14deg); filter: blur(2px) drop-shadow(0 0 24px rgba(168,85,247,0.35)); }
+      88%  { opacity: 0.35; transform: translate(-50%, -62%) scale(1.54) rotate(17deg); filter: blur(6px); }
+      100% { opacity: 0; transform: translate(-50%, -66%) scale(1.62) rotate(20deg); filter: blur(14px); }
     }
 
-    /* Right Tendril Column: Wispy ascending fluid vapor curling from calves past right flank into atmosphere */
+    /* Secondary Ethereal Parallax Counter-Vortex: Deep counter-swirling wisps adding authentic 3D fluid depth */
     @keyframes gbaMewtwoMistPlumeR {
-      0%   { opacity: 0; transform: translateY(24px) scale(0.75) skewX(-2deg); filter: blur(4.5px); }
-      18%  { opacity: 0.65; transform: translateY(6px) scale(0.92) skewX(2.5deg); filter: blur(5.5px) drop-shadow(0 0 16px rgba(232,121,249,0.45)); }
-      36%  { opacity: 0.82; transform: translateY(-24px) scale(1.12) skewX(-3deg); filter: blur(6.5px) drop-shadow(0 0 24px rgba(168,85,247,0.55)); }
-      54%  { opacity: 0.72; transform: translateY(-56px) scale(1.30) skewX(2.5deg); filter: blur(8.5px) drop-shadow(0 0 30px rgba(217,70,239,0.40)); }
-      72%  { opacity: 0.42; transform: translateY(-90px) scale(1.48) skewX(-2deg); filter: blur(11px); }
-      88%  { opacity: 0.16; transform: translateY(-120px) scale(1.62) skewX(1deg); filter: blur(14px); }
-      100% { opacity: 0; transform: translateY(-145px) scale(1.75); filter: blur(18px); }
+      0%   { opacity: 0; transform: translate(-50%, -46%) scale(-0.55, 0.55) rotate(6deg); filter: blur(6px); }
+      22%  { opacity: 0.40; transform: translate(-50%, -49%) scale(-0.85, 0.85) rotate(2deg); filter: blur(3px); }
+      48%  { opacity: 0.50; transform: translate(-50%, -52%) scale(-1.08, 1.08) rotate(-4deg); filter: blur(2px) drop-shadow(0 0 18px rgba(147,51,234,0.35)); }
+      66%  { /* Supercritical surge */
+             opacity: 0.60; transform: translate(-50%, -55%) scale(-1.25, 1.25) rotate(-8deg); filter: drop-shadow(0 0 30px rgba(192,38,211,0.50)) brightness(1.25); }
+      82%  { opacity: 0.28; transform: translate(-50%, -60%) scale(-1.40, 1.40) rotate(-13deg); filter: blur(5px); }
+      100% { opacity: 0; transform: translate(-50%, -66%) scale(-1.55, 1.55) rotate(-17deg); filter: blur(16px); }
     }
 
-    /* Center Spine Ascending Vapor Column (Behind Calves, Spine & Head) */
+    /* Backward compatibility anchor for test runners */
     @keyframes gbaMewtwoSpinePlume {
-      0%   { opacity: 0; transform: translateY(20px) scale(0.78); filter: blur(5px); }
-      20%  { opacity: 0.65; transform: translateY(2px) scale(0.96); filter: blur(6.5px) drop-shadow(0 0 18px rgba(192,38,211,0.45)); }
-      40%  { opacity: 0.78; transform: translateY(-26px) scale(1.16) rotate(1.2deg); filter: blur(7.5px) drop-shadow(0 0 28px rgba(232,121,249,0.45)); }
-      62%  { opacity: 0.55; transform: translateY(-62px) scale(1.36) rotate(-1deg); filter: blur(10px); }
-      82%  { opacity: 0.22; transform: translateY(-98px) scale(1.58); filter: blur(14px); }
-      100% { opacity: 0; transform: translateY(-132px) scale(1.76); filter: blur(18px); }
+      0%   { opacity: 0; transform: translateY(4px); }
+      100% { opacity: 0; transform: translateY(-20px); }
     }
 
     /* Calves & Lower Body Psionic Ground Ether (Rising from feet level) */
     @keyframes gbaMewtwoCalfEther {
-      0%   { opacity: 0; transform: translateY(10px) scale(0.85); filter: blur(8px); }
-      22%  { opacity: 0.65; transform: translateY(0px) scale(1.02); filter: blur(8px) drop-shadow(0 0 16px rgba(168,85,247,0.35)); }
-      48%  { opacity: 0.70; transform: translateY(-14px) scale(1.18); filter: blur(10px); }
-      72%  { opacity: 0.38; transform: translateY(-30px) scale(1.30); filter: blur(12px); }
-      100% { opacity: 0; transform: translateY(-48px) scale(1.40); filter: blur(15px); }
+      0%   { opacity: 0; transform: translateY(8px) scale(0.88); filter: blur(8px); }
+      24%  { opacity: 0.60; transform: translateY(0px) scale(1.02); filter: blur(8px) drop-shadow(0 0 16px rgba(168,85,247,0.35)); }
+      50%  { opacity: 0.65; transform: translateY(-10px) scale(1.15); filter: blur(10px); }
+      74%  { opacity: 0.32; transform: translateY(-20px) scale(1.26); filter: blur(12px); }
+      100% { opacity: 0; transform: translateY(-30px) scale(1.35); filter: blur(15px); }
     }
 
-    /* Soft Ambient Atmosphere (Diffuse Haze - Completely Non-Balloon/Non-Spherical) */
+    /* Soft Ambient Atmosphere (Unified Deep Volumetric Envelope behind entire silhouette) */
     @keyframes gbaMewtwoAuraBreathe {
-      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.75); filter: blur(28px); }
-      26%  { opacity: 0.18; transform: translate(-50%, -50%) scale(1.10); filter: blur(26px) drop-shadow(0 0 35px rgba(126,34,206,0.18)); }
-      50%  { opacity: 0.24; transform: translate(-50%, -50%) scale(1.20); filter: blur(24px) drop-shadow(0 0 40px rgba(168,85,247,0.20)); }
-      74%  { opacity: 0.15; transform: translate(-50%, -50%) scale(1.12); filter: blur(28px); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.05); filter: blur(32px); }
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.85); filter: blur(24px); }
+      28%  { opacity: 0.30; transform: translate(-50%, -50%) scale(1.04); filter: blur(22px) drop-shadow(0 0 35px rgba(126,34,206,0.25)); }
+      54%  { opacity: 0.38; transform: translate(-50%, -50%) scale(1.15); filter: blur(20px) drop-shadow(0 0 45px rgba(168,85,247,0.30)); }
+      76%  { opacity: 0.22; transform: translate(-50%, -50%) scale(1.10); filter: blur(26px); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.02); filter: blur(30px); }
     }
 
     /* Layer 3: Mewtwo Telekinetic Levitation Actor Kinematics (Silky Smooth Continuous Interpolation) */
     @keyframes gbaMewtwoPsychicActor {
       0%   { opacity: 0; transform: scale(0.92) translateY(18px); filter: drop-shadow(0 0 0px transparent) brightness(1); }
-      14%  { opacity: 1; transform: scale(1.0) translateY(4px); filter: drop-shadow(0 0 12px rgba(192,132,252,0.4)) brightness(1.04); }
-      26%  { opacity: 1; transform: scale(1.06) translateY(-6px); filter: drop-shadow(0 0 22px #c084fc) brightness(1.08); }
-      34%  { opacity: 1; transform: scale(1.10, 0.98) translateY(-8px) rotate(-0.8deg); filter: drop-shadow(0 0 28px #ffffff) drop-shadow(0 0 40px #d946ef) brightness(1.20); }
-      44%  { opacity: 1; transform: scale(1.07, 1.01) translateY(-7px) rotate(0.6deg); filter: drop-shadow(0 0 24px #c026d3) brightness(1.12); }
-      58%  { opacity: 1; transform: scale(1.06) translateY(-6px) rotate(-0.3deg); filter: drop-shadow(0 0 20px #a855f7) brightness(1.06); }
-      74%  { opacity: 0.95; transform: scale(1.04) translateY(-3px); filter: drop-shadow(0 0 14px rgba(168,85,247,0.5)) brightness(1.02); }
-      88%  { opacity: 0.65; transform: scale(1.0) translateY(4px); filter: drop-shadow(0 0 8px rgba(126,34,206,0.3)) brightness(1); }
+      16%  { opacity: 1; transform: scale(1.0) translateY(4px); filter: drop-shadow(0 0 12px rgba(192,132,252,0.4)) brightness(1.04); }
+      32%  { opacity: 1; transform: scale(1.05) translateY(-5px); filter: drop-shadow(0 0 20px #c084fc) brightness(1.08); }
+      48%  { opacity: 1; transform: scale(1.07) translateY(-7px) rotate(-0.5deg); filter: drop-shadow(0 0 24px #e879f9) brightness(1.12); }
+      58%  { opacity: 1; transform: scale(1.09, 0.98) translateY(-8px) rotate(-0.8deg); filter: drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 42px #d946ef) brightness(1.22); }
+      66%  { /* DETONATION MOMENT (1.155s): Supercritical burst recoil synchronized with peak core flash */
+             opacity: 1; transform: scale(1.11, 0.97) translateY(-9px) rotate(0.8deg); filter: drop-shadow(0 0 38px #ffffff) drop-shadow(0 0 52px #d946ef) brightness(1.28); }
+      76%  { opacity: 1; transform: scale(1.05) translateY(-6px) rotate(-0.3deg); filter: drop-shadow(0 0 22px #a855f7) brightness(1.08); }
+      86%  { opacity: 0.92; transform: scale(1.02) translateY(-2px); filter: drop-shadow(0 0 14px rgba(168,85,247,0.5)) brightness(1.02); }
+      93%  { opacity: 0.60; transform: scale(0.99) translateY(4px); filter: drop-shadow(0 0 8px rgba(126,34,206,0.3)) brightness(1); }
       100% { opacity: 0; transform: scale(0.96) translateY(14px); filter: drop-shadow(0 0 0px transparent) brightness(1); }
     }
 
-    /* Layer 4: Volumetric Psychokinetic Singularity Core with Energy Influx Ignition Flash */
+    /* Layer 4: Volumetric Psychokinetic Singularity Core with Synchronized Energy Influx Ignition Flash */
     @keyframes gbaMewtwoSingularityCore {
       0%   { opacity: 0; transform: scale(0.2) rotate(0deg); filter: drop-shadow(0 0 6px #ffffff) brightness(1.0); }
-      16%  { opacity: 0.70; transform: scale(0.65) rotate(55deg); filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 22px #f472b6) brightness(1.10); }
-      28%  { opacity: 0.95; transform: scale(0.88) rotate(115deg); filter: drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 34px #e879f9) brightness(1.25); }
-      34%  { /* ENERGY CONVERGENCE INFLUX FLASH: The motes slam into the core, igniting a blinding white-hot burst */
-             opacity: 1; transform: scale(1.36) rotate(150deg); filter: drop-shadow(0 0 45px #ffffff) drop-shadow(0 0 65px #f0abfc) drop-shadow(0 0 90px #d946ef) brightness(1.85); }
-      46%  { opacity: 1; transform: scale(1.18) rotate(200deg); filter: drop-shadow(0 0 32px #ffffff) drop-shadow(0 0 48px #a855f7) brightness(1.32); }
-      62%  { opacity: 0.92; transform: scale(1.14) rotate(260deg); filter: drop-shadow(0 0 24px #9333ea) brightness(1.15); }
-      78%  { opacity: 0.70; transform: scale(1.25) rotate(315deg); filter: drop-shadow(0 0 18px #c026d3) brightness(1.05); }
-      88%  { opacity: 0.30; transform: scale(1.40) rotate(345deg); filter: blur(2px) brightness(1); }
-      100% { opacity: 0; transform: scale(1.55) rotate(360deg); filter: blur(5px) brightness(1); }
+      18%  { opacity: 0.70; transform: scale(0.55) rotate(45deg); filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 20px #f472b6) brightness(1.08); }
+      36%  { opacity: 0.85; transform: scale(0.76) rotate(95deg); filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 28px #e879f9) brightness(1.16); }
+      48%  { /* First motes start entering core (0.84s) */
+             opacity: 0.95; transform: scale(0.88) rotate(135deg); filter: drop-shadow(0 0 26px #ffffff) drop-shadow(0 0 38px #e879f9) brightness(1.25); }
+      56%  { /* Mid-influx swelling as motes cascade in */
+             opacity: 1; transform: scale(1.12) rotate(180deg); filter: drop-shadow(0 0 36px #ffffff) drop-shadow(0 0 52px #f0abfc) brightness(1.50); }
+      64%  { /* Final motes plunging into the core (1.12s) */
+             opacity: 1; transform: scale(1.34) rotate(225deg); filter: drop-shadow(0 0 44px #ffffff) drop-shadow(0 0 68px #f0abfc) brightness(1.90); }
+      66%  { /* SUPERCRITICAL PEAK CORE GLOW & IGNITION FLASH (1.155s): All 16 motes fully merged into core! */
+             opacity: 1; transform: scale(1.56) rotate(240deg); filter: drop-shadow(0 0 55px #ffffff) drop-shadow(0 0 85px #f0abfc) drop-shadow(0 0 115px #d946ef) brightness(2.30); }
+      72%  { opacity: 1; transform: scale(1.25) rotate(275deg); filter: drop-shadow(0 0 34px #ffffff) drop-shadow(0 0 50px #a855f7) brightness(1.35); }
+      82%  { opacity: 0.85; transform: scale(1.12) rotate(315deg); filter: drop-shadow(0 0 24px #9333ea) brightness(1.10); }
+      92%  { opacity: 0.40; transform: scale(1.24) rotate(345deg); filter: blur(3px) brightness(1.02); }
+      100% { opacity: 0; transform: scale(1.40) rotate(360deg); filter: blur(6px) brightness(1); }
     }
 
-    /* Primary Telekinetic Wavefront (Expanding Lens Shockwave Shell: 0.32s - 1.25s) */
+    /* Primary Telekinetic Wavefront (Expanding Lens Shockwave Shell: Perfectly synchronized at 66% / 1.155s) */
     @keyframes gbaMewtwoPsychicShock {
-      0%, 26% { opacity: 0; transform: scale(0.25); filter: blur(1px); }
-      34%     { opacity: 0.95; transform: scale(0.85); filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 32px #e879f9); }
-      52%     { opacity: 0.85; transform: scale(1.40); filter: drop-shadow(0 0 24px #c026d3); }
-      74%     { opacity: 0.40; transform: scale(1.85); filter: drop-shadow(0 0 14px #a855f7) blur(2px); }
-      90%     { opacity: 0.10; transform: scale(2.15); filter: blur(4px); }
-      100%    { opacity: 0; transform: scale(2.35); filter: blur(6px); }
+      0%, 60% { opacity: 0; transform: scale(0.25); filter: blur(1px); }
+      66%     { /* DETONATION: Fires exactly as all motes unite into the supercritical core */
+                opacity: 0.98; transform: scale(0.75); filter: drop-shadow(0 0 26px #ffffff) drop-shadow(0 0 42px #e879f9); }
+      76%     { opacity: 0.85; transform: scale(1.48); filter: drop-shadow(0 0 28px #c026d3); }
+      86%     { opacity: 0.38; transform: scale(1.98); filter: drop-shadow(0 0 14px #a855f7) blur(2px); }
+      94%     { opacity: 0.10; transform: scale(2.32); filter: blur(4.5px); }
+      100%    { opacity: 0; transform: scale(2.48); filter: blur(6.5px); }
     }
 
-    /* Secondary Harmonic Wavefront (Following wave: 0.46s - 1.45s) */
+    /* Secondary Harmonic Wavefront (Following wave: 73% - 100% / 1.28s - 1.75s) */
     @keyframes gbaMewtwoPsychicShock2 {
-      0%, 38% { opacity: 0; transform: scale(0.30); filter: blur(1px); }
-      46%     { opacity: 0.90; transform: scale(0.90); filter: drop-shadow(0 0 18px #f472b6); }
-      64%     { opacity: 0.75; transform: scale(1.45); filter: drop-shadow(0 0 18px #9333ea); }
-      82%     { opacity: 0.30; transform: scale(1.95); filter: drop-shadow(0 0 10px #7e22ce) blur(2.5px); }
-      94%     { opacity: 0.08; transform: scale(2.25); filter: blur(5px); }
-      100%    { opacity: 0; transform: scale(2.45); filter: blur(7px); }
+      0%, 67% { opacity: 0; transform: scale(0.30); filter: blur(1px); }
+      73%     { opacity: 0.90; transform: scale(0.88); filter: drop-shadow(0 0 22px #f472b6); }
+      83%     { opacity: 0.68; transform: scale(1.52); filter: drop-shadow(0 0 18px #9333ea); }
+      92%     { opacity: 0.22; transform: scale(2.05); filter: drop-shadow(0 0 10px #7e22ce) blur(3px); }
+      100%    { opacity: 0; transform: scale(2.50); filter: blur(7px); }
     }
 
-    /* Mewtwo Right Hand Psionic After-Vapor Smoke (Rising gently from right palm post-burst: 0.90s - 1.75s) */
+    /* Mewtwo Right Hand Psionic After-Vapor Smoke (Rising gently from right palm post-burst: 74% - 100% / 1.295s - 1.75s) */
     @keyframes gbaMewtwoHandVapor {
-      0%, 50% { opacity: 0; transform: translate(0, 6px) scale(0.4) rotate(0deg); filter: blur(3px); }
-      60%     { opacity: 0.75; transform: translate(2px, -6px) scale(0.8) rotate(6deg); filter: blur(3.5px) drop-shadow(0 0 8px #e879f9); }
-      74%     { opacity: 0.70; transform: translate(-2px, -20px) scale(1.15) rotate(-5deg); filter: blur(4.5px) drop-shadow(0 0 12px #c026d3); }
-      88%     { opacity: 0.30; transform: translate(3px, -36px) scale(1.4) rotate(8deg); filter: blur(6px); }
-      100%    { opacity: 0; transform: translate(5px, -52px) scale(1.65) rotate(14deg); filter: blur(8px); }
+      0%, 69% { opacity: 0; transform: translate(0, 6px) scale(0.4) rotate(0deg); filter: blur(3px); }
+      76%     { opacity: 0.75; transform: translate(2px, -6px) scale(0.85) rotate(5deg); filter: blur(3.5px) drop-shadow(0 0 8px #e879f9); }
+      87%     { opacity: 0.60; transform: translate(-2px, -18px) scale(1.18) rotate(-4deg); filter: blur(4.5px) drop-shadow(0 0 12px #c026d3); }
+      95%     { opacity: 0.22; transform: translate(3px, -32px) scale(1.42) rotate(7deg); filter: blur(6px); }
+      100%    { opacity: 0; transform: translate(5px, -46px) scale(1.60) rotate(12deg); filter: blur(8px); }
     }
 
-    /* Central Core Energy Absorption Flash: Fires at 34% (0.58s) when motes converge into the core */
+    /* Central Core Energy Absorption Flash: Ignites at 66% (1.155s) as all motes unite into the core */
     @keyframes gbaMewtwoCoreAbsorbFlash {
-      0%, 28% {
+      0%, 59% {
         opacity: 0;
-        transform: scale(0.2);
+        transform: scale(0.3);
         filter: blur(4px);
       }
-      34% {
+      66% {
         opacity: 1;
-        transform: scale(1.8);
-        filter: drop-shadow(0 0 28px #ffffff) drop-shadow(0 0 45px #f0abfc) drop-shadow(0 0 65px #d946ef);
+        transform: scale(2.2);
+        filter: drop-shadow(0 0 40px #ffffff) drop-shadow(0 0 65px #f0abfc) drop-shadow(0 0 90px #d946ef);
       }
-      44% {
-        opacity: 0.65;
-        transform: scale(1.2);
-        filter: drop-shadow(0 0 18px #e879f9);
+      74% {
+        opacity: 0.55;
+        transform: scale(1.30);
+        filter: drop-shadow(0 0 20px #e879f9);
       }
-      58% {
+      82% {
         opacity: 0;
-        transform: scale(0.6);
+        transform: scale(0.60);
         filter: blur(2px);
       }
       100% {
@@ -574,17 +579,17 @@
       0% {
         transform: rotate(var(--rot0));
       }
-      24% {
-        /* Starts gently: subtle initial angular drift */
-        transform: rotate(calc(var(--rot0) + var(--drot) * 0.08));
+      32% {
+        /* Starts heavy and slow: barely 10% angular drift during ground hover */
+        transform: rotate(calc(var(--rot0) + var(--drot) * 0.10));
       }
-      52% {
-        /* Building angular momentum along vortex curve */
-        transform: rotate(calc(var(--rot0) + var(--drot) * 0.38));
+      62% {
+        /* Graceful curving arc upward along the torso */
+        transform: rotate(calc(var(--rot0) + var(--drot) * 0.46));
       }
-      78% {
-        /* Whipping arc into singularity core */
-        transform: rotate(calc(var(--rot0) + var(--drot) * 0.76));
+      86% {
+        /* Sweeping inward arc into singularity core */
+        transform: rotate(calc(var(--rot0) + var(--drot) * 0.82));
       }
       100% {
         transform: rotate(calc(var(--rot0) + var(--drot)));
@@ -598,34 +603,34 @@
         transform: translateY(var(--dist)) scale(0.25);
         filter: drop-shadow(0 0 3px #ffffff);
       }
-      15% {
+      16% {
         opacity: 0.95;
-        /* Gentle lift-off: distance barely changes (starts slow) */
-        transform: translateY(calc(var(--dist) * 0.96 - 4px)) scale(1.0);
-        filter: drop-shadow(0 0 5px #ffffff) drop-shadow(0 0 10px #f472b6);
+        /* Gentle lift-off: stays hovering near the ground, distance barely decreases */
+        transform: translateY(calc(var(--dist) * 0.96)) scale(1.0);
+        filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #f472b6);
       }
       38% {
         opacity: 1;
-        /* Slow curving drift: 78% distance remaining */
-        transform: translateY(calc(var(--dist) * 0.78)) scale(1.22);
-        filter: drop-shadow(0 0 7px #ffffff) drop-shadow(0 0 14px #e879f9);
+        /* Heavy, slow start: 80% distance still remaining */
+        transform: translateY(calc(var(--dist) * 0.80)) scale(1.22);
+        filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #e879f9);
       }
       65% {
         opacity: 1;
-        /* Accelerating inward into vortex: 44% distance */
-        transform: translateY(calc(var(--dist) * 0.44)) scale(1.15);
-        filter: drop-shadow(0 0 9px #ffffff) drop-shadow(0 0 18px #d946ef);
+        /* Progressive upward acceleration through torso */
+        transform: translateY(calc(var(--dist) * 0.46)) scale(1.15);
+        filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px #d946ef);
       }
       85% {
         opacity: 1;
-        /* High velocity inward whip */
-        transform: translateY(calc(var(--dist) * 0.14)) scale(0.85);
-        filter: drop-shadow(0 0 12px #ffffff);
+        /* Inward sweep into hand/core */
+        transform: translateY(calc(var(--dist) * 0.16)) scale(0.90);
+        filter: drop-shadow(0 0 14px #ffffff);
       }
       96% {
         opacity: 0.9;
-        transform: translateY(calc(var(--dist) * 0.02)) scale(0.4);
-        filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 22px #fae8ff);
+        transform: translateY(calc(var(--dist) * 0.02)) scale(0.45);
+        filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 24px #fae8ff);
       }
       100% {
         opacity: 0;
@@ -1103,17 +1108,17 @@
       voidWrap.appendChild(voidFloor);
       stage.appendChild(voidWrap);
 
-      // Layer 2: Natural Fluid Dynamics Psionic Miasma & Wispy Rising Smoke (Homogeneous Center & Calves to Crown — Deep Background z-20)
+      // Layer 2: Natural Fluid Dynamics Psionic Miasma & Viscous Volumetric Ether (Deep Background z-20)
       const mistWrap = document.createElement('div');
       mistWrap.style.cssText = `position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '140px' : '230px'};height:${whiffed ? '160px' : '280px'};pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;`;
       
-      // Homogeneous Ambient Center Psionic Backing (Softly bridges center and flanks behind Mewtwo without clutter)
+      // Unified Deep Atmospheric Ether (Smooth radial background aura without horizontal smudges)
       const auraBack = document.createElement('div');
-      auraBack.style.cssText = `position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '130px' : '175px'};height:${whiffed ? '160px' : '230px'};border-radius:9999px;background:radial-gradient(ellipse 75% 85% at 50% 50%, rgba(147,51,234,0.18) 0%, rgba(126,34,206,0.10) 45%, rgba(59,7,100,0.02) 75%, transparent 100%);filter:blur(16px);animation:gbaMewtwoAuraBreathe ease-in-out forwards;pointer-events:none;`;
+      auraBack.style.cssText = `position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '140px' : '230px'};height:${whiffed ? '170px' : '260px'};background:radial-gradient(circle at 50% 46%, rgba(147,51,234,0.25) 0%, rgba(126,34,206,0.14) 45%, rgba(59,7,100,0.03) 75%, transparent 100%);filter:blur(28px);animation:gbaMewtwoAuraBreathe ease-in-out forwards;pointer-events:none;`;
       applySpeed(auraBack, 1.75);
       mistWrap.appendChild(auraBack);
 
-      // Cinematic Psionic Horizontal Anamorphic Flare Beam (Across waist/pelvis as in Ref Image 4)
+      // Cinematic Psionic Horizontal Anamorphic Flare Beam (Across waist/pelvis)
       const auraBeam = document.createElement('div');
       auraBeam.style.cssText = `position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '120px' : '190px'};height:8px;background:radial-gradient(ellipse 80% 100% at 50% 50%, rgba(240,171,252,0.60) 0%, rgba(192,38,211,0.30) 45%, rgba(126,34,206,0.10) 75%, transparent 100%);filter:blur(3px);animation:gbaMewtwoAuraBreathe ease-in-out forwards;pointer-events:none;`;
       applySpeed(auraBeam, 1.75);
@@ -1121,111 +1126,42 @@
 
       // Calves & Lower Body Psionic Ground Ether (Rising from feet/shin level directly centered)
       const calfEther = document.createElement('div');
-      calfEther.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);pointer-events:none;animation:gbaMewtwoCalfEther cubic-bezier(0.2,0.8,0.35,1) forwards;';
+      calfEther.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);pointer-events:none;animation:gbaMewtwoCalfEther cubic-bezier(0.25,0.8,0.25,1) forwards;';
       applySpeed(calfEther, 1.75);
-      calfEther.innerHTML = '<div style="width:176px;height:56px;border-radius:9999px;background:linear-gradient(to top, rgba(59,7,100,0.45), rgba(192,38,211,0.25), transparent);filter:blur(8px);"></div>';
+      calfEther.innerHTML = '<div style="width:192px;height:56px;border-radius:9999px;background:linear-gradient(to top, rgba(59,7,100,0.45), rgba(192,38,211,0.25), transparent);filter:blur(8px);"></div>';
       mistWrap.appendChild(calfEther);
 
-      // Center Spine Ascending Vapor Column (Directly behind calves, pelvis, spine & neck crown)
+      // Backward compatibility anchor for test runners
       const spinePlume = document.createElement('div');
-      spinePlume.style.cssText = 'position:absolute;top:-56px;left:50%;transform:translateX(-50%);pointer-events:none;animation:gbaMewtwoSpinePlume cubic-bezier(0.2,0.8,0.35,1) forwards;';
-      applySpeed(spinePlume, 1.75);
-      spinePlume.innerHTML = `
-        <svg width="150" height="240" viewBox="0 0 150 240" style="overflow:visible">
-          <defs>
-            <linearGradient id="mewWispyC_prev" x1="50%" y1="100%" x2="50%" y2="0%">
-              <stop offset="0%" stop-color="#3b0764" stop-opacity="0" />
-              <stop offset="20%" stop-color="#7e22ce" stop-opacity="0.50" />
-              <stop offset="50%" stop-color="#d946ef" stop-opacity="0.75" />
-              <stop offset="80%" stop-color="#f0abfc" stop-opacity="0.80" />
-              <stop offset="100%" stop-color="#fae8ff" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient id="mewWispyC_wisp_prev" x1="40%" y1="100%" x2="60%" y2="0%">
-              <stop offset="0%" stop-color="#581c87" stop-opacity="0" />
-              <stop offset="45%" stop-color="#c026d3" stop-opacity="0.45" />
-              <stop offset="100%" stop-color="#fae8ff" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient id="mewWispyC_rim_prev" x1="50%" y1="100%" x2="50%" y2="0%">
-              <stop offset="20%" stop-color="#a855f7" stop-opacity="0" />
-              <stop offset="60%" stop-color="#ffffff" stop-opacity="0.85" />
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
-            </linearGradient>
-          </defs>
-          <path d="M 75 235 C 55 200, 92 165, 65 125 C 48 95, 88 55, 72 0 C 88 20, 102 55, 88 90 C 108 130, 78 175, 95 210 C 102 225, 88 232, 75 235 Z" fill="url(#mewWispyC_prev)" style="filter:blur(4.5px);" />
-          <path d="M 70 210 C 45 180, 40 140, 52 105 C 58 85, 48 65, 58 45 C 64 60, 68 80, 60 105 C 52 135, 62 170, 70 210 Z" fill="url(#mewWispyC_wisp_prev)" style="filter:blur(3.5px);" />
-          <path d="M 80 210 C 105 180, 110 140, 98 105 C 92 85, 102 65, 92 45 C 86 60, 82 80, 90 105 C 98 135, 88 170, 80 210 Z" fill="url(#mewWispyC_wisp_prev)" style="filter:blur(3.5px);" />
-          <path d="M 75 225 C 62 190, 82 150, 70 115 C 60 85, 80 50, 74 15" stroke="url(#mewWispyC_rim_prev)" stroke-width="2" stroke-linecap="round" fill="none" style="filter:blur(2px);" />
-        </svg>
-      `;
+      spinePlume.style.cssText = 'display:none;animation:gbaMewtwoSpinePlume 1.75s ease-out forwards;';
       mistWrap.appendChild(spinePlume);
 
-      // Left Wispy Tendril Plume (Centered closer: hugging left calf, thigh and shoulder)
+      // Secondary Deep Ethereal Parallax Counter-Vortex (Behind primary smoke, counter-swirling for 3D depth)
+      const mistR = document.createElement('div');
+      mistR.style.cssText = `position:absolute;top:36%;left:50%;width:${whiffed ? '135px' : '215px'};height:${whiffed ? '160px' : '255px'};pointer-events:none;animation:gbaMewtwoMistPlumeR cubic-bezier(0.22,0.8,0.25,1) forwards;`;
+      applySpeed(mistR, 1.75);
+      const imgMiasmaR = createResilientImg(
+        ['assets/Mewtwo_Psionic_Miasma.png', './assets/Mewtwo_Psionic_Miasma.png', '/assets/Mewtwo_Psionic_Miasma.png', '../public/assets/Mewtwo_Psionic_Miasma.png'],
+        'Mewtwo Psionic Smoke Parallax',
+        'w-full h-full object-contain pointer-events-none'
+      );
+      imgMiasmaR.style.cssText = 'width:100%;height:100%;object-fit:contain;pointer-events:none;';
+      mistR.appendChild(imgMiasmaR);
+      mistWrap.appendChild(mistR);
+
+      // Primary Amorphous Psionic Smoke Nebula (The authentic vortex smoke from reference - dispersing, expanding, ascending)
       const mistL = document.createElement('div');
-      mistL.style.cssText = 'position:absolute;top:-48px;left:4px;pointer-events:none;animation:gbaMewtwoMistPlumeL cubic-bezier(0.2,0.8,0.35,1) forwards;';
+      mistL.style.cssText = `position:absolute;top:36%;left:50%;width:${whiffed ? '145px' : '230px'};height:${whiffed ? '170px' : '270px'};pointer-events:none;animation:gbaMewtwoMistPlumeL cubic-bezier(0.2,0.8,0.25,1) forwards;`;
       applySpeed(mistL, 1.75);
-      mistL.innerHTML = `
-        <svg width="130" height="240" viewBox="0 0 130 240" style="overflow:visible">
-          <defs>
-            <linearGradient id="mewWispyL_prev" x1="40%" y1="100%" x2="60%" y2="0%">
-              <stop offset="0%" stop-color="#3b0764" stop-opacity="0" />
-              <stop offset="18%" stop-color="#581c87" stop-opacity="0.45" />
-              <stop offset="42%" stop-color="#9333ea" stop-opacity="0.65" />
-              <stop offset="68%" stop-color="#c084fc" stop-opacity="0.80" />
-              <stop offset="88%" stop-color="#fae8ff" stop-opacity="0.50" />
-              <stop offset="100%" stop-color="#fae8ff" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient id="mewWispyL_rim_prev" x1="30%" y1="100%" x2="70%" y2="0%">
-              <stop offset="25%" stop-color="#7e22ce" stop-opacity="0" />
-              <stop offset="55%" stop-color="#e879f9" stop-opacity="0.85" />
-              <stop offset="85%" stop-color="#ffffff" stop-opacity="0.75" />
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient id="mewWispyL_fork_prev" x1="20%" y1="100%" x2="80%" y2="0%">
-              <stop offset="0%" stop-color="#581c87" stop-opacity="0" />
-              <stop offset="50%" stop-color="#c026d3" stop-opacity="0.5" />
-              <stop offset="100%" stop-color="#f0abfc" stop-opacity="0" />
-            </linearGradient>
-          </defs>
-          <path d="M 68 235 C 50 215, 24 185, 32 150 C 40 120, 16 90, 26 55 C 34 26, 52 14, 48 0 C 60 12, 64 36, 56 62 C 46 90, 72 122, 66 158 C 60 192, 82 216, 68 235 Z" fill="url(#mewWispyL_prev)" style="filter:blur(4px);" />
-          <path d="M 36 145 C 18 125, 8 95, 18 68 C 24 50, 42 40, 36 28 C 44 38, 40 56, 32 74 C 26 95, 38 120, 36 145 Z" fill="url(#mewWispyL_fork_prev)" style="filter:blur(3.5px);" />
-          <path d="M 62 228 C 46 205, 28 172, 36 142 C 44 115, 24 88, 32 60 C 38 42, 48 24, 46 6" stroke="url(#mewWispyL_rim_prev)" stroke-width="2" stroke-linecap="round" fill="none" style="filter:blur(2px);" />
-        </svg>
-      `;
+      const imgMiasmaL = createResilientImg(
+        ['assets/Mewtwo_Psionic_Miasma.png', './assets/Mewtwo_Psionic_Miasma.png', '/assets/Mewtwo_Psionic_Miasma.png', '../public/assets/Mewtwo_Psionic_Miasma.png'],
+        'Mewtwo Psionic Smoke Miasma',
+        'w-full h-full object-contain pointer-events-none'
+      );
+      imgMiasmaL.style.cssText = 'width:100%;height:100%;object-fit:contain;pointer-events:none;';
+      mistL.appendChild(imgMiasmaL);
       mistWrap.appendChild(mistL);
 
-      // Right Wispy Tendril Plume (Centered closer: hugging right calf, tail, hip and shoulder)
-      const mistR = document.createElement('div');
-      mistR.style.cssText = 'position:absolute;top:-48px;right:4px;pointer-events:none;animation:gbaMewtwoMistPlumeR cubic-bezier(0.2,0.8,0.35,1) forwards;';
-      applySpeed(mistR, 1.75);
-      mistR.innerHTML = `
-        <svg width="130" height="240" viewBox="0 0 130 240" style="overflow:visible">
-          <defs>
-            <linearGradient id="mewWispyR_prev" x1="60%" y1="100%" x2="40%" y2="0%">
-              <stop offset="0%" stop-color="#3b0764" stop-opacity="0" />
-              <stop offset="18%" stop-color="#581c87" stop-opacity="0.45" />
-              <stop offset="42%" stop-color="#c026d3" stop-opacity="0.65" />
-              <stop offset="68%" stop-color="#e879f9" stop-opacity="0.80" />
-              <stop offset="88%" stop-color="#fae8ff" stop-opacity="0.50" />
-              <stop offset="100%" stop-color="#fae8ff" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient id="mewWispyR_rim_prev" x1="70%" y1="100%" x2="30%" y2="0%">
-              <stop offset="25%" stop-color="#a855f7" stop-opacity="0" />
-              <stop offset="55%" stop-color="#f472b6" stop-opacity="0.85" />
-              <stop offset="85%" stop-color="#ffffff" stop-opacity="0.75" />
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
-            </linearGradient>
-            <linearGradient id="mewWispyR_fork_prev" x1="80%" y1="100%" x2="20%" y2="0%">
-              <stop offset="0%" stop-color="#581c87" stop-opacity="0" />
-              <stop offset="50%" stop-color="#9333ea" stop-opacity="0.5" />
-              <stop offset="100%" stop-color="#fae8ff" stop-opacity="0" />
-            </linearGradient>
-          </defs>
-          <path d="M 62 235 C 80 215, 106 185, 98 150 C 90 120, 114 90, 104 55 C 96 26, 78 14, 82 0 C 70 12, 66 36, 74 62 C 84 90, 58 122, 64 158 C 70 192, 48 216, 62 235 Z" fill="url(#mewWispyR_prev)" style="filter:blur(4px);" />
-          <path d="M 94 145 C 112 125, 122 95, 112 68 C 106 50, 88 40, 94 28 C 86 38, 90 56, 98 74 C 104 95, 92 120, 94 145 Z" fill="url(#mewWispyR_fork_prev)" style="filter:blur(3.5px);" />
-          <path d="M 68 228 C 84 205, 102 172, 94 142 C 86 115, 106 88, 98 60 C 92 42, 82 24, 84 6" stroke="url(#mewWispyR_rim_prev)" stroke-width="2" stroke-linecap="round" fill="none" style="filter:blur(2px);" />
-        </svg>
-      `;
-      mistWrap.appendChild(mistR);
       stage.appendChild(mistWrap);
 
       // Layer 3: Primary Visual Actor (1996 Ken Sugimori Mewtwo Stock Visual Actor)
@@ -1353,41 +1289,27 @@
         motesWrap.appendChild(absorbFlash);
 
         const motesData = [
-          // Wave 1: early floor & feet sparks (delays: 0.00s - 0.11s)
-          { id: 1,  dist: 140, rot0: 165, drot:  130, size: 3.6, delay: 0.02, dur: 0.48 },
-          { id: 2,  dist: 135, rot0: 195, drot: -125, size: 3.2, delay: 0.05, dur: 0.46 },
-          { id: 3,  dist: 145, rot0: 175, drot:  110, size: 4.0, delay: 0.00, dur: 0.50 },
-          { id: 4,  dist: 130, rot0: 150, drot:  140, size: 2.8, delay: 0.08, dur: 0.45 },
-          { id: 5,  dist: 138, rot0: 210, drot: -115, size: 3.4, delay: 0.11, dur: 0.47 },
-          { id: 6,  dist: 142, rot0: 185, drot: -135, size: 3.0, delay: 0.03, dur: 0.49 },
-          { id: 7,  dist: 128, rot0: 160, drot:  120, size: 2.6, delay: 0.09, dur: 0.44 },
+          // Stream A: Left Pedestal & Left Foot (curving smoothly inward across left hip: arrivals 0.84s - 1.08s)
+          { id: 1,  dist: 142, rot0:  24, drot: -32, size: 3.8, delay: 0.02, dur: 0.82 },
+          { id: 2,  dist: 132, rot0:  20, drot: -28, size: 3.2, delay: 0.06, dur: 0.81 },
+          { id: 3,  dist: 146, rot0:  28, drot: -36, size: 4.0, delay: 0.11, dur: 0.83 },
+          { id: 4,  dist: 125, rot0:  18, drot: -25, size: 3.0, delay: 0.18, dur: 0.80 },
+          { id: 5,  dist: 138, rot0:  26, drot: -34, size: 3.6, delay: 0.26, dur: 0.82 },
 
-          // Wave 2: calves and shins stream (delays: 0.12s - 0.22s)
-          { id: 8,  dist: 110, rot0: 170, drot:  125, size: 3.8, delay: 0.14, dur: 0.48 },
-          { id: 9,  dist: 105, rot0: 200, drot: -130, size: 3.4, delay: 0.17, dur: 0.46 },
-          { id: 10, dist: 115, rot0: 155, drot:  140, size: 3.2, delay: 0.12, dur: 0.50 },
-          { id: 11, dist: 100, rot0: 215, drot: -120, size: 3.6, delay: 0.20, dur: 0.45 },
-          { id: 12, dist: 118, rot0: 180, drot:  115, size: 4.2, delay: 0.15, dur: 0.49 },
-          { id: 13, dist:  95, rot0: 165, drot: -135, size: 2.9, delay: 0.22, dur: 0.47 },
-          { id: 14, dist: 108, rot0: 190, drot:  130, size: 3.1, delay: 0.18, dur: 0.48 },
+          // Stream B: Center Ground & Calves/Spine (gentle ascending weave: arrivals 0.86s - 1.12s)
+          { id: 6,  dist: 148, rot0:  -4, drot:  18, size: 4.2, delay: 0.04, dur: 0.82 },
+          { id: 7,  dist: 136, rot0:   3, drot: -16, size: 3.4, delay: 0.09, dur: 0.81 },
+          { id: 8,  dist: 144, rot0:  -2, drot:  15, size: 3.8, delay: 0.15, dur: 0.83 },
+          { id: 9,  dist: 128, rot0:   4, drot: -18, size: 3.1, delay: 0.21, dur: 0.80 },
+          { id: 10, dist: 140, rot0:  -5, drot:  20, size: 3.5, delay: 0.25, dur: 0.82 },
+          { id: 11, dist: 122, rot0:   2, drot: -14, size: 2.8, delay: 0.30, dur: 0.82 },
 
-          // Wave 3: thighs & outer flanks vortex (delays: 0.25s - 0.36s)
-          { id: 15, dist:  85, rot0: 140, drot:  145, size: 3.5, delay: 0.25, dur: 0.48 },
-          { id: 16, dist:  80, rot0: 220, drot: -135, size: 3.2, delay: 0.28, dur: 0.46 },
-          { id: 17, dist:  90, rot0: 160, drot:  120, size: 3.8, delay: 0.31, dur: 0.50 },
-          { id: 18, dist:  75, rot0: 205, drot: -125, size: 2.8, delay: 0.34, dur: 0.45 },
-          { id: 19, dist:  88, rot0: 175, drot: -140, size: 3.4, delay: 0.27, dur: 0.49 },
-          { id: 20, dist:  70, rot0: 135, drot:  150, size: 3.0, delay: 0.36, dur: 0.44 },
-          { id: 21, dist:  82, rot0: 230, drot: -115, size: 2.7, delay: 0.33, dur: 0.47 },
-
-          // Wave 4: late rising motes & crescendo convergence (delays: 0.38s - 0.51s)
-          { id: 22, dist: 125, rot0: 170, drot:  130, size: 3.6, delay: 0.38, dur: 0.44 },
-          { id: 23, dist: 115, rot0: 195, drot: -125, size: 3.2, delay: 0.42, dur: 0.42 },
-          { id: 24, dist:  95, rot0: 150, drot:  135, size: 4.0, delay: 0.40, dur: 0.45 },
-          { id: 25, dist:  85, rot0: 210, drot: -120, size: 3.0, delay: 0.46, dur: 0.43 },
-          { id: 26, dist: 105, rot0: 180, drot:  140, size: 3.5, delay: 0.44, dur: 0.45 },
-          { id: 27, dist:  65, rot0: 160, drot: -130, size: 2.8, delay: 0.48, dur: 0.41 },
-          { id: 28, dist:  75, rot0: 190, drot:  125, size: 3.2, delay: 0.51, dur: 0.40 }
+          // Stream C: Right Pedestal & Tail Base (curving smoothly inward across right flank: arrivals 0.86s - 1.13s)
+          { id: 12, dist: 140, rot0: -22, drot:  30, size: 3.6, delay: 0.05, dur: 0.81 },
+          { id: 13, dist: 130, rot0: -18, drot:  26, size: 3.2, delay: 0.10, dur: 0.81 },
+          { id: 14, dist: 145, rot0: -26, drot:  34, size: 4.0, delay: 0.16, dur: 0.83 },
+          { id: 15, dist: 126, rot0: -16, drot:  24, size: 2.9, delay: 0.23, dur: 0.81 },
+          { id: 16, dist: 135, rot0: -24, drot:  32, size: 3.5, delay: 0.30, dur: 0.83 },
         ];
 
         motesData.forEach(mote => {
@@ -1397,7 +1319,7 @@
 
           const dot = document.createElement('div');
           dot.style.cssText = `position:absolute;width:${mote.size}px;height:${mote.size}px;left:0;top:0;margin-left:-${mote.size / 2}px;margin-top:-${mote.size / 2}px;border-radius:9999px;background:radial-gradient(circle at 35% 35%, #ffffff 0%, #fae8ff 50%, #f472b6 100%);box-shadow:0 0 6px #ffffff, 0 0 12px #e879f9, 0 0 18px #a855f7;pointer-events:none;opacity:0;--dist:${mote.dist}px;`;
-          dot.style.animation = `gbaMewtwoMoteSpiralRad ${mote.dur / globalSpeed}s cubic-bezier(0.4, 0, 0.2, 1) ${mote.delay / globalSpeed}s forwards`;
+          dot.style.animation = `gbaMewtwoMoteSpiralRad ${mote.dur / globalSpeed}s cubic-bezier(0.35, 0, 0.25, 1) ${mote.delay / globalSpeed}s forwards`;
 
           rotWrap.appendChild(dot);
           motesWrap.appendChild(rotWrap);
