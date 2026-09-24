@@ -269,11 +269,12 @@
     /* Layer 1: Ambient Card Floor Atmosphere Glow & Concentric Expanding Shockwave Ripples */
     @keyframes gbaScytherDanceFloorGlow {
       0%   { opacity: 0; transform: scale(0.35); }
-      20%  { opacity: 0.85; transform: scale(0.85); filter: drop-shadow(0 0 12px #a3e635); }
-      45%  { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 18px #84cc16) drop-shadow(0 0 10px #bef264); }
-      75%  { opacity: 0.95; transform: scale(1.08); filter: drop-shadow(0 0 22px #a3e635) drop-shadow(0 0 12px #ffffff); }
-      90%  { opacity: 0.5; transform: scale(1.02); }
-      100% { opacity: 0; transform: scale(0.95); }
+      18%  { opacity: 0.85; transform: scale(0.85); filter: drop-shadow(0 0 12px #a3e635); }
+      42%  { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 18px #84cc16) drop-shadow(0 0 10px #bef264); }
+      72%  { opacity: 0.95; transform: scale(1.08); filter: drop-shadow(0 0 22px #a3e635) drop-shadow(0 0 12px #ffffff); }
+      88%  { opacity: 0.80; transform: scale(1.05); filter: drop-shadow(0 0 16px #84cc16); }
+      94%  { opacity: 0.35; transform: scale(1.01); filter: blur(10px); }
+      100% { opacity: 0; transform: scale(0.95); filter: blur(12px); }
     }
 
     /* Ground Shockwave Ripple 1 (Opening Dance Pulse: 0.10s - 0.85s) */
@@ -294,12 +295,12 @@
       100% { opacity: 0; transform: scale(1.26); }
     }
 
-    /* Ground Shockwave Ripple 3 (Climax Cross-Lock Shockwave: 1.05s - 1.65s) */
+    /* Ground Shockwave Ripple 3 (Climax Cross-Lock Shockwave: 1.05s - 1.80s) */
     @keyframes gbaScytherGroundRipple3 {
       0%   { opacity: 0; transform: scale(0.25); }
       20%  { opacity: 1; transform: scale(0.75); filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 18px #a3e635); }
       55%  { opacity: 0.7; transform: scale(1.05); filter: drop-shadow(0 0 12px #bef264); }
-      85%  { opacity: 0.2; transform: scale(1.22); }
+      85%  { opacity: 0.25; transform: scale(1.22); }
       100% { opacity: 0; transform: scale(1.30); }
     }
 
@@ -316,50 +317,58 @@
     }
 
     /* Layer 2: 4-Phase Kinematic Zoetrope with Continuous Momentum & Smooth Smear Cross-Fade */
-    /* Pose 1 / 002: High Scythe Lunge & Opening Dance Stance (0% - 34%) */
+    /* Pose 1 / 002: High Scythe Lunge & Opening Dance Stance (0% - 32%) */
     @keyframes gbaScytherDanceActorA {
       0%   { opacity: 0; transform: translateY(12px) scale(0.96) rotate(-2deg); filter: blur(2px); }
       6%   { opacity: 1; transform: translateY(6px) scale(0.99) rotate(-1deg); filter: blur(0px); }
       16%  { opacity: 1; transform: translateY(0px) scale(1.01) rotate(0.5deg); filter: blur(0px); }
       24%  { opacity: 0.85; transform: translateY(-3px) scale(1.03) rotate(1.5deg); filter: blur(0.8px); }
-      34%  { opacity: 0; transform: translateY(-5px) scale(1.04) rotate(2deg); filter: blur(2px); }
+      32%  { opacity: 0; transform: translateY(-5px) scale(1.04) rotate(2deg); filter: blur(2px); }
       100% { opacity: 0; }
     }
 
-    /* Pose 2 / 003: Weaving Lateral Spin Slash (20% - 56%) */
+    /* Pose 2 / 003: Weaving Lateral Spin Slash (18% - 53%) */
     @keyframes gbaScytherDanceActorB {
-      0%, 18% { opacity: 0; }
-      20%     { opacity: 0; transform: translateY(-3px) scale(1.01) rotate(1.5deg); filter: blur(2px); }
-      26%     { opacity: 0.75; transform: translateY(-1px) scale(1.02) rotate(0deg); filter: blur(1px); }
-      34%     { opacity: 1; transform: translateX(3px) translateY(1px) scale(1.03) rotate(-2deg); filter: blur(0px); }
-      42%     { opacity: 1; transform: translateX(2px) translateY(-1px) scale(1.04) rotate(-1deg); filter: blur(0px); }
-      48%     { opacity: 0.8; transform: translateX(-2px) translateY(-2px) scale(1.03) rotate(0.5deg); filter: blur(0.8px); }
-      56%     { opacity: 0; transform: translateX(-4px) translateY(-4px) scale(1.02) rotate(1.5deg); filter: blur(2px); }
+      0%, 16% { opacity: 0; }
+      18%     { opacity: 0; transform: translateY(-3px) scale(1.01) rotate(1.5deg); filter: blur(2px); }
+      24%     { opacity: 0.75; transform: translateY(-1px) scale(1.02) rotate(0deg); filter: blur(1px); }
+      32%     { opacity: 1; transform: translateX(3px) translateY(1px) scale(1.03) rotate(-2deg); filter: blur(0px); }
+      40%     { opacity: 1; transform: translateX(2px) translateY(-1px) scale(1.04) rotate(-1deg); filter: blur(0px); }
+      46%     { opacity: 0.8; transform: translateX(-2px) translateY(-2px) scale(1.03) rotate(0.5deg); filter: blur(0.8px); }
+      53%     { opacity: 0; transform: translateX(-4px) translateY(-4px) scale(1.02) rotate(1.5deg); filter: blur(2px); }
       100%    { opacity: 0; }
     }
 
-    /* Pose 3 / 004: High Cross-Guard Flourish (42% - 78%) */
+    /* Pose 3 / 004: High Cross-Guard Flourish (38% - 74%) */
     @keyframes gbaScytherDanceActorC {
-      0%, 40% { opacity: 0; }
-      42%     { opacity: 0; transform: translateY(-3px) scale(1.01) rotate(1deg); filter: blur(2px); }
-      48%     { opacity: 0.75; transform: translateY(-4px) scale(1.03) rotate(1.5deg); filter: blur(1px); }
-      56%     { opacity: 1; transform: translateY(-5px) scale(1.04) rotate(1.5deg); filter: blur(0px); }
-      64%     { opacity: 1; transform: translateY(-4px) scale(1.05) rotate(1deg); filter: blur(0px); }
-      70%     { opacity: 0.8; transform: translateY(-2px) scale(1.03) rotate(0.5deg); filter: blur(0.8px); }
-      78%     { opacity: 0; transform: translateY(0px) scale(1.01) rotate(0deg); filter: blur(2px); }
+      0%, 36% { opacity: 0; }
+      38%     { opacity: 0; transform: translateY(-3px) scale(1.01) rotate(1deg); filter: blur(2px); }
+      44%     { opacity: 0.75; transform: translateY(-4px) scale(1.03) rotate(1.5deg); filter: blur(1px); }
+      52%     { opacity: 1; transform: translateY(-5px) scale(1.04) rotate(1.5deg); filter: blur(0px); }
+      60%     { opacity: 1; transform: translateY(-4px) scale(1.05) rotate(1deg); filter: blur(0px); }
+      66%     { opacity: 0.8; transform: translateY(-2px) scale(1.03) rotate(0.5deg); filter: blur(0.8px); }
+      74%     { opacity: 0; transform: translateY(0px) scale(1.01) rotate(0deg); filter: blur(2px); }
       100%    { opacity: 0; }
     }
 
-    /* Pose 4 / 005: Apex Primed Guard Stance (64% - 100%) */
+    /* Pose 4 / 005: Apex Primed Guard Stance with Extended Sustain & Silky Ease-Out Dissolve (60% - 100%) */
     @keyframes gbaScytherDanceActorD {
-      0%, 62% { opacity: 0; }
-      64%     { opacity: 0; transform: translateY(-2px) scale(1.02); filter: blur(2px); }
-      72%     { opacity: 0.8; transform: translateY(0px) scale(1.04); filter: blur(1px); }
-      78%     { opacity: 1; transform: translateY(1px) scale(1.06, 0.98); filter: blur(0px); }
-      83%     { opacity: 1; transform: translateY(-1px) scale(1.05, 1.01); filter: blur(0px); }
-      88%     { opacity: 1; transform: translateY(0px) scale(1.06); filter: blur(0px); }
-      95%     { opacity: 0.95; transform: translateY(0px) scale(1.05); filter: blur(0px); }
-      100%    { opacity: 0; transform: translateY(3px) scale(1.00); filter: blur(1.5px); }
+      0%, 58% { opacity: 0; }
+      60%     { opacity: 0; transform: translateY(-2px) scale(1.02); filter: blur(2px); }
+      66%     { opacity: 0.85; transform: translateY(0px) scale(1.04); filter: blur(0.8px); }
+      72%     { opacity: 1; transform: translateY(1px) scale(1.06, 0.98); filter: blur(0px); }
+      78%     { /* Apex Stance Locked & Glints Ignite */
+                opacity: 1; transform: translateY(-0.5px) scale(1.05, 1.01); filter: blur(0px) drop-shadow(0 0 16px #bef264); }
+      84%     { /* Sustained Kinetic Tension (Subtle breathing shudder) */
+                opacity: 1; transform: translateY(0.5px) scale(1.06, 0.99); filter: blur(0px) drop-shadow(0 0 18px #bef264) drop-shadow(0 0 24px rgba(163,230,53,0.65)); }
+      89%     { /* Peak sustain holding before gentle dissipation */
+                opacity: 0.98; transform: translateY(0px) scale(1.05); filter: blur(0px) drop-shadow(0 0 14px #a3e635); }
+      93%     { /* Phase A: Soft feathered ease-out dissolve begins */
+                opacity: 0.70; transform: translateY(-1px) scale(1.03); filter: blur(1.2px) drop-shadow(0 0 10px rgba(163,230,53,0.45)); }
+      97%     { /* Phase B: Ethereal Ki smoke dissipation */
+                opacity: 0.28; transform: translateY(-2px) scale(1.01); filter: blur(2.5px) drop-shadow(0 0 6px rgba(163,230,53,0.20)); }
+      100%    { /* Phase C: Complete seamless dissolve */
+                opacity: 0; transform: translateY(-3px) scale(0.99); filter: blur(4px) drop-shadow(0 0 0px transparent); }
     }
 
     /* Whiff Pose 1 (0% - 48%) */
@@ -372,7 +381,7 @@
       100% { opacity: 0; }
     }
 
-    /* Whiff Pose 2 (38% - 82% - falters and dissipates) */
+    /* Whiff Pose 2 (38% - 82% - soft falter and dissipate) */
     @keyframes gbaScytherDanceActorWhiff2 {
       0%, 36% { opacity: 0; transform: translateY(3px) scale(0.96); filter: blur(2px); }
       44%     { opacity: 0.8; transform: translateY(0px) scale(1.0); filter: blur(0px); }
@@ -389,35 +398,40 @@
       32%  { opacity: 1; transform: rotate(280deg) scale(0.95); filter: drop-shadow(0 0 16px #a3e635); }
       48%  { opacity: 1; transform: rotate(420deg) scale(1.08); filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 26px #a3e635); }
       65%  { opacity: 1; transform: rotate(560deg) scale(1.14); filter: brightness(1.30) drop-shadow(0 0 22px #ffffff); }
-      78%  { opacity: 0.75; transform: rotate(660deg) scale(1.05); filter: drop-shadow(0 0 14px #bef264); }
-      88%  { opacity: 0.35; transform: rotate(720deg) scale(0.98); }
-      100% { opacity: 0; transform: rotate(760deg) scale(0.88); }
+      78%  { opacity: 0.85; transform: rotate(660deg) scale(1.06); filter: drop-shadow(0 0 14px #bef264); }
+      88%  { opacity: 0.50; transform: rotate(720deg) scale(1.00); filter: blur(1px); }
+      95%  { opacity: 0.18; transform: rotate(750deg) scale(0.94); filter: blur(2.5px); }
+      100% { opacity: 0; transform: rotate(770deg) scale(0.88); filter: blur(4px); }
     }
 
-    /* Climax Crossed Blades Central Glint (Centered Intersection Starburst) */
+    /* Climax Crossed Blades Central Glint (Centered Intersection Starburst - Extended Shimmer) */
     @keyframes gbaScytherCrossGlint {
       0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
-      25%  { opacity: 1; transform: translate(-50%, -50%) scale(1.18) rotate(45deg); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #bef264) brightness(1.5); }
-      52%  { opacity: 0.95; transform: translate(-50%, -50%) scale(0.95) rotate(90deg); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #a3e635); }
-      75%  { opacity: 0.55; transform: translate(-50%, -50%) scale(0.60) rotate(135deg); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(180deg); }
+      20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.22) rotate(45deg); filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 18px #bef264) brightness(1.6); }
+      45%  { opacity: 1; transform: translate(-50%, -50%) scale(1.05) rotate(80deg); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635) brightness(1.3); }
+      70%  { opacity: 0.80; transform: translate(-50%, -50%) scale(0.85) rotate(120deg); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 10px #bef264); }
+      88%  { opacity: 0.35; transform: translate(-50%, -50%) scale(0.50) rotate(155deg); filter: blur(1px); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.15) rotate(180deg); filter: blur(2px); }
     }
 
-    /* Scyther Blade Sheen Glint (Along Left & Right Scythe Edges) */
+    /* Scyther Blade Sheen Glint (Along Left & Right Scythe Edges - Extended Shimmer) */
     @keyframes gbaScytherBladeGlint {
       0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
-      22%  { opacity: 1; transform: translate(-50%, -50%) scale(1.10) rotate(45deg); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #a3e635) brightness(1.4); }
-      50%  { opacity: 0.95; transform: translate(-50%, -50%) scale(0.90) rotate(90deg); filter: drop-shadow(0 0 5px #ffffff) drop-shadow(0 0 10px #bef264); }
-      75%  { opacity: 0.55; transform: translate(-50%, -50%) scale(0.55) rotate(135deg); }
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(180deg); }
+      20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(45deg); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635) brightness(1.5); }
+      45%  { opacity: 1; transform: translate(-50%, -50%) scale(1.00) rotate(80deg); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #bef264) brightness(1.2); }
+      72%  { opacity: 0.75; transform: translate(-50%, -50%) scale(0.75) rotate(125deg); filter: drop-shadow(0 0 4px #a3e635); }
+      88%  { opacity: 0.30; transform: translate(-50%, -50%) scale(0.45) rotate(160deg); filter: blur(1px); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.15) rotate(180deg); filter: blur(2px); }
     }
 
+    /* Layer 5: Ambient Ki Sharpening Glints */
     @keyframes gbaScytherKiGlints {
-      0%, 35% { opacity: 0; transform: translateY(6px) scale(0.4); }
-      48%     { opacity: 1; transform: translateY(-4px) scale(1.15); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635); }
-      68%     { opacity: 0.9; transform: translateY(-14px) scale(1.0); filter: drop-shadow(0 0 10px #bef264); }
-      86%     { opacity: 0.5; transform: translateY(-24px) scale(0.80); }
-      100%    { opacity: 0; transform: translateY(-32px) scale(0.4); }
+      0%, 32% { opacity: 0; transform: translateY(6px) scale(0.4); }
+      45%     { opacity: 1; transform: translateY(-4px) scale(1.15); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635); }
+      65%     { opacity: 0.9; transform: translateY(-14px) scale(1.0); filter: drop-shadow(0 0 10px #bef264); }
+      84%     { opacity: 0.6; transform: translateY(-24px) scale(0.85); }
+      94%     { opacity: 0.2; transform: translateY(-30px) scale(0.55); filter: blur(1px); }
+      100%    { opacity: 0; transform: translateY(-34px) scale(0.3); filter: blur(2px); }
     }
 
     /* Screen / Card Telekinetic Distortion Shudder Tremor (Detonation Recoil @ 66%) */
@@ -878,7 +892,7 @@
     }
 
     // ==========================================
-    // SCYTHER SWORDS DANCE RENDERER (1.65s)
+    // SCYTHER SWORDS DANCE RENDERER (1.82s)
     // ==========================================
     function renderScyther(stageId, whiffed) {
       const stage = clearStage(stageId);
@@ -889,7 +903,7 @@
       
       const glow = document.createElement('div');
       glow.style.cssText = 'position:absolute;inset:0;border-radius:9999px;background:radial-gradient(ellipse 65% 55% at 50% 50%, rgba(254,240,138,0.50) 0%, rgba(163,230,53,0.30) 42%, rgba(34,197,94,0.08) 72%, transparent 100%);filter:blur(8px);animation:gbaScytherDanceFloorGlow cubic-bezier(0.2,0.9,0.28,1) forwards;';
-      applySpeed(glow, 1.65);
+      applySpeed(glow, 1.82);
       aura.appendChild(glow);
 
       // Concentric Expanding Shockwave Ripple 1 (Opening Pulse: 0.10s)
@@ -935,7 +949,7 @@
       // Concentric Expanding Shockwave Ripple 3 (Climax Cross-Lock Shockwave: 1.05s)
       const ripple3 = document.createElement('div');
       ripple3.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;animation:gbaScytherGroundRipple3 cubic-bezier(0.15,0.85,0.3,1) forwards;opacity:0;';
-      applySpeed(ripple3, 0.60);
+      applySpeed(ripple3, 0.75);
       ripple3.style.animationDelay = (1.05 / globalSpeed) + 's';
       ripple3.innerHTML = `
         <svg width="160" height="48" viewBox="0 0 160 48" style="overflow:visible;">
@@ -958,10 +972,10 @@
       actorWrap.style.cssText = `position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '78px' : '108px'};height:${whiffed ? '86px' : '118px'};pointer-events:none;z-index:30;`;
 
       if (!whiffed) {
-        // Pose 1 (002): High Scythe Lunge (0% - 34%)
+        // Pose 1 (002): High Scythe Lunge (0% - 32%)
         const pose1 = document.createElement('div');
         pose1.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:gbaScytherDanceActorA cubic-bezier(0.2,0.9,0.28,1) forwards;';
-        applySpeed(pose1, 1.65);
+        applySpeed(pose1, 1.82);
         const img1 = createResilientImg(
           ['assets/Scyther_SwordsDance_Actor_A.png', './assets/Scyther_SwordsDance_Actor_A.png', '/assets/Scyther_SwordsDance_Actor_A.png', '../public/assets/Scyther_SwordsDance_Actor_A.png'],
           'Scyther Pose 1',
@@ -971,10 +985,10 @@
         pose1.appendChild(img1);
         actorWrap.appendChild(pose1);
 
-        // Pose 2 (003): Weaving Lateral Spin Slash (20% - 56%)
+        // Pose 2 (003): Weaving Lateral Spin Slash (18% - 53%)
         const pose2 = document.createElement('div');
         pose2.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:gbaScytherDanceActorB cubic-bezier(0.2,0.9,0.28,1) forwards;opacity:0;';
-        applySpeed(pose2, 1.65);
+        applySpeed(pose2, 1.82);
         const img2 = createResilientImg(
           ['assets/Scyther_SwordsDance_Actor_B.png', './assets/Scyther_SwordsDance_Actor_B.png', '/assets/Scyther_SwordsDance_Actor_B.png', '../public/assets/Scyther_SwordsDance_Actor_B.png'],
           'Scyther Pose 2',
@@ -984,10 +998,10 @@
         pose2.appendChild(img2);
         actorWrap.appendChild(pose2);
 
-        // Pose 3 (004): High Cross-Guard Flourish (42% - 78%)
+        // Pose 3 (004): High Cross-Guard Flourish (38% - 74%)
         const pose3 = document.createElement('div');
         pose3.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:gbaScytherDanceActorC cubic-bezier(0.2,0.9,0.28,1) forwards;opacity:0;';
-        applySpeed(pose3, 1.65);
+        applySpeed(pose3, 1.82);
         const img3 = createResilientImg(
           ['assets/Scyther_SwordsDance_Actor_C.png', './assets/Scyther_SwordsDance_Actor_C.png', '/assets/Scyther_SwordsDance_Actor_C.png', '../public/assets/Scyther_SwordsDance_Actor_C.png'],
           'Scyther Pose 3',
@@ -997,10 +1011,10 @@
         pose3.appendChild(img3);
         actorWrap.appendChild(pose3);
 
-        // Pose 4 (005): Apex Primed Guard Stance (64% - 100%)
+        // Pose 4 (005): Apex Primed Guard Stance with Extended Sustain & Silky Ease-Out Dissolve (60% - 100%)
         const pose4 = document.createElement('div');
         pose4.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:gbaScytherDanceActorD cubic-bezier(0.2,0.9,0.28,1) forwards;opacity:0;';
-        applySpeed(pose4, 1.65);
+        applySpeed(pose4, 1.82);
         const img4 = createResilientImg(
           ['assets/Scyther_SwordsDance_Actor_D.png', './assets/Scyther_SwordsDance_Actor_D.png', '/assets/Scyther_SwordsDance_Actor_D.png', '../public/assets/Scyther_SwordsDance_Actor_D.png'],
           'Scyther Pose 4',
@@ -1014,8 +1028,8 @@
         // 1. Climax Crossed Blades Central Intersection Starburst (Center of the 2 Blades: 49%, 44%)
         const glintCross = document.createElement('div');
         glintCross.style.cssText = 'position:absolute;left:49%;top:44%;transform:translate(-50%,-50%);pointer-events:none;z-index:45;animation:gbaScytherCrossGlint ease-out forwards;opacity:0;';
-        applySpeed(glintCross, 0.38);
-        glintCross.style.animationDelay = (1.26 / globalSpeed) + 's';
+        applySpeed(glintCross, 0.46);
+        glintCross.style.animationDelay = (1.22 / globalSpeed) + 's';
         glintCross.innerHTML = `
           <svg width="22" height="22" viewBox="0 0 32 32" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #a3e635)">
             <polygon points="16,0 19,12 32,16 19,20 16,32 13,20 0,16 13,12" fill="#ffffff" />
@@ -1029,8 +1043,8 @@
         // 2. Left Blade Sheen Glint (Right on left blade cutting edge: 36%, 42%)
         const glintL = document.createElement('div');
         glintL.style.cssText = 'position:absolute;left:36%;top:42%;transform:translate(-50%,-50%);pointer-events:none;z-index:45;animation:gbaScytherBladeGlint ease-out forwards;opacity:0;';
-        applySpeed(glintL, 0.35);
-        glintL.style.animationDelay = (1.22 / globalSpeed) + 's';
+        applySpeed(glintL, 0.44);
+        glintL.style.animationDelay = (1.20 / globalSpeed) + 's';
         glintL.innerHTML = `
           <svg width="16" height="16" viewBox="0 0 24 24" style="overflow:visible;filter:drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #bef264)">
             <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
@@ -1042,8 +1056,8 @@
         // 3. Right Blade Sheen Glint (Right on right blade cutting edge: 61%, 42%)
         const glintR = document.createElement('div');
         glintR.style.cssText = 'position:absolute;left:61%;top:42%;transform:translate(-50%,-50%);pointer-events:none;z-index:45;animation:gbaScytherBladeGlint ease-out forwards;opacity:0;';
-        applySpeed(glintR, 0.35);
-        glintR.style.animationDelay = (1.30 / globalSpeed) + 's';
+        applySpeed(glintR, 0.44);
+        glintR.style.animationDelay = (1.26 / globalSpeed) + 's';
         glintR.innerHTML = `
           <svg width="16" height="16" viewBox="0 0 24 24" style="overflow:visible;filter:drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #bef264)">
             <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
@@ -1055,7 +1069,7 @@
         // Whiff: 2 muted poses without overlap that softly dissipate
         const poseW1 = document.createElement('div');
         poseW1.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:gbaScytherDanceActorWhiff1 ease-out forwards;';
-        applySpeed(poseW1, 1.65);
+        applySpeed(poseW1, 1.82);
         const imgW1 = createResilientImg(
           ['assets/Scyther_SwordsDance_Actor_A.png', './assets/Scyther_SwordsDance_Actor_A.png', '/assets/Scyther_SwordsDance_Actor_A.png', '../public/assets/Scyther_SwordsDance_Actor_A.png'],
           'Scyther Whiff 1',
@@ -1067,7 +1081,7 @@
 
         const poseW2 = document.createElement('div');
         poseW2.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;animation:gbaScytherDanceActorWhiff2 ease-out forwards;opacity:0;';
-        applySpeed(poseW2, 1.65);
+        applySpeed(poseW2, 1.82);
         const imgW2 = createResilientImg(
           ['assets/Scyther_SwordsDance_Actor_B.png', './assets/Scyther_SwordsDance_Actor_B.png', '/assets/Scyther_SwordsDance_Actor_B.png', '../public/assets/Scyther_SwordsDance_Actor_B.png'],
           'Scyther Whiff 2',
@@ -1085,7 +1099,7 @@
       
       const bladesInner = document.createElement('div');
       bladesInner.style.cssText = 'position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;animation:gbaScytherOrbitBlades cubic-bezier(0.25,0.85,0.35,1) forwards;transform-origin:center center;';
-      applySpeed(bladesInner, 1.65);
+      applySpeed(bladesInner, 1.82);
       bladesInner.innerHTML = `
         <svg width="0" height="0" style="position:absolute;">
           <defs>
@@ -1137,7 +1151,7 @@
         glints.forEach((g) => {
           const glEl = document.createElement('div');
           glEl.style.cssText = `position:absolute;left:calc(50% + ${g.x}px);top:calc(48% + ${g.y}px);transform:translate(-50%,-50%);pointer-events:none;z-index:40;animation:gbaScytherKiGlints ease-out forwards;opacity:0;`;
-          applySpeed(glEl, 1.65);
+          applySpeed(glEl, 1.82);
           glEl.style.animationDelay = (g.delay / globalSpeed) + 's';
           glEl.innerHTML = `
             <svg width="${g.s}" height="${g.s}" viewBox="0 0 16 16" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635)">

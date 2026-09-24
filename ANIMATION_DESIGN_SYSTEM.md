@@ -100,6 +100,16 @@ This document is the permanent, canonical design standard for all move animation
   3. **Tam Kart Genişliği ve Doğal Sahne Kırpması (Borderless Card-Width Span & Native Stage Clipping):** Sis, duman veya atmosferik aura kapsayıcısı ASLA kartın ortasına küçük bir kutu gibi (`width: 65%–80%`) oturtulamaz. Konteyner genişliği kartın tüm yatay sınırlarını aşacak şekilde (`width: 100%` veya `108%`, `left: 50%`, `transform: translate(-50%, -50%)`) ayarlanmalı; kart çerçevesinin kendi `overflow: hidden` ve `border-radius: 12px` kuralı doğal vizör görevi görmelidir. Böylece dumanın kenarları kart sınırları dışında kalarak havada yüzen "video penceresi" algısını tamamen yok eder.
   4. **Makro Ölçek Alt Sınırı Kuralı (Macro Scale Keyframe Floor $\ge 1.0$):** CSS keyframe animasyonlarında sis katmanına başlangıçta `scale(0.60)` gibi ufak ölçekler verilmesi, vignette uygulanmış kenarları kartın içine çekerek dikdörtgen çerçeveyi görünür kılar. Ölçek daima $1.0$ tabanında tutulmalı (`scale(1.0)` $\rightarrow$ `scale(1.15)`), görünürlük değişimi ise ölçek yerine doğrudan `opacity: 0` $\rightarrow$ `opacity: 1` $\rightarrow$ `opacity: 0` ile yönetilmelidir.
 
+### L. Feathered Ease-Out Dissolve vs. Abrupt Actor Pop-Out (Kademeli Dissolve Geçişi ve Ani Sahneden Kopma Yasağı)
+- **Ani Pop-Out / Kesilme Yasağı (Abrupt Cut-Off Prohibition):**
+  Bir animasyonun finalinde ekranda bulunan son stok görsel, silah veya apeks vuruş duruşu (örneğin Scyther *Swords Dance* Pose 4, Mewtwo *Psychic* tekillik sonrası vb.); animasyon süresinin son diliminde (örneğin %95 $\rightarrow$ %100 aralığında, <100ms içinde) aniden `%95` opaklıktan `%0`'a düşerek "pankart gibi ekrandan kesilip atılamaz". Bu ani yok oluş, animasyonun tokluk seviyesini düşürür, koreografinin bitiminde ham ve tamamlanmamış bir "pop-out" kusuru yaratır.
+- **Üç Aşamalı Kademeli Buharlaşma Standardı (Three-Phase Feathered Ease-Out Dissolve):**
+  Son aktör sahneden çekilirken toplam animasyon zarfının en az son **%10–12'lik dilimi (yaklaşık 180–220ms)** akışkan bir dissolve geçişine tahsis edilmelidir:
+  1. *Faz A — Yumuşak Odak Gevşemesi (Soft Defocus & Levitation: %89–%93):* Opaklık `%98` $\rightarrow$ `%70` seviyesine inerken, hafif bir yukarı doğru süzülme (`translateY(-1px)`) ve başlangıç odak bulanıklığı (`filter: blur(1.2px)`) devreye girer.
+  2. *Faz B — Ruhsal/Eterik Duman Süblimasyonu (Ethereal Ki Smoke Sublimation: %93–%97):* Opaklık `%70` $\rightarrow$ `%28` seviyesine geriler; Gaussian blur (`blur(2.5px)`) ve süzülme (`translateY(-2px)`) artarak aktör atmosferle bütünleşir.
+  3. *Faz C — Dikişsiz Tam Çözünme (Seamless Stage Dissolve: %97–%100):* Opaklık `%0`, `blur(4px)` ve `translateY(-3px)` ile aktör hiçbir görsel sıçrama veya sert sınır bırakmaksızın sahne zeminine emilir.
+- **Senkron Çevresel Sönümleme:** Dönen spektral bıçaklar, zemin auraları ve kıvılcımlar da aktörün bu 3 fazlı dissolve eğrisiyle milisaniyesi milisaniyesine senkronize biçimde yumuşayarak dağılmalıdır.
+
 ---
 
 ## 2. Motion Dynamics & Kinematics (The Anti-Idle Engine)
@@ -193,12 +203,23 @@ This document is the permanent, canonical design standard for all move animation
 - **Terminal Convergence (Son Nokta Birleşmesi):** Tüm parçacıkların son keyframe'i aynı koordinata (`translate(0px, 5px)`) converge olur. Bu, parçacıkların "hedefe yapıştığını" ve ana kütlenin parçası olduğunu anlatır.
 - **Freeze Dry FAZ5 doğrulaması:** `gbaFreezeDryShardRain` keyframe'i 6 shard'ı tek bir blokla sürer; her shard `--fd-shard-x/y/rot` ile parametrize edilir, 5 stop'ta (0%, 20%, 45%, 70%, 100%) yakınsak yörünge + tumble rotation + terminal convergence uygulanır. TSX L19063–19090, CSS L15565–15572. `npx tsc --noEmit` hatasız.
 
-### K. Zoetrope Dual-Pose Kinematics & Kinetic Alternation (Zootrop Çift Poz Kinematiği)
-- **Prensip ve Geleneksel Animasyon Mirası:** Kılıç dansları, hızlı çoklu kesikler, ritüel duruşları ve yakın dövüş hazırlıklarında (örneğin Scyther *Swords Dance*); tek bir durağan Ken Sugimori görselini 2D düzlemde çevirmek veya kaydırmak, yaşayan bir savaşçı hissi vermez. Bunun yerine, **aynı Pokémon'un iki veya daha fazla farklı otantik Ken Sugimori suluboya duruşu** (Poz A: savunma/bekleme duruşu $\leftrightarrow$ Poz B: saldırı/savurma duruşu) arasında yüksek frekanslı (<100ms) kademeli alternasyon (zoetrope) uygulanması; ara kare çizmeye gerek kalmaksızın klasik 1990'lar anime ekolüne sadık, optik ve dinamik bir kinetik hareket illüzyonu üretir.
-- **Üç Fazlı Ritmik Yapı (Three-Phase Ritual Cadence):**
-  1. *Faz 1 — Duruş ve Odaklanma (Stance Lock & Ki Charge: 0.0s – 0.45s):* Yalnızca Poz A görünürdür; hafif elastik nefes alma (`scale(0.98)` $\leftrightarrow$ `scale(1.02)`), zemin aurasının uyanışı ve taban şok halkası.
-  2. *Faz 2 — İvmelenen Zootrop Alternasyonu (Accelerating Kinetic Alternation: 0.45s – 1.15s):* Poz A ve Poz B arasında çapraz sönümlü (`opacity: 1/0`) yüksek hızlı geçişler. Geçiş periyotları sabit kalmaz, ivmelenir (180ms $\rightarrow$ 120ms $\rightarrow$ 80ms). Eş zamanlı olarak 3D uydu bıçak yörüngeleri (`gbaScytherOrbitBlades`) döner.
-  3. *Faz 3 — Doruk Kilitlenmesi ve Ki Parlaması (Climax Strike Lock & Ki Discharge: 1.15s – 1.65s):* Dans aniden Poz B'ye kilitlenir; uzuv uçlarında ve gövdede akkor SVG ki-parlamaları (`gbaScytherKiGlints`), merkezde vakum kesişi ve kart titreşimi patlar.
+### K. Zoetrope Multi-Pose Kinematics, Climax Sustain & Dissolve (Zootrop Çoklu Poz Kinematiği, Apeks Sustain & Sönümlenme)
+- **Prensip ve Geleneksel Animasyon Mirası:** Kılıç dansları, hızlı çoklu kesikler, ritüel duruşları ve yakın dövüş hazırlıklarında (örneğin Scyther *Swords Dance*); tek bir durağan Ken Sugimori görselini 2D düzlemde çevirmek veya kaydırmak, yaşayan bir savaşçı hissi vermez. Bunun yerine, **aynı Pokémon'un 4 farklı otantik Ken Sugimori suluboya duruşu** (Poz 1: yüksek atılma/açılış $\rightarrow$ Poz 2: yanal kılıç savurma $\rightarrow$ Poz 3: yüksek çapraz kalkan $\rightarrow$ Poz 4: apeks kilitlenme duruşu) arasında dinamik kademeli alternasyon (zoetrope) uygulanması; klasik 1990'lar anime ekolüne sadık, optik ve organik bir kinetik hareket illüzyonu üretir.
+- **Dört Fazlı Ritmik Yapı ve Apeks Sustain Penceresi (Four-Phase Ritual Cadence & Apex Sustain):**
+  1. *Faz 1 — Açılış Atılımı ve Taban Rezonansı (0.0s – 0.58s / %0–%32):* Yüksek Scythe atılımı (Poz 1) ile sahneye giriş; taban aurasının uyanışı ve 1. eşmerkezli şok halkası (`gbaScytherGroundRipple1 0.85s @ 0.10s`).
+  2. *Faz 2 — Yanal Burgu Kesişi (0.33s – 0.96s / %18–%53):* Yanal kılıç savurması (Poz 2) devreye girer; 3D yörüngeli spektral bıçaklar (`gbaScytherOrbitBlades 1.82s`) dönerek ivmelenir ve 2. rezonans dalgası (`0.85s @ 0.50s`) yayılır.
+  3. *Faz 3 — Yüksek Çapraz Kalkan (0.69s – 1.35s / %38–%74):* Kılıçlar göğüs hizasında çaprazlanarak son kinetik gerilim biriktirilir (Poz 3).
+  4. *Faz 4 — Apeks Kilitlenme, 3 Noktalı Glint Patlaması ve Sönümlenme (1.09s – 1.82s / %60–%100):* Poz 4'e kilitlenme; 3. zemin şok dalgası (`gbaScytherGroundRipple3 0.75s @ 1.05s`) ve 3 odaklı kılıç parıltıları patlar.
+- **Apeks Sustain Süresi Genişletmesi & Kural 2 (Anti-Idle) Uyumu:**
+  - Koreografinin bitimindeki çarpıcılığın net algılanabilmesi için son duruş (Poz 4) **%72'den %89'a kadar (~420ms)** ekranda sustain edilir. Bu süre toplam zarfın ~%23'ünü kapsar.
+  - **Kinetic Breathing Tension:** Sustain süresince aktör asla donmaz (%15 Kuralı); `%84` aralığında mikro-gerilim nefesi (`scale(1.06, 0.99)` ve `0.5px` titreme) ile yaşayan bir savaşçı gerilimi sergiler.
+- **3 Noktalı Kılıç Parıltı Geometrisi (Dedicated Glint Constellation):**
+  - Kılıç uçlarındaki ki-parlamaları jenerik parçacıklar yerine, pozun anatomisine kilitlenmiş 3 odak noktasından patlar:
+    1. *Merkezi Kesişim Yıldızı (`gbaScytherCrossGlint`):* İki kılıcın tam kesiştiği merkezde (`49%, 44%`) 4 kollu yıldız patlaması + 45° diyagonal ışık ışınları (`0.46s @ 1.22s`).
+    2. *Sol Kılıç Namlu Işıltısı (`gbaScytherBladeGlint`):* Sol kesici ağız üzerinde (`36%, 42%`) akkor yıldız (`0.44s @ 1.20s`).
+    3. *Sağ Kılıç Namlu Işıltısı (`gbaScytherBladeGlint`):* Sağ kesici ağız üzerinde (`61%, 42%`) kademeli akkor yıldız (`0.44s @ 1.26s`).
+- **Üç Aşamalı Feathered Ease-Out Dissolve (%89–%100):**
+  - %89'a kadar net odakla taşınan Poz 4; %89 $\rightarrow$ %93 (opaklık %70, `blur(1.2px)`, `translateY(-1px)`), %93 $\rightarrow$ %97 (opaklık %28, `blur(2.5px)`, `translateY(-2px)`), %97 $\rightarrow$ %100 (opaklık 0, `blur(4px)`, `translateY(-3px)`) ile sahadan pürüzsüzce buharlaşarak ayrılır (§1.L). Ani pop-out tamamen engellenir.
 - **Unicode Sembol Yasağı & Akkor Elmas Standardı:** Silah uçlarında parlayan ki/keskinlik ışıltılarında kesinlikle `✦` gibi unicode metin karakterleri kullanılamaz (§1.B). Parlamalar; 8 noktalı akkor sarı/beyaz SVG elmas yıldız (`<polygon points="8,0 10,6 16,8 10,10 8,16 6,10 0,8 6,6" fill="#fef08a" />`) ve merkezinde beyaz ışık küresi (`<circle cx="8" cy="8" r="2.5" fill="#ffffff" />`) ile inşa edilmelidir.
 
 ---
@@ -921,22 +942,35 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 - **D. Grimer Minimize: Amorf Gölet Çöküşü & Yüzey Gerilimi Dalgalanmaları (`grimer_minimize`, 1500ms):**
   - Düz elips yerine üç fazlı sıvı çöküşü: Eriyerek yayılan gölet (`gbaGrimerPuddleMelt 1.5s`), içine batan sıvılaşmış göz nodları, eşmerkezli çift yüzey gerilimi dalgası (`gbaGrimerMeltRipple1/2 1.5s`) ve evasive savunma buhar kalkanı (`gbaGrimerShieldAura 1.5s`).
 
-### 10.7 Vaka Çalışması: Scyther Kılıç Dansı (Swords Dance / Blade Dance Ritual) (`scyther_blade_dance`, 1650ms)
+### 10.7 Vaka Çalışması: Scyther Kılıç Dansı (Swords Dance / Blade Dance Ritual) (`scyther_blade_dance`, 1820ms)
 
-**Kaynak:** `BattleFXOverlay.tsx` L889 (dispatch `scyther_blade_dance`), L1283 (`getFXDuration` = 1650), L18621–18938 · `index.css` L3566–3730 · Görsel Varlıklar: `Scyther_SwordsDance_Actor_A.png`, `Scyther_SwordsDance_Actor_B.png`, `Scyther_SwordsDance_Actor_C.png`, `Scyther_SwordsDance_Actor_D.png`, `Scyther_Orbit_Blade.png`.
+**Kaynak:** `BattleFXOverlay.tsx` L889 (dispatch `scyther_blade_dance`), L1283 (`getFXDuration` = 1820), L18621–18938 · `index.css` L3566–3730 · Görsel Varlıklar: `Scyther_SwordsDance_Actor_A.png`, `Scyther_SwordsDance_Actor_B.png`, `Scyther_SwordsDance_Actor_C.png`, `Scyther_SwordsDance_Actor_D.png`, `Scyther_Orbit_Blade.png`.
 
 - **A. Zootrop Mantis Duruş Kinematiği (Zoetrope Pose Switching):**
   - **Sorun:** Tek bir durağan Scyther görseli, kılıç dansının agresif dövüş sanatları havasını yansıtmıyor; sağa-sola dönen tek parça çıkartma gibi duruyordu.
-  - **Mimari Çözüm:** Ken Sugimori'nin 4 farklı açılı orijinal duruşu (Poz A açılış/savunma duruşu, Poz B yanal savurma kesiği, Poz C çapraz kilit, Poz D doruk vuruşu) arasında yüksek frekanslı (<100ms) kademeli zootrop geçişi (`gbaScytherDanceActorA/B/C/D 1.65s`) uygulandı. Ara çizim olmadan optik hareket illüzyonu sağlandı (§2.K).
+  - **Mimari Çözüm:** Ken Sugimori'nin 4 farklı açılı orijinal duruşu (Poz 1 açılış lunge, Poz 2 yanal savurma kesiği, Poz 3 yüksek çapraz kalkan, Poz 4 apeks kilitlenme duruşu) arasında yüksek frekanslı (<100ms) kademeli zootrop geçişi (`gbaScytherDanceActorA/B/C/D 1.82s`) uygulandı. Ara çizim olmadan optik hareket illüzyonu sağlandı (§2.K).
 - **B. Merkezlenmiş 3D Yörünge Bıçakları (Centered 3D Spectral Orbit Blades):**
   - **Sorun:** Karusel benzeri dönen bıçaklar kartın merkezinden kayıyor veya yapay bir tekerlek gibi mekanik dönüyordu.
-  - **Mimari Çözüm:** Bıçaklar kartın tam merkezine kilitlenmiş `240px x 240px` bir alanda, 120° faz ayrımı ve `66px` yörünge yarıçapıyla konumlandırıldı (`gbaScytherOrbitBlades 1.65s`). Bıçakların kendi açısı (`rotate(-12deg)`) korunarak derinlikli bir hava girdabı oluşturuldu.
-- **C. Uzuv Ki-Işıltıları (Incandescent Ki-Glints) ve Unicode Arındırması:**
-  - `✦` gibi unicode metin karakterleri tamamen temizlendi; 8 noktalı akkor SVG elmas yıldızlar ve beyaz çekirdekler (`gbaScytherKiGlints 1.65s`) kullanılarak vuruş doruğunda keskin kılıç parlamaları elde edildi.
+  - **Mimari Çözüm:** Bıçaklar kartın tam merkezine kilitlenmiş `240px x 240px` bir alanda, 120° faz ayrımı ve `66px` yörünge yarıçapıyla konumlandırıldı (`gbaScytherOrbitBlades 1.82s`). Bıçakların kendi açısı (`rotate(-12deg)`) korunarak derinlikli bir hava girdabı oluşturuldu.
+- **C. %10 Süre Genişletmesi ve Apeks Sustain Penceresi (1650ms $\rightarrow$ 1820ms):**
+  - **Sorun:** Önceki implementasyonda Poz 4 ve kılıç parıltıları ekranda çok kısa kalıyor (~250ms), koreografinin sonundaki çarpıcılık oyuncu tarafından tam algılanamadan kayboluyordu.
+  - **Mimari Çözüm:** Toplam süre 1650ms'den **1820ms'ye (+%10.3)** genişletildi. Poz 4'ün tepe sustain penceresi **%72'den %89'a kadar (~420ms)** uzatıldı. Bu pencerede Kural 2 (Anti-Idle) gereği asla statik donma yaşanmaz; `%84` aralığında mikro-elastik gerilim (`scale(1.06, 0.99)` ve `0.5px` nefes titremesi) ile yaşayan dövüşçü tansiyonu korunur.
+- **D. Üç Odaklı Kılıç Parıltı Geometrisi (Dedicated 3-Point Glint Constellation):**
+  - Unicode sembol yasağına (§1.B) tavizsiz uyularak, kılıçların kesişim anatomisine kilitlenmiş 3 parıltı uygulandı:
+    1. *Merkezi Kesişim Yıldızı (`gbaScytherCrossGlint`):* İki kılıcın tam merkezinde (`49%, 44%`) 4 kollu akkor yıldız + 45° diyagonal ışınlar (`0.46s @ 1.22s`).
+    2. *Sol Namlu Işıltısı (`gbaScytherBladeGlint`):* Sol bıçak kesici ağzında (`36%, 42%`) parıldayan yıldız (`0.44s @ 1.20s`).
+    3. *Sağ Namlu Işıltısı (`gbaScytherBladeGlint`):* Sağ bıçak kesici ağzında (`61%, 42%`) kademeli parıldayan yıldız (`0.44s @ 1.26s`).
+- **E. Feathered Ease-Out Dissolve (Anti-Pop-Out Sönümlenme Geçişi):**
+  - **Sorun:** Animasyon sonunda Scyther %95'ten %100'e yalnızca 80ms içinde aniden silinerek yok oluyor, bu da animasyonun tokluk seviyesini düşürerek ham bir görüntü yaratıyordu.
+  - **Mimari Çözüm:** Üç aşamalı kademeli dissolve geçişi (%89–%100 / ~200ms) uygulandı (§1.L):
+    - `%89`: Opaklık 0.98, net odak (`blur(0px)`).
+    - `%93`: Opaklık 0.70, yumuşak odak gevşemesi (`blur(1.2px)`), hafif süzülme (`translateY(-1px)`).
+    - `%97`: Opaklık 0.28, eterik duman süblimasyonu (`blur(2.5px)`), süzülme (`translateY(-2px)`).
+    - `%100`: Opaklık 0, dikişsiz tam çözünme (`blur(4px)`). Dönen kılıçlar ve zemin aurası da eşzamanlı dissolve ile sönümlenir.
 
 ### 10.8 Vaka Çalışması: Mewtwo Psişik Tekillik & Volumetrik Eter (Mewtwo Psychic Singularity & Psionic Miasma) (`mewtwo_psychic`, 1750ms)
 
-**Kaynak:** `BattleFXOverlay.tsx` L491 (dispatch `mewtwo_psychic`), L1281 (`getFXDuration` = 1750), L21587–21740 · `index.css` L13316–13585 · Görsel Varlıklar: `Mewtwo_Psychic_Actor.png` (Tier 1 Apex `120px x 156px`), `Mewtwo_Psionic_Miasma_Anim.webp` (30 kare dikişsiz animasyonlu WebP dizisi, `Mewtwo_psionic_mist.mp4` kaynağından üretilmiş), `Mewtwo_Psionic_Miasma_Sheet.png`.
+**Kaynak:** `BattleFXOverlay.tsx` L491 (dispatch `mewtwo_psychic`), L1281 (`getFXDuration` = 1750), L21587–21740 · `GameEngine.ts` L2372–2380 · `index.css` L13316–13585 · Görsel Varlıklar: `Mewtwo_Psychic_Actor.png` (Tier 1 Apex `120px x 156px`), `Mewtwo_Psionic_Miasma_Anim.webp` (30 kare dikişsiz animasyonlu WebP dizisi, `Mewtwo_psionic_mist.mp4` kaynağından üretilmiş), `Mewtwo_Psionic_Miasma_Sheet.png`.
 
 - **A. Çift Kademeli İyonize Zemin Havuzu (Two-Tier Ground Ionization vs. CAD Wireframes):**
   - **Sorun:** Zemin aurası sert kenarlı eliptik bir kapsül gibi görünüyordu; CAD çizimi izlenimi veriyordu.
@@ -948,14 +982,16 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
   - **Sorun:** Video tabanlı psişik sis, kartın ortasında yüzen bir video penceresi gibi kare kenarlar gösteriyordu.
   - **Mimari Çözüm:** Dört kenar kosinüs karartmasıyla en dış pikseller `alpha = 0.000` değerine çekildi; sis konteyneri kartın tüm genişliğini kaplayacak şekilde (`width: 108%`) ölçeklendi ve kart sahnesinin `overflow: hidden` sınırları doğal vizör haline getirildi (§1.K).
   - İki katmanlı ters girdap paralaksı (`gbaMewtwoMistPlumeL 1.75s` ve `gbaMewtwoMistPlumeR 1.75s`) ile derinlikli volumetrik eter elde edildi.
-- **C. Telekinetik Havada Yükselme & Tekillik Çekirdeği:**
-  - 1996 Ken Sugimori Mewtwo aktörü üzerinde `gbaMewtwoPsychicActor 1.75s` ile havada süzülme kinematiği; göğüs hizasında yoğunlaşan psişik kara delik/tekillik çekirdeği (`gbaMewtwoSingularityCore`), odak yıldız patlaması (`gbaMewtwoShockCenterFlash`), 3 kademeli telekinetik darbe dalgaları (`gbaMewtwoPsychicShock`, `Shock2`, `Shock3`), uzay-zaman kırılma arkları (`gbaMewtwoPsionicFilament`) ve sağ avuçtan yükselen psiyonik buhar (`gbaMewtwoHandVapor`) ile donatıldı.
-- **D. Hasar Orantılı Yoğunluk Ölçeklendirmesi (Intensity & Impact Scaling Factor):**
-  - **Mekanizma:** Water Gun ve Hydro Pump modellerine benzer biçimde, rakip aktif Pokémon'a takılı her Enerji kartı başına +10 hasar artışı (`baseDamage = 10 + oppEnergyCount * 10`), görsel efekt motorunda `fxIntensity = 1.0 + max(0, baseDamage - 10) * 0.01` formülüyle ölçeklendirilir.
-  - **Görsel Yansıma:**
-    - `10 Hasar (1.0x Intensity - Stock):` Standart 4 yönlü mikro-deşarj kırılması, temiz akkor beyaz-fuşya şok dalgası, standart kart sarsıntısı.
-    - `30 Hasar (1.2x Intensity):` +20% şok dalgası kalınlığı ve ışık halesi, 6 yönlü kırılma arkı, genişleyen 3. kademe kavitasyon dalgası, şiddetli kart sarsıntısı (`gbaMewtwoCardShakeIntense`).
-    - `40+ Hasar (1.3x - 1.5x Intensity):` 8 yönlü çatallanan uzay-zaman çatlakları, çekirdek parlama ve lens florışı tepe noktası, derin ekran titreşimi.
+- **C. Telekinetik Havada Yükselme & Üç Kademeli Kinematik Şok Dalgaları:**
+  - 1996 Ken Sugimori Mewtwo aktörü üzerinde `gbaMewtwoPsychicActor 1.75s` ile havada süzülme kinematiği; göğüs hizasında yoğunlaşan psişik kara delik/tekillik çekirdeği (`gbaMewtwoSingularityCore`), odak yıldız patlaması (`gbaMewtwoShockCenterFlash`), uzay-zaman kırılma arkları (`gbaMewtwoPsionicFilament`) ve sağ avuçtan yükselen psiyonik buhar (`gbaMewtwoHandVapor`) inşa edildi.
+  - Şok dalgaları tek bir çember yerine 3 eşmerkezli organik darbe dalgasıyla (`gbaMewtwoPsychicShock`, `Shock2`, `Shock3`) hedefe doğru patlatıldı.
+- **D. Hasar Orantılı Yoğunluk Ölçeklendirmesi (Damage-Proportional Intensity & Impact Scaling):**
+  - **Mimari Entegrasyon:** `GameEngine.ts` L2372–2380 içinde rakibe takılı her enerji kartı başına artan hasar (`baseDamage = 10 + oppEnergyCount * 10`), görsel efekt motoruna aktarıldı:
+    $$\text{fxIntensity} = 1.0 + \max(0, \text{baseDamage} - 10) \times 0.01$$
+  - **Kademeli Görsel Çarpanlar:**
+    - *10 Hasar (1.0x Intensity — Temel Seviye):* 4 yönlü mikro deşarj iplikçiği, standart 130px şok dalgası, standart kart sarsıntısı.
+    - *30 Hasar (1.2x Intensity — 2 Enerjili Hedef):* +20% şok dalgası kontur kalınlığı ve parlama yarıçapı, 6 yönlü kırılma arkı, genişleyen 3. kademe kavitasyon dalgası, belirgin telekinetik kart sarsıntısı (`gbaMewtwoCardShakeIntense`).
+    - *40+ Hasar (1.3x – 1.5x Intensity — 3+ Enerjili Hedef):* 8 yönlü çatallanan uzay-zaman çatlakları, çekirdek akkor parlama tepe noktası, derin ekran ve kart titreşim genliği. Mekanizma Water Gun ve Hydro Pump mimarisiyle tam uyumludur (§3.E).
 
 ## 11. Karşılaştırma Tablosu ve Anti-Paternler
 
@@ -990,12 +1026,14 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 13. **Video Penceresi ve Yüzen Dikdörtgen Tuzağı (Floating Rectangular Video Cutout Anti-Pattern):** Video simülasyonundan aktarılan görsel varlıkların, kenarları kosinüs eğrisiyle yumuşatılmadan ve kart genişliğinden daha dar (`width < 100%`) bir konteyner içinde oynatılması; kartın ortasında yüzen bir "video oynatıcı penceresi" izlenimi uyandırır. Çözüm: 4 kenar kosinüs karartması + tam kart genişliği (`width: 100%` veya `108%`) + sahne `overflow: hidden` kırpması (§1.K).
 14. **Yassı Kapsül / CAD Zemin Çemberi Tuzağı (Flat Capsule / CAD Floor Outline Anti-Pattern):** Zemin aurası oluştururken `border: 1px solid rgba(...)`, düşük blur (`blur-sm` / 3px) ve `border-radius: 9999px` kullanmak; zemin enerjisi yerine yere atılmış plastik bir kablo veya teknik çizim ovali hissi verir. Çözüm: İki kademeli akkor radyal difüzyon havuzu (`blur(16px)` dış mor + `blur(8px)` iç akkor, `transparent 100%` sönümlenme) (§1.J).
 15. **Düşük Alfa Unmultiply Gürültü ve Fringe Tuzağı (Low-Alpha Black Noise Bleed):** Siyah arka plandan alfa kanalı ayıklanırken (unmultiply), videonun sıkıştırma artefaktlarından kaynaklanan çok düşük parlaklıktaki siyah/gri gürültülerin (`luma < 0.04`) filtrelenmeden bırakılması; şeffaf zeminde soluk gri-yeşil kenar pisliklerine yol açar. Çözüm: `smoothstep(0.04, 0.15, luma)` eşik filtrelemesi ve taban gürültü kesimi (§1.K).
+16. **Ani Kare Kesilmesi ve Sert Pop-Out Tuzağı (Abrupt Frame Cut-Off / Pop-Out Anti-Pattern):** Bir aktörün veya apeks vuruş karesinin animasyon biterken son <100ms içinde aniden `%95` opaklıktan `%0`'a kesilerek kaybolması, animasyonun tokluk seviyesini düşürür ve ham bir izlenim bırakır. Çözüm: Zarfın son %10–12'lik diliminde (180–220ms) aşamalı opaklık düşüşü, progresif Gaussian blur (`blur(1.2px) → blur(2.5px) → blur(4px)`) ve hafif süzülme (`translateY(-1px) → translateY(-3px)`) içeren 3 aşamalı feathered ease-out dissolve uygulanmalıdır (§1.L).
+17. **Hasar-Yoğunluk Ölçek Kopukluğu (Damage-Intensity Decoupling Anti-Pattern):** Bir saldırı motor düzeyinde değişken hasar verirken (örneğin Mewtwo *Psychic* rakip enerjisine bağlı olarak 10, 20, 30, 40+ hasar verirken), görsel efektin her hasar değerinde aynı standart şok dalgası ve aynı sarsıntı şiddetiyle oynaması. Çözüm: Hasar artışı doğrudan `fxIntensity` katsayısına (`1.0 + Math.max(0, baseDamage - 10) * 0.01`) bağlanmalı; şok dalgası kalınlığı, ışık halesi, ark dallanma sayısı ve kart sarsıntı genliği hasarla doğru orantılı olarak ölçeklenmelidir (§10.8.D).
 
 ## 12. Ayar Turu Protokolü (Tuning Protocol)
 
 Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 
-1. **Timing bütünlüğü:** Toplam süre, oyun motorunun bekleme penceresiyle uyumlu mu? Fazlar arası gecikmeler (delay zinciri) nedensellik okutuyor mu? (Leech Life: diş 0.25s → orb 0.3s+; Blizzard: 2120ms; Cloyster Clamp: 1550ms; Cloyster Spike Cannon: 1650ms; Scyther Blade Dance: 1650ms; Mewtwo Psychic: 1750ms tam envelope.)
+1. **Timing bütünlüğü:** Toplam süre, oyun motorunun bekleme penceresiyle uyumlu mu? Fazlar arası gecikmeler (delay zinciri) nedensellik okutuyor mu? (Leech Life: diş 0.25s → orb 0.3s+; Blizzard: 2120ms; Cloyster Clamp: 1550ms; Cloyster Spike Cannon: 1650ms; Scyther Blade Dance: 1820ms; Mewtwo Psychic: 1750ms tam envelope.)
 2. **Whiff senaryosu:** Her "sonuç" katmanı `fx.whiffed` koşuluyla kaldırılmış mı? Hareket katmanları kısaltılmış süreyle kalıyor mu?
 3. **Yön parametreleri:** Hedefe göre değişen tüm ofsetler tek custom property'den türetiliyor mu (`--drain-dy` modeli)? Kopya keyframe var mı?
 4. **Döngü kararlılığı:** `infinite` döngülerde negatif delay ile ilk karede steady state sağlanmış mı?
@@ -1007,6 +1045,7 @@ Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 10. **Doğrulama:** `npx tsc --noEmit` EXIT=0 ve ilgili Python test grubu tam geçiş.
 11. **Çerçevesiz Kenar Kontrolü (Borderless Vignette Check):** Sis/duman veya video varlıklarının 4 kenarında sert raster kesintisi veya "kutuda video" hissi var mı? Dört kenar kosinüs karartması ve kart genişliği tam örtüşü (`width: 100%–108%`) sağlandı mı? (§1.K)
 12. **Zemin Aurası Akkorluğu Kontrolü (Ground Aura Incandescence Check):** Tabanda sert `border`, düşük blur'lu kapsül veya yapay CAD ovalleri var mı? İki kademeli difüzyon havuzu (`blur(16px)` + `blur(8px)`) uygulandı mı? (§1.J)
+13. **Apeks Sustain ve Çıkış Dissolve Kontrolü (Apex Sustain & Exit Dissolve Check):** Son stok görsel veya vuruş karesi oyuncunun algılayabileceği toklukta ekranda sustain edildi mi? Animasyon biterken aktör birdenbire ekrandan kesilip fırlatıldı mı (pop-out), yoksa en az 180–220ms'lik yumuşak feathered ease-out dissolve ile sahneye yedirildi mi? (§1.L)
 
 ## 13. Revizyon Geçmişi
 
@@ -1019,4 +1058,5 @@ Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 | 5 | 2026-09-24 | §10.5.C Cloyster Clamp CSS transform ezme (override) hatası ve merkezleme çözümü (Anti-patern #12 eklendi): Eşmerkezli su şok halkaları ve darbe flaşı keyframe'lerine `translate(-50%, -50%)` eklenerek sağ-alta kayma giderildi; baloncuk ve spreyler iki katmanlı (konumlandırma + animasyon) wrapper ayrımı ile merkezlendi. §10.5.D Shellder Supersonic: Başarılı kafa vuruşunda (`!fx.whiffed`) kart yüzeyini hipnotik şekilde dalgalandıran `z-[5]` seviyesinde odak bulanıklaşması (`card-fx-block-overlay`, `gbaConfuseCardBlur 1.65s`) eklendi, ses dalgaları net korundu. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_cloyster_animations.py` 100% PASS |
 | 6 | 2026-09-24 | §10.6 Grimer & Muk Toksik Balçık ve Sıvı Dinamiği Modernizasyonu: Muk Sludge için 1996 Ken Sugimori suluboya stok varlığı (`Muk_Sludge_Actor.png`, 114px, Tier 1 Apex), kaynayan bataklık taban aurası, yükselen çok loblu balçık tsunamisi ve kavitasyon asit baloncukları (1750ms); Grimer Nasty Goo için yapay dikdörtgenler kaldırılarak Bézier sıvı boyunlaşması (necking), yerçekimli damla kopması (pinch-off) ve zemin taç sıçramaları (1550ms); Grimer Sticky Hands için bağımsız FX tipi (`grimer_sticky_hands`, 1650ms), ikili amorf mor balçık kol kıskacı, gerilen mukus lifleri ve felç kıvılcımları; Grimer Minimize için amorf gölet çöküşü ve eşmerkezli yüzey gerilimi dalgalanmaları (1500ms) implemente edildi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_grimer_muk_animations.py` 35/35 PASS |
 | 7 | 2026-09-24 | §10.7 Scyther Blade Dance (4-Fazlı Zootrop Mantis duruş alternasyonu, 3D merkezli yörünge bıçakları, akkor elmas ki-parlamaları, 1650ms) ve §10.8 Mewtwo Psychic (Çift kademeli akkor iyonize taban, 30-karelik çerçevesiz akışkan psişik eter, ters girdap paralaksı, telekinetik yükselme ve tekillik çekirdeği, 1750ms) vaka analizleri eklendi. §1.J (Zemin aurası ve yassı kapsül yasağı), §1.K (Çerçevesiz VFX & video penceresi illüzyonunu kırma) ve §2.K (Zootrop çift poz kinematiği) anayasaya işlendi. Anti-patern #13 (Video penceresi tuzağı), #14 (Yassı kapsül tuzağı) ve #15 (Düşük alfa unmultiply gürültüsü) ile Ayar Turu #11 ve #12 maddeleri eklendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_scyther_mewtwo_animations.py` 33/33 PASS · `python scratch/test_grimer_muk_animations.py` 35/35 PASS |
+| 8 | 2026-09-24 | §10.7 Scyther Blade Dance süresi 1820ms'ye (+%10.3) genişletildi, Poz 4 apeks kilitlenme sustain penceresi ~420ms'ye (%72–%89) çıkarıldı; Kural 2 (Anti-Idle) uyumlu mikro-elastik tansiyon nefesi (`scale(1.06, 0.99)`), 3 odaklı kılıç parıltı geometrisi (merkezi starburst 0.46s @ 1.22s, sol namlu 0.44s @ 1.20s, sağ namlu 0.44s @ 1.26s) ve 3 aşamalı feathered ease-out dissolve (%89–%100, blur 0px→4px) ile ani pop-out tamamen engellendi. §10.8 Mewtwo Psychic'e GameEngine hasar orantılı yoğunluk ölçeklendirme formülü (`fxIntensity = 1.0 + max(0, baseDamage - 10) * 0.01`) ve 3 kademeli kinematik psişik şok dalgaları entegre edildi. §1.L (Feathered Ease-Out Dissolve) ve §2.K (Zootrop çoklu poz & sustain kinematiği) kanonlaştırıldı. Anti-patern #16 (Pop-out tuzağı), #17 (Hasar-yoğunluk kopukluğu) ve Ayar Turu #13 eklendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_scyther_mewtwo_animations.py` 40/40 PASS |
 

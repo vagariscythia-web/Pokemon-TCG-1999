@@ -1281,7 +1281,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'mewtwo_psychic':
       return 1750;
     case 'scyther_blade_dance':
-      return 1650;
+      return 1820;
     case 'mewtwo_barrier':
       return 1600;
     case 'mr_mime_meditate':
@@ -18617,7 +18617,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 46c. SCYTHER BLADE DANCE (Scyther Swords Dance - 4-Phase Cinematic Ritual & Centered Spectral Blades — 1.65s) */}
+      {/* 46c. SCYTHER BLADE DANCE (Scyther Swords Dance - 4-Phase Cinematic Ritual & Centered Spectral Blades — 1.82s) */}
       {fx.type === 'scyther_blade_dance' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Layer 1: Ambient Card Floor Atmosphere Glow & Concentric Expanding Shockwave Ripples */}
@@ -18637,7 +18637,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(254,240,138,0.50) 0%, rgba(163,230,53,0.30) 42%, rgba(34,197,94,0.08) 72%, transparent 100%)',
                 filter: 'blur(8px)',
-                animation: 'gbaScytherDanceFloorGlow 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards'
+                animation: 'gbaScytherDanceFloorGlow 1.82s cubic-bezier(0.2, 0.9, 0.28, 1) forwards'
               }}
             />
 
@@ -18687,7 +18687,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div
               className="absolute inset-0 flex items-center justify-center pointer-events-none"
               style={{
-                animation: 'gbaScytherGroundRipple3 0.60s cubic-bezier(0.15, 0.85, 0.3, 1) 1.05s forwards',
+                animation: 'gbaScytherGroundRipple3 0.75s cubic-bezier(0.15, 0.85, 0.3, 1) 1.05s forwards',
                 opacity: 0
               }}
             >
@@ -18721,7 +18721,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 {/* Pose 1 (002): High Scythe Lunge & Opening Dance Stance (0% - 34%) */}
                 <div
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ animation: 'gbaScytherDanceActorA 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
+                  style={{ animation: 'gbaScytherDanceActorA 1.82s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
                 >
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_A.png"
@@ -18733,7 +18733,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 {/* Pose 2 (003): Weaving Lateral Spin Slash (20% - 56%) */}
                 <div
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ animation: 'gbaScytherDanceActorB 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
+                  style={{ animation: 'gbaScytherDanceActorB 1.82s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
                 >
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_B.png"
@@ -18745,7 +18745,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 {/* Pose 3 (004): High Cross-Guard Flourish (42% - 78%) */}
                 <div
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ animation: 'gbaScytherDanceActorC 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
+                  style={{ animation: 'gbaScytherDanceActorC 1.82s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
                 >
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_C.png"
@@ -18754,10 +18754,10 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   />
                 </div>
 
-                {/* Pose 4 (005): Apex Primed Guard Stance (64% - 100%) */}
+                {/* Pose 4 (005): Apex Primed Guard Stance with Extended Sustain & Silky Ease-Out Dissolve (60% - 100%) */}
                 <div
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ animation: 'gbaScytherDanceActorD 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
+                  style={{ animation: 'gbaScytherDanceActorD 1.82s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
                 >
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_D.png"
@@ -18774,7 +18774,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     left: '49%',
                     top: '44%',
                     transform: 'translate(-50%, -50%)',
-                    animation: 'gbaScytherCrossGlint 0.38s ease-out 1.26s forwards',
+                    animation: 'gbaScytherCrossGlint 0.46s ease-out 1.22s forwards',
                     opacity: 0
                   }}
                 >
@@ -18795,7 +18795,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     left: '36%',
                     top: '42%',
                     transform: 'translate(-50%, -50%)',
-                    animation: 'gbaScytherBladeGlint 0.35s ease-out 1.22s forwards',
+                    animation: 'gbaScytherBladeGlint 0.44s ease-out 1.20s forwards',
                     opacity: 0
                   }}
                 >
@@ -18812,7 +18812,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     left: '61%',
                     top: '42%',
                     transform: 'translate(-50%, -50%)',
-                    animation: 'gbaScytherBladeGlint 0.35s ease-out 1.30s forwards',
+                    animation: 'gbaScytherBladeGlint 0.44s ease-out 1.26s forwards',
                     opacity: 0
                   }}
                 >
@@ -18827,7 +18827,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <>
                 <div
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ animation: 'gbaScytherDanceActorWhiff1 1.65s ease-out forwards' }}
+                  style={{ animation: 'gbaScytherDanceActorWhiff1 1.82s ease-out forwards' }}
                 >
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_A.png"
@@ -18837,7 +18837,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 </div>
                 <div
                   className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                  style={{ animation: 'gbaScytherDanceActorWhiff2 1.65s ease-out forwards', opacity: 0 }}
+                  style={{ animation: 'gbaScytherDanceActorWhiff2 1.82s ease-out forwards', opacity: 0 }}
                 >
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_B.png"
@@ -18863,7 +18863,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div
               className="relative w-full h-full flex items-center justify-center"
               style={{
-                animation: 'gbaScytherOrbitBlades 1.65s cubic-bezier(0.25, 0.85, 0.35, 1) forwards',
+                animation: 'gbaScytherOrbitBlades 1.82s cubic-bezier(0.25, 0.85, 0.35, 1) forwards',
                 transformOrigin: 'center center'
               }}
             >
@@ -18924,7 +18924,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 left: `calc(50% + ${glint.x}px)`,
                 top: `calc(48% + ${glint.y}px)`,
                 transform: 'translate(-50%, -50%)',
-                animation: `gbaScytherKiGlints 1.65s ease-out ${glint.delay} forwards`,
+                animation: `gbaScytherKiGlints 1.82s ease-out ${glint.delay} forwards`,
                 opacity: 0
               }}
             >
