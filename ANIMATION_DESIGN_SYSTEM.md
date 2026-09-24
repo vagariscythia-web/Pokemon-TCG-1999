@@ -752,11 +752,13 @@ Her stok görsel üretim prompt'u aşağıdaki 5 bloğu bu sırayla içerir:
 4. **POSE / COMPOSITION:** Animasyon katmanları için tasarlanır (§9.D): savaş ölçeğinde (~180px) okunur silüet (geniş V kanat açıklığı, net kafa/kuyruk), efekt yayın noktalarının (kanat kenarı, kuyruk ucu, pençe) keyframe'lerle hizalanması ve karakterin bedensel bütünlüğünün korunması (yalnız fırlatılan nesne değil, Pokémon'un kendisi görünür).
 5. **STRICTLY FORBIDDEN:** Önceki üretim turlarında gözlenen her sapma kalıcı bir negatif kısıta dönüşür ("no glowing eyes", "no black-dominant wings", "no brown beak"). Negatif blok, pozitif checklist kadar bağlayıcıdır.
 
+<!-- [PASİFİZE EDİLDİ - Kullanıcı Talimatı: Prompt üretim sürecini hantallaştırmaması için geçici olarak yoruma alındı]
 ### B. Canon Verification Protocol (Kanon Doğruluk Protokolü)
 - Prompt yazılmadan önce tür anatomisi **Bulbapedia Biology wikitext** üzerinden doğrulanır (`action=parse&prop=wikitext&section=1`); model hafızasına asla güvenilmez.
 - Üretim sonrası görsel, resmi artwork ile görsel dife tabi tutulur; sapmalar üç sütunlu tabloda kaydedilir: *gözlenen hata → kanon gerçek → prompt karşılığı*.
 - Renk adları tek başına yeterli değildir: ton (pale sky blue ≠ indigo), yüzey (wing front ≠ wing backing) ve oran (~%70 yellow) birlikte belirtilir.
 - Kullanıcının referans-görsel slotunu kullanmadığı turlarda bile checklist + negatif blok metin düzeyinde anatomi kilidi sağlar; prompt seti o turda kullanılmış olmasa dahi **toolset referansı** olarak saklanır ve gelecek istemlere şablonluk eder.
+-->
 
 ### C. Iteration & User Edit Loop (Yineleme ve Kullanıcı Düzenleme Döngüsü)
 - v1 çıktının sapması beklenen durumdur; revizyon döngüsü: sapma tablosu → v2 prompt (negatif kısıtlar genişletilmiş).
@@ -822,22 +824,95 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 - **F. SVG diş geometrisi — simetrik path çiftleri:** Üst dişler aşağı, alt dişler yukarı bakan kuadratik bezier path'leridir (`Q` komutları); her dişin içine ince kırmızı damar çizgisi (`stroke="#f87171"`, opacity 0.75) eklenmiştir. Üst ve alt SVG'ler ayrı `viewBox`'larda tanımlanır ve `drop-shadow` ile kırmızı glow alır — harici görsel varlık kullanılmaz, tüm geometri inline SVG'dir.
 - **G. Renk anlatısı:** Faz A kırmızı/kızıl (ısırık, kan), Faz B'nin orb'ları yine kızıl ama beyaz çekirdekli (yaşam özü), replenish bloğu ise zümrüt yeşiline döner (`gbaZubatReplenish`). Renk geçişi "kızıl = alınan yaşam → yeşil = kazanılan HP" semantiğini izleyiciye kelimeler olmadan iletir.
 
+### 10.4 — Articuno Blizzard: Bench Hasarı Ayrıştırması (`moveFxType`), Z-Index Derinliği, Kristal Hançer Parlaklığı ve Kinematik Süre Kalibrasyonu (2120ms)
+
+**Kaynak:** `BattleFXOverlay.tsx` L1264 (`getFXDuration = 2120`), L19802–20085 · `GameBoard.tsx` L766–787 (bench loop) & L1383, L1818, L4741, L4994 (`playAttackFX` çağrı noktaları) · `index.css` L16067–16155 & L16213–16238.
+
+- **A. Bench Hasarının Aktif Savunma Kalkanından Ayrıştırılması (`moveFxType` İlkesi):**
+  - **Sorun:** Aktif savunmacı Pokémon (örn. Kakuna "Stiffen", Alakazam "Barrier", Mr. Mime "Invisible Wall") kalkan korumasındayken, `isBlocked: true` durumu nedeniyle `playAttackFX` çağrısında `fxType: 'barrier'` aktarılıyordu. Bu durum, `playAttackFX` içerisindeki `benchHits` döngüsünde tüm yedek Pokémon'ların da (`hit.benchIndex`) Blizzard fırtınası yerine Kakuna'nın altıgen altın kalkanını render etmesine yol açıyordu.
+  - **Mimari Çözüm:** `playAttackFX` arayüzüne `moveFxType?: ActiveFX['type']` parametresi eklendi. Aktif hedefe savunma kalkanı oynatılsa bile (`spec.fxType === 'barrier'`), bench vuruşları için `actualMoveType = spec.moveFxType || ...` kuralıyla orijinal saldırı türü (`articuno_blizzard`) korundu. Böylece bench'teki Pokémon'lar, aktif savunanın engellemesinden bağımsız olarak her zaman doğru alan etkisini (Blizzard Frost Scatter) alır.
+- **B. Kromatik & Işıma Maskelemesini Kırma (Kristal Hançerler & Frost Veil):**
+  - **Sorun (Luminance Masking):** Stok raster aktör (`Articuno_raw_edited.png`, 168px / Apex Tier 1) `z-26` seviyesinde yer alırken; aktörün devasa opak kütlesi (~5,000 px²) ve geniş camgöbeği ışıması (`drop-shadow 18px`), önündeki ince rüzgâr çizgilerini ve minik buz kırıklarını görsel olarak yutuyordu.
+  - **Kristal Hançer Mimarisi (Crystal Daggers):** Aktif kart üzerindeki kırıklar %55 büyütülerek 13x26px çok yüzeyli hançerlere dönüştürüldü (`points="6,0 11,8 9,28 3,28 1,8"`, akkor beyaz omurga `#ffffff`, camgöbeği yansıma `#7dd3fc` ve koyu cerulean `#0284c7` kontur). Üçlü akkor ışıma (`drop-shadow 8px #fff, 14px #38bdf8, 20px #0284c7`) ile aktörün gövdesi üzerinde kristal parlaklık sağlandı. Yedek kartlar (bench) ise estetik karmaşayı önlemek için kompakt 8x16px ölçeğinde korundu.
+  - **Frost Veil Kontrast Ayırıcı (z-28):** Aktör ile ön plan fırtınası arasına yerleştirilen yarı şeffaf rime filmi (`rgba(240,249,255,0.48)`, `backdrop-filter: blur(0.8px)`), Articuno'nun tüyleri üzerine hafif buğulu bir zemin sererek önündeki 7 kollu kalın rüzgâr akımının (4.2px) ve hançerlerin kontrastını en üst düzeye çıkardı.
+- **C. Ön Plan Fırtına ve Z-Index Hiyerarşisi (Aktörün Önünde Süpürme):**
+  - Fırtına sis kütlesi (Haze `z-32`), 7 kollu rüzgâr akımları (Vortex `z-34`), kristal hançerler (Scatter & Embed `z-36`) ve kar kristalleri (Snowflakes `z-38`) aktörün **ÖNÜNDE** süpürülür.
+  - Bu hiyerarşi, aktörün arkasında kaybolan fırtına elemanlarını tam görünür kılarak aktif kart üzerindeki vuruş hissini ve derinlik algısını en üst düzeye çıkarır.
+- **D. İkinci %10 Süre Genişletmesi ve Bench Senkronizasyonu (1925ms $\rightarrow$ 2120ms):**
+  - Aktif kart fırtınasının akıcılığı ve kristal sönümün pürüzsüzleşmesi için animasyon süresi %10.1 artırılarak 2120ms'ye genişletildi.
+  - `GameBoard.tsx` içerisindeki bench vuruş gecikmesi (`delayMs = 240 + Math.min(benchIndex, 4) * 110`) uyarınca 3 yedekli bir tahtada Bench #3 vuruşu 570ms'de başlar ve 1550ms sürer (`570 + 1550 = 2120ms`). Böylece aktif fırtına finali ile son bench vuruşu milisaniyesine aynı anda tamamlanır.
+  - Rule 6 uyarınca `getFXDuration('articuno_blizzard')` dönüşü `2120` olarak ayarlandı ve bileşenler bu envelope'a hizalandı:
+    - Articuno Wing Spread / Whiff: `2.12s` (FAZ9 10 duraklı süzülme ve oturma)
+    - Frost Veil: `1.95s` + `0.17s` delay = `2.12s`
+    - Storm Haze & 7-Stream Wind Vortex: `2.08s`
+    - Scatter Crystal Daggers: `1.42s` + max `0.70s` delay = `2.12s`
+    - Embed Crystal Daggers: `1.42s` + max `0.70s` delay = `2.12s`
+    - Crystalline Snowflakes: `1.36s` + max `0.75s` delay = `2.11s` $\le$ `2120ms`
+    - Bench Frost Burst: `1.55s` (değiştirilmeden korundu)
+
+### 10.5 — Cloyster: Clamp (Bilateral Hydro-Jets & Kavitasyon) ve Spike Cannon (Spiked Torpedo Shell Drill)
+
+**Kaynak:** `BattleFXOverlay.tsx` L1120 (`getFXDuration` cloyster_clamp = 1550, cloyster_spike_cannon = 1650), L17252–17355 · `index.css` L2983–3118 · Görsel Varlıklar: `Cloyster_Clamp_Maw.png` ve `Cloyster_Spike_Cannon.png` (Ham varlık kökeni: `public/assets/raw/Cloyster_raw_edited_001.png`, 1024x978 sıkı kırpılmış).
+
+- **A. Clamp Çevresel Efekt Yoksunluğunun Çözümü (Bilateral Hydro-Jets & Cavitation):**
+  - **Sorun:** Mevcut Clamp animasyonu yalnızca bivalve kabuğun morfolojik kapanmasından ibaretti; su temalı derinlik ve immersion efektleri bulunmuyordu.
+  - **Mimari Çözüm:** 5 katmanlı hidrolik deniz kapanı mimarisi kuruldu:
+    - *Katman 1 (Zemin):* `gbaCloysterAbyssalFloor` (1.55s) ile kartı kaplayan koyu okyanus çukuru aurası ve şok dalgası.
+    - *Katman 2 (Aktör):* `Cloyster_Clamp_Maw.png` üzerinde FAZ kinematik eğrisi (0.32s anticipation $\rightarrow$ 0.46s şiddetli hidrolik kapanma $\rightarrow$ 0.56s/0.68s çift elastik shudder tremor).
+    - *Katman 3 (Darbe & Şok):* Akkor beyaz hidrolik flaş ve çift eşmerkezli cerulean su halkaları (`gbaCloysterHydroRingInner` / `Outer`).
+    - *Katman 4 (Püskürme & Kavitasyon):* Kabuk kapandığı anda sıkışan suyun iki yana fışkırdığı iki yönlü su jetleri (`gbaCloysterHydroJetLeft` & `Right`) ve 8 adet parlayan kavitasyon baloncuk kümesi (`gbaCloysterBubblePop`).
+    - *Katman 5 (Sönümlenme):* Deniz sisi ve su damlası zerreleri (`gbaCloysterSprayDrift`).
+- **B. Spike Cannon Spiked Torpedo Drill Mimarisi:**
+  - **Sorun:** Küçük ve zayıf 4 SVG konisi, Cloyster'ın elmas sertliğindeki kabuk ağırlığını ve balistik gücünü hissettirmiyordu.
+  - **Mimari Çözüm:** Ken Sugimori otantik suluboya estetiğinde üretilen `Cloyster_Spike_Cannon.png` (Tier 1 standart 114px) aktörü kullanılarak "Spiked Shell Torpedo Cannonball" atağı oluşturuldu:
+    - Cloyster geriye çekilip su jeti tahriki toplar (0–0.18s), 740° dönerek bir burgu mermisi gibi fırlar (0.18–0.48s), hedefe şiddetli bir gülle gibi çarpar ve geri teper (0.48–0.68s).
+    - Çarpma anında hem kavitasyon şok dalgası patlar hem de gövdeden 6 adet kalsifiye prizmatik deniz kabuğu dikeni fırlayarak karta saplanır (4 Embed tip-first impaling + 2 Scatter shearing shards §T).
+- **C. CSS Keyframe Transform Ezme Tuzağı & Merkezleme Çözümü (Transform Composition Anti-Pattern):**
+  - **Sorun:** Inline stilde `transform: translate(-50%, -50%)` verilen bir elemente, `@keyframes` içinde doğrudan `transform: scale(...)` uygulandığında; CSS spesifikasyonu gereği keyframe animasyonu elementin inline transform tanımını tamamen ezer. Bu durum, Cloyster Clamp'in darbe flaşı ve eşmerkezli su şok halkalarının (`gbaCloysterHydroRingInner`/`Outer`) sol-üst köşesini `(50%, 48%)` noktasına kilitleyerek halkanın merkezini 48–56px sağ-alta kaydırmıştır.
+  - **Mimari Çözüm:**
+    1. Keyframe adımlarının tümünde `transform: translate(-50%, -50%) scale(...)` bileşimi zorunlu kılınarak mutlak merkezleme korundu.
+    2. Dağılan kavitasyon baloncukları ve su damlacıklarında ise iki katmanlı wrapper mimarisine geçildi: Dış div yalnızca statik koordinat konumlandırmasını (`transform: translate(calc(-50% + ${x}), calc(-50% + ${y}))`), iç div ise yalnızca keyframe animasyonunu (`animation: gbaCloysterBubblePop`) üstlenir.
+- **D. Shellder Supersonic: Z-Index 5 Confusion Card Blur İlkesi:**
+  - Supersonic başarılı olduğunda (`!fx.whiffed`), rakip kart yüzeyinde hipnotik odak bulanıklaşması (`card-fx-block-overlay`, `gbaConfuseCardBlur 1.65s`) devreye sokuldu.
+  - Efekt `z-[5]` seviyesinde tutularak akustik basınç (`z-10`) ve ön plan suluboya ses dalgalarının (`z-30`) arkasında konumlandırıldı. Böylece kart yüzeyi rüya gibi dalgalanırken, ses dalgaları ve parçacıklar jilet gibi keskin ve net kaldı. Iska/tura durumunda (`fx.whiffed`) blur bastırılır.
+
+### 10.6 Vaka Çalışması: Grimer & Muk Toksik Balçık & Sıvı Dinamiği (Muk Sludge, Grimer Nasty Goo, Sticky Hands, Minimize)
+
+- **A. Muk Sludge Deluge: 1996 Ken Sugimori Tier 1 Apex Stok Varlık Mimarisi (`muk_sludge_deluge`, 1750ms):**
+  - **Katman 1 (z-15):** Kaynayan zehirli bataklık taban aurası (`gbaMukSludgeFloor 1.75s`), kart zemininde derin mor/lacivert kütle.
+  - **Katman 2 (z-25):** Otantik 1996 Ken Sugimori suluboya Muk stok görseli (`Muk_Sludge_Actor.png`, Tier 1 Apex `114px x 82px`), kart tabanından iki kolunu iki yana açarak kabaran devasa kütle (`gbaMukSludgeActorSurge 1.75s`).
+  - **Katman 3 (z-30):** Çok loblu, derin mor gradyanlı (`#3b0764` $\rightarrow$ `#c084fc`) ve asit yeşili/açık lila köpük çizgili akışkan tsunami dalgası (`gbaMukDelugeSurge 1.75s`).
+  - **Katman 4 (z-35):** Balistik balçık sıçrama topakları (`gbaMukSludgeGlob 1.25s`), yöne bağlı custom property'lerle (`--glob-x`, `--glob-y`) havaya fırlayan asimetrik damlalar.
+  - **Katman 5 (z-40):** Şişip patlayan kavitasyon asit baloncukları (`gbaMukToxicBubble 1.75s`) ve kartı saran zümrüt asit dumanı buharlaşması (`gbaMukAcidSizzle 1.75s`).
+- **B. Grimer Nasty Goo: Gerçek Sıvı Dinamiği (Fluid Necking, Pinch-Off Droplets & Splatter Crowns) (`grimer_nasty_goo`, 1550ms):**
+  - Yapay dikdörtgen kutular tamamen terk edildi.
+  - **Viskoz Boyunlaşma (Necking):** Ana balçık loblarına bağlı 3 organik Bézier iplikçiği (`gbaGrimerNeckingThread 1.55s`) yerçekimiyle uzar, incelir ve kopma anında geri büzülür.
+  - **Damla Kopması (Pinch-Off):** Teardrop SVG geometrisine sahip 3 bağımsız sıvı damlası (`gbaGrimerPinchDrop1/2/3 1.55s`) ivmelenerek kart tabanına düşer.
+  - **Taban Taç Sıçraması (Floor Splatter Crown):** Damlaların yere temas anında (`~65–75%`) tabanda yatay yayılan balçık sıçramaları (`gbaGrimerFloorSplat 1.55s`) patlar.
+- **C. Grimer Sticky Hands: İkili Amorf Mor Balçık Kol Kıskacı (`grimer_sticky_hands`, 1650ms):**
+  - Zeytin yeşili yapay kollar kaldırıldı; Grimer kanon mor paleti (`#3b0764` $\rightarrow$ `#a855f7`) uygulandı.
+  - Kartın iki yanından uzanan iki amorf balçık kolu (`gbaStickyArmLungeL`/`R 1.65s`) ortada birleşir, temas anında elastik titreşim (`gbaStickyClampTremor 1.65s`) ve çekilme mukus lifleri (`gbaStickyTendrilSnap 1.65s`) devreye girer.
+  - Başarılı kafa vuruşunda (`!fx.whiffed`) kart üzerinde statik felç kıvılcımları (`gbaStickyParalysisSpark 0.6s`) çakar.
+- **D. Grimer Minimize: Amorf Gölet Çöküşü & Yüzey Gerilimi Dalgalanmaları (`grimer_minimize`, 1500ms):**
+  - Düz elips yerine üç fazlı sıvı çöküşü: Eriyerek yayılan gölet (`gbaGrimerPuddleMelt 1.5s`), içine batan sıvılaşmış göz nodları, eşmerkezli çift yüzey gerilimi dalgası (`gbaGrimerMeltRipple1/2 1.5s`) ve evasive savunma buhar kalkanı (`gbaGrimerShieldAura 1.5s`).
+
 ## 11. Karşılaştırma Tablosu ve Anti-Paternler
 
-### 11.A — Üç animasyonun yapısal karşılaştırması
+### 11.A — Dört animasyonun yapısal karşılaştırması
 
-| Boyut | Zubat Supersonic | Alakazam Confuse Ray | Zubat Leech Life |
-|---|---|---|---|
-| Anlatı modeli | Sürekli alan etkisi (sonsuz döngü) | Stok aktör + 4 vuruş ritmi | İki fazlı nedensellik (ısırık→emme) |
-| Döngü tipi | `infinite` + negatif delay | Tek seferlik (1.6s, 4 pulse) | Tek seferlik + ayrı replenish FX'i |
-| Yön bağımlılığı | Yok (merkezci dalga) | Yok | Var (`--drain-dy` hedefe göre ±150px) |
-| Whiff davranışı | Katman 3–5 kaldırılır, 1–2 kısalır | Yıldızlar/şok kalkar, kaşık kalır | Faz B hiç render edilmez |
-| Stok aktör | Yok | Var (Alakazam SVG) | Yok |
-| Custom property sayısı | Faz offsetleri (per-halka delay) | Minimal | 4 (`--orb-x`, `--orb-start-y`, `--drain-dy`, orb delay) |
-| Overflow | hidden | hidden | **visible** (orb taşması) |
-| Ana renk kimliği | Mavi/camgöbeği (ses) | Mor/eflatun (psişik) | Kızıl→zümrüt (kan→iyileşme) |
+| Boyut | Zubat Supersonic | Alakazam Confuse Ray | Zubat Leech Life | Articuno Blizzard |
+|---|---|---|---|---|
+| Anlatı modeli | Sürekli alan etkisi (sonsuz döngü) | Stok aktör + 4 vuruş ritmi | İki fazlı nedensellik (ısırık→emme) | Apex aktör + çoklu hedef tipi |
+| Döngü tipi | `infinite` + negatif delay | Tek seferlik (1.6s, 4 pulse) | Tek seferlik + ayrı replenish FX'i | Tek seferlik (2.12s envelope, 2120ms) |
+| Yön bağımlılığı | Yok (merkezci dalga) | Yok | Var (`--drain-dy` hedefe göre ±150px) | Rüzgâr yönü (228° vektör açısı) |
+| Whiff davranışı | Katman 3–5 kaldırılır, 1–2 kısalır | Yıldızlar/şok kalkar, kaşık kalır | Faz B hiç render edilmez | 90px aktör, kalkan/patlama yok |
+| Stok aktör | Yok | Var (Alakazam SVG) | Yok | Var (Articuno 168px raster PNG) |
+| Bench desteği | Yok | Yok | Yok | Var (`moveFxType` ile bağımsız bench burst) |
+| Custom property sayısı | Faz offsetleri (per-halka delay) | Minimal | 4 (`--orb-x`, `--orb-start-y`, `--drain-dy`, orb delay) | 4 (`--shard-ox`, `--shard-oy`, `--shard-tx`, `--shard-angle`) |
+| Overflow | hidden | hidden | **visible** (orb taşması) | **visible** (fırtına ve kristaller) |
+| Ana renk kimliği | Mavi/camgöbeği (ses) | Mor/eflatun (psişik) | Kızıl→zümrüt (kan→iyileşme) | Buzul beyazı/gök mavisi (soğuk) |
 
-### 11.B — Anti-patern listesi (bu üç implementasyondan çıkarılan yasaklar)
+### 11.B — Anti-patern listesi (bu implementasyonlardan çıkarılan yasaklar)
 
 1. **Yanlış türün kodunu kaynak almak:** Golbat Leech Life kodunu Zubat Leech Life sanıp analiz etmek. Ders: bir ders/belge yazmadan önce TSX bloğunun `fx.type === '...'` satırını kelimesi kelimesine doğrula.
 2. **Tek timeline'da neden+sonuç zorlaması:** Emme + HP kazanımını tek keyframe'e gömmek; motor olaylarıyla senkron kayar. Çözüm: ayrı FX tipi (Leech Life → `zubat_leech_replenish`).
@@ -849,20 +924,22 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 8. **z-index'i parlaklıkla çeliştirmek:** Yüksek z-index'li soluk katman, düşük z-index'li parlak katmanı görsel olarak ezer; parlaklık da hiyerarşiye tabidir (§10.1.G).
 9. **Stok aktör geometrisini keyframe'e gömmek:** Alakazam gövde/kaşık SVG'si statik katmandır; yalnızca hareket keyframe'e girer (§10.2.A).
 10. **`transform-origin` belirsiz rotasyon:** Kaşık çiftleri gibi simetrik dönüşlerde `center` sabitlenmezse yörünge kayar (§10.2.C).
+11. **Savunma kalkanını bench hedeflerine bulaştırmak (`moveFxType` ihlali):** Aktif savunan Pokémon hasarı engellediğinde (`isBlocked`), `fxType` parametresini kalkan ('barrier') ile ezip bench döngüsüne aynı değeri aktarmak; yedek Pokémon'ların da kalkanla kaplanmasına yol açar. Çözüm: `moveFxType` ile asıl saldırı kimliği bench'e eksiksiz aktarılmalıdır (§10.4.A).
+12. **CSS Transform Ezme Hatası (Keyframe Transform Override):** Inline `style` veya CSS sınıfında `transform: translate(-50%, -50%)` verilen bir elemente, `@keyframes` bloğu içinde `transform: scale(...)` uygulandığında koordinat merkezleme yok sayılır ve element sağ-alta kayar. Çözüm: keyframe'lerin tümüne `translate(-50%, -50%) scale(...)` eklenmeli veya iki katmanlı (konumlandırma wrapper'ı + animasyon child'ı) ayrımı uygulanmalıdır (§10.5.C).
 
 ## 12. Ayar Turu Protokolü (Tuning Protocol)
 
 Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 
-1. **Timing bütünlüğü:** Toplam süre, oyun motorunun bekleme penceresiyle uyumlu mu? Fazlar arası gecikmeler (delay zinciri) nedensellik okutuyor mu? (Leech Life: diş 0.25s → orb 0.3s+.)
+1. **Timing bütünlüğü:** Toplam süre, oyun motorunun bekleme penceresiyle uyumlu mu? Fazlar arası gecikmeler (delay zinciri) nedensellik okutuyor mu? (Leech Life: diş 0.25s → orb 0.3s+; Blizzard: 2120ms; Cloyster Clamp: 1550ms; Cloyster Spike Cannon: 1650ms tam envelope.)
 2. **Whiff senaryosu:** Her "sonuç" katmanı `fx.whiffed` koşuluyla kaldırılmış mı? Hareket katmanları kısaltılmış süreyle kalıyor mu?
 3. **Yön parametreleri:** Hedefe göre değişen tüm ofsetler tek custom property'den türetiliyor mu (`--drain-dy` modeli)? Kopya keyframe var mı?
 4. **Döngü kararlılığı:** `infinite` döngülerde negatif delay ile ilk karede steady state sağlanmış mı?
 5. **Overflow kontrolü:** Taşan partikül var mı? Varsa konteyner `overflow-visible` mı?
-6. **Katman/z-index + parlaklık tutarlılığı:** En "önemli" efekt en önde ve en parlak mı? (§10.1.G)
+6. **Katman/z-index + parlaklık tutarlılığı:** En "önemli" efekt en önde ve en parlak mı? Efektler stok aktörün arkasında kalıp boğulmuyor mu? (§10.4.B)
 7. **Renk kimliği:** Palet, türün kanon renkleriyle örtüşüyor ve durum geçişini (kızıl→yeşil gibi) anlatıyor mu?
 8. **Stok aktör ayrımı:** Statik geometri keyframe dışında mı? `transform-origin` sabit mi?
-9. **FX olay sınırları:** Motor zamanlamasına bağlı sonuçlar ayrı FX tipi mi? (Leech Life / `zubat_leech_replenish` modeli.)
+9. **FX olay sınırları & Bench ayrıştırması:** Motor zamanlamasına bağlı sonuçlar ayrı FX tipi mi? Bench hedefleri aktifin kalkanından ayrıştırıldı mı (`moveFxType`)? (§10.4.A)
 10. **Doğrulama:** `npx tsc --noEmit` EXIT=0 ve ilgili Python test grubu tam geçiş.
 
 ## 13. Revizyon Geçmişi
@@ -870,3 +947,8 @@ Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 | Rev | Tarih | İçerik | Doğrulama |
 |---|---|---|---|
 | 1 | 2026-09-23 | §10 Vaka Çalışması Dersleri (10.1 Zubat Supersonic faz kaydırmalı sonsuz döngü + anti-bleed; 10.2 Alakazam Confuse Ray stok aktör + 4 vuruş ritmi; 10.3 Zubat Leech Life iki fazlı anlatı + yönlü drain), §11 karşılaştırma tablosu + 10 anti-patern, §12 Ayar Turu Protokolü, §13 Revizyon Geçmişi eklendi. Tüm dersler TSX (L12092, L15433, L21207) / CSS (L9732, L6205, L13255) satır referanslarıyla disk üzerinden doğrulandı. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_group_b1.py` 39/39 PASS |
+| 2 | 2026-09-23 | §10.4 Articuno Blizzard vaka analizi eklendi: Bench hasarının savunma kalkanından ayrıştırılması (`moveFxType` decoupling), ön plan fırtına z-index hiyerarşisi (Haze z-32, Wind z-34, Shards z-36, Snowflakes z-38), 1925ms (+%10) süre kalibrasyonu ve FAZ8 kinematik yumuşatma durakları. Anti-patern #11 eklendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_batch_birds.py` 100% PASS |
+| 3 | 2026-09-23 | §10.4 Articuno Blizzard görsel belirginlik ve parlaklık optimizasyonu: Rakip aktif kartta Articuno stok görselinin ardında kaybolma (luminance/chromatic masking) sorununa karşı Kristal Hançer geometrisi (+%55 kütle artışı, akkor beyaz omurga, üçlü drop-shadow), 7 kollu kalın rüzgâr akımı (4.2px), Frost Veil kontrast ayırıcı (z-28, 0.48 opasite rime zemin) eklendi. Bench efektleri korunarak aktif kart fırtına süresi 1925ms'den 2120ms'ye (+%10.1) genişletildi ve GameBoard bench cascade zamanlamasıyla milisaniyesine senkronize edildi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_batch_birds.py` 100% PASS |
+| 4 | 2026-09-23 | §10.5 Cloyster Clamp ve Spike Cannon modernizasyonu: Clamp için Abyssal okyanus tabanı aurası, bilateral su jetleri, kavitasyon baloncukları ve eşmerkezli cerulean su halkaları (1550ms); Spike Cannon için 1996 Ken Sugimori otantik suluboya Spiked Torpedo Drill varlığı (`Cloyster_Spike_Cannon.png`, 114px), 740° dönerek balistik burgu çarpması ve hedefe saplanan kalsifiye elmas deniz kabuğu dikenleri (1650ms) eklendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_cloyster_animations.py` 100% PASS |
+| 5 | 2026-09-24 | §10.5.C Cloyster Clamp CSS transform ezme (override) hatası ve merkezleme çözümü (Anti-patern #12 eklendi): Eşmerkezli su şok halkaları ve darbe flaşı keyframe'lerine `translate(-50%, -50%)` eklenerek sağ-alta kayma giderildi; baloncuk ve spreyler iki katmanlı (konumlandırma + animasyon) wrapper ayrımı ile merkezlendi. §10.5.D Shellder Supersonic: Başarılı kafa vuruşunda (`!fx.whiffed`) kart yüzeyini hipnotik şekilde dalgalandıran `z-[5]` seviyesinde odak bulanıklaşması (`card-fx-block-overlay`, `gbaConfuseCardBlur 1.65s`) eklendi, ses dalgaları net korundu. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_cloyster_animations.py` 100% PASS |
+| 6 | 2026-09-24 | §10.6 Grimer & Muk Toksik Balçık ve Sıvı Dinamiği Modernizasyonu: Muk Sludge için 1996 Ken Sugimori suluboya stok varlığı (`Muk_Sludge_Actor.png`, 114px, Tier 1 Apex), kaynayan bataklık taban aurası, yükselen çok loblu balçık tsunamisi ve kavitasyon asit baloncukları (1750ms); Grimer Nasty Goo için yapay dikdörtgenler kaldırılarak Bézier sıvı boyunlaşması (necking), yerçekimli damla kopması (pinch-off) ve zemin taç sıçramaları (1550ms); Grimer Sticky Hands için bağımsız FX tipi (`grimer_sticky_hands`, 1650ms), ikili amorf mor balçık kol kıskacı, gerilen mukus lifleri ve felç kıvılcımları; Grimer Minimize için amorf gölet çöküşü ve eşmerkezli yüzey gerilimi dalgalanmaları (1500ms) implemente edildi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_grimer_muk_animations.py` 35/35 PASS |

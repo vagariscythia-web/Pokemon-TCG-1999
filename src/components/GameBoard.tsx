@@ -622,6 +622,8 @@ export const GameBoard: React.FC<GameBoardProps> = ({
    */
   const playAttackFX = (spec: {
     fxType: ActiveFX['type'];
+    /** Original move fxType before any active-shield/barrier replacement. Used for bench damage hits! */
+    moveFxType?: ActiveFX['type'];
     /** Side that was attacked - the side the move animation belongs to. */
     target: 'player' | 'cpu';
     damageText?: string;
@@ -762,10 +764,15 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     }
 
     (spec.result?.benchHits ?? []).forEach(hit => {
+      // Bench Pokémon took damage from the attacking move (e.g. Blizzard), NOT the active defender's shield / barrier!
+      const actualMoveType = spec.moveFxType || (spec.fxType === 'barrier' || spec.fxType === 'mr_mime_invisible_wall' ? undefined : spec.fxType);
+      const benchFxType = actualMoveType === 'poison_vapor'
+        ? 'poison_vapor_bench'
+        : (actualMoveType || spec.fxType);
+
       beats.push({
         id: uid(),
-        // The vapor gets its own compact cloud; anything else replays the move on the bench card.
-        type: spec.fxType === 'poison_vapor' ? 'poison_vapor_bench' : spec.fxType,
+        type: benchFxType,
         target: hit.side,
         slot: 'bench',
         benchIndex: hit.benchIndex,
@@ -1375,6 +1382,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             } else {
               playAttackFX({
                 fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
+                moveFxType: fxType,
                 target: selfTarget ? 'cpu' : 'player',
                 damageText: formatAttackDamageOrEffectText(attackToUse, calculatedDmg, isBlocked, isResist, selfTarget),
                 isWeakness: isWeak,
@@ -1809,6 +1817,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
                 );
                 playAttackFX({
                   fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
+                  moveFxType: fxType,
                   target: selfTarget ? 'cpu' : 'player',
                   damageText: formatAttackDamageOrEffectText(atk, dealtDmg, isBlocked, atkRes?.isResistance, selfTarget),
                   isWeakness: atkRes?.isWeakness,
@@ -4731,6 +4740,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
       } else {
         playAttackFX({
           fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
+          moveFxType: fxType,
           target: selfTarget ? 'player' : 'cpu',
           damageText: formatAttackDamageOrEffectText(attack, calculatedDmg, isBlocked, isResist, selfTarget),
           isWeakness: isWeak,
@@ -4983,6 +4993,7 @@ export const GameBoard: React.FC<GameBoardProps> = ({
     } else {
       playAttackFX({
         fxType: isBlocked ? (struckIsMrMime ? 'mr_mime_invisible_wall' : 'barrier') : fxType,
+        moveFxType: fxType,
         target: selfTarget ? 'player' : 'cpu',
         damageText: formatAttackDamageOrEffectText(attack, calculatedDmg, isBlocked, isResist, selfTarget),
         isWeakness: isWeak,

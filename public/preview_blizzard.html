@@ -322,29 +322,36 @@
       border: 1px solid #475569;
     }
 
-    /* KEYFRAMES FOR BLIZZARD (Synchronized with index.css) */
+    /* KEYFRAMES FOR BLIZZARD (Synchronized with index.css; FAZ9 smoothed 2.12s glide arc) */
     @keyframes gbaBlizzardStockWingSpread {
       0%   { transform: translate(-50%, -50%) scale(0.55) translateY(14px); opacity: 0; }
-      14%  { transform: translate(-50%, -50%) scale(0.62) translateY(18px); opacity: 0; }
-      32%  { transform: translate(-50%, -50%) scale(1.06) translateY(-4px); opacity: 1; }
-      46%  { transform: translate(-50%, -50%) scale(1.14) translateY(-8px); opacity: 1; }
-      60%  { transform: translate(-50%, -50%) scale(1.10) translateY(-6px); opacity: 1; }
-      80%  { transform: translate(-50%, -50%) scale(0.98) translateY(2px); opacity: 0.9; }
-      100% { transform: translate(-50%, -50%) scale(0.88) translateY(6px); opacity: 0; }
+      10%  { transform: translate(-50%, -50%) scale(0.59) translateY(16px); opacity: 0; }
+      20%  { transform: translate(-50%, -50%) scale(0.78) translateY(8px); opacity: 0.5; }
+      30%  { transform: translate(-50%, -50%) scale(1.02) translateY(-2px); opacity: 1; }
+      42%  { transform: translate(-50%, -50%) scale(1.14) translateY(-8px); opacity: 1; }
+      55%  { transform: translate(-50%, -50%) scale(1.12) translateY(-7px); opacity: 1; }
+      66%  { transform: translate(-50%, -50%) scale(1.07) translateY(-3px); opacity: 0.98; }
+      76%  { transform: translate(-50%, -50%) scale(1.00) translateY(1px); opacity: 0.92; }
+      86%  { transform: translate(-50%, -50%) scale(0.95) translateY(4px); opacity: 0.68; }
+      94%  { transform: translate(-50%, -50%) scale(0.91) translateY(6px); opacity: 0.32; }
+      100% { transform: translate(-50%, -50%) scale(0.88) translateY(7px); opacity: 0; }
     }
     @keyframes gbaBlizzardStockWhiff {
       0%   { transform: translate(-50%, -50%) scale(0.5) translateY(16px); opacity: 0; }
-      14%  { transform: translate(-50%, -50%) scale(0.55) translateY(20px); opacity: 0; }
+      10%  { transform: translate(-50%, -50%) scale(0.53) translateY(18px); opacity: 0; }
+      22%  { transform: translate(-50%, -50%) scale(0.66) translateY(9px); opacity: 0.22; }
       34%  { transform: translate(-50%, -50%) scale(0.82) translateY(-2px); opacity: 0.45; }
-      52%  { transform: translate(-50%, -50%) scale(0.86) translateY(-4px); opacity: 0.4; }
-      74%  { transform: translate(-50%, -50%) scale(0.78) translateY(4px); opacity: 0.25; }
+      48%  { transform: translate(-50%, -50%) scale(0.86) translateY(-4px); opacity: 0.42; }
+      62%  { transform: translate(-50%, -50%) scale(0.83) translateY(0px); opacity: 0.35; }
+      76%  { transform: translate(-50%, -50%) scale(0.77) translateY(4px); opacity: 0.22; }
+      88%  { transform: translate(-50%, -50%) scale(0.72) translateY(8px); opacity: 0.1; }
       100% { transform: translate(-50%, -50%) scale(0.68) translateY(10px); opacity: 0; }
     }
     @keyframes gbaBlizzardFrostVeil {
       0%   { opacity: 0; }
-      22%  { opacity: 0.3; }
-      45%  { opacity: 0.42; backdrop-filter: blur(0.6px); }
-      70%  { opacity: 0.26; }
+      20%  { opacity: 0.35; }
+      45%  { opacity: 0.48; backdrop-filter: blur(0.8px); }
+      72%  { opacity: 0.32; backdrop-filter: blur(0.5px); }
       100% { opacity: 0; }
     }
     @keyframes gbaBlizzardStormHaze {
@@ -433,6 +440,11 @@
       80% {
         opacity: 0.85;
         transform: translate(var(--shard-tx, 0px), var(--shard-ty, 0px)) rotate(var(--shard-angle, 228deg)) scale(0.98);
+      }
+      92% {
+        opacity: 0.45;
+        transform: translate(var(--shard-tx, 0px), var(--shard-ty, 0px)) rotate(var(--shard-angle, 228deg)) scale(0.92);
+        filter: blur(0.8px);
       }
       100% {
         opacity: 0;
@@ -628,7 +640,7 @@
         actorBox.style.cssText = 'position:absolute;left:50%;top:48%;transform:translate(-50%, -50%);pointer-events:none;z-index:26;' +
           'width:' + (whiff ? '90px' : '168px') + ';height:' + (whiff ? '90px' : '168px') + ';' +
           (whiff ? 'filter:saturate(0.4) brightness(0.85);' : '') +
-          'animation:' + (whiff ? ('gbaBlizzardStockWhiff ' + dur(1.75) + ' ease-out forwards') : ('gbaBlizzardStockWingSpread ' + dur(1.75) + ' cubic-bezier(0.18, 0.92, 0.28, 1) forwards')) + ';';
+          'animation:' + (whiff ? ('gbaBlizzardStockWhiff ' + dur(2.12) + ' ease-out forwards') : ('gbaBlizzardStockWingSpread ' + dur(2.12) + ' cubic-bezier(0.18, 0.92, 0.28, 1) forwards')) + ';';
 
         var img = document.createElement('img');
         img.src = ARTICUNO_DATA_URI;
@@ -644,9 +656,9 @@
       // 2. Layer 1: Frost Veil Aura (ONLY on Active Slot when !whiff)
       if (!isBench && !whiff && document.getElementById('chk-veil').checked) {
         var veil = document.createElement('div');
-        veil.style.cssText = 'position:absolute;left:50%;top:48%;width:176px;height:176px;transform:translate(-50%, -50%);border-radius:24px;pointer-events:none;z-index:28;opacity:0;' +
-          'animation:gbaBlizzardFrostVeil ' + dur(1.75) + ' ease-out ' + dur(0.15) + ' forwards;' +
-          'background:radial-gradient(ellipse, rgba(224,242,254,0.38) 0%, rgba(186,230,253,0.22) 45%, rgba(56,189,248,0.1) 70%, transparent 92%);';
+        veil.style.cssText = 'position:absolute;left:50%;top:48%;width:180px;height:180px;transform:translate(-50%, -50%);border-radius:24px;pointer-events:none;z-index:28;opacity:0;' +
+          'animation:gbaBlizzardFrostVeil ' + dur(1.95) + ' ease-out ' + dur(0.17) + ' forwards;' +
+          'background:radial-gradient(ellipse, rgba(240,249,255,0.48) 0%, rgba(224,242,254,0.32) 45%, rgba(56,189,248,0.14) 70%, transparent 92%);';
         stage.appendChild(veil);
       }
 
@@ -655,13 +667,13 @@
         var burst = document.createElement('div');
         burst.style.cssText = 'position:absolute;border-radius:50%;pointer-events:none;z-index:15;' +
           'width:72px;height:72px;' +
-          'animation:gbaBlizzardBenchFrostBurst ' + dur(1.4) + ' ease-out forwards;' +
+          'animation:gbaBlizzardBenchFrostBurst ' + dur(1.55) + ' ease-out forwards;' +
           'background:radial-gradient(circle, rgba(207,250,254,0.5) 0%, rgba(56,189,248,0.3) 40%, transparent 75%);';
         stage.appendChild(burst);
 
         var shimmer = document.createElement('div');
         shimmer.style.cssText = 'position:absolute;pointer-events:none;z-index:20;opacity:0;' +
-          'animation:gbaBlizzardBenchFrostBurst ' + dur(1.2) + ' ease-out ' + dur(0.15) + ' forwards;';
+          'animation:gbaBlizzardBenchFrostBurst ' + dur(1.32) + ' ease-out ' + dur(0.15) + ' forwards;';
         shimmer.innerHTML = `
           <svg width="60" height="60" viewBox="0 0 60 60" style="overflow:visible">
             <circle cx="30" cy="30" r="24" fill="none" stroke="#bae6fd" stroke-width="1.5" opacity="0.8" />
@@ -675,7 +687,7 @@
       if (!whiff && document.getElementById('chk-shake').checked) {
         var shiver = document.createElement('div');
         shiver.style.cssText = 'position:absolute;inset:0;pointer-events:none;' +
-          'animation:gbaMagneticHumCardShake ' + dur(1.4) + ' ease-out ' + dur(0.2) + ' forwards;';
+          'animation:gbaMagneticHumCardShake ' + dur(1.68) + ' ease-out ' + dur(0.2) + ' forwards;';
         stage.appendChild(shiver);
       }
 
@@ -683,9 +695,9 @@
       if (document.getElementById('chk-haze').checked) {
         var haze = document.createElement('div');
         haze.style.cssText = 'position:absolute;border-radius:50%;pointer-events:none;z-index:32;' +
-          'width:' + (isBench ? '140px' : '168px') + ';height:' + (isBench ? '110px' : '136px') + ';' +
-          'animation:gbaBlizzardStormHaze ' + dur(1.7) + ' cubic-bezier(0.2, 0.9, 0.3, 1) forwards;' +
-          'background:radial-gradient(ellipse, rgba(224,242,254,0.55) 0%, rgba(186,230,253,0.35) 45%, rgba(56,189,248,0.18) 70%, transparent 92%);';
+          'width:' + (isBench ? '140px' : '180px') + ';height:' + (isBench ? '110px' : '146px') + ';' +
+          'animation:gbaBlizzardStormHaze ' + dur(2.08) + ' cubic-bezier(0.2, 0.9, 0.3, 1) forwards;' +
+          'background:' + (isBench ? 'radial-gradient(ellipse, rgba(224,242,254,0.55) 0%, rgba(186,230,253,0.35) 45%, rgba(56,189,248,0.18) 70%, transparent 92%)' : 'radial-gradient(ellipse, rgba(240,249,255,0.72) 0%, rgba(207,250,254,0.48) 45%, rgba(56,189,248,0.22) 70%, transparent 92%)') + ';';
         stage.appendChild(haze);
       }
 
@@ -693,15 +705,17 @@
       if (document.getElementById('chk-wind').checked) {
         var wind = document.createElement('div');
         wind.style.cssText = 'position:absolute;pointer-events:none;z-index:' + (isBench ? '25' : '34') + ';' +
-          'animation:gbaArticunoBlizzardVortex ' + dur(1.7) + ' cubic-bezier(0.2, 0.9, 0.3, 1) forwards;';
+          'animation:gbaArticunoBlizzardVortex ' + dur(2.08) + ' cubic-bezier(0.2, 0.9, 0.3, 1) forwards;';
         var wScale = isBench ? 0.8 : 1.0;
         wind.innerHTML = `
-          <svg width="${180 * wScale}" height="${150 * wScale}" viewBox="0 0 180 150" style="overflow:visible; opacity:0.9;">
-            <path d="M 170 15 C 130 35, 70 45, 10 95" fill="none" stroke="#e0f2fe" stroke-width="3.2" stroke-linecap="round" opacity="0.85" style="filter:drop-shadow(0 0 12px #38bdf8)" />
-            <path d="M 180 40 C 130 65, 80 85, 20 135" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" opacity="0.8" style="filter:drop-shadow(0 0 8px #ffffff)" />
-            <path d="M 160 65 C 110 95, 60 115, 5 150" fill="none" stroke="#7dd3fc" stroke-width="2.4" stroke-linecap="round" opacity="0.75" style="filter:drop-shadow(0 0 10px #7dd3fc)" />
-            <path d="M 175 25 C 125 50, 75 65, 12 115" fill="none" stroke="#bae6fd" stroke-width="2.2" stroke-linecap="round" opacity="0.68" style="filter:drop-shadow(0 0 8px #bae6fd)" />
-            <path d="M 150 78 C 100 102, 55 120, 10 145" fill="none" stroke="#e0f2fe" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+          <svg width="${186 * wScale}" height="${156 * wScale}" viewBox="0 0 186 156" style="overflow:visible; opacity:0.95;">
+            <path d="M 176 12 C 130 32, 68 45, 8 98" fill="none" stroke="#ffffff" stroke-width="4.2" stroke-linecap="round" opacity="0.95" style="filter:drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 20px #38bdf8)" />
+            <path d="M 186 38 C 132 64, 82 86, 18 138" fill="none" stroke="#f0f9ff" stroke-width="3.6" stroke-linecap="round" opacity="0.9" style="filter:drop-shadow(0 0 10px #ffffff)" />
+            <path d="M 166 62 C 112 92, 62 114, 4 152" fill="none" stroke="#7dd3fc" stroke-width="3.2" stroke-linecap="round" opacity="0.85" style="filter:drop-shadow(0 0 12px #7dd3fc)" />
+            <path d="M 180 22 C 128 48, 76 64, 10 118" fill="none" stroke="#bae6fd" stroke-width="3.0" stroke-linecap="round" opacity="0.8" style="filter:drop-shadow(0 0 10px #bae6fd)" />
+            <path d="M 154 76 C 102 100, 56 120, 8 148" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" opacity="0.75" style="filter:drop-shadow(0 0 8px #ffffff)" />
+            <path d="M 188 50 C 140 72, 90 98, 28 144" fill="none" stroke="#38bdf8" stroke-width="2.4" stroke-linecap="round" opacity="0.7" style="filter:drop-shadow(0 0 8px #38bdf8)" />
+            <path d="M 160 30 C 118 55, 70 75, 14 126" fill="none" stroke="#e0f2fe" stroke-width="2.2" stroke-linecap="round" opacity="0.65" />
           </svg>
         `;
         stage.appendChild(wind);
@@ -712,24 +726,26 @@
         var scatterShards = [
           { ox: '58px', oy: '-46px', delay: 0.08, w: 8, h: 16, angle: '232deg' },
           { ox: '44px', oy: '-34px', delay: 0.18, w: 7, h: 15, angle: '228deg' },
-          { ox: '-20px', oy: '-32px', delay: 0.26, w: 8, h: 17, angle: '225deg' },
-          { ox: '50px', oy: '-18px', delay: 0.34, w: 7, h: 14, angle: '235deg' },
-          { ox: '26px', oy: '-26px', delay: 0.42, w: 9, h: 18, angle: '230deg' },
-          { ox: '-10px', oy: '-12px', delay: 0.50, w: 7, h: 15, angle: '226deg' },
-          { ox: '38px', oy: '2px', delay: 0.58, w: 8, h: 16, angle: '233deg' },
-          { ox: '8px', oy: '-8px', delay: 0.66, w: 7, h: 14, angle: '227deg' }
+          { ox: '-20px', oy: '-32px', delay: 0.28, w: 8, h: 17, angle: '225deg' },
+          { ox: '50px', oy: '-18px', delay: 0.38, w: 7, h: 14, angle: '235deg' },
+          { ox: '26px', oy: '-26px', delay: 0.48, w: 9, h: 18, angle: '230deg' },
+          { ox: '-10px', oy: '-12px', delay: 0.56, w: 7, h: 15, angle: '226deg' },
+          { ox: '38px', oy: '2px', delay: 0.64, w: 8, h: 16, angle: '233deg' },
+          { ox: '8px', oy: '-8px', delay: 0.70, w: 7, h: 14, angle: '227deg' }
         ];
 
         scatterShards.forEach(function(sh, i) {
+          var shardW = !isBench ? Math.round(sh.w * 1.55) : sh.w;
+          var shardH = !isBench ? Math.round(sh.h * 1.55) : sh.h;
           var el = document.createElement('div');
           el.style.cssText = 'position:absolute;pointer-events:none;z-index:36;opacity:0;' +
-            'animation:gbaBlizzardIceShard ' + dur(1.25) + ' cubic-bezier(0.18, 0.88, 0.32, 1) ' + dur(sh.delay) + ' forwards;' +
+            'animation:gbaBlizzardIceShard ' + dur(1.42) + ' cubic-bezier(0.18, 0.88, 0.32, 1) ' + dur(sh.delay) + ' forwards;' +
             '--shard-ox:' + sh.ox + ';--shard-oy:' + sh.oy + ';--shard-angle:' + sh.angle + ';';
           el.innerHTML = `
-            <svg width="${sh.w}" height="${sh.h}" viewBox="0 0 8 20" style="filter:drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 9px #0284c7)">
-              <polygon points="4,0 7,6 5.5,20 2.5,20 1,6" fill="#f0f9ff" stroke="#0284c7" stroke-width="0.8" />
-              <polygon points="4,1 6.5,6 5,17 4,19 4,1" fill="#ffffff" opacity="0.95" />
-              <polygon points="4,1 4,19 3,17 1.5,6 4,1" fill="#7dd3fc" opacity="0.8" />
+            <svg width="${shardW}" height="${shardH}" viewBox="0 0 12 28" style="filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #38bdf8) drop-shadow(0 0 20px #0284c7)">
+              <polygon points="6,0 11,8 9,28 3,28 1,8" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.0" />
+              <polygon points="6,1 10.5,8 8.5,25 6,27 6,1" fill="#ffffff" opacity="0.98" />
+              <polygon points="6,1 6,27 3.5,25 1.5,8 6,1" fill="#7dd3fc" opacity="0.85" />
             </svg>
           `;
           stage.appendChild(el);
@@ -738,29 +754,31 @@
         // 8. Layer 4: Embed Shards (6 Penetrating Shards with Kinetic Impact Shudder)
         if (!whiff) {
           var embedShards = isBench ? [
-            { ox: '44px', oy: '-36px', tx: '22px', ty: '-20px', delay: 0.14, w: 8, h: 17, angle: '232deg' },
-            { ox: '-26px', oy: '-30px', tx: '-28px', ty: '-10px', delay: 0.24, w: 7, h: 15, angle: '226deg' },
-            { ox: '36px', oy: '-12px', tx: '12px', ty: '10px', delay: 0.34, w: 8, h: 16, angle: '234deg' },
-            { ox: '10px', oy: '-28px', tx: '-16px', ty: '24px', delay: 0.44, w: 7, h: 15, angle: '228deg' }
+            { ox: '44px', oy: '-36px', tx: '22px', ty: '-20px', delay: 0.15, w: 8, h: 17, angle: '232deg' },
+            { ox: '-26px', oy: '-30px', tx: '-28px', ty: '-10px', delay: 0.25, w: 7, h: 15, angle: '226deg' },
+            { ox: '36px', oy: '-12px', tx: '12px', ty: '10px', delay: 0.35, w: 8, h: 16, angle: '234deg' },
+            { ox: '10px', oy: '-28px', tx: '-16px', ty: '24px', delay: 0.45, w: 7, h: 15, angle: '228deg' }
           ] : [
-            { ox: '64px', oy: '-52px', tx: '32px', ty: '-28px', delay: 0.14, w: 9, h: 19, angle: '232deg' },
-            { ox: '-36px', oy: '-42px', tx: '-38px', ty: '-16px', delay: 0.24, w: 8, h: 17, angle: '226deg' },
-            { ox: '52px', oy: '-16px', tx: '18px', ty: '12px', delay: 0.34, w: 9, h: 18, angle: '234deg' },
-            { ox: '12px', oy: '-38px', tx: '-22px', ty: '32px', delay: 0.44, w: 8, h: 17, angle: '228deg' },
-            { ox: '40px', oy: '8px', tx: '26px', ty: '38px', delay: 0.54, w: 9, h: 19, angle: '230deg' },
-            { ox: '-18px', oy: '-24px', tx: '-12px', ty: '-36px', delay: 0.62, w: 8, h: 16, angle: '225deg' }
+            { ox: '64px', oy: '-52px', tx: '32px', ty: '-28px', delay: 0.15, w: 9, h: 19, angle: '232deg' },
+            { ox: '-36px', oy: '-42px', tx: '-38px', ty: '-16px', delay: 0.26, w: 8, h: 17, angle: '226deg' },
+            { ox: '52px', oy: '-16px', tx: '18px', ty: '12px', delay: 0.37, w: 9, h: 18, angle: '234deg' },
+            { ox: '12px', oy: '-38px', tx: '-22px', ty: '32px', delay: 0.48, w: 8, h: 17, angle: '228deg' },
+            { ox: '40px', oy: '8px', tx: '26px', ty: '38px', delay: 0.58, w: 9, h: 19, angle: '230deg' },
+            { ox: '-18px', oy: '-24px', tx: '-12px', ty: '-36px', delay: 0.70, w: 8, h: 16, angle: '225deg' }
           ];
 
           embedShards.forEach(function(es, i) {
+            var embedW = !isBench ? Math.round(es.w * 1.55) : es.w;
+            var embedH = !isBench ? Math.round(es.h * 1.55) : es.h;
             var el = document.createElement('div');
             el.style.cssText = 'position:absolute;pointer-events:none;z-index:36;opacity:0;' +
-              'animation:gbaBlizzardIceShardEmbed ' + dur(1.2) + ' cubic-bezier(0.18, 0.88, 0.32, 1) ' + dur(es.delay) + ' forwards;' +
+              'animation:gbaBlizzardIceShardEmbed ' + dur(1.42) + ' cubic-bezier(0.18, 0.88, 0.32, 1) ' + dur(es.delay) + ' forwards;' +
               '--shard-ox:' + es.ox + ';--shard-oy:' + es.oy + ';--shard-tx:' + es.tx + ';--shard-ty:' + es.ty + ';--shard-angle:' + es.angle + ';';
             el.innerHTML = `
-              <svg width="${es.w}" height="${es.h}" viewBox="0 0 8 20" style="filter:drop-shadow(0 0 7px #ffffff) drop-shadow(0 0 10px #0284c7)">
-                <polygon points="4,0 7,6 5.5,20 2.5,20 1,6" fill="#f0f9ff" stroke="#0284c7" stroke-width="0.85" />
-                <polygon points="4,1 6.5,6 5,17 4,19 4,1" fill="#ffffff" opacity="0.95" />
-                <polygon points="4,1 4,19 3,17 1.5,6 4,1" fill="#7dd3fc" opacity="0.8" />
+              <svg width="${embedW}" height="${embedH}" viewBox="0 0 12 28" style="filter:drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 16px #38bdf8) drop-shadow(0 0 22px #0284c7)">
+                <polygon points="6,0 11,8 9,28 3,28 1,8" fill="#f0f9ff" stroke="#0284c7" stroke-width="1.1" />
+                <polygon points="6,1 10.5,8 8.5,25 6,27 6,1" fill="#ffffff" opacity="0.98" />
+                <polygon points="6,1 6,27 3.5,25 1.5,8 6,1" fill="#7dd3fc" opacity="0.85" />
               </svg>
             `;
             stage.appendChild(el);
@@ -780,25 +798,25 @@
           { ox: '12px', oy: '28px', delay: 0.42, size: 22 },
           { ox: '-38px', oy: '16px', delay: 0.55, size: 16 }
         ] : [
-          { ox: '52px', oy: '-45px', delay: 0.10, size: 26 },
-          { ox: '-40px', oy: '-28px', delay: 0.28, size: 22 },
-          { ox: '15px', oy: '38px', delay: 0.42, size: 28 },
-          { ox: '-50px', oy: '20px', delay: 0.55, size: 20 },
-          { ox: '35px', oy: '-10px', delay: 0.70, size: 24 }
+          { ox: '52px', oy: '-45px', delay: 0.10, size: 32 },
+          { ox: '-40px', oy: '-28px', delay: 0.28, size: 26 },
+          { ox: '15px', oy: '38px', delay: 0.44, size: 34 },
+          { ox: '-50px', oy: '20px', delay: 0.58, size: 24 },
+          { ox: '35px', oy: '-10px', delay: 0.75, size: 28 }
         ]);
 
         flakes.forEach(function(sn, i) {
           var el = document.createElement('div');
           el.style.cssText = 'position:absolute;pointer-events:none;z-index:38;opacity:0;' +
-            'animation:gbaArticunoSnowflakeSpin ' + dur(1.4) + ' ease-out ' + dur(sn.delay) + ' forwards;' +
+            'animation:gbaArticunoSnowflakeSpin ' + dur(1.36) + ' ease-out ' + dur(sn.delay) + ' forwards;' +
             '--s-ox:' + sn.ox + ';--s-oy:' + sn.oy + ';';
           el.innerHTML = `
-            <svg width="${sn.size}" height="${sn.size}" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 6px #38bdf8)">
-              <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" />
-              <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" />
-              <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" stroke-width="2" stroke-linecap="round" />
-              <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" stroke-width="2" stroke-linecap="round" />
-              <circle cx="12" cy="12" r="2.8" fill="#38bdf8" stroke="#ffffff" stroke-width="0.8" />
+            <svg width="${sn.size}" height="${sn.size}" viewBox="0 0 24 24" style="filter:drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 8px #38bdf8)">
+              <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" />
+              <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" />
+              <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" stroke-width="2.0" stroke-linecap="round" />
+              <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" stroke-width="2.0" stroke-linecap="round" />
+              <circle cx="12" cy="12" r="2.8" fill="#38bdf8" stroke="#ffffff" stroke-width="1.0" />
             </svg>
           `;
           stage.appendChild(el);

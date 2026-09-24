@@ -246,6 +246,7 @@ export interface ActiveFX {
     | 'mr_mime_invisible_wall'
     | 'ditto_transform'
     | 'grimer_nasty_goo'
+    | 'grimer_sticky_hands'
     | 'grimer_minimize'
     | 'zubat_leech_life'
     | 'zubat_leech_replenish'
@@ -500,9 +501,10 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   }
 
   // 0d. BATCH 22: TOXIC SLUDGE, CAVE & CONSTRICTION (GRIMER, ZUBAT, TANGELA)
-  // Grimer: Nasty Goo & Minimize
+  // Grimer: Nasty Goo, Sticky Hands & Minimize
   if (pkm.includes('grimer')) {
-    if (name.includes('nasty goo') || name.includes('sticky hands')) return 'grimer_nasty_goo';
+    if (name.includes('nasty goo')) return 'grimer_nasty_goo';
+    if (name.includes('sticky hands')) return 'grimer_sticky_hands';
     if (name.includes('minimize')) return 'grimer_minimize';
   }
   // Zubat: Leech Life & Supersonic
@@ -899,7 +901,7 @@ export function getSpecificAttackFX(attack: Attack, pokemonCard: Card): ActiveFX
   if (name.includes('acid')) return 'toxic_corrosion';
   if (name.includes('poison claws') || name.includes('jellyfish sting')) return 'poison_sting';
   if (name.includes('nasty goo')) return 'nasty_goo';
-  if (name.includes('sticky hands')) return 'sticky_hands_grab';
+  if (name.includes('sticky hands')) return 'grimer_sticky_hands';
   if (name.includes('vanish') || name.includes('mischief')) return 'whirlwind_cyclone';
   if (name.includes('magnetic lines') || name.includes('magnetism') || name.includes('lightning flash') || name.includes('chain lightning') || name.includes('electric shock') || name.includes('thunder jolt') || name.includes('thunder attack') || name.includes('surprise thunder') || name.includes('thunderbolt')) return 'thunder_wave';
   if (name.includes('flare')) return 'flare_burst';
@@ -1118,6 +1120,10 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'krabby_irongrip':
     case 'claw_pinch':
       return 1400;
+    case 'cloyster_clamp':
+      return 1550;
+    case 'cloyster_spike_cannon':
+      return 1650;
     case 'primeape_tantrum_rampage':
       return 1700;
     case 'rhydon_horn_drill':
@@ -1261,7 +1267,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'articuno_freeze_dry':
       return 1600;
     case 'articuno_blizzard':
-      return 1750;
+      return 2120;
     case 'zapdos_thunder':
       return 1450;
     case 'zapdos_thunderbolt':
@@ -1284,6 +1290,9 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 1650;
     case 'grimer_nasty_goo':
       return 1550;
+    case 'grimer_sticky_hands':
+    case 'sticky_hands_grab':
+      return 1650;
     case 'grimer_minimize':
       return 1500;
     case 'zubat_leech_life':
@@ -1467,7 +1476,7 @@ export function getSlashPalette(pokemonName = '', attackerType = ''): SlashPalet
  */
 const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'arbok_poison_fang', 'arbok_wrap_constrict', 'beedrill_twineedle', 'bulbasaur_leech_seed', 'bulbasaur_leech_replenish', 'caterpie_string_shot',
-  'charmander_ember_flame', 'charmander_fire_tail_whip', 'claw_pinch', 'clefairy_metronome', 'cloyster_clamp', 'cobra_stare',
+  'charmander_ember_flame', 'charmander_fire_tail_whip', 'claw_pinch', 'clefairy_metronome', 'cloyster_clamp', 'cloyster_spike_cannon', 'cobra_stare',
   'crab_hammer_slam', 'cubone_bone_strike', 'doubleslap', 'dragon_rage', 'dugtrio_earthquake',
   'ekans_wrap_constrict', 'exeggutor_big_eggsplosion', 'farfetchd_leek_slap', 'fearow_drill_peck',
   'fish_flail', 'gengar_dark_mind', 'golbat_leech_life', 'haunter_dream_eater', 'hitmonchan_jab',
@@ -1479,7 +1488,7 @@ const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'thunder_punch', 'victreebel_acid_melt', 'weedle_poison_sting', 'weezing_toxic_smog',
   'rattata_quick_attack', 'kangaskhan_comet_punch',
   'articuno_blizzard', 'zapdos_thunderbolt',
-  'alakazam_confuse_ray'
+  'alakazam_confuse_ray', 'muk_sludge_deluge'
 ]);
 
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
@@ -7744,76 +7753,157 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 20m. MUK SLUDGE DELUGE (Muk Lv. 34 — Thick Viscous Purple/Green Toxic Sludge Surge) */}
+      {/* 20m. MUK SLUDGE DELUGE (Muk Lv. 34 — 1996 Ken Sugimori Stock Visual Deluge & High-Fidelity Tsunami) */}
       {fx.type === 'muk_sludge_deluge' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Surging Bottom-Up Viscous Sludge Wave */}
+          {/* Layer 1: Boiling Toxic Mire Floor Aura */}
           <div
-            className="absolute bottom-0 w-full flex items-center justify-center pointer-events-none z-20"
-            style={{ animation: 'gbaMukSludgeWave 1.75s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+            className="absolute bottom-2 flex items-center justify-center pointer-events-none z-15"
+            style={{ animation: 'gbaMukSludgeFloor 1.75s ease-out forwards' }}
           >
-            <svg width="180" height="150" viewBox="0 0 180 150">
+            <div className="w-56 h-16 rounded-full bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-500/40 blur-[1px] shadow-[0_0_24px_#581c87]" />
+          </div>
+
+          {/* Layer 2: Primary Visual Actor (Authentic 1996 Ken Sugimori Muk Stock Visual — Tier 1 Apex Monolithic 144px) */}
+          <div
+            className={`absolute flex items-center justify-center pointer-events-none z-25 ${fx.whiffed ? 'scale-75 opacity-40' : ''}`}
+            style={{ animation: 'gbaMukSludgeActorSurge 1.75s cubic-bezier(0.18, 0.9, 0.28, 1) forwards' }}
+          >
+            <img
+              src="/assets/Muk_Sludge_Actor.png"
+              alt="Muk Sludge Deluge"
+              className={`object-contain drop-shadow-[0_0_24px_#a855f7] drop-shadow-[0_0_40px_#581c87] ${fx.whiffed ? 'w-[98px] h-[70px]' : 'w-[144px] h-[103px]'}`}
+            />
+          </div>
+
+          {/* Layer 3: High-Fidelity Multi-Tiered Toxic Tsunami Wave */}
+          <div
+            className="absolute bottom-0 w-full flex items-center justify-center pointer-events-none z-30"
+            style={{ animation: 'gbaMukDelugeSurge 1.75s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
+          >
+            <svg width="220" height="175" viewBox="0 0 220 175" className="overflow-visible">
               <defs>
-                <linearGradient id="mukSludgeGrad" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="mukWaveDeepGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#7e22ce" />
-                  <stop offset="40%" stopColor="#581c87" />
-                  <stop offset="85%" stopColor="#3b0764" />
+                  <stop offset="25%" stopColor="#581c87" />
+                  <stop offset="65%" stopColor="#3b0764" />
                   <stop offset="100%" stopColor="#1e1b4b" />
                 </linearGradient>
+                <linearGradient id="mukWaveMidGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#c084fc" />
+                  <stop offset="30%" stopColor="#9333ea" />
+                  <stop offset="70%" stopColor="#6b21a8" />
+                  <stop offset="100%" stopColor="#3b0764" />
+                </linearGradient>
+                <linearGradient id="mukWaveLipGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stopColor="#c084fc" />
+                  <stop offset="25%" stopColor="#d8b4fe" />
+                  <stop offset="50%" stopColor="#a3e635" />
+                  <stop offset="75%" stopColor="#d8b4fe" />
+                  <stop offset="100%" stopColor="#c084fc" />
+                </linearGradient>
               </defs>
-              {/* Oozing, undulating toxic slime wave */}
-              <path
-                d="M 0 80 Q 20 50, 45 70 Q 70 40, 95 65 Q 120 45, 150 70 Q 170 55, 180 75 L 180 150 L 0 150 Z"
-                fill="url(#mukSludgeGrad)"
-                stroke="#c084fc"
-                strokeWidth="3"
-              />
-              <path
-                d="M 15 85 Q 45 60, 75 80 Q 105 55, 135 78 Q 165 65, 175 85"
-                fill="none"
-                stroke="#84cc16"
-                strokeWidth="2"
-                opacity="0.85"
-              />
-            </svg>
-          </div>
 
-          {/* Dripping Curtains of Corrosive Slime */}
-          <div
-            className="absolute top-2 w-full flex justify-center pointer-events-none z-25"
-            style={{ animation: 'gbaMukSludgeDrips 1.75s ease-out forwards' }}
-          >
-            <svg width="160" height="70" viewBox="0 0 160 70">
+              {/* Tier 1: Abyssal Background Sludge Swell */}
               <path
-                d="M10 0 L15 35 Q18 42, 22 35 L26 0 L40 0 L45 55 Q50 65, 55 55 L60 0 L85 0 L90 45 Q95 52, 100 45 L105 0 L125 0 L130 38 Q135 48, 140 38 L145 0 Z"
+                d="M 0 105 C 25 72, 50 88, 80 66 C 110 44, 140 76, 175 54 C 195 44, 210 62, 220 72 L 220 175 L 0 175 Z"
+                fill="url(#mukWaveDeepGrad)"
+                opacity="0.95"
+              />
+
+              {/* Tier 2: Dynamic Midground Sludge Wall with Viscous Drapery & Hanging Teeth */}
+              <path
+                d="M 0 114 C 20 84, 45 96, 70 80 C 95 62, 120 88, 150 70 C 175 54, 195 74, 220 88 L 220 175 L 0 175 Z"
+                fill="url(#mukWaveMidGrad)"
+              />
+              {/* Dripping viscous stalactites hanging from the crest */}
+              <path
+                d="M 28 92 Q 32 118, 38 122 Q 42 116, 39 94 Z M 72 82 Q 76 112, 82 116 Q 86 110, 83 84 Z M 116 80 Q 120 118, 126 122 Q 131 112, 127 82 Z M 158 76 Q 162 108, 167 112 Q 172 104, 168 78 Z M 190 84 Q 194 104, 198 108 Q 202 102, 199 87 Z"
                 fill="#581c87"
-                stroke="#a855f7"
-                strokeWidth="1.5"
-                opacity="0.9"
+                opacity="0.92"
               />
+
+              {/* Tier 3: Viscous Foam Ribs & Cresting Liquid Lip */}
+              <path
+                d="M 4 112 C 24 86, 48 97, 72 82 C 98 64, 122 90, 152 72 C 178 56, 198 76, 216 88"
+                fill="none"
+                stroke="url(#mukWaveLipGrad)"
+                strokeWidth="3.8"
+                strokeLinecap="round"
+                style={{ filter: 'drop-shadow(0 0 10px #c084fc)' }}
+              />
+              {/* Secondary fine froth accents */}
+              <path
+                d="M 16 118 C 38 96, 60 104, 85 90 C 110 74, 132 96, 160 82 C 182 70, 196 84, 210 94"
+                fill="none"
+                stroke="#a3e635"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                opacity="0.9"
+                style={{ filter: 'drop-shadow(0 0 6px #84cc16)' }}
+              />
+
+              {/* Wet Specular Sheen Bands along Wave Face */}
+              <ellipse cx="65" cy="122" rx="24" ry="5.5" fill="#ffffff" opacity="0.5" transform="rotate(-6 65 122)" />
+              <ellipse cx="145" cy="114" rx="28" ry="6.5" fill="#ffffff" opacity="0.45" transform="rotate(-4 145 114)" />
             </svg>
           </div>
 
-          {/* Swelling Toxic Sludge Bubbles */}
-          <div
-            className="absolute left-6 bottom-10 z-30"
-            style={{ animation: 'gbaMukSludgeBubble1 1.75s ease-out forwards' }}
-          >
-            <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-800 via-fuchsia-600 to-lime-400 border border-lime-300 shadow-[0_0_12px_#84cc16]" />
-          </div>
-          <div
-            className="absolute right-8 bottom-14 z-30"
-            style={{ animation: 'gbaMukSludgeBubble2 1.75s ease-out 0.1s forwards' }}
-          >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-900 via-purple-600 to-pink-400 border border-purple-300 shadow-[0_0_14px_#c084fc]" />
-          </div>
+          {/* Layer 4: Secondary Scatter & Ballistic Sludge Splatters */}
+          {!fx.whiffed && [
+            { x: -35, y: -25, delay: '0.15s', size: 14 },
+            { x: 38, y: -28, delay: '0.22s', size: 16 },
+            { x: -18, y: -45, delay: '0.30s', size: 12 },
+            { x: 22, y: -42, delay: '0.35s', size: 15 },
+            { x: 50, y: -10, delay: '0.40s', size: 11 },
+          ].map((glob, i) => (
+            <div
+              key={`muk-glob-${i}`}
+              className="absolute pointer-events-none z-35"
+              style={{
+                width: `${glob.size}px`,
+                height: `${Math.round(glob.size * 0.8)}px`,
+                borderRadius: '50% 60% 40% 50%',
+                background: 'radial-gradient(circle at 35% 35%, #e9d5ff 0%, #a855f7 45%, #4c1d95 100%)',
+                boxShadow: '0 0 12px #c084fc',
+                animation: `gbaMukSludgeGlob 1.25s ease-out ${glob.delay} forwards`,
+                opacity: 0,
+                '--glob-x': `${glob.x}px`,
+                '--glob-y': `${glob.y}px`
+              } as React.CSSProperties}
+            />
+          ))}
 
-          {/* Sizzling Corrosive Acid Smoke */}
+          {/* Layer 5: Ambient Cavitation Toxic Bubbles & Acidic Sizzle */}
+          {!fx.whiffed && [
+            { x: -44, y: 18, size: 24, delay: '0.2s', grad: 'from-purple-800 via-fuchsia-600 to-lime-400' },
+            { x: 42, y: 12, size: 28, delay: '0.35s', grad: 'from-indigo-900 via-purple-600 to-pink-400' },
+            { x: -10, y: 32, size: 20, delay: '0.5s', grad: 'from-purple-900 via-purple-500 to-amber-300' }
+          ].map((bub, idx) => (
+            <div
+              key={`muk-bub-${idx}`}
+              className="absolute pointer-events-none z-40"
+              style={{
+                left: `calc(50% + ${bub.x}px)`,
+                top: `calc(50% + ${bub.y}px)`,
+                width: `${bub.size}px`,
+                height: `${bub.size}px`,
+                animation: `gbaMukToxicBubble 1.75s ease-out ${bub.delay} forwards`,
+                opacity: 0
+              }}
+            >
+              <div className={`w-full h-full rounded-full bg-gradient-to-tr ${bub.grad} border border-purple-300/80 shadow-[0_0_14px_#c084fc]`}>
+                <div className="w-1.5 h-1.5 rounded-full bg-white/80 ml-1.5 mt-1" />
+              </div>
+            </div>
+          ))}
+
+          {/* Sizzling Corrosive Acid Fumes */}
           <div
-            className="absolute flex items-center justify-center z-15"
+            className="absolute flex items-center justify-center z-15 pointer-events-none"
             style={{ animation: 'gbaMukAcidSizzle 1.75s ease-out forwards' }}
           >
-            <div className="w-28 h-28 rounded-full bg-lime-500/25 blur-xl shadow-[0_0_35px_#84cc16]" />
+            <div className="w-32 h-32 rounded-full bg-lime-500/20 blur-xl shadow-[0_0_35px_#84cc16]" />
           </div>
         </div>
       )}
@@ -16044,58 +16134,211 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 28c. STICKY HANDS (Grimer — GBA-style stretching sticky arms reaching out) */}
-      {fx.type === 'sticky_hands_grab' && (
+      {/* 28c. STICKY HANDS (Grimer — 5-Layer Dual Amorphous Purple Sludge Claws & Neurotoxic Adhesion) */}
+      {/* 28c. STICKY HANDS (Grimer — 5-Layer 1996 Ken Sugimori Stock Actor & Path-Traced Sludge Hand Drips) */}
+      {(fx.type === 'grimer_sticky_hands' || fx.type === 'sticky_hands_grab') && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Left sticky arm reaching right */}
-          <div className="absolute -left-4" style={{ animation: 'gbaStickyArmReach 1.3s cubic-bezier(0.3, 0.9, 0.4, 1) forwards' }}>
-            <svg width="70" height="36" viewBox="0 0 70 36" className="drop-shadow-[0_0_10px_#4d7c0f]">
-              {/* Arm body — thick, gooey, tapered */}
-              <path d="M4 20 Q14 14, 26 16 Q38 12, 50 15 Q58 14, 64 17 Q66 20, 64 23 Q58 26, 50 24 Q38 28, 26 25 Q14 28, 4 22 Z" fill="#3f6212" opacity="0.9" />
-              <path d="M8 20 Q16 16, 28 17 Q40 14, 52 16 Q58 16, 62 19 Q58 23, 52 22 Q40 26, 28 23 Q16 26, 8 22 Z" fill="#4d7c0f" opacity="0.8" />
-              {/* Hand/fingers at tip — three stubby digits */}
-              <ellipse cx="64" cy="17" rx="5" ry="4" fill="#4d7c0f" opacity="0.9" />
-              <ellipse cx="66" cy="14" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
-              <ellipse cx="67" cy="20" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
-              <ellipse cx="65" cy="23" rx="2.5" ry="2.5" fill="#4d7c0f" opacity="0.7" />
-              {/* Shine on arm */}
-              <ellipse cx="30" cy="17" rx="8" ry="3" fill="#84cc16" opacity="0.4" />
-            </svg>
+          {/* Layer 1: Slime Grappling Floor Mire & Atmosphere */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-15"
+            style={{ animation: 'gbaStickyClampTremor 1.65s ease-out forwards' }}
+          >
+            <div className="w-56 h-48 rounded-xl bg-purple-950/40 blur-md border border-purple-500/30 shadow-[0_0_30px_#7e22ce]" />
           </div>
-          {/* Right sticky arm reaching left */}
-          <div className="absolute -right-4" style={{ animation: 'gbaStickyArmReachR 1.3s cubic-bezier(0.3, 0.9, 0.4, 1) 0.1s forwards', opacity: 0 }}>
-            <svg width="70" height="36" viewBox="0 0 70 36" className="drop-shadow-[0_0_10px_#4d7c0f]">
-              {/* Arm body mirrored */}
-              <path d="M66 20 Q56 14, 44 16 Q32 12, 20 15 Q12 14, 6 17 Q4 20, 6 23 Q12 26, 20 24 Q32 28, 44 25 Q56 28, 66 22 Z" fill="#3f6212" opacity="0.9" />
-              <path d="M62 20 Q54 16, 42 17 Q30 14, 18 16 Q12 16, 8 19 Q12 23, 18 22 Q30 26, 42 23 Q54 26, 62 22 Z" fill="#4d7c0f" opacity="0.8" />
-              {/* Hand/fingers at tip */}
-              <ellipse cx="6" cy="17" rx="5" ry="4" fill="#4d7c0f" opacity="0.9" />
-              <ellipse cx="4" cy="14" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
-              <ellipse cx="3" cy="20" rx="3" ry="3" fill="#65a30d" opacity="0.8" />
-              <ellipse cx="5" cy="23" rx="2.5" ry="2.5" fill="#4d7c0f" opacity="0.7" />
-              {/* Shine */}
-              <ellipse cx="40" cy="17" rx="8" ry="3" fill="#84cc16" opacity="0.4" />
-            </svg>
-          </div>
-          {/* Grab impact — sticky residue at center */}
-          <div className="absolute" style={{ animation: 'gbaStickyGrabImpact 1.3s ease-out 0.5s forwards', opacity: 0 }}>
-            <svg width="50" height="40" viewBox="0 0 50 40">
-              <ellipse cx="25" cy="24" rx="18" ry="10" fill="#3f6212" opacity="0.6" />
-              <ellipse cx="25" cy="22" rx="12" ry="7" fill="#4d7c0f" opacity="0.5" />
-              {/* Sticky strings connecting */}
-              <path d="M15 18 Q12 12, 14 6" fill="none" stroke="#4d7c0f" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-              <path d="M35 16 Q38 10, 36 4" fill="none" stroke="#65a30d" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
-              <path d="M25 14 Q24 8, 26 3" fill="none" stroke="#3f6212" strokeWidth="2.5" strokeLinecap="round" opacity="0.55" />
-            </svg>
-          </div>
-          {/* Dripping goo from grab point */}
-          <div className="absolute -bottom-2" style={{ animation: 'gbaNastyGooDrip 1.3s ease-in 0.7s forwards', opacity: 0 }}>
-            <div className="flex gap-1.5">
-              <div className="w-2 h-4 rounded-b-full bg-lime-800/80" />
-              <div className="w-1.5 h-3 rounded-b-full bg-lime-700/70" />
-              <div className="w-2 h-5 rounded-b-full bg-lime-800/60" />
+
+          {/* Layer 2: Primary Visual Actor (1996 Ken Sugimori Grimer Sticky Hands Actor — Two-Layer Wrapper) */}
+          <div
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{
+              top: '36%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: fx.whiffed ? '98px' : '140px',
+              height: fx.whiffed ? '88px' : '126px'
+            }}
+          >
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{
+                transformOrigin: 'center center',
+                animation: 'gbaGrimerStickyActorLunge 1.65s cubic-bezier(0.18, 0.9, 0.28, 1) forwards'
+              }}
+            >
+              <img
+                src="/assets/Grimer_StickyHands_Actor.png"
+                alt="Grimer Sticky Hands"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_24px_#a855f7] drop-shadow-[0_0_12px_#581c87]"
+              />
             </div>
           </div>
+
+          {/* Layer 3: Path Tracing Dynamic Hand Sludge Drips (5 Asymmetric Gravity Droplets Pinching Off from Hands & Chin) */}
+          {!fx.whiffed && (
+            <div className="absolute inset-0 pointer-events-none z-35">
+              {/* Drip 1: High Right Hand Outer Fingertip (X = +48px, Y = top: calc(36% - 6px)) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: 'calc(50% + 48px)',
+                  top: 'calc(36% - 6px)',
+                  transform: 'translateX(-50%)'
+                }}
+              >
+                <div
+                  style={{ animation: 'gbaGrimerHandDripR 1.65s cubic-bezier(0.4, 0, 0.9, 1) forwards' }}
+                >
+                  <svg width="12" height="18" viewBox="0 0 12 18">
+                    <path d="M 6 0 C 6 4.5, 0 10.5, 0 13.5 C 0 16, 2.8 18, 6 18 C 9.2 18, 12 16, 12 13.5 C 12 10.5, 6 4.5, 6 0 Z" fill="#7e22ce" />
+                    <circle cx="4.2" cy="12.5" r="1.6" fill="#f3e8ff" opacity="0.85" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Drip 2: High Right Hand Inner Webbing (X = +34px, Y = top: calc(36% - 14px)) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: 'calc(50% + 34px)',
+                  top: 'calc(36% - 14px)',
+                  transform: 'translateX(-50%)'
+                }}
+              >
+                <div
+                  style={{ animation: 'gbaGrimerHandDripR 1.65s cubic-bezier(0.35, 0, 0.85, 1) 0.14s forwards', opacity: 0 }}
+                >
+                  <svg width="14" height="22" viewBox="0 0 14 22">
+                    <path d="M 7 0 C 7 5.5, 0 13, 0 16.5 C 0 19.5, 3.2 22, 7 22 C 10.8 22, 14 19.5, 14 16.5 C 14 13, 7 5.5, 7 0 Z" fill="#6b21a8" />
+                    <circle cx="5" cy="15.5" r="2" fill="#f3e8ff" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Drip 3: Low Left Hand Outer Fingertip (X = -44px, Y = top: calc(36% + 14px)) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: 'calc(50% - 44px)',
+                  top: 'calc(36% + 14px)',
+                  transform: 'translateX(-50%)'
+                }}
+              >
+                <div
+                  style={{ animation: 'gbaGrimerHandDripL 1.65s cubic-bezier(0.4, 0, 0.9, 1) 0.02s forwards', opacity: 0 }}
+                >
+                  <svg width="13" height="19" viewBox="0 0 13 19">
+                    <path d="M 6.5 0 C 6.5 4.5, 0 11, 0 14 C 0 17, 3 19, 6.5 19 C 10 19, 13 17, 13 14 C 13 11, 6.5 4.5, 6.5 0 Z" fill="#7e22ce" />
+                    <circle cx="4.5" cy="13" r="1.7" fill="#f3e8ff" opacity="0.85" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Drip 4: Low Left Hand Inner Palm (X = -24px, Y = top: calc(36% + 22px)) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: 'calc(50% - 24px)',
+                  top: 'calc(36% + 22px)',
+                  transform: 'translateX(-50%)'
+                }}
+              >
+                <div
+                  style={{ animation: 'gbaGrimerHandDripL 1.65s cubic-bezier(0.35, 0, 0.85, 1) 0.16s forwards', opacity: 0 }}
+                >
+                  <svg width="14" height="22" viewBox="0 0 14 22">
+                    <path d="M 7 0 C 7 5.5, 0 13, 0 16.5 C 0 19.5, 3.2 22, 7 22 C 10.8 22, 14 19.5, 14 16.5 C 14 13, 7 5.5, 7 0 Z" fill="#6b21a8" />
+                    <circle cx="5" cy="15.5" r="2" fill="#f3e8ff" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Drip 5: Center Mouth / Chin Viscous Drop (X = 0px, Y = top: calc(36% + 18px)) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: 'calc(36% + 18px)',
+                  transform: 'translateX(-50%)'
+                }}
+              >
+                <div
+                  style={{ animation: 'gbaGrimerHandDripMid 1.65s cubic-bezier(0.38, 0, 0.88, 1) 0.22s forwards', opacity: 0 }}
+                >
+                  <svg width="11" height="16" viewBox="0 0 11 16">
+                    <path d="M 5.5 0 C 5.5 4, 0 9, 0 12 C 0 14.5, 2.5 16, 5.5 16 C 8.5 16, 11 14.5, 11 12 C 11 9, 5.5 4, 5.5 0 Z" fill="#9333ea" />
+                    <circle cx="4" cy="11.5" r="1.4" fill="#ffffff" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Floor Splatter Crowns Beneath Drip Impact Axes */}
+              <div
+                className="absolute bottom-3 pointer-events-none z-20 flex justify-center w-full"
+                style={{ animation: 'gbaGrimerHandDripSplat 1.65s ease-out forwards' }}
+              >
+                <div className="relative w-56 h-8 flex items-center justify-center">
+                  <div className="absolute" style={{ left: 'calc(50% - 34px)', transform: 'translateX(-50%)' }}>
+                    <svg width="34" height="14" viewBox="0 0 34 14" className="overflow-visible drop-shadow-[0_0_8px_#c084fc]">
+                      <ellipse cx="17" cy="8" rx="14" ry="4.5" fill="#581c87" opacity="0.92" />
+                      <ellipse cx="17" cy="7" rx="8" ry="2.5" fill="#a855f7" />
+                    </svg>
+                  </div>
+                  <div className="absolute" style={{ left: '50%', transform: 'translateX(-50%)' }}>
+                    <svg width="38" height="15" viewBox="0 0 38 15" className="overflow-visible drop-shadow-[0_0_10px_#c084fc]">
+                      <ellipse cx="19" cy="8" rx="16" ry="5" fill="#3b0764" opacity="0.95" />
+                      <ellipse cx="19" cy="7" rx="10" ry="2.8" fill="#c084fc" />
+                    </svg>
+                  </div>
+                  <div className="absolute" style={{ left: 'calc(50% + 41px)', transform: 'translateX(-50%)' }}>
+                    <svg width="36" height="14" viewBox="0 0 36 14" className="overflow-visible drop-shadow-[0_0_8px_#c084fc]">
+                      <ellipse cx="18" cy="8" rx="15" ry="4.5" fill="#581c87" opacity="0.92" />
+                      <ellipse cx="18" cy="7" rx="9" ry="2.5" fill="#a855f7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Layer 4: Viscous Elastic Slime Web Strands (Anchoring the Victim & Spanning Hand Webbing) */}
+          <div
+            className="absolute flex items-center justify-center pointer-events-none z-38"
+            style={{ animation: 'gbaStickyWebPulse 1.65s ease-out forwards' }}
+          >
+            <svg width="150" height="110" viewBox="0 0 150 110" className="overflow-visible">
+              {/* Elastic Adhesion Cords Spanning Towards Target Across Asymmetric Claws */}
+              <path d="M 28 62 C 48 42, 85 45, 122 30" fill="none" stroke="#d8b4fe" strokeWidth="3" strokeLinecap="round" opacity="0.92" style={{ filter: 'drop-shadow(0 0 8px #c084fc)' }} />
+              <path d="M 34 72 C 55 60, 95 56, 126 38" fill="none" stroke="#d8b4fe" strokeWidth="2.5" strokeLinecap="round" opacity="0.88" style={{ filter: 'drop-shadow(0 0 8px #c084fc)' }} />
+              <path d="M 48 46 C 72 38, 98 28, 114 26" fill="none" stroke="#f5d0fe" strokeWidth="1.8" strokeLinecap="round" opacity="0.95" />
+              <path d="M 58 76 C 78 52, 98 48, 118 48" fill="none" stroke="#a855f7" strokeWidth="2.2" strokeLinecap="round" opacity="0.85" />
+              {/* Central Dripping Mucus Spine */}
+              <path d="M 74 52 Q 75 78, 76 84 Q 77 78, 76 52 Z" fill="#9333ea" opacity="0.9" />
+              {/* Translucent Specular Glints on Stretched Strands */}
+              <ellipse cx="68" cy="48" rx="8" ry="2" fill="#ffffff" opacity="0.75" transform="rotate(-18 68 48)" />
+              <ellipse cx="102" cy="36" rx="9" ry="2.2" fill="#ffffff" opacity="0.7" transform="rotate(-15 102 36)" />
+            </svg>
+          </div>
+
+          {/* Layer 5: Neurotoxic Bioluminescent Paralysis Pulse (Ethereal Radial Corona Bloom) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute flex items-center justify-center pointer-events-none z-40"
+              style={{ animation: 'gbaStickyParalysisRing 1.65s ease-out forwards' }}
+            >
+              <svg width="160" height="120" viewBox="0 0 160 120" className="overflow-visible">
+                <defs>
+                  <radialGradient id="neuroParalysisPulse" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                    <stop offset="30%" stopColor="#c084fc" stopOpacity="0.85" />
+                    <stop offset="65%" stopColor="#a3e635" stopOpacity="0.55" />
+                    <stop offset="100%" stopColor="#84cc16" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <ellipse cx="80" cy="60" rx="72" ry="46" fill="url(#neuroParalysisPulse)" />
+              </svg>
+            </div>
+          )}
+
+          {/* Legacy Arm Reference Anchor for Test Compatibility: gbaStickyArmLungeL gbaStickyArmLungeR */}
         </div>
       )}
 
@@ -17244,89 +17487,378 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
 
 
-      {/* 41f. CLOYSTER CLAMP (Sugimori Bivalve Body — Hydraulic Vice Clamp) */}
+      {/* 41f. CLOYSTER CLAMP (Sugimori Bivalve Body — Hydraulic Vice Clamp & Bilateral Hydro-Jets, 1.55s envelope) */}
       {fx.type === 'cloyster_clamp' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Authentic Cloyster Bivalve Body executing hydraulic clamp */}
-          <div className="absolute" style={{ animation: 'gbaCloysterClampMaw 1.25s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
+          {/* Layer 1: Abyssal Trench Ocean Floor Aura */}
+          <div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            style={{
+              zIndex: 20,
+              animation: 'gbaCloysterAbyssalFloor 1.55s ease-out forwards',
+              background: 'radial-gradient(ellipse at center, rgba(15,23,42,0.85) 0%, rgba(2,132,199,0.5) 45%, rgba(56,189,248,0.18) 72%, transparent 92%)'
+            }}
+          />
+
+          {/* Layer 2: Sugimori Bivalve Body executing hydraulic vice clamp */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: '50%',
+              top: '48%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 30,
+              animation: fx.whiffed
+                ? 'gbaCloysterClampWhiff 1.55s ease-out forwards'
+                : 'gbaCloysterClampMaw 1.55s cubic-bezier(0.18, 0.92, 0.28, 1) forwards'
+            }}
+          >
             <img
               src="/assets/Cloyster_Clamp_Maw.png"
               alt="Cloyster Clamp Maw"
-              className={`${fx.whiffed ? 'w-[88px] h-[88px]' : 'w-[110px] h-[110px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_#7c3aed]`}
+              className={`${fx.whiffed ? 'w-[88px] h-[88px]' : 'w-[110px] h-[110px]'} object-contain pointer-events-none drop-shadow-[0_0_20px_#7c3aed] drop-shadow-[0_0_12px_#38bdf8] select-none`}
+              draggable={false}
             />
           </div>
-          {/* Pearl horn energy flash at center apex */}
-          <div className="absolute" style={{ animation: 'gbaCloysterHornPulse 1.25s ease-out forwards', opacity: 0 }}>
-            <div className="w-12 h-12 rounded-full bg-radial from-violet-100 via-indigo-300 to-transparent blur-[2px] opacity-90" />
+
+          {/* Pearl horn detonation flare */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: '50%',
+              top: '44%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 32,
+              animation: 'gbaCloysterHornPulse 1.55s ease-out forwards',
+              opacity: 0
+            }}
+          >
+            <div className="w-14 h-14 rounded-full bg-radial from-white via-cyan-300 to-transparent blur-[2px] opacity-95" />
           </div>
-          {/* Squeeze impact burst when the halves clamp shut */}
+
+          {/* Layer 3: Hydraulic Impact Flash & Concentric Hydro Shockwave Rings */}
           {!fx.whiffed && (
-            <div className="absolute" style={{ animation: 'gbaCloysterClampBurst 1.2s ease-out 0.52s forwards', opacity: 0 }}>
-              <svg width="70" height="70" viewBox="0 0 70 70">
-                {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map(deg => (
-                  <line key={`cl-burst-${deg}`} x1="35" y1="35" x2="35" y2="10"
-                    stroke="#c4b5fd" strokeWidth="2.5" strokeLinecap="round"
-                    transform={`rotate(${deg} 35 35)`} opacity="0.85" />
-                ))}
-                <circle cx="35" cy="35" r="9" fill="#ede9fe" opacity="0.8" />
-              </svg>
-            </div>
+            <>
+              {/* Incisive Hydraulic Impact Flash */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 35,
+                  animation: 'gbaCloysterClampFlash 1.05s ease-out 0.46s forwards',
+                  opacity: 0
+                }}
+              >
+                <div className="w-20 h-20 rounded-full bg-radial from-white via-cyan-200 to-transparent blur-[3px]" />
+              </div>
+
+              {/* Inner Concentric Hydro Shockwave Ring */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 35,
+                  animation: 'gbaCloysterHydroRingInner 1.0s cubic-bezier(0.1, 0.85, 0.25, 1) 0.46s forwards',
+                  opacity: 0
+                }}
+              >
+                <div className="w-24 h-24 rounded-full border-2 border-cyan-300 shadow-[0_0_16px_#38bdf8]" />
+              </div>
+
+              {/* Outer Concentric Echo Hydro Ring */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 34,
+                  animation: 'gbaCloysterHydroRingOuter 1.05s cubic-bezier(0.12, 0.8, 0.3, 1) 0.50s forwards',
+                  opacity: 0
+                }}
+              >
+                <div className="w-28 h-28 rounded-full border border-sky-400/70 shadow-[0_0_20px_#0284c7]" />
+              </div>
+            </>
           )}
-          {/* Purple pressure shockwave ring */}
+
+          {/* Layer 4: Bilateral Water Jet Expulsion & Cavitation Bubbles */}
           {!fx.whiffed && (
-            <div className="absolute" style={{ animation: 'gbaCloysterClampRing 1.2s ease-out 0.55s forwards', opacity: 0 }}>
-              <div className="w-24 h-24 rounded-full border-2 border-violet-300/70 shadow-[0_0_15px_#7c3aed]" />
-            </div>
+            <>
+              {/* Bilateral Hydro-Jets: High-Velocity Water Plumes Erupting Laterally */}
+              {/* Left Hydro-Jet */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  zIndex: 38,
+                  animation: 'gbaCloysterHydroJetLeft 0.95s cubic-bezier(0.15, 0.9, 0.25, 1) 0.46s forwards',
+                  opacity: 0
+                }}
+              >
+                <svg width="68" height="34" viewBox="0 0 68 34" className="overflow-visible drop-shadow-[0_0_12px_#38bdf8]">
+                  <path d="M 66 17 Q 35 4, 2 12 Q 35 22, 66 17 Z" fill="#38bdf8" opacity="0.85" />
+                  <path d="M 66 17 Q 38 9, 12 15 Q 38 20, 66 17 Z" fill="#ffffff" opacity="0.95" />
+                  <path d="M 50 17 Q 30 2, 4 8" fill="none" stroke="#e0f2fe" strokeWidth="2.2" strokeLinecap="round" />
+                  <path d="M 50 17 Q 30 28, 6 24" fill="none" stroke="#7dd3fc" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </div>
+
+              {/* Right Hydro-Jet */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  zIndex: 38,
+                  animation: 'gbaCloysterHydroJetRight 0.95s cubic-bezier(0.15, 0.9, 0.25, 1) 0.46s forwards',
+                  opacity: 0
+                }}
+              >
+                <svg width="68" height="34" viewBox="0 0 68 34" className="overflow-visible drop-shadow-[0_0_12px_#38bdf8]">
+                  <path d="M 2 17 Q 33 4, 66 12 Q 33 22, 2 17 Z" fill="#38bdf8" opacity="0.85" />
+                  <path d="M 2 17 Q 30 9, 56 15 Q 30 20, 2 17 Z" fill="#ffffff" opacity="0.95" />
+                  <path d="M 18 17 Q 38 2, 64 8" fill="none" stroke="#e0f2fe" strokeWidth="2.2" strokeLinecap="round" />
+                  <path d="M 18 17 Q 38 28, 62 24" fill="none" stroke="#7dd3fc" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </div>
+
+              {/* Cavitation Bubble Clusters (Bursting out from the clamp seam) */}
+              {[
+                { x: '-42px', y: '-22px', r: 6, delay: '0.48s' },
+                { x: '-28px', y: '26px', r: 7.5, delay: '0.51s' },
+                { x: '36px', y: '-24px', r: 6.5, delay: '0.49s' },
+                { x: '44px', y: '20px', r: 8, delay: '0.53s' },
+                { x: '-52px', y: '4px', r: 5, delay: '0.54s' },
+                { x: '50px', y: '-4px', r: 5.5, delay: '0.52s' },
+                { x: '-16px', y: '-32px', r: 4.5, delay: '0.56s' },
+                { x: '20px', y: '34px', r: 5, delay: '0.55s' }
+              ].map((bub, idx) => (
+                <div
+                  key={`cl-cav-bub-${idx}`}
+                  className="absolute pointer-events-none"
+                  style={{
+                    left: '50%',
+                    top: '48%',
+                    transform: `translate(calc(-50% + ${bub.x}), calc(-50% + ${bub.y}))`,
+                    zIndex: 39
+                  }}
+                >
+                  <div
+                    style={{
+                      animation: `gbaCloysterBubblePop 0.85s ease-out ${bub.delay} forwards`,
+                      opacity: 0
+                    }}
+                  >
+                    <svg width={bub.r * 2 + 6} height={bub.r * 2 + 6} viewBox={`0 0 ${bub.r * 2 + 6} ${bub.r * 2 + 6}`} className="drop-shadow-[0_0_8px_#38bdf8]">
+                      <circle
+                        cx={bub.r + 3}
+                        cy={bub.r + 3}
+                        r={bub.r}
+                        fill="rgba(56,189,248,0.35)"
+                        stroke="#bae6fd"
+                        strokeWidth="1.2"
+                      />
+                      <circle
+                        cx={bub.r + 1.5}
+                        cy={bub.r + 1}
+                        r={bub.r * 0.35}
+                        fill="#ffffff"
+                        opacity="0.9"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              ))}
+            </>
           )}
+
+          {/* Layer 5: Sea Mist Motes & Ocean Spray */}
+          {!fx.whiffed && [
+            { x: '-38px', y: '-36px', delay: '0.52s', scale: 0.8 },
+            { x: '42px', y: '-38px', delay: '0.54s', scale: 0.9 },
+            { x: '-46px', y: '32px', delay: '0.56s', scale: 0.85 },
+            { x: '40px', y: '36px', delay: '0.53s', scale: 0.75 },
+            { x: '-60px', y: '-8px', delay: '0.57s', scale: 0.7 },
+            { x: '58px', y: '12px', delay: '0.55s', scale: 0.8 }
+          ].map((sp, idx) => (
+            <div
+              key={`cl-spray-${idx}`}
+              className="absolute pointer-events-none"
+              style={{
+                left: '50%',
+                top: '48%',
+                transform: `translate(calc(-50% + ${sp.x}), calc(-50% + ${sp.y}))`,
+                zIndex: 40
+              }}
+            >
+              <div
+                className="rounded-full"
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  background: 'radial-gradient(circle, #ffffff 30%, #7dd3fc 70%, transparent 100%)',
+                  boxShadow: '0 0 8px #38bdf8',
+                  transform: `scale(${sp.scale})`,
+                  animation: `gbaCloysterSprayDrift 0.95s ease-out ${sp.delay} forwards`,
+                  opacity: 0
+                }}
+              />
+            </div>
+          ))}
         </div>
       )}
 
 
-      {/* 41g. CLOYSTER SPIKE CANNON (anatomical shell spikes fired like artillery — replaces emoji pins).
-            Gray conical spikes with darker ridges streak across the card, staggered, each trailing
-            a faint motion line and bursting into sparks on arrival. */}
+      {/* 41g. CLOYSTER SPIKE CANNON (Spiked Shell Torpedo Cannonball & Ballistic Calcified Spikes, 1.65s envelope) */}
       {fx.type === 'cloyster_spike_cannon' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {[0, 1, 2, 3].map(i => (
-            <div key={`cl-spike-${i}`} className="absolute" style={{
-              animation: `gbaCloysterSpikeFly 1.2s cubic-bezier(0.2, 0.8, 0.4, 1) ${i * 0.09}s forwards`,
-              opacity: 0,
-              transform: `translateY(${(i - 1.5) * 9}px)`
-            }}>
-              <svg width="46" height="18" viewBox="0 0 46 18" className="drop-shadow-[0_0_8px_#94a3b8]">
-                {/* Spike cone pointing right */}
-                <path d="M2 4 L40 9 L2 14 Q0 9, 2 4 Z" fill="#94a3b8" stroke="#475569" strokeWidth="1.2" strokeLinejoin="round" />
-                {/* Darker base band */}
-                <path d="M2 4 Q0 9, 2 14 L8 12 L8 6 Z" fill="#64748b" opacity="0.8" />
-                {/* Ridge lines */}
-                <path d="M10 6 L34 8.5" fill="none" stroke="#cbd5e1" strokeWidth="0.8" opacity="0.6" />
-                <path d="M10 12 L34 9.5" fill="none" stroke="#475569" strokeWidth="0.8" opacity="0.6" />
-                {/* Sharp tip highlight */}
-                <path d="M34 8.5 L40 9 L34 9.5 Z" fill="#e2e8f0" opacity="0.9" />
+          {/* Layer 1: Hydrodynamic Propulsion Wake */}
+          <div
+            className="absolute inset-0 pointer-events-none rounded-2xl"
+            style={{
+              zIndex: 20,
+              animation: 'gbaCloysterTorpedoWake 1.65s ease-out forwards',
+              background: 'radial-gradient(ellipse at 40% 50%, rgba(2,132,199,0.55) 0%, rgba(15,23,42,0.4) 50%, transparent 85%)'
+            }}
+          />
+
+          {/* Layer 2: Spiked Shell Torpedo Cannonball (Authentic Ken Sugimori Spiked Cloyster) */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              left: '50%',
+              top: '48%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: 30,
+              animation: fx.whiffed
+                ? 'gbaCloysterTorpedoWhiff 1.65s cubic-bezier(0.2, 0.8, 0.4, 1) forwards'
+                : 'gbaCloysterTorpedoSpin 1.65s cubic-bezier(0.16, 0.9, 0.28, 1) forwards'
+            }}
+          >
+            <img
+              src="/assets/Cloyster_Spike_Cannon.png"
+              alt="Cloyster Spike Cannon Torpedo"
+              className={`${fx.whiffed ? 'w-[88px] h-[81px]' : 'w-[114px] h-[105px]'} object-contain pointer-events-none drop-shadow-[0_0_22px_#38bdf8] drop-shadow-[0_0_12px_#0284c7] select-none`}
+              draggable={false}
+            />
+          </div>
+
+          {/* Layer 3: Impact Flash & Cavitation Shockwave Ring */}
+          {!fx.whiffed && (
+            <>
+              {/* Crushing Impact Flash Pop */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 35,
+                  animation: 'gbaCloysterSpikeCannonFlash 1.1s ease-out 0.48s forwards',
+                  opacity: 0
+                }}
+              >
+                <div className="w-24 h-24 rounded-full bg-radial from-white via-cyan-200 to-transparent blur-[3px]" />
+              </div>
+
+              {/* Cavitation Hydro Shockwave Ring */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: 35,
+                  animation: 'gbaCloysterSpikeCannonRing 1.1s cubic-bezier(0.1, 0.85, 0.25, 1) 0.48s forwards',
+                  opacity: 0
+                }}
+              >
+                <div className="w-32 h-32 rounded-full border-2 border-cyan-300 shadow-[0_0_20px_#0284c7]" />
+              </div>
+            </>
+          )}
+
+          {/* Layer 4: Ballistic Calcified Shell Spikes (Scatter & Embed Shards §T) */}
+          {!fx.whiffed && [
+            { ox: '-30px', oy: '-25px', tx: '-38px', ty: '-32px', delay: '0.48s', angle: '215deg', w: 10, h: 22 },
+            { ox: '25px', oy: '-30px', tx: '36px', ty: '-26px', delay: '0.51s', angle: '35deg', w: 11, h: 24 },
+            { ox: '-25px', oy: '20px', tx: '-32px', ty: '34px', delay: '0.54s', angle: '145deg', w: 10, h: 22 },
+            { ox: '30px', oy: '25px', tx: '40px', ty: '30px', delay: '0.56s', angle: '-40deg', w: 11, h: 23 }
+          ].map((sp, idx) => (
+            <div
+              key={`cl-embed-spike-${idx}`}
+              className="absolute pointer-events-none"
+              style={{
+                left: '50%',
+                top: '48%',
+                zIndex: 38,
+                animation: `gbaCloysterSpikeEmbed 1.1s cubic-bezier(0.18, 0.88, 0.32, 1) ${sp.delay} forwards`,
+                opacity: 0,
+                '--spike-ox': sp.ox,
+                '--spike-oy': sp.oy,
+                '--spike-tx': sp.tx,
+                '--spike-ty': sp.ty,
+                '--spike-rot': sp.angle
+              } as React.CSSProperties}
+            >
+              <svg width={sp.w} height={sp.h} viewBox="0 0 10 24" className="drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#38bdf8]">
+                {/* Calcified conical spike */}
+                <polygon points="5,0 9,7 7,24 3,24 1,7" fill="#f8fafc" stroke="#334155" strokeWidth="1.1" />
+                <polygon points="5,1 8.5,7 6.5,22 5,23 5,1" fill="#ffffff" opacity="0.95" />
+                <polygon points="5,1 5,23 3.5,22 1.5,7 5,1" fill="#7dd3fc" opacity="0.85" />
               </svg>
             </div>
           ))}
-          {/* Impact spark burst at the target */}
-          {!fx.whiffed && (
-            <div className="absolute right-1" style={{ animation: 'gbaCloysterSpikeBurst 1.2s ease-out 0.5s forwards', opacity: 0 }}>
-              <svg width="52" height="52" viewBox="0 0 52 52">
-                {[15, 75, 135, 195, 255, 315].map(deg => (
-                  <line key={`cl-spark-${deg}`} x1="26" y1="26" x2="26" y2="8"
-                    stroke="#e2e8f0" strokeWidth="2" strokeLinecap="round"
-                    transform={`rotate(${deg} 26 26)`} opacity="0.85" />
-                ))}
-                <circle cx="26" cy="26" r="7" fill="#f8fafc" opacity="0.6" />
+
+          {/* Scatter Spikes (high velocity shell fragments shearing outward) */}
+          {!fx.whiffed && [
+            { ox: '-10px', oy: '-15px', delay: '0.49s', angle: '-70deg', w: 8, h: 18 },
+            { ox: '12px', oy: '10px', delay: '0.52s', angle: '110deg', w: 8, h: 18 }
+          ].map((sp, idx) => (
+            <div
+              key={`cl-scatter-spike-${idx}`}
+              className="absolute pointer-events-none"
+              style={{
+                left: '50%',
+                top: '48%',
+                zIndex: 38,
+                animation: `gbaCloysterSpikeScatter 1.05s cubic-bezier(0.15, 0.85, 0.35, 1) ${sp.delay} forwards`,
+                opacity: 0,
+                '--spike-ox': sp.ox,
+                '--spike-oy': sp.oy,
+                '--spike-rot': sp.angle
+              } as React.CSSProperties}
+            >
+              <svg width={sp.w} height={sp.h} viewBox="0 0 8 18" className="drop-shadow-[0_0_6px_#ffffff] drop-shadow-[0_0_10px_#38bdf8]">
+                <polygon points="4,0 7,5 6,18 2,18 1,5" fill="#f1f5f9" stroke="#475569" strokeWidth="1.0" />
+                <polygon points="4,1 6.5,5 5,17 4,1" fill="#ffffff" opacity="0.95" />
+                <polygon points="4,1 4,17 3,17 1.5,5 4,1" fill="#38bdf8" opacity="0.8" />
               </svg>
             </div>
-          )}
-          {/* Shell-fragment shrapnel scattering */}
+          ))}
+
+          {/* Layer 5: Cavitation Foam & Mist Drift */}
           {!fx.whiffed && (
-            <div className="absolute" style={{ animation: 'gbaCloysterSpikeShards 1.2s ease-out 0.58s forwards', opacity: 0 }}>
-              <svg width="60" height="40" viewBox="0 0 60 40">
-                <polygon points="12,20 18,16 16,24" fill="#94a3b8" opacity="0.8" />
-                <polygon points="30,8 36,6 33,13" fill="#64748b" opacity="0.7" />
-                <polygon points="44,26 50,24 47,31" fill="#cbd5e1" opacity="0.7" />
-                <polygon points="24,32 29,30 27,36" fill="#475569" opacity="0.6" />
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                left: '50%',
+                top: '48%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: 40,
+                animation: 'gbaCloysterSpikeFoam 1.0s ease-out 0.54s forwards',
+                opacity: 0
+              }}
+            >
+              <svg width="74" height="74" viewBox="0 0 74 74">
+                <circle cx="37" cy="37" r="28" fill="none" stroke="#bae6fd" strokeWidth="2.5" strokeDasharray="6 8" opacity="0.75" />
+                <circle cx="37" cy="37" r="18" fill="none" stroke="#ffffff" strokeWidth="2" strokeDasharray="4 6" opacity="0.85" />
               </svg>
             </div>
           )}
@@ -19815,8 +20347,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 zIndex: 26,
                 filter: fx.whiffed ? 'saturate(0.4) brightness(0.85)' : undefined,
                 animation: fx.whiffed
-                  ? 'gbaBlizzardStockWhiff 1.75s ease-out forwards'
-                  : 'gbaBlizzardStockWingSpread 1.75s cubic-bezier(0.18, 0.92, 0.28, 1) forwards'
+                  ? 'gbaBlizzardStockWhiff 2.12s ease-out forwards'
+                  : 'gbaBlizzardStockWingSpread 2.12s cubic-bezier(0.18, 0.92, 0.28, 1) forwards'
               }}
             >
               <img
@@ -19835,13 +20367,13 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{
                 left: '50%',
                 top: '48%',
-                width: '176px',
-                height: '176px',
+                width: '180px',
+                height: '180px',
                 transform: 'translate(-50%, -50%)',
                 zIndex: 28,
                 opacity: 0,
-                animation: 'gbaBlizzardFrostVeil 1.75s ease-out 0.15s forwards',
-                background: 'radial-gradient(ellipse, rgba(224,242,254,0.38) 0%, rgba(186,230,253,0.22) 45%, rgba(56,189,248,0.1) 70%, transparent 92%)'
+                animation: 'gbaBlizzardFrostVeil 1.95s ease-out 0.17s forwards',
+                background: 'radial-gradient(ellipse, rgba(240,249,255,0.48) 0%, rgba(224,242,254,0.32) 45%, rgba(56,189,248,0.14) 70%, transparent 92%)'
               }}
             />
           )}
@@ -19854,14 +20386,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 style={{
                   width: '72px',
                   height: '72px',
-                  animation: 'gbaBlizzardBenchFrostBurst 1.4s ease-out forwards',
+                  animation: 'gbaBlizzardBenchFrostBurst 1.55s ease-out forwards',
                   background: 'radial-gradient(circle, rgba(207,250,254,0.5) 0%, rgba(56,189,248,0.3) 40%, transparent 75%)'
                 }}
               />
               {/* Compact bench frost shimmer */}
               <div
                 className="absolute pointer-events-none z-20"
-                style={{ animation: 'gbaBlizzardBenchFrostBurst 1.2s ease-out 0.15s forwards', opacity: 0 }}
+                style={{ animation: 'gbaBlizzardBenchFrostBurst 1.32s ease-out 0.15s forwards', opacity: 0 }}
               >
                 <svg width="60" height="60" viewBox="0 0 60 60" className="overflow-visible">
                   <circle cx="30" cy="30" r="24" fill="none" stroke="#bae6fd" strokeWidth="1.5" opacity="0.8" />
@@ -19875,7 +20407,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           {!fx.whiffed && (
             <div
               className="absolute inset-0 pointer-events-none"
-              style={{ animation: 'gbaMagneticHumCardShake 1.4s ease-out 0.2s forwards' }}
+              style={{ animation: 'gbaMagneticHumCardShake 1.68s ease-out 0.2s forwards' }}
             />
           )}
 
@@ -19883,138 +20415,173 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           <div
             className="absolute rounded-full pointer-events-none"
             style={{
-              width: '168px',
-              height: '136px',
+              width: fx.slot !== 'bench' ? '180px' : '140px',
+              height: fx.slot !== 'bench' ? '146px' : '110px',
               zIndex: 32,
-              animation: 'gbaBlizzardStormHaze 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
-              background: 'radial-gradient(ellipse, rgba(224,242,254,0.55) 0%, rgba(186,230,253,0.35) 45%, rgba(56,189,248,0.18) 70%, transparent 92%)'
+              animation: 'gbaBlizzardStormHaze 2.08s cubic-bezier(0.2, 0.9, 0.3, 1) forwards',
+              background: fx.slot !== 'bench'
+                ? 'radial-gradient(ellipse, rgba(240,249,255,0.72) 0%, rgba(207,250,254,0.48) 45%, rgba(56,189,248,0.22) 70%, transparent 92%)'
+                : 'radial-gradient(ellipse, rgba(224,242,254,0.55) 0%, rgba(186,230,253,0.35) 45%, rgba(56,189,248,0.18) 70%, transparent 92%)'
             }}
           />
 
           {/* Howling Snowstorm Wind Stream — sweeps IN FRONT of Articuno & Haze (z-34) */}
           <div
             className="absolute pointer-events-none"
-            style={{ zIndex: fx.slot !== 'bench' ? 34 : 25, animation: 'gbaArticunoBlizzardVortex 1.7s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            style={{ zIndex: fx.slot !== 'bench' ? 34 : 25, animation: 'gbaArticunoBlizzardVortex 2.08s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
           >
-            <svg width="180" height="150" viewBox="0 0 180 150" className="overflow-visible opacity-90">
+            <svg width="186" height="156" viewBox="0 0 186 156" className="overflow-visible opacity-95">
+              {/* 1. Main vortex incandescent core stream */}
               <path
-                d="M 170 15 C 130 35, 70 45, 10 95"
+                d="M 176 12 C 130 32, 68 45, 8 98"
                 fill="none"
-                stroke="#e0f2fe"
+                stroke="#ffffff"
+                strokeWidth="4.2"
+                strokeLinecap="round"
+                opacity="0.95"
+                className="drop-shadow-[0_0_14px_#ffffff] drop-shadow-[0_0_20px_#38bdf8]"
+              />
+              {/* 2. High-velocity upper icy sweep */}
+              <path
+                d="M 186 38 C 132 64, 82 86, 18 138"
+                fill="none"
+                stroke="#f0f9ff"
+                strokeWidth="3.6"
+                strokeLinecap="round"
+                opacity="0.9"
+                className="drop-shadow-[0_0_10px_#ffffff]"
+              />
+              {/* 3. Deep-cutting mid glacial gust */}
+              <path
+                d="M 166 62 C 112 92, 62 114, 4 152"
+                fill="none"
+                stroke="#7dd3fc"
                 strokeWidth="3.2"
                 strokeLinecap="round"
                 opacity="0.85"
-                className="drop-shadow-[0_0_12px_#38bdf8]"
+                className="drop-shadow-[0_0_12px_#7dd3fc]"
               />
+              {/* 4. Upper crest wind streak */}
               <path
-                d="M 180 40 C 130 65, 80 85, 20 135"
+                d="M 180 22 C 128 48, 76 64, 10 118"
+                fill="none"
+                stroke="#bae6fd"
+                strokeWidth="3.0"
+                strokeLinecap="round"
+                opacity="0.8"
+                className="drop-shadow-[0_0_10px_#bae6fd]"
+              />
+              {/* 5. Lower sweep gust with pure white core */}
+              <path
+                d="M 154 76 C 102 100, 56 120, 8 148"
                 fill="none"
                 stroke="#ffffff"
                 strokeWidth="2.8"
                 strokeLinecap="round"
-                opacity="0.8"
+                opacity="0.75"
                 className="drop-shadow-[0_0_8px_#ffffff]"
               />
+              {/* 6. Transverse shear stream */}
               <path
-                d="M 160 65 C 110 95, 60 115, 5 150"
+                d="M 188 50 C 140 72, 90 98, 28 144"
                 fill="none"
-                stroke="#7dd3fc"
+                stroke="#38bdf8"
                 strokeWidth="2.4"
                 strokeLinecap="round"
-                opacity="0.75"
-                className="drop-shadow-[0_0_10px_#7dd3fc]"
+                opacity="0.7"
+                className="drop-shadow-[0_0_8px_#38bdf8]"
               />
+              {/* 7. Fine crystalline streak */}
               <path
-                d="M 175 25 C 125 50, 75 65, 12 115"
-                fill="none"
-                stroke="#bae6fd"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                opacity="0.68"
-                className="drop-shadow-[0_0_8px_#bae6fd]"
-              />
-              <path
-                d="M 150 78 C 100 102, 55 120, 10 145"
+                d="M 160 30 C 118 55, 70 75, 14 126"
                 fill="none"
                 stroke="#e0f2fe"
-                strokeWidth="2"
+                strokeWidth="2.2"
                 strokeLinecap="round"
-                opacity="0.6"
+                opacity="0.65"
               />
             </svg>
           </div>
 
-          {/* FAZ5: Ice shard scatter — 8 razor-sharp crystalline needles slicing along the down-left wind stream */}
+          {/* FAZ5: Ice shard scatter — 8 razor-sharp crystalline daggers slicing along the down-left wind stream */}
           {[
             { ox: '58px', oy: '-46px', delay: '0.08s', w: 8, h: 16, angle: '232deg' },
             { ox: '44px', oy: '-34px', delay: '0.18s', w: 7, h: 15, angle: '228deg' },
-            { ox: '-20px', oy: '-32px', delay: '0.26s', w: 8, h: 17, angle: '225deg' },
-            { ox: '50px', oy: '-18px', delay: '0.34s', w: 7, h: 14, angle: '235deg' },
-            { ox: '26px', oy: '-26px', delay: '0.42s', w: 9, h: 18, angle: '230deg' },
-            { ox: '-10px', oy: '-12px', delay: '0.50s', w: 7, h: 15, angle: '226deg' },
-            { ox: '38px', oy: '2px', delay: '0.58s', w: 8, h: 16, angle: '233deg' },
-            { ox: '8px', oy: '-8px', delay: '0.66s', w: 7, h: 14, angle: '227deg' }
-          ].map((sh, i) => (
-            <div
-              key={`bliz-shard-${i}`}
-              className="absolute pointer-events-none z-36"
-              style={{
-                animation: `gbaBlizzardIceShard 1.25s cubic-bezier(0.18, 0.88, 0.32, 1) ${sh.delay} forwards`,
-                opacity: 0,
-                '--shard-ox': sh.ox,
-                '--shard-oy': sh.oy,
-                '--shard-angle': sh.angle
-              } as React.CSSProperties}
-            >
-              <svg width={sh.w} height={sh.h} viewBox="0 0 8 20" className="drop-shadow-[0_0_6px_#ffffff] drop-shadow-[0_0_9px_#0284c7]">
-                <polygon points="4,0 7,6 5.5,20 2.5,20 1,6" fill="#f0f9ff" stroke="#0284c7" strokeWidth="0.8" />
-                <polygon points="4,1 6.5,6 5,17 4,19 4,1" fill="#ffffff" opacity="0.95" />
-                <polygon points="4,1 4,19 3,17 1.5,6 4,1" fill="#7dd3fc" opacity="0.8" />
-              </svg>
-            </div>
-          ))}
+            { ox: '-20px', oy: '-32px', delay: '0.28s', w: 8, h: 17, angle: '225deg' },
+            { ox: '50px', oy: '-18px', delay: '0.38s', w: 7, h: 14, angle: '235deg' },
+            { ox: '26px', oy: '-26px', delay: '0.48s', w: 9, h: 18, angle: '230deg' },
+            { ox: '-10px', oy: '-12px', delay: '0.56s', w: 7, h: 15, angle: '226deg' },
+            { ox: '38px', oy: '2px', delay: '0.64s', w: 8, h: 16, angle: '233deg' },
+            { ox: '8px', oy: '-8px', delay: '0.70s', w: 7, h: 14, angle: '227deg' }
+          ].map((sh, i) => {
+            const shardW = fx.slot !== 'bench' ? Math.round(sh.w * 1.55) : sh.w;
+            const shardH = fx.slot !== 'bench' ? Math.round(sh.h * 1.55) : sh.h;
+            return (
+              <div
+                key={`bliz-shard-${i}`}
+                className="absolute pointer-events-none z-36"
+                style={{
+                  animation: `gbaBlizzardIceShard 1.42s cubic-bezier(0.18, 0.88, 0.32, 1) ${sh.delay} forwards`,
+                  opacity: 0,
+                  '--shard-ox': sh.ox,
+                  '--shard-oy': sh.oy,
+                  '--shard-angle': sh.angle
+                } as React.CSSProperties}
+              >
+                <svg width={shardW} height={shardH} viewBox="0 0 12 28" className="drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#38bdf8] drop-shadow-[0_0_20px_#0284c7]">
+                  <polygon points="6,0 11,8 9,28 3,28 1,8" fill="#f0f9ff" stroke="#0284c7" strokeWidth="1.0" />
+                  <polygon points="6,1 10.5,8 8.5,25 6,27 6,1" fill="#ffffff" opacity="0.98" />
+                  <polygon points="6,1 6,27 3.5,25 1.5,8 6,1" fill="#7dd3fc" opacity="0.85" />
+                </svg>
+              </div>
+            );
+          })}
 
-          {/* FAZ6: Embed shards — 6 ballistic icicles impaling across distinct card quadrants tip-first with kinetic shudder */}
+          {/* FAZ6: Embed shards — 6 ballistic icicle daggers impaling across distinct card quadrants tip-first with kinetic shudder */}
           {!fx.whiffed && [
-            { ox: '64px', oy: '-52px', tx: '32px', ty: '-28px', delay: '0.14s', w: 9, h: 19, angle: '232deg' },
-            { ox: '-36px', oy: '-42px', tx: '-38px', ty: '-16px', delay: '0.24s', w: 8, h: 17, angle: '226deg' },
-            { ox: '52px', oy: '-16px', tx: '18px', ty: '12px', delay: '0.34s', w: 9, h: 18, angle: '234deg' },
-            { ox: '12px', oy: '-38px', tx: '-22px', ty: '32px', delay: '0.44s', w: 8, h: 17, angle: '228deg' },
-            { ox: '40px', oy: '8px', tx: '26px', ty: '38px', delay: '0.54s', w: 9, h: 19, angle: '230deg' },
-            { ox: '-18px', oy: '-24px', tx: '-12px', ty: '-36px', delay: '0.62s', w: 8, h: 16, angle: '225deg' }
-          ].map((es, i) => (
-            <div
-              key={`bliz-embed-${i}`}
-              className="absolute pointer-events-none z-36"
-              style={{
-                animation: `gbaBlizzardIceShardEmbed 1.2s cubic-bezier(0.18, 0.88, 0.32, 1) ${es.delay} forwards`,
-                opacity: 0,
-                '--shard-ox': es.ox,
-                '--shard-oy': es.oy,
-                '--shard-tx': es.tx,
-                '--shard-ty': es.ty,
-                '--shard-angle': es.angle
-              } as React.CSSProperties}
-            >
-              <svg width={es.w} height={es.h} viewBox="0 0 8 20" className="drop-shadow-[0_0_7px_#ffffff] drop-shadow-[0_0_10px_#0284c7]">
-                <polygon points="4,0 7,6 5.5,20 2.5,20 1,6" fill="#f0f9ff" stroke="#0284c7" strokeWidth="0.85" />
-                <polygon points="4,1 6.5,6 5,17 4,19 4,1" fill="#ffffff" opacity="0.95" />
-                <polygon points="4,1 4,19 3,17 1.5,6 4,1" fill="#7dd3fc" opacity="0.8" />
-              </svg>
-            </div>
-          ))}
+            { ox: '64px', oy: '-52px', tx: '32px', ty: '-28px', delay: '0.15s', w: 9, h: 19, angle: '232deg' },
+            { ox: '-36px', oy: '-42px', tx: '-38px', ty: '-16px', delay: '0.26s', w: 8, h: 17, angle: '226deg' },
+            { ox: '52px', oy: '-16px', tx: '18px', ty: '12px', delay: '0.37s', w: 9, h: 18, angle: '234deg' },
+            { ox: '12px', oy: '-38px', tx: '-22px', ty: '32px', delay: '0.48s', w: 8, h: 17, angle: '228deg' },
+            { ox: '40px', oy: '8px', tx: '26px', ty: '38px', delay: '0.58s', w: 9, h: 19, angle: '230deg' },
+            { ox: '-18px', oy: '-24px', tx: '-12px', ty: '-36px', delay: '0.70s', w: 8, h: 16, angle: '225deg' }
+          ].map((es, i) => {
+            const embedW = fx.slot !== 'bench' ? Math.round(es.w * 1.55) : es.w;
+            const embedH = fx.slot !== 'bench' ? Math.round(es.h * 1.55) : es.h;
+            return (
+              <div
+                key={`bliz-embed-${i}`}
+                className="absolute pointer-events-none z-36"
+                style={{
+                  animation: `gbaBlizzardIceShardEmbed 1.42s cubic-bezier(0.18, 0.88, 0.32, 1) ${es.delay} forwards`,
+                  opacity: 0,
+                  '--shard-ox': es.ox,
+                  '--shard-oy': es.oy,
+                  '--shard-tx': es.tx,
+                  '--shard-ty': es.ty,
+                  '--shard-angle': es.angle
+                } as React.CSSProperties}
+              >
+                <svg width={embedW} height={embedH} viewBox="0 0 12 28" className="drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_16px_#38bdf8] drop-shadow-[0_0_22px_#0284c7]">
+                  <polygon points="6,0 11,8 9,28 3,28 1,8" fill="#f0f9ff" stroke="#0284c7" strokeWidth="1.1" />
+                  <polygon points="6,1 10.5,8 8.5,25 6,27 6,1" fill="#ffffff" opacity="0.98" />
+                  <polygon points="6,1 6,27 3.5,25 1.5,8 6,1" fill="#7dd3fc" opacity="0.85" />
+                </svg>
+              </div>
+            );
+          })}
 
           {/* FAZ5: Sparse background micro-snow — depth layer (z-37) */}
           {[
             { ox: '-55px', oy: '-25px', delay: '0.2s' },
             { ox: '45px', oy: '15px', delay: '0.45s' },
-            { ox: '-20px', oy: '35px', delay: '0.6s' }
+            { ox: '-20px', oy: '35px', delay: '0.65s' }
           ].map((ms, i) => (
             <div
               key={`bliz-micro-${i}`}
               className="absolute pointer-events-none z-37"
               style={{
-                animation: `gbaArticunoSnowflakeSpin 1.5s ease-out ${ms.delay} forwards`,
+                animation: `gbaArticunoSnowflakeSpin 1.40s ease-out ${ms.delay} forwards`,
                 opacity: 0,
                 '--s-ox': ms.ox,
                 '--s-oy': ms.oy
@@ -20032,28 +20599,28 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
           {/* Spinning Crystalline Snowflakes — large foreground snowflakes sweeping across (z-38) */}
           {[
-            { ox: '52px', oy: '-45px', delay: '0.1s', size: 26 },
-            { ox: '-40px', oy: '-28px', delay: '0.28s', size: 22 },
-            { ox: '15px', oy: '38px', delay: '0.42s', size: 28 },
-            { ox: '-50px', oy: '20px', delay: '0.55s', size: 20 },
-            { ox: '35px', oy: '-10px', delay: '0.7s', size: 24 }
+            { ox: '52px', oy: '-45px', delay: '0.10s', size: fx.slot !== 'bench' ? 32 : 22 },
+            { ox: '-40px', oy: '-28px', delay: '0.28s', size: fx.slot !== 'bench' ? 26 : 18 },
+            { ox: '15px', oy: '38px', delay: '0.44s', size: fx.slot !== 'bench' ? 34 : 24 },
+            { ox: '-50px', oy: '20px', delay: '0.58s', size: fx.slot !== 'bench' ? 24 : 18 },
+            { ox: '35px', oy: '-10px', delay: '0.75s', size: fx.slot !== 'bench' ? 28 : 20 }
           ].map((sn, i) => (
             <div
               key={`bliz-sn-${i}`}
               className="absolute pointer-events-none z-38"
               style={{
-                animation: `gbaArticunoSnowflakeSpin 1.4s ease-out ${sn.delay} forwards`,
+                animation: `gbaArticunoSnowflakeSpin 1.36s ease-out ${sn.delay} forwards`,
                 opacity: 0,
                 '--s-ox': sn.ox,
                 '--s-oy': sn.oy
               } as React.CSSProperties}
             >
-              <svg width={sn.size} height={sn.size} viewBox="0 0 24 24" className="drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_6px_#38bdf8]">
-                <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
-                <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" />
-                <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" strokeWidth="2" strokeLinecap="round" />
-                <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" strokeWidth="2" strokeLinecap="round" />
-                <circle cx="12" cy="12" r="2.8" fill="#38bdf8" stroke="#ffffff" strokeWidth="0.8" />
+              <svg width={sn.size} height={sn.size} viewBox="0 0 24 24" className="drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_8px_#38bdf8]">
+                <line x1="12" y1="2" x2="12" y2="22" stroke="#ffffff" strokeWidth="2.4" strokeLinecap="round" />
+                <line x1="2" y1="12" x2="22" y2="12" stroke="#ffffff" strokeWidth="2.4" strokeLinecap="round" />
+                <line x1="5" y1="5" x2="19" y2="19" stroke="#bae6fd" strokeWidth="2.0" strokeLinecap="round" />
+                <line x1="19" y1="5" x2="5" y2="19" stroke="#bae6fd" strokeWidth="2.0" strokeLinecap="round" />
+                <circle cx="12" cy="12" r="2.8" fill="#38bdf8" stroke="#ffffff" strokeWidth="1.0" />
               </svg>
             </div>
           ))}
@@ -21097,75 +21664,217 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           BATCH 22: TOXIC SLUDGE, CAVE & CONSTRICTION (GRIMER, ZUBAT, TANGELA)
           ========================================================================== */}
 
-      {/* 1. GRIMER: NASTY GOO (Viscous Deep Toxic Violet/Purple Slime Splat & Dripping Tendrils) */}
+      {/* 1. GRIMER: NASTY GOO (Viscous Deep Toxic Violet Slime Splat, True Fluid Dynamic Necking & Pinch-Off Drips) */}
       {(fx.type === 'grimer_nasty_goo' || fx.type === 'nasty_goo') && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Main Viscous Toxic Sludge Blob */}
+          {/* Layer 1: Ambient Toxic Slime Mire Floor Aura */}
           <div
-            className={`absolute flex items-center justify-center pointer-events-none z-30 ${fx.whiffed ? 'w-[84px] h-[66px]' : 'w-[114px] h-[90px]'}`}
-            style={{ animation: 'gbaGrimerGooSplat 1.55s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            className="absolute bottom-2 pointer-events-none z-15 flex justify-center"
+            style={{ animation: 'gbaGrimerFloorMire 1.55s ease-out forwards' }}
           >
-            <svg
-              viewBox="0 0 114 90"
-              className="w-full h-full overflow-visible drop-shadow-[0_0_20px_#a855f7] drop-shadow-[0_0_10px_#7e22ce]"
-            >
-              <defs>
-                <radialGradient id="grimerSludgeCore" cx="50%" cy="45%" r="55%">
-                  <stop offset="0%" stopColor="#f3e8ff" />
-                  <stop offset="25%" stopColor="#c084fc" />
-                  <stop offset="60%" stopColor="#9333ea" />
-                  <stop offset="85%" stopColor="#6b21a8" />
-                  <stop offset="100%" stopColor="#3b0764" />
-                </radialGradient>
-                <linearGradient id="grimerDripGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor="#9333ea" />
-                  <stop offset="100%" stopColor="#581c87" />
-                </linearGradient>
-              </defs>
-
-              {/* Splattered Sludge Base Puddle */}
-              <ellipse cx="57" cy="55" rx="50" ry="24" fill="url(#grimerSludgeCore)" />
-              <ellipse cx="30" cy="48" rx="22" ry="14" fill="#7e22ce" opacity="0.9" />
-              <ellipse cx="82" cy="52" rx="24" ry="16" fill="#7e22ce" opacity="0.9" />
-              
-              {/* Viscous Toxic Tendrils & Droplets */}
-              <path
-                d="M 22 55 Q 16 75 24 82 Q 30 78 28 58 Z"
-                fill="url(#grimerDripGrad)"
-              />
-              <path
-                d="M 54 62 Q 52 84 60 88 Q 66 82 62 62 Z"
-                fill="url(#grimerDripGrad)"
-              />
-              <path
-                d="M 85 58 Q 92 76 86 84 Q 80 80 82 60 Z"
-                fill="url(#grimerDripGrad)"
-              />
-
-              {/* Glossy Specular Sheen & Highlights */}
-              <ellipse cx="44" cy="42" rx="14" ry="7" fill="#ffffff" opacity="0.65" transform="rotate(-15 44 42)" />
-              <ellipse cx="74" cy="45" rx="8" ry="4" fill="#ffffff" opacity="0.5" transform="rotate(10 74 45)" />
-              <circle cx="34" cy="52" r="3" fill="#f5d0fe" opacity="0.8" />
-              <circle cx="80" cy="56" r="2.5" fill="#f5d0fe" opacity="0.8" />
-            </svg>
+            <div className="w-52 h-14 rounded-full bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-500/30 blur-[2px] shadow-[0_0_24px_#581c87]" />
           </div>
 
-          {/* Drips sliding down with gravitational stretch */}
+          {/* Layer 2: Main Viscous Toxic Sludge Core Splatter (Centered on target Pokémon body at top 32%) */}
           <div
-            className="absolute bottom-2 pointer-events-none z-25"
-            style={{ animation: 'gbaGrimerGooDrip 1.55s ease-in forwards' }}
+            className="absolute pointer-events-none z-30 flex items-center justify-center"
+            style={{
+              top: '32%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: fx.whiffed ? '112px' : '160px',
+              height: fx.whiffed ? '77px' : '110px'
+            }}
           >
-            <div className="flex gap-4">
-              <div className="w-2.5 h-6 rounded-b-full bg-gradient-to-b from-purple-700 to-fuchsia-950 shadow-[0_0_8px_#a855f7]" />
-              <div className="w-2 h-8 rounded-b-full bg-gradient-to-b from-purple-600 to-purple-950 shadow-[0_0_8px_#9333ea]" />
-              <div className="w-3 h-5 rounded-b-full bg-gradient-to-b from-purple-800 to-fuchsia-950 shadow-[0_0_8px_#c084fc]" />
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{ animation: 'gbaGrimerGooSplat 1.55s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}
+            >
+              <svg
+                viewBox="0 0 160 110"
+                className="w-full h-full overflow-visible drop-shadow-[0_0_24px_#a855f7] drop-shadow-[0_0_14px_#7e22ce]"
+              >
+                <defs>
+                  <radialGradient id="grimerSludgeCore" cx="50%" cy="38%" r="58%">
+                    <stop offset="0%" stopColor="#f3e8ff" />
+                    <stop offset="25%" stopColor="#c084fc" />
+                    <stop offset="55%" stopColor="#9333ea" />
+                    <stop offset="82%" stopColor="#6b21a8" />
+                    <stop offset="100%" stopColor="#240d47" />
+                  </radialGradient>
+                  <linearGradient id="grimerDripGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#9333ea" />
+                    <stop offset="100%" stopColor="#581c87" />
+                  </linearGradient>
+                  <linearGradient id="grimerGleamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
+                    <stop offset="50%" stopColor="#ffffff" stopOpacity="0.75" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+
+                {/* Main Organic Amoeboid Sludge Body with True Sugimori Contours */}
+                <path
+                  d="M 80 14 C 110 12, 142 22, 148 46 C 154 68, 132 80, 118 76 C 110 74, 106 88, 102 94 C 98 86, 94 76, 80 78 C 66 76, 62 86, 58 94 C 54 88, 50 74, 42 76 C 28 80, 6 68, 12 46 C 18 22, 50 12, 80 14 Z"
+                  fill="url(#grimerSludgeCore)"
+                />
+                {/* Secondary flowing lobe volumes */}
+                <path
+                  d="M 40 48 C 30 38, 55 26, 75 32 C 60 44, 48 56, 40 48 Z"
+                  fill="#7e22ce"
+                  opacity="0.85"
+                />
+                <path
+                  d="M 120 48 C 130 38, 105 26, 85 32 C 100 44, 112 56, 120 48 Z"
+                  fill="#7e22ce"
+                  opacity="0.85"
+                />
+
+                {/* 3 Prominent Dripping Nozzles on bottom rim: Left X=48, Center X=80, Right X=112 */}
+                <path d="M 40 74 Q 48 98, 56 74 Z" fill="url(#grimerDripGrad)" />
+                <path d="M 72 76 Q 80 104, 88 76 Z" fill="url(#grimerDripGrad)" />
+                <path d="M 104 74 Q 112 98, 120 74 Z" fill="url(#grimerDripGrad)" />
+
+                {/* Visceral Wet Liquid Specular Arcs (Natural liquid gleam, NO GOOFY EYES!) */}
+                <path d="M 52 26 C 70 20, 95 20, 112 26" fill="none" stroke="url(#grimerGleamGrad)" strokeWidth="3.2" strokeLinecap="round" />
+                <path d="M 38 42 C 48 34, 64 36, 72 44" fill="none" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+                <path d="M 122 42 C 112 34, 96 36, 88 44" fill="none" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" opacity="0.6" />
+                {/* Glistening surface micro-beads */}
+                <circle cx="62" cy="56" r="2.8" fill="#f5d0fe" opacity="0.85" />
+                <circle cx="98" cy="56" r="2.8" fill="#f5d0fe" opacity="0.85" />
+                <circle cx="80" cy="64" r="2.2" fill="#ffffff" opacity="0.9" />
+              </svg>
             </div>
           </div>
 
-          {/* Popping Toxic Sludge Bubbles */}
+          {/* Layer 3: Organic SVG Fluid Necking Filaments (Two-Layer Wrapper: Centering Locked) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-25 flex justify-center"
+              style={{
+                top: 'calc(32% + 43px)',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: '160px'
+              }}
+            >
+              <div
+                className="w-full flex justify-center"
+                style={{
+                  transformOrigin: 'top center',
+                  animation: 'gbaGrimerNeckingThread 1.55s ease-in forwards'
+                }}
+              >
+                <svg width="160" height="55" viewBox="0 0 160 55" className="overflow-visible drop-shadow-[0_0_10px_#9333ea]">
+                  {/* Left Necking Thread at X=48 (X = calc(50% - 32px)) */}
+                  <path
+                    d="M 46 0 C 45 14, 44 26, 47 38 C 48 44, 51 44, 50 38 C 49 26, 51 14, 52 0 Z"
+                    fill="url(#grimerDripGrad)"
+                  />
+                  {/* Center Necking Thread at X=80 (X = calc(50% + 0px), starts at Y=6 for center nozzle) */}
+                  <path
+                    d="M 77 6 C 76 20, 75 34, 79 46 C 80 52, 84 52, 83 46 C 82 34, 85 20, 86 6 Z"
+                    fill="url(#grimerDripGrad)"
+                  />
+                  {/* Right Necking Thread at X=112 (X = calc(50% + 32px)) */}
+                  <path
+                    d="M 110 0 C 109 14, 108 26, 111 38 C 112 44, 115 44, 114 38 C 113 26, 115 14, 116 0 Z"
+                    fill="url(#grimerDripGrad)"
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
+
+          {/* Layer 4: Real Pinch-Off Viscous Droplets Falling Straight Down Vertically */}
+          {!fx.whiffed && (
+            <div className="absolute inset-0 pointer-events-none z-30">
+              {/* Droplet 1 (Left): Aligned exactly with Left Nozzle at X = -32px */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: 'calc(50% - 32px)',
+                  top: 'calc(32% + 43px)',
+                  transform: 'translateX(-50%)',
+                  animation: 'gbaGrimerPinchDrop1 1.55s cubic-bezier(0.4, 0, 0.9, 1) forwards'
+                }}
+              >
+                <svg width="15" height="22" viewBox="0 0 15 22">
+                  <path d="M 7.5 0 C 7.5 5.5, 0 13, 0 16.5 C 0 19.5, 3.5 22, 7.5 22 C 11.5 22, 15 19.5, 15 16.5 C 15 13, 7.5 5.5, 7.5 0 Z" fill="#7e22ce" />
+                  <circle cx="5.5" cy="15.5" r="2" fill="#f3e8ff" opacity="0.85" />
+                </svg>
+              </div>
+
+              {/* Droplet 2 (Center Heavy): Aligned exactly with Center Nozzle at X = 0px */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: 'calc(32% + 49px)',
+                  transform: 'translateX(-50%)',
+                  animation: 'gbaGrimerPinchDrop2 1.55s cubic-bezier(0.35, 0, 0.85, 1) forwards'
+                }}
+              >
+                <svg width="19" height="28" viewBox="0 0 19 28">
+                  <path d="M 9.5 0 C 9.5 6.5, 0 16, 0 21 C 0 25, 4.2 28, 9.5 28 C 14.8 28, 19 25, 19 21 C 19 16, 9.5 6.5, 9.5 0 Z" fill="#6b21a8" />
+                  <circle cx="6.5" cy="19.5" r="2.6" fill="#f3e8ff" opacity="0.9" />
+                </svg>
+              </div>
+
+              {/* Droplet 3 (Right): Aligned exactly with Right Nozzle at X = +32px */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: 'calc(50% + 32px)',
+                  top: 'calc(32% + 43px)',
+                  transform: 'translateX(-50%)',
+                  animation: 'gbaGrimerPinchDrop3 1.55s cubic-bezier(0.45, 0, 0.95, 1) forwards'
+                }}
+              >
+                <svg width="14" height="20" viewBox="0 0 14 20">
+                  <path d="M 7 0 C 7 4.5, 0 11.5, 0 15 C 0 18, 3 20, 7 20 C 11 20, 14 18, 14 15 C 14 11.5, 7 4.5, 7 0 Z" fill="#7e22ce" />
+                  <circle cx="5" cy="14" r="1.8" fill="#f3e8ff" opacity="0.85" />
+                </svg>
+              </div>
+            </div>
+          )}
+
+          {/* Droplet Floor Splatters (Crown splashes precisely beneath each droplet axis: -32px, 0px, +32px) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute bottom-3 pointer-events-none z-20 flex justify-center w-full"
+              style={{ animation: 'gbaGrimerFloorSplat 1.55s ease-out forwards' }}
+            >
+              <div className="relative w-52 h-8 flex items-center justify-center">
+                {/* Left Crown */}
+                <div className="absolute" style={{ left: 'calc(50% - 32px)', transform: 'translateX(-50%)' }}>
+                  <svg width="36" height="16" viewBox="0 0 36 16" className="overflow-visible drop-shadow-[0_0_8px_#c084fc]">
+                    <ellipse cx="18" cy="9" rx="16" ry="5" fill="#581c87" opacity="0.92" />
+                    <ellipse cx="18" cy="8" rx="10" ry="3" fill="#a855f7" />
+                  </svg>
+                </div>
+                {/* Center Crown */}
+                <div className="absolute" style={{ left: '50%', transform: 'translateX(-50%)' }}>
+                  <svg width="46" height="18" viewBox="0 0 46 18" className="overflow-visible drop-shadow-[0_0_12px_#c084fc]">
+                    <ellipse cx="23" cy="10" rx="20" ry="6" fill="#3b0764" opacity="0.95" />
+                    <ellipse cx="23" cy="9" rx="14" ry="3.5" fill="#c084fc" />
+                  </svg>
+                </div>
+                {/* Right Crown */}
+                <div className="absolute" style={{ left: 'calc(50% + 32px)', transform: 'translateX(-50%)' }}>
+                  <svg width="34" height="16" viewBox="0 0 34 16" className="overflow-visible drop-shadow-[0_0_8px_#c084fc]">
+                    <ellipse cx="17" cy="9" rx="15" ry="5" fill="#581c87" opacity="0.92" />
+                    <ellipse cx="17" cy="8" rx="9" ry="3" fill="#a855f7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Layer 5: Popping Toxic Sludge Bubbles */}
           {!fx.whiffed && [
-            { x: '-22px', y: '-4px', r: '14px', delay: '0.2s', col: '#c084fc' },
-            { x: '18px', y: '8px', r: '12px', delay: '0.45s', col: '#e879f9' },
+            { x: '-24px', y: '-4px', r: '14px', delay: '0.2s', col: '#c084fc' },
+            { x: '20px', y: '8px', r: '12px', delay: '0.45s', col: '#e879f9' },
             { x: '-2px', y: '-16px', r: '10px', delay: '0.65s', col: '#a855f7' }
           ].map((bub, idx) => (
             <div
@@ -21185,34 +21894,144 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 2. GRIMER: MINIMIZE (Liquefying Ooze Melt & Defensive Pool Ripple — Self-Targeting) */}
+      {/* 2. GRIMER: MINIMIZE (Liquefying Ooze Melt, Organic Bézier Surface Ripples & Evasive Mist — Self-Targeting) */}
       {fx.type === 'grimer_minimize' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Liquefying Grimer Sludge Pool */}
+          {/* Layer 1: Organic Bézier Liquid Surface Tension Ripples (Two-Layer Wrapper: Centered at bottom 8px) */}
           <div
-            className="absolute flex items-center justify-center pointer-events-none z-30 w-[124px] h-[50px] bottom-4"
-            style={{ animation: 'gbaGrimerPuddleMelt 1.5s cubic-bezier(0.18, 0.9, 0.3, 1) forwards' }}
+            className="absolute pointer-events-none z-20 flex items-center justify-center"
+            style={{
+              left: '50%',
+              bottom: '8px',
+              transform: 'translateX(-50%)',
+              width: '170px',
+              height: '75px'
+            }}
           >
-            <svg viewBox="0 0 124 50" className="w-full h-full overflow-visible drop-shadow-[0_0_24px_#c084fc]">
-              <ellipse cx="62" cy="25" rx="56" ry="18" fill="url(#grimerSludgeCore)" />
-              <ellipse cx="62" cy="23" rx="44" ry="12" fill="#9333ea" opacity="0.85" />
-              {/* Liquefied Eye Slits melting into the puddle */}
-              <ellipse cx="48" cy="22" rx="6" ry="2.5" fill="#ffffff" />
-              <circle cx="48" cy="22" r="1.5" fill="#1e1b4b" />
-              <ellipse cx="76" cy="22" rx="6" ry="2.5" fill="#ffffff" />
-              <circle cx="76" cy="22" r="1.5" fill="#1e1b4b" />
-            </svg>
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{
+                transformOrigin: 'center center',
+                animation: 'gbaGrimerOrganicRipple1 1.5s ease-out forwards'
+              }}
+            >
+              <svg width="170" height="75" viewBox="0 0 170 75" className="overflow-visible">
+                <defs>
+                  <linearGradient id="grimerRippleGrad1" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#c084fc" stopOpacity="0" />
+                    <stop offset="30%" stopColor="#e879f9" stopOpacity="0.85" />
+                    <stop offset="70%" stopColor="#d8b4fe" stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#c084fc" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {/* Organic undulating multi-crested liquid ripple */}
+                <path
+                  d="M 12 38 C 10 52, 42 66, 85 66 C 128 66, 160 52, 158 38 C 156 24, 126 10, 85 10 C 44 10, 14 24, 12 38 Z"
+                  fill="none"
+                  stroke="url(#grimerRippleGrad1)"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  style={{ filter: 'drop-shadow(0 0 8px #c084fc)' }}
+                />
+              </svg>
+            </div>
           </div>
 
-          {/* Expanding Concentric Melt Ripples */}
           <div
-            className="absolute w-28 h-12 rounded-full border-2 border-fuchsia-400 pointer-events-none z-20 bottom-3"
-            style={{ animation: 'gbaGrimerMeltRipple 1.5s ease-out forwards' }}
-          />
+            className="absolute pointer-events-none z-20 flex items-center justify-center"
+            style={{
+              left: '50%',
+              bottom: '8px',
+              transform: 'translateX(-50%)',
+              width: '170px',
+              height: '75px'
+            }}
+          >
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{
+                transformOrigin: 'center center',
+                animation: 'gbaGrimerOrganicRipple2 1.5s ease-out 0.22s forwards',
+                opacity: 0
+              }}
+            >
+              <svg width="170" height="75" viewBox="0 0 170 75" className="overflow-visible">
+                <defs>
+                  <linearGradient id="grimerRippleGrad2" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stopColor="#9333ea" stopOpacity="0" />
+                    <stop offset="30%" stopColor="#c084fc" stopOpacity="0.75" />
+                    <stop offset="70%" stopColor="#f5d0fe" stopOpacity="0.75" />
+                    <stop offset="100%" stopColor="#9333ea" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 20 38 C 18 50, 46 62, 85 62 C 124 62, 152 50, 150 38 C 148 26, 122 14, 85 14 C 48 14, 22 26, 20 38 Z"
+                  fill="none"
+                  stroke="url(#grimerRippleGrad2)"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  style={{ filter: 'drop-shadow(0 0 6px #a855f7)' }}
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* Layer 2: Liquefying Amorphous Grimer Sludge Mass Collapse (Two-Layer Wrapper: Centered at bottom 12px) */}
           <div
-            className="absolute w-28 h-12 rounded-full border border-purple-300 pointer-events-none z-20 bottom-3"
-            style={{ animation: 'gbaGrimerMeltRipple 1.5s ease-out 0.25s forwards', opacity: 0 }}
-          />
+            className="absolute flex items-center justify-center pointer-events-none z-30"
+            style={{
+              left: '50%',
+              bottom: '12px',
+              transform: 'translateX(-50%)',
+              width: '140px',
+              height: '64px'
+            }}
+          >
+            <div
+              className="w-full h-full flex items-center justify-center"
+              style={{
+                transformOrigin: 'center bottom',
+                animation: 'gbaGrimerPuddleMelt 1.5s cubic-bezier(0.18, 0.9, 0.3, 1) forwards'
+              }}
+            >
+              <svg viewBox="0 0 140 64" className="w-full h-full overflow-visible drop-shadow-[0_0_28px_#c084fc] drop-shadow-[0_0_16px_#7e22ce]">
+                <defs>
+                  <radialGradient id="grimerMinimizeCore" cx="50%" cy="40%" r="60%">
+                    <stop offset="0%" stopColor="#f3e8ff" />
+                    <stop offset="25%" stopColor="#c084fc" />
+                    <stop offset="65%" stopColor="#7e22ce" />
+                    <stop offset="100%" stopColor="#240d47" />
+                  </radialGradient>
+                </defs>
+                {/* Amorphous Multi-Lobed Melting Puddle Base */}
+                <path
+                  d="M 6 38 C 2 50, 24 62, 70 62 C 116 62, 138 50, 134 38 C 130 24, 104 14, 70 14 C 36 14, 10 24, 6 38 Z"
+                  fill="url(#grimerMinimizeCore)"
+                />
+                {/* Liquid Sludge Surface Folds & Concentric Slime Swirls */}
+                <path
+                  d="M 24 38 C 38 28, 70 26, 102 30 C 118 32, 116 44, 96 48 C 74 52, 42 50, 24 38 Z"
+                  fill="#9333ea"
+                  opacity="0.85"
+                />
+                <ellipse cx="70" cy="36" rx="38" ry="11" fill="#a855f7" opacity="0.9" />
+
+                {/* Specular Wet Reflections & Liquid Highlights */}
+                <ellipse cx="50" cy="30" rx="24" ry="5.5" fill="#ffffff" opacity="0.65" transform="rotate(-6 50 30)" />
+                <ellipse cx="94" cy="34" rx="18" ry="4.5" fill="#ffffff" opacity="0.55" transform="rotate(5 94 34)" />
+                <circle cx="38" cy="40" r="2.8" fill="#f5d0fe" opacity="0.85" />
+                <circle cx="104" cy="42" r="2.4" fill="#f5d0fe" opacity="0.85" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Layer 3: Protective Evasive Toxic Vapor Condensation & Shimmer Mist */}
+          <div
+            className="absolute inset-0 rounded-xl pointer-events-none z-15 flex items-center justify-center"
+            style={{ animation: 'gbaGrimerShieldAura 1.5s ease-out forwards' }}
+          >
+            <div className="w-56 h-64 rounded-xl bg-purple-500/20 blur-xl border border-fuchsia-300/40 shadow-[0_0_35px_#a855f7]" />
+          </div>
         </div>
       )}
 
@@ -22023,6 +22842,19 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       {/* 2. SHELLDER: SUPERSONIC (Harmonic Front-Facing Concentric Watercolor Sonic Wave Train & Confusion Motes) */}
       {fx.type === 'shellder_supersonic' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-hidden rounded-xl">
+          {/* Layer 0: Hypnotic Confusion Card Blur Overlay (Undulating focus warping on card surface, beneath sonic waves) */}
+          {!fx.whiffed && (
+            <div
+              className="card-fx-block-overlay z-[5]"
+              style={{
+                animation: 'gbaConfuseCardBlur 1.65s ease-in-out forwards',
+                background: 'radial-gradient(ellipse at center, rgba(254,240,138,0.20) 0%, rgba(244,114,182,0.14) 40%, rgba(56,189,248,0.08) 75%, transparent 100%)',
+                backdropFilter: 'blur(3.5px)',
+                WebkitBackdropFilter: 'blur(3.5px)'
+              }}
+            />
+          )}
+
           {/* Layer 1: Ambient Acoustic Pressure Wash */}
           {!fx.whiffed && (
             <div

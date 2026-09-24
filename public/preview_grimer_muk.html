@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grimer & Muk Toxic Sludge Animations — Master Showcase</title>
+  <style>
+    :root {
+      --speed-mult: 1;
+    }
+    body {
+      background: #080512;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #c084fc;
+      font-size: 22px;
+      margin: 0;
+      text-shadow: 0 0 20px rgba(192, 132, 252, 0.6);
+      letter-spacing: 0.5px;
+    }
+    .note {
+      font-size: 13px;
+      color: #94a3b8;
+      max-width: 860px;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: #140d26;
+      border: 1px solid #7e22ce;
+      border-radius: 12px;
+      padding: 12px 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+    .speed-btn-group {
+      display: flex;
+      gap: 6px;
+      background: #1f1338;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid #581c87;
+    }
+    .speed-btn {
+      padding: 6px 14px;
+      background: transparent;
+      color: #c084fc;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .speed-btn.active {
+      background: #7e22ce;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+    }
+    .main-btn {
+      padding: 8px 20px;
+      background: #9333ea;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      box-shadow: 0 0 14px rgba(147, 51, 234, 0.5);
+      transition: all 0.2s;
+    }
+    .main-btn:hover {
+      background: #a855f7;
+      transform: translateY(-1px);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 28px;
+      max-width: 1240px;
+      width: 100%;
+    }
+    .card-box {
+      background: #120a22;
+      border: 2px solid #581c87;
+      border-radius: 14px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6);
+      transition: border-color 0.2s;
+    }
+    .card-box:hover {
+      border-color: #a855f7;
+    }
+    .card-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+    h3 {
+      margin: 0;
+      color: #e9d5ff;
+      font-size: 15px;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      color: #c084fc;
+      background: #240d47;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      border: 1px solid #7e22ce;
+    }
+    
+    /* Authentic 1999 Card Stage Frame */
+    .card-stage {
+      width: 180px;
+      height: 252px;
+      background: radial-gradient(circle at 50% 35%, #1f1138 0%, #0d061c 100%);
+      border: 3px solid #7e22ce;
+      border-radius: 12px;
+      position: relative;
+      overflow: visible;
+      box-shadow: inset 0 0 24px rgba(0,0,0,0.9), 0 0 20px rgba(126, 34, 206, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-stage::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(192, 132, 252, 0.2);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+    .card-mockup-label {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      font-size: 10px;
+      font-weight: bold;
+      color: #d8b4fe;
+      opacity: 0.45;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .card-mockup-hp {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 10px;
+      font-weight: bold;
+      color: #ef4444;
+      opacity: 0.55;
+    }
+    .card-art-box {
+      width: 136px;
+      height: 94px;
+      border-radius: 6px;
+      border: 1px dashed rgba(168, 85, 247, 0.35);
+      background: rgba(30, 11, 54, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #a855f7;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+    .replay-btn {
+      padding: 7px 16px;
+      background: #7e22ce;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(126, 34, 206, 0.4);
+    }
+    .replay-btn:hover {
+      background: #9333ea;
+      transform: translateY(-1px);
+    }
+    .whiff-btn {
+      padding: 7px 14px;
+      background: #3b0764;
+      color: #d8b4fe;
+      border: 1px solid #7e22ce;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .whiff-btn:hover {
+      background: #581c87;
+      color: #fff;
+    }
+    .spec-text {
+      font-size: 11px;
+      color: #c084fc;
+      margin: 0;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    /* Keyframe Animations */
+    @keyframes gbaMukSludgeFloor {
+      0%   { opacity: 0; transform: scaleX(0.3) scaleY(0.4); }
+      15%  { opacity: 0.85; transform: scaleX(0.9) scaleY(0.85); }
+      35%  { opacity: 1; transform: scaleX(1.08) scaleY(1.02); }
+      60%  { opacity: 0.95; transform: scaleX(1.02) scaleY(1.0); }
+      82%  { opacity: 0.6; transform: scaleX(0.95) scaleY(0.9); }
+      100% { opacity: 0; transform: scaleX(0.8) scaleY(0.7); }
+    }
+
+    /* Layer 2: 1996 Ken Sugimori Muk Stock Visual Actor Surge (Tier 1 Apex Monolithic 144px) */
+    @keyframes gbaMukSludgeActorSurge {
+      0%   { opacity: 0; transform: translate(-50%, -50%) translateY(36px) scale(0.72); filter: brightness(0.6) blur(2px); }
+      14%  { opacity: 0.8; transform: translate(-50%, -50%) translateY(16px) scale(0.92); filter: brightness(1.2); }
+      28%  { opacity: 1; transform: translate(-50%, -50%) translateY(-6px) scale(1.08); filter: brightness(1.3) contrast(1.1); }
+      42%  { opacity: 1; transform: translate(-50%, -50%) translateY(0px) scale(1.02); filter: brightness(1.05); }
+      60%  { opacity: 1; transform: translate(-50%, -50%) translateY(-2px) scale(1.04); filter: brightness(1.0); }
+      75%  { opacity: 0.95; transform: translate(-50%, -50%) translateY(4px) scale(0.98); }
+      88%  { opacity: 0.55; transform: translate(-50%, -50%) translateY(14px) scale(0.92); filter: blur(1px); }
+      100% { opacity: 0; transform: translate(-50%, -50%) translateY(24px) scale(0.85); filter: blur(2px); }
+    }
+
+    @keyframes gbaMukDelugeSurge {
+      0%   { opacity: 0; transform: translateY(45px) scaleY(0.3); }
+      18%  { opacity: 0.95; transform: translateY(12px) scaleY(0.9); }
+      32%  { opacity: 1; transform: translateY(-4px) scaleY(1.08); }
+      48%  { opacity: 1; transform: translateY(2px) scaleY(1.02); }
+      68%  { opacity: 0.9; transform: translateY(8px) scaleY(0.96); }
+      85%  { opacity: 0.5; transform: translateY(24px) scaleY(0.75); }
+      100% { opacity: 0; transform: translateY(40px) scaleY(0.4); }
+    }
+
+    @keyframes gbaMukSludgeGlob {
+      0%   { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      25%  { opacity: 1; transform: translate(calc(var(--glob-x, 0px) * 0.7), calc(var(--glob-y, 0px) * 0.7)) scale(1.15); }
+      55%  { opacity: 0.9; transform: translate(var(--glob-x, 0px), var(--glob-y, 0px)) scale(1.0); }
+      80%  { opacity: 0.55; transform: translate(calc(var(--glob-x, 0px) * 1.2), calc(var(--glob-y, 0px) * 1.2 + 8px)) scale(0.8); }
+      100% { opacity: 0; transform: translate(calc(var(--glob-x, 0px) * 1.3), calc(var(--glob-y, 0px) * 1.3 + 18px)) scale(0.5); }
+    }
+
+    @keyframes gbaMukToxicBubble {
+      0%   { opacity: 0; transform: scale(0.2); }
+      35%  { opacity: 1; transform: scale(1.15); }
+      65%  { opacity: 0.95; transform: scale(1.0) translateY(-4px); }
+      82%  { opacity: 0.8; transform: scale(1.2) translateY(-7px); }
+      92%  { opacity: 0.9; transform: scale(1.35) translateY(-8px); filter: brightness(1.4); }
+      100% { opacity: 0; transform: scale(1.5) translateY(-9px); }
+    }
+
+    @keyframes gbaMukAcidSizzle {
+      0%   { opacity: 0; transform: scale(0.6); }
+      30%  { opacity: 0.7; transform: scale(1.1); }
+      60%  { opacity: 0.85; transform: scale(1.25); }
+      85%  { opacity: 0.4; transform: scale(1.4); filter: blur(12px); }
+      100% { opacity: 0; transform: scale(1.5); filter: blur(16px); }
+    }
+
+    @keyframes gbaStickyArmLungeL {
+      0%   { opacity: 0; transform: translateX(-50px) scaleX(0.4) scaleY(0.7); }
+      18%  { opacity: 0.95; transform: translateX(-10px) scaleX(0.9) scaleY(0.95); }
+      32%  { opacity: 1; transform: translateX(18px) scaleX(1.12) scaleY(1.06); }
+      38%  { opacity: 1; transform: translateX(14px) scaleX(1.08) scaleY(1.02) rotate(-2deg); }
+      50%  { opacity: 1; transform: translateX(16px) scaleX(1.04) scaleY(1.0) rotate(1deg); }
+      70%  { opacity: 1; transform: translateX(14px) scaleX(1.02) scaleY(1.0); }
+      84%  { opacity: 0.8; transform: translateX(-10px) scaleX(0.92) scaleY(0.9); }
+      100% { opacity: 0; transform: translateX(-45px) scaleX(0.5) scaleY(0.7); }
+    }
+
+    @keyframes gbaStickyArmLungeR {
+      0%   { opacity: 0; transform: translateX(50px) scaleX(0.4) scaleY(0.7); }
+      18%  { opacity: 0.95; transform: translateX(10px) scaleX(0.9) scaleY(0.95); }
+      32%  { opacity: 1; transform: translateX(-18px) scaleX(1.12) scaleY(1.06); }
+      38%  { opacity: 1; transform: translateX(-14px) scaleX(1.08) scaleY(1.02) rotate(2deg); }
+      50%  { opacity: 1; transform: translateX(-16px) scaleX(1.04) scaleY(1.0) rotate(-1deg); }
+      70%  { opacity: 1; transform: translateX(-14px) scaleX(1.02) scaleY(1.0); }
+      84%  { opacity: 0.8; transform: translateX(10px) scaleX(0.92) scaleY(0.9); }
+      100% { opacity: 0; transform: translateX(45px) scaleX(0.5) scaleY(0.7); }
+    }
+
+    /* Grimer Sticky Hands 1996 Ken Sugimori Stock Actor Kinematics */
+    @keyframes gbaGrimerStickyActorLunge {
+      0%   { opacity: 0; transform: scale(0.4) translateY(32px) scaleX(1.15) scaleY(0.85); }
+      14%  { opacity: 0.95; transform: scale(0.8) translateY(14px) scaleX(0.92) scaleY(1.12); }
+      28%  { opacity: 1; transform: scale(1.18) translateY(-8px) scaleX(1.08) scaleY(0.94); }
+      34%  { opacity: 1; transform: scale(1.15) translateY(-4px) scaleX(1.18) scaleY(0.88) rotate(-1.5deg); }
+      40%  { opacity: 1; transform: scale(1.13) translateY(-3px) scaleX(1.10) scaleY(0.94) rotate(1.2deg); }
+      48%  { opacity: 1; transform: scale(1.11) translateY(-2px) scaleX(1.05) scaleY(0.97) rotate(-0.8deg); }
+      56%  { opacity: 1; transform: scale(1.10) translateY(-1px) scaleX(0.95) scaleY(1.07) rotate(0.6deg); }
+      66%  { opacity: 0.98; transform: scale(1.08) translateY(1px) scaleX(1.04) scaleY(0.98) rotate(-0.5deg); }
+      76%  { opacity: 0.95; transform: scale(1.05) translateY(3px) scaleX(0.98) scaleY(1.03); }
+      84%  { opacity: 0.88; transform: scale(1.02) translateY(6px) scaleX(1.02) scaleY(0.99); }
+      92%  { opacity: 0.65; transform: scale(0.98) translateY(12px) scaleX(0.98) scaleY(1.02); }
+      97%  { opacity: 0.30; transform: scale(0.94) translateY(18px); }
+      100% { opacity: 0; transform: scale(0.90) translateY(24px); }
+    }
+
+    /* Dynamic Hand Drip Path Tracing: Drops falling straight down from outstretched fingers */
+    @keyframes gbaGrimerHandDripL {
+      0%, 26% { opacity: 0; transform: translateY(0px) scale(0.3); }
+      36%     { opacity: 0.95; transform: translateY(12px) scale(1.0); }
+      50%     { opacity: 1; transform: translateY(38px) scale(1.15); }
+      68%     { opacity: 1; transform: translateY(72px) scale(1.05); }
+      84%     { opacity: 0.85; transform: translateY(92px) scale(0.8); }
+      100%    { opacity: 0; transform: translateY(100px) scale(0.35); }
+    }
+
+    @keyframes gbaGrimerHandDripR {
+      0%, 28% { opacity: 0; transform: translateY(0px) scale(0.3); }
+      38%     { opacity: 0.95; transform: translateY(16px) scale(1.0); }
+      54%     { opacity: 1; transform: translateY(52px) scale(1.18); }
+      72%     { opacity: 1; transform: translateY(98px) scale(1.05); }
+      86%     { opacity: 0.85; transform: translateY(128px) scale(0.8); }
+      100%    { opacity: 0; transform: translateY(138px) scale(0.35); }
+    }
+
+    @keyframes gbaGrimerHandDripSplat {
+      0%, 54% { opacity: 0; transform: scale(0.2); }
+      64%     { opacity: 1; transform: scale(1.25); filter: drop-shadow(0 0 10px #c084fc); }
+      76%     { opacity: 0.95; transform: scale(1.1); filter: drop-shadow(0 0 6px #a855f7); }
+      88%     { opacity: 0.7; transform: scale(1.0); }
+      96%     { opacity: 0.35; transform: scale(0.95); }
+      100%    { opacity: 0; transform: scale(0.9); }
+    }
+
+    @keyframes gbaStickyClampTremor {
+      0%, 24% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+      30%     { opacity: 1; transform: translate(-50%, -50%) scale(1.22); }
+      38%     { opacity: 1; transform: translate(-50%, -50%) scale(1.10) translate(3px, -2px); }
+      48%     { opacity: 1; transform: translate(-50%, -50%) scale(1.04) translate(-3px, 2px); }
+      60%     { opacity: 0.98; transform: translate(-50%, -50%) scale(1.02) translate(1px, -1px); }
+      74%     { opacity: 0.92; transform: translate(-50%, -50%) scale(1.04); }
+      86%     { opacity: 0.70; transform: translate(-50%, -50%) scale(1.01); }
+      94%     { opacity: 0.35; transform: translate(-50%, -50%) scale(0.96); }
+      100%    { opacity: 0; transform: translate(-50%, -50%) scale(0.88); }
+    }
+
+    @keyframes gbaStickyTendrilSnap {
+      0%, 30% { opacity: 0; transform: translate(-50%, -50%) scaleX(0.4); }
+      36%     { opacity: 0.95; transform: translate(-50%, -50%) scaleX(1.08); }
+      52%     { opacity: 1; transform: translate(-50%, -50%) scaleX(1.18) scaleY(0.9); }
+      70%     { opacity: 0.85; transform: translate(-50%, -50%) scaleX(1.04); }
+      85%     { opacity: 0.45; transform: translate(-50%, -50%) scaleX(0.9); }
+      100%    { opacity: 0; transform: translate(-50%, -50%) scaleX(0.65); }
+    }
+
+    @keyframes gbaStickyWebPulse {
+      0%, 26% { opacity: 0; transform: translate(-50%, -50%) scale(0.35); }
+      32%     { opacity: 0.96; transform: translate(-50%, -50%) scale(1.16); filter: drop-shadow(0 0 16px #c084fc) drop-shadow(0 0 8px #f5d0fe); }
+      44%     { opacity: 1; transform: translate(-50%, -50%) scale(1.12) rotate(-1.5deg); }
+      56%     { opacity: 0.98; transform: translate(-50%, -50%) scaleX(1.16) scaleY(0.92) rotate(1.2deg); }
+      68%     { opacity: 0.94; transform: translate(-50%, -50%) scaleX(1.08) scaleY(0.96) rotate(-0.8deg); filter: drop-shadow(0 0 12px #c084fc); }
+      80%     { opacity: 0.88; transform: translate(-50%, -50%) scaleX(1.03) scaleY(0.98) rotate(0.4deg); }
+      90%     { opacity: 0.65; transform: translate(-50%, -50%) scale(0.98); }
+      96%     { opacity: 0.30; transform: translate(-50%, -50%) scale(0.94); }
+      100%    { opacity: 0; transform: translate(-50%, -50%) scale(0.88); }
+    }
+
+    @keyframes gbaStickyParalysisRing {
+      0%, 28% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+      34%     { opacity: 0.95; transform: translate(-50%, -50%) scale(1.02); filter: drop-shadow(0 0 20px #c084fc) drop-shadow(0 0 32px #a3e635); }
+      46%     { opacity: 0.92; transform: translate(-50%, -50%) scale(1.18); filter: drop-shadow(0 0 24px #84cc16); }
+      60%     { opacity: 0.82; transform: translate(-50%, -50%) scale(1.36); filter: drop-shadow(0 0 28px #a3e635); }
+      74%     { opacity: 0.68; transform: translate(-50%, -50%) scale(1.52); filter: drop-shadow(0 0 22px #84cc16); }
+      86%     { opacity: 0.45; transform: translate(-50%, -50%) scale(1.65); }
+      94%     { opacity: 0.22; transform: translate(-50%, -50%) scale(1.75); }
+      100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.85); }
+    }
+
+    @keyframes gbaGrimerHandDripMid {
+      0%, 30% { opacity: 0; transform: translateY(0px) scale(0.3); }
+      42%     { opacity: 0.95; transform: translateY(14px) scale(1.0); }
+      58%     { opacity: 1; transform: translateY(42px) scale(1.15); }
+      76%     { opacity: 1; transform: translateY(76px) scale(1.05); }
+      88%     { opacity: 0.85; transform: translateY(96px) scale(0.8); }
+      100%    { opacity: 0; transform: translateY(104px) scale(0.35); }
+    }
+
+    @keyframes gbaGrimerFloorMire {
+      0%   { opacity: 0; transform: scale(0.4); }
+      20%  { opacity: 0.8; transform: scale(0.95); }
+      45%  { opacity: 0.95; transform: scale(1.05); }
+      75%  { opacity: 0.85; transform: scale(1.0); }
+      100% { opacity: 0; transform: scale(0.85); }
+    }
+
+    /* Smooth Vertical Splat Dynamics: Centered by Parent Wrapper */
+    @keyframes gbaGrimerGooSplat {
+      0%   { opacity: 0; transform: translateY(-28px) scale(0.4) scaleY(0.7); }
+      22%  { opacity: 0.95; transform: translateY(0px) scale(1.12) scaleY(0.95); }
+      35%  { opacity: 1; transform: translateY(-4px) scale(1.04) scaleY(1.02); }
+      50%  { opacity: 1; transform: translateY(0px) scale(1.0) scaleY(1.0); }
+      75%  { opacity: 0.95; transform: translateY(2px) scale(0.98); }
+      90%  { opacity: 0.65; transform: translateY(6px) scale(0.94); }
+      100% { opacity: 0; transform: translateY(12px) scale(0.88); }
+    }
+
+    @keyframes gbaGrimerNeckingThread {
+      0%, 15% { opacity: 0; transform: scaleY(0.2); }
+      30%     { opacity: 0.9; transform: scaleY(0.8); }
+      45%     { opacity: 1; transform: scaleY(1.15) scaleX(0.9); }
+      60%     { opacity: 0.8; transform: scaleY(1.3) scaleX(0.7); }
+      75%     { opacity: 0.45; transform: scaleY(0.85) scaleX(0.7); }
+      100%    { opacity: 0; transform: scaleY(0.2); }
+    }
+
+    @keyframes gbaGrimerPinchDrop1 {
+      0%, 25% { opacity: 0; transform: translateY(-5px) scale(0.4); }
+      38%     { opacity: 0.95; transform: translateY(18px) scale(1.05); }
+      55%     { opacity: 1; transform: translateY(60px) scale(1.15); }
+      75%     { opacity: 1; transform: translateY(112px) scale(1.05); }
+      85%     { opacity: 0.85; transform: translateY(132px) scale(0.9); }
+      94%     { opacity: 0.4; transform: translateY(138px) scale(0.6); }
+      100%    { opacity: 0; transform: translateY(140px) scale(0.3); }
+    }
+
+    @keyframes gbaGrimerPinchDrop2 {
+      0%, 28% { opacity: 0; transform: translateY(-5px) scale(0.4); }
+      42%     { opacity: 0.95; transform: translateY(22px) scale(1.1); }
+      60%     { opacity: 1; transform: translateY(68px) scale(1.2); }
+      78%     { opacity: 1; transform: translateY(118px) scale(1.1); }
+      88%     { opacity: 0.85; transform: translateY(136px) scale(0.95); }
+      96%     { opacity: 0.4; transform: translateY(142px) scale(0.65); }
+      100%    { opacity: 0; transform: translateY(145px) scale(0.3); }
+    }
+
+    @keyframes gbaGrimerPinchDrop3 {
+      0%, 24% { opacity: 0; transform: translateY(-4px) scale(0.4); }
+      36%     { opacity: 0.9; transform: translateY(16px) scale(1.0); }
+      52%     { opacity: 1; transform: translateY(55px) scale(1.1); }
+      74%     { opacity: 1; transform: translateY(108px) scale(1.0); }
+      84%     { opacity: 0.85; transform: translateY(128px) scale(0.85); }
+      93%     { opacity: 0.4; transform: translateY(134px) scale(0.55); }
+      100%    { opacity: 0; transform: translateY(136px) scale(0.3); }
+    }
+
+    @keyframes gbaGrimerFloorSplat {
+      0%, 72% { opacity: 0; transform: scale(0.2); }
+      82%     { opacity: 1; transform: scale(1.25); filter: drop-shadow(0 0 10px #c084fc); }
+      92%     { opacity: 0.85; transform: scale(1.05); }
+      100%    { opacity: 0; transform: scale(0.9); }
+    }
+
+    @keyframes gbaGrimerBubblePop {
+      0%   { opacity: 0; transform: scale(0.3); }
+      40%  { opacity: 1; transform: scale(1.15); }
+      75%  { opacity: 0.9; transform: scale(1.0); }
+      90%  { opacity: 0.95; transform: scale(1.3); filter: brightness(1.3); }
+      100% { opacity: 0; transform: scale(1.45); }
+    }
+
+    @keyframes gbaGrimerPuddleMelt {
+      0%   { opacity: 0; transform: translateY(-20px) scale(0.6) scaleY(1.3); }
+      18%  { opacity: 0.9; transform: translateY(0px) scale(0.9) scaleY(1.05); }
+      35%  { opacity: 1; transform: translateY(4px) scale(1.08) scaleY(0.92); }
+      55%  { opacity: 1; transform: translateY(6px) scale(1.15) scaleY(0.85); }
+      75%  { opacity: 0.95; transform: translateY(6px) scale(1.12) scaleY(0.88); }
+      90%  { opacity: 0.6; transform: translateY(8px) scale(1.05) scaleY(0.82); }
+      100% { opacity: 0; transform: translateY(10px) scale(0.95) scaleY(0.75); }
+    }
+
+    /* Organic Bézier Liquid Surface Ripples (Centered directly on floor puddle) */
+    @keyframes gbaGrimerOrganicRipple1 {
+      0%, 18% { opacity: 0; transform: scale(0.35) scaleY(0.6); }
+      32%     { opacity: 0.95; transform: scale(0.75) scaleY(0.72); }
+      60%     { opacity: 0.65; transform: scale(1.15) scaleY(0.82); }
+      85%     { opacity: 0.25; transform: scale(1.38) scaleY(0.88); }
+      100%    { opacity: 0; transform: scale(1.52) scaleY(0.9); }
+    }
+
+    @keyframes gbaGrimerOrganicRipple2 {
+      0%, 32% { opacity: 0; transform: scale(0.3) scaleY(0.6); }
+      48%     { opacity: 0.9; transform: scale(0.75) scaleY(0.72); }
+      72%     { opacity: 0.55; transform: scale(1.18) scaleY(0.82); }
+      90%     { opacity: 0.18; transform: scale(1.42) scaleY(0.88); }
+      100%    { opacity: 0; transform: scale(1.58) scaleY(0.9); }
+    }
+
+    @keyframes gbaGrimerShieldAura {
+      0%   { opacity: 0; transform: scale(0.85); }
+      25%  { opacity: 0.7; transform: scale(1.02); }
+      50%  { opacity: 0.95; transform: scale(1.05); filter: brightness(1.2); }
+      75%  { opacity: 0.8; transform: scale(1.02); }
+      90%  { opacity: 0.45; transform: scale(1.0); }
+      100% { opacity: 0; transform: scale(0.96); }
+    }
+  </style>
+</head>
+<body>
+  <h1>Grimer & Muk Toxic Sludge Animations — Master Showcase</h1>
+  <div class="note">
+    5-Katmanlı Mimari Hiyerarşisi: Otantik Ken Sugimori Tier 1 Apex Varlık ([Muk_Sludge_Actor.png](file:///c:/Users/KaanS/.gemini/antigravity/scratch/pokemon-tcg-1999_demo/public/assets/Muk_Sludge_Actor.png)), Yüksek Çözünürlüklü Organik Bézier Balçık Tsunami Dalgası, İkili Amorf Sugimori Pençe Kolları & Emojisiz İyonize Arklar, Üst-Merkez Hizalı Sıvı Boyunlaşması & 135px Yerçekimli Damla Kopması, ve Amorf Gölet Çöküşü.
+  </div>
+
+  <div class="control-bar">
+    <button class="main-btn" onclick="playAll()">▶ Tümünü Oynat (Play All)</button>
+    <button class="main-btn" style="background:#581c87" onclick="resetAll()">⏹ Sıfırla (Reset)</button>
+    <div class="speed-btn-group">
+      <span style="font-size:11px;color:#94a3b8;align-self:center;padding:0 6px;">Hız:</span>
+      <button class="speed-btn active" onclick="setSpeed(1, this)">1.0x Normal</button>
+      <button class="speed-btn" onclick="setSpeed(0.5, this)">0.5x Ağır Çekim</button>
+      <button class="speed-btn" onclick="setSpeed(0.25, this)">0.25x Analiz</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- Slot 1: Muk Sludge Deluge (HIT) -->
+    <div class="card-box">
+      <div class="card-header">
+        <h3>MUK: SLUDGE DELUGE</h3>
+        <span class="badge">1750ms · Tier 1 Apex Stock Visual</span>
+      </div>
+      <div class="card-stage" id="stage-muk-hit">
+        <span class="card-mockup-label">MUK LV.34</span>
+        <span class="card-mockup-hp">70 HP</span>
+        <div class="card-art-box">MUK ART</div>
+      </div>
+      <div class="btn-row">
+        <button class="replay-btn" onclick="renderMuk('stage-muk-hit', false)">Hit Oynat</button>
+        <button class="whiff-btn" onclick="renderMuk('stage-muk-hit', true)">Whiff</button>
+      </div>
+      <p class="spec-text">Katman 1 Zemin Bataklığı + Katman 2 Muk Stok Aktör + Katman 3 Çok Loblu Tsunami + Katman 4 Balistik Topaklar + Katman 5 Kavitasyon Baloncukları & Asit Dumanı</p>
+    </div>
+
+    <!-- Slot 2: Grimer Sticky Hands (HIT) -->
+    <div class="card-box">
+      <div class="card-header">
+        <h3>GRIMER: STICKY HANDS</h3>
+        <span class="badge">1650ms · 1996 Ken Sugimori Asymmetric Claws</span>
+      </div>
+      <div class="card-stage" id="stage-grimer-sticky">
+        <span class="card-mockup-label">GRIMER LV.17</span>
+        <span class="card-mockup-hp">40 HP</span>
+        <div class="card-art-box">GRIMER ART</div>
+      </div>
+      <div class="btn-row">
+        <button class="replay-btn" onclick="renderSticky('stage-grimer-sticky', false)">Hit Oynat</button>
+        <button class="whiff-btn" onclick="renderSticky('stage-grimer-sticky', true)">Whiff</button>
+      </div>
+      <p class="spec-text">Katman 1 Tutunma Aurası + Katman 2 Otantik 1996 Sugimori Grimer Aktörü + Katman 3 Asimetrik 5-Nokta El & Çene Damlaması + Katman 4 Gerilen Visköz Mukus Ağları + Katman 5 Nörotoksik Paraliz Korona Işıması</p>
+    </div>
+
+    <!-- Slot 3: Grimer Nasty Goo (True Fluid Dynamics) -->
+    <div class="card-box">
+      <div class="card-header">
+        <h3>GRIMER: NASTY GOO</h3>
+        <span class="badge">1550ms · Fluid Necking & Drop Pinch-Off</span>
+      </div>
+      <div class="card-stage" id="stage-grimer-goo">
+        <span class="card-mockup-label">GRIMER LV.17</span>
+        <span class="card-mockup-hp">50 HP</span>
+        <div class="card-art-box">GRIMER ART</div>
+      </div>
+      <div class="btn-row">
+        <button class="replay-btn" onclick="renderGoo('stage-grimer-goo', false)">Hit Oynat</button>
+        <button class="whiff-btn" onclick="renderGoo('stage-grimer-goo', true)">Whiff</button>
+      </div>
+      <p class="spec-text">Üst-Merkezde Konumlanan Splatter (top 26%) + 3 Eksenel Nozzle (-28px, 0px, +28px) + Bézier Boyunlaşma + 135px Yerçekimli Damla Düşüşü + Zemin Taç Sıçramaları</p>
+    </div>
+
+    <!-- Slot 4: Grimer Minimize (Amorphous Puddle Collapse) -->
+    <div class="card-box">
+      <div class="card-header">
+        <h3>GRIMER: MINIMIZE</h3>
+        <span class="badge">1500ms · Puddle Liquefaction & Ripples</span>
+      </div>
+      <div class="card-stage" id="stage-grimer-minimize">
+        <span class="card-mockup-label">GRIMER LV.17</span>
+        <span class="card-mockup-hp">50 HP</span>
+        <div class="card-art-box">GRIMER ART</div>
+      </div>
+      <div class="btn-row">
+        <button class="replay-btn" onclick="renderMinimize('stage-grimer-minimize')">Oynat (Kendini Hedefleme)</button>
+      </div>
+      <p class="spec-text">Çocuksu Göz Çizimleri Kaldırıldı! Katman 1 Çift Eşmerkezli Yüzey Gerilimi Dalgası + Katman 2 Amorf Gölet Çöküşü & Islak Yansımalar + Katman 3 Evasive Buhar Kalkanı</p>
+    </div>
+  </div>
+
+  <script>
+    let globalSpeed = 1;
+
+    function setSpeed(spd, btn) {
+      globalSpeed = spd;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.documentElement.style.setProperty('--speed-mult', 1 / spd);
+      playAll();
+    }
+
+    function applySpeed(el, baseSec) {
+      el.style.animationDuration = (baseSec / globalSpeed) + 's';
+    }
+
+    /* 1. MUK SLUDGE DELUGE */
+    function renderMuk(stageId, whiffed) {
+      const stage = document.getElementById(stageId);
+      // Clean previous dynamic fx elements while keeping mockup labels
+      Array.from(stage.children).forEach(c => {
+        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
+          stage.removeChild(c);
+        }
+      });
+
+      // Layer 1: Floor Mire
+      const floor = document.createElement('div');
+      floor.style.cssText = 'position:absolute;bottom:8px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;animation:gbaMukSludgeFloor forwards;';
+      applySpeed(floor, 1.75);
+      floor.innerHTML = '<div style="width:210px;height:56px;border-radius:9999px;background:radial-gradient(ellipse at 50% 50%, #3b0764 0%, #1e1b4b 75%, transparent 100%);filter:blur(2px);box-shadow:0 0 24px #581c87;"></div>';
+      stage.appendChild(floor);
+
+      // Layer 2: Muk Stock Actor (Tier 1 Apex Monolithic 144px)
+      const actor = document.createElement('div');
+      const w = whiffed ? '98px' : '144px';
+      const h = whiffed ? '70px' : '103px';
+      const opacityClass = whiffed ? 'opacity:0.4;filter:brightness(0.7);' : 'opacity:1;';
+      actor.style.cssText = `position:absolute;left:50%;top:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:25;animation:gbaMukSludgeActorSurge cubic-bezier(0.18, 0.9, 0.28, 1) forwards;${opacityClass}`;
+      applySpeed(actor, 1.75);
+      
+      const img = document.createElement('img');
+      img.alt = 'Muk Sludge';
+      img.style.cssText = `width:${w};height:${h};object-fit:contain;filter:drop-shadow(0 0 24px #a855f7) drop-shadow(0 0 40px #581c87);`;
+      const candidatePaths = [
+        'assets/Muk_Sludge_Actor.png',
+        '/assets/Muk_Sludge_Actor.png',
+        './assets/Muk_Sludge_Actor.png',
+        '../public/assets/Muk_Sludge_Actor.png'
+      ];
+      let pathIdx = 0;
+      img.onerror = function() {
+        pathIdx++;
+        if (pathIdx < candidatePaths.length) {
+          this.src = candidatePaths[pathIdx];
+        }
+      };
+      img.src = candidatePaths[0];
+      actor.appendChild(img);
+      stage.appendChild(actor);
+
+      // Layer 3: High-Fidelity Multi-Tiered Tsunami Wave
+      const wave = document.createElement('div');
+      wave.style.cssText = 'position:absolute;bottom:0;width:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:30;animation:gbaMukDelugeSurge cubic-bezier(0.12, 0.85, 0.25, 1) forwards;';
+      applySpeed(wave, 1.75);
+      wave.innerHTML = `
+        <svg width="220" height="175" viewBox="0 0 220 175" style="overflow:visible">
+          <defs>
+            <linearGradient id="mukWaveDeepGrad_prev" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7e22ce" />
+              <stop offset="25%" stop-color="#581c87" />
+              <stop offset="65%" stop-color="#3b0764" />
+              <stop offset="100%" stop-color="#1e1b4b" />
+            </linearGradient>
+            <linearGradient id="mukWaveMidGrad_prev" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#c084fc" />
+              <stop offset="30%" stop-color="#9333ea" />
+              <stop offset="70%" stop-color="#6b21a8" />
+              <stop offset="100%" stop-color="#3b0764" />
+            </linearGradient>
+            <linearGradient id="mukWaveLipGrad_prev" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#c084fc" />
+              <stop offset="25%" stop-color="#d8b4fe" />
+              <stop offset="50%" stop-color="#a3e635" />
+              <stop offset="75%" stop-color="#d8b4fe" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+          </defs>
+          <path d="M 0 105 C 25 72, 50 88, 80 66 C 110 44, 140 76, 175 54 C 195 44, 210 62, 220 72 L 220 175 L 0 175 Z" fill="url(#mukWaveDeepGrad_prev)" opacity="0.95" />
+          <path d="M 0 114 C 20 84, 45 96, 70 80 C 95 62, 120 88, 150 70 C 175 54, 195 74, 220 88 L 220 175 L 0 175 Z" fill="url(#mukWaveMidGrad_prev)" />
+          <path d="M 28 92 Q 32 118, 38 122 Q 42 116, 39 94 Z M 72 82 Q 76 112, 82 116 Q 86 110, 83 84 Z M 116 80 Q 120 118, 126 122 Q 131 112, 127 82 Z M 158 76 Q 162 108, 167 112 Q 172 104, 168 78 Z M 190 84 Q 194 104, 198 108 Q 202 102, 199 87 Z" fill="#581c87" opacity="0.92" />
+          <path d="M 4 112 C 24 86, 48 97, 72 82 C 98 64, 122 90, 152 72 C 178 56, 198 76, 216 88" fill="none" stroke="url(#mukWaveLipGrad_prev)" stroke-width="3.8" stroke-linecap="round" style="filter:drop-shadow(0 0 10px #c084fc)" />
+          <path d="M 16 118 C 38 96, 60 104, 85 90 C 110 74, 132 96, 160 82 C 182 70, 196 84, 210 94" fill="none" stroke="#a3e635" stroke-width="1.8" stroke-linecap="round" opacity="0.9" style="filter:drop-shadow(0 0 6px #84cc16)" />
+          <ellipse cx="65" cy="122" rx="24" ry="5.5" fill="#ffffff" opacity="0.5" transform="rotate(-6 65 122)" />
+          <ellipse cx="145" cy="114" rx="28" ry="6.5" fill="#ffffff" opacity="0.45" transform="rotate(-4 145 114)" />
+        </svg>
+      `;
+      stage.appendChild(wave);
+
+      if (!whiffed) {
+        // Layer 4: Ballistic Globs
+        const globs = [
+          { x: -35, y: -25, delay: 0.15, size: 14 },
+          { x: 38, y: -28, delay: 0.22, size: 16 },
+          { x: -18, y: -45, delay: 0.30, size: 12 },
+          { x: 22, y: -42, delay: 0.35, size: 15 },
+          { x: 50, y: -10, delay: 0.40, size: 11 }
+        ];
+        globs.forEach((g) => {
+          const gb = document.createElement('div');
+          gb.style.cssText = `position:absolute;left:50%;top:50%;width:${g.size}px;height:${Math.round(g.size * 0.8)}px;border-radius:50% 60% 40% 50%;background:radial-gradient(circle at 35% 35%, #e9d5ff 0%, #a855f7 45%, #4c1d95 100%);box-shadow:0 0 12px #c084fc;pointer-events:none;z-index:35;animation:gbaMukSludgeGlob forwards;--glob-x:${g.x}px;--glob-y:${g.y}px;opacity:0;`;
+          applySpeed(gb, 1.25);
+          gb.style.animationDelay = (g.delay / globalSpeed) + 's';
+          stage.appendChild(gb);
+        });
+
+        // Layer 5: Translucent Bubbles
+        const bubbles = [
+          { x: -44, y: 18, size: 24, delay: 0.2, grad: 'linear-gradient(to top right, #581c87, #c026d3, #a3e635)' },
+          { x: 42, y: 12, size: 28, delay: 0.35, grad: 'linear-gradient(to top right, #312e81, #9333ea, #f472b6)' },
+          { x: -10, y: 32, size: 20, delay: 0.5, grad: 'linear-gradient(to top right, #3b0764, #9333ea, #fbbf24)' }
+        ];
+        bubbles.forEach((b) => {
+          const bub = document.createElement('div');
+          bub.style.cssText = `position:absolute;left:calc(50% + ${b.x}px);top:calc(50% + ${b.y}px);width:${b.size}px;height:${b.size}px;border-radius:9999px;background:${b.grad};border:1px solid rgba(216, 180, 254, 0.8);box-shadow:0 0 14px #c084fc;pointer-events:none;z-index:40;animation:gbaMukToxicBubble forwards;opacity:0;`;
+          applySpeed(bub, 1.75);
+          bub.style.animationDelay = (b.delay / globalSpeed) + 's';
+          bub.innerHTML = '<div style="width:5px;height:5px;border-radius:9999px;background:rgba(255,255,255,0.85);margin-left:5px;margin-top:4px;"></div>';
+          stage.appendChild(bub);
+        });
+      }
+
+      // Layer 5 Ambient: Corrosive Acid Smoke
+      const sizzle = document.createElement('div');
+      sizzle.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;animation:gbaMukAcidSizzle forwards;';
+      applySpeed(sizzle, 1.75);
+      sizzle.innerHTML = '<div style="width:140px;height:140px;border-radius:9999px;background:rgba(132, 204, 22, 0.22);filter:blur(24px);box-shadow:0 0 35px #84cc16;"></div>';
+      stage.appendChild(sizzle);
+    }
+
+    /* 2. GRIMER STICKY HANDS */
+    function renderSticky(stageId, whiffed) {
+      const stage = document.getElementById(stageId);
+      Array.from(stage.children).forEach(c => {
+        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
+          stage.removeChild(c);
+        }
+      });
+
+      // Layer 1: Adhesion Aura
+      const aura = document.createElement('div');
+      aura.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;animation:gbaStickyClampTremor forwards;';
+      applySpeed(aura, 1.65);
+      aura.innerHTML = '<div style="width:160px;height:190px;border-radius:12px;background:rgba(59, 7, 100, 0.35);filter:blur(8px);border:1px solid rgba(168, 85, 247, 0.4);box-shadow:0 0 30px #7e22ce;"></div>';
+      stage.appendChild(aura);
+
+      // Layer 2: Primary Visual Actor (1996 Ken Sugimori Grimer Sticky Hands Actor — Two-Layer Wrapper)
+      const actorWrapper = document.createElement('div');
+      const w = whiffed ? '98px' : '140px';
+      const h = whiffed ? '88px' : '126px';
+      actorWrapper.style.cssText = `position:absolute;top:36%;left:50%;transform:translate(-50%,-50%);width:${w};height:${h};pointer-events:none;z-index:30;display:flex;align-items:center;justify-content:center;`;
+      
+      const actorInner = document.createElement('div');
+      actorInner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;animation:gbaGrimerStickyActorLunge cubic-bezier(0.18, 0.9, 0.28, 1) forwards;';
+      applySpeed(actorInner, 1.65);
+
+      const img = document.createElement('img');
+      img.alt = 'Grimer Sticky Hands';
+      img.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 24px #a855f7) drop-shadow(0 0 12px #581c87);';
+      const candidatePaths = [
+        'assets/Grimer_StickyHands_Actor.png',
+        '/assets/Grimer_StickyHands_Actor.png',
+        './assets/Grimer_StickyHands_Actor.png',
+        '../public/assets/Grimer_StickyHands_Actor.png'
+      ];
+      let pathIdx = 0;
+      img.onerror = function() {
+        pathIdx++;
+        if (pathIdx < candidatePaths.length) {
+          this.src = candidatePaths[pathIdx];
+        }
+      };
+      img.src = candidatePaths[0];
+      actorInner.appendChild(img);
+      actorWrapper.appendChild(actorInner);
+      stage.appendChild(actorWrapper);
+
+      // Layer 3: Dynamic Hand Sludge Drips (5 Asymmetric Gravity Droplets Pinching Off from Hands & Chin)
+      if (!whiffed) {
+        const handDrips = [
+          { x: 48, top: 'calc(36% - 6px)', kf: 'gbaGrimerHandDripR', delay: 0, w: 12, h: 18, r: 6 },
+          { x: 34, top: 'calc(36% - 14px)', kf: 'gbaGrimerHandDripR', delay: 0.14, w: 14, h: 22, r: 7 },
+          { x: -44, top: 'calc(36% + 14px)', kf: 'gbaGrimerHandDripL', delay: 0.02, w: 13, h: 19, r: 6.5 },
+          { x: -24, top: 'calc(36% + 22px)', kf: 'gbaGrimerHandDripL', delay: 0.16, w: 14, h: 22, r: 7 },
+          { x: 0, top: 'calc(36% + 18px)', kf: 'gbaGrimerHandDripMid', delay: 0.22, w: 11, h: 16, r: 5.5 }
+        ];
+        handDrips.forEach(d => {
+          const dripWrap = document.createElement('div');
+          dripWrap.style.cssText = `position:absolute;left:calc(50% + ${d.x}px);top:${d.top};transform:translateX(-50%);pointer-events:none;z-index:35;`;
+          const dripInner = document.createElement('div');
+          dripInner.style.cssText = `animation:${d.kf} cubic-bezier(0.4, 0, 0.9, 1) forwards;opacity:0;`;
+          applySpeed(dripInner, 1.65);
+          if (d.delay > 0) dripInner.style.animationDelay = (d.delay / globalSpeed) + 's';
+          dripInner.innerHTML = `
+            <svg width="${d.w}" height="${d.h}" viewBox="0 0 ${d.w} ${d.h}">
+              <path d="M ${d.r} 0 C ${d.r} ${d.r * 0.75}, 0 ${d.h * 0.6}, 0 ${d.h * 0.75} C 0 ${d.h * 0.9}, ${d.r * 0.5} ${d.h}, ${d.r} ${d.h} C ${d.r * 1.5} ${d.h}, ${d.w} ${d.h * 0.9}, ${d.w} ${d.h * 0.75} C ${d.w} ${d.h * 0.6}, ${d.r} ${d.r * 0.75}, ${d.r} 0 Z" fill="#7e22ce" />
+              <circle cx="${d.r * 0.7}" cy="${d.h * 0.7}" r="${d.r * 0.28}" fill="#f3e8ff" opacity="0.85" />
+            </svg>
+          `;
+          dripWrap.appendChild(dripInner);
+          stage.appendChild(dripWrap);
+        });
+
+        // Floor Splatters Beneath Hand Drips
+        const handSplat = document.createElement('div');
+        handSplat.style.cssText = 'position:absolute;bottom:10px;pointer-events:none;z-index:20;animation:gbaGrimerHandDripSplat forwards;opacity:0;display:flex;justify-content:center;width:100%;';
+        applySpeed(handSplat, 1.65);
+        handSplat.innerHTML = `
+          <div style="position:relative;width:216px;height:24px;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;left:calc(50% - 34px);transform:translateX(-50%);">
+              <svg width="34" height="14" viewBox="0 0 34 14" style="overflow:visible;filter:drop-shadow(0 0 8px #c084fc)">
+                <ellipse cx="17" cy="8" rx="14" ry="4.5" fill="#581c87" opacity="0.92" />
+                <ellipse cx="17" cy="7" rx="8" ry="2.5" fill="#a855f7" />
+              </svg>
+            </div>
+            <div style="position:absolute;left:50%;transform:translateX(-50%);">
+              <svg width="38" height="15" viewBox="0 0 38 15" style="overflow:visible;filter:drop-shadow(0 0 10px #c084fc)">
+                <ellipse cx="19" cy="8" rx="16" ry="5" fill="#3b0764" opacity="0.95" />
+                <ellipse cx="19" cy="7" rx="10" ry="2.8" fill="#c084fc" />
+              </svg>
+            </div>
+            <div style="position:absolute;left:calc(50% + 41px);transform:translateX(-50%);">
+              <svg width="36" height="14" viewBox="0 0 36 14" style="overflow:visible;filter:drop-shadow(0 0 8px #c084fc)">
+                <ellipse cx="18" cy="8" rx="15" ry="4.5" fill="#581c87" opacity="0.92" />
+                <ellipse cx="18" cy="7" rx="9" ry="2.5" fill="#a855f7" />
+              </svg>
+            </div>
+          </div>
+        `;
+        stage.appendChild(handSplat);
+      }
+
+      // Layer 4: Viscous Elastic Slime Web Strands (Anchoring the Victim & Spanning Hand Webbing)
+      const tendrils = document.createElement('div');
+      tendrils.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:38;animation:gbaStickyWebPulse ease-out forwards;';
+      applySpeed(tendrils, 1.65);
+      tendrils.innerHTML = `
+        <svg width="150" height="110" viewBox="0 0 150 110" style="overflow:visible">
+          <path d="M 28 62 C 48 42, 85 45, 122 30" fill="none" stroke="#d8b4fe" stroke-width="3" stroke-linecap="round" opacity="0.92" style="filter:drop-shadow(0 0 8px #c084fc)" />
+          <path d="M 34 72 C 55 60, 95 56, 126 38" fill="none" stroke="#d8b4fe" stroke-width="2.5" stroke-linecap="round" opacity="0.88" style="filter:drop-shadow(0 0 8px #c084fc)" />
+          <path d="M 48 46 C 72 38, 98 28, 114 26" fill="none" stroke="#f5d0fe" stroke-width="1.8" stroke-linecap="round" opacity="0.95" />
+          <path d="M 58 76 C 78 52, 98 48, 118 48" fill="none" stroke="#a855f7" stroke-width="2.2" stroke-linecap="round" opacity="0.85" />
+          <path d="M 74 52 Q 75 78, 76 84 Q 77 78, 76 52 Z" fill="#9333ea" opacity="0.9" />
+          <ellipse cx="68" cy="48" rx="8" ry="2" fill="#ffffff" opacity="0.75" transform="rotate(-18 68 48)" />
+          <ellipse cx="102" cy="36" rx="9" ry="2.2" fill="#ffffff" opacity="0.7" transform="rotate(-15 102 36)" />
+        </svg>
+      `;
+      stage.appendChild(tendrils);
+
+      // Layer 5: Neurotoxic Bioluminescent Paralysis Pulse (Ethereal Radial Corona Bloom)
+      if (!whiffed) {
+        const pulse = document.createElement('div');
+        pulse.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:40;animation:gbaStickyParalysisRing ease-out forwards;';
+        applySpeed(pulse, 1.65);
+        pulse.innerHTML = `
+          <svg width="160" height="120" viewBox="0 0 160 120" style="overflow:visible">
+            <defs>
+              <radialGradient id="neuroParalysisPulse_p" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                <stop offset="30%" stop-color="#c084fc" stop-opacity="0.85" />
+                <stop offset="65%" stop-color="#a3e635" stop-opacity="0.55" />
+                <stop offset="100%" stop-color="#84cc16" stop-opacity="0" />
+              </radialGradient>
+            </defs>
+            <ellipse cx="80" cy="60" rx="72" ry="46" fill="url(#neuroParalysisPulse_p)" />
+          </svg>
+        `;
+        stage.appendChild(pulse);
+      }
+    }
+
+    /* 3. GRIMER NASTY GOO */
+    function renderGoo(stageId, whiffed) {
+      const stage = document.getElementById(stageId);
+      Array.from(stage.children).forEach(c => {
+        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
+          stage.removeChild(c);
+        }
+      });
+
+      // Layer 1: Mire Floor
+      const floor = document.createElement('div');
+      floor.style.cssText = 'position:absolute;bottom:8px;pointer-events:none;z-index:15;animation:gbaGrimerFloorMire forwards;display:flex;justify-content:center;';
+      applySpeed(floor, 1.55);
+      floor.innerHTML = '<div style="width:160px;height:40px;border-radius:9999px;background:radial-gradient(ellipse at 50% 50%, #3b0764 0%, #1e1b4b 70%, transparent 100%);filter:blur(2px);box-shadow:0 0 20px #581c87;"></div>';
+      stage.appendChild(floor);
+
+      // Layer 2: Main Blob (Centered on target Pokémon body at top 32%)
+      const blobWrapper = document.createElement('div');
+      const w = whiffed ? '112px' : '160px';
+      const h = whiffed ? '77px' : '110px';
+      blobWrapper.style.cssText = `position:absolute;left:50%;top:32%;transform:translate(-50%,-50%);width:${w};height:${h};pointer-events:none;z-index:30;display:flex;align-items:center;justify-content:center;`;
+      
+      const blobInner = document.createElement('div');
+      blobInner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;animation:gbaGrimerGooSplat cubic-bezier(0.2, 0.9, 0.3, 1) forwards;';
+      applySpeed(blobInner, 1.55);
+      blobInner.innerHTML = `
+        <svg viewBox="0 0 160 110" style="width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 24px #a855f7) drop-shadow(0 0 14px #7e22ce)">
+          <defs>
+            <radialGradient id="gooCore_p" cx="50%" cy="38%" r="58%">
+              <stop offset="0%" stop-color="#f3e8ff" />
+              <stop offset="25%" stop-color="#c084fc" />
+              <stop offset="55%" stop-color="#9333ea" />
+              <stop offset="82%" stop-color="#6b21a8" />
+              <stop offset="100%" stop-color="#240d47" />
+            </radialGradient>
+            <linearGradient id="gooDripG_p" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#9333ea" />
+              <stop offset="100%" stop-color="#581c87" />
+            </linearGradient>
+            <linearGradient id="gooGleamG_p" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+              <stop offset="50%" stop-color="#ffffff" stop-opacity="0.75" />
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M 80 14 C 110 12, 142 22, 148 46 C 154 68, 132 80, 118 76 C 110 74, 106 88, 102 94 C 98 86, 94 76, 80 78 C 66 76, 62 86, 58 94 C 54 88, 50 74, 42 76 C 28 80, 6 68, 12 46 C 18 22, 50 12, 80 14 Z" fill="url(#gooCore_p)" />
+          <path d="M 40 48 C 30 38, 55 26, 75 32 C 60 44, 48 56, 40 48 Z" fill="#7e22ce" opacity="0.85" />
+          <path d="M 120 48 C 130 38, 105 26, 85 32 C 100 44, 112 56, 120 48 Z" fill="#7e22ce" opacity="0.85" />
+          <path d="M 40 74 Q 48 98, 56 74 Z" fill="url(#gooDripG_p)" />
+          <path d="M 72 76 Q 80 104, 88 76 Z" fill="url(#gooDripG_p)" />
+          <path d="M 104 74 Q 112 98, 120 74 Z" fill="url(#gooDripG_p)" />
+          <path d="M 52 26 C 70 20, 95 20, 112 26" fill="none" stroke="url(#gooGleamG_p)" stroke-width="3.2" stroke-linecap="round" />
+          <path d="M 38 42 C 48 34, 64 36, 72 44" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.6" />
+          <path d="M 122 42 C 112 34, 96 36, 88 44" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.6" />
+          <circle cx="62" cy="56" r="2.8" fill="#f5d0fe" opacity="0.85" />
+          <circle cx="98" cy="56" r="2.8" fill="#f5d0fe" opacity="0.85" />
+          <circle cx="80" cy="64" r="2.2" fill="#ffffff" opacity="0.9" />
+        </svg>
+      `;
+      blobWrapper.appendChild(blobInner);
+      stage.appendChild(blobWrapper);
+
+      if (!whiffed) {
+        // Layer 3: Organic Necking Filaments anchored directly to Nozzles at top: calc(32% + 43px) (Two-Layer Wrapper)
+        const neckingWrapper = document.createElement('div');
+        neckingWrapper.style.cssText = 'position:absolute;left:50%;top:calc(32% + 43px);transform:translateX(-50%);width:160px;pointer-events:none;z-index:25;display:flex;justify-content:center;';
+        const neckingInner = document.createElement('div');
+        neckingInner.style.cssText = 'width:100%;display:flex;justify-content:center;transform-origin:top center;animation:gbaGrimerNeckingThread forwards;';
+        applySpeed(neckingInner, 1.55);
+        neckingInner.innerHTML = `
+          <svg width="160" height="55" viewBox="0 0 160 55" style="overflow:visible;filter:drop-shadow(0 0 10px #9333ea)">
+            <path d="M 46 0 C 45 14, 44 26, 47 38 C 48 44, 51 44, 50 38 C 49 26, 51 14, 52 0 Z" fill="url(#gooDripG_p)" />
+            <path d="M 77 6 C 76 20, 75 34, 79 46 C 80 52, 84 52, 83 46 C 82 34, 85 20, 86 6 Z" fill="url(#gooDripG_p)" />
+            <path d="M 110 0 C 109 14, 108 26, 111 38 C 112 44, 115 44, 114 38 C 113 26, 115 14, 116 0 Z" fill="url(#gooDripG_p)" />
+          </svg>
+        `;
+        neckingWrapper.appendChild(neckingInner);
+        stage.appendChild(neckingWrapper);
+
+        // Layer 4: Vertical Gravitational Droplets falling ~135px straight down (Aligned to -32px, 0px, +32px)
+        const drops = [
+          { x: -32, top: 'calc(32% + 43px)', kf: 'gbaGrimerPinchDrop1', w: 15, h: 22, r: 7.5 },
+          { x: 0, top: 'calc(32% + 49px)', kf: 'gbaGrimerPinchDrop2', w: 19, h: 28, r: 9.5 },
+          { x: 32, top: 'calc(32% + 43px)', kf: 'gbaGrimerPinchDrop3', w: 14, h: 20, r: 7 }
+        ];
+        drops.forEach(d => {
+          const drop = document.createElement('div');
+          drop.style.cssText = `position:absolute;left:calc(50% + ${d.x}px);top:${d.top};transform:translateX(-50%);pointer-events:none;z-index:30;animation:${d.kf} cubic-bezier(0.4, 0, 0.9, 1) forwards;opacity:0;`;
+          applySpeed(drop, 1.55);
+          drop.innerHTML = `
+            <svg width="${d.w}" height="${d.h}" viewBox="0 0 ${d.w} ${d.h}">
+              <path d="M ${d.r} 0 C ${d.r} ${d.r * 0.7}, 0 ${d.h * 0.6}, 0 ${d.h * 0.75} C 0 ${d.h * 0.9}, ${d.r * 0.5} ${d.h}, ${d.r} ${d.h} C ${d.r * 1.5} ${d.h}, ${d.w} ${d.h * 0.9}, ${d.w} ${d.h * 0.75} C ${d.w} ${d.h * 0.6}, ${d.r} ${d.r * 0.7}, ${d.r} 0 Z" fill="#7e22ce" />
+              <circle cx="${d.r * 0.7}" cy="${d.h * 0.7}" r="${d.r * 0.25}" fill="#f3e8ff" opacity="0.85" />
+            </svg>
+          `;
+          stage.appendChild(drop);
+        });
+
+        // Layer 4 Floor Splatters: 3 crowns positioned exactly below each droplet axis (-32px, 0px, +32px)
+        const splat = document.createElement('div');
+        splat.style.cssText = 'position:absolute;bottom:12px;pointer-events:none;z-index:20;animation:gbaGrimerFloorSplat forwards;opacity:0;display:flex;justify-content:center;width:100%;';
+        applySpeed(splat, 1.55);
+        splat.innerHTML = `
+          <div style="position:relative;width:200px;height:24px;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;left:calc(50% - 32px);transform:translateX(-50%);">
+              <svg width="36" height="16" viewBox="0 0 36 16" style="overflow:visible;filter:drop-shadow(0 0 8px #c084fc)">
+                <ellipse cx="18" cy="9" rx="16" ry="5" fill="#581c87" opacity="0.92" />
+                <ellipse cx="18" cy="8" rx="10" ry="3" fill="#a855f7" />
+              </svg>
+            </div>
+            <div style="position:absolute;left:50%;transform:translateX(-50%);">
+              <svg width="46" height="18" viewBox="0 0 46 18" style="overflow:visible;filter:drop-shadow(0 0 12px #c084fc)">
+                <ellipse cx="23" cy="10" rx="20" ry="6" fill="#3b0764" opacity="0.95" />
+                <ellipse cx="23" cy="9" rx="14" ry="3.5" fill="#c084fc" />
+              </svg>
+            </div>
+            <div style="position:absolute;left:calc(50% + 32px);transform:translateX(-50%);">
+              <svg width="34" height="16" viewBox="0 0 34 16" style="overflow:visible;filter:drop-shadow(0 0 8px #c084fc)">
+                <ellipse cx="17" cy="9" rx="15" ry="5" fill="#581c87" opacity="0.92" />
+                <ellipse cx="17" cy="8" rx="9" ry="3" fill="#a855f7" />
+              </svg>
+            </div>
+          </div>
+        `;
+        stage.appendChild(splat);
+      }
+    }
+
+    /* 4. GRIMER MINIMIZE */
+    function renderMinimize(stageId) {
+      const stage = document.getElementById(stageId);
+      Array.from(stage.children).forEach(c => {
+        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
+          stage.removeChild(c);
+        }
+      });
+
+      // Layer 1: Organic Bézier Liquid Surface Tension Ripples (Surrounding Floor Puddle at bottom: 8px) (Two-Layer Wrapper)
+      const r1Wrapper = document.createElement('div');
+      r1Wrapper.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:170px;height:75px;pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;';
+      const r1Inner = document.createElement('div');
+      r1Inner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-origin:center center;animation:gbaGrimerOrganicRipple1 forwards;';
+      applySpeed(r1Inner, 1.5);
+      r1Inner.innerHTML = `
+        <svg width="170" height="75" viewBox="0 0 170 75" style="overflow:visible">
+          <defs>
+            <linearGradient id="minR1_p" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#c084fc" stop-opacity="0" />
+              <stop offset="30%" stop-color="#e879f9" stop-opacity="0.85" />
+              <stop offset="70%" stop-color="#d8b4fe" stop-opacity="0.85" />
+              <stop offset="100%" stop-color="#c084fc" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M 12 38 C 10 52, 42 66, 85 66 C 128 66, 160 52, 158 38 C 156 24, 126 10, 85 10 C 44 10, 14 24, 12 38 Z" fill="none" stroke="url(#minR1_p)" stroke-width="2.2" stroke-linecap="round" style="filter:drop-shadow(0 0 8px #c084fc)" />
+        </svg>
+      `;
+      r1Wrapper.appendChild(r1Inner);
+      stage.appendChild(r1Wrapper);
+
+      const r2Wrapper = document.createElement('div');
+      r2Wrapper.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:170px;height:75px;pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;';
+      const r2Inner = document.createElement('div');
+      r2Inner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-origin:center center;animation:gbaGrimerOrganicRipple2 forwards;opacity:0;';
+      applySpeed(r2Inner, 1.5);
+      r2Inner.style.animationDelay = (0.22 / globalSpeed) + 's';
+      r2Inner.innerHTML = `
+        <svg width="170" height="75" viewBox="0 0 170 75" style="overflow:visible">
+          <defs>
+            <linearGradient id="minR2_p" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#9333ea" stop-opacity="0" />
+              <stop offset="30%" stop-color="#c084fc" stop-opacity="0.75" />
+              <stop offset="70%" stop-color="#f5d0fe" stop-opacity="0.75" />
+              <stop offset="100%" stop-color="#9333ea" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <path d="M 20 38 C 18 50, 46 62, 85 62 C 124 62, 152 50, 150 38 C 148 26, 122 14, 85 14 C 48 14, 22 26, 20 38 Z" fill="none" stroke="url(#minR2_p)" stroke-width="1.6" stroke-linecap="round" style="filter:drop-shadow(0 0 6px #a855f7)" />
+        </svg>
+      `;
+      r2Wrapper.appendChild(r2Inner);
+      stage.appendChild(r2Wrapper);
+
+      // Layer 2: Genuine Liquefying Slime Mass Collapse (Floor-Centered at bottom: 12px) (Two-Layer Wrapper)
+      const poolWrapper = document.createElement('div');
+      poolWrapper.style.cssText = 'position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:140px;height:64px;pointer-events:none;z-index:30;display:flex;align-items:center;justify-content:center;';
+      const poolInner = document.createElement('div');
+      poolInner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-origin:center bottom;animation:gbaGrimerPuddleMelt cubic-bezier(0.18, 0.9, 0.3, 1) forwards;';
+      applySpeed(poolInner, 1.5);
+      poolInner.innerHTML = `
+        <svg viewBox="0 0 140 64" style="width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 28px #c084fc) drop-shadow(0 0 16px #7e22ce)">
+          <defs>
+            <radialGradient id="minCore_p" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#f3e8ff" />
+              <stop offset="25%" stop-color="#c084fc" />
+              <stop offset="65%" stop-color="#7e22ce" />
+              <stop offset="100%" stop-color="#240d47" />
+            </radialGradient>
+          </defs>
+          <path d="M 6 38 C 2 50, 24 62, 70 62 C 116 62, 138 50, 134 38 C 130 24, 104 14, 70 14 C 36 14, 10 24, 6 38 Z" fill="url(#minCore_p)" />
+          <path d="M 24 38 C 38 28, 70 26, 102 30 C 118 32, 116 44, 96 48 C 74 52, 42 50, 24 38 Z" fill="#9333ea" opacity="0.85" />
+          <ellipse cx="70" cy="36" rx="38" ry="11" fill="#a855f7" opacity="0.9" />
+          <ellipse cx="50" cy="30" rx="24" ry="5.5" fill="#ffffff" opacity="0.65" transform="rotate(-6 50 30)" />
+          <ellipse cx="94" cy="34" rx="18" ry="4.5" fill="#ffffff" opacity="0.55" transform="rotate(5 94 34)" />
+          <circle cx="38" cy="40" r="2.8" fill="#f5d0fe" opacity="0.85" />
+          <circle cx="104" cy="42" r="2.4" fill="#f5d0fe" opacity="0.85" />
+        </svg>
+      `;
+      poolWrapper.appendChild(poolInner);
+      stage.appendChild(poolWrapper);
+
+      // Layer 3: Evasive Vapor Mist & Refractive Shimmer Aura
+      const aura = document.createElement('div');
+      aura.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;animation:gbaGrimerShieldAura forwards;';
+      applySpeed(aura, 1.5);
+      aura.innerHTML = '<div style="width:160px;height:200px;border-radius:14px;background:rgba(168, 85, 247, 0.2);filter:blur(18px);border:1px solid rgba(245, 208, 254, 0.4);box-shadow:0 0 35px #a855f7;"></div>';
+      stage.appendChild(aura);
+    }
+
+    function playAll() {
+      renderMuk('stage-muk-hit', false);
+      renderSticky('stage-grimer-sticky', false);
+      renderGoo('stage-grimer-goo', false);
+      renderMinimize('stage-grimer-minimize');
+    }
+
+    function resetAll() {
+      ['stage-muk-hit', 'stage-grimer-sticky', 'stage-grimer-goo', 'stage-grimer-minimize'].forEach(id => {
+        const stage = document.getElementById(id);
+        Array.from(stage.children).forEach(c => {
+          if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
+            stage.removeChild(c);
+          }
+        });
+      });
+    }
+
+    // Auto-init on load
+    playAll();
+  </script>
+</body>
+</html>
