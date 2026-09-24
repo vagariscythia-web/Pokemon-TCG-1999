@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@keyframes gbaMewtwoMoteSpiralRot {
+  0%   { transform: rotate(var(--rot0)); }
+  25%  { transform: rotate(calc(var(--rot0) + var(--drot) * 0.10)); }
+  55%  { transform: rotate(calc(var(--rot0) + var(--drot) * 0.42)); }
+  80%  { transform: rotate(calc(var(--rot0) + var(--drot) * 0.78)); }
+  100% { transform: rotate(calc(var(--rot0) + var(--drot))); }
+}
+
+@keyframes gbaMewtwoMoteSpiralRad {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--dist)) scale(0.25);
+    filter: drop-shadow(0 0 3px #ffffff);
+  }
+  14% {
+    opacity: 0.95;
+    transform: translateY(calc(var(--dist) * 0.96 - 4px)) scale(1.0);
+    filter: drop-shadow(0 0 5px #ffffff) drop-shadow(0 0 10px #f472b6);
+  }
+  36% {
+    opacity: 1;
+    transform: translateY(calc(var(--dist) * 0.78)) scale(1.22);
+    filter: drop-shadow(0 0 7px #ffffff) drop-shadow(0 0 14px #e879f9);
+  }
+  64% {
+    opacity: 1;
+    transform: translateY(calc(var(--dist) * 0.44)) scale(1.15);
+    filter: drop-shadow(0 0 9px #ffffff) drop-shadow(0 0 18px #d946ef);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(calc(var(--dist) * 0.14)) scale(0.85);
+    filter: drop-shadow(0 0 12px #ffffff);
+  }
+  96% {
+    opacity: 0.9;
+    transform: translateY(calc(var(--dist) * 0.02)) scale(0.4);
+    filter: drop-shadow(0 0 16px #ffffff);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0) scale(0.08);
+    filter: drop-shadow(0 0 20px #ffffff);
+  }
+}
+</style>
+</head>
+<body>OK</body>
+</html>

@@ -1279,6 +1279,8 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'moltres_dive_bomb':
       return 1650;
     case 'mewtwo_psychic':
+      return 1750;
+    case 'scyther_blade_dance':
       return 1650;
     case 'mewtwo_barrier':
       return 1600;
@@ -1488,7 +1490,8 @@ const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'thunder_punch', 'victreebel_acid_melt', 'weedle_poison_sting', 'weezing_toxic_smog',
   'rattata_quick_attack', 'kangaskhan_comet_punch',
   'articuno_blizzard', 'zapdos_thunderbolt',
-  'alakazam_confuse_ray', 'muk_sludge_deluge'
+  'alakazam_confuse_ray', 'muk_sludge_deluge',
+  'mewtwo_psychic'
 ]);
 
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
@@ -18614,38 +18617,323 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 46c. SCYTHER BLADE DANCE (Scyther Swords Dance - scythe-arm crossing slashes) */}
+      {/* 46c. SCYTHER BLADE DANCE (Scyther Swords Dance - 4-Phase Cinematic Ritual & Centered Spectral Blades — 1.65s) */}
       {fx.type === 'scyther_blade_dance' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Left scythe arm sweeping in */}
-          <div className="absolute" style={{ animation: 'gbaScytherBladeLeft 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) forwards' }}>
-            <img
-              src="/assets/Scyther_Scythe_Blade.png"
-              alt="Scyther Blade Left"
-              className={`${fx.whiffed ? 'w-[80px] h-[56px]' : 'w-[108px] h-[76px]'} object-contain pointer-events-none drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_28px_rgba(163,230,53,0.7)]`}
+          {/* Layer 1: Ambient Card Floor Atmosphere Glow & Concentric Expanding Shockwave Ripples */}
+          <div
+            className="absolute pointer-events-none z-15 flex items-center justify-center"
+            style={{
+              top: '67%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '240px',
+              height: '76px'
+            }}
+          >
+            {/* Luminous Ground Atmosphere (Radial Incandescent Illumination) */}
+            <div
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(254,240,138,0.55) 0%, rgba(163,230,53,0.35) 42%, rgba(34,197,94,0.12) 72%, transparent 100%)',
+                filter: 'blur(8px)',
+                animation: 'gbaScytherDanceFloorGlow 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards'
+              }}
             />
-          </div>
-          {/* Right scythe arm sweeping in (mirrored) */}
-          <div className="absolute" style={{ animation: 'gbaScytherBladeRight 1.2s cubic-bezier(0.2, 0.9, 0.3, 1) 0.1s forwards', opacity: 0 }}>
-            <img
-              src="/assets/Scyther_Scythe_Blade.png"
-              alt="Scyther Blade Right"
-              className={`${fx.whiffed ? 'w-[80px] h-[56px]' : 'w-[108px] h-[76px]'} object-contain pointer-events-none -scale-x-100 drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_28px_rgba(163,230,53,0.7)]`}
-            />
-          </div>
-          {/* Crossing slash flash at center */}
-          <div className="absolute" style={{ animation: 'gbaScytherSlashFlash 1.2s ease-out 0.35s forwards', opacity: 0 }}>
-            <svg width={fx.whiffed ? "64" : "88"} height={fx.whiffed ? "64" : "88"} viewBox="0 0 88 88">
-              <line x1="12" y1="12" x2="76" y2="76" stroke="#fefce8" strokeWidth="4" strokeLinecap="round" opacity="0.95" className="drop-shadow-[0_0_10px_#ffffff]" />
-              <line x1="76" y1="12" x2="12" y2="76" stroke="#bef264" strokeWidth="4" strokeLinecap="round" opacity="0.95" className="drop-shadow-[0_0_14px_#a3e635]" />
-            </svg>
-          </div>
-          {/* Green energy sparks */}
-          {!fx.whiffed && (
-            <div className="absolute -top-2" style={{ animation: 'gbaScytherSpark 1.2s ease-out 0.5s forwards', opacity: 0 }}>
-              <span className="text-xl text-lime-300 select-none drop-shadow-[0_0_10px_#a3e635]">✦</span>
+
+            {/* Concentric Expanding Shockwave Ripple 1 (Opening Pulse: 0.10s) */}
+            <div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              style={{
+                animation: 'gbaScytherGroundRipple1 0.85s cubic-bezier(0.2, 0.8, 0.35, 1) 0.10s forwards',
+                opacity: 0
+              }}
+            >
+              <svg width="240" height="76" viewBox="0 0 240 76" className="overflow-visible">
+                <defs>
+                  <radialGradient id="scytherRippleGrad1" cx="50%" cy="50%" r="50%">
+                    <stop offset="60%" stopColor="#ffffff" stopOpacity="0" />
+                    <stop offset="85%" stopColor="#ffffff" stopOpacity="0.9" />
+                    <stop offset="93%" stopColor="#bef264" stopOpacity="0.75" />
+                    <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <ellipse cx="120" cy="38" rx="90" ry="26" fill="url(#scytherRippleGrad1)" stroke="#bef264" strokeWidth="1.8" className="drop-shadow-[0_0_10px_#bef264]" />
+              </svg>
             </div>
-          )}
+
+            {/* Concentric Expanding Shockwave Ripple 2 (Mid-Dance Resonant Wave: 0.50s) */}
+            <div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              style={{
+                animation: 'gbaScytherGroundRipple2 0.85s cubic-bezier(0.2, 0.8, 0.35, 1) 0.50s forwards',
+                opacity: 0
+              }}
+            >
+              <svg width="240" height="76" viewBox="0 0 240 76" className="overflow-visible">
+                <defs>
+                  <radialGradient id="scytherRippleGrad2" cx="50%" cy="50%" r="50%">
+                    <stop offset="65%" stopColor="#ffffff" stopOpacity="0" />
+                    <stop offset="88%" stopColor="#ffffff" stopOpacity="0.95" />
+                    <stop offset="94%" stopColor="#d9f99d" stopOpacity="0.7" />
+                    <stop offset="100%" stopColor="#15803d" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <ellipse cx="120" cy="38" rx="95" ry="28" fill="url(#scytherRippleGrad2)" stroke="#a3e635" strokeWidth="2.2" className="drop-shadow-[0_0_12px_#a3e635]" />
+              </svg>
+            </div>
+
+            {/* Concentric Expanding Shockwave Ripple 3 (Climax Cross-Lock Shockwave: 1.05s) */}
+            <div
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+              style={{
+                animation: 'gbaScytherGroundRipple3 0.60s cubic-bezier(0.15, 0.85, 0.3, 1) 1.05s forwards',
+                opacity: 0
+              }}
+            >
+              <svg width="240" height="76" viewBox="0 0 240 76" className="overflow-visible">
+                <defs>
+                  <radialGradient id="scytherRippleGrad3" cx="50%" cy="50%" r="50%">
+                    <stop offset="70%" stopColor="#ffffff" stopOpacity="0" />
+                    <stop offset="90%" stopColor="#ffffff" stopOpacity="1" />
+                    <stop offset="96%" stopColor="#bef264" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#166534" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                <ellipse cx="120" cy="38" rx="100" ry="30" fill="url(#scytherRippleGrad3)" stroke="#ffffff" strokeWidth="2.5" className="drop-shadow-[0_0_16px_#ffffff] drop-shadow-[0_0_24px_#bef264]" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Layer 2: 4-Phase Scyther Stock Visual Actor (Kinematic Zoetrope with Continuous Momentum & Smear Cross-Fade) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{
+              top: '48%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: fx.whiffed ? '102px' : '142px',
+              height: fx.whiffed ? '112px' : '154px'
+            }}
+          >
+            {!fx.whiffed ? (
+              <>
+                {/* Pose 1 (002): High Scythe Lunge & Opening Dance Stance (0% - 34%) */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{ animation: 'gbaScytherDanceActorA 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
+                >
+                  <img
+                    src="/assets/Scyther_SwordsDance_Actor_A.png"
+                    alt="Scyther Swords Dance Pose 1"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_30px_rgba(163,230,53,0.65)]"
+                  />
+                </div>
+
+                {/* Pose 2 (003): Weaving Lateral Spin Slash (20% - 56%) */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{ animation: 'gbaScytherDanceActorB 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
+                >
+                  <img
+                    src="/assets/Scyther_SwordsDance_Actor_B.png"
+                    alt="Scyther Swords Dance Pose 2"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_30px_rgba(163,230,53,0.65)]"
+                  />
+                </div>
+
+                {/* Pose 3 (004): High Cross-Guard Flourish (42% - 78%) */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{ animation: 'gbaScytherDanceActorC 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
+                >
+                  <img
+                    src="/assets/Scyther_SwordsDance_Actor_C.png"
+                    alt="Scyther Swords Dance Pose 3"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_20px_#bef264] drop-shadow-[0_0_32px_rgba(163,230,53,0.7)]"
+                  />
+                </div>
+
+                {/* Pose 4 (005): Apex Primed Guard Stance (64% - 100%) */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{ animation: 'gbaScytherDanceActorD 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards', opacity: 0 }}
+                >
+                  <img
+                    src="/assets/Scyther_SwordsDance_Actor_D.png"
+                    alt="Scyther Swords Dance Pose 4"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_22px_#bef264] drop-shadow-[0_0_35px_rgba(163,230,53,0.75)]"
+                  />
+                </div>
+
+                {/* Dedicated Scythe Blade Glints on Pose 4 — Positioned exactly at the center of the crossed blades */}
+                {/* 1. Climax Crossed Blades Central Intersection Starburst (Center of the 2 Blades: 49%, 44%) */}
+                <div
+                  className="absolute pointer-events-none z-45"
+                  style={{
+                    left: '49%',
+                    top: '44%',
+                    transform: 'translate(-50%, -50%)',
+                    animation: 'gbaScytherCrossGlint 0.38s ease-out 1.26s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width="28" height="28" viewBox="0 0 32 32" className="overflow-visible drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                    {/* 4-Point Starburst Core */}
+                    <polygon points="16,0 19,12 32,16 19,20 16,32 13,20 0,16 13,12" fill="#ffffff" />
+                    {/* Diagonal Cross Rays extending along the two crossed blades */}
+                    <path d="M 6 6 L 26 26 M 26 6 L 6 26" stroke="#fef08a" strokeWidth="1.8" strokeLinecap="round" opacity="0.9" />
+                    <circle cx="16" cy="16" r="3.5" fill="#fef08a" />
+                    <circle cx="16" cy="16" r="2" fill="#ffffff" />
+                  </svg>
+                </div>
+
+                {/* 2. Left Blade Sheen Glint (Right on left blade cutting edge: 36%, 42%) */}
+                <div
+                  className="absolute pointer-events-none z-45"
+                  style={{
+                    left: '36%',
+                    top: '42%',
+                    transform: 'translate(-50%, -50%)',
+                    animation: 'gbaScytherBladeGlint 0.35s ease-out 1.22s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#bef264]">
+                    <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
+                    <circle cx="12" cy="12" r="2.8" fill="#fef08a" />
+                  </svg>
+                </div>
+
+                {/* 3. Right Blade Sheen Glint (Right on right blade cutting edge: 61%, 42%) */}
+                <div
+                  className="absolute pointer-events-none z-45"
+                  style={{
+                    left: '61%',
+                    top: '42%',
+                    transform: 'translate(-50%, -50%)',
+                    animation: 'gbaScytherBladeGlint 0.35s ease-out 1.30s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#bef264]">
+                    <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
+                    <circle cx="12" cy="12" r="2.8" fill="#fef08a" />
+                  </svg>
+                </div>
+              </>
+            ) : (
+              /* Whiff: Muted 2-pose tentative attempt (non-overlapping) that dissipates */
+              <>
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{ animation: 'gbaScytherDanceActorWhiff1 1.65s ease-out forwards' }}
+                >
+                  <img
+                    src="/assets/Scyther_SwordsDance_Actor_A.png"
+                    alt="Scyther Whiff Pose 1"
+                    className="w-full h-full object-contain pointer-events-none opacity-85"
+                  />
+                </div>
+                <div
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                  style={{ animation: 'gbaScytherDanceActorWhiff2 1.65s ease-out forwards', opacity: 0 }}
+                >
+                  <img
+                    src="/assets/Scyther_SwordsDance_Actor_B.png"
+                    alt="Scyther Whiff Pose 2"
+                    className="w-full h-full object-contain pointer-events-none opacity-80"
+                  />
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Layer 3: 3D Cylindrical Orbiting Spectral Blades (Decoupled centering + rotating inner container) */}
+          <div
+            className="absolute pointer-events-none z-35 flex items-center justify-center"
+            style={{
+              top: '48%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '200px',
+              height: '200px'
+            }}
+          >
+            <div
+              className="relative w-full h-full flex items-center justify-center"
+              style={{
+                animation: 'gbaScytherOrbitBlades 1.65s cubic-bezier(0.25, 0.85, 0.35, 1) forwards',
+                transformOrigin: 'center center'
+              }}
+            >
+              {/* Blade 1 (0 deg - top) */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'rotate(0deg)' }}>
+                <div style={{ transform: 'translateY(-66px) rotate(-12deg)' }}>
+                  <svg width="24" height="42" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                    <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad)" />
+                    <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+              {/* Blade 2 (120 deg - bottom-right) */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'rotate(120deg)' }}>
+                <div style={{ transform: 'translateY(-66px) rotate(-12deg)' }}>
+                  <svg width="24" height="42" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                    <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad)" />
+                    <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+              {/* Blade 3 (240 deg - bottom-left) */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'rotate(240deg)' }}>
+                <div style={{ transform: 'translateY(-66px) rotate(-12deg)' }}>
+                  <svg width="24" height="42" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                    <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad)" />
+                    <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Gradients Defs for Spectral Blades */}
+          <svg width="0" height="0" className="absolute">
+            <defs>
+              <linearGradient id="scytherBladeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#ffffff" />
+                <stop offset="35%" stopColor="#d9f99d" />
+                <stop offset="70%" stopColor="#84cc16" />
+                <stop offset="100%" stopColor="#15803d" />
+              </linearGradient>
+            </defs>
+          </svg>
+
+          {/* Layer 5: Ambient Ki Sharpening Glints (NO unicode symbols - pure SVG incandescence) */}
+          {!fx.whiffed && [
+            { x: -38, y: -24, delay: '0.42s', s: 12 },
+            { x: 42, y: -18, delay: '0.52s', s: 15 },
+            { x: -26, y: 32, delay: '0.62s', s: 11 },
+            { x: 36, y: 28, delay: '0.74s', s: 14 },
+            { x: 0, y: -46, delay: '0.48s', s: 16 }
+          ].map((glint, idx) => (
+            <div
+              key={`scyther-glint-${idx}`}
+              className="absolute pointer-events-none z-40"
+              style={{
+                left: `calc(50% + ${glint.x}px)`,
+                top: `calc(38% + ${glint.y}px)`,
+                transform: 'translate(-50%, -50%)',
+                animation: `gbaScytherKiGlints 1.65s ease-out ${glint.delay} forwards`,
+                opacity: 0
+              }}
+            >
+              <svg width={glint.s} height={glint.s} viewBox="0 0 16 16" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#a3e635]">
+                <polygon points="8,0 10,6 16,8 10,10 8,16 6,10 0,8 6,6" fill="#fef08a" />
+                <circle cx="8" cy="8" r="2.5" fill="#ffffff" />
+              </svg>
+            </div>
+          ))}
         </div>
       )}
 
@@ -21296,90 +21584,483 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 66. MEWTWO PSYCHIC (Mewtwo — Hyper-Dense Psychokinetic Singularity & Warp Implosion) */}
+      {/* 66. MEWTWO PSYCHIC (5-Layer Psionic Singularity, Levitation & Volumetric Ether — 1.75s) */}
       {fx.type === 'mewtwo_psychic' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Card Telekinetic Distortion Shudder */}
-          {!fx.whiffed && (
+        <div
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+          style={{ animation: !fx.whiffed ? 'gbaMagneticHumCardShake 1.75s ease-out forwards' : undefined }}
+        >
+          {/* Layer 1: Gravitational Space-Time Collapse Card Floor (Strictly Centered) */}
+          <div className="absolute pointer-events-none z-15 bottom-3 left-1/2 -translate-x-1/2 flex items-center justify-center">
             <div
-              className="absolute inset-0 pointer-events-none"
-              style={{ animation: 'gbaMagneticHumCardShake 1.5s ease-out 0.15s forwards' }}
-            />
-          )}
-
-          {/* Concentric Telekinetic Shockwaves */}
-          {!fx.whiffed && (
-            <div
-              className="absolute pointer-events-none z-20"
-              style={{ animation: 'gbaMewtwoPsychicShock 1.3s ease-out 0.3s forwards', opacity: 0 }}
+              style={{ animation: 'gbaMewtwoVoidFloor 1.75s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
             >
-              <div className="w-28 h-28 rounded-full border-2 border-purple-400 shadow-[0_0_24px_#9333ea]" />
+              <div className="w-[200px] h-[52px] rounded-full bg-gradient-to-r from-purple-950/10 via-indigo-950/70 to-purple-950/10 blur-sm border border-purple-500/30 shadow-[0_0_36px_#581c87]" />
             </div>
-          )}
-
-          {/* Hyper-Dense Psychokinetic Core Orb */}
-          <div
-            className="absolute pointer-events-none z-30 flex items-center justify-center"
-            style={{ animation: 'gbaMewtwoPsychicOrb 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
-          >
-            <svg
-              width={fx.whiffed ? "75" : "110"}
-              height={fx.whiffed ? "75" : "110"}
-              viewBox="0 0 100 100"
-              className="overflow-visible"
-            >
-              <defs>
-                <radialGradient id="mewtwoCoreGrad" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="30%" stopColor="#f472b6" />
-                  <stop offset="65%" stopColor="#c026d3" />
-                  <stop offset="100%" stopColor="#581c87" stopOpacity="0.9" />
-                </radialGradient>
-              </defs>
-              {/* Outer Energy Corona */}
-              <circle
-                cx="50"
-                cy="50"
-                r="44"
-                fill="none"
-                stroke="#d946ef"
-                strokeWidth="3"
-                strokeDasharray="14 8"
-                className="drop-shadow-[0_0_22px_#c026d3]"
-              />
-              {/* Dense Singularity Core */}
-              <circle
-                cx="50"
-                cy="50"
-                r="32"
-                fill="url(#mewtwoCoreGrad)"
-                className="drop-shadow-[0_0_28px_#9333ea] drop-shadow-[0_0_16px_#ffffff]"
-              />
-              {/* Inner White Singularity Dot */}
-              <circle cx="50" cy="50" r="10" fill="#ffffff" className="drop-shadow-[0_0_10px_#ffffff]" />
-            </svg>
           </div>
 
-          {/* Orbiting Neural Telekinetic Sparks */}
-          {!fx.whiffed && [
-            { x: '-34px', y: '-28px', delay: '0.2s' },
-            { x: '32px', y: '-30px', delay: '0.35s' },
-            { x: '-30px', y: '32px', delay: '0.5s' },
-            { x: '35px', y: '26px', delay: '0.65s' }
-          ].map((spk, idx) => (
+          {/* Layer 2: Natural Fluid Dynamics Psionic Miasma & Wispy Rising Smoke (Homogeneous Center & Calves to Crown — Deep Background z-20) */}
+          <div
+            className="absolute pointer-events-none z-20 flex items-center justify-center"
+            style={{
+              top: '38%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: fx.whiffed ? '140px' : '230px',
+              height: fx.whiffed ? '160px' : '280px'
+            }}
+          >
+            {/* Homogeneous Ambient Center Psionic Backing (Softly bridges center and flanks behind Mewtwo without clutter) */}
             <div
-              key={`mew-spk-${idx}`}
-              className="absolute pointer-events-none z-35"
+              className="absolute pointer-events-none"
               style={{
-                left: `calc(50% + ${spk.x})`,
-                top: `calc(50% + ${spk.y})`,
-                animation: `gbaQuickKineticBurst 0.5s ease-out ${spk.delay} forwards`,
-                opacity: 0
+                top: '48%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: fx.whiffed ? '130px' : '175px',
+                height: fx.whiffed ? '160px' : '230px',
+                background: 'radial-gradient(ellipse 75% 85% at 50% 50%, rgba(147,51,234,0.18) 0%, rgba(126,34,206,0.10) 45%, rgba(59,7,100,0.02) 75%, transparent 100%)',
+                filter: 'blur(16px)',
+                animation: 'gbaMewtwoAuraBreathe 1.75s ease-in-out forwards'
+              }}
+            />
+
+            {/* Cinematic Psionic Horizontal Anamorphic Flare Beam (Across waist/pelvis as in Ref Image 4) */}
+            <div
+              className="absolute pointer-events-none"
+              style={{
+                top: '52%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: fx.whiffed ? '120px' : '190px',
+                height: '8px',
+                background: 'radial-gradient(ellipse 80% 100% at 50% 50%, rgba(240,171,252,0.60) 0%, rgba(192,38,211,0.30) 45%, rgba(126,34,206,0.10) 75%, transparent 100%)',
+                filter: 'blur(3px)',
+                animation: 'gbaMewtwoAuraBreathe 1.75s ease-in-out forwards'
+              }}
+            />
+
+            {/* Calves & Lower Body Psionic Ground Ether (Rising from feet/shin level directly centered) */}
+            <div
+              className="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none"
+              style={{ animation: 'gbaMewtwoCalfEther 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards' }}
+            >
+              <div className="w-44 h-14 rounded-full bg-gradient-to-t from-purple-950/45 via-fuchsia-900/25 to-transparent blur-md" />
+            </div>
+
+            {/* Center Spine Ascending Vapor Column (Directly behind calves, pelvis, spine & neck crown) */}
+            <div
+              className="absolute -top-14 left-1/2 -translate-x-1/2 pointer-events-none"
+              style={{ animation: 'gbaMewtwoSpinePlume 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards' }}
+            >
+              <svg width="150" height="240" viewBox="0 0 150 240" className="overflow-visible">
+                <defs>
+                  <linearGradient id="mewWispyC_grad" x1="50%" y1="100%" x2="50%" y2="0%">
+                    <stop offset="0%" stopColor="#3b0764" stopOpacity="0" />
+                    <stop offset="20%" stopColor="#7e22ce" stopOpacity="0.50" />
+                    <stop offset="50%" stopColor="#d946ef" stopOpacity="0.75" />
+                    <stop offset="80%" stopColor="#f0abfc" stopOpacity="0.80" />
+                    <stop offset="100%" stopColor="#fae8ff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="mewWispyC_wisp" x1="40%" y1="100%" x2="60%" y2="0%">
+                    <stop offset="0%" stopColor="#581c87" stopOpacity="0" />
+                    <stop offset="45%" stopColor="#c026d3" stopOpacity="0.45" />
+                    <stop offset="100%" stopColor="#fae8ff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="mewWispyC_rim" x1="50%" y1="100%" x2="50%" y2="0%">
+                    <stop offset="20%" stopColor="#a855f7" stopOpacity="0" />
+                    <stop offset="60%" stopColor="#ffffff" stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {/* Main Central Ascending Flame Column */}
+                <path
+                  d="M 75 235 C 55 200, 92 165, 65 125 C 48 95, 88 55, 72 0 C 88 20, 102 55, 88 90 C 108 130, 78 175, 95 210 C 102 225, 88 232, 75 235 Z"
+                  fill="url(#mewWispyC_grad)"
+                  style={{ filter: 'blur(4.5px)' }}
+                />
+                {/* Left Central Billow */}
+                <path
+                  d="M 70 210 C 45 180, 40 140, 52 105 C 58 85, 48 65, 58 45 C 64 60, 68 80, 60 105 C 52 135, 62 170, 70 210 Z"
+                  fill="url(#mewWispyC_wisp)"
+                  style={{ filter: 'blur(3.5px)' }}
+                />
+                {/* Right Central Billow */}
+                <path
+                  d="M 80 210 C 105 180, 110 140, 98 105 C 92 85, 102 65, 92 45 C 86 60, 82 80, 90 105 C 98 135, 88 170, 80 210 Z"
+                  fill="url(#mewWispyC_wisp)"
+                  style={{ filter: 'blur(3.5px)' }}
+                />
+                {/* Luminous Inner Core Filament */}
+                <path
+                  d="M 75 225 C 62 190, 82 150, 70 115 C 60 85, 80 50, 74 15"
+                  stroke="url(#mewWispyC_rim)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
+                  style={{ filter: 'blur(2px)' }}
+                />
+              </svg>
+            </div>
+
+            {/* Left Wispy Tendril Plume (Centered closer: hugging left calf, thigh and shoulder) */}
+            <div
+              className="absolute -top-12 left-1 pointer-events-none"
+              style={{ animation: 'gbaMewtwoMistPlumeL 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards' }}
+            >
+              <svg width="130" height="240" viewBox="0 0 130 240" className="overflow-visible">
+                <defs>
+                  <linearGradient id="mewWispyL_grad" x1="40%" y1="100%" x2="60%" y2="0%">
+                    <stop offset="0%" stopColor="#3b0764" stopOpacity="0" />
+                    <stop offset="18%" stopColor="#581c87" stopOpacity="0.45" />
+                    <stop offset="42%" stopColor="#9333ea" stopOpacity="0.65" />
+                    <stop offset="68%" stopColor="#c084fc" stopOpacity="0.80" />
+                    <stop offset="88%" stopColor="#fae8ff" stopOpacity="0.50" />
+                    <stop offset="100%" stopColor="#fae8ff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="mewWispyL_rim" x1="30%" y1="100%" x2="70%" y2="0%">
+                    <stop offset="25%" stopColor="#7e22ce" stopOpacity="0" />
+                    <stop offset="55%" stopColor="#e879f9" stopOpacity="0.85" />
+                    <stop offset="85%" stopColor="#ffffff" stopOpacity="0.75" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="mewWispyL_fork" x1="20%" y1="100%" x2="80%" y2="0%">
+                    <stop offset="0%" stopColor="#581c87" stopOpacity="0" />
+                    <stop offset="50%" stopColor="#c026d3" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#f0abfc" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {/* Primary Sinuous Smoke Body (Calves to head) */}
+                <path
+                  d="M 68 235 C 50 215, 24 185, 32 150 C 40 120, 16 90, 26 55 C 34 26, 52 14, 48 0 C 60 12, 64 36, 56 62 C 46 90, 72 122, 66 158 C 60 192, 82 216, 68 235 Z"
+                  fill="url(#mewWispyL_grad)"
+                  style={{ filter: 'blur(4px)' }}
+                />
+                {/* Secondary Detached Flank Eddy / Curl */}
+                <path
+                  d="M 36 145 C 18 125, 8 95, 18 68 C 24 50, 42 40, 36 28 C 44 38, 40 56, 32 74 C 26 95, 38 120, 36 145 Z"
+                  fill="url(#mewWispyL_fork)"
+                  style={{ filter: 'blur(3.5px)' }}
+                />
+                {/* Luminous Inner Rim-Light Vapor Ribbons */}
+                <path
+                  d="M 62 228 C 46 205, 28 172, 36 142 C 44 115, 24 88, 32 60 C 38 42, 48 24, 46 6"
+                  stroke="url(#mewWispyL_rim)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
+                  style={{ filter: 'blur(2px)' }}
+                />
+              </svg>
+            </div>
+
+            {/* Right Wispy Tendril Plume (Centered closer: hugging right calf, tail, hip and shoulder) */}
+            <div
+              className="absolute -top-12 right-1 pointer-events-none"
+              style={{ animation: 'gbaMewtwoMistPlumeR 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards' }}
+            >
+              <svg width="130" height="240" viewBox="0 0 130 240" className="overflow-visible">
+                <defs>
+                  <linearGradient id="mewWispyR_grad" x1="60%" y1="100%" x2="40%" y2="0%">
+                    <stop offset="0%" stopColor="#3b0764" stopOpacity="0" />
+                    <stop offset="18%" stopColor="#581c87" stopOpacity="0.45" />
+                    <stop offset="42%" stopColor="#c026d3" stopOpacity="0.65" />
+                    <stop offset="68%" stopColor="#e879f9" stopOpacity="0.80" />
+                    <stop offset="88%" stopColor="#fae8ff" stopOpacity="0.50" />
+                    <stop offset="100%" stopColor="#fae8ff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="mewWispyR_rim" x1="70%" y1="100%" x2="30%" y2="0%">
+                    <stop offset="25%" stopColor="#a855f7" stopOpacity="0" />
+                    <stop offset="55%" stopColor="#f472b6" stopOpacity="0.85" />
+                    <stop offset="85%" stopColor="#ffffff" stopOpacity="0.75" />
+                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                  </linearGradient>
+                  <linearGradient id="mewWispyR_fork" x1="80%" y1="100%" x2="20%" y2="0%">
+                    <stop offset="0%" stopColor="#581c87" stopOpacity="0" />
+                    <stop offset="50%" stopColor="#9333ea" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#fae8ff" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                {/* Primary Sinuous Smoke Body (Calves to head) */}
+                <path
+                  d="M 62 235 C 80 215, 106 185, 98 150 C 90 120, 114 90, 104 55 C 96 26, 78 14, 82 0 C 70 12, 66 36, 74 62 C 84 90, 58 122, 64 158 C 70 192, 48 216, 62 235 Z"
+                  fill="url(#mewWispyR_grad)"
+                  style={{ filter: 'blur(4px)' }}
+                />
+                {/* Secondary Detached Flank Eddy / Curl */}
+                <path
+                  d="M 94 145 C 112 125, 122 95, 112 68 C 106 50, 88 40, 94 28 C 86 38, 90 56, 98 74 C 104 95, 92 120, 94 145 Z"
+                  fill="url(#mewWispyR_fork)"
+                  style={{ filter: 'blur(3.5px)' }}
+                />
+                {/* Luminous Inner Rim-Light Vapor Ribbons */}
+                <path
+                  d="M 68 228 C 84 205, 102 172, 94 142 C 86 115, 106 88, 98 60 C 92 42, 82 24, 84 6"
+                  stroke="url(#mewWispyR_rim)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
+                  style={{ filter: 'blur(2px)' }}
+                />
+              </svg>
+            </div>
+          </div>
+
+          {/* Layer 3: Primary Visual Actor (1996 Ken Sugimori Mewtwo Stock Visual Actor) */}
+          <div
+            className="absolute pointer-events-none z-30"
+            style={{
+              top: '38%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: fx.whiffed ? '86px' : '120px',
+              height: fx.whiffed ? '112px' : '156px'
+            }}
+          >
+            <div
+              className="w-full h-full flex items-center justify-center pointer-events-none"
+              style={{ animation: 'gbaMewtwoPsychicActor 1.75s cubic-bezier(0.18, 0.9, 0.28, 1) forwards' }}
+            >
+              <img
+                src="/assets/Mewtwo_Psychic_Actor.png"
+                alt="Mewtwo Psychic Levitation"
+                className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_20px_#c026d3] drop-shadow-[0_0_12px_#3b0764]"
+              />
+            </div>
+          </div>
+
+          {/* Layer 4: Hyper-Dense Psychokinetic Singularity Core & Telekinetic Wave Shells */}
+          <div
+            className="absolute pointer-events-none z-35 flex items-center justify-center"
+            style={{
+              top: 'calc(38% - 20px)',
+              left: 'calc(50% - 28px)',
+              transform: 'translate(-50%, -50%)'
+            }}
+          >
+            {/* Telekinetic Wave Shell 1: Expanding Feathered Shockwave Shell */}
+            {!fx.whiffed && (
+              <div
+                className="absolute pointer-events-none"
+                style={{ animation: 'gbaMewtwoPsychicShock 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards', opacity: 0 }}
+              >
+                <svg width="160" height="160" viewBox="0 0 160 160" className="overflow-visible">
+                  <defs>
+                    <radialGradient id="mewShockGrad1" cx="50%" cy="50%" r="50%">
+                      <stop offset="68%" stopColor="#ffffff" stopOpacity="0" />
+                      <stop offset="84%" stopColor="#ffffff" stopOpacity="0.95" />
+                      <stop offset="92%" stopColor="#e879f9" stopOpacity="0.75" />
+                      <stop offset="100%" stopColor="#9333ea" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+                  <circle cx="80" cy="80" r="72" fill="url(#mewShockGrad1)" style={{ filter: 'drop-shadow(0 0 12px #d946ef)' }} />
+                </svg>
+              </div>
+            )}
+
+            {/* Telekinetic Wave Shell 2: Secondary Harmonic Expansion Wavefront */}
+            {!fx.whiffed && (
+              <div
+                className="absolute pointer-events-none"
+                style={{ animation: 'gbaMewtwoPsychicShock2 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards', opacity: 0 }}
+              >
+                <svg width="160" height="160" viewBox="0 0 160 160" className="overflow-visible">
+                  <defs>
+                    <radialGradient id="mewShockGrad2" cx="50%" cy="50%" r="50%">
+                      <stop offset="72%" stopColor="#ffffff" stopOpacity="0" />
+                      <stop offset="86%" stopColor="#f472b6" stopOpacity="0.85" />
+                      <stop offset="94%" stopColor="#a855f7" stopOpacity="0.6" />
+                      <stop offset="100%" stopColor="#581c87" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+                  <circle cx="80" cy="80" r="74" fill="url(#mewShockGrad2)" style={{ filter: 'drop-shadow(0 0 10px #c026d3)' }} />
+                </svg>
+              </div>
+            )}
+
+            {/* Volumetric Singularity Core (The Psyball - Pure Incandescence, NO wireframe lines) */}
+            <div
+              className="pointer-events-none flex items-center justify-center"
+              style={{ animation: 'gbaMewtwoSingularityCore 1.75s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
+            >
+              <svg
+                width={fx.whiffed ? "68" : "100"}
+                height={fx.whiffed ? "68" : "100"}
+                viewBox="0 0 100 100"
+                className="overflow-visible"
+              >
+                <defs>
+                  <radialGradient id="mewtwoCoreGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="25%" stopColor="#fae8ff" />
+                    <stop offset="48%" stopColor="#f472b6" />
+                    <stop offset="75%" stopColor="#c026d3" />
+                    <stop offset="95%" stopColor="#581c87" stopOpacity="0.95" />
+                    <stop offset="100%" stopColor="#3b0764" stopOpacity="0" />
+                  </radialGradient>
+                  <radialGradient id="mewtwoCoronaGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="40%" stopColor="#d946ef" stopOpacity="0.8" />
+                    <stop offset="70%" stopColor="#9333ea" stopOpacity="0.4" />
+                    <stop offset="100%" stopColor="#3b0764" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+                {/* Outer Luminous Gravitational Corona Shell */}
+                <circle cx="50" cy="50" r="48" fill="url(#mewtwoCoronaGrad)" style={{ filter: 'blur(3px)' }} />
+                {/* Dense Singularity Core Body */}
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="36"
+                  fill="url(#mewtwoCoreGrad)"
+                  className="drop-shadow-[0_0_24px_#d946ef] drop-shadow-[0_0_36px_#ffffff]"
+                />
+                {/* Inner White-Hot Plasma Center */}
+                <circle cx="50" cy="50" r="14" fill="#ffffff" className="drop-shadow-[0_0_14px_#ffffff] drop-shadow-[0_0_8px_#fae8ff]" />
+                {/* Micro-Accretion Focal Pinpoint */}
+                <circle cx="50" cy="50" r="6" fill="#ffffff" />
+              </svg>
+            </div>
+          </div>
+
+          {/* Right Hand Psionic After-Vapor Smoke (Gentle curling vapor post-detonation: 0.90s - 1.75s) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-36"
+              style={{
+                top: 'calc(38% - 16px)',
+                left: 'calc(50% - 24px)',
+                transform: 'translate(-50%, -50%)',
+                animation: 'gbaMewtwoHandVapor 1.75s ease-out forwards'
               }}
             >
-              <span className="text-fuchsia-200 text-lg select-none drop-shadow-[0_0_10px_#d946ef]">✦</span>
+              <svg width="48" height="76" viewBox="0 0 48 76" className="overflow-visible">
+                <defs>
+                  <linearGradient id="mewHandSmokeGrad" x1="0%" y1="100%" x2="40%" y2="0%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
+                    <stop offset="25%" stopColor="#fae8ff" stopOpacity="0.65" />
+                    <stop offset="55%" stopColor="#e879f9" stopOpacity="0.45" />
+                    <stop offset="85%" stopColor="#7e22ce" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#581c87" stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M 24 72 C 20 58, 28 46, 22 34 C 17 24, 25 14, 21 2 C 27 10, 31 22, 26 32 C 32 44, 26 58, 24 72 Z"
+                  fill="url(#mewHandSmokeGrad)"
+                  style={{ filter: 'blur(2.5px)' }}
+                />
+                <path
+                  d="M 23 70 C 27 56, 19 44, 24 32 C 27 22, 22 12, 25 4"
+                  stroke="#ffffff"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  fill="none"
+                  style={{ filter: 'blur(1.5px)', opacity: 0.6 }}
+                />
+              </svg>
             </div>
-          ))}
+          )}
+
+          {/* Layer 5: Anime Energy Gathering Spiral Vortex Motes (Staggered 4-Wave Spiral Influx to Core) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-38"
+              style={{
+                top: 'calc(38% - 20px)',
+                left: 'calc(50% - 28px)',
+                transform: 'translate(-50%, -50%)',
+                width: '1px',
+                height: '1px'
+              }}
+            >
+              {/* Backward compatibility anchor */}
+              <div style={{ animation: 'gbaMewtwoNeuralArcs 1.75s ease-out forwards', display: 'none' }} />
+
+              {/* Central Core Energy Absorption Flash: Fires when motes converge into the core (0.32s - 0.68s) */}
+              <div
+                className="absolute pointer-events-none rounded-full"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  left: 0,
+                  top: 0,
+                  marginLeft: '-16px',
+                  marginTop: '-16px',
+                  background: 'radial-gradient(circle, #ffffff 0%, #fae8ff 40%, #e879f9 70%, transparent 100%)',
+                  animation: 'gbaMewtwoCoreAbsorbFlash 1.75s ease-out forwards',
+                  opacity: 0
+                }}
+              />
+
+              {/* 28 Staggered Spiral Vortex Motes streaming asynchronously into the core */}
+              {[
+                // Wave 1: early floor & feet sparks (delays: 0.00s - 0.11s)
+                { id: 1,  dist: 140, rot0: 165, drot:  130, size: 3.6, delay: 0.02, dur: 0.48 },
+                { id: 2,  dist: 135, rot0: 195, drot: -125, size: 3.2, delay: 0.05, dur: 0.46 },
+                { id: 3,  dist: 145, rot0: 175, drot:  110, size: 4.0, delay: 0.00, dur: 0.50 },
+                { id: 4,  dist: 130, rot0: 150, drot:  140, size: 2.8, delay: 0.08, dur: 0.45 },
+                { id: 5,  dist: 138, rot0: 210, drot: -115, size: 3.4, delay: 0.11, dur: 0.47 },
+                { id: 6,  dist: 142, rot0: 185, drot: -135, size: 3.0, delay: 0.03, dur: 0.49 },
+                { id: 7,  dist: 128, rot0: 160, drot:  120, size: 2.6, delay: 0.09, dur: 0.44 },
+
+                // Wave 2: calves and shins stream (delays: 0.12s - 0.22s)
+                { id: 8,  dist: 110, rot0: 170, drot:  125, size: 3.8, delay: 0.14, dur: 0.48 },
+                { id: 9,  dist: 105, rot0: 200, drot: -130, size: 3.4, delay: 0.17, dur: 0.46 },
+                { id: 10, dist: 115, rot0: 155, drot:  140, size: 3.2, delay: 0.12, dur: 0.50 },
+                { id: 11, dist: 100, rot0: 215, drot: -120, size: 3.6, delay: 0.20, dur: 0.45 },
+                { id: 12, dist: 118, rot0: 180, drot:  115, size: 4.2, delay: 0.15, dur: 0.49 },
+                { id: 13, dist:  95, rot0: 165, drot: -135, size: 2.9, delay: 0.22, dur: 0.47 },
+                { id: 14, dist: 108, rot0: 190, drot:  130, size: 3.1, delay: 0.18, dur: 0.48 },
+
+                // Wave 3: thighs & outer flanks vortex (delays: 0.25s - 0.36s)
+                { id: 15, dist:  85, rot0: 140, drot:  145, size: 3.5, delay: 0.25, dur: 0.48 },
+                { id: 16, dist:  80, rot0: 220, drot: -135, size: 3.2, delay: 0.28, dur: 0.46 },
+                { id: 17, dist:  90, rot0: 160, drot:  120, size: 3.8, delay: 0.31, dur: 0.50 },
+                { id: 18, dist:  75, rot0: 205, drot: -125, size: 2.8, delay: 0.34, dur: 0.45 },
+                { id: 19, dist:  88, rot0: 175, drot: -140, size: 3.4, delay: 0.27, dur: 0.49 },
+                { id: 20, dist:  70, rot0: 135, drot:  150, size: 3.0, delay: 0.36, dur: 0.44 },
+                { id: 21, dist:  82, rot0: 230, drot: -115, size: 2.7, delay: 0.33, dur: 0.47 },
+
+                // Wave 4: late rising motes & crescendo convergence (delays: 0.38s - 0.51s)
+                { id: 22, dist: 125, rot0: 170, drot:  130, size: 3.6, delay: 0.38, dur: 0.44 },
+                { id: 23, dist: 115, rot0: 195, drot: -125, size: 3.2, delay: 0.42, dur: 0.42 },
+                { id: 24, dist:  95, rot0: 150, drot:  135, size: 4.0, delay: 0.40, dur: 0.45 },
+                { id: 25, dist:  85, rot0: 210, drot: -120, size: 3.0, delay: 0.46, dur: 0.43 },
+                { id: 26, dist: 105, rot0: 180, drot:  140, size: 3.5, delay: 0.44, dur: 0.45 },
+                { id: 27, dist:  65, rot0: 160, drot: -130, size: 2.8, delay: 0.48, dur: 0.41 },
+                { id: 28, dist:  75, rot0: 190, drot:  125, size: 3.2, delay: 0.51, dur: 0.40 }
+              ].map((mote) => (
+                <div
+                  key={mote.id}
+                  className="absolute pointer-events-none"
+                  style={{
+                    left: 0,
+                    top: 0,
+                    width: 0,
+                    height: 0,
+                    transformOrigin: '0 0',
+                    ['--rot0' as any]: `${mote.rot0}deg`,
+                    ['--drot' as any]: `${mote.drot}deg`,
+                    animation: `gbaMewtwoMoteSpiralRot ${mote.dur}s cubic-bezier(0.25, 0.1, 0.25, 1) ${mote.delay}s forwards`
+                  }}
+                >
+                  <div
+                    className="rounded-full pointer-events-none"
+                    style={{
+                      width: `${mote.size}px`,
+                      height: `${mote.size}px`,
+                      marginLeft: `-${mote.size / 2}px`,
+                      marginTop: `-${mote.size / 2}px`,
+                      background: 'radial-gradient(circle at 35% 35%, #ffffff 0%, #fae8ff 50%, #f472b6 100%)',
+                      boxShadow: '0 0 6px #ffffff, 0 0 12px #e879f9, 0 0 18px #a855f7',
+                      ['--dist' as any]: `${mote.dist}px`,
+                      animation: `gbaMewtwoMoteSpiralRad ${mote.dur}s cubic-bezier(0.4, 0, 0.2, 1) ${mote.delay}s forwards`,
+                      opacity: 0
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
