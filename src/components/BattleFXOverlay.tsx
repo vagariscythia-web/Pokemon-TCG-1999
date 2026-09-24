@@ -18624,18 +18624,18 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           <div
             className="absolute pointer-events-none z-15 flex items-center justify-center"
             style={{
-              top: '67%',
+              top: '70%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: '240px',
-              height: '76px'
+              width: '160px',
+              height: '48px'
             }}
           >
             {/* Luminous Ground Atmosphere (Radial Incandescent Illumination) */}
             <div
               className="absolute inset-0 rounded-full"
               style={{
-                background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(254,240,138,0.55) 0%, rgba(163,230,53,0.35) 42%, rgba(34,197,94,0.12) 72%, transparent 100%)',
+                background: 'radial-gradient(ellipse 65% 55% at 50% 50%, rgba(254,240,138,0.50) 0%, rgba(163,230,53,0.30) 42%, rgba(34,197,94,0.08) 72%, transparent 100%)',
                 filter: 'blur(8px)',
                 animation: 'gbaScytherDanceFloorGlow 1.65s cubic-bezier(0.2, 0.9, 0.28, 1) forwards'
               }}
@@ -18649,7 +18649,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 opacity: 0
               }}
             >
-              <svg width="240" height="76" viewBox="0 0 240 76" className="overflow-visible">
+              <svg width="160" height="48" viewBox="0 0 160 48" className="overflow-visible">
                 <defs>
                   <radialGradient id="scytherRippleGrad1" cx="50%" cy="50%" r="50%">
                     <stop offset="60%" stopColor="#ffffff" stopOpacity="0" />
@@ -18658,7 +18658,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     <stop offset="100%" stopColor="#22c55e" stopOpacity="0" />
                   </radialGradient>
                 </defs>
-                <ellipse cx="120" cy="38" rx="90" ry="26" fill="url(#scytherRippleGrad1)" stroke="#bef264" strokeWidth="1.8" className="drop-shadow-[0_0_10px_#bef264]" />
+                <ellipse cx="80" cy="24" rx="54" ry="15" fill="url(#scytherRippleGrad1)" stroke="#bef264" strokeWidth="1.5" className="drop-shadow-[0_0_8px_#bef264]" />
               </svg>
             </div>
 
@@ -18670,7 +18670,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 opacity: 0
               }}
             >
-              <svg width="240" height="76" viewBox="0 0 240 76" className="overflow-visible">
+              <svg width="160" height="48" viewBox="0 0 160 48" className="overflow-visible">
                 <defs>
                   <radialGradient id="scytherRippleGrad2" cx="50%" cy="50%" r="50%">
                     <stop offset="65%" stopColor="#ffffff" stopOpacity="0" />
@@ -18679,7 +18679,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     <stop offset="100%" stopColor="#15803d" stopOpacity="0" />
                   </radialGradient>
                 </defs>
-                <ellipse cx="120" cy="38" rx="95" ry="28" fill="url(#scytherRippleGrad2)" stroke="#a3e635" strokeWidth="2.2" className="drop-shadow-[0_0_12px_#a3e635]" />
+                <ellipse cx="80" cy="24" rx="60" ry="17" fill="url(#scytherRippleGrad2)" stroke="#a3e635" strokeWidth="1.8" className="drop-shadow-[0_0_10px_#a3e635]" />
               </svg>
             </div>
 
@@ -18691,7 +18691,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 opacity: 0
               }}
             >
-              <svg width="240" height="76" viewBox="0 0 240 76" className="overflow-visible">
+              <svg width="160" height="48" viewBox="0 0 160 48" className="overflow-visible">
                 <defs>
                   <radialGradient id="scytherRippleGrad3" cx="50%" cy="50%" r="50%">
                     <stop offset="70%" stopColor="#ffffff" stopOpacity="0" />
@@ -18700,7 +18700,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     <stop offset="100%" stopColor="#166534" stopOpacity="0" />
                   </radialGradient>
                 </defs>
-                <ellipse cx="120" cy="38" rx="100" ry="30" fill="url(#scytherRippleGrad3)" stroke="#ffffff" strokeWidth="2.5" className="drop-shadow-[0_0_16px_#ffffff] drop-shadow-[0_0_24px_#bef264]" />
+                <ellipse cx="80" cy="24" rx="66" ry="19" fill="url(#scytherRippleGrad3)" stroke="#ffffff" strokeWidth="2.0" className="drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_18px_#bef264]" />
               </svg>
             </div>
           </div>
@@ -18712,8 +18712,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               top: '48%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: fx.whiffed ? '102px' : '142px',
-              height: fx.whiffed ? '112px' : '154px'
+              width: fx.whiffed ? '78px' : '108px',
+              height: fx.whiffed ? '86px' : '118px'
             }}
           >
             {!fx.whiffed ? (
@@ -18726,7 +18726,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_A.png"
                     alt="Scyther Swords Dance Pose 1"
-                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_30px_rgba(163,230,53,0.65)]"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_12px_#a3e635] drop-shadow-[0_0_20px_rgba(163,230,53,0.55)]"
                   />
                 </div>
 
@@ -18738,7 +18738,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_B.png"
                     alt="Scyther Swords Dance Pose 2"
-                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_18px_#a3e635] drop-shadow-[0_0_30px_rgba(163,230,53,0.65)]"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_12px_#a3e635] drop-shadow-[0_0_20px_rgba(163,230,53,0.55)]"
                   />
                 </div>
 
@@ -18750,7 +18750,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_C.png"
                     alt="Scyther Swords Dance Pose 3"
-                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_20px_#bef264] drop-shadow-[0_0_32px_rgba(163,230,53,0.7)]"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_14px_#bef264] drop-shadow-[0_0_22px_rgba(163,230,53,0.60)]"
                   />
                 </div>
 
@@ -18762,7 +18762,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   <img
                     src="/assets/Scyther_SwordsDance_Actor_D.png"
                     alt="Scyther Swords Dance Pose 4"
-                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_22px_#bef264] drop-shadow-[0_0_35px_rgba(163,230,53,0.75)]"
+                    className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_14px_#bef264] drop-shadow-[0_0_22px_rgba(163,230,53,0.60)]"
                   />
                 </div>
 
@@ -18778,7 +18778,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     opacity: 0
                   }}
                 >
-                  <svg width="28" height="28" viewBox="0 0 32 32" className="overflow-visible drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                  <svg width="22" height="22" viewBox="0 0 32 32" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_16px_#a3e635]">
                     {/* 4-Point Starburst Core */}
                     <polygon points="16,0 19,12 32,16 19,20 16,32 13,20 0,16 13,12" fill="#ffffff" />
                     {/* Diagonal Cross Rays extending along the two crossed blades */}
@@ -18799,7 +18799,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     opacity: 0
                   }}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#bef264]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" className="overflow-visible drop-shadow-[0_0_6px_#ffffff] drop-shadow-[0_0_12px_#bef264]">
                     <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
                     <circle cx="12" cy="12" r="2.8" fill="#fef08a" />
                   </svg>
@@ -18816,7 +18816,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                     opacity: 0
                   }}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#bef264]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" className="overflow-visible drop-shadow-[0_0_6px_#ffffff] drop-shadow-[0_0_12px_#bef264]">
                     <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
                     <circle cx="12" cy="12" r="2.8" fill="#fef08a" />
                   </svg>
@@ -18856,8 +18856,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               top: '48%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: '200px',
-              height: '200px'
+              width: '140px',
+              height: '140px'
             }}
           >
             <div
@@ -18869,8 +18869,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             >
               {/* Blade 1 (0 deg - top) */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'rotate(0deg)' }}>
-                <div style={{ transform: 'translateY(-66px) rotate(-12deg)' }}>
-                  <svg width="24" height="42" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                <div style={{ transform: 'translateY(-46px) rotate(-12deg)' }}>
+                  <svg width="18" height="32" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#a3e635]">
                     <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad)" />
                     <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.9" />
                   </svg>
@@ -18878,8 +18878,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </div>
               {/* Blade 2 (120 deg - bottom-right) */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'rotate(120deg)' }}>
-                <div style={{ transform: 'translateY(-66px) rotate(-12deg)' }}>
-                  <svg width="24" height="42" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                <div style={{ transform: 'translateY(-46px) rotate(-12deg)' }}>
+                  <svg width="18" height="32" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#a3e635]">
                     <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad)" />
                     <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.9" />
                   </svg>
@@ -18887,8 +18887,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               </div>
               {/* Blade 3 (240 deg - bottom-left) */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: 'rotate(240deg)' }}>
-                <div style={{ transform: 'translateY(-66px) rotate(-12deg)' }}>
-                  <svg width="24" height="42" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_12px_#ffffff] drop-shadow-[0_0_20px_#a3e635]">
+                <div style={{ transform: 'translateY(-46px) rotate(-12deg)' }}>
+                  <svg width="18" height="32" viewBox="0 0 24 42" className="overflow-visible drop-shadow-[0_0_8px_#ffffff] drop-shadow-[0_0_14px_#a3e635]">
                     <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad)" />
                     <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" fill="none" opacity="0.9" />
                   </svg>
@@ -18911,18 +18911,18 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
           {/* Layer 5: Ambient Ki Sharpening Glints (NO unicode symbols - pure SVG incandescence) */}
           {!fx.whiffed && [
-            { x: -38, y: -24, delay: '0.42s', s: 12 },
-            { x: 42, y: -18, delay: '0.52s', s: 15 },
-            { x: -26, y: 32, delay: '0.62s', s: 11 },
-            { x: 36, y: 28, delay: '0.74s', s: 14 },
-            { x: 0, y: -46, delay: '0.48s', s: 16 }
+            { x: -30, y: -16, delay: '0.42s', s: 10 },
+            { x: 32, y: -12, delay: '0.52s', s: 12 },
+            { x: -20, y: 22, delay: '0.62s', s: 9 },
+            { x: 26, y: 18, delay: '0.74s', s: 11 },
+            { x: 0, y: -26, delay: '0.48s', s: 13 }
           ].map((glint, idx) => (
             <div
               key={`scyther-glint-${idx}`}
               className="absolute pointer-events-none z-40"
               style={{
                 left: `calc(50% + ${glint.x}px)`,
-                top: `calc(38% + ${glint.y}px)`,
+                top: `calc(48% + ${glint.y}px)`,
                 transform: 'translate(-50%, -50%)',
                 animation: `gbaScytherKiGlints 1.65s ease-out ${glint.delay} forwards`,
                 opacity: 0
@@ -21590,37 +21590,46 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
           style={{ animation: !fx.whiffed ? 'gbaMagneticHumCardShake 1.75s ease-out forwards' : undefined }}
         >
-          {/* Layer 1: Gravitational Space-Time Collapse Card Floor (Strictly Centered) */}
-          <div className="absolute pointer-events-none z-15 bottom-3 left-1/2 -translate-x-1/2 flex items-center justify-center">
+          {/* Layer 1: Gravitational Space-Time Collapse Card Floor (Pure Atmospheric Ionization — Zero CAD Borders) */}
+          <div className="absolute pointer-events-none z-15 bottom-1.5 left-1/2 -translate-x-1/2 flex items-center justify-center">
             <div
+              className="relative flex items-center justify-center pointer-events-none"
               style={{ animation: 'gbaMewtwoVoidFloor 1.75s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
             >
-              <div className="w-[200px] h-[52px] rounded-full bg-gradient-to-r from-purple-950/10 via-indigo-950/70 to-purple-950/10 blur-sm border border-purple-500/30 shadow-[0_0_36px_#581c87]" />
+              {/* Outer Deep Imperial Violet Atmospheric Diffusion */}
+              <div
+                className="w-[170px] h-[48px] rounded-full pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(147,51,234,0.38) 0%, rgba(88,28,135,0.22) 42%, rgba(59,7,100,0.04) 72%, transparent 100%)',
+                  filter: 'blur(12px)'
+                }}
+              />
+              {/* Core Hot Magenta Psionic Vapor Pool (Incandescent & borderless) */}
+              <div
+                className="absolute w-[116px] h-[26px] rounded-full pointer-events-none"
+                style={{
+                  background: 'radial-gradient(ellipse 65% 45% at 50% 50%, rgba(240,171,252,0.68) 0%, rgba(217,70,239,0.36) 38%, rgba(168,85,247,0.12) 68%, transparent 100%)',
+                  filter: 'blur(6px)'
+                }}
+              />
             </div>
           </div>
 
           {/* Layer 2: Natural Fluid Dynamics Psionic Miasma & Viscous Volumetric Ether (Deep Background z-20) */}
           <div
-            className="absolute pointer-events-none z-20 flex items-center justify-center"
-            style={{
-              top: '38%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: fx.whiffed ? '140px' : '230px',
-              height: fx.whiffed ? '160px' : '280px'
-            }}
+            className="absolute pointer-events-none z-20 inset-0 rounded-xl overflow-hidden"
           >
             {/* Unified Deep Atmospheric Ether (Smooth radial background aura without horizontal smudges) */}
             <div
               className="absolute pointer-events-none"
               style={{
-                top: '46%',
+                top: '48%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: fx.whiffed ? '140px' : '230px',
-                height: fx.whiffed ? '170px' : '260px',
-                background: 'radial-gradient(circle at 50% 46%, rgba(147,51,234,0.25) 0%, rgba(126,34,206,0.14) 45%, rgba(59,7,100,0.03) 75%, transparent 100%)',
-                filter: 'blur(28px)',
+                width: '100%',
+                height: fx.whiffed ? '140px' : '200px',
+                background: 'radial-gradient(ellipse 90% 70% at 50% 46%, rgba(147,51,234,0.22) 0%, rgba(126,34,206,0.12) 45%, rgba(59,7,100,0.02) 75%, transparent 100%)',
+                filter: 'blur(20px)',
                 animation: 'gbaMewtwoAuraBreathe 1.75s ease-in-out forwards'
               }}
             />
@@ -21629,23 +21638,23 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div
               className="absolute pointer-events-none"
               style={{
-                top: '52%',
+                top: '48%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: fx.whiffed ? '120px' : '190px',
-                height: '8px',
+                width: '85%',
+                height: '6px',
                 background: 'radial-gradient(ellipse 80% 100% at 50% 50%, rgba(240,171,252,0.60) 0%, rgba(192,38,211,0.30) 45%, rgba(126,34,206,0.10) 75%, transparent 100%)',
-                filter: 'blur(3px)',
+                filter: 'blur(2.5px)',
                 animation: 'gbaMewtwoAuraBreathe 1.75s ease-in-out forwards'
               }}
             />
 
             {/* Calves & Lower Body Psionic Ground Ether (Rising from feet/shin level directly centered) */}
             <div
-              className="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none"
+              className="absolute bottom-1 left-1/2 -translate-x-1/2 pointer-events-none"
               style={{ animation: 'gbaMewtwoCalfEther 1.75s cubic-bezier(0.25, 0.8, 0.25, 1) forwards' }}
             >
-              <div className="w-48 h-14 rounded-full bg-gradient-to-t from-purple-950/45 via-fuchsia-900/25 to-transparent blur-md" />
+              <div className="w-36 h-12 rounded-full bg-gradient-to-t from-purple-950/30 via-fuchsia-900/15 to-transparent blur-lg pointer-events-none" />
             </div>
 
             {/* Test runner anchor */}
@@ -21655,33 +21664,33 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div
               className="absolute pointer-events-none"
               style={{
-                top: '36%',
+                top: '50%',
                 left: '50%',
-                width: fx.whiffed ? '135px' : '215px',
-                height: fx.whiffed ? '160px' : '255px',
+                width: fx.whiffed ? '96%' : '104%',
+                height: fx.whiffed ? '160px' : '220px',
                 animation: 'gbaMewtwoMistPlumeR 1.75s cubic-bezier(0.22, 0.8, 0.25, 1) forwards'
               }}
             >
               <img
-                src="/assets/Mewtwo_Psionic_Miasma.png"
+                src="/assets/Mewtwo_Psionic_Miasma_Anim.webp"
                 alt="Mewtwo Psionic Smoke Parallax"
                 className="w-full h-full object-contain pointer-events-none"
               />
             </div>
 
-            {/* Primary Amorphous Psionic Smoke Nebula (The authentic vortex smoke from reference - dispersing, expanding, ascending) */}
+            {/* Primary Amorphous Psionic Smoke Nebula (Borderless across card horizontal width) */}
             <div
               className="absolute pointer-events-none"
               style={{
-                top: '36%',
+                top: '50%',
                 left: '50%',
-                width: fx.whiffed ? '145px' : '230px',
-                height: fx.whiffed ? '170px' : '270px',
+                width: fx.whiffed ? '96%' : '104%',
+                height: fx.whiffed ? '165px' : '225px',
                 animation: 'gbaMewtwoMistPlumeL 1.75s cubic-bezier(0.2, 0.8, 0.25, 1) forwards'
               }}
             >
               <img
-                src="/assets/Mewtwo_Psionic_Miasma.png"
+                src="/assets/Mewtwo_Psionic_Miasma_Anim.webp"
                 alt="Mewtwo Psionic Smoke Miasma"
                 className="w-full h-full object-contain pointer-events-none"
               />
@@ -21692,11 +21701,11 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           <div
             className="absolute pointer-events-none z-30"
             style={{
-              top: '38%',
+              top: '48%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: fx.whiffed ? '86px' : '120px',
-              height: fx.whiffed ? '112px' : '156px'
+              width: fx.whiffed ? '74px' : '100px',
+              height: fx.whiffed ? '98px' : '132px'
             }}
           >
             <div
@@ -21706,7 +21715,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <img
                 src="/assets/Mewtwo_Psychic_Actor.png"
                 alt="Mewtwo Psychic Levitation"
-                className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_20px_#c026d3] drop-shadow-[0_0_12px_#3b0764]"
+                className="w-full h-full object-contain pointer-events-none drop-shadow-[0_0_16px_#c026d3] drop-shadow-[0_0_10px_#3b0764]"
               />
             </div>
           </div>
@@ -21715,18 +21724,23 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           <div
             className="absolute pointer-events-none z-35 flex items-center justify-center"
             style={{
-              top: 'calc(38% - 20px)',
-              left: 'calc(50% - 28px)',
+              top: 'calc(48% - 14px)',
+              left: 'calc(50% - 4px)',
               transform: 'translate(-50%, -50%)'
             }}
           >
             {/* Telekinetic Wave Shell 1: Expanding Feathered Shockwave Shell (Synchronized at 60% / 1.05s) */}
             {!fx.whiffed && (
               <div
-                className="absolute pointer-events-none"
-                style={{ animation: 'gbaMewtwoPsychicShock 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards', opacity: 0 }}
+                className="absolute pointer-events-none flex items-center justify-center"
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  animation: 'gbaMewtwoPsychicShock 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards',
+                  opacity: 0
+                }}
               >
-                <svg width="160" height="160" viewBox="0 0 160 160" className="overflow-visible">
+                <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
                   <defs>
                     <radialGradient id="mewShockGrad1" cx="50%" cy="50%" r="50%">
                       <stop offset="68%" stopColor="#ffffff" stopOpacity="0" />
@@ -21735,7 +21749,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                       <stop offset="100%" stopColor="#9333ea" stopOpacity="0" />
                     </radialGradient>
                   </defs>
-                  <circle cx="80" cy="80" r="72" fill="url(#mewShockGrad1)" style={{ filter: 'drop-shadow(0 0 12px #d946ef)' }} />
+                  <circle cx="60" cy="60" r="54" fill="url(#mewShockGrad1)" style={{ filter: 'drop-shadow(0 0 10px #d946ef)' }} />
                 </svg>
               </div>
             )}
@@ -21743,10 +21757,15 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             {/* Telekinetic Wave Shell 2: Secondary Harmonic Expansion Wavefront */}
             {!fx.whiffed && (
               <div
-                className="absolute pointer-events-none"
-                style={{ animation: 'gbaMewtwoPsychicShock2 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards', opacity: 0 }}
+                className="absolute pointer-events-none flex items-center justify-center"
+                style={{
+                  width: '120px',
+                  height: '120px',
+                  animation: 'gbaMewtwoPsychicShock2 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards',
+                  opacity: 0
+                }}
               >
-                <svg width="160" height="160" viewBox="0 0 160 160" className="overflow-visible">
+                <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
                   <defs>
                     <radialGradient id="mewShockGrad2" cx="50%" cy="50%" r="50%">
                       <stop offset="72%" stopColor="#ffffff" stopOpacity="0" />
@@ -21755,7 +21774,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                       <stop offset="100%" stopColor="#581c87" stopOpacity="0" />
                     </radialGradient>
                   </defs>
-                  <circle cx="80" cy="80" r="74" fill="url(#mewShockGrad2)" style={{ filter: 'drop-shadow(0 0 10px #c026d3)' }} />
+                  <circle cx="60" cy="60" r="74" fill="url(#mewShockGrad2)" style={{ filter: 'drop-shadow(0 0 8px #c026d3)' }} />
                 </svg>
               </div>
             )}
@@ -21766,8 +21785,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               style={{ animation: 'gbaMewtwoSingularityCore 1.75s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
             >
               <svg
-                width={fx.whiffed ? "68" : "100"}
-                height={fx.whiffed ? "68" : "100"}
+                width={fx.whiffed ? "44" : "64"}
+                height={fx.whiffed ? "44" : "64"}
                 viewBox="0 0 100 100"
                 className="overflow-visible"
               >
@@ -21794,10 +21813,10 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   cy="50"
                   r="36"
                   fill="url(#mewtwoCoreGrad)"
-                  className="drop-shadow-[0_0_24px_#d946ef] drop-shadow-[0_0_36px_#ffffff]"
+                  className="drop-shadow-[0_0_18px_#d946ef] drop-shadow-[0_0_24px_#ffffff]"
                 />
                 {/* Inner White-Hot Plasma Center */}
-                <circle cx="50" cy="50" r="14" fill="#ffffff" className="drop-shadow-[0_0_14px_#ffffff] drop-shadow-[0_0_8px_#fae8ff]" />
+                <circle cx="50" cy="50" r="14" fill="#ffffff" className="drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_6px_#fae8ff]" />
                 {/* Micro-Accretion Focal Pinpoint */}
                 <circle cx="50" cy="50" r="6" fill="#ffffff" />
               </svg>
@@ -21809,13 +21828,13 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div
               className="absolute pointer-events-none z-36"
               style={{
-                top: 'calc(38% - 16px)',
-                left: 'calc(50% - 24px)',
+                top: 'calc(48% - 12px)',
+                left: 'calc(50% - 14px)',
                 transform: 'translate(-50%, -50%)',
                 animation: 'gbaMewtwoHandVapor 1.75s ease-out forwards'
               }}
             >
-              <svg width="48" height="76" viewBox="0 0 48 76" className="overflow-visible">
+              <svg width="40" height="64" viewBox="0 0 48 76" className="overflow-visible">
                 <defs>
                   <linearGradient id="mewHandSmokeGrad" x1="0%" y1="100%" x2="40%" y2="0%">
                     <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
@@ -21828,7 +21847,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 <path
                   d="M 24 72 C 20 58, 28 46, 22 34 C 17 24, 25 14, 21 2 C 27 10, 31 22, 26 32 C 32 44, 26 58, 24 72 Z"
                   fill="url(#mewHandSmokeGrad)"
-                  style={{ filter: 'blur(2.5px)' }}
+                  style={{ filter: 'blur(2px)' }}
                 />
                 <path
                   d="M 23 70 C 27 56, 19 44, 24 32 C 27 22, 22 12, 25 4"
@@ -21836,7 +21855,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   strokeWidth="1.5"
                   strokeLinecap="round"
                   fill="none"
-                  style={{ filter: 'blur(1.5px)', opacity: 0.6 }}
+                  style={{ filter: 'blur(1.2px)', opacity: 0.6 }}
                 />
               </svg>
             </div>
@@ -21847,8 +21866,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             <div
               className="absolute pointer-events-none z-38"
               style={{
-                top: 'calc(38% - 20px)',
-                left: 'calc(50% - 28px)',
+                top: 'calc(48% - 14px)',
+                left: 'calc(50% - 4px)',
                 transform: 'translate(-50%, -50%)',
                 width: '1px',
                 height: '1px'
@@ -21861,41 +21880,41 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <div
                 className="absolute pointer-events-none rounded-full"
                 style={{
-                  width: '32px',
-                  height: '32px',
+                  width: '28px',
+                  height: '28px',
                   left: 0,
                   top: 0,
-                  marginLeft: '-16px',
-                  marginTop: '-16px',
+                  marginLeft: '-14px',
+                  marginTop: '-14px',
                   background: 'radial-gradient(circle, #ffffff 0%, #fae8ff 40%, #e879f9 70%, transparent 100%)',
                   animation: 'gbaMewtwoCoreAbsorbFlash 1.75s ease-out forwards',
                   opacity: 0
                 }}
               />
 
-              {/* 16 Harmonious Ground-Originating Ascending Psionic Motes (Synchronized Arrival: 0.84s - 1.13s) */}
+              {/* 16 Harmonious Ground-Originating Ascending Psionic Motes (Calibrated dist 65px - 94px inside card) */}
               {[
                 // Stream A: Left Pedestal & Left Foot (curving smoothly inward across left hip: arrivals 0.84s - 1.08s)
-                { id: 1,  dist: 142, rot0:  24, drot: -32, size: 3.8, delay: 0.02, dur: 0.82 },
-                { id: 2,  dist: 132, rot0:  20, drot: -28, size: 3.2, delay: 0.06, dur: 0.81 },
-                { id: 3,  dist: 146, rot0:  28, drot: -36, size: 4.0, delay: 0.11, dur: 0.83 },
-                { id: 4,  dist: 125, rot0:  18, drot: -25, size: 3.0, delay: 0.18, dur: 0.80 },
-                { id: 5,  dist: 138, rot0:  26, drot: -34, size: 3.6, delay: 0.26, dur: 0.82 },
+                { id: 1,  dist: 86, rot0:  24, drot: -32, size: 3.2, delay: 0.02, dur: 0.82 },
+                { id: 2,  dist: 78, rot0:  20, drot: -28, size: 2.8, delay: 0.06, dur: 0.81 },
+                { id: 3,  dist: 90, rot0:  28, drot: -36, size: 3.5, delay: 0.11, dur: 0.83 },
+                { id: 4,  dist: 72, rot0:  18, drot: -25, size: 2.6, delay: 0.18, dur: 0.80 },
+                { id: 5,  dist: 82, rot0:  26, drot: -34, size: 3.0, delay: 0.26, dur: 0.82 },
 
                 // Stream B: Center Ground & Calves/Spine (gentle ascending weave: arrivals 0.86s - 1.12s)
-                { id: 6,  dist: 148, rot0:  -4, drot:  18, size: 4.2, delay: 0.04, dur: 0.82 },
-                { id: 7,  dist: 136, rot0:   3, drot: -16, size: 3.4, delay: 0.09, dur: 0.81 },
-                { id: 8,  dist: 144, rot0:  -2, drot:  15, size: 3.8, delay: 0.15, dur: 0.83 },
-                { id: 9,  dist: 128, rot0:   4, drot: -18, size: 3.1, delay: 0.21, dur: 0.80 },
-                { id: 10, dist: 140, rot0:  -5, drot:  20, size: 3.5, delay: 0.25, dur: 0.82 },
-                { id: 11, dist: 122, rot0:   2, drot: -14, size: 2.8, delay: 0.30, dur: 0.82 },
+                { id: 6,  dist: 94, rot0:  -4, drot:  18, size: 3.6, delay: 0.04, dur: 0.82 },
+                { id: 7,  dist: 80, rot0:   3, drot: -16, size: 2.8, delay: 0.09, dur: 0.81 },
+                { id: 8,  dist: 88, rot0:  -2, drot:  15, size: 3.2, delay: 0.15, dur: 0.83 },
+                { id: 9,  dist: 74, rot0:   4, drot: -18, size: 2.6, delay: 0.21, dur: 0.80 },
+                { id: 10, dist: 84, rot0:  -5, drot:  20, size: 3.0, delay: 0.25, dur: 0.82 },
+                { id: 11, dist: 68, rot0:   2, drot: -14, size: 2.4, delay: 0.30, dur: 0.82 },
 
                 // Stream C: Right Pedestal & Tail Base (curving smoothly inward across right flank: arrivals 0.86s - 1.13s)
-                { id: 12, dist: 140, rot0: -22, drot:  30, size: 3.6, delay: 0.05, dur: 0.81 },
-                { id: 13, dist: 130, rot0: -18, drot:  26, size: 3.2, delay: 0.10, dur: 0.81 },
-                { id: 14, dist: 145, rot0: -26, drot:  34, size: 4.0, delay: 0.16, dur: 0.83 },
-                { id: 15, dist: 126, rot0: -16, drot:  24, size: 2.9, delay: 0.23, dur: 0.81 },
-                { id: 16, dist: 135, rot0: -24, drot:  32, size: 3.5, delay: 0.30, dur: 0.83 },
+                { id: 12, dist: 84, rot0: -22, drot:  30, size: 3.0, delay: 0.05, dur: 0.81 },
+                { id: 13, dist: 76, rot0: -18, drot:  26, size: 2.6, delay: 0.10, dur: 0.81 },
+                { id: 14, dist: 88, rot0: -26, drot:  34, size: 3.4, delay: 0.16, dur: 0.83 },
+                { id: 15, dist: 70, rot0: -16, drot:  24, size: 2.5, delay: 0.23, dur: 0.81 },
+                { id: 16, dist: 80, rot0: -24, drot:  32, size: 2.9, delay: 0.30, dur: 0.83 },
               ].map((mote) => (
                 <div
                   key={mote.id}
@@ -21919,7 +21938,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                       marginLeft: `-${mote.size / 2}px`,
                       marginTop: `-${mote.size / 2}px`,
                       background: 'radial-gradient(circle at 35% 35%, #ffffff 0%, #fae8ff 50%, #f472b6 100%)',
-                      boxShadow: '0 0 6px #ffffff, 0 0 12px #e879f9, 0 0 18px #a855f7',
+                      boxShadow: '0 0 4px #ffffff, 0 0 8px #e879f9, 0 0 12px #a855f7',
                       ['--dist' as any]: `${mote.dist}px`,
                       animation: `gbaMewtwoMoteSpiralRad ${mote.dur}s cubic-bezier(0.35, 0, 0.25, 1) ${mote.delay}s forwards`,
                       opacity: 0

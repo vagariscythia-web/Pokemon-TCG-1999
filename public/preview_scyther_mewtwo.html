@@ -164,50 +164,59 @@
       min-height: 34px;
     }
 
-    /* Authentic Pokémon TCG Card Canvas */
+    /* Authentic Pokémon TCG Card Canvas: Default matches GameBoard desktop active card (180px x 248px) */
     .card-stage {
       position: relative;
-      width: 250px;
-      height: 350px;
+      width: 180px;
+      height: 248px;
       background: #1e293b;
       border-radius: 12px;
-      overflow: hidden;
+      overflow: visible;
       box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 0 2px rgba(255,255,255,0.05);
-      border: 6px solid #eab308;
+      border: 4px solid #eab308;
+      transition: width 0.25s ease, height 0.25s ease;
     }
     .card-stage.psychic-border {
       border-color: #a855f7;
     }
+    .card-stage.size-large {
+      width: 250px;
+      height: 344px;
+      border-width: 6px;
+    }
+    .card-stage.clipped-overflow {
+      overflow: hidden !important;
+    }
     .card-mockup-label {
       position: absolute;
-      top: 10px;
-      left: 12px;
-      font-size: 12px;
+      top: 8px;
+      left: 10px;
+      font-size: 11px;
       font-weight: 800;
       color: #1e293b;
       background: rgba(255, 255, 255, 0.85);
-      padding: 2px 8px;
+      padding: 1px 6px;
       border-radius: 4px;
       z-index: 5;
     }
     .card-mockup-hp {
       position: absolute;
-      top: 10px;
-      right: 12px;
-      font-size: 12px;
+      top: 8px;
+      right: 10px;
+      font-size: 11px;
       font-weight: 900;
       color: #dc2626;
       background: rgba(255, 255, 255, 0.85);
-      padding: 2px 8px;
+      padding: 1px 6px;
       border-radius: 4px;
       z-index: 5;
     }
     .card-art-box {
       position: absolute;
-      top: 34px;
-      left: 12px;
-      right: 12px;
-      height: 155px;
+      top: 30px;
+      left: 8px;
+      right: 8px;
+      height: 110px;
       background: #0f172a;
       border-radius: 6px;
       border: 2px solid #64748b;
@@ -215,7 +224,7 @@
       align-items: center;
       justify-content: center;
       color: #475569;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       letter-spacing: 1px;
     }
@@ -260,155 +269,155 @@
     /* Layer 1: Ambient Card Floor Atmosphere Glow & Concentric Expanding Shockwave Ripples */
     @keyframes gbaScytherDanceFloorGlow {
       0%   { opacity: 0; transform: scale(0.35); }
-      20%  { opacity: 0.85; transform: scale(0.85); filter: drop-shadow(0 0 16px #a3e635); }
-      45%  { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 24px #84cc16) drop-shadow(0 0 12px #bef264); }
-      75%  { opacity: 0.95; transform: scale(1.22); filter: drop-shadow(0 0 30px #a3e635) drop-shadow(0 0 14px #ffffff); }
-      90%  { opacity: 0.5; transform: scale(1.1); }
+      20%  { opacity: 0.85; transform: scale(0.85); filter: drop-shadow(0 0 12px #a3e635); }
+      45%  { opacity: 1; transform: scale(1.02); filter: drop-shadow(0 0 18px #84cc16) drop-shadow(0 0 10px #bef264); }
+      75%  { opacity: 0.95; transform: scale(1.08); filter: drop-shadow(0 0 22px #a3e635) drop-shadow(0 0 12px #ffffff); }
+      90%  { opacity: 0.5; transform: scale(1.02); }
       100% { opacity: 0; transform: scale(0.95); }
     }
 
     /* Ground Shockwave Ripple 1 (Opening Dance Pulse: 0.10s - 0.85s) */
     @keyframes gbaScytherGroundRipple1 {
       0%   { opacity: 0; transform: scale(0.25); }
-      15%  { opacity: 0.9; transform: scale(0.65); filter: drop-shadow(0 0 8px #bef264); }
-      50%  { opacity: 0.65; transform: scale(1.15); filter: drop-shadow(0 0 14px #a3e635); }
-      85%  { opacity: 0.2; transform: scale(1.45); }
-      100% { opacity: 0; transform: scale(1.6); }
+      15%  { opacity: 0.9; transform: scale(0.65); filter: drop-shadow(0 0 6px #bef264); }
+      50%  { opacity: 0.65; transform: scale(0.95); filter: drop-shadow(0 0 10px #a3e635); }
+      85%  { opacity: 0.2; transform: scale(1.15); }
+      100% { opacity: 0; transform: scale(1.22); }
     }
 
     /* Ground Shockwave Ripple 2 (Mid-Dance Resonant Wave: 0.50s - 1.25s) */
     @keyframes gbaScytherGroundRipple2 {
       0%   { opacity: 0; transform: scale(0.2); }
-      18%  { opacity: 0.95; transform: scale(0.7); filter: drop-shadow(0 0 10px #ffffff); }
-      52%  { opacity: 0.6; transform: scale(1.25); filter: drop-shadow(0 0 16px #bef264); }
-      85%  { opacity: 0.15; transform: scale(1.6); }
-      100% { opacity: 0; transform: scale(1.8); }
+      18%  { opacity: 0.95; transform: scale(0.68); filter: drop-shadow(0 0 8px #ffffff); }
+      52%  { opacity: 0.6; transform: scale(0.98); filter: drop-shadow(0 0 12px #bef264); }
+      85%  { opacity: 0.15; transform: scale(1.18); }
+      100% { opacity: 0; transform: scale(1.26); }
     }
 
     /* Ground Shockwave Ripple 3 (Climax Cross-Lock Shockwave: 1.05s - 1.65s) */
     @keyframes gbaScytherGroundRipple3 {
       0%   { opacity: 0; transform: scale(0.25); }
-      20%  { opacity: 1; transform: scale(0.85); filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 24px #a3e635); }
-      55%  { opacity: 0.7; transform: scale(1.4); filter: drop-shadow(0 0 14px #bef264); }
-      85%  { opacity: 0.2; transform: scale(1.85); }
-      100% { opacity: 0; transform: scale(2.1); }
+      20%  { opacity: 1; transform: scale(0.75); filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 18px #a3e635); }
+      55%  { opacity: 0.7; transform: scale(1.05); filter: drop-shadow(0 0 12px #bef264); }
+      85%  { opacity: 0.2; transform: scale(1.22); }
+      100% { opacity: 0; transform: scale(1.30); }
     }
 
     /* Backward compatibility aliases */
     @keyframes gbaScytherDanceCycloneSpin {
       0%   { opacity: 0; transform: scale(0.4) rotate(0deg); }
-      50%  { opacity: 1; transform: scale(1.1) rotate(180deg); }
-      100% { opacity: 0; transform: scale(1.3) rotate(360deg); }
+      50%  { opacity: 1; transform: scale(1.05) rotate(180deg); }
+      100% { opacity: 0; transform: scale(1.2) rotate(360deg); }
     }
     @keyframes gbaScytherDanceAura {
       0%   { opacity: 0; transform: scale(0.4); }
-      50%  { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 20px #84cc16); }
-      100% { opacity: 0; transform: scale(1.4); }
+      50%  { opacity: 1; transform: scale(1.08); filter: drop-shadow(0 0 16px #84cc16); }
+      100% { opacity: 0; transform: scale(1.25); }
     }
 
     /* Layer 2: 4-Phase Kinematic Zoetrope with Continuous Momentum & Smooth Smear Cross-Fade */
     /* Pose 1 / 002: High Scythe Lunge & Opening Dance Stance (0% - 34%) */
     @keyframes gbaScytherDanceActorA {
-      0%   { opacity: 0; transform: translateY(16px) scale(0.96) rotate(-2deg); filter: blur(2px); }
-      6%   { opacity: 1; transform: translateY(8px) scale(1.00) rotate(-1deg); filter: blur(0px); }
-      16%  { opacity: 1; transform: translateY(0px) scale(1.03) rotate(0.5deg); filter: blur(0px); }
-      24%  { opacity: 0.85; transform: translateY(-4px) scale(1.05) rotate(1.5deg); filter: blur(0.8px); }
-      34%  { opacity: 0; transform: translateY(-7px) scale(1.07) rotate(2deg); filter: blur(2px); }
+      0%   { opacity: 0; transform: translateY(12px) scale(0.96) rotate(-2deg); filter: blur(2px); }
+      6%   { opacity: 1; transform: translateY(6px) scale(0.99) rotate(-1deg); filter: blur(0px); }
+      16%  { opacity: 1; transform: translateY(0px) scale(1.01) rotate(0.5deg); filter: blur(0px); }
+      24%  { opacity: 0.85; transform: translateY(-3px) scale(1.03) rotate(1.5deg); filter: blur(0.8px); }
+      34%  { opacity: 0; transform: translateY(-5px) scale(1.04) rotate(2deg); filter: blur(2px); }
       100% { opacity: 0; }
     }
 
     /* Pose 2 / 003: Weaving Lateral Spin Slash (20% - 56%) */
     @keyframes gbaScytherDanceActorB {
       0%, 18% { opacity: 0; }
-      20%     { opacity: 0; transform: translateY(-5px) scale(1.02) rotate(1.5deg); filter: blur(2px); }
-      26%     { opacity: 0.75; transform: translateY(-2px) scale(1.04) rotate(0deg); filter: blur(1px); }
-      34%     { opacity: 1; transform: translateX(4px) translateY(1px) scale(1.06) rotate(-2deg); filter: blur(0px); }
-      42%     { opacity: 1; transform: translateX(2px) translateY(-1px) scale(1.07) rotate(-1deg); filter: blur(0px); }
-      48%     { opacity: 0.8; transform: translateX(-2px) translateY(-3px) scale(1.06) rotate(0.5deg); filter: blur(0.8px); }
-      56%     { opacity: 0; transform: translateX(-5px) translateY(-6px) scale(1.04) rotate(1.5deg); filter: blur(2px); }
+      20%     { opacity: 0; transform: translateY(-3px) scale(1.01) rotate(1.5deg); filter: blur(2px); }
+      26%     { opacity: 0.75; transform: translateY(-1px) scale(1.02) rotate(0deg); filter: blur(1px); }
+      34%     { opacity: 1; transform: translateX(3px) translateY(1px) scale(1.03) rotate(-2deg); filter: blur(0px); }
+      42%     { opacity: 1; transform: translateX(2px) translateY(-1px) scale(1.04) rotate(-1deg); filter: blur(0px); }
+      48%     { opacity: 0.8; transform: translateX(-2px) translateY(-2px) scale(1.03) rotate(0.5deg); filter: blur(0.8px); }
+      56%     { opacity: 0; transform: translateX(-4px) translateY(-4px) scale(1.02) rotate(1.5deg); filter: blur(2px); }
       100%    { opacity: 0; }
     }
 
     /* Pose 3 / 004: High Cross-Guard Flourish (42% - 78%) */
     @keyframes gbaScytherDanceActorC {
       0%, 40% { opacity: 0; }
-      42%     { opacity: 0; transform: translateY(-4px) scale(1.03) rotate(1deg); filter: blur(2px); }
-      48%     { opacity: 0.75; transform: translateY(-6px) scale(1.05) rotate(1.5deg); filter: blur(1px); }
-      56%     { opacity: 1; transform: translateY(-8px) scale(1.08) rotate(2deg); filter: blur(0px); }
-      64%     { opacity: 1; transform: translateY(-6px) scale(1.09) rotate(1deg); filter: blur(0px); }
-      70%     { opacity: 0.8; transform: translateY(-3px) scale(1.07) rotate(0.5deg); filter: blur(0.8px); }
-      78%     { opacity: 0; transform: translateY(0px) scale(1.04) rotate(0deg); filter: blur(2px); }
+      42%     { opacity: 0; transform: translateY(-3px) scale(1.01) rotate(1deg); filter: blur(2px); }
+      48%     { opacity: 0.75; transform: translateY(-4px) scale(1.03) rotate(1.5deg); filter: blur(1px); }
+      56%     { opacity: 1; transform: translateY(-5px) scale(1.04) rotate(1.5deg); filter: blur(0px); }
+      64%     { opacity: 1; transform: translateY(-4px) scale(1.05) rotate(1deg); filter: blur(0px); }
+      70%     { opacity: 0.8; transform: translateY(-2px) scale(1.03) rotate(0.5deg); filter: blur(0.8px); }
+      78%     { opacity: 0; transform: translateY(0px) scale(1.01) rotate(0deg); filter: blur(2px); }
       100%    { opacity: 0; }
     }
 
     /* Pose 4 / 005: Apex Primed Guard Stance (64% - 100%) */
     @keyframes gbaScytherDanceActorD {
       0%, 62% { opacity: 0; }
-      64%     { opacity: 0; transform: translateY(-2px) scale(1.04); filter: blur(2px); }
-      72%     { opacity: 0.8; transform: translateY(0px) scale(1.07); filter: blur(1px); }
-      78%     { opacity: 1; transform: translateY(2px) scale(1.12, 0.96); filter: blur(0px); }
-      83%     { opacity: 1; transform: translateY(-1px) scale(1.08, 1.02); filter: blur(0px); }
-      88%     { opacity: 1; transform: translateY(0px) scale(1.10); filter: blur(0px); }
-      95%     { opacity: 0.95; transform: translateY(0px) scale(1.09); filter: blur(0px); }
-      100%    { opacity: 0; transform: translateY(4px) scale(1.02); filter: blur(1.5px); }
+      64%     { opacity: 0; transform: translateY(-2px) scale(1.02); filter: blur(2px); }
+      72%     { opacity: 0.8; transform: translateY(0px) scale(1.04); filter: blur(1px); }
+      78%     { opacity: 1; transform: translateY(1px) scale(1.06, 0.98); filter: blur(0px); }
+      83%     { opacity: 1; transform: translateY(-1px) scale(1.05, 1.01); filter: blur(0px); }
+      88%     { opacity: 1; transform: translateY(0px) scale(1.06); filter: blur(0px); }
+      95%     { opacity: 0.95; transform: translateY(0px) scale(1.05); filter: blur(0px); }
+      100%    { opacity: 0; transform: translateY(3px) scale(1.00); filter: blur(1.5px); }
     }
 
     /* Whiff Pose 1 (0% - 48%) */
     @keyframes gbaScytherDanceActorWhiff1 {
-      0%   { opacity: 0; transform: translateY(12px) scale(0.9); filter: blur(2px); }
+      0%   { opacity: 0; transform: translateY(10px) scale(0.9); filter: blur(2px); }
       12%  { opacity: 0.85; transform: translateY(0px) scale(1.0); filter: blur(0px); }
-      35%  { opacity: 0.85; transform: translateY(-2px) scale(1.02); filter: blur(0px); }
-      44%  { opacity: 0.5; transform: translateY(1px) scale(1.0); filter: blur(1.5px); }
-      48%  { opacity: 0; transform: translateY(3px) scale(0.98); filter: blur(3px); }
+      35%  { opacity: 0.85; transform: translateY(-2px) scale(1.01); filter: blur(0px); }
+      44%  { opacity: 0.5; transform: translateY(1px) scale(0.99); filter: blur(1.5px); }
+      48%  { opacity: 0; transform: translateY(3px) scale(0.97); filter: blur(3px); }
       100% { opacity: 0; }
     }
 
     /* Whiff Pose 2 (38% - 82% - falters and dissipates) */
     @keyframes gbaScytherDanceActorWhiff2 {
-      0%, 36% { opacity: 0; transform: translateY(4px) scale(0.96); filter: blur(2px); }
+      0%, 36% { opacity: 0; transform: translateY(3px) scale(0.96); filter: blur(2px); }
       44%     { opacity: 0.8; transform: translateY(0px) scale(1.0); filter: blur(0px); }
       62%     { opacity: 0.65; transform: translateY(2px) scale(0.98); filter: blur(0.5px); }
-      75%     { opacity: 0.35; transform: translateY(6px) scale(0.95); filter: blur(1.5px); }
-      82%     { opacity: 0; transform: translateY(10px) scale(0.92); filter: blur(3px); }
+      75%     { opacity: 0.35; transform: translateY(5px) scale(0.95); filter: blur(1.5px); }
+      82%     { opacity: 0; transform: translateY(8px) scale(0.92); filter: blur(3px); }
       100%    { opacity: 0; }
     }
 
     /* Centered 3D Orbiting Spectral Blades */
     @keyframes gbaScytherOrbitBlades {
       0%   { opacity: 0; transform: rotate(0deg) scale(0.35); }
-      15%  { opacity: 0.95; transform: rotate(120deg) scale(0.95); filter: drop-shadow(0 0 14px #bef264); }
-      32%  { opacity: 1; transform: rotate(280deg) scale(1.15); filter: drop-shadow(0 0 22px #a3e635); }
-      48%  { opacity: 1; transform: rotate(420deg) scale(1.3); filter: drop-shadow(0 0 28px #ffffff) drop-shadow(0 0 38px #a3e635); }
-      65%  { opacity: 1; transform: rotate(560deg) scale(1.38); filter: brightness(1.35) drop-shadow(0 0 30px #ffffff); }
-      78%  { opacity: 0.75; transform: rotate(660deg) scale(1.22); filter: drop-shadow(0 0 16px #bef264); }
-      88%  { opacity: 0.35; transform: rotate(720deg) scale(1.05); }
-      100% { opacity: 0; transform: rotate(760deg) scale(0.9); }
+      15%  { opacity: 0.95; transform: rotate(120deg) scale(0.80); filter: drop-shadow(0 0 10px #bef264); }
+      32%  { opacity: 1; transform: rotate(280deg) scale(0.95); filter: drop-shadow(0 0 16px #a3e635); }
+      48%  { opacity: 1; transform: rotate(420deg) scale(1.08); filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 26px #a3e635); }
+      65%  { opacity: 1; transform: rotate(560deg) scale(1.14); filter: brightness(1.30) drop-shadow(0 0 22px #ffffff); }
+      78%  { opacity: 0.75; transform: rotate(660deg) scale(1.05); filter: drop-shadow(0 0 14px #bef264); }
+      88%  { opacity: 0.35; transform: rotate(720deg) scale(0.98); }
+      100% { opacity: 0; transform: rotate(760deg) scale(0.88); }
     }
 
     /* Climax Crossed Blades Central Glint (Centered Intersection Starburst) */
     @keyframes gbaScytherCrossGlint {
       0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
-      25%  { opacity: 1; transform: translate(-50%, -50%) scale(1.45) rotate(45deg); filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 22px #bef264) brightness(1.5); }
-      52%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1.05) rotate(90deg); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #a3e635); }
-      75%  { opacity: 0.55; transform: translate(-50%, -50%) scale(0.65) rotate(135deg); }
+      25%  { opacity: 1; transform: translate(-50%, -50%) scale(1.18) rotate(45deg); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #bef264) brightness(1.5); }
+      52%  { opacity: 0.95; transform: translate(-50%, -50%) scale(0.95) rotate(90deg); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #a3e635); }
+      75%  { opacity: 0.55; transform: translate(-50%, -50%) scale(0.60) rotate(135deg); }
       100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(180deg); }
     }
 
     /* Scyther Blade Sheen Glint (Along Left & Right Scythe Edges) */
     @keyframes gbaScytherBladeGlint {
       0%   { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(0deg); }
-      22%  { opacity: 1; transform: translate(-50%, -50%) scale(1.25) rotate(45deg); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #a3e635) brightness(1.4); }
-      50%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1.0) rotate(90deg); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #bef264); }
-      75%  { opacity: 0.55; transform: translate(-50%, -50%) scale(0.65) rotate(135deg); }
+      22%  { opacity: 1; transform: translate(-50%, -50%) scale(1.10) rotate(45deg); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #a3e635) brightness(1.4); }
+      50%  { opacity: 0.95; transform: translate(-50%, -50%) scale(0.90) rotate(90deg); filter: drop-shadow(0 0 5px #ffffff) drop-shadow(0 0 10px #bef264); }
+      75%  { opacity: 0.55; transform: translate(-50%, -50%) scale(0.55) rotate(135deg); }
       100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2) rotate(180deg); }
     }
 
     @keyframes gbaScytherKiGlints {
-      0%, 35% { opacity: 0; transform: translateY(10px) scale(0.4); }
-      48%     { opacity: 1; transform: translateY(-8px) scale(1.25); filter: drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 20px #a3e635); }
-      68%     { opacity: 0.9; transform: translateY(-24px) scale(1.1); filter: drop-shadow(0 0 14px #bef264); }
-      86%     { opacity: 0.5; transform: translateY(-40px) scale(0.85); }
-      100%    { opacity: 0; transform: translateY(-52px) scale(0.4); }
+      0%, 35% { opacity: 0; transform: translateY(6px) scale(0.4); }
+      48%     { opacity: 1; transform: translateY(-4px) scale(1.15); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635); }
+      68%     { opacity: 0.9; transform: translateY(-14px) scale(1.0); filter: drop-shadow(0 0 10px #bef264); }
+      86%     { opacity: 0.5; transform: translateY(-24px) scale(0.80); }
+      100%    { opacity: 0; transform: translateY(-32px) scale(0.4); }
     }
 
     /* Screen / Card Telekinetic Distortion Shudder Tremor */
@@ -426,37 +435,37 @@
 
     /* Layer 1: Gravitational Space-Time Collapse Card Floor (Strictly Centered) */
     @keyframes gbaMewtwoVoidFloor {
-      0%   { opacity: 0; transform: scale(0.35); }
-      20%  { opacity: 0.85; transform: scale(1.05); filter: drop-shadow(0 0 20px #581c87); }
-      42%  { opacity: 0.95; transform: scale(1.18); filter: drop-shadow(0 0 32px #3b0764) drop-shadow(0 0 16px #7e22ce); }
-      68%  { opacity: 0.75; transform: scale(1.12); filter: drop-shadow(0 0 22px #581c87); }
-      86%  { opacity: 0.35; transform: scale(1.0); }
-      100% { opacity: 0; transform: scale(0.9); }
+      0%   { opacity: 0; transform: scale(0.65); filter: blur(10px); }
+      22%  { opacity: 0.80; transform: scale(0.95); filter: blur(4px) drop-shadow(0 0 20px rgba(168, 85, 247, 0.45)); }
+      46%  { opacity: 0.95; transform: scale(1.06); filter: drop-shadow(0 0 28px rgba(217, 70, 239, 0.55)); }
+      66%  { /* Supercritical surge */
+             opacity: 1.0; transform: scale(1.14); filter: drop-shadow(0 0 40px rgba(240, 171, 252, 0.70)); }
+      82%  { opacity: 0.55; transform: scale(1.05); filter: blur(6px); }
+      100% { opacity: 0; transform: scale(0.95); filter: blur(14px); }
     }
 
     /* Layer 2: Natural Fluid Dynamics Psionic Miasma & Viscous Volumetric Ether (Deep Background z-20) */
-    /* Primary Amorphous Psionic Smoke Vortex: Disperses, expands radially, and ascends organically behind Mewtwo */
+    /* Primary Amorphous Psionic Smoke Vortex: Borderless horizontal card coverage with fluid vortex ascension */
     @keyframes gbaMewtwoMistPlumeL {
-      0%   { opacity: 0; transform: translate(-50%, -46%) scale(0.60) rotate(-6deg); filter: blur(5px) brightness(1.2); }
-      18%  { opacity: 0.78; transform: translate(-50%, -48%) scale(0.85) rotate(-2deg); filter: blur(0px) drop-shadow(0 0 16px rgba(168,85,247,0.40)); }
-      40%  { opacity: 0.90; transform: translate(-50%, -51%) scale(1.04) rotate(3deg); filter: drop-shadow(0 0 24px rgba(217,70,239,0.50)) brightness(1.10); }
-      56%  { opacity: 0.95; transform: translate(-50%, -53%) scale(1.18) rotate(7deg); filter: drop-shadow(0 0 32px rgba(232,121,249,0.60)) brightness(1.20); }
+      0%   { opacity: 0; transform: translate(-50%, -46%) scale(1.0) rotate(-3deg); filter: brightness(1.15); }
+      16%  { opacity: 0.88; transform: translate(-50%, -48%) scale(1.02) rotate(-1deg); filter: drop-shadow(0 0 16px rgba(168,85,247,0.40)); }
+      42%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1.05) rotate(2deg); filter: drop-shadow(0 0 24px rgba(217,70,239,0.50)) brightness(1.10); }
       66%  { /* SUPERCRITICAL DETONATION SURGE (1.155s): Core explosion blasts through the miasma */
-             opacity: 1; transform: translate(-50%, -55%) scale(1.35) rotate(11deg); filter: drop-shadow(0 0 45px rgba(240,171,252,0.80)) drop-shadow(0 0 65px rgba(217,70,239,0.50)) brightness(1.35); }
-      76%  { opacity: 0.78; transform: translate(-50%, -58%) scale(1.45) rotate(14deg); filter: blur(2px) drop-shadow(0 0 24px rgba(168,85,247,0.35)); }
-      88%  { opacity: 0.35; transform: translate(-50%, -62%) scale(1.54) rotate(17deg); filter: blur(6px); }
-      100% { opacity: 0; transform: translate(-50%, -66%) scale(1.62) rotate(20deg); filter: blur(14px); }
+             opacity: 1; transform: translate(-50%, -52%) scale(1.12) rotate(5deg); filter: drop-shadow(0 0 45px rgba(240,171,252,0.80)) brightness(1.30); }
+      78%  { opacity: 0.78; transform: translate(-50%, -54%) scale(1.16) rotate(7deg); filter: blur(2px) drop-shadow(0 0 24px rgba(168,85,247,0.35)); }
+      88%  { opacity: 0.35; transform: translate(-50%, -57%) scale(1.20) rotate(9deg); filter: blur(6px); }
+      100% { opacity: 0; transform: translate(-50%, -60%) scale(1.24) rotate(11deg); filter: blur(12px); }
     }
 
     /* Secondary Ethereal Parallax Counter-Vortex: Deep counter-swirling wisps adding authentic 3D fluid depth */
     @keyframes gbaMewtwoMistPlumeR {
-      0%   { opacity: 0; transform: translate(-50%, -46%) scale(-0.55, 0.55) rotate(6deg); filter: blur(6px); }
-      22%  { opacity: 0.40; transform: translate(-50%, -49%) scale(-0.85, 0.85) rotate(2deg); filter: blur(3px); }
-      48%  { opacity: 0.50; transform: translate(-50%, -52%) scale(-1.08, 1.08) rotate(-4deg); filter: blur(2px) drop-shadow(0 0 18px rgba(147,51,234,0.35)); }
+      0%   { opacity: 0; transform: translate(-50%, -46%) scale(-0.96, 0.96) rotate(3deg); filter: blur(4px); }
+      20%  { opacity: 0.40; transform: translate(-50%, -48%) scale(-1.0, 1.0) rotate(1deg); filter: blur(2px); }
+      46%  { opacity: 0.50; transform: translate(-50%, -50%) scale(-1.04, 1.04) rotate(-2deg); filter: drop-shadow(0 0 18px rgba(147,51,234,0.35)); }
       66%  { /* Supercritical surge */
-             opacity: 0.60; transform: translate(-50%, -55%) scale(-1.25, 1.25) rotate(-8deg); filter: drop-shadow(0 0 30px rgba(192,38,211,0.50)) brightness(1.25); }
-      82%  { opacity: 0.28; transform: translate(-50%, -60%) scale(-1.40, 1.40) rotate(-13deg); filter: blur(5px); }
-      100% { opacity: 0; transform: translate(-50%, -66%) scale(-1.55, 1.55) rotate(-17deg); filter: blur(16px); }
+             opacity: 0.60; transform: translate(-50%, -52%) scale(-1.10, 1.10) rotate(-5deg); filter: drop-shadow(0 0 30px rgba(192,38,211,0.50)) brightness(1.20); }
+      82%  { opacity: 0.28; transform: translate(-50%, -55%) scale(-1.15, 1.15) rotate(-8deg); filter: blur(5px); }
+      100% { opacity: 0; transform: translate(-50%, -60%) scale(-1.20, 1.20) rotate(-11deg); filter: blur(14px); }
     }
 
     /* Backward compatibility anchor for test runners */
@@ -485,56 +494,56 @@
 
     /* Layer 3: Mewtwo Telekinetic Levitation Actor Kinematics (Silky Smooth Continuous Interpolation) */
     @keyframes gbaMewtwoPsychicActor {
-      0%   { opacity: 0; transform: scale(0.92) translateY(18px); filter: drop-shadow(0 0 0px transparent) brightness(1); }
-      16%  { opacity: 1; transform: scale(1.0) translateY(4px); filter: drop-shadow(0 0 12px rgba(192,132,252,0.4)) brightness(1.04); }
-      32%  { opacity: 1; transform: scale(1.05) translateY(-5px); filter: drop-shadow(0 0 20px #c084fc) brightness(1.08); }
-      48%  { opacity: 1; transform: scale(1.07) translateY(-7px) rotate(-0.5deg); filter: drop-shadow(0 0 24px #e879f9) brightness(1.12); }
-      58%  { opacity: 1; transform: scale(1.09, 0.98) translateY(-8px) rotate(-0.8deg); filter: drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 42px #d946ef) brightness(1.22); }
+      0%   { opacity: 0; transform: scale(0.94) translateY(10px); filter: drop-shadow(0 0 0px transparent) brightness(1); }
+      16%  { opacity: 1; transform: scale(0.98) translateY(3px); filter: drop-shadow(0 0 10px rgba(192,132,252,0.4)) brightness(1.04); }
+      32%  { opacity: 1; transform: scale(1.02) translateY(-2px); filter: drop-shadow(0 0 14px #c084fc) brightness(1.08); }
+      48%  { opacity: 1; transform: scale(1.03) translateY(-4px) rotate(-0.5deg); filter: drop-shadow(0 0 18px #e879f9) brightness(1.12); }
+      58%  { opacity: 1; transform: scale(1.04, 0.99) translateY(-5px) rotate(-0.6deg); filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 26px #d946ef) brightness(1.20); }
       66%  { /* DETONATION MOMENT (1.155s): Supercritical burst recoil synchronized with peak core flash */
-             opacity: 1; transform: scale(1.11, 0.97) translateY(-9px) rotate(0.8deg); filter: drop-shadow(0 0 38px #ffffff) drop-shadow(0 0 52px #d946ef) brightness(1.28); }
-      76%  { opacity: 1; transform: scale(1.05) translateY(-6px) rotate(-0.3deg); filter: drop-shadow(0 0 22px #a855f7) brightness(1.08); }
-      86%  { opacity: 0.92; transform: scale(1.02) translateY(-2px); filter: drop-shadow(0 0 14px rgba(168,85,247,0.5)) brightness(1.02); }
-      93%  { opacity: 0.60; transform: scale(0.99) translateY(4px); filter: drop-shadow(0 0 8px rgba(126,34,206,0.3)) brightness(1); }
-      100% { opacity: 0; transform: scale(0.96) translateY(14px); filter: drop-shadow(0 0 0px transparent) brightness(1); }
+             opacity: 1; transform: scale(1.06, 0.98) translateY(-6px) rotate(0.6deg); filter: drop-shadow(0 0 24px #ffffff) drop-shadow(0 0 32px #d946ef) brightness(1.25); }
+      76%  { opacity: 1; transform: scale(1.03) translateY(-3px) rotate(-0.3deg); filter: drop-shadow(0 0 16px #a855f7) brightness(1.08); }
+      86%  { opacity: 0.92; transform: scale(1.00) translateY(0px); filter: drop-shadow(0 0 10px rgba(168,85,247,0.5)) brightness(1.02); }
+      93%  { opacity: 0.60; transform: scale(0.98) translateY(4px); filter: drop-shadow(0 0 6px rgba(126,34,206,0.3)) brightness(1); }
+      100% { opacity: 0; transform: scale(0.95) translateY(10px); filter: drop-shadow(0 0 0px transparent) brightness(1); }
     }
 
     /* Layer 4: Volumetric Psychokinetic Singularity Core with Synchronized Energy Influx Ignition Flash */
     @keyframes gbaMewtwoSingularityCore {
       0%   { opacity: 0; transform: scale(0.2) rotate(0deg); filter: drop-shadow(0 0 6px #ffffff) brightness(1.0); }
-      18%  { opacity: 0.70; transform: scale(0.55) rotate(45deg); filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 20px #f472b6) brightness(1.08); }
-      36%  { opacity: 0.85; transform: scale(0.76) rotate(95deg); filter: drop-shadow(0 0 20px #ffffff) drop-shadow(0 0 28px #e879f9) brightness(1.16); }
+      18%  { opacity: 0.70; transform: scale(0.48) rotate(45deg); filter: drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 14px #f472b6) brightness(1.08); }
+      36%  { opacity: 0.85; transform: scale(0.66) rotate(95deg); filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 20px #e879f9) brightness(1.16); }
       48%  { /* First motes start entering core (0.84s) */
-             opacity: 0.95; transform: scale(0.88) rotate(135deg); filter: drop-shadow(0 0 26px #ffffff) drop-shadow(0 0 38px #e879f9) brightness(1.25); }
+             opacity: 0.95; transform: scale(0.78) rotate(135deg); filter: drop-shadow(0 0 18px #ffffff) drop-shadow(0 0 26px #e879f9) brightness(1.25); }
       56%  { /* Mid-influx swelling as motes cascade in */
-             opacity: 1; transform: scale(1.12) rotate(180deg); filter: drop-shadow(0 0 36px #ffffff) drop-shadow(0 0 52px #f0abfc) brightness(1.50); }
+             opacity: 1; transform: scale(0.92) rotate(180deg); filter: drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 32px #f0abfc) brightness(1.40); }
       64%  { /* Final motes plunging into the core (1.12s) */
-             opacity: 1; transform: scale(1.34) rotate(225deg); filter: drop-shadow(0 0 44px #ffffff) drop-shadow(0 0 68px #f0abfc) brightness(1.90); }
+             opacity: 1; transform: scale(1.05) rotate(225deg); filter: drop-shadow(0 0 26px #ffffff) drop-shadow(0 0 40px #f0abfc) brightness(1.65); }
       66%  { /* SUPERCRITICAL PEAK CORE GLOW & IGNITION FLASH (1.155s): All 16 motes fully merged into core! */
-             opacity: 1; transform: scale(1.56) rotate(240deg); filter: drop-shadow(0 0 55px #ffffff) drop-shadow(0 0 85px #f0abfc) drop-shadow(0 0 115px #d946ef) brightness(2.30); }
-      72%  { opacity: 1; transform: scale(1.25) rotate(275deg); filter: drop-shadow(0 0 34px #ffffff) drop-shadow(0 0 50px #a855f7) brightness(1.35); }
-      82%  { opacity: 0.85; transform: scale(1.12) rotate(315deg); filter: drop-shadow(0 0 24px #9333ea) brightness(1.10); }
-      92%  { opacity: 0.40; transform: scale(1.24) rotate(345deg); filter: blur(3px) brightness(1.02); }
-      100% { opacity: 0; transform: scale(1.40) rotate(360deg); filter: blur(6px) brightness(1); }
+             opacity: 1; transform: scale(1.18) rotate(240deg); filter: drop-shadow(0 0 32px #ffffff) drop-shadow(0 0 48px #f0abfc) drop-shadow(0 0 64px #d946ef) brightness(1.90); }
+      72%  { opacity: 1; transform: scale(0.95) rotate(275deg); filter: drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 32px #a855f7) brightness(1.30); }
+      82%  { opacity: 0.85; transform: scale(0.78) rotate(315deg); filter: drop-shadow(0 0 16px #9333ea) brightness(1.10); }
+      92%  { opacity: 0.40; transform: scale(0.50) rotate(345deg); filter: blur(2px) brightness(1.02); }
+      100% { opacity: 0; transform: scale(0.25) rotate(360deg); filter: blur(4px) brightness(1); }
     }
 
     /* Primary Telekinetic Wavefront (Expanding Lens Shockwave Shell: Perfectly synchronized at 66% / 1.155s) */
     @keyframes gbaMewtwoPsychicShock {
-      0%, 60% { opacity: 0; transform: scale(0.25); filter: blur(1px); }
+      0%, 60% { opacity: 0; transform: scale(0.20); filter: blur(1px); }
       66%     { /* DETONATION: Fires exactly as all motes unite into the supercritical core */
-                opacity: 0.98; transform: scale(0.75); filter: drop-shadow(0 0 26px #ffffff) drop-shadow(0 0 42px #e879f9); }
-      76%     { opacity: 0.85; transform: scale(1.48); filter: drop-shadow(0 0 28px #c026d3); }
-      86%     { opacity: 0.38; transform: scale(1.98); filter: drop-shadow(0 0 14px #a855f7) blur(2px); }
-      94%     { opacity: 0.10; transform: scale(2.32); filter: blur(4.5px); }
-      100%    { opacity: 0; transform: scale(2.48); filter: blur(6.5px); }
+                opacity: 0.98; transform: scale(0.50); filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 22px #e879f9); }
+      76%     { opacity: 0.85; transform: scale(0.85); filter: drop-shadow(0 0 18px #c026d3); }
+      86%     { opacity: 0.40; transform: scale(1.15); filter: drop-shadow(0 0 12px #a855f7) blur(2px); }
+      94%     { opacity: 0.12; transform: scale(1.30); filter: blur(3.5px); }
+      100%    { opacity: 0; transform: scale(1.40); filter: blur(5px); }
     }
 
     /* Secondary Harmonic Wavefront (Following wave: 73% - 100% / 1.28s - 1.75s) */
     @keyframes gbaMewtwoPsychicShock2 {
-      0%, 67% { opacity: 0; transform: scale(0.30); filter: blur(1px); }
-      73%     { opacity: 0.90; transform: scale(0.88); filter: drop-shadow(0 0 22px #f472b6); }
-      83%     { opacity: 0.68; transform: scale(1.52); filter: drop-shadow(0 0 18px #9333ea); }
-      92%     { opacity: 0.22; transform: scale(2.05); filter: drop-shadow(0 0 10px #7e22ce) blur(3px); }
-      100%    { opacity: 0; transform: scale(2.50); filter: blur(7px); }
+      0%, 67% { opacity: 0; transform: scale(0.25); filter: blur(1px); }
+      73%     { opacity: 0.90; transform: scale(0.55); filter: drop-shadow(0 0 14px #f472b6); }
+      83%     { opacity: 0.70; transform: scale(0.90); filter: drop-shadow(0 0 16px #9333ea); }
+      92%     { opacity: 0.25; transform: scale(1.20); filter: drop-shadow(0 0 10px #7e22ce) blur(2.5px); }
+      100%    { opacity: 0; transform: scale(1.35); filter: blur(5px); }
     }
 
     /* Mewtwo Right Hand Psionic After-Vapor Smoke (Rising gently from right palm post-burst: 74% - 100% / 1.295s - 1.75s) */
@@ -704,6 +713,8 @@
     </div>
     <button class="main-btn" onclick="playAll()">&#9654; Play All Full FX</button>
     <button class="main-btn btn-mewtwo" onclick="playAllWhiff()">&#9888; Play All Whiffs</button>
+    <button class="speed-btn" id="btn-scale" style="border:1px solid #475569;" onclick="toggleCardScale()">📐 Ölçek: Oyun İçi (180x248)</button>
+    <button class="speed-btn" id="btn-overflow" style="border:1px solid #475569;" onclick="toggleOverflow()">🔍 Taşma: Serbest (Bleed Check)</button>
     <button class="speed-btn" style="border:1px solid #475569;" onclick="resetAll()">&#8634; Reset</button>
   </div>
 
@@ -819,10 +830,10 @@
 
       // Layer 1: Ambient Card Floor Atmosphere Glow & Concentric Expanding Shockwave Ripples
       const aura = document.createElement('div');
-      aura.style.cssText = 'position:absolute;top:67%;left:50%;transform:translate(-50%,-50%);width:240px;height:76px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;';
+      aura.style.cssText = 'position:absolute;top:70%;left:50%;transform:translate(-50%,-50%);width:160px;height:48px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;';
       
       const glow = document.createElement('div');
-      glow.style.cssText = 'position:absolute;inset:0;border-radius:9999px;background:radial-gradient(ellipse 65% 55% at 50% 50%, rgba(254,240,138,0.55) 0%, rgba(163,230,53,0.35) 42%, rgba(34,197,94,0.12) 72%, transparent 100%);filter:blur(8px);animation:gbaScytherDanceFloorGlow cubic-bezier(0.2,0.9,0.28,1) forwards;';
+      glow.style.cssText = 'position:absolute;inset:0;border-radius:9999px;background:radial-gradient(ellipse 65% 55% at 50% 50%, rgba(254,240,138,0.50) 0%, rgba(163,230,53,0.30) 42%, rgba(34,197,94,0.08) 72%, transparent 100%);filter:blur(8px);animation:gbaScytherDanceFloorGlow cubic-bezier(0.2,0.9,0.28,1) forwards;';
       applySpeed(glow, 1.65);
       aura.appendChild(glow);
 
@@ -832,7 +843,7 @@
       applySpeed(ripple1, 0.85);
       ripple1.style.animationDelay = (0.10 / globalSpeed) + 's';
       ripple1.innerHTML = `
-        <svg width="240" height="76" viewBox="0 0 240 76" style="overflow:visible;">
+        <svg width="160" height="48" viewBox="0 0 160 48" style="overflow:visible;">
           <defs>
             <radialGradient id="scytherRippleGrad1_prev" cx="50%" cy="50%" r="50%">
               <stop offset="60%" stop-color="#ffffff" stop-opacity="0" />
@@ -841,7 +852,7 @@
               <stop offset="100%" stop-color="#22c55e" stop-opacity="0" />
             </radialGradient>
           </defs>
-          <ellipse cx="120" cy="38" rx="90" ry="26" fill="url(#scytherRippleGrad1_prev)" stroke="#bef264" stroke-width="1.8" style="filter:drop-shadow(0 0 10px #bef264);" />
+          <ellipse cx="80" cy="24" rx="54" ry="15" fill="url(#scytherRippleGrad1_prev)" stroke="#bef264" stroke-width="1.5" style="filter:drop-shadow(0 0 8px #bef264);" />
         </svg>
       `;
       aura.appendChild(ripple1);
@@ -852,7 +863,7 @@
       applySpeed(ripple2, 0.85);
       ripple2.style.animationDelay = (0.50 / globalSpeed) + 's';
       ripple2.innerHTML = `
-        <svg width="240" height="76" viewBox="0 0 240 76" style="overflow:visible;">
+        <svg width="160" height="48" viewBox="0 0 160 48" style="overflow:visible;">
           <defs>
             <radialGradient id="scytherRippleGrad2_prev" cx="50%" cy="50%" r="50%">
               <stop offset="65%" stop-color="#ffffff" stop-opacity="0" />
@@ -861,7 +872,7 @@
               <stop offset="100%" stop-color="#15803d" stop-opacity="0" />
             </radialGradient>
           </defs>
-          <ellipse cx="120" cy="38" rx="95" ry="28" fill="url(#scytherRippleGrad2_prev)" stroke="#a3e635" stroke-width="2.2" style="filter:drop-shadow(0 0 12px #a3e635);" />
+          <ellipse cx="80" cy="24" rx="60" ry="17" fill="url(#scytherRippleGrad2_prev)" stroke="#a3e635" stroke-width="1.8" style="filter:drop-shadow(0 0 10px #a3e635);" />
         </svg>
       `;
       aura.appendChild(ripple2);
@@ -872,7 +883,7 @@
       applySpeed(ripple3, 0.60);
       ripple3.style.animationDelay = (1.05 / globalSpeed) + 's';
       ripple3.innerHTML = `
-        <svg width="240" height="76" viewBox="0 0 240 76" style="overflow:visible;">
+        <svg width="160" height="48" viewBox="0 0 160 48" style="overflow:visible;">
           <defs>
             <radialGradient id="scytherRippleGrad3_prev" cx="50%" cy="50%" r="50%">
               <stop offset="70%" stop-color="#ffffff" stop-opacity="0" />
@@ -881,7 +892,7 @@
               <stop offset="100%" stop-color="#166534" stop-opacity="0" />
             </radialGradient>
           </defs>
-          <ellipse cx="120" cy="38" rx="100" ry="30" fill="url(#scytherRippleGrad3_prev)" stroke="#ffffff" stroke-width="2.5" style="filter:drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 24px #bef264);" />
+          <ellipse cx="80" cy="24" rx="66" ry="19" fill="url(#scytherRippleGrad3_prev)" stroke="#ffffff" stroke-width="2.0" style="filter:drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 18px #bef264);" />
         </svg>
       `;
       aura.appendChild(ripple3);
@@ -889,7 +900,7 @@
 
       // Layer 2: 4-Phase Scyther Visual Actor (Kinematic Zoetrope Sequence with Continuous Momentum)
       const actorWrap = document.createElement('div');
-      actorWrap.style.cssText = `position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '102px' : '142px'};height:${whiffed ? '112px' : '154px'};pointer-events:none;z-index:30;`;
+      actorWrap.style.cssText = `position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '78px' : '108px'};height:${whiffed ? '86px' : '118px'};pointer-events:none;z-index:30;`;
 
       if (!whiffed) {
         // Pose 1 (002): High Scythe Lunge (0% - 34%)
@@ -901,7 +912,7 @@
           'Scyther Pose 1',
           'w-full h-full object-contain pointer-events-none'
         );
-        img1.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 18px #a3e635) drop-shadow(0 0 30px rgba(163,230,53,0.65));';
+        img1.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 12px #a3e635) drop-shadow(0 0 20px rgba(163,230,53,0.55));';
         pose1.appendChild(img1);
         actorWrap.appendChild(pose1);
 
@@ -914,7 +925,7 @@
           'Scyther Pose 2',
           'w-full h-full object-contain pointer-events-none'
         );
-        img2.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 18px #a3e635) drop-shadow(0 0 30px rgba(163,230,53,0.65));';
+        img2.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 12px #a3e635) drop-shadow(0 0 20px rgba(163,230,53,0.55));';
         pose2.appendChild(img2);
         actorWrap.appendChild(pose2);
 
@@ -927,7 +938,7 @@
           'Scyther Pose 3',
           'w-full h-full object-contain pointer-events-none'
         );
-        img3.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px #bef264) drop-shadow(0 0 32px rgba(163,230,53,0.7));';
+        img3.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px #bef264) drop-shadow(0 0 22px rgba(163,230,53,0.60));';
         pose3.appendChild(img3);
         actorWrap.appendChild(pose3);
 
@@ -940,7 +951,7 @@
           'Scyther Pose 4',
           'w-full h-full object-contain pointer-events-none'
         );
-        img4.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 22px #bef264) drop-shadow(0 0 35px rgba(163,230,53,0.75));';
+        img4.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 14px #bef264) drop-shadow(0 0 22px rgba(163,230,53,0.60));';
         pose4.appendChild(img4);
         actorWrap.appendChild(pose4);
 
@@ -951,7 +962,7 @@
         applySpeed(glintCross, 0.38);
         glintCross.style.animationDelay = (1.26 / globalSpeed) + 's';
         glintCross.innerHTML = `
-          <svg width="28" height="28" viewBox="0 0 32 32" style="overflow:visible;filter:drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 20px #a3e635)">
+          <svg width="22" height="22" viewBox="0 0 32 32" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 16px #a3e635)">
             <polygon points="16,0 19,12 32,16 19,20 16,32 13,20 0,16 13,12" fill="#ffffff" />
             <path d="M 6 6 L 26 26 M 26 6 L 6 26" stroke="#fef08a" stroke-width="1.8" stroke-linecap="round" opacity="0.9" />
             <circle cx="16" cy="16" r="3.5" fill="#fef08a" />
@@ -966,7 +977,7 @@
         applySpeed(glintL, 0.35);
         glintL.style.animationDelay = (1.22 / globalSpeed) + 's';
         glintL.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #bef264)">
+          <svg width="16" height="16" viewBox="0 0 24 24" style="overflow:visible;filter:drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #bef264)">
             <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
             <circle cx="12" cy="12" r="2.8" fill="#fef08a" />
           </svg>
@@ -979,7 +990,7 @@
         applySpeed(glintR, 0.35);
         glintR.style.animationDelay = (1.30 / globalSpeed) + 's';
         glintR.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #bef264)">
+          <svg width="16" height="16" viewBox="0 0 24 24" style="overflow:visible;filter:drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #bef264)">
             <polygon points="12,0 15,9 24,12 15,15 12,24 9,15 0,12 9,9" fill="#ffffff" />
             <circle cx="12" cy="12" r="2.8" fill="#fef08a" />
           </svg>
@@ -1015,7 +1026,7 @@
 
       // Layer 3: 3D Cylindrical Orbiting Spectral Blades (Decoupled centering + rotating inner container)
       const blades = document.createElement('div');
-      blades.style.cssText = 'position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:35;';
+      blades.style.cssText = 'position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:140px;height:140px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:35;';
       
       const bladesInner = document.createElement('div');
       bladesInner.style.cssText = 'position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;animation:gbaScytherOrbitBlades cubic-bezier(0.25,0.85,0.35,1) forwards;transform-origin:center center;';
@@ -1032,24 +1043,24 @@
           </defs>
         </svg>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:rotate(0deg);pointer-events:none;">
-          <div style="transform:translateY(-66px) rotate(-12deg);">
-            <svg width="24" height="42" viewBox="0 0 24 42" style="overflow:visible;filter:drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 20px #a3e635)">
+          <div style="transform:translateY(-46px) rotate(-12deg);">
+            <svg width="18" height="32" viewBox="0 0 24 42" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635)">
               <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad_prev)" />
               <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.9" />
             </svg>
           </div>
         </div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:rotate(120deg);pointer-events:none;">
-          <div style="transform:translateY(-66px) rotate(-12deg);">
-            <svg width="24" height="42" viewBox="0 0 24 42" style="overflow:visible;filter:drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 20px #a3e635)">
+          <div style="transform:translateY(-46px) rotate(-12deg);">
+            <svg width="18" height="32" viewBox="0 0 24 42" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635)">
               <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad_prev)" />
               <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.9" />
             </svg>
           </div>
         </div>
         <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform:rotate(240deg);pointer-events:none;">
-          <div style="transform:translateY(-66px) rotate(-12deg);">
-            <svg width="24" height="42" viewBox="0 0 24 42" style="overflow:visible;filter:drop-shadow(0 0 12px #ffffff) drop-shadow(0 0 20px #a3e635)">
+          <div style="transform:translateY(-46px) rotate(-12deg);">
+            <svg width="18" height="32" viewBox="0 0 24 42" style="overflow:visible;filter:drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #a3e635)">
               <path d="M 12 0 C 14 10, 24 28, 18 42 C 14 32, 4 18, 12 0 Z" fill="url(#scytherBladeGrad_prev)" />
               <path d="M 13 4 C 14 12, 21 26, 17 38" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.9" />
             </svg>
@@ -1062,15 +1073,15 @@
       // Layer 5: Ki Sharpening Glints (Hit only)
       if (!whiffed) {
         const glints = [
-          { x: -38, y: -24, delay: 0.42, s: 12 },
-          { x: 42, y: -18, delay: 0.52, s: 15 },
-          { x: -26, y: 32, delay: 0.62, s: 11 },
-          { x: 36, y: 28, delay: 0.74, s: 14 },
-          { x: 0, y: -46, delay: 0.48, s: 16 }
+          { x: -30, y: -16, delay: 0.42, s: 10 },
+          { x: 32, y: -12, delay: 0.52, s: 12 },
+          { x: -20, y: 22, delay: 0.62, s: 9 },
+          { x: 26, y: 18, delay: 0.74, s: 11 },
+          { x: 0, y: -26, delay: 0.48, s: 13 }
         ];
         glints.forEach((g) => {
           const glEl = document.createElement('div');
-          glEl.style.cssText = `position:absolute;left:calc(50% + ${g.x}px);top:calc(38% + ${g.y}px);transform:translate(-50%,-50%);pointer-events:none;z-index:40;animation:gbaScytherKiGlints ease-out forwards;opacity:0;`;
+          glEl.style.cssText = `position:absolute;left:calc(50% + ${g.x}px);top:calc(48% + ${g.y}px);transform:translate(-50%,-50%);pointer-events:none;z-index:40;animation:gbaScytherKiGlints ease-out forwards;opacity:0;`;
           applySpeed(glEl, 1.65);
           glEl.style.animationDelay = (g.delay / globalSpeed) + 's';
           glEl.innerHTML = `
@@ -1098,37 +1109,40 @@
         stage.appendChild(shake);
       }
 
-      // Layer 1: Gravitational Space-Time Collapse Floor (Strictly Centered)
+      // Layer 1: Gravitational Space-Time Collapse Floor (Atmospheric Ground Ionization — Zero CAD Borders)
       const voidWrap = document.createElement('div');
-      voidWrap.style.cssText = 'position:absolute;bottom:12px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:15;display:flex;align-items:center;justify-content:center;';
+      voidWrap.style.cssText = 'position:absolute;bottom:6px;left:50%;transform:translateX(-50%);pointer-events:none;z-index:15;display:flex;align-items:center;justify-content:center;';
       const voidFloor = document.createElement('div');
-      voidFloor.style.cssText = 'pointer-events:none;animation:gbaMewtwoVoidFloor cubic-bezier(0.2,0.9,0.28,1) forwards;';
+      voidFloor.style.cssText = 'pointer-events:none;animation:gbaMewtwoVoidFloor cubic-bezier(0.2,0.9,0.28,1) forwards;position:relative;display:flex;align-items:center;justify-content:center;';
       applySpeed(voidFloor, 1.75);
-      voidFloor.innerHTML = '<div style="width:200px;height:52px;border-radius:9999px;background:linear-gradient(to right, rgba(59,7,100,0.1), rgba(30,27,75,0.7), rgba(59,7,100,0.1));filter:blur(4px);border:1px solid rgba(168,85,247,0.3);box-shadow:0 0 36px #581c87;"></div>';
+      voidFloor.innerHTML = `
+        <div style="width:170px;height:48px;border-radius:9999px;background:radial-gradient(ellipse 70% 50% at 50% 50%, rgba(147,51,234,0.38) 0%, rgba(88,28,135,0.22) 42%, rgba(59,7,100,0.04) 72%, transparent 100%);filter:blur(12px);pointer-events:none;"></div>
+        <div style="position:absolute;width:116px;height:26px;border-radius:9999px;background:radial-gradient(ellipse 65% 45% at 50% 50%, rgba(240,171,252,0.68) 0%, rgba(217,70,239,0.36) 38%, rgba(168,85,247,0.12) 68%, transparent 100%);filter:blur(6px);pointer-events:none;"></div>
+      `;
       voidWrap.appendChild(voidFloor);
       stage.appendChild(voidWrap);
 
       // Layer 2: Natural Fluid Dynamics Psionic Miasma & Viscous Volumetric Ether (Deep Background z-20)
       const mistWrap = document.createElement('div');
-      mistWrap.style.cssText = `position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '140px' : '230px'};height:${whiffed ? '160px' : '280px'};pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;`;
+      mistWrap.style.cssText = 'position:absolute;inset:0;border-radius:12px;overflow:hidden;pointer-events:none;z-index:20;';
       
       // Unified Deep Atmospheric Ether (Smooth radial background aura without horizontal smudges)
       const auraBack = document.createElement('div');
-      auraBack.style.cssText = `position:absolute;top:46%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '140px' : '230px'};height:${whiffed ? '170px' : '260px'};background:radial-gradient(circle at 50% 46%, rgba(147,51,234,0.25) 0%, rgba(126,34,206,0.14) 45%, rgba(59,7,100,0.03) 75%, transparent 100%);filter:blur(28px);animation:gbaMewtwoAuraBreathe ease-in-out forwards;pointer-events:none;`;
+      auraBack.style.cssText = `position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:100%;height:${whiffed ? '140px' : '200px'};border-radius:9999px;background:radial-gradient(ellipse 90% 70% at 50% 46%, rgba(147,51,234,0.22) 0%, rgba(126,34,206,0.12) 45%, rgba(59,7,100,0.02) 75%, transparent 100%);filter:blur(20px);animation:gbaMewtwoAuraBreathe ease-in-out forwards;pointer-events:none;`;
       applySpeed(auraBack, 1.75);
       mistWrap.appendChild(auraBack);
 
       // Cinematic Psionic Horizontal Anamorphic Flare Beam (Across waist/pelvis)
       const auraBeam = document.createElement('div');
-      auraBeam.style.cssText = `position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '120px' : '190px'};height:8px;background:radial-gradient(ellipse 80% 100% at 50% 50%, rgba(240,171,252,0.60) 0%, rgba(192,38,211,0.30) 45%, rgba(126,34,206,0.10) 75%, transparent 100%);filter:blur(3px);animation:gbaMewtwoAuraBreathe ease-in-out forwards;pointer-events:none;`;
+      auraBeam.style.cssText = `position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:85%;height:6px;background:radial-gradient(ellipse 80% 100% at 50% 50%, rgba(240,171,252,0.60) 0%, rgba(192,38,211,0.30) 45%, rgba(126,34,206,0.10) 75%, transparent 100%);filter:blur(2.5px);animation:gbaMewtwoAuraBreathe ease-in-out forwards;pointer-events:none;`;
       applySpeed(auraBeam, 1.75);
       mistWrap.appendChild(auraBeam);
 
       // Calves & Lower Body Psionic Ground Ether (Rising from feet/shin level directly centered)
       const calfEther = document.createElement('div');
-      calfEther.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);pointer-events:none;animation:gbaMewtwoCalfEther cubic-bezier(0.25,0.8,0.25,1) forwards;';
+      calfEther.style.cssText = 'position:absolute;bottom:4px;left:50%;transform:translateX(-50%);pointer-events:none;animation:gbaMewtwoCalfEther cubic-bezier(0.25,0.8,0.25,1) forwards;';
       applySpeed(calfEther, 1.75);
-      calfEther.innerHTML = '<div style="width:192px;height:56px;border-radius:9999px;background:linear-gradient(to top, rgba(59,7,100,0.45), rgba(192,38,211,0.25), transparent);filter:blur(8px);"></div>';
+      calfEther.innerHTML = '<div style="width:144px;height:48px;border-radius:9999px;background:linear-gradient(to top, rgba(59,7,100,0.30), rgba(192,38,211,0.15), transparent);filter:blur(12px);pointer-events:none;"></div>';
       mistWrap.appendChild(calfEther);
 
       // Backward compatibility anchor for test runners
@@ -1138,10 +1152,10 @@
 
       // Secondary Deep Ethereal Parallax Counter-Vortex (Behind primary smoke, counter-swirling for 3D depth)
       const mistR = document.createElement('div');
-      mistR.style.cssText = `position:absolute;top:36%;left:50%;width:${whiffed ? '135px' : '215px'};height:${whiffed ? '160px' : '255px'};pointer-events:none;animation:gbaMewtwoMistPlumeR cubic-bezier(0.22,0.8,0.25,1) forwards;`;
+      mistR.style.cssText = `position:absolute;top:50%;left:50%;width:${whiffed ? '96%' : '104%'};height:${whiffed ? '160px' : '220px'};pointer-events:none;animation:gbaMewtwoMistPlumeR cubic-bezier(0.22,0.8,0.25,1) forwards;`;
       applySpeed(mistR, 1.75);
       const imgMiasmaR = createResilientImg(
-        ['assets/Mewtwo_Psionic_Miasma.png', './assets/Mewtwo_Psionic_Miasma.png', '/assets/Mewtwo_Psionic_Miasma.png', '../public/assets/Mewtwo_Psionic_Miasma.png'],
+        ['assets/Mewtwo_Psionic_Miasma_Anim.webp', './assets/Mewtwo_Psionic_Miasma_Anim.webp', '/assets/Mewtwo_Psionic_Miasma_Anim.webp', '../public/assets/Mewtwo_Psionic_Miasma_Anim.webp'],
         'Mewtwo Psionic Smoke Parallax',
         'w-full h-full object-contain pointer-events-none'
       );
@@ -1149,12 +1163,12 @@
       mistR.appendChild(imgMiasmaR);
       mistWrap.appendChild(mistR);
 
-      // Primary Amorphous Psionic Smoke Nebula (The authentic vortex smoke from reference - dispersing, expanding, ascending)
+      // Primary Amorphous Psionic Smoke Nebula (Borderless across card horizontal width)
       const mistL = document.createElement('div');
-      mistL.style.cssText = `position:absolute;top:36%;left:50%;width:${whiffed ? '145px' : '230px'};height:${whiffed ? '170px' : '270px'};pointer-events:none;animation:gbaMewtwoMistPlumeL cubic-bezier(0.2,0.8,0.25,1) forwards;`;
+      mistL.style.cssText = `position:absolute;top:50%;left:50%;width:${whiffed ? '96%' : '104%'};height:${whiffed ? '165px' : '225px'};pointer-events:none;animation:gbaMewtwoMistPlumeL cubic-bezier(0.2,0.8,0.25,1) forwards;`;
       applySpeed(mistL, 1.75);
       const imgMiasmaL = createResilientImg(
-        ['assets/Mewtwo_Psionic_Miasma.png', './assets/Mewtwo_Psionic_Miasma.png', '/assets/Mewtwo_Psionic_Miasma.png', '../public/assets/Mewtwo_Psionic_Miasma.png'],
+        ['assets/Mewtwo_Psionic_Miasma_Anim.webp', './assets/Mewtwo_Psionic_Miasma_Anim.webp', '/assets/Mewtwo_Psionic_Miasma_Anim.webp', '../public/assets/Mewtwo_Psionic_Miasma_Anim.webp'],
         'Mewtwo Psionic Smoke Miasma',
         'w-full h-full object-contain pointer-events-none'
       );
@@ -1166,7 +1180,7 @@
 
       // Layer 3: Primary Visual Actor (1996 Ken Sugimori Mewtwo Stock Visual Actor)
       const actorWrap = document.createElement('div');
-      actorWrap.style.cssText = `position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '86px' : '120px'};height:${whiffed ? '112px' : '156px'};pointer-events:none;z-index:30;`;
+      actorWrap.style.cssText = `position:absolute;top:48%;left:50%;transform:translate(-50%,-50%);width:${whiffed ? '74px' : '100px'};height:${whiffed ? '98px' : '132px'};pointer-events:none;z-index:30;`;
       const actorInner = document.createElement('div');
       actorInner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;animation:gbaMewtwoPsychicActor cubic-bezier(0.18,0.9,0.28,1) forwards;';
       applySpeed(actorInner, 1.75);
@@ -1175,14 +1189,14 @@
         'Mewtwo Psychic Levitation',
         'w-full h-full object-contain pointer-events-none'
       );
-      imgMew.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px #c026d3) drop-shadow(0 0 12px #3b0764);';
+      imgMew.style.cssText = 'width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 16px #c026d3) drop-shadow(0 0 10px #3b0764);';
       actorInner.appendChild(imgMew);
       actorWrap.appendChild(actorInner);
       stage.appendChild(actorWrap);
 
       // Layer 4: Hyper-Dense Psychokinetic Singularity Core & Telekinetic Wave Shells
       const coreWrap = document.createElement('div');
-      coreWrap.style.cssText = 'position:absolute;top:calc(38% - 20px);left:calc(50% - 28px);transform:translate(-50%,-50%);pointer-events:none;z-index:35;display:flex;align-items:center;justify-content:center;';
+      coreWrap.style.cssText = 'position:absolute;top:calc(48% - 14px);left:calc(50% - 4px);transform:translate(-50%,-50%);pointer-events:none;z-index:35;display:flex;align-items:center;justify-content:center;';
 
       if (!whiffed) {
         // Telekinetic Wave Shell 1: Expanding Feathered Shockwave Shell
@@ -1190,7 +1204,7 @@
         shock1.style.cssText = 'position:absolute;pointer-events:none;animation:gbaMewtwoPsychicShock cubic-bezier(0.2,0.8,0.35,1) forwards;opacity:0;';
         applySpeed(shock1, 1.75);
         shock1.innerHTML = `
-          <svg width="160" height="160" viewBox="0 0 160 160" style="overflow:visible">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="overflow:visible">
             <defs>
               <radialGradient id="mewShockGrad1_prev" cx="50%" cy="50%" r="50%">
                 <stop offset="68%" stop-color="#ffffff" stop-opacity="0" />
@@ -1199,7 +1213,7 @@
                 <stop offset="100%" stop-color="#9333ea" stop-opacity="0" />
               </radialGradient>
             </defs>
-            <circle cx="80" cy="80" r="72" fill="url(#mewShockGrad1_prev)" style="filter:drop-shadow(0 0 12px #d946ef);" />
+            <circle cx="60" cy="60" r="54" fill="url(#mewShockGrad1_prev)" style="filter:drop-shadow(0 0 10px #d946ef);" />
           </svg>
         `;
         coreWrap.appendChild(shock1);
@@ -1209,7 +1223,7 @@
         shock2.style.cssText = 'position:absolute;pointer-events:none;animation:gbaMewtwoPsychicShock2 cubic-bezier(0.2,0.8,0.35,1) forwards;opacity:0;';
         applySpeed(shock2, 1.75);
         shock2.innerHTML = `
-          <svg width="160" height="160" viewBox="0 0 160 160" style="overflow:visible">
+          <svg width="120" height="120" viewBox="0 0 120 120" style="overflow:visible">
             <defs>
               <radialGradient id="mewShockGrad2_prev" cx="50%" cy="50%" r="50%">
                 <stop offset="72%" stop-color="#ffffff" stop-opacity="0" />
@@ -1218,7 +1232,7 @@
                 <stop offset="100%" stop-color="#581c87" stop-opacity="0" />
               </radialGradient>
             </defs>
-            <circle cx="80" cy="80" r="74" fill="url(#mewShockGrad2_prev)" style="filter:drop-shadow(0 0 10px #c026d3);" />
+            <circle cx="60" cy="60" r="54" fill="url(#mewShockGrad2_prev)" style="filter:drop-shadow(0 0 8px #c026d3);" />
           </svg>
         `;
         coreWrap.appendChild(shock2);
@@ -1229,7 +1243,7 @@
       coreInner.style.cssText = 'pointer-events:none;display:flex;align-items:center;justify-content:center;animation:gbaMewtwoSingularityCore cubic-bezier(0.2,0.9,0.28,1) forwards;';
       applySpeed(coreInner, 1.75);
       coreInner.innerHTML = `
-        <svg width="${whiffed ? '68' : '100'}" height="${whiffed ? '68' : '100'}" viewBox="0 0 100 100" style="overflow:visible">
+        <svg width="${whiffed ? '44' : '64'}" height="${whiffed ? '44' : '64'}" viewBox="0 0 100 100" style="overflow:visible">
           <defs>
             <radialGradient id="mewCoreGrad_prev" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stop-color="#ffffff" />
@@ -1246,8 +1260,8 @@
             </radialGradient>
           </defs>
           <circle cx="50" cy="50" r="48" fill="url(#mewCoronaGrad_prev)" style="filter:blur(3px);" />
-          <circle cx="50" cy="50" r="36" fill="url(#mewCoreGrad_prev)" style="filter:drop-shadow(0 0 24px #d946ef) drop-shadow(0 0 36px #ffffff);" />
-          <circle cx="50" cy="50" r="14" fill="#ffffff" style="filter:drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 8px #fae8ff);" />
+          <circle cx="50" cy="50" r="36" fill="url(#mewCoreGrad_prev)" style="filter:drop-shadow(0 0 18px #d946ef) drop-shadow(0 0 24px #ffffff);" />
+          <circle cx="50" cy="50" r="14" fill="#ffffff" style="filter:drop-shadow(0 0 10px #ffffff) drop-shadow(0 0 6px #fae8ff);" />
           <circle cx="50" cy="50" r="6" fill="#ffffff" />
         </svg>
       `;
@@ -1257,10 +1271,10 @@
       // Right Hand Psionic After-Vapor Smoke (Gentle curling vapor post-detonation: 0.90s - 1.75s)
       if (!whiffed) {
         const handVapor = document.createElement('div');
-        handVapor.style.cssText = 'position:absolute;top:calc(38% - 16px);left:calc(50% - 24px);transform:translate(-50%,-50%);pointer-events:none;z-index:36;animation:gbaMewtwoHandVapor ease-out forwards;';
+        handVapor.style.cssText = 'position:absolute;top:calc(48% - 12px);left:calc(50% - 14px);transform:translate(-50%,-50%);pointer-events:none;z-index:36;animation:gbaMewtwoHandVapor 1.75s ease-out forwards;';
         applySpeed(handVapor, 1.75);
         handVapor.innerHTML = `
-          <svg width="48" height="76" viewBox="0 0 48 76" style="overflow:visible">
+          <svg width="40" height="64" viewBox="0 0 48 76" style="overflow:visible">
             <defs>
               <linearGradient id="mewHandSmokeGrad_prev" x1="0%" y1="100%" x2="40%" y2="0%">
                 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
@@ -1270,46 +1284,46 @@
                 <stop offset="100%" stop-color="#581c87" stop-opacity="0" />
               </linearGradient>
             </defs>
-            <path d="M 24 72 C 20 58, 28 46, 22 34 C 17 24, 25 14, 21 2 C 27 10, 31 22, 26 32 C 32 44, 26 58, 24 72 Z" fill="url(#mewHandSmokeGrad_prev)" style="filter:blur(2.5px);" />
-            <path d="M 23 70 C 27 56, 19 44, 24 32 C 27 22, 22 12, 25 4" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" fill="none" style="filter:blur(1.5px);opacity:0.6;" />
+            <path d="M 24 72 C 20 58, 28 46, 22 34 C 17 24, 25 14, 21 2 C 27 10, 31 22, 26 32 C 32 44, 26 58, 24 72 Z" fill="url(#mewHandSmokeGrad_prev)" style="filter:blur(2px);" />
+            <path d="M 23 70 C 27 56, 19 44, 24 32 C 27 22, 22 12, 25 4" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" fill="none" style="filter:blur(1.2px);opacity:0.6;" />
           </svg>
         `;
         stage.appendChild(handVapor);
       }
 
-      // Layer 5: Anime Energy Gathering Convergence Motes (Accelerating from feet/calves to Psyball Core)
+      // Layer 5: Anime Energy Gathering Convergence Motes (Accelerating to Psyball Core)
       if (!whiffed) {
         const motesWrap = document.createElement('div');
-        motesWrap.style.cssText = 'position:absolute;top:calc(38% - 20px);left:calc(50% - 28px);transform:translate(-50%,-50%);width:1px;height:1px;pointer-events:none;z-index:38;';
+        motesWrap.style.cssText = 'position:absolute;top:calc(48% - 14px);left:calc(50% - 4px);transform:translate(-50%,-50%);width:1px;height:1px;pointer-events:none;z-index:38;';
 
         // Central Core Energy Absorption Flash: Ignites when motes slam into the core (0.32s - 0.68s)
         const absorbFlash = document.createElement('div');
-        absorbFlash.style.cssText = 'position:absolute;width:32px;height:32px;left:0;top:0;margin-left:-16px;margin-top:-16px;border-radius:9999px;background:radial-gradient(circle, #ffffff 0%, #fae8ff 40%, #e879f9 70%, transparent 100%);pointer-events:none;opacity:0;';
+        absorbFlash.style.cssText = 'position:absolute;width:28px;height:28px;left:0;top:0;margin-left:-14px;margin-top:-14px;border-radius:9999px;background:radial-gradient(circle, #ffffff 0%, #fae8ff 40%, #e879f9 70%, transparent 100%);pointer-events:none;opacity:0;';
         absorbFlash.style.animation = `gbaMewtwoCoreAbsorbFlash ${1.75 / globalSpeed}s ease-out forwards`;
         motesWrap.appendChild(absorbFlash);
 
         const motesData = [
           // Stream A: Left Pedestal & Left Foot (curving smoothly inward across left hip: arrivals 0.84s - 1.08s)
-          { id: 1,  dist: 142, rot0:  24, drot: -32, size: 3.8, delay: 0.02, dur: 0.82 },
-          { id: 2,  dist: 132, rot0:  20, drot: -28, size: 3.2, delay: 0.06, dur: 0.81 },
-          { id: 3,  dist: 146, rot0:  28, drot: -36, size: 4.0, delay: 0.11, dur: 0.83 },
-          { id: 4,  dist: 125, rot0:  18, drot: -25, size: 3.0, delay: 0.18, dur: 0.80 },
-          { id: 5,  dist: 138, rot0:  26, drot: -34, size: 3.6, delay: 0.26, dur: 0.82 },
+          { id: 1,  dist: 86, rot0:  24, drot: -32, size: 3.2, delay: 0.02, dur: 0.82 },
+          { id: 2,  dist: 78, rot0:  20, drot: -28, size: 2.8, delay: 0.06, dur: 0.81 },
+          { id: 3,  dist: 90, rot0:  28, drot: -36, size: 3.5, delay: 0.11, dur: 0.83 },
+          { id: 4,  dist: 72, rot0:  18, drot: -25, size: 2.6, delay: 0.18, dur: 0.80 },
+          { id: 5,  dist: 82, rot0:  26, drot: -34, size: 3.0, delay: 0.26, dur: 0.82 },
 
           // Stream B: Center Ground & Calves/Spine (gentle ascending weave: arrivals 0.86s - 1.12s)
-          { id: 6,  dist: 148, rot0:  -4, drot:  18, size: 4.2, delay: 0.04, dur: 0.82 },
-          { id: 7,  dist: 136, rot0:   3, drot: -16, size: 3.4, delay: 0.09, dur: 0.81 },
-          { id: 8,  dist: 144, rot0:  -2, drot:  15, size: 3.8, delay: 0.15, dur: 0.83 },
-          { id: 9,  dist: 128, rot0:   4, drot: -18, size: 3.1, delay: 0.21, dur: 0.80 },
-          { id: 10, dist: 140, rot0:  -5, drot:  20, size: 3.5, delay: 0.25, dur: 0.82 },
-          { id: 11, dist: 122, rot0:   2, drot: -14, size: 2.8, delay: 0.30, dur: 0.82 },
+          { id: 6,  dist: 94, rot0:  -4, drot:  18, size: 3.6, delay: 0.04, dur: 0.82 },
+          { id: 7,  dist: 80, rot0:   3, drot: -16, size: 2.8, delay: 0.09, dur: 0.81 },
+          { id: 8,  dist: 88, rot0:  -2, drot:  15, size: 3.2, delay: 0.15, dur: 0.83 },
+          { id: 9,  dist: 74, rot0:   4, drot: -18, size: 2.6, delay: 0.21, dur: 0.80 },
+          { id: 10, dist: 84, rot0:  -5, drot:  20, size: 3.0, delay: 0.25, dur: 0.82 },
+          { id: 11, dist: 68, rot0:   2, drot: -14, size: 2.4, delay: 0.30, dur: 0.82 },
 
           // Stream C: Right Pedestal & Tail Base (curving smoothly inward across right flank: arrivals 0.86s - 1.13s)
-          { id: 12, dist: 140, rot0: -22, drot:  30, size: 3.6, delay: 0.05, dur: 0.81 },
-          { id: 13, dist: 130, rot0: -18, drot:  26, size: 3.2, delay: 0.10, dur: 0.81 },
-          { id: 14, dist: 145, rot0: -26, drot:  34, size: 4.0, delay: 0.16, dur: 0.83 },
-          { id: 15, dist: 126, rot0: -16, drot:  24, size: 2.9, delay: 0.23, dur: 0.81 },
-          { id: 16, dist: 135, rot0: -24, drot:  32, size: 3.5, delay: 0.30, dur: 0.83 },
+          { id: 12, dist: 84, rot0: -22, drot:  30, size: 3.2, delay: 0.05, dur: 0.81 },
+          { id: 13, dist: 76, rot0: -18, drot:  26, size: 2.8, delay: 0.10, dur: 0.81 },
+          { id: 14, dist: 88, rot0: -26, drot:  34, size: 3.5, delay: 0.16, dur: 0.83 },
+          { id: 15, dist: 72, rot0: -16, drot:  24, size: 2.5, delay: 0.23, dur: 0.81 },
+          { id: 16, dist: 80, rot0: -24, drot:  32, size: 3.0, delay: 0.30, dur: 0.83 },
         ];
 
         motesData.forEach(mote => {
@@ -1326,6 +1340,39 @@
         });
 
         stage.appendChild(motesWrap);
+      }
+    }
+
+    let isLargeScale = false;
+    let isClipped = false;
+
+    function toggleCardScale() {
+      isLargeScale = !isLargeScale;
+      document.querySelectorAll('.card-stage').forEach(el => {
+        if (isLargeScale) {
+          el.classList.add('size-large');
+        } else {
+          el.classList.remove('size-large');
+        }
+      });
+      const btn = document.getElementById('btn-scale');
+      if (btn) {
+        btn.textContent = isLargeScale ? '📐 Ölçek: Genişletilmiş (250x344)' : '📐 Ölçek: Oyun İçi (180x248)';
+      }
+    }
+
+    function toggleOverflow() {
+      isClipped = !isClipped;
+      document.querySelectorAll('.card-stage').forEach(el => {
+        if (isClipped) {
+          el.classList.add('clipped-overflow');
+        } else {
+          el.classList.remove('clipped-overflow');
+        }
+      });
+      const btn = document.getElementById('btn-overflow');
+      if (btn) {
+        btn.textContent = isClipped ? '🔍 Taşma: Kırpılmış (Clipped)' : '🔍 Taşma: Serbest (Bleed Check)';
       }
     }
 
