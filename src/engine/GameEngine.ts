@@ -2369,9 +2369,15 @@ export class GameEngine {
     } else if (attackName === 'flail') {
       baseDamage = attacker.damage;
       GameEngine.addLog(next, `🐟 Flail dealt damage equal to damage taken: ${baseDamage} damage!`, 'action');
-    } else if (attackName === 'psychic' && attacker.card.number === 10) {
+    } else if (attackName === 'psychic' && (attacker.card.number === 10 || attacker.card.name.includes('Mewtwo'))) {
       const oppEnergyCount = defender.attachedEnergy.length;
       baseDamage = 10 + oppEnergyCount * 10;
+      // Enhancer intensity: baseline 10 dmg = 1.0 intensity; each attached energy (+10 dmg) adds +0.10 intensity.
+      // (10 dmg → 1.0, 20 dmg → 1.1, 30 dmg → 1.2, 40 dmg → 1.3, etc.)
+      fxIntensity = 1.0 + Math.max(0, baseDamage - 10) * 0.01;
+      if (oppEnergyCount > 0) {
+        GameEngine.addLog(next, `🔮 Psychic damage boosted by opponent's ${oppEnergyCount} attached Energy: +${oppEnergyCount * 10} damage (${baseDamage} total)!`, 'action');
+      }
     } else if (attackName === 'meditate') {
       baseDamage = 20 + defender.damage;
     } else if (attackName === 'rage') {

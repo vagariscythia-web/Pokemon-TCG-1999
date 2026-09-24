@@ -13299,17 +13299,40 @@ html, body {
 
 /* 1. MEWTWO: PSYCHIC (5-Layer Psionic Singularity, Levitation & Volumetric Ether — 1.75s) */
 
-/* Screen / Card Telekinetic Distortion Shudder Tremor */
+/* Screen / Card Telekinetic Distortion Shudder Tremor (Detonation Recoil @ 66%) */
 @keyframes gbaMagneticHumCardShake {
   0%, 16%  { transform: translate(0, 0); }
-  22%      { transform: translate(-1px, 0.5px); }
-  28%      { transform: translate(1px, -0.8px); }
-  34%      { transform: translate(-1.5px, 1.2px) rotate(-0.2deg); }
-  40%      { transform: translate(1.5px, -1px) rotate(0.2deg); }
-  48%      { transform: translate(-1px, 0.6px); }
-  58%      { transform: translate(0.6px, -0.4px); }
-  72%      { transform: translate(-0.3px, 0.2px); }
-  85%, 100%{ transform: translate(0, 0); }
+  24%      { transform: translate(-0.8px, 0.5px); }
+  34%      { transform: translate(1px, -0.6px); }
+  46%      { transform: translate(-1.2px, 0.8px) rotate(-0.15deg); }
+  58%      { transform: translate(1.4px, -1px) rotate(0.15deg); }
+  65%      { transform: translate(0, 0) scale(0.995); }
+  66%      { /* DETONATION SNAP (1.155s): Instantaneous recoil pulse */
+             transform: translate(-3px, 2px) rotate(-0.5deg) scale(1.008); }
+  68%      { transform: translate(2.5px, -2px) rotate(0.4deg) scale(1.005); }
+  71%      { transform: translate(-2px, 1.2px) rotate(-0.3deg); }
+  75%      { transform: translate(1.5px, -1px) rotate(0.2deg); }
+  80%      { transform: translate(-0.8px, 0.6px); }
+  88%      { transform: translate(0.4px, -0.3px); }
+  95%, 100%{ transform: translate(0, 0); }
+}
+
+/* High-Intensity Enhanced Detonation Tremor (for wi >= 1.2 / 30-40+ damage) */
+@keyframes gbaMewtwoCardShakeIntense {
+  0%, 16%  { transform: translate(0, 0); }
+  24%      { transform: translate(-1.2px, 0.8px); }
+  34%      { transform: translate(1.4px, -1px); }
+  46%      { transform: translate(-1.8px, 1.2px) rotate(-0.25deg); }
+  58%      { transform: translate(2px, -1.5px) rotate(0.25deg); }
+  65%      { transform: translate(0, 0) scale(0.99); }
+  66%      { /* MEGA DETONATION SNAP (1.155s) */
+             transform: translate(-4.5px, 3px) rotate(-0.8deg) scale(1.015); }
+  68%      { transform: translate(4px, -3px) rotate(0.7deg) scale(1.01); }
+  71%      { transform: translate(-3px, 2px) rotate(-0.5deg); }
+  75%      { transform: translate(2px, -1.5px) rotate(0.3deg); }
+  81%      { transform: translate(-1.2px, 0.8px); }
+  90%      { transform: translate(0.5px, -0.4px); }
+  96%, 100%{ transform: translate(0, 0); }
 }
 
 /* Layer 1: Gravitational Space-Time Collapse Card Floor (Strictly Centered) */
@@ -13405,24 +13428,54 @@ html, body {
   100% { opacity: 0; transform: scale(0.25) rotate(360deg); filter: blur(4px) brightness(1); }
 }
 
-/* Primary Telekinetic Wavefront (Expanding Lens Shockwave Shell: Perfectly synchronized at 66% / 1.155s) */
+/* Primary Telekinetic Blastwave Shell (Hypersonic Detonation: 65% - 96% / 1.14s - 1.68s) */
 @keyframes gbaMewtwoPsychicShock {
-  0%, 60% { opacity: 0; transform: scale(0.20); filter: blur(1px); }
-  66%     { /* DETONATION: Fires exactly as all motes unite into the supercritical core */
-            opacity: 0.98; transform: scale(0.50); filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 22px #e879f9); }
-  76%     { opacity: 0.85; transform: scale(0.85); filter: drop-shadow(0 0 18px #c026d3); }
-  86%     { opacity: 0.40; transform: scale(1.15); filter: drop-shadow(0 0 12px #a855f7) blur(2px); }
-  94%     { opacity: 0.12; transform: scale(1.30); filter: blur(3.5px); }
-  100%    { opacity: 0; transform: scale(1.40); filter: blur(5px); }
+  0%, 64% { opacity: 0; transform: scale(0.20); filter: blur(2px); }
+  66%     { /* DETONATION SNAP: Instantaneous supercritical burst @ 1.155s */
+            opacity: 1; transform: scale(0.48); filter: drop-shadow(0 0 16px #ffffff) drop-shadow(0 0 28px #e879f9) brightness(1.8); }
+  72%     { opacity: 0.95; transform: scale(0.72) rotate(1.5deg); filter: drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 22px #d946ef) brightness(1.4); }
+  80%     { opacity: 0.70; transform: scale(0.95) rotate(-1deg); filter: drop-shadow(0 0 12px #c026d3) blur(1px) brightness(1.15); }
+  88%     { opacity: 0.35; transform: scale(1.08) rotate(0.5deg); filter: drop-shadow(0 0 8px #9333ea) blur(2.5px); }
+  95%     { opacity: 0.08; transform: scale(1.14); filter: blur(4px); }
+  100%    { opacity: 0; transform: scale(1.18); filter: blur(6px); }
 }
 
-/* Secondary Harmonic Wavefront (Following wave: 73% - 100% / 1.28s - 1.75s) */
+/* Secondary Harmonic Compression Wavefront (Resonant Pulse: 71% - 98% / 1.24s - 1.715s) */
 @keyframes gbaMewtwoPsychicShock2 {
-  0%, 67% { opacity: 0; transform: scale(0.25); filter: blur(1px); }
-  73%     { opacity: 0.90; transform: scale(0.55); filter: drop-shadow(0 0 14px #f472b6); }
-  83%     { opacity: 0.70; transform: scale(0.90); filter: drop-shadow(0 0 16px #9333ea); }
-  92%     { opacity: 0.25; transform: scale(1.20); filter: drop-shadow(0 0 10px #7e22ce) blur(2.5px); }
-  100%    { opacity: 0; transform: scale(1.35); filter: blur(5px); }
+  0%, 70% { opacity: 0; transform: scale(0.22); filter: blur(2px); }
+  72%     { opacity: 0.95; transform: scale(0.42); filter: drop-shadow(0 0 12px #f472b6) drop-shadow(0 0 20px #c026d3); }
+  80%     { opacity: 0.75; transform: scale(0.78) rotate(-1.5deg); filter: drop-shadow(0 0 14px #a855f7) blur(1px); }
+  89%     { opacity: 0.38; transform: scale(0.98) rotate(1deg); filter: drop-shadow(0 0 10px #7e22ce) blur(2.5px); }
+  96%     { opacity: 0.08; transform: scale(1.10); filter: blur(4.5px); }
+  100%    { opacity: 0; transform: scale(1.14); filter: blur(6px); }
+}
+
+/* Tertiary Atmospheric Cavitation Wavefront (Harmonic Reverberation: 77% - 100% / 1.35s - 1.75s) */
+@keyframes gbaMewtwoPsychicShock3 {
+  0%, 75% { opacity: 0; transform: scale(0.20); filter: blur(3px); }
+  78%     { opacity: 0.80; transform: scale(0.45); filter: drop-shadow(0 0 10px #e879f9); }
+  86%     { opacity: 0.55; transform: scale(0.78) rotate(1deg); filter: drop-shadow(0 0 12px #9333ea) blur(1.5px); }
+  94%     { opacity: 0.20; transform: scale(1.02); filter: drop-shadow(0 0 6px #581c87) blur(3.5px); }
+  100%    { opacity: 0; transform: scale(1.12); filter: blur(5.5px); }
+}
+
+/* Luminous Detonation Lens Starburst Pop (Instantaneous core detonation: 65% - 78% / 1.14s - 1.365s) */
+@keyframes gbaMewtwoShockCenterFlash {
+  0%, 64% { opacity: 0; transform: scale(0.15); filter: blur(3px); }
+  66%     { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 38px #f0abfc) brightness(2.0); }
+  70%     { opacity: 0.75; transform: scale(0.90); filter: drop-shadow(0 0 14px #e879f9) brightness(1.4); }
+  75%     { opacity: 0.25; transform: scale(0.45); filter: blur(2px); }
+  80%, 100% { opacity: 0; transform: scale(0.10); filter: blur(4px); }
+}
+
+/* Radial Spacetime Fracture Filaments (Psionic Detonation Micro-Arcs: 65% - 82% / 1.14s - 1.435s) */
+@keyframes gbaMewtwoPsionicFilament {
+  0%, 64% { opacity: 0; transform: scale(0.2) rotate(var(--rot, 0deg)); filter: blur(1px); }
+  66%     { opacity: 1; transform: scale(0.90) rotate(var(--rot, 0deg)); filter: drop-shadow(0 0 8px #ffffff) drop-shadow(0 0 14px #e879f9) brightness(1.9); }
+  70%     { opacity: 0.92; transform: scale(1.02) rotate(calc(var(--rot, 0deg) + 2deg)); filter: drop-shadow(0 0 6px #ffffff) drop-shadow(0 0 12px #d946ef) brightness(1.5); }
+  75%     { opacity: 0.55; transform: scale(1.10) rotate(calc(var(--rot, 0deg) - 1deg)); filter: drop-shadow(0 0 4px #c026d3) blur(1px); }
+  80%     { opacity: 0.15; transform: scale(1.16) rotate(var(--rot, 0deg)); filter: blur(2px); }
+  83%, 100% { opacity: 0; transform: scale(1.20) rotate(var(--rot, 0deg)); filter: blur(3px); }
 }
 
 /* Mewtwo Right Hand Psionic After-Vapor Smoke (Rising gently from right palm post-burst: 74% - 100% / 1.295s - 1.75s) */

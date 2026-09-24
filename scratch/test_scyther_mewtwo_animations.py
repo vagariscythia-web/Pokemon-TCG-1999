@@ -85,7 +85,20 @@ def run_tests():
     assert_true("@keyframes gbaMewtwoMistPlumeR" in css_code, "Keyframe @keyframes gbaMewtwoMistPlumeR present in index.css")
     assert_true("@keyframes gbaMewtwoSingularityCore" in css_code, "Keyframe @keyframes gbaMewtwoSingularityCore present in index.css")
     assert_true("@keyframes gbaMewtwoPsychicShock" in css_code, "Keyframe @keyframes gbaMewtwoPsychicShock present in index.css")
+    assert_true("@keyframes gbaMewtwoPsychicShock2" in css_code, "Keyframe @keyframes gbaMewtwoPsychicShock2 present in index.css")
+    assert_true("@keyframes gbaMewtwoPsychicShock3" in css_code, "Keyframe @keyframes gbaMewtwoPsychicShock3 present in index.css")
+    assert_true("@keyframes gbaMewtwoShockCenterFlash" in css_code, "Keyframe @keyframes gbaMewtwoShockCenterFlash present in index.css")
+    assert_true("@keyframes gbaMewtwoPsionicFilament" in css_code, "Keyframe @keyframes gbaMewtwoPsionicFilament present in index.css")
+    assert_true("@keyframes gbaMewtwoCardShakeIntense" in css_code, "Keyframe @keyframes gbaMewtwoCardShakeIntense present in index.css")
     assert_true("@keyframes gbaMewtwoNeuralArcs" in css_code, "Keyframe @keyframes gbaMewtwoNeuralArcs present in index.css")
+
+    # 5. Check GameEngine.ts psychic fxIntensity calculation
+    engine_path = os.path.join(ROOT, "src", "engine", "GameEngine.ts")
+    with open(engine_path, "r", encoding="utf-8") as f:
+        engine_code = f.read()
+
+    assert_true("attackName === 'psychic'" in engine_code, "attackName === 'psychic' in GameEngine.ts")
+    assert_true("fxIntensity = 1.0 + Math.max(0, baseDamage - 10) * 0.01" in engine_code, "Psychic fxIntensity formula in GameEngine.ts")
 
     print(f"\nSummary: {passed}/{total} tests passed.")
     if passed == total:

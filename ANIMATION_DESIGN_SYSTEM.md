@@ -949,7 +949,13 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
   - **Mimari Çözüm:** Dört kenar kosinüs karartmasıyla en dış pikseller `alpha = 0.000` değerine çekildi; sis konteyneri kartın tüm genişliğini kaplayacak şekilde (`width: 108%`) ölçeklendi ve kart sahnesinin `overflow: hidden` sınırları doğal vizör haline getirildi (§1.K).
   - İki katmanlı ters girdap paralaksı (`gbaMewtwoMistPlumeL 1.75s` ve `gbaMewtwoMistPlumeR 1.75s`) ile derinlikli volumetrik eter elde edildi.
 - **C. Telekinetik Havada Yükselme & Tekillik Çekirdeği:**
-  - 1996 Ken Sugimori Mewtwo aktörü üzerinde `gbaMewtwoPsychicActor 1.75s` ile havada süzülme kinematiği; göğüs hizasında yoğunlaşan psişik kara delik/tekillik çekirdeği (`gbaMewtwoSingularityCore`), çift telekinetik şok kabuğu (`gbaMewtwoPsychicShock` / `Shock2`), neural deşarj arkları (`gbaMewtwoNeuralArcs`) ve sağ avuçtan yükselen psiyonik buhar (`gbaMewtwoHandVapor`) ile donatıldı.
+  - 1996 Ken Sugimori Mewtwo aktörü üzerinde `gbaMewtwoPsychicActor 1.75s` ile havada süzülme kinematiği; göğüs hizasında yoğunlaşan psişik kara delik/tekillik çekirdeği (`gbaMewtwoSingularityCore`), odak yıldız patlaması (`gbaMewtwoShockCenterFlash`), 3 kademeli telekinetik darbe dalgaları (`gbaMewtwoPsychicShock`, `Shock2`, `Shock3`), uzay-zaman kırılma arkları (`gbaMewtwoPsionicFilament`) ve sağ avuçtan yükselen psiyonik buhar (`gbaMewtwoHandVapor`) ile donatıldı.
+- **D. Hasar Orantılı Yoğunluk Ölçeklendirmesi (Intensity & Impact Scaling Factor):**
+  - **Mekanizma:** Water Gun ve Hydro Pump modellerine benzer biçimde, rakip aktif Pokémon'a takılı her Enerji kartı başına +10 hasar artışı (`baseDamage = 10 + oppEnergyCount * 10`), görsel efekt motorunda `fxIntensity = 1.0 + max(0, baseDamage - 10) * 0.01` formülüyle ölçeklendirilir.
+  - **Görsel Yansıma:**
+    - `10 Hasar (1.0x Intensity - Stock):` Standart 4 yönlü mikro-deşarj kırılması, temiz akkor beyaz-fuşya şok dalgası, standart kart sarsıntısı.
+    - `30 Hasar (1.2x Intensity):` +20% şok dalgası kalınlığı ve ışık halesi, 6 yönlü kırılma arkı, genişleyen 3. kademe kavitasyon dalgası, şiddetli kart sarsıntısı (`gbaMewtwoCardShakeIntense`).
+    - `40+ Hasar (1.3x - 1.5x Intensity):` 8 yönlü çatallanan uzay-zaman çatlakları, çekirdek parlama ve lens florışı tepe noktası, derin ekran titreşimi.
 
 ## 11. Karşılaştırma Tablosu ve Anti-Paternler
 

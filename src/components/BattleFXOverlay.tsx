@@ -21585,11 +21585,13 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
       )}
 
       {/* 66. MEWTWO PSYCHIC (5-Layer Psionic Singularity, Levitation & Volumetric Ether — 1.75s) */}
-      {fx.type === 'mewtwo_psychic' && (
-        <div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
-          style={{ animation: !fx.whiffed ? 'gbaMagneticHumCardShake 1.75s ease-out forwards' : undefined }}
-        >
+      {fx.type === 'mewtwo_psychic' && (() => {
+        const wi = Math.max(1, fx.intensity ?? 1);
+        return (
+          <div
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible"
+            style={{ animation: !fx.whiffed ? (wi >= 1.2 ? 'gbaMewtwoCardShakeIntense 1.75s ease-out forwards' : 'gbaMagneticHumCardShake 1.75s ease-out forwards') : undefined }}
+          >
           {/* Layer 1: Gravitational Space-Time Collapse Card Floor (Pure Atmospheric Ionization — Zero CAD Borders) */}
           <div className="absolute pointer-events-none z-15 bottom-1.5 left-1/2 -translate-x-1/2 flex items-center justify-center">
             <div
@@ -21729,64 +21731,199 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               transform: 'translate(-50%, -50%)'
             }}
           >
-            {/* Telekinetic Wave Shell 1: Expanding Feathered Shockwave Shell (Synchronized at 60% / 1.05s) */}
             {!fx.whiffed && (
-              <div
-                className="absolute pointer-events-none flex items-center justify-center"
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  animation: 'gbaMewtwoPsychicShock 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards',
-                  opacity: 0
-                }}
-              >
-                <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
-                  <defs>
-                    <radialGradient id="mewShockGrad1" cx="50%" cy="50%" r="50%">
-                      <stop offset="68%" stopColor="#ffffff" stopOpacity="0" />
-                      <stop offset="84%" stopColor="#ffffff" stopOpacity="0.95" />
-                      <stop offset="92%" stopColor="#e879f9" stopOpacity="0.75" />
-                      <stop offset="100%" stopColor="#9333ea" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  <circle cx="60" cy="60" r="54" fill="url(#mewShockGrad1)" style={{ filter: 'drop-shadow(0 0 10px #d946ef)' }} />
-                </svg>
-              </div>
+              <>
+                {/* Detonation Focal Pop: Instantaneous Supercritical Lens Starburst @ 66% (1.155s) */}
+                <div
+                  className="absolute pointer-events-none rounded-full flex items-center justify-center"
+                  style={{
+                    width: `${Math.round(44 * Math.min(1.3, wi))}px`,
+                    height: `${Math.round(44 * Math.min(1.3, wi))}px`,
+                    animation: 'gbaMewtwoShockCenterFlash 1.75s cubic-bezier(0.18, 0.9, 0.28, 1) forwards',
+                    background: 'radial-gradient(circle at 50% 50%, #ffffff 0%, #fae8ff 42%, #e879f9 72%, transparent 100%)',
+                    opacity: 0
+                  }}
+                />
+
+                {/* Telekinetic Wave Shell 1: Hyper-Accelerated Hypersonic Blastwave Shell (Peak @ 66% / 1.155s) */}
+                <div
+                  className="absolute pointer-events-none flex items-center justify-center"
+                  style={{
+                    width: '130px',
+                    height: '130px',
+                    animation: 'gbaMewtwoPsychicShock 1.75s cubic-bezier(0.15, 0.85, 0.25, 1) forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width="130" height="130" viewBox="0 0 130 130" className="overflow-visible">
+                    <defs>
+                      <radialGradient id="mewShockGrad1" cx="50%" cy="50%" r="50%">
+                        <stop offset="64%" stopColor="#ffffff" stopOpacity="0" />
+                        <stop offset="78%" stopColor="#ffffff" stopOpacity="0.95" />
+                        <stop offset="86%" stopColor="#f0abfc" stopOpacity="0.85" />
+                        <stop offset="94%" stopColor="#d946ef" stopOpacity="0.55" />
+                        <stop offset="100%" stopColor="#7e22ce" stopOpacity="0" />
+                      </radialGradient>
+                      <radialGradient id="mewShockAura1" cx="50%" cy="50%" r="50%">
+                        <stop offset="68%" stopColor="#e879f9" stopOpacity="0" />
+                        <stop offset="86%" stopColor="#c026d3" stopOpacity={0.25 * Math.min(1.3, wi)} />
+                        <stop offset="100%" stopColor="#581c87" stopOpacity="0" />
+                      </radialGradient>
+                    </defs>
+                    {/* Atmospheric compression halo */}
+                    <circle cx="65" cy="65" r="62" fill="url(#mewShockAura1)" style={{ filter: 'blur(3px)' }} />
+                    {/* Luminous refraction blastwave shell */}
+                    <circle
+                      cx="65"
+                      cy="65"
+                      r="56"
+                      fill="url(#mewShockGrad1)"
+                      style={{
+                        filter: `drop-shadow(0 0 ${10 * wi}px #ffffff) drop-shadow(0 0 ${18 * wi}px #e879f9) drop-shadow(0 0 ${26 * wi}px #c026d3)`
+                      }}
+                    />
+                    {/* Inner incandescent highlight refraction ring */}
+                    <circle
+                      cx="65"
+                      cy="65"
+                      r="54"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={1.2 * Math.min(1.3, wi)}
+                      opacity="0.85"
+                      style={{ filter: 'blur(0.8px)' }}
+                    />
+                  </svg>
+                </div>
+
+                {/* Telekinetic Wave Shell 2: Secondary Resonant Harmonic Compression Wavefront (Fires @ 71% / 1.24s) */}
+                <div
+                  className="absolute pointer-events-none flex items-center justify-center"
+                  style={{
+                    width: '130px',
+                    height: '130px',
+                    animation: 'gbaMewtwoPsychicShock2 1.75s cubic-bezier(0.18, 0.85, 0.28, 1) forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width="130" height="130" viewBox="0 0 130 130" className="overflow-visible">
+                    <defs>
+                      <radialGradient id="mewShockGrad2" cx="50%" cy="50%" r="50%">
+                        <stop offset="66%" stopColor="#ffffff" stopOpacity="0" />
+                        <stop offset="82%" stopColor="#fae8ff" stopOpacity="0.90" />
+                        <stop offset="90%" stopColor="#ec4899" stopOpacity="0.75" />
+                        <stop offset="96%" stopColor="#9333ea" stopOpacity="0.45" />
+                        <stop offset="100%" stopColor="#3b0764" stopOpacity="0" />
+                      </radialGradient>
+                    </defs>
+                    <circle
+                      cx="65"
+                      cy="65"
+                      r="58"
+                      fill="url(#mewShockGrad2)"
+                      style={{
+                        filter: `drop-shadow(0 0 ${8 * wi}px #f472b6) drop-shadow(0 0 ${16 * wi}px #a855f7)`
+                      }}
+                    />
+                    <circle
+                      cx="65"
+                      cy="65"
+                      r="56"
+                      fill="none"
+                      stroke="#fae8ff"
+                      strokeWidth="1.0"
+                      opacity="0.70"
+                      style={{ filter: 'blur(1px)' }}
+                    />
+                  </svg>
+                </div>
+
+                {/* Telekinetic Wave Shell 3: Tertiary Atmospheric Cavitation Wavefront (Fires @ 77% / 1.35s) */}
+                <div
+                  className="absolute pointer-events-none flex items-center justify-center"
+                  style={{
+                    width: '130px',
+                    height: '130px',
+                    animation: 'gbaMewtwoPsychicShock3 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width="130" height="130" viewBox="0 0 130 130" className="overflow-visible">
+                    <defs>
+                      <radialGradient id="mewShockGrad3" cx="50%" cy="50%" r="50%">
+                        <stop offset="70%" stopColor="#e879f9" stopOpacity="0" />
+                        <stop offset="86%" stopColor="#d946ef" stopOpacity={0.65 * Math.min(1.3, wi)} />
+                        <stop offset="94%" stopColor="#7e22ce" stopOpacity={0.35 * Math.min(1.3, wi)} />
+                        <stop offset="100%" stopColor="#3b0764" stopOpacity="0" />
+                      </radialGradient>
+                    </defs>
+                    <circle cx="65" cy="65" r="62" fill="url(#mewShockGrad3)" style={{ filter: 'blur(2.5px)' }} />
+                  </svg>
+                </div>
+
+                {/* Radial Spacetime Fracture Filaments (Psionic Detonation Micro-Arcs: 4 base + 4 extra at higher damage) */}
+                {[
+                  { angle: 32,  len: 38, d: "M 0 0 L 10 -4 L 20 3 L 29 -2 L 38 1" },
+                  { angle: 124, len: 36, d: "M 0 0 L 9 3 L 19 -4 L 28 2 L 36 -1" },
+                  { angle: 218, len: 40, d: "M 0 0 L 11 -3 L 21 4 L 31 -2 L 40 2" },
+                  { angle: 308, len: 37, d: "M 0 0 L 10 4 L 20 -3 L 29 3 L 37 -1" },
+                  ...(wi >= 1.15 ? [
+                    { angle: -14, len: 34, d: "M 0 0 L 8 -3 L 18 2 L 26 -2 L 34 1" },
+                    { angle: 76,  len: 35, d: "M 0 0 L 9 2 L 18 -3 L 27 2 L 35 -1" }
+                  ] : []),
+                  ...(wi >= 1.25 ? [
+                    { angle: 168, len: 36, d: "M 0 0 L 9 -3 L 18 3 L 28 -2 L 36 1" },
+                    { angle: 262, len: 35, d: "M 0 0 L 8 3 L 18 -3 L 27 2 L 35 -1" }
+                  ] : [])
+                ].map((arc, i) => (
+                  <div
+                    key={i}
+                    className="absolute pointer-events-none"
+                    style={{
+                      left: '50%',
+                      top: '50%',
+                      width: 0,
+                      height: 0,
+                      ['--rot' as any]: `${arc.angle}deg`,
+                      animation: 'gbaMewtwoPsionicFilament 1.75s ease-out forwards',
+                      opacity: 0
+                    }}
+                  >
+                    <svg
+                      width={arc.len + 12}
+                      height="24"
+                      viewBox={`-2 -12 ${arc.len + 12} 24`}
+                      className="overflow-visible"
+                      style={{ transform: 'translate(14px, -12px)' }}
+                    >
+                      <path
+                        d={arc.d}
+                        fill="none"
+                        stroke="#ffffff"
+                        strokeWidth={1.5}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{
+                          filter: `drop-shadow(0 0 ${4 * wi}px #ffffff) drop-shadow(0 0 ${8 * wi}px #e879f9) drop-shadow(0 0 ${12 * wi}px #c026d3)`
+                        }}
+                      />
+                    </svg>
+                  </div>
+                ))}
+              </>
             )}
 
-            {/* Telekinetic Wave Shell 2: Secondary Harmonic Expansion Wavefront */}
-            {!fx.whiffed && (
-              <div
-                className="absolute pointer-events-none flex items-center justify-center"
-                style={{
-                  width: '120px',
-                  height: '120px',
-                  animation: 'gbaMewtwoPsychicShock2 1.75s cubic-bezier(0.2, 0.8, 0.35, 1) forwards',
-                  opacity: 0
-                }}
-              >
-                <svg width="120" height="120" viewBox="0 0 120 120" className="overflow-visible">
-                  <defs>
-                    <radialGradient id="mewShockGrad2" cx="50%" cy="50%" r="50%">
-                      <stop offset="72%" stopColor="#ffffff" stopOpacity="0" />
-                      <stop offset="86%" stopColor="#f472b6" stopOpacity="0.85" />
-                      <stop offset="94%" stopColor="#a855f7" stopOpacity="0.6" />
-                      <stop offset="100%" stopColor="#581c87" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  <circle cx="60" cy="60" r="74" fill="url(#mewShockGrad2)" style={{ filter: 'drop-shadow(0 0 8px #c026d3)' }} />
-                </svg>
-              </div>
-            )}
-
-            {/* Volumetric Singularity Core (The Psyball - Synchronized ignition flash at 60% / 1.05s) */}
+            {/* Volumetric Singularity Core (The Psyball - Synchronized ignition flash at 66% / 1.155s) */}
             <div
               className="pointer-events-none flex items-center justify-center"
-              style={{ animation: 'gbaMewtwoSingularityCore 1.75s cubic-bezier(0.2, 0.9, 0.28, 1) forwards' }}
+              style={{
+                animation: 'gbaMewtwoSingularityCore 1.75s cubic-bezier(0.2, 0.9, 0.28, 1) forwards',
+                filter: `brightness(${1.0 + (wi - 1) * 0.15})`
+              }}
             >
               <svg
-                width={fx.whiffed ? "44" : "64"}
-                height={fx.whiffed ? "44" : "64"}
+                width={fx.whiffed ? "44" : `${Math.round(64 * Math.min(1.2, wi))}`}
+                height={fx.whiffed ? "44" : `${Math.round(64 * Math.min(1.2, wi))}`}
                 viewBox="0 0 100 100"
                 className="overflow-visible"
               >
@@ -21813,7 +21950,9 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   cy="50"
                   r="36"
                   fill="url(#mewtwoCoreGrad)"
-                  className="drop-shadow-[0_0_18px_#d946ef] drop-shadow-[0_0_24px_#ffffff]"
+                  style={{
+                    filter: `drop-shadow(0 0 ${18 * wi}px #d946ef) drop-shadow(0 0 ${24 * wi}px #ffffff)`
+                  }}
                 />
                 {/* Inner White-Hot Plasma Center */}
                 <circle cx="50" cy="50" r="14" fill="#ffffff" className="drop-shadow-[0_0_10px_#ffffff] drop-shadow-[0_0_6px_#fae8ff]" />
@@ -21948,8 +22087,9 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               ))}
             </div>
           )}
-        </div>
-      )}
+          </div>
+        );
+      })()}
 
       {/* 67. MEWTWO BARRIER (Mewtwo — Prismatic Hexagonal Crystalline Shield Dome) */}
       {fx.type === 'mewtwo_barrier' && (
