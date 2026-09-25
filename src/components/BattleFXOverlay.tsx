@@ -993,7 +993,7 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
     case 'poison_tick':
       return 1600;
     case 'hydro_pump_cannons':
-      return 2500; // shell 1.9s + jets 0.3s+1.4s + impact 0.9s+1.3s ≈ 2.2s + buffer
+      return 2100; // full body actor 2.1s, torrents 0.3s+1.25s=1.55s, impact dome 0.48s+1.15s=1.63s, ballistic falling droplets 0.50s+1.42s=1.92s, mist resolve 2.1s
     case 'solar_beam_charge_blast':
       return 2200;
     case 'selfdestruct_shockwave':
@@ -1377,6 +1377,12 @@ export const getFXDuration = (type: ActiveFX['type']): number => {
       return 2500;
     case 'psyshock_lite_waves':
       return 2100; // ring konveyörü 0.05+7×0.131+1.045≈2.01s, mottle 1.95s → en uzun aktif katman ~2.01s + buffer (toplam ~2.1s sabit)
+    case 'cobra_stare':
+      return 1750;
+    case 'poison_vapor':
+      return 1820;
+    case 'poison_vapor_bench':
+      return 1320;
     default:
       return 1300;
   }
@@ -1491,7 +1497,7 @@ const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'rattata_quick_attack', 'kangaskhan_comet_punch',
   'articuno_blizzard', 'zapdos_thunderbolt',
   'alakazam_confuse_ray', 'muk_sludge_deluge',
-  'mewtwo_psychic'
+  'mewtwo_psychic', 'poison_vapor'
 ]);
 
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
@@ -2673,145 +2679,422 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         </div>
       )}
 
-      {/* 7b. POISON VAPOR (Dark Arbok) - a venom mist that rolls off the Active card and keeps
-           going across the Bench. Three cloud bands travel at different speeds over the card so
-           the mass reads as drifting gas instead of one flat decal, and the bench beat below
-           carries the same cloud onto every benched Pokémon the attack damaged. */}
+      {/* 7b. POISON VAPOR (Dark Arbok) - 5-Layer Modular Architecture & Field-Wide Toxic Miasma
+           - Layer 1: Ambient Caustic Floor Pool (Deep dark green & corrosive purple pool)
+           - Layer 2: Primary Visual Actor (Arbok Toxic Maw Exhale & high-pressure venom jet)
+           - Layer 3: Caustic Boiling Shockwaves & Poison Status Flash (Multi-lobed organic ring)
+           - Layer 4: Volumetric Miasma Plumes & Rising Tendrils (3 multi-lobed Bézier billow layers)
+           - Layer 5: Boiling Toxic Bubbles, Acid Droplets & Poison Saturation (6 caustic boils + venom drops)
+      {/* 7b. POISON VAPOR (Dark Arbok) - Fluid Aerodynamic Volumetric Miasma & Centered Cobra Lunge
+           - Layer 1: Ambient Caustic Floor Pool & Card Vignette (Deep dark green & corrosive purple pool)
+           - Layer 2: Primary Visual Actor (Arbok Centered Apex Cobra Lunge & conical venom eruption jet)
+           - Layer 3: Aerodynamic Pressure Wave & Poison Status Saturation Flash (Zero CAD borders, fluid radial expansion)
+           - Layer 4: Volumetric Fluid Gas Miasma (Deep violet base plume, caustic lime core billow, turbulent eddies)
+           - Layer 5: Ballistic Caustic Spurt Particles & Boiling Acid Effervescence (Zero clip-art droplets)
+      */}
       {fx.type === 'poison_vapor' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* The hiss escaping before the cloud: a thin jet angled up from the attacker's side */}
-          <div className="absolute left-[-6px] bottom-1" style={{ animation: 'gbaVaporJet 1.25s ease-out forwards', opacity: 0 }}>
-            <svg width="70" height="46" viewBox="0 0 70 46" className="overflow-visible">
-              <path d="M2 44 C 18 38, 34 26, 62 8" fill="none" stroke="#bbf7d0" strokeWidth="7" strokeLinecap="round" opacity="0.5" />
-              <path d="M4 44 C 20 38, 36 26, 62 10" fill="none" stroke="#86efac" strokeWidth="2.5" strokeLinecap="round" opacity="0.85" />
-            </svg>
-          </div>
-
-          {/* Sickly haze that sits over the whole card while the gas rolls through (Restricted cleanly to card, HP bar 100% crisp) */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-hidden rounded-xl">
+          {/* LAYER 1: Ambient Caustic Floor Pool & Card Vignette */}
           <div
-            className="card-fx-block-overlay z-10 pointer-events-none"
+            className="absolute inset-0 rounded-xl pointer-events-none"
             style={{
-              animation: 'gbaVaporHaze 1.25s ease-in-out forwards',
+              animation: 'gbaVaporFloorPool 1.82s ease-in-out forwards',
               opacity: 0,
-              background: 'radial-gradient(ellipse at 30% 62%, rgba(132,204,22,0.30) 0%, rgba(21,128,61,0.22) 45%, rgba(88,28,135,0.20) 75%, rgba(0,0,0,0) 100%)'
+              background: 'radial-gradient(ellipse at 50% 65%, rgba(20,83,45,0.48) 0%, rgba(88,28,135,0.38) 45%, rgba(20,10,40,0.65) 85%, transparent 100%)'
             }}
           />
 
-          {/* Cloud band 1 - the widest, slowest layer, drifting left to right */}
-          <div className="absolute" style={{ animation: 'gbaVaporRollA 1.25s cubic-bezier(0.22, 0.8, 0.3, 1) forwards', opacity: 0 }}>
-            <svg width="190" height="80" viewBox="0 0 190 80" className="overflow-visible">
-              <defs>
-                <linearGradient id="vaporGradA" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#14532d" stopOpacity="0.15" />
-                  <stop offset="35%" stopColor="#4d7c0f" stopOpacity="0.85" />
-                  <stop offset="65%" stopColor="#7e22ce" stopOpacity="0.75" />
-                  <stop offset="100%" stopColor="#3b0764" stopOpacity="0.1" />
-                </linearGradient>
-                <linearGradient id="vaporGradB" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#a3e635" stopOpacity="0.1" />
-                  <stop offset="45%" stopColor="#a3e635" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#c084fc" stopOpacity="0.08" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M6 58 C 6 34, 30 22, 52 30 C 60 10, 92 8, 104 26 C 126 16, 152 28, 152 46 C 176 44, 186 60, 176 70 C 150 82, 40 82, 6 70 Z"
-                fill="url(#vaporGradA)"
+          {/* LAYER 3: Aerodynamic Pressure Shockwave & Poison Status Saturation Flash (Suppressed on whiff) */}
+          {!fx.whiffed && (
+            <>
+              {/* Organic Aerodynamic Pressure Shockwave (Zero CAD borders, solid feathered radial burst) */}
+              <div
+                className="absolute rounded-full pointer-events-none z-30 blur-[4px]"
+                style={{
+                  left: '50%',
+                  top: '52%',
+                  width: '180px',
+                  height: '140px',
+                  animation: 'gbaVaporPressureWave 1.82s cubic-bezier(0.2, 0.8, 0.25, 1) forwards',
+                  background: 'radial-gradient(ellipse at 50% 50%, rgba(190,242,100,0.35) 0%, rgba(163,230,53,0.25) 45%, rgba(126,34,206,0.18) 70%, transparent 95%)',
+                  opacity: 0
+                }}
               />
-            </svg>
-          </div>
-
-          {/* Cloud band 2 - brighter, smaller, runs the other way on top of band 1 */}
-          <div className="absolute" style={{ animation: 'gbaVaporRollB 1.25s cubic-bezier(0.22, 0.8, 0.3, 1) 0.08s forwards', opacity: 0 }}>
-            <svg width="150" height="60" viewBox="0 0 150 60" className="overflow-visible">
-              <path
-                d="M8 44 C 4 26, 26 16, 44 24 C 54 8, 84 8, 92 24 C 114 18, 134 30, 128 44 C 108 56, 30 56, 8 44 Z"
-                fill="url(#vaporGradB)"
+              {/* Poison Status Condition Saturation Flash */}
+              <div
+                className="absolute inset-0 rounded-xl pointer-events-none z-28"
+                style={{
+                  animation: 'gbaVaporPoisonSaturation 1.82s ease-out forwards',
+                  opacity: 0,
+                  background: 'radial-gradient(circle at 50% 55%, rgba(190,242,100,0.38) 0%, rgba(163,230,53,0.24) 40%, rgba(168,85,247,0.18) 70%, transparent 100%)'
+                }}
               />
-            </svg>
-          </div>
+            </>
+          )}
 
-          {/* Cloud band 3 - the pale top edge that lags behind and thins out last */}
-          <div className="absolute" style={{ animation: 'gbaVaporRollC 1.25s cubic-bezier(0.22, 0.8, 0.3, 1) 0.18s forwards', opacity: 0 }}>
-            <svg width="170" height="40" viewBox="0 0 170 40" className="overflow-visible">
-              <path d="M4 30 C 20 12, 44 20, 62 12 C 84 2, 108 14, 126 10 C 150 6, 166 18, 164 30 Z" fill="#d9f99d" opacity="0.35" />
-            </svg>
-          </div>
-
-          {/* Tendrils curling up out of the mass once it has covered the card */}
-          <div className="absolute left-[-18px] bottom-2" style={{ animation: 'gbaVaporTendril 1.25s ease-out 0.3s forwards', opacity: 0 }}>
-            <svg width="30" height="54" viewBox="0 0 30 54">
-              <path d="M15 52 C 4 40, 26 32, 14 20 C 6 12, 20 4, 16 2" fill="none" stroke="#bef264" strokeWidth="2.6" strokeLinecap="round" opacity="0.8" />
-            </svg>
-          </div>
-          <div className="absolute right-[-10px] bottom-4" style={{ animation: 'gbaVaporTendril 1.25s ease-out 0.42s forwards', opacity: 0 }}>
-            <svg width="26" height="46" viewBox="0 0 26 46">
-              <path d="M13 44 C 24 34, 4 26, 14 16 C 20 10, 10 4, 13 2" fill="none" stroke="#d8b4fe" strokeWidth="2.2" strokeLinecap="round" opacity="0.7" />
-            </svg>
-          </div>
-
-          {/* The venom spread: concentric pulse rings expanding outward from the cloud core,
-              reading as the toxin seeping into everything it touches */}
-          {[0, 1, 2].map(i => (
-            <div key={`vspread-${i}`} className="absolute" style={{ animation: `gbaVaporSpread 1.25s ease-out ${0.12 + i * 0.16}s forwards`, opacity: 0 }}>
-              <svg width={72 + i * 26} height={72 + i * 26} viewBox={`0 0 ${72 + i * 26} ${72 + i * 26}`}>
-                <circle
-                  cx={(72 + i * 26) / 2} cy={(72 + i * 26) / 2} r={(72 + i * 26) / 2 - 3}
-                  fill="none"
-                  stroke={i === 0 ? '#a3e635' : i === 1 ? '#86efac' : '#c084fc'}
-                  strokeWidth={i === 0 ? 2.5 : 1.5}
-                  strokeDasharray={i === 2 ? '5 4' : undefined}
-                  opacity={0.75 - i * 0.15}
+          {/* LAYER 4: Volumetric Fluid Gas Miasma (Suppressed on whiff — Symmetrically Balanced Bilateral Billows) */}
+          {!fx.whiffed && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-35 overflow-hidden rounded-xl">
+              {/* 4A: Deep Noxious Purple Base Plume (Rolling multi-lobed turbulent gas) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  width: '168px',
+                  height: '112px',
+                  animation: 'gbaVaporDeepPlume 1.82s cubic-bezier(0.22, 0.8, 0.3, 1) forwards',
+                  opacity: 0
+                }}
+              >
+                {/* Lobe 1 - Deep Violet Left Flank */}
+                <div
+                  className="absolute w-26 h-18 rounded-full blur-[7px]"
+                  style={{
+                    left: '12px',
+                    top: '12px',
+                    background: 'radial-gradient(ellipse, rgba(59,7,100,0.92) 0%, rgba(88,28,135,0.75) 55%, transparent 95%)'
+                  }}
                 />
-              </svg>
+                {/* Lobe 2 - Toxic Ametist Right Flank */}
+                <div
+                  className="absolute w-26 h-18 rounded-full blur-[7px]"
+                  style={{
+                    right: '12px',
+                    top: '12px',
+                    background: 'radial-gradient(ellipse, rgba(126,34,206,0.85) 0%, rgba(147,51,234,0.65) 50%, transparent 90%)'
+                  }}
+                />
+                {/* Lobe 3 - Base Floor Cushion */}
+                <div
+                  className="absolute w-36 h-16 rounded-full blur-[9px]"
+                  style={{
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    bottom: '4px',
+                    background: 'radial-gradient(ellipse, rgba(88,28,135,0.75) 0%, rgba(30,10,60,0.55) 60%, transparent 95%)'
+                  }}
+                />
+              </div>
+
+              {/* 4B: Caustic Acid Core Billow (Symmetrical Chlorine Lime Billow centered on mouth) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '48%',
+                  width: '154px',
+                  height: '102px',
+                  animation: 'gbaVaporAcidCore 1.82s cubic-bezier(0.22, 0.8, 0.3, 1) 0.08s forwards',
+                  opacity: 0
+                }}
+              >
+                {/* Left Billow Lobe */}
+                <div
+                  className="absolute w-22 h-16 rounded-full blur-[5px]"
+                  style={{
+                    left: '14px',
+                    top: '14px',
+                    background: 'radial-gradient(ellipse, rgba(236,252,203,0.95) 0%, rgba(163,230,53,0.82) 40%, rgba(63,98,18,0.5) 75%, transparent 95%)'
+                  }}
+                />
+                {/* Right Billow Lobe */}
+                <div
+                  className="absolute w-22 h-16 rounded-full blur-[5px]"
+                  style={{
+                    right: '14px',
+                    top: '14px',
+                    background: 'radial-gradient(ellipse, rgba(236,252,203,0.95) 0%, rgba(163,230,53,0.82) 40%, rgba(63,98,18,0.5) 75%, transparent 95%)'
+                  }}
+                />
+                {/* Central Downward Column */}
+                <div
+                  className="absolute w-24 h-16 rounded-full blur-[4px]"
+                  style={{
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    top: '20px',
+                    background: 'radial-gradient(ellipse, rgba(254,255,230,0.98) 0%, rgba(190,242,100,0.88) 40%, rgba(132,204,22,0.6) 70%, transparent 92%)'
+                  }}
+                />
+              </div>
+
+              {/* 4C: Swirling Turbulent Miasma Eddies */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  left: '50%',
+                  top: '45%',
+                  width: '172px',
+                  height: '114px',
+                  animation: 'gbaVaporSwirlingEddy 1.82s ease-out 0.16s forwards',
+                  opacity: 0
+                }}
+              >
+                <div
+                  className="w-full h-full rounded-full blur-[6px]"
+                  style={{
+                    background: 'radial-gradient(ellipse at 50% 50%, rgba(168,85,247,0.32) 0%, rgba(163,230,53,0.22) 50%, transparent 80%)'
+                  }}
+                />
+              </div>
             </div>
-          ))}
-          {/* Rising venom wisps curling up out of the spreading mass */}
-          <div className="absolute" style={{ animation: 'gbaVaporRise 1.25s ease-out 0.32s forwards', opacity: 0 }}>
-            <svg width="44" height="52" viewBox="0 0 44 52" className="overflow-visible">
-              <path d="M22 50 C 20 40, 26 36, 22 28 C 18 20, 26 16, 22 6" fill="none" stroke="#a3e635" strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-              <path d="M12 46 C 12 38, 16 34, 12 26 C 8 18, 14 12, 12 4" fill="none" stroke="#86efac" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-              <path d="M32 48 C 34 38, 30 34, 34 24 C 38 16, 32 10, 34 2" fill="none" stroke="#c084fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.55" />
-            </svg>
+          )}
+
+          {/* LAYER 2: Primary Visual Actor (Arbok Centered Apex Cobra Lunge — Safe-Zone Bounded) */}
+          <div
+            className="absolute pointer-events-none z-40"
+            style={{
+              left: '50%',
+              top: '24%',
+              width: fx.whiffed ? '76px' : '108px',
+              height: fx.whiffed ? '76px' : '108px',
+              animation: fx.whiffed
+                ? 'gbaArbokVaporWhiff 1.82s ease-out forwards'
+                : 'gbaArbokVaporLunge 1.82s cubic-bezier(0.18, 0.9, 0.3, 1) forwards',
+              opacity: 0
+            }}
+          >
+            {/* Authentic Ken Sugimori Arbok Poison Maw */}
+            <img
+              src="/assets/Arbok_PoisonFang_Maw.png"
+              alt="Arbok Poison Vapor"
+              className="w-full h-full object-contain select-none pointer-events-none drop-shadow-[0_0_20px_rgba(163,230,53,0.7)] drop-shadow-[0_6px_16px_rgba(88,28,135,0.75)]"
+              draggable={false}
+            />
           </div>
 
-          {/* Heavy droplets falling out of the bottom of the cloud */}
-          <div className="absolute left-2 top-3" style={{ animation: 'gbaVaporDroplet 1.25s ease-in 0.45s forwards', opacity: 0 }}>
-            <svg width="12" height="18" viewBox="0 0 12 18"><path d="M6 1 Q9 7, 9 11 A4 4 0 1 1 3 11 Q3 7, 6 1 Z" fill="#a3e635" opacity="0.85" /></svg>
-          </div>
-          <div className="absolute right-4 top-1" style={{ animation: 'gbaVaporDroplet 1.25s ease-in 0.62s forwards', opacity: 0 }}>
-            <svg width="10" height="15" viewBox="0 0 10 15"><path d="M5 1 Q8 6, 8 9 A3.2 3.2 0 1 1 2 9 Q2 6, 5 1 Z" fill="#c084fc" opacity="0.8" /></svg>
-          </div>
+          {/* Anticipation: Pre-Spurt Caustic Maw Charge Glow (0.24s–0.44s) — Aligned to open mouth/fangs at 50% */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-42"
+              style={{
+                left: '50%',
+                top: '22%',
+                transform: 'translate(-50%, -50%)',
+                animation: 'gbaArbokMawGlow 1.82s ease-out forwards',
+                opacity: 0
+              }}
+            >
+              <div className="w-8 h-8 rounded-full bg-lime-300/85 blur-[3px] shadow-[0_0_18px_#a3e635]" />
+            </div>
+          )}
+
+          {/* High-Velocity Fluid Venom Impulse Jet (Pinned to fangs at 50% 0% — Symmetrical Bilateral Aerodynamic Whisps) */}
+          {!fx.whiffed && (
+            <div
+              className="absolute pointer-events-none z-38"
+              style={{
+                left: '50%',
+                top: '22%',
+                transformOrigin: '50% 0%',
+                animation: 'gbaVaporEruptionJet 1.82s ease-out forwards',
+                opacity: 0
+              }}
+            >
+              {/* Central High-Pressure Caustic Stream Core */}
+              <div
+                className="w-14 h-30 blur-[2px] rounded-full mx-auto"
+                style={{
+                  background: 'radial-gradient(ellipse at 50% 12%, rgba(254,255,230,0.98) 0%, rgba(190,242,100,0.9) 25%, rgba(163,230,53,0.75) 45%, rgba(126,34,206,0.35) 75%, transparent 100%)'
+                }}
+              />
+              {/* Symmetrical Dual Fluid Mist Flaring Whisps */}
+              <div
+                className="absolute -left-4 top-3 w-10 h-24 blur-[3px] rounded-full -rotate-12"
+                style={{
+                  background: 'radial-gradient(ellipse, rgba(163,230,53,0.75) 0%, rgba(126,34,206,0.45) 55%, transparent 90%)'
+                }}
+              />
+              <div
+                className="absolute -right-4 top-3 w-10 h-24 blur-[3px] rounded-full rotate-12"
+                style={{
+                  background: 'radial-gradient(ellipse, rgba(163,230,53,0.75) 0%, rgba(126,34,206,0.45) 55%, transparent 90%)'
+                }}
+              />
+            </div>
+          )}
+
+          {/* LAYER 5: Ballistic Caustic Spurt Particles & Boiling Acid Effervescence (Suppressed on whiff) */}
+          {!fx.whiffed && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-45">
+              {/* 5A: Ballistic Caustic Spurt Micro-Droplets fanning out from the fangs at 50% */}
+              {[
+                { dx: '-32px', dy: '46px', delay: 0.40, s: 4.5, color: '#fef08a' },
+                { dx: '34px', dy: '48px', delay: 0.43, s: 4, color: '#bef264' },
+                { dx: '-16px', dy: '58px', delay: 0.46, s: 5, color: '#a3e635' },
+                { dx: '18px', dy: '62px', delay: 0.49, s: 4.5, color: '#d9f99d' },
+                { dx: '-44px', dy: '52px', delay: 0.52, s: 3.5, color: '#86efac' },
+                { dx: '42px', dy: '54px', delay: 0.55, s: 4, color: '#c084fc' }
+              ].map((p, i) => (
+                <div
+                  key={`pv-spurt-${i}`}
+                  className="absolute rounded-full pointer-events-none"
+                  style={{
+                    left: '50%',
+                    top: '23%',
+                    '--p-dx': p.dx,
+                    '--p-dy': p.dy,
+                    width: `${p.s}px`,
+                    height: `${p.s}px`,
+                    backgroundColor: p.color,
+                    boxShadow: `0 0 10px ${p.color}`,
+                    animation: `gbaVaporSpurtParticle 1.25s ease-out ${p.delay}s forwards`,
+                    opacity: 0
+                  } as React.CSSProperties}
+                />
+              ))}
+
+              {/* 5B: Boiling Caustic Effervescence & Micro-Bubbles in the gas pool */}
+              {[
+                { bdx: '-28px', delay: 0.52, s: 7, color: '#bef264' },
+                { bdx: '26px', delay: 0.60, s: 8, color: '#a3e635' },
+                { bdx: '-14px', delay: 0.68, s: 6, color: '#c084fc' },
+                { bdx: '32px', delay: 0.76, s: 7, color: '#86efac' },
+                { bdx: '-36px', delay: 0.84, s: 5, color: '#a855f7' },
+                { bdx: '14px', delay: 0.92, s: 6, color: '#facc15' }
+              ].map((b, i) => (
+                <div
+                  key={`pv-boil-${i}`}
+                  className="absolute rounded-full pointer-events-none"
+                  style={{
+                    left: '50%',
+                    top: '62%',
+                    '--bdx': b.bdx,
+                    width: `${b.s}px`,
+                    height: `${b.s}px`,
+                    backgroundColor: b.color,
+                    boxShadow: `0 0 8px ${b.color}`,
+                    animation: `gbaVaporBoilingBubble 1.15s ease-out ${b.delay}s forwards`,
+                    opacity: 0
+                  } as React.CSSProperties}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
 
-      {/* 7c. POISON VAPOR - BENCH (the same gas, one beat later, on each Benched Pokémon) */}
+      {/* 7c. POISON VAPOR - BENCH (Viscous Multi-Layer Miasma & Boiling Effervescence on Benched Pokémon) */}
       {fx.type === 'poison_vapor_bench' && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          <div className="absolute" style={{ animation: 'gbaVaporBenchPuff 1.1s ease-out forwards', opacity: 0 }}>
-            <svg width="96" height="60" viewBox="0 0 96 60" className="overflow-visible">
-              <path
-                d="M6 44 C 2 28, 22 18, 38 26 C 46 10, 74 12, 80 28 C 94 30, 94 46, 82 50 C 58 60, 20 58, 6 44 Z"
-                fill="#3f6212" opacity="0.72"
-              />
-              <path
-                d="M14 42 C 12 30, 28 24, 40 30 C 50 18, 70 22, 74 34 C 84 38, 80 48, 70 50 C 46 56, 24 52, 14 42 Z"
-                fill="#7e22ce" opacity="0.45"
-              />
-            </svg>
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-hidden rounded-lg">
+          {/* Layer 1: Bench Caustic Floor Aura & Card Vignette */}
+          <div
+            className="absolute inset-0 rounded-lg pointer-events-none"
+            style={{
+              animation: 'gbaVaporBenchAura 1.32s ease-in-out forwards',
+              opacity: 0,
+              background: 'radial-gradient(ellipse at 50% 60%, rgba(20,83,45,0.72) 0%, rgba(88,28,135,0.60) 50%, rgba(15,23,42,0.78) 85%, transparent 100%)'
+            }}
+          />
+
+          {/* Layer 2: Bench Viscous Aerodynamic Counter-Rolling Gas Plumes */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              width: '96px',
+              height: '70px',
+              animation: 'gbaVaporBenchPuff 1.32s cubic-bezier(0.2, 0.8, 0.25, 1) forwards',
+              opacity: 0
+            }}
+          >
+            {/* Lobe 1 - Deep Noxious Violet Shadow Plume */}
+            <div
+              className="absolute w-17 h-13 rounded-full blur-[4px]"
+              style={{
+                left: '4px',
+                top: '6px',
+                background: 'radial-gradient(ellipse, rgba(59,7,100,0.95) 0%, rgba(88,28,135,0.72) 60%, transparent 95%)'
+              }}
+            />
+            {/* Lobe 2 - Caustic Chlorine Lime Core Billow */}
+            <div
+              className="absolute w-16 h-12 rounded-full blur-[3px]"
+              style={{
+                right: '4px',
+                bottom: '4px',
+                background: 'radial-gradient(ellipse, rgba(236,252,203,0.95) 0%, rgba(163,230,53,0.85) 40%, rgba(63,98,18,0.55) 75%, transparent 95%)'
+              }}
+            />
+            {/* Lobe 3 - Sweeping Upper Mist Canopy */}
+            <div
+              className="absolute w-20 h-9 rounded-full blur-[3px]"
+              style={{
+                left: '50%',
+                transform: 'translateX(-50%)',
+                top: '0px',
+                background: 'radial-gradient(ellipse, rgba(190,242,100,0.82) 0%, rgba(132,204,22,0.48) 50%, transparent 90%)'
+              }}
+            />
+            {/* Lobe 4 - Corrosive Ametist Right Flank */}
+            <div
+              className="absolute w-14 h-11 rounded-full blur-[4px]"
+              style={{
+                right: '8px',
+                top: '4px',
+                background: 'radial-gradient(ellipse, rgba(147,51,234,0.75) 0%, rgba(126,34,206,0.50) 55%, transparent 90%)'
+              }}
+            />
           </div>
-          <div className="absolute" style={{ animation: 'gbaVaporBenchWisp 1.1s ease-out 0.15s forwards', opacity: 0 }}>
-            <svg width="60" height="34" viewBox="0 0 60 34" className="overflow-visible">
-              <path d="M4 26 C 10 10, 30 16, 38 8 C 48 0, 58 10, 56 24 Z" fill="#d9f99d" opacity="0.4" />
-            </svg>
-          </div>
-          {/* Mini venom pulse marking the gas reaching this benched Pokémon */}
-          <div className="absolute" style={{ animation: 'gbaVaporBenchSpread 1.1s ease-out 0.2s forwards', opacity: 0 }}>
-            <svg width="48" height="48" viewBox="0 0 48 48">
-              <circle cx="24" cy="24" r="18" fill="none" stroke="#a3e635" strokeWidth="2" opacity="0.8" />
-              <circle cx="24" cy="24" r="11" fill="none" stroke="#86efac" strokeWidth="1.5" opacity="0.6" />
-              <circle cx="24" cy="24" r="5" fill="#a3e635" opacity="0.35" />
-            </svg>
-          </div>
+
+          {/* Layer 3: Bench Boiling Effervescence (Viscous Micro-Bubbles with squash & stretch and chromatic glows) */}
+          {[
+            { x: '-22px', delay: 0.14, s: 7, c: '#bef264' },
+            { x: '18px', delay: 0.22, s: 8, c: '#a3e635' },
+            { x: '-8px', delay: 0.30, s: 6, c: '#c084fc' },
+            { x: '26px', delay: 0.38, s: 7, c: '#facc15' },
+            { x: '-16px', delay: 0.46, s: 5, c: '#86efac' },
+            { x: '10px', delay: 0.54, s: 6.5, c: '#d946ef' }
+          ].map((b, i) => (
+            <div
+              key={`pv-bench-bubble-${i}`}
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                '--bb-x': b.x,
+                width: `${b.s}px`,
+                height: `${b.s}px`,
+                backgroundColor: b.c,
+                boxShadow: `0 0 8px ${b.c}`,
+                animation: `gbaVaporBenchBubble 1.32s ease-out ${b.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            />
+          ))}
+
+          {/* Layer 4: Bench Micro Caustic Flecks & Bio-Luminescent Spores */}
+          {[
+            { x: '-16px', y: '-18px', delay: 0.10, c: '#bef264' },
+            { x: '18px', y: '-16px', delay: 0.16, c: '#a3e635' },
+            { x: '-6px', y: '-26px', delay: 0.22, c: '#c084fc' },
+            { x: '22px', y: '-20px', delay: 0.28, c: '#86efac' },
+            { x: '-24px', y: '-14px', delay: 0.34, c: '#facc15' },
+            { x: '12px', y: '-28px', delay: 0.40, c: '#d946ef' }
+          ].map((f, i) => (
+            <div
+              key={`pv-bench-fleck-${i}`}
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                '--bf-x': f.x,
+                '--bf-y': f.y,
+                width: '3.5px',
+                height: '3.5px',
+                backgroundColor: f.c,
+                boxShadow: `0 0 8px ${f.c}`,
+                animation: `gbaVaporBenchFlecks 1.20s ease-out ${f.delay}s forwards`,
+                opacity: 0
+              } as React.CSSProperties}
+            />
+          ))}
+
+          {/* Layer 5: Bench Poison Damage Saturation Pulse */}
+          <div
+            className="absolute inset-0 rounded-lg pointer-events-none z-30"
+            style={{
+              animation: 'gbaVaporBenchDamageFlash 1.32s ease-out forwards',
+              opacity: 0,
+              background: 'radial-gradient(ellipse at 50% 50%, rgba(190,242,100,0.30) 0%, rgba(168,85,247,0.22) 55%, transparent 90%)'
+            }}
+          />
         </div>
       )}
 
@@ -5269,196 +5552,585 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           Intensity scales with bonus Water Energy: base 40 dmg → wi 1.0, +2 Water → 1.2. */}
       {fx.type === 'hydro_pump_cannons' && (() => {
         const wi = Math.max(1, fx.intensity ?? 1);
+        const durSec = 2.1;
+        const actorWidth = fx.whiffed ? Math.round(82 * wi) : Math.round(118 * wi);
+        const actorAnim = fx.whiffed
+          ? 'gbaBlastoiseWhiffRecede 2.1s ease-out forwards'
+          : 'gbaBlastoiseFullBodyMotion 2.1s cubic-bezier(0.22, 0.9, 0.36, 1) forwards';
+
         return (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Blastoise shell + twin cannons — stock PNG (1024×559, transparent bg)
-              blur-in + anticipation overshoot → hold → grainy dissolve-out */}
-          <div className="absolute bottom-0 left-1/2" style={{ width: Math.round(160 * wi), zIndex: 1, animation: 'gbaHydroCannonShell 1.9s cubic-bezier(0.22, 0.9, 0.36, 1) forwards', opacity: 0 }}>
-            <img src="/blastoise-hydro-cannon.png" alt="" draggable={false} style={{ width: '100%', height: 'auto', display: 'block' }} />
+          {/* Layer 1: Soft Ambient Foam & Surge at Blastoise's feet (Clean ground contact centered directly under Blastoise's feet) */}
+          <div
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: `${Math.round(112 * wi)}px`,
+              height: `${Math.round(26 * wi)}px`,
+              bottom: '0px',
+              left: `calc(50% - ${Math.round(38 * wi)}px)`,
+              transform: 'translateX(-50%)',
+              zIndex: 0,
+              background: 'radial-gradient(ellipse at 50% 100%, rgba(56,189,248,0.32) 0%, rgba(2,132,199,0.12) 50%, transparent 75%)',
+              filter: 'blur(2px)',
+              animation: 'gbaHydroFloorSurge 2.1s ease-out forwards',
+              opacity: 0
+            }}
+          />
+
+          {/* Layer 2: Authentic Ken Sugimori Full-Body Blastoise (Tier 1 Apex Monster ~118px, whiff 82px; shifted 34px left so tail is perfectly tangent to left card border) */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              width: `${actorWidth}px`,
+              aspectRatio: '1381 / 1346',
+              bottom: '2px',
+              left: `calc(50% - ${Math.round(34 * wi)}px)`,
+              zIndex: 10,
+              animation: actorAnim,
+              opacity: 0
+            }}
+          >
+            <img
+              src="/assets/blastoise_full_body.png"
+              alt="Blastoise Full Body"
+              draggable={false}
+              className="w-full h-full object-contain"
+              style={{
+                filter: fx.whiffed ? 'brightness(0.7) contrast(1.1) drop-shadow(0 0 6px rgba(56,189,248,0.3))' : 'drop-shadow(0 4px 14px rgba(0,0,0,0.75))'
+              }}
+            />
           </div>
-          {/* Left cannon jet — linear trajectory from PNG bore (delayed 0.3s for shell anticipation) */}
-          <div className="absolute" style={{ left: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetLeft 1.4s cubic-bezier(0.15, 0.8, 0.35, 1) 0.3s forwards', opacity: 0, filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
-            <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
-              {/* Initial pressure burst cone at nozzle exit */}
-              <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
-              <path d="M16 100 L28 80 L40 100 Z" fill="#7dd3fc" opacity="0.45" />
-              {/* Main jet body — straight linear path (+20% thickness) */}
-              <path d="M28 96 L28 6" fill="none" stroke="url(#hydroCannonGradL)" strokeWidth={28.1 * wi} strokeLinecap="round" opacity="0.92" />
-              <path d="M28 94 L28 8" fill="none" stroke="#7dd3fc" strokeWidth={14 * wi} strokeLinecap="round" opacity="0.7" />
-              <path d="M28 92 L28 10" fill="none" stroke="#e0f2fe" strokeWidth={7.8 * wi} strokeLinecap="round" opacity="0.8" />
-              <defs>
-                <linearGradient id="hydroCannonGradL" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.7" />
-                  <stop offset="50%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#7dd3fc" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          {/* Right cannon jet — linear trajectory from PNG bore (delayed 0.3s for shell anticipation) */}
-          <div className="absolute" style={{ right: `calc(50% - ${Math.round(68 * wi)}px)`, bottom: `${Math.round(66 * wi)}px`, transformOrigin: '50% 100%', animation: 'gbaHydroCannonJetRight 1.4s cubic-bezier(0.15, 0.8, 0.35, 1) 0.3s forwards', opacity: 0, filter: `drop-shadow(0 0 ${Math.round(8 + (wi - 1) * 20)}px rgba(56,189,248,0.65))` }}>
-            <svg width={Math.round(56 * wi)} height={Math.round(100 * wi)} viewBox="0 0 56 100" style={{ overflow: 'visible' }}>
-              {/* Initial pressure burst cone at nozzle exit */}
-              <path d="M21 98 L28 76 L35 98 Z" fill="#e0f2fe" opacity="0.75" />
-              <path d="M16 100 L28 80 L40 100 Z" fill="#7dd3fc" opacity="0.45" />
-              {/* Main jet body — straight linear path (+20% thickness) */}
-              <path d="M28 96 L28 6" fill="none" stroke="url(#hydroCannonGradR)" strokeWidth={28.1 * wi} strokeLinecap="round" opacity="0.92" />
-              <path d="M28 94 L28 8" fill="none" stroke="#7dd3fc" strokeWidth={14 * wi} strokeLinecap="round" opacity="0.7" />
-              <path d="M28 92 L28 10" fill="none" stroke="#e0f2fe" strokeWidth={7.8 * wi} strokeLinecap="round" opacity="0.8" />
-              <defs>
-                <linearGradient id="hydroCannonGradR" x1="0" y1="1" x2="0" y2="0">
-                  <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.7" />
-                  <stop offset="50%" stopColor="#38bdf8" />
-                  <stop offset="100%" stopColor="#7dd3fc" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          {/* Muzzle flash — left cannon (double ring + 8-spike burst, delayed after shell) */}
-          <div className="absolute" style={{ left: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.35s forwards', opacity: 0 }}>
-            <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
-              <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
-              <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
-              <circle cx="26" cy="26" r="12" fill="#7dd3fc" opacity="0.65" />
-              <circle cx="26" cy="26" r="7" fill="#bae6fd" opacity="0.8" />
-              <circle cx="26" cy="26" r="3.5" fill="#e0f2fe" opacity="0.95" />
-              <path d="M26 2 L28.5 16 L23.5 16 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M26 50 L28.5 36 L23.5 36 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M2 26 L16 23.5 L16 28.5 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M50 26 L36 23.5 L36 28.5 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M8 8 L18 16 L14 20 Z" fill="#e0f2fe" opacity="0.6" />
-              <path d="M44 8 L34 16 L38 20 Z" fill="#e0f2fe" opacity="0.6" />
-              <path d="M8 44 L18 36 L14 32 Z" fill="#e0f2fe" opacity="0.6" />
-              <path d="M44 44 L34 36 L38 32 Z" fill="#e0f2fe" opacity="0.6" />
-            </svg>
-          </div>
-          {/* Muzzle flash — right cannon (double ring + 8-spike burst, delayed after shell) */}
-          <div className="absolute" style={{ right: `calc(50% - ${Math.round(66 * wi)}px)`, bottom: `${Math.round(44 * wi)}px`, animation: 'gbaHydroCannonMuzzle 1.3s ease-out 0.41s forwards', opacity: 0 }}>
-            <svg width={Math.round(52 * wi)} height={Math.round(52 * wi)} viewBox="0 0 52 52">
-              <circle cx="26" cy="26" r="22" fill="none" stroke="#38bdf8" strokeWidth={3.5 * wi} opacity="0.5" />
-              <circle cx="26" cy="26" r="16" fill="none" stroke="#7dd3fc" strokeWidth={2 * wi} opacity="0.4" />
-              <circle cx="26" cy="26" r="12" fill="#7dd3fc" opacity="0.65" />
-              <circle cx="26" cy="26" r="7" fill="#bae6fd" opacity="0.8" />
-              <circle cx="26" cy="26" r="3.5" fill="#e0f2fe" opacity="0.95" />
-              <path d="M26 2 L28.5 16 L23.5 16 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M26 50 L28.5 36 L23.5 36 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M2 26 L16 23.5 L16 28.5 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M50 26 L36 23.5 L36 28.5 Z" fill="#bae6fd" opacity="0.85" />
-              <path d="M8 8 L18 16 L14 20 Z" fill="#e0f2fe" opacity="0.6" />
-              <path d="M44 8 L34 16 L38 20 Z" fill="#e0f2fe" opacity="0.6" />
-              <path d="M8 44 L18 36 L14 32 Z" fill="#e0f2fe" opacity="0.6" />
-              <path d="M44 44 L34 36 L38 32 Z" fill="#e0f2fe" opacity="0.6" />
-            </svg>
-          </div>
-          {/* Heavy spray droplets — scatter left (delayed to match jet arrival) */}
-          <div className="absolute top-2 left-4" style={{ animation: 'gbaHydroCannonDrop1 1.3s ease-out 0.65s forwards', opacity: 0 }}>
-            <svg width={Math.round(14 * wi)} height={Math.round(18 * wi)} viewBox="0 0 14 18">
-              <path d="M7 1 Q10.5 7, 10.5 10.5 Q10.5 15, 7 17 Q3.5 15, 3.5 10.5 Q3.5 7, 7 1 Z" fill="#38bdf8" opacity="0.9" />
-              <ellipse cx="5.5" cy="9" rx="1.8" ry="2.4" fill="#bae6fd" opacity="0.7" />
-            </svg>
-          </div>
-          {/* Heavy spray droplets — scatter right (delayed to match jet arrival) */}
-          <div className="absolute top-2 right-4" style={{ animation: 'gbaHydroCannonDrop2 1.3s ease-out 0.72s forwards', opacity: 0 }}>
-            <svg width={Math.round(12 * wi)} height={Math.round(16 * wi)} viewBox="0 0 12 16">
-              <path d="M6 1 Q9 5.5, 9 8.5 Q9 12.5, 6 14.5 Q3 12.5, 3 8.5 Q3 5.5, 6 1 Z" fill="#0ea5e9" opacity="0.85" />
-              <ellipse cx="4.5" cy="7.5" rx="1.5" ry="2" fill="#e0f2fe" opacity="0.6" />
-            </svg>
-          </div>
-          {/* Extra droplets at higher intensity */}
-          {wi > 1.08 && (
-            <div className="absolute top-3" style={{ animation: 'gbaHydroCannonDrop3 1.3s ease-out 0.8s forwards', opacity: 0 }}>
-              <svg width={Math.round(10 * wi)} height={Math.round(14 * wi)} viewBox="0 0 10 14">
-                <path d="M5 1 Q7.5 4.5, 7.5 7 Q7.5 10.5, 5 12 Q2.5 10.5, 2.5 7 Q2.5 4.5, 5 1 Z" fill="#7dd3fc" opacity="0.8" />
-              </svg>
-            </div>
+
+          {!fx.whiffed && (
+            <>
+              {/* Layer 4: Left Cannon Volumetric Hydrodynamic Torrent (Erupts along +28 deg axis converging to central impact dome) */}
+              <div
+                className="absolute"
+                style={{
+                  left: `calc(50% - ${Math.round(54 * wi)}px)`,
+                  bottom: `${Math.round(105 * wi)}px`,
+                  zIndex: 18,
+                  pointerEvents: 'none'
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: `-${Math.round(32 * wi)}px`,
+                    bottom: '0px',
+                    width: `${Math.round(64 * wi)}px`,
+                    height: `${Math.round(112 * wi)}px`,
+                    transformOrigin: `${Math.round(32 * wi)}px ${Math.round(112 * wi)}px`,
+                    animation: 'gbaHydroTorrentL 1.25s cubic-bezier(0.18, 0.85, 0.35, 1) 0.30s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width={Math.round(64 * wi)} height={Math.round(112 * wi)} viewBox="0 0 64 112" style={{ overflow: 'visible' }}>
+                    <defs>
+                      <linearGradient id="hydroFlowGradL_bfx" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stopColor="#0369a1" stopOpacity="0.98" />
+                        <stop offset="25%" stopColor="#0284c7" stopOpacity="0.95" />
+                        <stop offset="60%" stopColor="#0ea5e9" stopOpacity="0.92" />
+                        <stop offset="85%" stopColor="#38bdf8" stopOpacity="0.96" />
+                        <stop offset="100%" stopColor="#bae6fd" stopOpacity="1.0" />
+                      </linearGradient>
+                      <linearGradient id="hydroFlowCoreL_bfx" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.95" />
+                        <stop offset="40%" stopColor="#7dd3fc" stopOpacity="0.96" />
+                        <stop offset="75%" stopColor="#e0f2fe" stopOpacity="0.98" />
+                        <stop offset="100%" stopColor="#ffffff" stopOpacity="1.0" />
+                      </linearGradient>
+                    </defs>
+                    {/* Outer Volumetric Wave Mantle (Sugimori watercolor wave contours) */}
+                    <path
+                      d="M24 112 C24 102, 22 90, 20 78 C18 64, 12 50, 10 36 C8 24, 6 12, 10 4 C16 0, 26 2, 32 3 C38 2, 48 0, 54 4 C58 12, 56 24, 54 36 C52 50, 46 64, 44 78 C42 90, 40 102, 40 112 Z"
+                      fill="url(#hydroFlowGradL_bfx)"
+                      filter="drop-shadow(0 0 10px rgba(14,165,233,0.85))"
+                    />
+                    {/* Pressurized Turbulent Inner Stream */}
+                    <path
+                      d="M26 110 C26 98, 24 86, 22 74 C19 60, 15 48, 14 36 C13 26, 12 16, 16 8 C22 4, 28 6, 32 7 C36 6, 42 4, 48 8 C52 16, 51 26, 50 36 C49 48, 45 60, 42 74 C40 86, 38 98, 38 110 Z"
+                      fill="#0ea5e9"
+                      opacity={0.85}
+                    />
+                    {/* Pressurized White-Water Cavitation Core */}
+                    <path
+                      d="M28 108 C28 96, 27 82, 25 70 C23 56, 20 46, 20 34 C20 24, 22 14, 26 10 C29 8, 31 9, 32 9 C33 9, 35 8, 38 10 C42 14, 44 24, 44 34 C44 46, 41 56, 39 70 C37 82, 36 96, 36 108 Z"
+                      fill="url(#hydroFlowCoreL_bfx)"
+                    />
+                    {/* Central High-Pressure Cavitation Spine */}
+                    <path
+                      d="M32 108 C32 88, 30 68, 29 48 C28 32, 30 18, 32 8"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={4 * wi}
+                      strokeLinecap="round"
+                      opacity={0.95}
+                    />
+                    {/* Braided Hydrodynamic Helical Flow Ribbons */}
+                    <path
+                      d="M26 104 Q36 86, 28 68 Q20 50, 34 32 Q42 18, 32 8"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={1.8 * wi}
+                      strokeLinecap="round"
+                      opacity={0.85}
+                    />
+                    <path
+                      d="M38 100 Q26 82, 36 64 Q44 46, 26 28 Q20 16, 30 6"
+                      fill="none"
+                      stroke="#bae6fd"
+                      strokeWidth={1.5 * wi}
+                      strokeLinecap="round"
+                      opacity={0.75}
+                    />
+                    {/* Dynamic Sugimori Wave Foam Crests at Jet Head */}
+                    <path
+                      d="M12 10 Q22 4, 32 7 Q42 4, 52 10"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={2.0 * wi}
+                      strokeLinecap="round"
+                      opacity={0.9}
+                    />
+                    {/* Sputtering Cavitation Droplets */}
+                    <circle cx="10" cy="22" r={2.2 * wi} fill="#7dd3fc" opacity={0.9} />
+                    <circle cx="8" cy="12" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
+                    <circle cx="22" cy="7" r={1.8 * wi} fill="#ffffff" opacity={0.85} />
+                    <circle cx="42" cy="7" r={1.8 * wi} fill="#ffffff" opacity={0.85} />
+                    <circle cx="54" cy="12" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
+                    <circle cx="52" cy="22" r={2.2 * wi} fill="#7dd3fc" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Layer 4: Right Cannon Volumetric Hydrodynamic Torrent (Erupts directly along +30 deg barrel axis from right cannon nozzle) */}
+              <div
+                className="absolute"
+                style={{
+                  left: `calc(50% + ${Math.round(10 * wi)}px)`,
+                  bottom: `${Math.round(98 * wi)}px`,
+                  zIndex: 18,
+                  pointerEvents: 'none'
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: `-${Math.round(36 * wi)}px`,
+                    bottom: '0px',
+                    width: `${Math.round(72 * wi)}px`,
+                    height: `${Math.round(136 * wi)}px`,
+                    transformOrigin: `${Math.round(36 * wi)}px ${Math.round(136 * wi)}px`,
+                    animation: 'gbaHydroTorrentR 1.25s cubic-bezier(0.18, 0.85, 0.35, 1) 0.30s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width={Math.round(72 * wi)} height={Math.round(136 * wi)} viewBox="0 0 72 136" style={{ overflow: 'visible' }}>
+                    <defs>
+                      <linearGradient id="hydroFlowGradR_bfx" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stopColor="#0369a1" stopOpacity="0.98" />
+                        <stop offset="25%" stopColor="#0284c7" stopOpacity="0.95" />
+                        <stop offset="60%" stopColor="#0ea5e9" stopOpacity="0.92" />
+                        <stop offset="85%" stopColor="#38bdf8" stopOpacity="0.96" />
+                        <stop offset="100%" stopColor="#bae6fd" stopOpacity="1.0" />
+                      </linearGradient>
+                      <linearGradient id="hydroFlowCoreR_bfx" x1="0%" y1="100%" x2="0%" y2="0%">
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.95" />
+                        <stop offset="40%" stopColor="#7dd3fc" stopOpacity="0.96" />
+                        <stop offset="75%" stopColor="#e0f2fe" stopOpacity="0.98" />
+                        <stop offset="100%" stopColor="#ffffff" stopOpacity="1.0" />
+                      </linearGradient>
+                    </defs>
+                    {/* Outer Volumetric Wave Mantle */}
+                    <path
+                      d="M28 136 C28 124, 25 108, 22 92 C19 76, 14 58, 12 40 C10 26, 8 14, 12 4 C18 0, 30 2, 36 3 C42 2, 54 0, 60 4 C64 14, 62 26, 60 40 C58 58, 53 76, 50 92 C47 108, 44 124, 44 136 Z"
+                      fill="url(#hydroFlowGradR_bfx)"
+                      filter="drop-shadow(0 0 10px rgba(14,165,233,0.85))"
+                    />
+                    {/* Pressurized Turbulent Inner Stream */}
+                    <path
+                      d="M30 132 C30 118, 27 104, 24 88 C21 72, 17 56, 16 40 C15 28, 14 18, 18 8 C24 4, 31 6, 36 7 C41 6, 48 4, 54 8 C58 18, 57 28, 56 40 C55 56, 51 72, 48 88 C45 104, 42 118, 42 132 Z"
+                      fill="#0ea5e9"
+                      opacity={0.85}
+                    />
+                    {/* Pressurized White-Water Cavitation Core */}
+                    <path
+                      d="M32 130 C32 114, 30 98, 27 82 C24 66, 22 52, 22 38 C22 26, 24 16, 28 10 C32 8, 34 9, 36 9 C38 9, 40 8, 44 10 C48 16, 50 26, 50 38 C50 52, 48 66, 45 82 C42 98, 40 114, 40 130 Z"
+                      fill="url(#hydroFlowCoreR_bfx)"
+                    />
+                    {/* Central High-Pressure Cavitation Spine */}
+                    <path
+                      d="M36 130 C36 104, 34 78, 33 54 C32 36, 34 20, 36 8"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={4 * wi}
+                      strokeLinecap="round"
+                      opacity={0.95}
+                    />
+                    {/* Braided Hydrodynamic Helical Flow Ribbons */}
+                    <path
+                      d="M30 126 Q42 102, 32 80 Q22 58, 38 36 Q48 20, 36 8"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={1.8 * wi}
+                      strokeLinecap="round"
+                      opacity={0.85}
+                    />
+                    <path
+                      d="M42 120 Q28 98, 40 74 Q50 52, 30 30 Q22 16, 34 6"
+                      fill="none"
+                      stroke="#bae6fd"
+                      strokeWidth={1.5 * wi}
+                      strokeLinecap="round"
+                      opacity={0.75}
+                    />
+                    {/* Dynamic Sugimori Wave Foam Crests at Jet Head */}
+                    <path
+                      d="M14 10 Q26 4, 36 7 Q46 4, 58 10"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={2.0 * wi}
+                      strokeLinecap="round"
+                      opacity={0.9}
+                    />
+                    {/* Sputtering Cavitation Droplets */}
+                    <circle cx="12" cy="24" r={2.2 * wi} fill="#7dd3fc" opacity={0.9} />
+                    <circle cx="10" cy="14" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
+                    <circle cx="26" cy="7" r={1.8 * wi} fill="#ffffff" opacity={0.85} />
+                    <circle cx="46" cy="7" r={1.8 * wi} fill="#ffffff" opacity={0.85} />
+                    <circle cx="60" cy="14" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
+                    <circle cx="58" cy="24" r={2.2 * wi} fill="#7dd3fc" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Layer 3: Expanding Fluid Shockwave Ring on Target Impact */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  top: `${Math.round(50 * wi)}px`,
+                  left: `calc(50% - ${Math.round(1 * wi)}px)`,
+                  zIndex: 25
+                }}
+              >
+                <div
+                  style={{
+                    width: `${Math.round(140 * wi)}px`,
+                    height: `${Math.round(100 * wi)}px`,
+                    animation: 'gbaHydroShockRing 1.05s ease-out 0.48s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width={Math.round(140 * wi)} height={Math.round(100 * wi)} viewBox="0 0 140 100">
+                    <ellipse cx="70" cy="50" rx={64 * wi} ry={44 * wi} fill="none" stroke="#7dd3fc" strokeWidth={3 * wi} opacity={0.8} style={{ filter: 'blur(1px)' }} />
+                    <ellipse cx="70" cy="50" rx={46 * wi} ry={30 * wi} fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} opacity={0.85} />
+                    <ellipse cx="70" cy="50" rx={28 * wi} ry={18 * wi} fill="none" stroke="#ffffff" strokeWidth={2.0 * wi} opacity={0.95} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Layer 3: Central Concussive Hydro Dome (Impact Explosion — positioned directly at water jet arrival point in arena center) */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  top: `${Math.round(50 * wi)}px`,
+                  left: `calc(50% - ${Math.round(1 * wi)}px)`,
+                  zIndex: 32
+                }}
+              >
+                <div
+                  style={{
+                    width: `${Math.round(92 * wi)}px`,
+                    height: `${Math.round(92 * wi)}px`,
+                    animation: 'gbaHydroConcussionDome 1.15s ease-out 0.48s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width={Math.round(92 * wi)} height={Math.round(92 * wi)} viewBox="0 0 92 92">
+                    <defs>
+                      <radialGradient id="hydroDomeGradL_bfx" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                        <stop offset="25%" stopColor="#e0f2fe" stopOpacity="0.98" />
+                        <stop offset="50%" stopColor="#7dd3fc" stopOpacity="0.90" />
+                        <stop offset="75%" stopColor="#0284c7" stopOpacity="0.60" />
+                        <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+                      </radialGradient>
+                    </defs>
+                    {/* 1. Outer Diffuse Pressure Field */}
+                    <circle cx="46" cy="46" r={44 * wi} fill="url(#hydroDomeGradL_bfx)" />
+                    {/* 2. Volumetric Fluid Refraction Rings (No thin CAD wireframes) */}
+                    <circle cx="46" cy="46" r={32 * wi} fill="none" stroke="#e0f2fe" strokeWidth={3.5 * wi} opacity={0.65} style={{ filter: 'blur(1.5px)' }} />
+                    <ellipse cx="46" cy="46" rx={42 * wi} ry={24 * wi} fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} opacity={0.5} style={{ filter: 'blur(2px)' }} />
+                    {/* 3. Superheated Incandescent White Core */}
+                    <circle cx="46" cy="46" r={20 * wi} fill="#ffffff" opacity={0.95} style={{ filter: 'blur(1.5px)' }} />
+                    <circle cx="46" cy="46" r={10 * wi} fill="#ffffff" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Layer 4: Multi-Lobed Tsunami Splash Crown across upper rim */}
+              <div
+                className="absolute pointer-events-none"
+                style={{
+                  top: `${Math.round(48 * wi)}px`,
+                  left: `calc(50% - ${Math.round(1 * wi)}px)`,
+                  zIndex: 28
+                }}
+              >
+                <div
+                  style={{
+                    width: `${Math.round(160 * wi)}px`,
+                    height: `${Math.round(115 * wi)}px`,
+                    animation: 'gbaHydroTsunamiCrown 1.15s cubic-bezier(0.18, 0.85, 0.35, 1) 0.48s forwards',
+                    opacity: 0
+                  }}
+                >
+                  <svg width={Math.round(160 * wi)} height={Math.round(115 * wi)} viewBox="0 0 160 115" style={{ overflow: 'visible' }}>
+                    <defs>
+                      <radialGradient id="tsunamiCrownGrad_bfx" cx="50%" cy="88%" r="75%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
+                        <stop offset="22%" stopColor="#e0f2fe" stopOpacity="0.98" />
+                        <stop offset="45%" stopColor="#7dd3fc" stopOpacity="0.95" />
+                        <stop offset="72%" stopColor="#0284c7" stopOpacity="0.90" />
+                        <stop offset="92%" stopColor="#0369a1" stopOpacity="0.75" />
+                        <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+                      </radialGradient>
+                      <radialGradient id="tsunamiFoamWash_bfx" cx="50%" cy="85%" r="65%">
+                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                        <stop offset="35%" stopColor="#e0f2fe" stopOpacity="0.85" />
+                        <stop offset="70%" stopColor="#bae6fd" stopOpacity="0.55" />
+                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
+                      </radialGradient>
+                    </defs>
+                    {/* 1. Outer Hydrodynamic Volumetric Water Sheet (Organic Curved Sugimori Wave Lobes) */}
+                    <path
+                      d="M80 106 C64 106, 42 98, 28 84 C16 72, 10 56, 16 46 C20 38, 30 44, 32 54 C34 40, 42 26, 52 18 C60 12, 68 20, 66 34 C68 20, 74 9, 80 8 C86 9, 92 20, 94 34 C92 20, 100 12, 108 18 C118 26, 126 40, 128 54 C130 44, 140 38, 144 46 C150 56, 144 72, 132 84 C118 98, 96 106, 80 106 Z"
+                      fill="url(#tsunamiCrownGrad_bfx)"
+                      filter="drop-shadow(0 0 10px rgba(56,189,248,0.85))"
+                    />
+                    {/* 2. Inner Aerated White-Water Core & Continuous Rolling Wave Foam (No sharp triangles) */}
+                    <path
+                      d="M80 102 C68 102, 50 94, 38 82 C30 72, 26 58, 32 52 C36 48, 42 54, 44 62 C46 50, 52 38, 60 32 C66 28, 72 34, 71 44 C73 34, 77 22, 80 20 C83 22, 87 34, 89 44 C88 34, 94 28, 100 32 C108 38, 114 50, 116 62 C118 54, 124 48, 128 52 C134 58, 130 72, 122 82 C110 94, 92 102, 80 102 Z"
+                      fill="url(#tsunamiFoamWash_bfx)"
+                    />
+                    {/* 3. Dynamic Curved Foam Crest Ribbons (Sugimori wave foam curl lines) */}
+                    <path
+                      d="M16 46 Q24 38, 32 54 Q42 26, 52 18 Q62 14, 66 34 Q74 12, 80 8 Q86 12, 94 34 Q98 14, 108 18 Q118 26, 128 54 Q136 38, 144 46"
+                      fill="none"
+                      stroke="#ffffff"
+                      strokeWidth={2.2 * wi}
+                      strokeLinecap="round"
+                      opacity={0.95}
+                    />
+                    <path
+                      d="M32 52 Q44 38, 60 32 Q72 26, 80 20 Q88 26, 100 32 Q116 38, 128 52"
+                      fill="none"
+                      stroke="#e0f2fe"
+                      strokeWidth={1.6 * wi}
+                      strokeLinecap="round"
+                      opacity={0.85}
+                    />
+                    {/* 4. Natural Centrifugal Droplets & Micro-Cavitation Spray (Organically placed ahead of wave curls) */}
+                    <circle cx="12" cy="40" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
+                    <circle cx="22" cy="30" r={2.2 * wi} fill="#ffffff" opacity={0.9} />
+                    <circle cx="38" cy="18" r={2.0 * wi} fill="#e0f2fe" opacity={0.85} />
+                    <circle cx="48" cy="10" r={2.4 * wi} fill="#ffffff" opacity={0.95} />
+                    <circle cx="68" cy="6" r={1.8 * wi} fill="#bae6fd" opacity={0.8} />
+                    <circle cx="80" cy="3" r={2.4 * wi} fill="#ffffff" opacity={0.95} />
+                    <circle cx="92" cy="6" r={1.8 * wi} fill="#bae6fd" opacity={0.8} />
+                    <circle cx="112" cy="10" r={2.4 * wi} fill="#ffffff" opacity={0.95} />
+                    <circle cx="122" cy="18" r={2.0 * wi} fill="#e0f2fe" opacity={0.85} />
+                    <circle cx="138" cy="30" r={2.2 * wi} fill="#ffffff" opacity={0.9} />
+                    <circle cx="148" cy="40" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Layer 5: Ballistic Cavitation Droplets (14-Vector Natural Gravitational Dispersion & Descent) */}
+              {/* Droplet 1: North-West high velocity arc */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '48px', left: `calc(50% - ${Math.round(16 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray1 1.35s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
+                  <svg width={Math.round(12 * wi)} height={Math.round(15 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
+                    <ellipse cx="5" cy="8" rx={1.8 * wi} ry={2.4 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 2: North-North-West arc */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '42px', left: `calc(50% - ${Math.round(8 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray2 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.51s forwards', opacity: 0 }}>
+                  <svg width={Math.round(10 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#7dd3fc" />
+                    <ellipse cx="5" cy="8" rx={1.6 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 3: Vertical Apex high-pressure plume */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '36px', left: '50%', transform: 'translateX(-50%)', zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray3 1.42s cubic-bezier(0.22, 0.85, 0.36, 1) 0.49s forwards', opacity: 0 }}>
+                  <svg width={Math.round(11 * wi)} height={Math.round(15 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#bae6fd" />
+                    <ellipse cx="7" cy="8" rx={2.2 * wi} ry={3.0 * wi} fill="#ffffff" opacity={0.95} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 4: North-North-East arc */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '42px', left: `calc(50% + ${Math.round(8 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray4 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.51s forwards', opacity: 0 }}>
+                  <svg width={Math.round(10 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#7dd3fc" />
+                    <ellipse cx="9" cy="8" rx={1.6 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 5: North-East high velocity arc */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '48px', left: `calc(50% + ${Math.round(16 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray5 1.35s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
+                  <svg width={Math.round(12 * wi)} height={Math.round(15 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
+                    <ellipse cx="9" cy="8" rx={1.8 * wi} ry={2.4 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 6: Lateral West ejecta */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '52px', left: `calc(50% - ${Math.round(22 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray6 1.32s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
+                  <svg width={Math.round(9 * wi)} height={Math.round(12 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#0ea5e9" />
+                    <ellipse cx="5" cy="8" rx={1.4 * wi} ry={1.8 * wi} fill="#ffffff" opacity={0.85} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 7: Lateral East ejecta */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '52px', left: `calc(50% + ${Math.round(22 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray7 1.32s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
+                  <svg width={Math.round(9 * wi)} height={Math.round(12 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#0ea5e9" />
+                    <ellipse cx="9" cy="8" rx={1.4 * wi} ry={1.8 * wi} fill="#ffffff" opacity={0.85} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 8: Down-West ricochet mist bead */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '58px', left: `calc(50% - ${Math.round(12 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray8 1.36s cubic-bezier(0.22, 0.85, 0.36, 1) 0.53s forwards', opacity: 0 }}>
+                  <svg width={Math.round(8 * wi)} height={Math.round(10 * wi)} viewBox="0 0 14 18">
+                    <circle cx="7" cy="9" r={4 * wi} fill="#7dd3fc" opacity={0.85} />
+                    <circle cx="6" cy="8" r={1.6 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 9: Down-East ricochet mist bead */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '58px', left: `calc(50% + ${Math.round(12 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray9 1.36s cubic-bezier(0.22, 0.85, 0.36, 1) 0.53s forwards', opacity: 0 }}>
+                  <svg width={Math.round(8 * wi)} height={Math.round(10 * wi)} viewBox="0 0 14 18">
+                    <circle cx="7" cy="9" r={4 * wi} fill="#7dd3fc" opacity={0.85} />
+                    <circle cx="8" cy="8" r={1.6 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 10: Fast micro cavitation bead */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '44px', left: '50%', transform: 'translateX(-50%)', zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray10 1.28s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
+                  <svg width={Math.round(6 * wi)} height={Math.round(8 * wi)} viewBox="0 0 14 18">
+                    <circle cx="7" cy="9" r={3 * wi} fill="#bae6fd" opacity={0.9} />
+                    <circle cx="7" cy="8" r={1.2 * wi} fill="#ffffff" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 11: Mid-West cascading spray */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '46px', left: `calc(50% - ${Math.round(14 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray11 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
+                  <svg width={Math.round(9 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
+                    <ellipse cx="6" cy="8" rx={1.5 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 12: Mid-East cascading spray */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '46px', left: `calc(50% + ${Math.round(14 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray12 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
+                  <svg width={Math.round(9 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
+                    <ellipse cx="8" cy="8" rx={1.5 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 13: High-altitude fine mist plume */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '38px', left: `calc(50% + ${Math.round(3 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray13 1.40s cubic-bezier(0.22, 0.85, 0.36, 1) 0.51s forwards', opacity: 0 }}>
+                  <svg width={Math.round(7 * wi)} height={Math.round(9 * wi)} viewBox="0 0 14 18">
+                    <circle cx="7" cy="9" r={3.2 * wi} fill="#bae6fd" opacity={0.92} />
+                    <circle cx="7" cy="8" r={1.4 * wi} fill="#ffffff" />
+                  </svg>
+                </div>
+              </div>
+
+              {/* Droplet 14: Deep downward hydro splash tear */}
+              <div
+                className="absolute pointer-events-none"
+                style={{ top: '54px', left: `calc(50% - ${Math.round(4 * wi)}px)`, zIndex: 34 }}
+              >
+                <div style={{ animation: 'gbaHydroSpray14 1.42s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
+                  <svg width={Math.round(10 * wi)} height={Math.round(14 * wi)} viewBox="0 0 14 18">
+                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#0284c7" />
+                    <ellipse cx="6" cy="9" rx={1.8 * wi} ry={2.6 * wi} fill="#ffffff" opacity={0.92} />
+                  </svg>
+                </div>
+              </div>
+            </>
           )}
-          {/* Convergence impact splash — where both jets meet the target (top).
-              Redesigned: layered burst with a white-hot pressure core, radiating water
-              spokes, arcing splash curls, airborne mist particles and a landing pool —
-              reads as pressurized water striking the target and exploding off it. */}
-          <div className="absolute -top-2" style={{ animation: 'gbaHydroCannonImpact 1.3s ease-out 0.9s forwards', opacity: 0 }}>
-            <svg width={Math.round(84 * wi)} height={Math.round(72 * wi)} viewBox="0 0 84 72">
-              <circle cx="42" cy="40" r={13 * wi} fill="#e0f2fe" opacity="0.9" />
-              <circle cx="42" cy="40" r={8 * wi} fill="#bae6fd" opacity="0.95" />
-              <circle cx="42" cy="40" r={4.5 * wi} fill="#ffffff" opacity="0.9" />
-              <path d="M42 40 L42 10" stroke="#7dd3fc" strokeWidth={3 * wi} strokeLinecap="round" opacity="0.85" />
-              <path d="M42 40 L18 22" stroke="#38bdf8" strokeWidth={2.8 * wi} strokeLinecap="round" opacity="0.8" />
-              <path d="M42 40 L66 22" stroke="#38bdf8" strokeWidth={2.8 * wi} strokeLinecap="round" opacity="0.8" />
-              <path d="M42 40 L12 40" stroke="#7dd3fc" strokeWidth={2.6 * wi} strokeLinecap="round" opacity="0.75" />
-              <path d="M42 40 L72 40" stroke="#7dd3fc" strokeWidth={2.6 * wi} strokeLinecap="round" opacity="0.75" />
-              <path d="M42 40 L22 58" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.6" />
-              <path d="M42 40 L62 58" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.6" />
-              <path d="M42 40 L42 66" stroke="#e0f2fe" strokeWidth={2 * wi} strokeLinecap="round" opacity="0.55" />
-              <path d="M42 40 Q28 30, 16 16 Q24 28, 32 36" fill="none" stroke="#7dd3fc" strokeWidth={3 * wi} strokeLinecap="round" opacity="0.85" />
-              <path d="M42 40 Q56 28, 70 14 Q60 28, 50 36" fill="none" stroke="#38bdf8" strokeWidth={3 * wi} strokeLinecap="round" opacity="0.8" />
-              <path d="M42 40 Q32 34, 22 24" fill="none" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.65" />
-              <path d="M42 40 Q54 32, 64 26" fill="none" stroke="#bae6fd" strokeWidth={2.2 * wi} strokeLinecap="round" opacity="0.65" />
-              <circle cx="14" cy="12" r={3.2 * wi} fill="#7dd3fc" opacity="0.85" />
-              <circle cx="68" cy="10" r={2.8 * wi} fill="#38bdf8" opacity="0.8" />
-              <circle cx="32" cy="6" r={2.4 * wi} fill="#bae6fd" opacity="0.75" />
-              <circle cx="54" cy="8" r={2 * wi} fill="#e0f2fe" opacity="0.7" />
-              <circle cx="6" cy="30" r={2.4 * wi} fill="#38bdf8" opacity="0.7" />
-              <circle cx="78" cy="28" r={2.2 * wi} fill="#7dd3fc" opacity="0.7" />
-              {wi > 1.1 && <circle cx="10" cy="48" r={2.6 * wi} fill="#38bdf8" opacity="0.65" />}
-              {wi > 1.1 && <circle cx="74" cy="46" r={2.4 * wi} fill="#7dd3fc" opacity="0.6" />}
-              {wi > 1.18 && <circle cx="24" cy="2" r={2.8 * wi} fill="#bae6fd" opacity="0.6" />}
-              {wi > 1.18 && <circle cx="60" cy="4" r={2.2 * wi} fill="#e0f2fe" opacity="0.55" />}
-              <ellipse cx="42" cy="66" rx={26 * wi} ry={6 * wi} fill="#0ea5e9" opacity="0.3" />
-              <ellipse cx="42" cy="64" rx={17 * wi} ry={4.5 * wi} fill="#38bdf8" opacity="0.25" />
-            </svg>
-          </div>
-          {/* Expanding pressure ring — shockwave of pressurized water hitting the target */}
-          <div className="absolute -top-2" style={{ animation: 'gbaHydroImpactRing 0.9s ease-out 0.95s forwards', opacity: 0 }}>
-            <svg width={Math.round(90 * wi)} height={Math.round(70 * wi)} viewBox="0 0 90 70">
-              <ellipse cx="45" cy="35" rx="38" ry="26" fill="none" stroke="#7dd3fc" strokeWidth={2.5 * wi} opacity="0.7" />
-              <ellipse cx="45" cy="35" rx="30" ry="20" fill="none" stroke="#bae6fd" strokeWidth={1.8 * wi} opacity="0.5" />
-              <ellipse cx="45" cy="35" rx="22" ry="15" fill="none" stroke="#e0f2fe" strokeWidth={1.2 * wi} opacity="0.4" />
-            </svg>
-          </div>
-          {/* Ricochet droplets — water bouncing off the target and falling outward */}
-          <div className="absolute top-1 left-6" style={{ animation: 'gbaHydroImpactScatter1 1.1s ease-out 1.0s forwards', opacity: 0 }}>
-            <svg width={Math.round(12 * wi)} height={Math.round(16 * wi)} viewBox="0 0 12 16">
-              <path d="M6 1 Q9 5.5, 9 8.5 Q9 12.5, 6 14.5 Q3 12.5, 3 8.5 Q3 5.5, 6 1 Z" fill="#38bdf8" opacity="0.9" />
-              <ellipse cx="4.5" cy="7.5" rx="1.5" ry="2" fill="#bae6fd" opacity="0.65" />
-            </svg>
-          </div>
-          <div className="absolute top-1 right-6" style={{ animation: 'gbaHydroImpactScatter2 1.1s ease-out 1.06s forwards', opacity: 0 }}>
-            <svg width={Math.round(11 * wi)} height={Math.round(15 * wi)} viewBox="0 0 10 14">
-              <path d="M5 1 Q7.5 4.5, 7.5 7 Q7.5 10.5, 5 12 Q2.5 10.5, 2.5 7 Q2.5 4.5, 5 1 Z" fill="#0ea5e9" opacity="0.85" />
-              <ellipse cx="4" cy="6.5" rx="1.2" ry="1.7" fill="#e0f2fe" opacity="0.6" />
-            </svg>
-          </div>
-          <div className="absolute top-0" style={{ animation: 'gbaHydroImpactScatter3 1.1s ease-out 1.12s forwards', opacity: 0 }}>
-            <svg width={Math.round(9 * wi)} height={Math.round(13 * wi)} viewBox="0 0 8 12">
-              <path d="M4 1 Q6 3.5, 6 6 Q6 9, 4 10.5 Q2 9, 2 6 Q2 3.5, 4 1 Z" fill="#7dd3fc" opacity="0.8" />
-            </svg>
-          </div>
-          {wi > 1.1 && (
-            <div className="absolute top-2 left-1" style={{ animation: 'gbaHydroImpactScatter2 1.1s ease-out 1.16s forwards', opacity: 0 }}>
-              <svg width={Math.round(10 * wi)} height={Math.round(14 * wi)} viewBox="0 0 10 14">
-                <path d="M5 1 Q7.5 4.5, 7.5 7 Q7.5 10.5, 5 12 Q2.5 10.5, 2.5 7 Q2.5 4.5, 5 1 Z" fill="#bae6fd" opacity="0.75" />
-              </svg>
-            </div>
-          )}
-          {/* Foam pool — churned white water collecting at the base of the impact */}
-          <div className="absolute -top-1" style={{ animation: 'gbaHydroImpactFoam 1.0s ease-out 1.05s forwards', opacity: 0 }}>
-            <svg width={Math.round(64 * wi)} height={Math.round(24 * wi)} viewBox="0 0 64 24">
-              <ellipse cx="32" cy="14" rx={28 * wi} ry={7 * wi} fill="#e0f2fe" opacity="0.55" />
-              <ellipse cx="32" cy="12" rx={20 * wi} ry={5 * wi} fill="#bae6fd" opacity="0.45" />
-              <ellipse cx="24" cy="10" rx={8 * wi} ry={3 * wi} fill="#ffffff" opacity="0.4" />
-              <ellipse cx="42" cy="11" rx={6 * wi} ry={2.5 * wi} fill="#ffffff" opacity="0.35" />
-              <circle cx="14" cy="8" r={2 * wi} fill="#e0f2fe" opacity="0.6" />
-              <circle cx="50" cy="9" r={1.8 * wi} fill="#bae6fd" opacity="0.55" />
-              <circle cx="32" cy="6" r={1.5 * wi} fill="#ffffff" opacity="0.5" />
-            </svg>
-          </div>
-          {/* Dense mist at cannon base */}
-          <div className="absolute bottom-2" style={{ animation: 'gbaWaterMistTrail 1.3s ease-out forwards', opacity: 0 }}>
-            <svg width={Math.round(52 * wi)} height={Math.round(30 * wi)} viewBox="0 0 52 30">
-              <ellipse cx="26" cy="15" rx={22 * wi} ry={10 * wi} fill="#bae6fd" opacity={0.25 + (wi - 1) * 0.15} />
-              <ellipse cx="18" cy="12" rx={13 * wi} ry={6 * wi} fill="#e0f2fe" opacity={0.18 + (wi - 1) * 0.1} />
-            </svg>
-          </div>
         </div>
         );
       })()}
@@ -14851,67 +15523,251 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
       {/* 20b. CRABHAMMER (Handled above in kingler_crabhammer) */}
 
-      {/* 20c. COBRA STARE (Dark Arbok) - the reference illustration materializes through a
-           GBA-style grainy dissolve. The light drains, static coalesces into the image, holds
-           with a pulsing horror glow, then dissolves back into grain leaving an afterimage. */}
+      {/* 20c. COBRA STARE (Dark Arbok) - 5-Layer Modular Architecture
+           - Layer 1: Ambient Dread Vignette & Void Floor (Deep dark violet dread gradient on victim card)
+           - Layer 2: Primary Visual Actor (Authentic Mitsuhiro Arita / Sugimori Dark Arbok 1999) with serpentine rearing, hypnotic sway, lunging tremor & sinuous retreat
+           - Layer 3: Hypnotic Shockwaves (Twin rotating concentric incandescent rings emanating from the menacing chest pattern)
+           - Layer 4: Intimidating Gaze Rays & Silence Seal Aura (Focusing energy beams + Pokémon Power shutdown rune)
+           - Layer 5: Ambient Dissipating Embers & Silence Afterimage (Glowing toxic/amber static motes & lingering shadow)
+      */}
       {fx.type === 'cobra_stare' && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
-          {/* Beat 0: soft dread vignette — the light drains from the victim's card.
-              Kept to inset-0 with a low-alpha gradient so it reads as the card dimming,
-              never as a solid block or a frame bleeding past the card edge. */}
+          {/* LAYER 1: Ambient Dread Vignette & Floor Shadow */}
           <div
-            className="absolute inset-0 rounded-xl"
+            className="absolute inset-0 rounded-xl pointer-events-none"
             style={{
-              animation: 'gbaCobraDread 1.25s ease-in-out forwards',
+              animation: 'gbaArbokDreadFloor 1.75s ease-in-out forwards',
               opacity: 0,
-              background: 'radial-gradient(ellipse at 50% 45%, rgba(88,28,135,0.05) 0%, rgba(30,10,60,0.20) 58%, rgba(12,5,28,0.36) 100%)'
+              background: 'radial-gradient(ellipse at 50% 50%, rgba(59,7,100,0.45) 0%, rgba(30,10,60,0.65) 60%, rgba(10,3,25,0.85) 100%)'
             }}
           />
 
-          {/* Beat 1: the reference image materializes through grainy dissolve */}
+          {/* LAYER 3: Concentric Hypnotic Gaze Shockwaves (Suppressed on whiff) */}
+          {!fx.whiffed && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+              {/* Ring 1 - Volumetric Solar/Amber Hypnotic Psionic Shockwave */}
+              <div
+                className="absolute pointer-events-none flex items-center justify-center"
+                style={{
+                  width: '136px',
+                  height: '116px',
+                  animation: 'gbaArbokHypnoRing1 1.75s cubic-bezier(0.18, 0.85, 0.25, 1) forwards',
+                  opacity: 0
+                }}
+              >
+                <svg className="w-full h-full" viewBox="0 0 136 116" fill="none">
+                  <defs>
+                    <linearGradient id="arbokHypnoGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                      <stop offset="25%" stopColor="#fef08a" stopOpacity="0.90" />
+                      <stop offset="55%" stopColor="#facc15" stopOpacity="0.85" />
+                      <stop offset="85%" stopColor="#f97316" stopOpacity="0.75" />
+                      <stop offset="100%" stopColor="#c084fc" stopOpacity="0.4" />
+                    </linearGradient>
+                    <radialGradient id="arbokHypnoGoldVeil" cx="50%" cy="50%" r="50%">
+                      <stop offset="35%" stopColor="#fef08a" stopOpacity="0.14" />
+                      <stop offset="75%" stopColor="#facc15" stopOpacity="0.08" />
+                      <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+                  {/* Organic multi-lobed Bézier psionic ripple body fill */}
+                  <path
+                    d="M 68 8 C 92 6, 124 20, 128 58 C 132 94, 98 108, 68 110 C 38 108, 4 94, 8 58 C 12 20, 44 6, 68 8 Z"
+                    fill="url(#arbokHypnoGoldVeil)"
+                  />
+                  {/* Primary incandescent wave crest */}
+                  <path
+                    d="M 68 8 C 92 6, 124 20, 128 58 C 132 94, 98 108, 68 110 C 38 108, 4 94, 8 58 C 12 20, 44 6, 68 8 Z"
+                    stroke="url(#arbokHypnoGoldGrad)"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                    style={{ filter: 'drop-shadow(0 0 8px #facc15) drop-shadow(0 0 16px rgba(250,204,21,0.65))' }}
+                  />
+                  {/* Secondary inner harmonic ripple for wave refraction */}
+                  <path
+                    d="M 68 20 C 86 18, 110 30, 112 58 C 114 84, 88 96, 68 98 C 48 96, 22 84, 24 58 C 26 30, 50 18, 68 20 Z"
+                    stroke="#fef08a"
+                    strokeWidth="1.6"
+                    strokeOpacity="0.55"
+                    style={{ filter: 'drop-shadow(0 0 4px #facc15)' }}
+                  />
+                </svg>
+              </div>
+
+              {/* Ring 2 - Volumetric Sinister Void Warp Distortion Shockwave */}
+              <div
+                className="absolute pointer-events-none flex items-center justify-center"
+                style={{
+                  width: '176px',
+                  height: '152px',
+                  animation: 'gbaArbokHypnoRing2 1.75s cubic-bezier(0.18, 0.85, 0.25, 1) forwards',
+                  opacity: 0
+                }}
+              >
+                <svg className="w-full h-full" viewBox="0 0 176 152" fill="none">
+                  <defs>
+                    <linearGradient id="arbokHypnoVoidGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+                      <stop offset="20%" stopColor="#f5d0fe" stopOpacity="0.85" />
+                      <stop offset="50%" stopColor="#c084fc" stopOpacity="0.80" />
+                      <stop offset="80%" stopColor="#9333ea" stopOpacity="0.75" />
+                      <stop offset="100%" stopColor="#581c87" stopOpacity="0.35" />
+                    </linearGradient>
+                    <radialGradient id="arbokHypnoVoidVeil" cx="50%" cy="50%" r="50%">
+                      <stop offset="45%" stopColor="#c084fc" stopOpacity="0.12" />
+                      <stop offset="82%" stopColor="#7e22ce" stopOpacity="0.06" />
+                      <stop offset="100%" stopColor="#3b0764" stopOpacity="0" />
+                    </radialGradient>
+                  </defs>
+                  {/* Organic multi-lobed psionic distortion veil */}
+                  <path
+                    d="M 88 10 C 124 7, 164 26, 168 76 C 172 124, 128 143, 88 145 C 48 143, 4 124, 8 76 C 12 26, 52 7, 88 10 Z"
+                    fill="url(#arbokHypnoVoidVeil)"
+                  />
+                  {/* Primary sinister violet crest */}
+                  <path
+                    d="M 88 10 C 124 7, 164 26, 168 76 C 172 124, 128 143, 88 145 C 48 143, 4 124, 8 76 C 12 26, 52 7, 88 10 Z"
+                    stroke="url(#arbokHypnoVoidGrad)"
+                    strokeWidth="3.0"
+                    strokeLinecap="round"
+                    style={{ filter: 'drop-shadow(0 0 10px #c084fc) drop-shadow(0 0 22px rgba(168,85,247,0.7))' }}
+                  />
+                  {/* Secondary inner psionic harmonic wave */}
+                  <path
+                    d="M 88 24 C 116 22, 148 38, 150 76 C 152 112, 120 128, 88 130 C 56 128, 24 112, 26 76 C 28 38, 60 22, 88 24 Z"
+                    stroke="#e879f9"
+                    strokeWidth="1.6"
+                    strokeOpacity="0.5"
+                    style={{ filter: 'drop-shadow(0 0 6px #a855f7)' }}
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
+
+          {/* LAYER 4: Intimidating Gaze Rays & Silence Seal Aura (Suppressed on whiff) */}
+          {!fx.whiffed && (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-35">
+              {/* Focused twin gaze beams from chest eyes toward card core */}
+              <svg className="absolute w-44 h-40 pointer-events-none" viewBox="0 0 176 160" fill="none">
+                <g style={{ animation: 'gbaArbokGazeBeams 1.75s ease-in-out forwards', opacity: 0 }}>
+                  {/* Left Gaze Beam: from Arbok's left chest eye to center */}
+                  <line x1="72" y1="68" x2="88" y2="105" stroke="url(#arbokGazeGradL)" strokeWidth="3.5" strokeLinecap="round" filter="drop-shadow(0 0 6px #facc15)" />
+                  {/* Right Gaze Beam: from Arbok's right chest eye to center */}
+                  <line x1="104" y1="68" x2="88" y2="105" stroke="url(#arbokGazeGradR)" strokeWidth="3.5" strokeLinecap="round" filter="drop-shadow(0 0 6px #facc15)" />
+                  {/* Core intersection impact focal dot */}
+                  <circle cx="88" cy="105" r="5" fill="#fef08a" filter="drop-shadow(0 0 10px #f59e0b)" />
+                </g>
+                <defs>
+                  <linearGradient id="arbokGazeGradL" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                    <stop offset="35%" stopColor="#facc15" stopOpacity="0.9" />
+                    <stop offset="70%" stopColor="#f97316" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#a855f7" stopOpacity="0.3" />
+                  </linearGradient>
+                  <linearGradient id="arbokGazeGradR" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                    <stop offset="35%" stopColor="#facc15" stopOpacity="0.9" />
+                    <stop offset="70%" stopColor="#f97316" stopOpacity="0.8" />
+                    <stop offset="100%" stopColor="#a855f7" stopOpacity="0.3" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              {/* Silence Seal: The hypnotic eye lock that shuts down Pokémon Powers */}
+              <div
+                className="absolute flex items-center justify-center pointer-events-none"
+                style={{
+                  width: '68px',
+                  height: '68px',
+                  animation: 'gbaArbokSilenceSeal 1.75s ease-out forwards',
+                  opacity: 0
+                }}
+              >
+                <svg width="68" height="68" viewBox="0 0 68 68" fill="none">
+                  {/* Outer Seal Eye contour */}
+                  <path
+                    d="M 6 34 C 18 16, 50 16, 62 34 C 50 52, 18 52, 6 34 Z"
+                    stroke="#fde047"
+                    strokeWidth="2.5"
+                    fill="rgba(88,28,135,0.35)"
+                    filter="drop-shadow(0 0 8px #a855f7)"
+                  />
+                  {/* Inner glowing vertical slit pupil */}
+                  <ellipse cx="34" cy="34" rx="4.5" ry="12" fill="#ef4444" filter="drop-shadow(0 0 6px #facc15)" />
+                  <circle cx="34" cy="34" r="2" fill="#ffffff" />
+                  {/* Hypnotic horizontal lock bars */}
+                  <line x1="18" y1="34" x2="26" y2="34" stroke="#fef08a" strokeWidth="2" strokeLinecap="round" />
+                  <line x1="42" y1="34" x2="50" y2="34" stroke="#fef08a" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+              </div>
+            </div>
+          )}
+
+          {/* LAYER 2: Primary Visual Actor (Authentic Mitsuhiro Arita / Sugimori Dark Arbok 1999) */}
           <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ animation: 'gbaStareMaterialize 0.7s steps(8) 0.15s forwards', opacity: 0 }}
+            className="absolute flex items-center justify-center pointer-events-none z-40"
+            style={{
+              width: fx.whiffed ? '84px' : '116px',
+              height: fx.whiffed ? '78px' : '108px',
+              animation: fx.whiffed
+                ? 'gbaArbokWhiffRecede 1.75s ease-out forwards'
+                : 'gbaArbokCobraMotion 1.75s cubic-bezier(0.18, 0.9, 0.28, 1) forwards',
+              opacity: 0
+            }}
           >
+            {/* The single authentic PNG with chest flare pulse */}
             <img
               src="/assets/dark_arbok_stare.png"
-              alt=""
-              className="select-none pointer-events-none"
+              alt="Dark Arbok Stare"
+              className="w-full h-full object-contain select-none pointer-events-none"
               style={{
-                width: '60%',
-                maxWidth: '60%',
-                height: 'auto',
-                objectFit: 'contain',
-                animation: 'gbaStarePulse 0.5s ease-in-out 0.85s 2',
-                filter: 'drop-shadow(0 0 12px rgba(147,51,234,0.6))'
+                filter: fx.whiffed
+                  ? 'brightness(0.7) contrast(1.1) drop-shadow(0 0 6px rgba(168,85,247,0.4))'
+                  : undefined,
+                animation: !fx.whiffed ? 'gbaArbokChestPulse 1.75s ease-in-out forwards' : undefined
               }}
               draggable={false}
             />
           </div>
 
-          {/* Beat 3: dissolve out — the image breaks back into grain */}
-          <div
-            className="absolute inset-0 flex items-center justify-center"
-            style={{ animation: 'gbaStareDissolveOut 0.45s steps(5) 0.8s forwards', opacity: 0 }}
-          >
-            <img
-              src="/assets/dark_arbok_stare.png"
-              alt=""
-              className="select-none pointer-events-none"
-              style={{ width: '60%', maxWidth: '60%', height: 'auto', objectFit: 'contain' }}
-              draggable={false}
+          {/* LAYER 5: Ambient Dissipating Embers & Silence Afterimage */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-45">
+            {/* 6 Directional Gaze Motes dispersing outward */}
+            {[
+              { dx: '-32px', dy: '-28px', delay: 0.45, size: 6, color: '#fef08a' },
+              { dx: '34px', dy: '-26px', delay: 0.52, size: 7, color: '#facc15' },
+              { dx: '-40px', dy: '18px', delay: 0.58, size: 5, color: '#c084fc' },
+              { dx: '38px', dy: '22px', delay: 0.65, size: 6, color: '#a855f7' },
+              { dx: '-22px', dy: '36px', delay: 0.72, size: 5, color: '#f59e0b' },
+              { dx: '24px', dy: '34px', delay: 0.80, size: 6, color: '#e879f9' }
+            ].map((p, i) => (
+              <div
+                key={`arbok-mote-${i}`}
+                className="absolute rounded-full pointer-events-none"
+                style={{
+                  '--pdx': p.dx,
+                  '--pdy': p.dy,
+                  width: `${p.size}px`,
+                  height: `${p.size}px`,
+                  backgroundColor: p.color,
+                  boxShadow: `0 0 8px ${p.color}`,
+                  animation: `gbaArbokGazeMote 1.1s ease-out ${p.delay}s forwards`,
+                  opacity: 0
+                } as React.CSSProperties}
+              />
+            ))}
+
+            {/* Lingering silence aura sitting on victim card while Pokémon Power remains shut down */}
+            <div
+              className="absolute inset-0 rounded-xl pointer-events-none"
+              style={{
+                animation: 'gbaArbokSilenceAfterimage 1.75s ease-out forwards',
+                opacity: 0,
+                background: 'radial-gradient(circle at 50% 50%, rgba(232,121,249,0.22) 0%, rgba(147,51,234,0.12) 55%, transparent 75%)'
+              }}
             />
           </div>
-
-          {/* Afterimage: the stare keeps sitting on the victim after the sprite is gone */}
-          <div
-            className="absolute inset-0 rounded-xl"
-            style={{
-              animation: 'gbaCobraAfterimage 1.25s ease-out forwards',
-              opacity: 0,
-              background: 'radial-gradient(circle at 50% 40%, rgba(232,121,249,0.30) 0%, rgba(147,51,234,0.12) 55%, rgba(0,0,0,0) 78%)'
-            }}
-          />
         </div>
       )}
 

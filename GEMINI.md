@@ -41,21 +41,29 @@ Bu depoda herhangi bir saldırı animasyonu (Move Animation / Battle FX), görse
    - Duman veya gaz bulutları tek parça kare gibi döndürülemez (`rotate` ile kutu döndürme yasağı); çok loblu Bézier SVG eğrileriyle organik kabarmalıdır.
    - **İlkel Vektör / CAD Çizimi Yasağı:** Kesik çizgili elipsler (`stroke-dasharray="6 4"` vb.), ham geometrik çember konturları, teknik çizim/tel kafes (wireframe) izlenimi veren ilkel SVG şekilleri KESİNLİKLE YASAKTIR. Şok dalgaları, felç/statik arkları ve auralar daima organik çok loblu Bézier eğrileri, çok dallı çatallanan iyonizasyon kırılmaları veya pürüzsüz kromatik sıcaklık gradyanları (`radial-gradient` akkor beyaz $\rightarrow$ neon $\rightarrow$ halelenme) ile inşa edilmelidir.
 
-8. **Varlık Üretim & Kırpma Protokolü (Strict Bounding-Box Cropping):**
-   - Kullanıcının `public/assets/raw/` altında hazırladığı onaylı şeffaf PNG'ler, etrafında +8–16px güvenli pay bırakılarak sıkıca kırpılmalı (`tight crop`) ve öyle `/public/assets/` altına alınmalıdır.
+8. **Nozul/Ağız Ekseni Kilitlenmesi & Kart Sınırı İçi Kırpma (Nozzle Pinning & Anti-Bleed):**
+   - Bir Pokémon'un ağzından, namlusundan veya organından çıkan jet, alev, su veya gaz püskürmelerinde (Arbok *Poison Vapor*, Horsea *Ink Jet* vb.); püskürme akıntısının başlangıç orijini aktörün anatomik ağız açıklığına pikseli pikseline kilitlenmelidir (`transform-origin: 50% 0%`, üst nozul ekseni, `top: 22%` kilitlenmesi).
+   - Akıntı aktörün altından veya boşluktan fışkıramaz; akıntı konteyneri hedef kartın fiziksel sınırları içinde tutulmalı (`overflow-hidden rounded-xl`), kartın alt sınırının dışına taşma (boundary bleed) yaşanmamalıdır.
 
-9. **Kod Teyidi ve Varlık Denetim Protokolü (Strict Codebase Verification Protocol):**
-   - Bir Pokémon'un, saldırı animasyonunun veya görsel varlığın mevcut durumunu analiz ederken veya kullanıcıya raporlarken; ASLA naif regex aramalarına veya geçici terminal script özetlerine körü körüne güvenilerek varsayımda bulunulamaz.
-   - Herhangi bir varlığın (`.png`/`.svg`) veya saldırının kodda aktif olup olmadığı, istisnasız olarak doğrudan `BattleFXOverlay.tsx` içindeki gerçek JSX satır numaraları (`<img src="..." />` ve `fx.type === ...`) ve `cards.json` eşleşmeleri okunarak KESİNLEŞTİRİLMELİDİR.
-   - Depoda zaten mevcut ve 5 katmanlı mimaride çalışan bir varlık (örneğin Pikachu, Nidoran ♂, Clefairy vb.) için kod teyidi yapılmadan "eksik", "yapılacak" veya "stok görsel adayı" şeklinde yanıltıcı iddialarda bulunulması KESİNLİKLE YASAKTIR. Her analiz doğrudan kod referansıyla (satır numarasıyla) belgelenmelidir.
-   - `public/assets/` altındaki bir görselin (örneğin `ThunderPunch_Fist.png`), `raw/` klasöründeki bir varlığın (`Electabuzz_raw_edited.png`) önceden onaylanıp sıkı kırpılmış nihai versiyonu olabileceği hesaba katılmalı; dosya içeriği ve görsel kökeni teyit edilmeden varsayımda bulunulmamalıdır.
+9. **Bench Hasarı Sinematik Kalite Standardı (Bench Cinematic Quality Standard):**
+   - Bench süpürme hasarı içeren çoklu hedef saldırılarında (Poison Vapor, Blizzard vb.); yedek kartlar üzerindeki efektler aceleye getirilmiş tekdüze renk lekelerinden ibaret olamaz.
+   - Küçük boyuttaki yedek kartlar (`110px × 151px`) üzerinde de minyatür 4-5 katmanlı bir kimyasal/fiziksel reaksiyon yaşanmalıdır (zemin aurası, dönen duman pufu, mikro köpük kabarcıkları, süzülen aerosol zerrecikleri ve darbe flaşı). Süreler ani kesilmeyip akıcı bir sönümlenme zarfı taşımalıdır.
 
-10. **Görev Kapsamı, Bağlam Tazeleme ve İstem Dışı Müdahale Yasağı (Strict Scope Locking & Anti-Drift Directive):**
+10. **Varlık Üretim & Kırpma Protokolü (Strict Bounding-Box Cropping):**
+    - Kullanıcının `public/assets/raw/` altında hazırladığı onaylı şeffaf PNG'ler, etrafında +8–16px güvenli pay bırakılarak sıkıca kırpılmalı (`tight crop`) ve öyle `/public/assets/` altına alınmalıdır.
+
+11. **Kod Teyidi ve Varlık Denetim Protokolü (Strict Codebase Verification Protocol):**
+    - Bir Pokémon'un, saldırı animasyonunun veya görsel varlığın mevcut durumunu analiz ederken veya kullanıcıya raporlarken; ASLA naif regex aramalarına veya geçici terminal script özetlerine körü körüne güvenilerek varsayımda bulunulamaz.
+    - Herhangi bir varlığın (`.png`/`.svg`) veya saldırının kodda aktif olup olmadığı, istisnasız olarak doğrudan `BattleFXOverlay.tsx` içindeki gerçek JSX satır numaraları (`<img src="..." />` ve `fx.type === ...`) ve `cards.json` eşleşmeleri okunarak KESİNLEŞTİRİLMELİDİR.
+    - Depoda zaten mevcut ve 5 katmanlı mimaride çalışan bir varlık (örneğin Pikachu, Nidoran ♂, Clefairy vb.) için kod teyidi yapılmadan "eksik", "yapılacak" veya "stok görsel adayı" şeklinde yanıltıcı iddialarda bulunulması KESİNLİKLE YASAKTIR. Her analiz doğrudan kod referansıyla (satır numarasıyla) belgelenmelidir.
+    - `public/assets/` altındaki bir görselin (örneğin `ThunderPunch_Fist.png`), `raw/` klasöründeki bir varlığın (`Electabuzz_raw_edited.png`) önceden onaylanıp sıkı kırpılmış nihai versiyonu olabileceği hesaba katılmalı; dosya içeriği ve görsel kökeni teyit edilmeden varsayımda bulunulmamalıdır.
+
+12. **Görev Kapsamı, Bağlam Tazeleme ve İstem Dışı Müdahale Yasağı (Strict Scope Locking & Anti-Drift Directive):**
     - Bir oturum kota dolumu, sunucu yeniden başlatılması veya uzun mesaj geçmişi (context compaction) sonrasında kesintiye uğrayıp devam ettirildiğinde; model ASLA aktif görevin/kullanıcı prompt'unun kapsamı dışındaki eski test loglarına, geçmiş terminal hatalarına (`FAIL` sonuçlarına) veya alakasız dosyalara otonom olarak müdahale edemez (*regression anchor / drift yasağı*).
     - Eski test koşucuların ürettiği hatalar veya regex uyumsuzlukları, kullanıcının o anki açık talebi olmadıkça düzeltilmeye çalışılamaz; test regex'ine yaranmak adına projenin çalışan diğer bileşenlerindeki parametreler, stiller veya fonksiyon imzaları (örneğin `BattleFXOverlay.tsx`, `index.css`, `GameBoard.tsx`) asla sessizce değiştirilemez.
     - Bir göreve devam edilirken çalışma belleğinde veya görev odağında şüphe oluşursa; kodlarda rastgele değişiklik yapmak yerine, öncelikle son durumda nerede kalındığı kullanıcıya maddeler halinde raporlanmalı (*Read-Only Audit First*) ve kullanıcının onayı alınmadan hiçbir dosyada `replace`/`edit` işlemi uygulanmamalıdır.
 
-11. **Stok Görsel Üretim ve İş Akışı Protokolü (User-Driven External Asset Workflow):**
+13. **Stok Görsel Üretim ve İş Akışı Protokolü (User-Driven External Asset Workflow):**
     - Aksi kullanıcı tarafından açıkça talep edilmedikçe, dahili görsel üretim araçları (`generate_image`) API kotası tüketimini önlemek adına KESİNLİKLE çağrılamaz.
     - Stok görsel ihtiyacı doğduğunda izlenecek zorunlu iş akışı:
       1. Model kullanıcıya en yüksek kalitede, 1996 Ken Sugimori suluboya ve teknik direktifleri içeren prompt metnini (pozitif, negatif ve parametreleriyle) sunar.
@@ -64,6 +72,17 @@ Bu depoda herhangi bir saldırı animasyonu (Move Animation / Battle FX), görse
       4. Uygunluk onayı sonrasında kullanıcı görseli transparanlaştırarak (`.png`) `public/assets/raw/` klasörüne yerleştirir.
       5. Dosya klasöre girdikten sonra model sıkı kırpma (+8–16px bounding box) ve animasyon implementasyonuna başlar.
 
-12. **Önizleme Sayfaları Dayanıklı Varlık Yolu Protokolü (Resilient Local/Static Preview Asset Protocol):**
-    - `public/preview_*.html` veya herhangi bir bağımsız HTML showcase sayfasında görsel yüklerken asla tekil veya mutlak yol (`/assets/...`) kullanılmaz.
-    - Sayfalar hem yerel dosya sisteminden doğrudan çift tıklanarak (`file:///...`) hem de dev sunucudan (`http://localhost:5173/...`) açılabildiğinden; istisnasız tüm `<img>` yüklemelerinde `candidatePaths` dizisi (`['assets/...', './assets/...', '/assets/...', '../public/assets/...']`) ve `onerror` döngüsü kullanılmak ZORUNDADIR.
+14. **Önizleme Sayfaları & GameBoard Boyut Paritesi, CSS Hijyeni ve Dayanıklı Varlık Protokolü (Preview Stage & GameBoard Parity, Scale & CSS Hygiene Protocol):**
+    - **Oyun İçi Boyut ve En-Boy Oranı Paritesi:**
+      - Aktif kart yuvası: **`184px × 253px`** (`aspect-ratio: 600 / 825`, `border-radius: 12px`).
+      - Bench (yedek) kart yuvaları: **`110px × 151px`** (`aspect-ratio: 600 / 825`, `border-radius: 8px`).
+      - Asla naif/tahmini değerler (`180×252`, `184×256`, `110×152`) kullanılamaz; masaüstü `GameBoard.tsx` ve `CardView.tsx` CSS standartları pikseli pikseline uygulanmalıdır.
+    - **CSS Sözdizimi Hijyeni & Bağımsız Keyframe Kuralı (Root-Level Keyframes Invariant):**
+      - Önizleme HTML dosyalarındaki `@keyframes` kuralları ASLA bir CSS seçicisinin (örneğin `.fx-layer`) içine gömülü (nested) yazılamaz; istisnasız olarak doğrudan CSS root seviyesinde tanımlanmalıdır.
+      - Açılan ve kapanan süslü parantez blokları (`{ ... }`) daima dengede tutulmalıdır (`open === close`). Kapanmayan tek bir parantez tarayıcının tüm keyframe'leri geçersiz saymasına ve başlangıçta `opacity: 0` olan tüm efektlerin ekranda hiçbir zaman görünmemesine (boş tahta / freeze hatası) yol açar.
+    - **Otantik Durum Şeridi & Çift Modlu Doğrulama (Status Strip & Dual-Mode Verification):**
+      - `CardView.tsx` durum şeridi (HP göstergesi ve segmentli yeşil can pips'leri) önizleme kartlarına da entegre edilmelidir.
+      - Önizleme sayfaları, test edilen kart tipine uygun otantik Base Set / Jungle / Fossil kart altlıklarını (`cards/*.jpg`) barındırmalı ve "Real Card Mode" ile "Dark Board Canvas" arasında anlık geçiş sağlayan mod butonu (`#btnMode`) sunmalıdır.
+    - **Dayanıklı Varlık Yolları (Resilient Path Protocol):**
+      - `public/preview_*.html` veya herhangi bir bağımsız HTML showcase sayfasında görsel yüklerken asla tekil veya mutlak yol (`/assets/...`) kullanılmaz.
+      - Sayfalar hem yerel dosya sisteminden doğrudan çift tıklanarak (`file:///...`) hem de dev sunucudan (`http://localhost:5173/...`) açılabildiğinden; istisnasız tüm `<img>` yüklemelerinde `candidatePaths` dizisi (`['assets/...', './assets/...', '/assets/...', '../public/assets/...']`) ve `onerror` döngüsü kullanılmak ZORUNDADIR.

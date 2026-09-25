@@ -1,0 +1,86 @@
+import subprocess
+
+svg_content = '''<svg xmlns="http://www.w3.org/2000/svg" width="160" height="115" viewBox="0 0 160 115" style="background:#090d16;">
+  <defs>
+    <!-- Multi-tier Hydrodynamic Collision Radial Gradient -->
+    <radialGradient id="hydroPlumeGrad" cx="50%" cy="88%" r="75%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="22%" stop-color="#e0f2fe" stop-opacity="0.98" />
+      <stop offset="45%" stop-color="#7dd3fc" stop-opacity="0.95" />
+      <stop offset="72%" stop-color="#0284c7" stop-opacity="0.90" />
+      <stop offset="92%" stop-color="#0369a1" stop-opacity="0.75" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Aerated White-Water Foam Wash Gradient -->
+    <radialGradient id="hydroFoamWash" cx="50%" cy="85%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+      <stop offset="35%" stop-color="#e0f2fe" stop-opacity="0.85" />
+      <stop offset="70%" stop-color="#bae6fd" stop-opacity="0.55" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <!-- 1. Outer Hydrodynamic Volumetric Water Sheet (Organic Curved Sugimori Wave Lobes) -->
+  <path
+    d="M80 106
+       C64 106, 42 98, 28 84
+       C16 72, 10 56, 16 46
+       C20 38, 30 44, 32 54
+       C34 40, 42 26, 52 18
+       C60 12, 68 20, 66 34
+       C68 20, 74 9, 80 8
+       C86 9, 92 20, 94 34
+       C92 20, 100 12, 108 18
+       C118 26, 126 40, 128 54
+       C130 44, 140 38, 144 46
+       C150 56, 144 72, 132 84
+       C118 98, 96 106, 80 106 Z"
+    fill="url(#hydroPlumeGrad)"
+    filter="drop-shadow(0 0 10px rgba(56,189,248,0.85))"
+  />
+
+  <!-- 2. Inner Aerated White-Water Core & Continuous Rolling Wave Foam (No sharp triangles) -->
+  <path
+    d="M80 102
+       C68 102, 50 94, 38 82
+       C30 72, 26 58, 32 52
+       C36 48, 42 54, 44 62
+       C46 50, 52 38, 60 32
+       C66 28, 72 34, 71 44
+       C73 34, 77 22, 80 20
+       C83 22, 87 34, 89 44
+       C88 34, 94 28, 100 32
+       C108 38, 114 50, 116 62
+       C118 54, 124 48, 128 52
+       C134 58, 130 72, 122 82
+       C110 94, 92 102, 80 102 Z"
+    fill="url(#hydroFoamWash)"
+  />
+
+  <!-- 3. Dynamic Curved Foam Crest Ribbons (Sugimori wave foam curl lines) -->
+  <path d="M16 46 Q24 38, 32 54 Q42 26, 52 18 Q62 14, 66 34 Q74 12, 80 8 Q86 12, 94 34 Q98 14, 108 18 Q118 26, 128 54 Q136 38, 144 46"
+        fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.95" />
+  <!-- Secondary Inner Foam Crest Line -->
+  <path d="M32 52 Q44 38, 60 32 Q72 26, 80 20 Q88 26, 100 32 Q116 38, 128 52"
+        fill="none" stroke="#e0f2fe" stroke-width="1.6" stroke-linecap="round" opacity="0.85" />
+
+  <!-- 4. Natural Centrifugal Droplets & Micro-Cavitation Spray (Organically placed ahead of wave curls) -->
+  <circle cx="12" cy="40" r="1.8" fill="#bae6fd" opacity="0.85" />
+  <circle cx="22" cy="30" r="2.2" fill="#ffffff" opacity="0.9" />
+  <circle cx="38" cy="18" r="2.0" fill="#e0f2fe" opacity="0.85" />
+  <circle cx="48" cy="10" r="2.4" fill="#ffffff" opacity="0.95" />
+  <circle cx="68" cy="6" r="1.8" fill="#bae6fd" opacity="0.8" />
+  <circle cx="80" cy="3" r="2.4" fill="#ffffff" opacity="0.95" />
+  <circle cx="92" cy="6" r="1.8" fill="#bae6fd" opacity="0.8" />
+  <circle cx="112" cy="10" r="2.4" fill="#ffffff" opacity="0.95" />
+  <circle cx="122" cy="18" r="2.0" fill="#e0f2fe" opacity="0.85" />
+  <circle cx="138" cy="30" r="2.2" fill="#ffffff" opacity="0.9" />
+  <circle cx="148" cy="40" r="1.8" fill="#bae6fd" opacity="0.85" />
+</svg>'''
+
+with open('scratch/test_final_splash.svg', 'w', encoding='utf-8') as f:
+    f.write(svg_content)
+
+subprocess.run(['inkscape', 'scratch/test_final_splash.svg', '-o', 'scratch/test_final_splash.png', '-w', '320', '-h', '230'])
+print('Rendered scratch/test_final_splash.png successfully.')

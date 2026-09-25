@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Arbok "Poison Vapor" — Battlefield Showcase &amp; Scale Parity</title>
+  <style>
+    :root {
+      --speed-mult: 1;
+    }
+    body {
+      background: #050d08;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #a3e635;
+      font-size: 24px;
+      margin: 0;
+      text-shadow: 0 0 24px rgba(163, 230, 53, 0.7);
+      letter-spacing: 0.5px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #cbd5e1;
+      max-width: 920px;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(132, 204, 22, 0.25);
+      border: 1px solid #84cc16;
+      border-radius: 4px;
+      color: #d9f99d;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+    .control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #0d1f14;
+      border: 1px solid #4d7c0f;
+      border-radius: 12px;
+      padding: 10px 22px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+    }
+    .speed-btn-group {
+      display: flex;
+      gap: 6px;
+      background: #07150c;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid #274916;
+    }
+    button {
+      background: #14532d;
+      color: #ecfccb;
+      border: 1px solid #4ade80;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    button:hover {
+      background: #166534;
+      border-color: #86efac;
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+    }
+    button.btn-whiff {
+      background: #4c1d95;
+      border-color: #c084fc;
+      color: #f5d0fe;
+    }
+    button.btn-whiff:hover {
+      background: #581c87;
+      border-color: #e879f9;
+      box-shadow: 0 0 12px rgba(192, 132, 252, 0.4);
+    }
+    button.btn-mode {
+      background: #1e3a8a;
+      border-color: #60a5fa;
+      color: #eff6ff;
+    }
+    button.btn-mode:hover {
+      background: #2563eb;
+      box-shadow: 0 0 12px rgba(96, 165, 250, 0.4);
+    }
+    button.btn-speed {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #94a3b8;
+      padding: 5px 12px;
+      font-size: 12px;
+    }
+    button.btn-speed.active {
+      background: #4d7c0f;
+      color: #f7fee7;
+      border-color: #a3e635;
+      box-shadow: 0 0 10px rgba(163, 230, 53, 0.4);
+    }
+    button.btn-loop.active {
+      background: #ca8a04;
+      border-color: #facc15;
+      color: #fffbeb;
+    }
+
+    .board-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+      width: 100%;
+      max-width: 920px;
+    }
+    .active-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .bench-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      width: 100%;
+    }
+    .card-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #a3e635;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+    }
+
+    /* ==========================================================================
+       AUTHENTIC CARD STAGE: 100% PARITY WITH GAMEBOARD & CARDVIEW.TSX
+       - Active Defending Card: w-[184px] aspect-[600/825] -> 184px x 253px
+       - Bench Defending Card:  w-[110px] aspect-[600/825] -> 110px x 151px
+       ========================================================================== */
+    .card-stage {
+      width: 184px;
+      height: 253px;
+      aspect-ratio: 600 / 825;
+      background: radial-gradient(circle at 50% 35%, #183720 0%, #0a190e 80%);
+      border: 2px solid #4d7c0f;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(101, 163, 13, 0.25);
+      box-sizing: border-box;
+      transition: all 0.25s ease;
+    }
+
+    .card-stage.real-card-mode {
+      background: #f5cb39;
+      border: 2.5px solid #c79808;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.85), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+
+    .card-stage-bench {
+      width: 110px;
+      height: 151px;
+      aspect-ratio: 600 / 825;
+      background: radial-gradient(circle at 50% 35%, #122818 0%, #07150c 80%);
+      border: 1.5px solid #365314;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.65);
+      box-sizing: border-box;
+      transition: all 0.25s ease;
+    }
+
+    .card-stage-bench.real-card-mode {
+      background: #f5cb39;
+      border: 1.5px solid #c79808;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    }
+
+    /* Real Card Graphic Underlay */
+    .card-underlay {
+      position: absolute;
+      inset: 2px;
+      border-radius: 6px;
+      overflow: hidden;
+      z-index: 1;
+      pointer-events: none;
+      display: none;
+      background: #f5cb39;
+    }
+    .card-stage.real-card-mode .card-underlay,
+    .card-stage-bench.real-card-mode .card-underlay {
+      display: block;
+    }
+
+    /* Mockup Interior (Shown in Dark Board Mode) */
+    .card-mockup-inner {
+      position: absolute;
+      inset: 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(163, 230, 53, 0.2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 6px;
+      box-sizing: border-box;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .card-stage.real-card-mode .card-mockup-inner,
+    .card-stage-bench.real-card-mode .card-mockup-inner {
+      display: none;
+    }
+
+    .card-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+    .card-header-sm {
+      font-size: 9.5px;
+    }
+
+    /* In-Game HP Life Pips Bar Parity */
+    .hp-strip {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 2px;
+      pointer-events: none;
+    }
+    .hp-text {
+      font-size: 9px;
+      font-family: monospace;
+      font-weight: 800;
+      color: #facc15;
+      display: flex;
+      justify-content: space-between;
+    }
+    .hp-bar {
+      width: 100%;
+      height: 5px;
+      background: #020617;
+      border-radius: 9999px;
+      border: 1px solid #334155;
+      display: flex;
+      gap: 1px;
+      padding: 1px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .hp-pip {
+      flex: 1;
+      height: 100%;
+      background: #facc15;
+      border-radius: 1px;
+      box-shadow: 0 0 4px #facc15;
+    }
+
+    .poison-badge {
+      background: #7e22ce;
+      color: #f5d0fe;
+      border: 1px solid #c084fc;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 9.5px;
+      font-weight: 800;
+      display: none;
+      z-index: 50;
+      box-shadow: 0 0 12px rgba(192, 132, 252, 0.6);
+      animation: poisonThrob 0.8s infinite alternate;
+    }
+
+    @keyframes poisonThrob {
+      0% { transform: scale(1); filter: drop-shadow(0 0 4px #a855f7); }
+      100% { transform: scale(1.08); filter: drop-shadow(0 0 10px #c084fc); }
+    }
+
+    /* Dedicated FX Layer (Container for 5-Layer Animations) */
+    .fx-layer {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 40;
+    }
+
+    /* ==========================================================================
+       KEYFRAMES: 100% MILISECOND PARITY WITH SRC/INDEX.CSS & BATTLEFXOVERLAY.TSX
+       ========================================================================== */
+
+    /* Layer 1: Ambient Caustic Floor Pool & Card Vignette */
+    @keyframes gbaVaporFloorPool {
+      0% { opacity: 0; transform: scale(0.88); }
+      22% { opacity: 0.85; transform: scale(1); }
+      65% { opacity: 0.95; }
+      85% { opacity: 0.60; }
+      100% { opacity: 0; transform: scale(1.06); filter: blur(3px); }
+    }
+
+    /* Pre-Spurt Caustic Maw Charge Glow (Anticipation 0.24s–0.44s) */
+    @keyframes gbaArbokMawGlow {
+      0%, 14% { opacity: 0; transform: scale(0.2); filter: blur(2px); }
+      22% { opacity: 0.75; transform: scale(0.8); filter: drop-shadow(0 0 8px #bef264); }
+      30% { opacity: 1.0; transform: scale(1.2); filter: drop-shadow(0 0 18px #a3e635) drop-shadow(0 0 6px #ffffff); }
+      40% { opacity: 0.85; transform: scale(1.35); filter: blur(2px); }
+      52% { opacity: 0; transform: scale(1.55); filter: blur(4px); }
+      100% { opacity: 0; }
+    }
+
+    /* Layer 2: Primary Visual Actor (Arbok Centered Apex Cobra Lunge) */
+    @keyframes gbaArbokVaporLunge {
+      0% { opacity: 0; transform: translate(-50%, -56%) scale(0.82) rotate(-2deg); filter: blur(2px); }
+      16% { opacity: 1; transform: translate(-50%, -50%) scale(1.0) rotate(1deg); filter: blur(0); }
+      30% { opacity: 1; transform: translate(-50%, -54%) scale(0.96) rotate(-1.5deg); }
+      42% { opacity: 1; transform: translate(-50%, -42%) scale(1.12) rotate(0deg); }
+      46% { opacity: 1; transform: translate(-50%, -41%) scale(1.10) rotate(0.8deg); }
+      52% { opacity: 1; transform: translate(-50%, -43%) scale(1.12) rotate(-0.6deg); }
+      70% { opacity: 0.95; transform: translate(-50%, -46%) scale(1.04) rotate(0deg); }
+      86% { opacity: 0.55; transform: translate(-50%, -52%) scale(0.95) rotate(-2deg); filter: blur(1.5px); }
+      100% { opacity: 0; transform: translate(-50%, -58%) scale(0.85) rotate(-3deg); filter: blur(4px); }
+    }
+
+    /* Layer 2 Whiff: Soft fizzle without lunge */
+    @keyframes gbaArbokVaporWhiff {
+      0% { opacity: 0; transform: translate(-50%, -54%) scale(0.70); }
+      25% { opacity: 0.70; transform: translate(-50%, -48%) scale(0.85); }
+      60% { opacity: 0.35; transform: translate(-50%, -50%) scale(0.80); }
+      100% { opacity: 0; transform: translate(-50%, -54%) scale(0.70); filter: blur(3px); }
+    }
+
+    /* High-Velocity Fluid Venom Impulse Jet (Pinned to fangs at 50% 0% — No vertical detachment gap) */
+    @keyframes gbaVaporEruptionJet {
+      0%, 22% { opacity: 0; transform: translate(-50%, 0) scale(0.12, 0.08); filter: blur(2px); }
+      32% { opacity: 0.50; transform: translate(-50%, 0) scale(0.45, 0.42); filter: blur(1.5px); }
+      42% { opacity: 0.90; transform: translate(-50%, 0) scale(0.85, 0.92); filter: blur(1.5px) drop-shadow(0 0 14px #a3e635); }
+      48% { opacity: 1.0; transform: translate(-50%, 0) scale(1.05, 1.22); filter: blur(2px) drop-shadow(0 0 20px #bef264); }
+      58% { opacity: 0.88; transform: translate(-50%, 0) scale(1.22, 1.35); filter: blur(3.5px); }
+      72% { opacity: 0.45; transform: translate(-50%, 0) scale(1.38, 1.45); filter: blur(5.5px); }
+      86% { opacity: 0.15; transform: translate(-50%, 0) scale(1.50, 1.52); filter: blur(7.5px); }
+      100% { opacity: 0; transform: translate(-50%, 0) scale(1.60, 1.58); filter: blur(9.5px); }
+    }
+
+    /* Layer 3: Organic Aerodynamic Pressure Wave (Zero CAD borders, solid feathered radial burst) */
+    @keyframes gbaVaporPressureWave {
+      0%, 34% { opacity: 0; transform: translate(-50%, -50%) scale(0.25); filter: blur(2px); }
+      46% { opacity: 0.75; transform: translate(-50%, -50%) scale(0.85); filter: blur(3px); }
+      70% { opacity: 0.45; transform: translate(-50%, -50%) scale(1.25); filter: blur(5px); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(1.55); filter: blur(8px); }
+    }
+
+    /* Layer 4A: Volumetric Deep Noxious Purple Base Plume (Contained within card bounds) */
+    @keyframes gbaVaporDeepPlume {
+      0%, 28% { opacity: 0; transform: translate(-50%, -50%) scale(0.35) rotate(0deg); }
+      40% { opacity: 0.55; transform: translate(-50%, -49%) scale(0.70) rotate(1deg); }
+      54% { opacity: 0.95; transform: translate(-50%, -47%) scale(1.02) rotate(2deg); }
+      74% { opacity: 0.80; transform: translate(-50%, -45%) scale(1.18) rotate(-2deg); }
+      90% { opacity: 0.35; transform: translate(-50%, -43%) scale(1.28) rotate(3deg); filter: blur(3px); }
+      100% { opacity: 0; transform: translate(-50%, -42%) scale(1.34) rotate(4deg); filter: blur(5px); }
+    }
+
+    /* Layer 4B: Caustic Acid Core Billow (Symmetrical Luminous Lime & Chlorine Gas) */
+    @keyframes gbaVaporAcidCore {
+      0%, 32% { opacity: 0; transform: translate(-50%, -50%) scale(0.30) rotate(-2deg); }
+      44% { opacity: 0.65; transform: translate(-50%, -49%) scale(0.68) rotate(0deg); }
+      56% { opacity: 0.95; transform: translate(-50%, -47%) scale(1.00) rotate(1deg); }
+      76% { opacity: 0.75; transform: translate(-50%, -44%) scale(1.16) rotate(-1deg); }
+      90% { opacity: 0.30; transform: translate(-50%, -42%) scale(1.26) rotate(2deg); filter: blur(3px); }
+      100% { opacity: 0; transform: translate(-50%, -40%) scale(1.30) rotate(3deg); filter: blur(4.5px); }
+    }
+
+    /* Layer 4C: Swirling Turbulent Miasma Eddies */
+    @keyframes gbaVaporSwirlingEddy {
+      0%, 35% { opacity: 0; transform: translate(-50%, -50%) scale(0.3) rotate(0deg); }
+      54% { opacity: 0.75; transform: translate(-50%, -52%) scale(0.95) rotate(-14deg); }
+      74% { opacity: 0.60; transform: translate(-50%, -54%) scale(1.18) rotate(-28deg); }
+      90% { opacity: 0.25; transform: translate(-50%, -56%) scale(1.30) rotate(-40deg); filter: blur(3px); }
+      100% { opacity: 0; transform: translate(-50%, -58%) scale(1.38) rotate(-48deg); filter: blur(4.5px); }
+    }
+
+    /* Layer 5A: High-Velocity Caustic Spurt Micro-Droplets */
+    @keyframes gbaVaporSpurtParticle {
+      0%, 36% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+      45% { opacity: 1; transform: translate(calc(var(--p-dx) * 0.45), calc(var(--p-dy) * 0.45)) scale(1.2); }
+      72% { opacity: 0.85; transform: translate(calc(var(--p-dx) * 0.85), calc(var(--p-dy) * 0.85)) scale(1.0); }
+      100% { opacity: 0; transform: translate(var(--p-dx), var(--p-dy)) scale(0.3); }
+    }
+
+    /* Layer 5B: Boiling Caustic Effervescence & Micro-Bubbles */
+    @keyframes gbaVaporBoilingBubble {
+      0%, 42% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+      58% { opacity: 1; transform: translate(calc(var(--bdx) * 0.5), -12px) scale(1.2); }
+      78% { opacity: 0.85; transform: translate(calc(var(--bdx) * 0.85), -24px) scale(0.9); }
+      100% { opacity: 0; transform: translate(var(--bdx), -38px) scale(0.2); }
+    }
+
+    /* Layer 5C: Poison Status Condition Saturation Pulse */
+    @keyframes gbaVaporPoisonSaturation {
+      0%, 32% { opacity: 0; }
+      50% { opacity: 0.85; filter: drop-shadow(0 0 20px rgba(163,230,53,0.9)); }
+      76% { opacity: 0.60; filter: drop-shadow(0 0 14px rgba(168,85,247,0.75)); }
+      100% { opacity: 0; }
+    }
+
+    /* Bench Beat: Volumetric Multi-Lobed Miasma & Caustic Pulse on Benched Pokémon (Zero CAD border rings) */
+    @keyframes gbaVaporBenchAura {
+      0% { opacity: 0; transform: scale(0.85); }
+      25% { opacity: 0.80; transform: scale(1); }
+      65% { opacity: 0.60; }
+      85% { opacity: 0.35; }
+      100% { opacity: 0; transform: scale(1.06); filter: blur(2px); }
+    }
+
+    @keyframes gbaVaporBenchPuff {
+      0% { opacity: 0; transform: scale(0.40) rotate(-5deg); filter: blur(2px); }
+      28% { opacity: 0.95; transform: scale(1.00) rotate(1deg); filter: blur(0); }
+      60% { opacity: 0.85; transform: scale(1.18) rotate(-2deg); }
+      82% { opacity: 0.45; transform: scale(1.30) rotate(2deg); filter: blur(2px); }
+      100% { opacity: 0; transform: scale(1.38) rotate(3deg); filter: blur(4px); }
+    }
+
+    /* Bench Micro Caustic Flecks & Bio-Luminescent Spores */
+    @keyframes gbaVaporBenchFlecks {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      28% { opacity: 1; transform: translate(var(--bf-x), var(--bf-y)) scale(1.25); filter: drop-shadow(0 0 4px currentColor); }
+      65% { opacity: 0.85; transform: translate(calc(var(--bf-x) * 1.45), calc(var(--bf-y) * 1.45)) scale(0.95); }
+      88% { opacity: 0.35; transform: translate(calc(var(--bf-x) * 1.75), calc(var(--bf-y) * 1.75)) scale(0.5); }
+      100% { opacity: 0; transform: translate(calc(var(--bf-x) * 1.95), calc(var(--bf-y) * 1.95)) scale(0.15); filter: blur(1px); }
+    }
+
+    /* Bench Viscous Boiling Effervescence with squash & stretch */
+    @keyframes gbaVaporBenchBubble {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.2, 0.2); }
+      18% { opacity: 0.95; transform: translate(calc(var(--bb-x) * 0.3), -6px) scale(1.2, 0.85); }
+      45% { opacity: 1.0; transform: translate(calc(var(--bb-x) * 0.65), -16px) scale(0.9, 1.15); filter: drop-shadow(0 0 6px currentColor); }
+      72% { opacity: 0.75; transform: translate(calc(var(--bb-x) * 0.95), -26px) scale(1.05, 0.95); }
+      90% { opacity: 0.35; transform: translate(var(--bb-x), -34px) scale(0.6, 0.5); filter: blur(1px); }
+      100% { opacity: 0; transform: translate(calc(var(--bb-x) * 1.08), -38px) scale(0.2); }
+    }
+
+    /* Bench Poison Damage Saturation Pulse */
+    @keyframes gbaVaporBenchDamageFlash {
+      0%, 12% { opacity: 0; }
+      32% { opacity: 0.70; }
+      65% { opacity: 0.40; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dark Arbok "Poison Vapor" (Zehir Buharı)</h1>
+  <div class="subtitle">
+    Aerodinamik Akışkan Miazma &bull; GameBoard Ölçek Uyumluluğu (184×253px Active, 110×151px Bench) &bull;
+    Arbok Zehir Dişlerine Kilitli Nozzle &bull; Kart Sınırı İçi Hapsedilme (Anti-Bleed) &bull;
+    5 Katmanlı Sinematik Tezgâh Efektleri (1.32s) &bull; Gerçek TCG Kartı / Dark Board Modu
+  </div>
+
+  <div class="control-bar">
+    <button onclick="triggerPoisonVapor(false)">
+      <span>▶ Normal Saldırı (Aktif Zehir + Tezgâh)</span>
+    </button>
+    <button class="btn-whiff" onclick="triggerPoisonVapor(true)">
+      <span>✕ Iska Modu (Whiff)</span>
+    </button>
+    <button id="btnLoop" class="btn-loop" onclick="toggleLoop()">
+      <span>⟳ Sürekli Döngü: KAPALI</span>
+    </button>
+    <button id="btnMode" class="btn-mode" onclick="toggleCardMode()">
+      <span>🃏 Mod: Gerçek TCG Kartı</span>
+    </button>
+
+    <div class="speed-btn-group">
+      <button class="btn-speed active" onclick="setSpeed(1.0, this)">1.0x (Orijinal)</button>
+      <button class="btn-speed" onclick="setSpeed(0.5, this)">0.5x (Ağır Çekim)</button>
+      <button class="btn-speed" onclick="setSpeed(0.25, this)">0.25x (Mikro Detay)</button>
+    </div>
+  </div>
+
+  <div class="board-container">
+    <!-- Active Target Card (Exact GameBoard Desktop Active Card: 184px x 253px, aspect 600/825) -->
+    <div class="active-row">
+      <div class="card-label">
+        Rakip Aktif Hedef (Active Defending)
+        <span class="badge">184PX × 253PX (GameBoard lg)</span>
+      </div>
+      <div class="hp-strip" style="width: 184px;">
+        <div class="hp-text">
+          <span>70/70 HP</span>
+          <span style="color: #cbd5e1;">MUK LV.34</span>
+        </div>
+        <div class="hp-bar">
+          <div class="hp-pip"></div>
+          <div class="hp-pip"></div>
+          <div class="hp-pip"></div>
+          <div class="hp-pip"></div>
+          <div class="hp-pip"></div>
+          <div class="hp-pip"></div>
+          <div class="hp-pip"></div>
+        </div>
+      </div>
+      <div class="card-stage real-card-mode" id="activeCard" data-card="13">
+        <!-- Real Card Underlay -->
+        <div class="card-underlay">
+          <img class="card-underlay-img" alt="Target Muk" style="width:100%;height:100%;object-fit:fill;" />
+        </div>
+        <!-- Mockup Interior -->
+        <div class="card-mockup-inner">
+          <div class="card-header">
+            <span>Muk</span>
+            <span>70 HP</span>
+          </div>
+          <div id="poisonBadge" class="poison-badge">ZEHİRLENDİ (POISONED)</div>
+          <div style="font-size: 11px; color: #86efac; font-weight: 600;">10 Hasar + Zehir Durumu</div>
+        </div>
+        <!-- Active FX Overlay -->
+        <div id="activeOverlay" class="fx-layer"></div>
+      </div>
+    </div>
+
+    <!-- Benched Target Cards (Exact GameBoard Desktop Bench Card: 110px x 151px, aspect 600/825) -->
+    <div class="bench-row">
+      <!-- Bench 0: Grimer -->
+      <div class="card-panel">
+        <div class="card-label" style="font-size: 11px;">
+          Yedek 1 (Bench 0)
+          <span class="badge" style="font-size: 8.5px;">+240ms</span>
+        </div>
+        <div class="hp-strip" style="width: 110px;">
+          <div class="hp-text" style="font-size: 8px;">
+            <span>50/50 HP</span>
+            <span>GRIMER</span>
+          </div>
+          <div class="hp-bar" style="height: 4px;">
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+          </div>
+        </div>
+        <div class="card-stage-bench real-card-mode" id="benchCard0" data-card="48">
+          <div class="card-underlay">
+            <img class="card-underlay-img" alt="Target Grimer" style="width:100%;height:100%;object-fit:fill;" />
+          </div>
+          <div class="card-mockup-inner">
+            <div class="card-header card-header-sm">
+              <span>Grimer</span>
+              <span>50 HP</span>
+            </div>
+            <div style="font-size: 9px; color: #cbd5e1;">-10 Hasar</div>
+          </div>
+          <div id="benchOverlay0" class="fx-layer"></div>
+        </div>
+      </div>
+
+      <!-- Bench 1: Weezing -->
+      <div class="card-panel">
+        <div class="card-label" style="font-size: 11px;">
+          Yedek 2 (Bench 1)
+          <span class="badge" style="font-size: 8.5px;">+350ms</span>
+        </div>
+        <div class="hp-strip" style="width: 110px;">
+          <div class="hp-text" style="font-size: 8px;">
+            <span>60/60 HP</span>
+            <span>WEEZING</span>
+          </div>
+          <div class="hp-bar" style="height: 4px;">
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+          </div>
+        </div>
+        <div class="card-stage-bench real-card-mode" id="benchCard1" data-card="14">
+          <div class="card-underlay">
+            <img class="card-underlay-img" alt="Target Weezing" style="width:100%;height:100%;object-fit:fill;" />
+          </div>
+          <div class="card-mockup-inner">
+            <div class="card-header card-header-sm">
+              <span>Weezing</span>
+              <span>60 HP</span>
+            </div>
+            <div style="font-size: 9px; color: #cbd5e1;">-10 Hasar</div>
+          </div>
+          <div id="benchOverlay1" class="fx-layer"></div>
+        </div>
+      </div>
+
+      <!-- Bench 2: Koffing -->
+      <div class="card-panel">
+        <div class="card-label" style="font-size: 11px;">
+          Yedek 3 (Bench 2)
+          <span class="badge" style="font-size: 8.5px;">+460ms</span>
+        </div>
+        <div class="hp-strip" style="width: 110px;">
+          <div class="hp-text" style="font-size: 8px;">
+            <span>50/50 HP</span>
+            <span>KOFFING</span>
+          </div>
+          <div class="hp-bar" style="height: 4px;">
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+            <div class="hp-pip"></div>
+          </div>
+        </div>
+        <div class="card-stage-bench real-card-mode" id="benchCard2" data-card="51">
+          <div class="card-underlay">
+            <img class="card-underlay-img" alt="Target Koffing" style="width:100%;height:100%;object-fit:fill;" />
+          </div>
+          <div class="card-mockup-inner">
+            <div class="card-header card-header-sm">
+              <span>Koffing</span>
+              <span>50 HP</span>
+            </div>
+            <div style="font-size: 9px; color: #cbd5e1;">-10 Hasar</div>
+          </div>
+          <div id="benchOverlay2" class="fx-layer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // RULE 12: Resilient Local/Static Preview Asset Protocol
+    const ASSET_CANDIDATE_PATHS = [
+      'assets/Arbok_PoisonFang_Maw.png',
+      '/assets/Arbok_PoisonFang_Maw.png',
+      './assets/Arbok_PoisonFang_Maw.png',
+      '../public/assets/Arbok_PoisonFang_Maw.png'
+    ];
+
+    let speedMult = 1.0;
+    let isLooping = false;
+    let loopTimeout = null;
+    let currentWhiff = false;
+    let isRealCardMode = true;
+
+    // Load authentic TCG card underlays with Rule 12 resilient fallback paths
+    function loadCardImages() {
+      document.querySelectorAll('[data-card]').forEach(stage => {
+        const cardNum = stage.getAttribute('data-card');
+        const img = stage.querySelector('.card-underlay-img');
+        if (!cardNum || !img) return;
+        const candidatePaths = [
+          `cards/${cardNum}.jpg`,
+          `/cards/${cardNum}.jpg`,
+          `./cards/${cardNum}.jpg`,
+          `../public/cards/${cardNum}.jpg`
+        ];
+        let idx = 0;
+        img.onerror = function() {
+          idx++;
+          if (idx < candidatePaths.length) {
+            this.src = candidatePaths[idx];
+          }
+        };
+        img.src = candidatePaths[0];
+      });
+    }
+
+    function toggleCardMode() {
+      isRealCardMode = !isRealCardMode;
+      const btn = document.getElementById('btnMode');
+      const cards = document.querySelectorAll('.card-stage, .card-stage-bench');
+      cards.forEach(c => {
+        if (isRealCardMode) {
+          c.classList.add('real-card-mode');
+        } else {
+          c.classList.remove('real-card-mode');
+        }
+      });
+      if (btn) {
+        btn.querySelector('span').innerText = isRealCardMode
+          ? '🃏 Mod: Gerçek TCG Kartı'
+          : '⬛ Mod: Stilize Dark Board';
+        btn.style.background = isRealCardMode ? '#1e3a8a' : '#334155';
+      }
+    }
+
+    function setSpeed(speed, btn) {
+      speedMult = speed;
+      document.querySelectorAll('.btn-speed').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      triggerPoisonVapor(currentWhiff);
+    }
+
+    function toggleLoop() {
+      isLooping = !isLooping;
+      const btn = document.getElementById('btnLoop');
+      if (isLooping) {
+        btn.classList.add('active');
+        btn.querySelector('span').innerText = '⟳ Sürekli Döngü: AÇIK';
+        triggerPoisonVapor(currentWhiff);
+      } else {
+        btn.classList.remove('active');
+        btn.querySelector('span').innerText = '⟳ Sürekli Döngü: KAPALI';
+        clearTimeout(loopTimeout);
+      }
+    }
+
+    // Main Poison Vapor Trigger (Matching BattleFXOverlay.tsx exactly)
+    function triggerPoisonVapor(isWhiffed = false) {
+      currentWhiff = isWhiffed;
+      clearTimeout(loopTimeout);
+
+      const activeContainer = document.getElementById('activeOverlay');
+      activeContainer.innerHTML = '';
+      [0, 1, 2].forEach(i => {
+        const b = document.getElementById(`benchOverlay${i}`);
+        if (b) b.innerHTML = '';
+      });
+
+      const durSec = (1.82 / speedMult).toFixed(2);
+      const boilDur = (1.15 / speedMult).toFixed(2);
+
+      // Build 5-Layer Active Poison Vapor
+      let activeHtml = '';
+
+      // Layer 1: Ambient Caustic Floor Pool & Card Vignette
+      activeHtml += `
+        <div style="
+          position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+          animation: gbaVaporFloorPool ${durSec}s ease-in-out forwards; opacity: 0;
+          background: radial-gradient(ellipse at 50% 65%, rgba(20,83,45,0.48) 0%, rgba(88,28,135,0.38) 45%, rgba(20,10,40,0.65) 85%, transparent 100%);
+        "></div>
+      `;
+
+      if (!isWhiffed) {
+        // Layer 3: Aerodynamic Pressure Shockwave & Status Saturation (Zero CAD borders)
+        activeHtml += `
+          <!-- Pressure Shockwave -->
+          <div style="
+            position: absolute; left: 50%; top: 52%; width: 180px; height: 140px;
+            border-radius: 9999px; pointer-events: none; z-index: 30; filter: blur(4px);
+            animation: gbaVaporPressureWave ${durSec}s cubic-bezier(0.2, 0.8, 0.25, 1) forwards; opacity: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(190,242,100,0.35) 0%, rgba(163,230,53,0.25) 45%, rgba(126,34,206,0.18) 70%, transparent 95%);
+          "></div>
+          <!-- Saturation Flash -->
+          <div style="
+            position: absolute; inset: 0; border-radius: 12px; pointer-events: none; z-index: 28;
+            animation: gbaVaporPoisonSaturation ${durSec}s ease-out forwards; opacity: 0;
+            background: radial-gradient(circle at 50% 55%, rgba(190,242,100,0.38) 0%, rgba(163,230,53,0.24) 40%, rgba(168,85,247,0.18) 70%, transparent 100%);
+          "></div>
+
+          <!-- Layer 4: Volumetric Fluid Gas Miasma (Contained strictly within card bounds) -->
+          <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 35; overflow: hidden; border-radius: 12px;">
+            <!-- 4A: Deep Noxious Purple Base Plume -->
+            <div style="
+              position: absolute; left: 50%; top: 50%; width: 168px; height: 112px; pointer-events: none;
+              animation: gbaVaporDeepPlume ${durSec}s cubic-bezier(0.22, 0.8, 0.3, 1) forwards; opacity: 0;
+            ">
+              <div style="
+                position: absolute; width: 104px; height: 72px; border-radius: 9999px; filter: blur(7px);
+                left: 12px; top: 12px;
+                background: radial-gradient(ellipse, rgba(59,7,100,0.92) 0%, rgba(88,28,135,0.75) 55%, transparent 95%);
+              "></div>
+              <div style="
+                position: absolute; width: 104px; height: 72px; border-radius: 9999px; filter: blur(7px);
+                right: 12px; top: 12px;
+                background: radial-gradient(ellipse, rgba(126,34,206,0.85) 0%, rgba(147,51,234,0.65) 50%, transparent 90%);
+              "></div>
+              <div style="
+                position: absolute; width: 144px; height: 64px; border-radius: 9999px; filter: blur(9px);
+                left: 50%; transform: translateX(-50%); bottom: 4px;
+                background: radial-gradient(ellipse, rgba(88,28,135,0.75) 0%, rgba(30,10,60,0.55) 60%, transparent 95%);
+              "></div>
+            </div>
+
+            <!-- 4B: Caustic Acid Core Billow (Symmetrical Chlorine Lime Billow centered on mouth) -->
+            <div style="
+              position: absolute; left: 50%; top: 48%; width: 154px; height: 102px; pointer-events: none;
+              animation: gbaVaporAcidCore ${durSec}s cubic-bezier(0.22, 0.8, 0.3, 1) ${(0.08 / speedMult).toFixed(2)}s forwards; opacity: 0;
+            ">
+              <div style="
+                position: absolute; width: 88px; height: 64px; border-radius: 9999px; filter: blur(5px);
+                left: 14px; top: 14px;
+                background: radial-gradient(ellipse, rgba(236,252,203,0.95) 0%, rgba(163,230,53,0.82) 40%, rgba(63,98,18,0.5) 75%, transparent 95%);
+              "></div>
+              <div style="
+                position: absolute; width: 88px; height: 64px; border-radius: 9999px; filter: blur(5px);
+                right: 14px; top: 14px;
+                background: radial-gradient(ellipse, rgba(236,252,203,0.95) 0%, rgba(163,230,53,0.82) 40%, rgba(63,98,18,0.5) 75%, transparent 95%);
+              "></div>
+              <div style="
+                position: absolute; width: 96px; height: 64px; border-radius: 9999px; filter: blur(4px);
+                left: 50%; transform: translateX(-50%); top: 20px;
+                background: radial-gradient(ellipse, rgba(254,255,230,0.98) 0%, rgba(190,242,100,0.88) 40%, rgba(132,204,22,0.6) 70%, transparent 92%);
+              "></div>
+            </div>
+
+            <!-- 4C: Swirling Turbulent Miasma Eddies -->
+            <div style="
+              position: absolute; left: 50%; top: 45%; width: 172px; height: 114px; pointer-events: none;
+              animation: gbaVaporSwirlingEddy ${durSec}s ease-out ${(0.16 / speedMult).toFixed(2)}s forwards; opacity: 0;
+            ">
+              <div style="
+                width: 100%; height: 100%; border-radius: 9999px; filter: blur(6px);
+                background: radial-gradient(ellipse at 50% 50%, rgba(168,85,247,0.32) 0%, rgba(163,230,53,0.22) 50%, transparent 80%);
+              "></div>
+            </div>
+          </div>
+        `;
+      }
+
+      // Layer 2: Primary Visual Actor (Arbok Centered Apex Cobra Lunge)
+      const mawSize = isWhiffed ? '76px' : '108px';
+      const mawAnim = isWhiffed
+        ? `gbaArbokVaporWhiff ${durSec}s ease-out forwards`
+        : `gbaArbokVaporLunge ${durSec}s cubic-bezier(0.18, 0.9, 0.3, 1) forwards`;
+
+      activeHtml += `
+        <div id="arbokMawContainer" style="
+          position: absolute; left: 50%; top: 24%; width: ${mawSize}; height: ${mawSize};
+          pointer-events: none; z-index: 40; animation: ${mawAnim}; opacity: 0;
+        "></div>
+      `;
+
+      if (!isWhiffed) {
+        // Anticipation: Pre-Spurt Caustic Maw Charge Glow (Aligned to open fangs at 50% 22%)
+        activeHtml += `
+          <div style="
+            position: absolute; left: 50%; top: 22%; pointer-events: none; z-index: 42;
+            transform: translate(-50%, -50%); animation: gbaArbokMawGlow ${durSec}s ease-out forwards; opacity: 0;
+          ">
+            <div style="width: 32px; height: 32px; border-radius: 9999px; background: rgba(190,242,100,0.85); filter: blur(3px); box-shadow: 0 0 18px #a3e635;"></div>
+          </div>
+        `;
+
+        // High-Velocity Fluid Venom Impulse Jet (Pinned to fangs at 50% 22% with transform-origin: 50% 0%)
+        activeHtml += `
+          <div style="
+            position: absolute; left: 50%; top: 22%; pointer-events: none; z-index: 38;
+            transform-origin: 50% 0%; animation: gbaVaporEruptionJet ${durSec}s ease-out forwards; opacity: 0;
+          ">
+            <!-- Central High-Pressure Caustic Stream Core -->
+            <div style="
+              width: 56px; height: 120px; filter: blur(2px); border-radius: 9999px; margin: 0 auto;
+              background: radial-gradient(ellipse at 50% 12%, rgba(254,255,230,0.98) 0%, rgba(190,242,100,0.9) 25%, rgba(163,230,53,0.75) 45%, rgba(126,34,206,0.35) 75%, transparent 100%);
+            "></div>
+            <!-- Symmetrical Dual Fluid Mist Flaring Whisps -->
+            <div style="
+              position: absolute; left: -16px; top: 12px; width: 40px; height: 96px; filter: blur(3px); border-radius: 9999px; transform: rotate(-12deg);
+              background: radial-gradient(ellipse, rgba(163,230,53,0.75) 0%, rgba(126,34,206,0.45) 55%, transparent 90%);
+            "></div>
+            <div style="
+              position: absolute; right: -16px; top: 12px; width: 40px; height: 96px; filter: blur(3px); border-radius: 9999px; transform: rotate(12deg);
+              background: radial-gradient(ellipse, rgba(163,230,53,0.75) 0%, rgba(126,34,206,0.45) 55%, transparent 90%);
+            "></div>
+          </div>
+        `;
+
+        // Layer 5: Ballistic Caustic Spurt Particles & Boiling Effervescence
+        const spurts = [
+          { dx: '-32px', dy: '46px', delay: 0.40, s: 4.5, color: '#fef08a' },
+          { dx: '34px', dy: '48px', delay: 0.43, s: 4, color: '#bef264' },
+          { dx: '-16px', dy: '58px', delay: 0.46, s: 5, color: '#a3e635' },
+          { dx: '18px', dy: '62px', delay: 0.49, s: 4.5, color: '#d9f99d' },
+          { dx: '-44px', dy: '52px', delay: 0.52, s: 3.5, color: '#86efac' },
+          { dx: '42px', dy: '54px', delay: 0.55, s: 4, color: '#c084fc' }
+        ];
+
+        let spurtsHtml = spurts.map(p => {
+          const d = (p.delay / speedMult).toFixed(2);
+          return `
+            <div style="
+              position: absolute; left: 50%; top: 23%; width: ${p.s}px; height: ${p.s}px; border-radius: 9999px;
+              background-color: ${p.color}; box-shadow: 0 0 10px ${p.color}; pointer-events: none;
+              --p-dx: ${p.dx}; --p-dy: ${p.dy};
+              animation: gbaVaporSpurtParticle ${(1.25 / speedMult).toFixed(2)}s ease-out ${d}s forwards; opacity: 0;
+            "></div>
+          `;
+        }).join('');
+
+        const boils = [
+          { bdx: '-28px', delay: 0.52, s: 7, color: '#bef264' },
+          { bdx: '26px', delay: 0.60, s: 8, color: '#a3e635' },
+          { bdx: '-14px', delay: 0.68, s: 6, color: '#c084fc' },
+          { bdx: '32px', delay: 0.76, s: 7, color: '#86efac' },
+          { bdx: '-36px', delay: 0.84, s: 5, color: '#a855f7' },
+          { bdx: '14px', delay: 0.92, s: 6, color: '#facc15' }
+        ];
+
+        let boilsHtml = boils.map(b => {
+          const d = (b.delay / speedMult).toFixed(2);
+          return `
+            <div style="
+              position: absolute; left: 50%; top: 62%; width: ${b.s}px; height: ${b.s}px; border-radius: 9999px;
+              background-color: ${b.color}; box-shadow: 0 0 8px ${b.color}; pointer-events: none;
+              --bdx: ${b.bdx};
+              animation: gbaVaporBoilingBubble ${boilDur}s ease-out ${d}s forwards; opacity: 0;
+            "></div>
+          `;
+        }).join('');
+
+        activeHtml += `
+          <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 45;">
+            ${spurtsHtml}
+            ${boilsHtml}
+          </div>
+        `;
+      }
+
+      activeContainer.innerHTML = activeHtml;
+
+      // Resilient Arbok Stock Actor Image Insertion with Rule 12 onerror Chaining
+      const mawContainer = document.getElementById('arbokMawContainer');
+      if (mawContainer) {
+        const mawImg = document.createElement('img');
+        mawImg.alt = 'Arbok Poison Vapor';
+        mawImg.style.cssText = 'width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 20px rgba(163,230,53,0.7)) drop-shadow(0 6px 16px rgba(88,28,135,0.75));';
+        let mawIdx = 0;
+        mawImg.onerror = function() {
+          mawIdx++;
+          if (mawIdx < ASSET_CANDIDATE_PATHS.length) {
+            this.src = ASSET_CANDIDATE_PATHS[mawIdx];
+          }
+        };
+        mawImg.src = ASSET_CANDIDATE_PATHS[0];
+        mawContainer.appendChild(mawImg);
+      }
+
+      // Poison Status Badge Feedback
+      const pBadge = document.getElementById('poisonBadge');
+      if (pBadge) {
+        if (!isWhiffed) {
+          setTimeout(() => {
+            pBadge.style.display = 'block';
+          }, (800 / speedMult));
+          setTimeout(() => {
+            pBadge.style.display = 'none';
+          }, (2600 / speedMult));
+        } else {
+          pBadge.style.display = 'none';
+        }
+      }
+
+      // Staggered Bench Hits (GameBoard.tsx parity: 240ms, 350ms, 460ms)
+      if (!isWhiffed) {
+        [0, 1, 2].forEach(bIdx => {
+          const delayMs = (240 + bIdx * 110) / speedMult;
+          setTimeout(() => {
+            triggerBenchHit(bIdx);
+          }, delayMs);
+        });
+      }
+
+      // Loop handling
+      if (isLooping) {
+        loopTimeout = setTimeout(() => {
+          triggerPoisonVapor(isWhiffed);
+        }, (2600 / speedMult));
+      }
+    }
+
+    // Bench Hit Trigger (Matching BattleFXOverlay.tsx poison_vapor_bench exactly)
+    function triggerBenchHit(idx) {
+      const container = document.getElementById(`benchOverlay${idx}`);
+      if (!container) return;
+      const bDur = (1.32 / speedMult).toFixed(2);
+
+      // Layer 3: Bench Boiling Effervescence Bubbles (6 micro-bubbles with squash & stretch and chromatic glows)
+      const benchBubbles = [
+        { x: '-22px', delay: 0.14, s: 7, c: '#bef264' },
+        { x: '18px', delay: 0.22, s: 8, c: '#a3e635' },
+        { x: '-8px', delay: 0.30, s: 6, c: '#c084fc' },
+        { x: '26px', delay: 0.38, s: 7, c: '#facc15' },
+        { x: '-16px', delay: 0.46, s: 5, c: '#86efac' },
+        { x: '10px', delay: 0.54, s: 6.5, c: '#d946ef' }
+      ];
+
+      const bubblesHtml = benchBubbles.map(b => `
+        <div style="
+          position: absolute; border-radius: 9999px; pointer-events: none;
+          --bb-x: ${b.x}; width: ${b.s}px; height: ${b.s}px;
+          background-color: ${b.c}; box-shadow: 0 0 8px ${b.c};
+          animation: gbaVaporBenchBubble ${bDur}s ease-out ${(b.delay / speedMult).toFixed(2)}s forwards; opacity: 0;
+        "></div>
+      `).join('');
+
+      // Layer 4: Micro Flecks & Bio-Luminescent Spores
+      const flecks = [
+        { x: '-16px', y: '-18px', delay: 0.10, c: '#bef264' },
+        { x: '18px', y: '-16px', delay: 0.16, c: '#a3e635' },
+        { x: '-6px', y: '-26px', delay: 0.22, c: '#c084fc' },
+        { x: '22px', y: '-20px', delay: 0.28, c: '#86efac' },
+        { x: '-24px', y: '-14px', delay: 0.34, c: '#facc15' },
+        { x: '12px', y: '-28px', delay: 0.40, c: '#d946ef' }
+      ];
+
+      const flecksHtml = flecks.map(f => `
+        <div style="
+          position: absolute; width: 3.5px; height: 3.5px; border-radius: 9999px;
+          background-color: ${f.c}; box-shadow: 0 0 8px ${f.c}; pointer-events: none;
+          --bf-x: ${f.x}; --bf-y: ${f.y};
+          animation: gbaVaporBenchFlecks ${(1.20 / speedMult).toFixed(2)}s ease-out ${(f.delay / speedMult).toFixed(2)}s forwards; opacity: 0;
+        "></div>
+      `).join('');
+
+      container.innerHTML = `
+        <!-- Layer 1: Bench Caustic Floor Aura & Card Vignette -->
+        <div style="
+          position: absolute; inset: 0; border-radius: 10px; pointer-events: none;
+          animation: gbaVaporBenchAura ${bDur}s ease-in-out forwards; opacity: 0;
+          background: radial-gradient(ellipse at 50% 60%, rgba(20,83,45,0.72) 0%, rgba(88,28,135,0.60) 50%, rgba(15,23,42,0.78) 85%, transparent 100%);
+        "></div>
+
+        <!-- Layer 2: Bench Viscous Aerodynamic Counter-Rolling Gas Plumes -->
+        <div style="
+          position: absolute; width: 96px; height: 70px; pointer-events: none;
+          animation: gbaVaporBenchPuff ${bDur}s cubic-bezier(0.2, 0.8, 0.25, 1) forwards; opacity: 0;
+        ">
+          <!-- Lobe 1 - Deep Noxious Violet Shadow Plume -->
+          <div style="
+            position: absolute; width: 68px; height: 52px; border-radius: 9999px; filter: blur(4px);
+            left: 4px; top: 6px;
+            background: radial-gradient(ellipse, rgba(59,7,100,0.95) 0%, rgba(88,28,135,0.72) 60%, transparent 95%);
+          "></div>
+          <!-- Lobe 2 - Caustic Chlorine Lime Core Billow -->
+          <div style="
+            position: absolute; width: 64px; height: 48px; border-radius: 9999px; filter: blur(3px);
+            right: 4px; bottom: 4px;
+            background: radial-gradient(ellipse, rgba(236,252,203,0.95) 0%, rgba(163,230,53,0.85) 40%, rgba(63,98,18,0.55) 75%, transparent 95%);
+          "></div>
+          <!-- Lobe 3 - Sweeping Upper Mist Canopy -->
+          <div style="
+            position: absolute; width: 80px; height: 36px; border-radius: 9999px; filter: blur(3px);
+            left: 50%; transform: translateX(-50%); top: 0px;
+            background: radial-gradient(ellipse, rgba(190,242,100,0.82) 0%, rgba(132,204,22,0.48) 50%, transparent 90%);
+          "></div>
+          <!-- Lobe 4 - Corrosive Ametist Right Flank -->
+          <div style="
+            position: absolute; width: 56px; height: 44px; border-radius: 9999px; filter: blur(4px);
+            right: 8px; top: 4px;
+            background: radial-gradient(ellipse, rgba(147,51,234,0.75) 0%, rgba(126,34,206,0.50) 55%, transparent 90%);
+          "></div>
+        </div>
+
+        <!-- Layer 3: Bench Boiling Effervescence -->
+        ${bubblesHtml}
+
+        <!-- Layer 4: Bench Micro Caustic Flecks & Bio-Luminescent Spores -->
+        ${flecksHtml}
+
+        <!-- Layer 5: Bench Poison Damage Saturation Pulse -->
+        <div style="
+          position: absolute; inset: 0; border-radius: 10px; pointer-events: none; z-index: 30;
+          animation: gbaVaporBenchDamageFlash ${bDur}s ease-out forwards; opacity: 0;
+          background: radial-gradient(ellipse at 50% 50%, rgba(190,242,100,0.30) 0%, rgba(168,85,247,0.22) 55%, transparent 90%);
+        "></div>
+      `;
+    }
+
+    // Auto-trigger on page load
+    window.addEventListener('load', () => {
+      loadCardImages();
+      setTimeout(() => triggerPoisonVapor(false), 200);
+    });
+  </script>
+</body>
+</html>

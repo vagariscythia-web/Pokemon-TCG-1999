@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dark Arbok "Stare" — 5-Layer Animation Master Showcase</title>
+  <style>
+    :root {
+      --speed-mult: 1;
+    }
+    body {
+      background: #090514;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      margin: 0;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #e879f9;
+      font-size: 24px;
+      margin: 0;
+      text-shadow: 0 0 24px rgba(232, 121, 249, 0.7);
+      letter-spacing: 0.5px;
+    }
+    .subtitle {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      max-width: 820px;
+      text-align: center;
+      line-height: 1.6;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid #a855f7;
+      border-radius: 4px;
+      color: #f5d0fe;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-left: 6px;
+    }
+    .control-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: #140a2b;
+      border: 1px solid #7e22ce;
+      border-radius: 12px;
+      padding: 12px 24px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.7);
+    }
+    .speed-btn-group {
+      display: flex;
+      gap: 6px;
+      background: #1e0e3d;
+      padding: 4px;
+      border-radius: 8px;
+      border: 1px solid #581c87;
+    }
+    .btn {
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+    .btn-speed {
+      background: transparent;
+      color: #c084fc;
+      padding: 6px 12px;
+    }
+    .btn-speed.active {
+      background: #a855f7;
+      color: #ffffff;
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.6);
+    }
+    .btn-action {
+      background: linear-gradient(135deg, #9333ea, #c026d3);
+      color: white;
+      box-shadow: 0 2px 10px rgba(192, 38, 211, 0.4);
+    }
+    .btn-action:hover {
+      filter: brightness(1.15);
+      transform: translateY(-1px);
+    }
+    .btn-whiff {
+      background: linear-gradient(135deg, #475569, #334155);
+      color: #f1f5f9;
+      border: 1px solid #64748b;
+    }
+    .btn-whiff:hover {
+      filter: brightness(1.2);
+    }
+    .btn-loop {
+      background: #2e1065;
+      color: #f0abfc;
+      border: 1px solid #a855f7;
+    }
+    .btn-loop.active {
+      background: #a21caf;
+      color: white;
+      box-shadow: 0 0 14px rgba(217, 70, 239, 0.8);
+    }
+    .btn-mode {
+      background: #1e1b4b;
+      color: #93c5fd;
+      border: 1px solid #3b82f6;
+    }
+    .btn-mode:hover {
+      filter: brightness(1.2);
+      transform: translateY(-1px);
+    }
+    .showcase-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 10px;
+    }
+    .card-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Authentic 184px × 253px In-Game Card Arena (100% GameBoard & CardView Parity) */
+    .card-container {
+      width: 184px;
+      height: 253px;
+      aspect-ratio: 600 / 825;
+      background: linear-gradient(145deg, #1e1138, #0e0720);
+      border: 2px solid #581c87;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(126, 34, 206, 0.25);
+      box-sizing: border-box;
+      transition: all 0.25s ease;
+    }
+    .card-container.real-card-mode {
+      background: #f5cb39;
+      border: 2px solid #c79808;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+    }
+    .card-underlay {
+      position: absolute;
+      inset: 2px;
+      border-radius: 10px;
+      overflow: hidden;
+      z-index: 1;
+      pointer-events: none;
+      display: none;
+      background: #f5cb39;
+    }
+    .card-container.real-card-mode .card-underlay {
+      display: block;
+    }
+    .card-container.real-card-mode .card-art-mock {
+      display: none;
+    }
+    .card-art-mock {
+      position: absolute;
+      inset: 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      background: radial-gradient(circle at 50% 35%, #2a154d 0%, #150a28 80%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 8px;
+      box-sizing: border-box;
+    }
+    .card-header-mock {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+    .card-power-mock {
+      background: rgba(147, 51, 234, 0.25);
+      border: 1px solid #9333ea;
+      border-radius: 6px;
+      padding: 4px 6px;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: center;
+      font-size: 9.5px;
+      color: #f5d0fe;
+    }
+    .card-power-title {
+      color: #f43f5e;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 9px;
+    }
+
+    /* ============================================================
+       DARK ARBOK STARE 5-LAYER ANIMATIONS (PARITY WITH INDEX.CSS)
+       ============================================================ */
+
+    /* Layer 1: Dread floor vignette */
+    @keyframes gbaArbokDreadFloor {
+      0% { opacity: 0; transform: scale(0.92); }
+      15% { opacity: 0.70; transform: scale(1); }
+      45% { opacity: 0.95; }
+      75% { opacity: 0.80; }
+      100% { opacity: 0; transform: scale(1.04); }
+    }
+
+    /* Layer 2: Primary Actor serpentine rearing, sway, lunge tremor & sinuous retreat (0% idle freeze) */
+    @keyframes gbaArbokCobraMotion {
+      0% { opacity: 0; transform: translateY(32px) scale(0.68) rotate(-2deg); }
+      14% { opacity: 1; transform: translateY(-4px) scale(1.04) rotate(-5deg); }
+      24% { opacity: 1; transform: translateY(-8px) scale(0.98) rotate(4deg); }
+      36% { opacity: 1; transform: translateY(-10px) scale(1.02) rotate(-3.5deg); }
+      52% { opacity: 1; transform: translateY(-6px) scale(1) rotate(2deg); }
+      62% { opacity: 1; transform: translateY(8px) scale(1.08) rotate(0deg); }
+      66% { opacity: 1; transform: translateY(7px) scale(1.07) rotate(-0.5deg); }
+      70% { opacity: 1; transform: translateY(8px) scale(1.08) rotate(0.5deg); }
+      74% { opacity: 1; transform: translateY(7px) scale(1.06) rotate(0deg); }
+      84% { opacity: 0.85; transform: translateY(0px) scale(1) rotate(-1deg); }
+      100% { opacity: 0; transform: translateY(22px) scale(0.90) rotate(2deg); filter: blur(2px); }
+    }
+
+    /* Layer 2: Authentic Sugimori chest false-eyes incandescent terror flare */
+    @keyframes gbaArbokChestPulse {
+      0% { filter: drop-shadow(0 0 6px rgba(168,85,247,0.4)) brightness(0.9); }
+      20% { filter: drop-shadow(0 0 14px rgba(250,204,21,0.75)) brightness(1.06); }
+      45% { filter: drop-shadow(0 0 24px #facc15) brightness(1.22); }
+      62% { filter: drop-shadow(0 0 32px #a855f7) drop-shadow(0 0 16px #ef4444) brightness(1.30); }
+      80% { filter: drop-shadow(0 0 18px rgba(168,85,247,0.75)) brightness(1.1); }
+      100% { filter: drop-shadow(0 0 4px rgba(168,85,247,0)) brightness(0.7); }
+    }
+
+    /* Layer 2 Whiff: Tempered fizzle */
+    @keyframes gbaArbokWhiffRecede {
+      0% { opacity: 0; transform: translateY(24px) scale(0.5); }
+      25% { opacity: 0.75; transform: translateY(0px) scale(0.95) rotate(-3deg); }
+      45% { opacity: 0.60; transform: translateY(-4px) scale(0.90) rotate(2deg); }
+      70% { opacity: 0.35; transform: translateY(8px) scale(0.80) rotate(-1deg); }
+      100% { opacity: 0; transform: translateY(18px) scale(0.70); filter: blur(3px); }
+    }
+
+    /* Layer 3: Concentric hypnotic gaze shockwave ring 1 (inner rapid solar/gold pulse) */
+    @keyframes gbaArbokHypnoRing1 {
+      0% { opacity: 0; transform: scale(0.20) rotate(0deg); filter: blur(4px); }
+      26% { opacity: 0; transform: scale(0.28) rotate(20deg); filter: blur(2px); }
+      38% { opacity: 1; transform: scale(0.68) rotate(75deg); filter: blur(0px); }
+      54% { opacity: 0.95; transform: scale(1.08) rotate(145deg); filter: blur(0px); }
+      70% { opacity: 0.60; transform: scale(1.42) rotate(215deg); filter: blur(1.5px); }
+      84% { opacity: 0.15; transform: scale(1.72) rotate(275deg); filter: blur(4px); }
+      100% { opacity: 0; transform: scale(1.88) rotate(315deg); filter: blur(8px); }
+    }
+
+    /* Layer 3: Concentric hypnotic gaze shockwave ring 2 (outer sinister void warp) */
+    @keyframes gbaArbokHypnoRing2 {
+      0% { opacity: 0; transform: scale(0.22) rotate(0deg); filter: blur(5px); }
+      34% { opacity: 0; transform: scale(0.32) rotate(-15deg); filter: blur(3px); }
+      48% { opacity: 0.95; transform: scale(0.78) rotate(-75deg); filter: blur(0px); }
+      64% { opacity: 0.85; transform: scale(1.22) rotate(-150deg); filter: blur(0.5px); }
+      80% { opacity: 0.45; transform: scale(1.58) rotate(-225deg); filter: blur(2.5px); }
+      92% { opacity: 0.10; transform: scale(1.82) rotate(-285deg); filter: blur(5px); }
+      100% { opacity: 0; transform: scale(1.96) rotate(-325deg); filter: blur(8px); }
+    }
+
+    /* Layer 4: Focused gaze beams */
+    @keyframes gbaArbokGazeBeams {
+      0%, 28% { opacity: 0; transform: scale(0.6) translateY(-8px); }
+      42% { opacity: 1; transform: scale(1) translateY(0px); }
+      62% { opacity: 1; transform: scale(1.05) translateY(2px); }
+      78% { opacity: 0.75; transform: scale(1) translateY(0px); }
+      100% { opacity: 0; transform: scale(0.95) translateY(4px); }
+    }
+
+    /* Layer 4: Silence Seal Rune (Pokémon Power lock) */
+    @keyframes gbaArbokSilenceSeal {
+      0%, 36% { opacity: 0; transform: scale(0.2) rotate(-25deg); }
+      50% { opacity: 0.95; transform: scale(1.12) rotate(4deg); }
+      62% { opacity: 1; transform: scale(1.0) rotate(0deg); }
+      74% { opacity: 0.90; transform: scale(1.04) rotate(-2deg); }
+      88% { opacity: 0.55; transform: scale(1.0) rotate(0deg); }
+      100% { opacity: 0; transform: scale(0.85) rotate(0deg); filter: blur(2px); }
+    }
+
+    /* Layer 5: Ambient gaze embers */
+    @keyframes gbaArbokGazeMote {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.4); }
+      25% { opacity: 1; transform: translate(calc(var(--pdx) * 0.4), calc(var(--pdy) * 0.4)) scale(1); }
+      70% { opacity: 0.80; transform: translate(calc(var(--pdx) * 0.85), calc(var(--pdy) * 0.85)) scale(0.8); }
+      100% { opacity: 0; transform: translate(var(--pdx), var(--pdy)) scale(0.2); }
+    }
+
+    /* Layer 5: Lingering silence afterimage */
+    @keyframes gbaArbokSilenceAfterimage {
+      0%, 55% { opacity: 0; }
+      68% { opacity: 0.95; transform: scale(1); }
+      85% { opacity: 0.60; transform: scale(1.02); }
+      100% { opacity: 0; transform: scale(1.05); }
+    }
+
+    .fx-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 40;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Dark Arbok "Stare" — 5-Layer Animation Showcase</h1>
+  <div class="subtitle">
+    Otantik 1999 Ken Sugimori / Mitsuhiro Arita Dark Arbok sanatı ile kesintisiz kobra salınımı, alevli göğüs gözleri parlaması, hipnotik şok dalgaları ve Pokémon Gücü susturma mührü (Silence Seal).
+  </div>
+
+  <div class="control-bar">
+    <button id="btnPlayNormal" class="btn btn-action" onclick="triggerAnimation(false)">▶ Normal Saldırı (Hit & Silence)</button>
+    <button id="btnPlayWhiff" class="btn btn-whiff" onclick="triggerAnimation(true)">⊘ Whiff (Iskalama / Engellenme)</button>
+    <button id="btnLoop" class="btn btn-loop" onclick="toggleLoop()">⟳ Sürekli Döngü: KAPALI</button>
+    <button id="btnMode" class="btn btn-mode" onclick="toggleMode()">🎴 Mod: Koyu Tahta (AÇIK)</button>
+
+    <div class="speed-btn-group">
+      <button class="btn btn-speed active" onclick="setSpeed(1, this)">1.0x (Orijinal)</button>
+      <button class="btn btn-speed" onclick="setSpeed(0.5, this)">0.5x (Ağır Çekim)</button>
+      <button class="btn btn-speed" onclick="setSpeed(0.25, this)">0.25x (Mikro Detay)</button>
+    </div>
+  </div>
+
+  <div class="showcase-grid">
+    <!-- Victim Card: Active Opponent (e.g. Blastoise / Muk with Pokémon Power) -->
+    <div class="card-panel">
+      <div class="card-title">
+        Rakip Kart (Hedef)
+        <span class="badge">184px × 253px</span>
+      </div>
+      <div class="card-container" id="targetCard">
+        <!-- Real Authentic Card Underlay (Base Set Blastoise #2) -->
+        <div class="card-underlay">
+          <img
+            id="targetRealCard"
+            src="cards/2.jpg"
+            alt="Blastoise Authentic Card"
+            style="width: 100%; height: 100%; object-fit: cover; display: block;"
+          />
+        </div>
+
+        <!-- Dark Board Canvas Interior Mockup -->
+        <div class="card-art-mock">
+          <div class="card-header-mock">
+            <span>Blastoise</span>
+            <span style="color: #38bdf8;">100 HP</span>
+          </div>
+          <!-- In-Game Segmented HP Life Pips Bar (Gameboard Parity) -->
+          <div style="width: 100%; display: flex; gap: 2px; margin-top: 1px; margin-bottom: 2px;">
+            <div style="flex: 1; height: 3px; background: #22c55e; border-radius: 1px;"></div>
+            <div style="flex: 1; height: 3px; background: #22c55e; border-radius: 1px;"></div>
+            <div style="flex: 1; height: 3px; background: #22c55e; border-radius: 1px;"></div>
+            <div style="flex: 1; height: 3px; background: #22c55e; border-radius: 1px;"></div>
+            <div style="flex: 1; height: 3px; background: #22c55e; border-radius: 1px;"></div>
+          </div>
+          <div style="font-size: 32px; filter: drop-shadow(0 0 10px rgba(56,189,248,0.5));">🐢💧</div>
+          <div class="card-power-mock" id="powerBox">
+            <span class="card-power-title">Pokémon Power: Rain Dance</span>
+            <div style="font-size: 8px; color: #cbd5e1; margin-top: 2px;">Attach extra Water Energy cards per turn.</div>
+          </div>
+        </div>
+
+        <!-- Dynamic FX Overlay Container -->
+        <div id="fxOverlay" class="fx-overlay"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // RULE 12: Resilient Local/Static Preview Asset Protocol
+    const ASSET_CANDIDATE_PATHS = [
+      'assets/dark_arbok_stare.png',
+      './assets/dark_arbok_stare.png',
+      '/assets/dark_arbok_stare.png',
+      '../public/assets/dark_arbok_stare.png'
+    ];
+
+    let resolvedAssetUrl = 'assets/dark_arbok_stare.png';
+
+    function resolveAssetUrl() {
+      let idx = 0;
+      function testNext() {
+        if (idx >= ASSET_CANDIDATE_PATHS.length) return;
+        const testImg = new Image();
+        const candidate = ASSET_CANDIDATE_PATHS[idx];
+        testImg.onload = () => {
+          resolvedAssetUrl = candidate;
+        };
+        testImg.onerror = () => {
+          idx++;
+          testNext();
+        };
+        testImg.src = candidate;
+      }
+      testNext();
+    }
+    resolveAssetUrl();
+
+    // RULE 14: Resilient Local/Static Card Asset Protocol
+    const CARD_CANDIDATE_PATHS = [
+      'cards/2.jpg',
+      './cards/2.jpg',
+      '/cards/2.jpg',
+      '../public/cards/2.jpg'
+    ];
+
+    function resolveCardUrl() {
+      let idx = 0;
+      function testNext() {
+        if (idx >= CARD_CANDIDATE_PATHS.length) return;
+        const testImg = new Image();
+        const candidate = CARD_CANDIDATE_PATHS[idx];
+        testImg.onload = () => {
+          const el = document.getElementById('targetRealCard');
+          if (el) el.src = candidate;
+        };
+        testImg.onerror = () => {
+          idx++;
+          testNext();
+        };
+        testImg.src = candidate;
+      }
+      testNext();
+    }
+    resolveCardUrl();
+
+    let isRealCardMode = false;
+    function toggleMode() {
+      isRealCardMode = !isRealCardMode;
+      const target = document.getElementById('targetCard');
+      const btn = document.getElementById('btnMode');
+      if (isRealCardMode) {
+        target.classList.add('real-card-mode');
+        btn.innerText = '🎴 Mod: Otantik Kart (AÇIK)';
+      } else {
+        target.classList.remove('real-card-mode');
+        btn.innerText = '🎴 Mod: Koyu Tahta (AÇIK)';
+      }
+    }
+
+    let speedMult = 1.0;
+    let isLooping = false;
+    let loopTimeout = null;
+    let currentWhiff = false;
+
+    function setSpeed(speed, btn) {
+      speedMult = speed;
+      document.querySelectorAll('.btn-speed').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      triggerAnimation(currentWhiff);
+    }
+
+    function toggleLoop() {
+      isLooping = !isLooping;
+      const btn = document.getElementById('btnLoop');
+      if (isLooping) {
+        btn.classList.add('active');
+        btn.innerText = '⟳ Sürekli Döngü: AÇIK';
+        triggerAnimation(currentWhiff);
+      } else {
+        btn.classList.remove('active');
+        btn.innerText = '⟳ Sürekli Döngü: KAPALI';
+        clearTimeout(loopTimeout);
+      }
+    }
+
+    function triggerAnimation(isWhiffed = false) {
+      currentWhiff = isWhiffed;
+      clearTimeout(loopTimeout);
+      const container = document.getElementById('fxOverlay');
+      container.innerHTML = '';
+
+      const durSec = (1.75 / speedMult).toFixed(2);
+      const moteDur = (1.1 / speedMult).toFixed(2);
+
+      // Build 5-layer DOM identical to BattleFXOverlay.tsx
+      let html = '';
+
+      // Layer 1: Dread Floor
+      html += `
+        <div style="
+          position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+          animation: gbaArbokDreadFloor ${durSec}s ease-in-out forwards; opacity: 0;
+          background: radial-gradient(ellipse at 50% 50%, rgba(59,7,100,0.45) 0%, rgba(30,10,60,0.65) 60%, rgba(10,3,25,0.85) 100%);
+        "></div>
+      `;
+
+      if (!isWhiffed) {
+        // Layer 3: Concentric Hypnotic Gaze Shockwaves (Volumetric Bézier SVG with Incandescent Glow)
+        html += `
+          <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 30;">
+            <!-- Ring 1: Volumetric Solar/Amber Hypnotic Psionic Shockwave -->
+            <div style="
+              position: absolute; width: 136px; height: 116px; pointer-events: none;
+              display: flex; align-items: center; justify-content: center;
+              animation: gbaArbokHypnoRing1 ${durSec}s cubic-bezier(0.18, 0.85, 0.25, 1) forwards; opacity: 0;
+            ">
+              <svg style="width: 100%; height: 100%;" viewBox="0 0 136 116" fill="none">
+                <defs>
+                  <linearGradient id="pvgGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                    <stop offset="25%" stop-color="#fef08a" stop-opacity="0.90" />
+                    <stop offset="55%" stop-color="#facc15" stop-opacity="0.85" />
+                    <stop offset="85%" stop-color="#f97316" stop-opacity="0.75" />
+                    <stop offset="100%" stop-color="#c084fc" stop-opacity="0.4" />
+                  </linearGradient>
+                  <radialGradient id="pvgGoldVeil" cx="50%" cy="50%" r="50%">
+                    <stop offset="35%" stop-color="#fef08a" stop-opacity="0.14" />
+                    <stop offset="75%" stop-color="#facc15" stop-opacity="0.08" />
+                    <stop offset="100%" stop-color="#f97316" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <path
+                  d="M 68 8 C 92 6, 124 20, 128 58 C 132 94, 98 108, 68 110 C 38 108, 4 94, 8 58 C 12 20, 44 6, 68 8 Z"
+                  fill="url(#pvgGoldVeil)"
+                />
+                <path
+                  d="M 68 8 C 92 6, 124 20, 128 58 C 132 94, 98 108, 68 110 C 38 108, 4 94, 8 58 C 12 20, 44 6, 68 8 Z"
+                  stroke="url(#pvgGoldGrad)"
+                  stroke-width="3.2"
+                  stroke-linecap="round"
+                  style="filter: drop-shadow(0 0 8px #facc15) drop-shadow(0 0 16px rgba(250,204,21,0.65));"
+                />
+                <path
+                  d="M 68 20 C 86 18, 110 30, 112 58 C 114 84, 88 96, 68 98 C 48 96, 22 84, 24 58 C 26 30, 50 18, 68 20 Z"
+                  stroke="#fef08a"
+                  stroke-width="1.6"
+                  stroke-opacity="0.55"
+                  style="filter: drop-shadow(0 0 4px #facc15);"
+                />
+              </svg>
+            </div>
+
+            <!-- Ring 2: Volumetric Sinister Void Warp Distortion Shockwave -->
+            <div style="
+              position: absolute; width: 176px; height: 152px; pointer-events: none;
+              display: flex; align-items: center; justify-content: center;
+              animation: gbaArbokHypnoRing2 ${durSec}s cubic-bezier(0.18, 0.85, 0.25, 1) forwards; opacity: 0;
+            ">
+              <svg style="width: 100%; height: 100%;" viewBox="0 0 176 152" fill="none">
+                <defs>
+                  <linearGradient id="pvgVoidGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+                    <stop offset="20%" stop-color="#f5d0fe" stop-opacity="0.85" />
+                    <stop offset="50%" stop-color="#c084fc" stop-opacity="0.80" />
+                    <stop offset="80%" stop-color="#9333ea" stop-opacity="0.75" />
+                    <stop offset="100%" stop-color="#581c87" stop-opacity="0.35" />
+                  </linearGradient>
+                  <radialGradient id="pvgVoidVeil" cx="50%" cy="50%" r="50%">
+                    <stop offset="45%" stop-color="#c084fc" stop-opacity="0.12" />
+                    <stop offset="82%" stop-color="#7e22ce" stop-opacity="0.06" />
+                    <stop offset="100%" stop-color="#3b0764" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+                <path
+                  d="M 88 10 C 124 7, 164 26, 168 76 C 172 124, 128 143, 88 145 C 48 143, 4 124, 8 76 C 12 26, 52 7, 88 10 Z"
+                  fill="url(#pvgVoidVeil)"
+                />
+                <path
+                  d="M 88 10 C 124 7, 164 26, 168 76 C 172 124, 128 143, 88 145 C 48 143, 4 124, 8 76 C 12 26, 52 7, 88 10 Z"
+                  stroke="url(#pvgVoidGrad)"
+                  stroke-width="3.0"
+                  stroke-linecap="round"
+                  style="filter: drop-shadow(0 0 10px #c084fc) drop-shadow(0 0 22px rgba(168,85,247,0.7));"
+                />
+                <path
+                  d="M 88 24 C 116 22, 148 38, 150 76 C 152 112, 120 128, 88 130 C 56 128, 24 112, 26 76 C 28 38, 60 22, 88 24 Z"
+                  stroke="#e879f9"
+                  stroke-width="1.6"
+                  stroke-opacity="0.5"
+                  style="filter: drop-shadow(0 0 6px #a855f7);"
+                />
+              </svg>
+            </div>
+          </div>
+        `;
+
+        // Layer 4: Gaze Beams & Silence Seal Rune
+        html += `
+          <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 35;">
+            <svg style="position: absolute; width: 176px; height: 160px; pointer-events: none;" viewBox="0 0 176 160" fill="none">
+              <g style="animation: gbaArbokGazeBeams ${durSec}s ease-in-out forwards; opacity: 0;">
+                <line x1="72" y1="68" x2="88" y2="105" stroke="url(#pvgL)" stroke-width="3.5" stroke-linecap="round" filter="drop-shadow(0 0 6px #facc15)" />
+                <line x1="104" y1="68" x2="88" y2="105" stroke="url(#pvgR)" stroke-width="3.5" stroke-linecap="round" filter="drop-shadow(0 0 6px #facc15)" />
+                <circle cx="88" cy="105" r="5" fill="#fef08a" filter="drop-shadow(0 0 10px #f59e0b)" />
+              </g>
+              <defs>
+                <linearGradient id="pvgL" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                  <stop offset="35%" stop-color="#facc15" stop-opacity="0.9" />
+                  <stop offset="70%" stop-color="#f97316" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#a855f7" stop-opacity="0.3" />
+                </linearGradient>
+                <linearGradient id="pvgR" x1="100%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                  <stop offset="35%" stop-color="#facc15" stop-opacity="0.9" />
+                  <stop offset="70%" stop-color="#f97316" stop-opacity="0.8" />
+                  <stop offset="100%" stop-color="#a855f7" stop-opacity="0.3" />
+                </linearGradient>
+              </defs>
+            </svg>
+
+            <!-- Silence Seal: The hypnotic eye lock that shuts down Pokémon Powers -->
+            <div style="
+              position: absolute; width: 68px; height: 68px; display: flex; align-items: center; justify-content: center;
+              animation: gbaArbokSilenceSeal ${durSec}s ease-out forwards; opacity: 0;
+            ">
+              <svg width="68" height="68" viewBox="0 0 68 68" fill="none">
+                <path d="M 6 34 C 18 16, 50 16, 62 34 C 50 52, 18 52, 6 34 Z" stroke="#fde047" stroke-width="2.5" fill="rgba(88,28,135,0.35)" filter="drop-shadow(0 0 8px #a855f7)" />
+                <ellipse cx="34" cy="34" rx="4.5" ry="12" fill="#ef4444" filter="drop-shadow(0 0 6px #facc15)" />
+                <circle cx="34" cy="34" r="2" fill="#ffffff" />
+                <line x1="18" y1="34" x2="26" y2="34" stroke="#fef08a" stroke-width="2" stroke-linecap="round" />
+                <line x1="42" y1="34" x2="50" y2="34" stroke="#fef08a" stroke-width="2" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        `;
+      }
+
+      // Layer 2: Primary Visual Actor
+      const actorWidth = isWhiffed ? '84px' : '116px';
+      const actorHeight = isWhiffed ? '78px' : '108px';
+      const motionAnim = isWhiffed
+        ? `gbaArbokWhiffRecede ${durSec}s ease-out forwards`
+        : `gbaArbokCobraMotion ${durSec}s cubic-bezier(0.18, 0.9, 0.28, 1) forwards`;
+      const pulseAnim = !isWhiffed ? `gbaArbokChestPulse ${durSec}s ease-in-out forwards` : '';
+
+      html += `
+        <div style="
+          position: absolute; width: ${actorWidth}; height: ${actorHeight};
+          display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 40;
+          animation: ${motionAnim}; opacity: 0;
+        ">
+          <img
+            id="arbokActorImg"
+            src="${resolvedAssetUrl}"
+            alt="Dark Arbok Stare"
+            style="
+              width: 100%; height: 100%; object-fit: contain; pointer-events: none;
+              ${isWhiffed ? 'filter: brightness(0.7) contrast(1.1) drop-shadow(0 0 6px rgba(168,85,247,0.4));' : ''}
+              ${pulseAnim ? `animation: ${pulseAnim};` : ''}
+            "
+          />
+        </div>
+      `;
+
+      // Layer 5: Ambient Embers & Afterimage
+      const motes = [
+        { dx: '-32px', dy: '-28px', delay: 0.45, size: 6, color: '#fef08a' },
+        { dx: '34px', dy: '-26px', delay: 0.52, size: 7, color: '#facc15' },
+        { dx: '-40px', dy: '18px', delay: 0.58, size: 5, color: '#c084fc' },
+        { dx: '38px', dy: '22px', delay: 0.65, size: 6, color: '#a855f7' },
+        { dx: '-22px', dy: '36px', delay: 0.72, size: 5, color: '#f59e0b' },
+        { dx: '24px', dy: '34px', delay: 0.80, size: 6, color: '#e879f9' }
+      ];
+
+      let motesHtml = motes.map(p => {
+        const d = (p.delay / speedMult).toFixed(2);
+        return `
+          <div style="
+            position: absolute; width: ${p.size}px; height: ${p.size}px; border-radius: 9999px;
+            background-color: ${p.color}; box-shadow: 0 0 8px ${p.color}; pointer-events: none;
+            --pdx: ${p.dx}; --pdy: ${p.dy};
+            animation: gbaArbokGazeMote ${moteDur}s ease-out ${d}s forwards; opacity: 0;
+          "></div>
+        `;
+      }).join('');
+
+      html += `
+        <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; z-index: 45;">
+          ${motesHtml}
+          <div style="
+            position: absolute; inset: 0; border-radius: 12px; pointer-events: none;
+            animation: gbaArbokSilenceAfterimage ${durSec}s ease-out forwards; opacity: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(232,121,249,0.22) 0%, rgba(147,51,234,0.12) 55%, transparent 75%);
+          "></div>
+        </div>
+      `;
+
+      container.innerHTML = html;
+
+      // Card Power Box Visual Feedback (dim on silence, restore after)
+      const pBox = document.getElementById('powerBox');
+      if (!isWhiffed) {
+        setTimeout(() => {
+          pBox.style.transition = 'all 0.3s ease';
+          pBox.style.opacity = '0.35';
+          pBox.style.filter = 'grayscale(0.8)';
+        }, (1000 / speedMult));
+        setTimeout(() => {
+          pBox.style.opacity = '1';
+          pBox.style.filter = 'none';
+        }, (2200 / speedMult));
+      }
+
+      // Loop handling
+      if (isLooping) {
+        loopTimeout = setTimeout(() => {
+          triggerAnimation(isWhiffed);
+        }, (2200 / speedMult));
+      }
+    }
+
+    // Auto-trigger on page load
+    window.addEventListener('load', () => {
+      setTimeout(() => triggerAnimation(false), 200);
+    });
+  </script>
+</body>
+</html>
