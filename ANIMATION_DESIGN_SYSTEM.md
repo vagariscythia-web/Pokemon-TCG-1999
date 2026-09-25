@@ -38,6 +38,7 @@ This document is the permanent, canonical design standard for all move animation
   - **Ring:** Tek bir `border` çemberi yerine, farklı `stroke-width`, `opacity` ve hafif `scale` offset'lerine sahip 2–3 eşmerkezli SVG elipsi (`<ellipse>`) kullanılmalıdır. Bu, şok dalgasının "tek bir çizgi" değil, **kalınlığı ve derinliği olan bir enerji cephesi** olarak okunmasını sağlar.
   - **Starburst:** 5 noktalı düz `polygon` yerine, 10–12 noktalı ve kromatik hiyerarşiye sahip (beyaz merkez $\rightarrow$ limon orta $\rightarrow$ amber uç) incandescent starburst `<polygon>` veya `<path>` kullanılmalıdır. Her noktanın uzunluğu hafifçe farklılaştırılarak mekanik simetri kırılır ve organik bir parlama hissi elde edilir.
   - **Dust:** Düz `border-radius: 50%` elipsler yerine, çok loblu kuadratik Bézier `Q`-path'leriyle (`d="M... Q... Q... Z"`) çizilen organik bulut formları kullanılmalıdır. Her lob farklı yarıçap ve açıyla konumlandırılarak "kes-yapıştır elips" hissinden uzaklaşılır.
+- **Gelişmiş Sıvı ve Gaz Simülasyonu Referansı:** Su, balçık ve gaz elementlerinde yüzey gerilimi (metaballs / gooey filter), Perlin türbülansı (`feTurbulence`), dinamik vektör morfizmi ve mikro-parçacık simülasyonları için bkz. **§7.K (Advanced Organic Fidelity & Enhanced Fluid/Gas Simulation Toolkit)**.
 
 ### E. Thematic Form & Chromatic Integrity (Organik Doku vs. Kristal/Metal İllüzyonu)
 - **Kavramsal Uyumsuzluk Yasağı:** Ateş, ruh, hayalet veya psişik kökenli saldırılarda (Kitsunebi / Confuse Ray, Will-O-Wisp, Night Shade vb.) sivri, köşeli geometrik çokgenler (elmas, prizmatik baklava, keskin kristal parçaları) ve soluk gri/beyaz/açık mavi gradyanlar kullanılması KESİNLİKLE YASAKTIR. Bu hatalı yaklaşım, alev/ruh yerine "fırıldak gibi dönen metalik/gümüş kristal parçaları" veya "buz kütleleri" illüzyonu yaratarak saldırının tematik kimliğini zedeler.
@@ -270,6 +271,26 @@ This document is the permanent, canonical design standard for all move animation
 - **Süre Boşluğu ve Akıcılık Dengelemesi (Post-Removal Timing Smoothing):**
   Bir animasyondan görsel estetiği bozan yapay ögeler (ör. taşan CAD çizgileri) temizlendiğinde, oluşan zaman boşluğu animasyonun ani bitmesine izin verilerek bırakılamaz. Kalan sürede hareket pürüzsüzleştirilmeli (smoothing); viskoz uzuvların geri çekilme sönümü, zemin aurasının nefes alması ve parçacıkların dağılım eğrisi genişletilerek animasyonun tokluğu ve ritmi korunmalıdır.
 
+### M. Parabolic Ballistic Kinematics, Gravitational Droplet Descent & Settling Fullness (Parabolik Balistik Kinematik, Yerçekimli Damlacık İnişi ve Tokluk Prensibi — Blastoise Dersi)
+- **Anti-Gravity / Zirvede Donma Yanılgısı:**
+  Parçacık veya damlacık animasyonlarında en sık karşılaşılan kinematik kusur; emitörden fırlayan unsurların yalnızca yukarı veya dışarı doğru doğrusal/üssel bir hızla ötelenmesi (`translateY(-46px)`, `translateX(20px)`) ve yerçekimini tamamen yok sayarak tepe noktada donup buharlaşmasıdır. Bu durum görselde "uçuşan gaz" veya "yerçekimsiz uzay boşluğu" hissi yaratarak su, taş veya balçık gibi kütleli maddelerin fiziksel ağırlığını yok eder.
+- **Dört Fazlı Parabolik Balistik Formül (Four-Phase Ballistic Arc):**
+  Ağır kavitasyon damlacıkları, kıvılcımlar veya patlama enkazları istisnasız olarak yerçekimi ivmesini ($g$) modelleyen 4 fazlı bir balistik yörünge izlemelidir:
+  1. *Faz 1 — Fırlama & Kavitasyon Patlaması (%0–%18):* Darbe merkezinden kinetik basınçla hızla dışarı ve yukarı fırlama ($v_y > 0$).
+  2. *Faz 2 — Zirve Apeks & Kinetik Sıfırlanma (%36–%42):* Yükselme hızının yerçekimiyle dengelenip sıfırlandığı tepe noktası ($v_y \rightarrow 0$).
+  3. *Faz 3 — Yerçekimi İvmeli İniş (%65–%90):* Yerçekiminin kontrolü ele alarak kütleyi başlangıç hizasının belirgin şekilde altına (**+12px ila +104px derinliğe**) hızlanarak çekmesi. Damlacıklar kart yüzeyi boyunca aşağıya doğru dökülmeli ve süzülmelidir.
+  4. *Faz 4 — Aerodinamik Sönüm & Buharlaşma (%88–%100):* Havanın sürtünmesiyle damlanın uzaması (teardrop morphology) ve yerini hafif bir buğuya/zerreciğe bırakarak sönümlenmesi.
+- **Süre Genişletmesi & Tokluk/Tamamlanmışlık İlkesi (Settling Fullness & Residual Energy):**
+  Bir animasyon ana vuruş karesi bittiği anda "bıçakla kesilir gibi" sonlandırılamaz. Ana aktör ve darbe kubbesi görevini tamamladıktan sonra, sahneye saçılan ikincil enkaz ve damlacıkların yere düşmesi ve ortamın sakinleşmesi için **toplam sürenin en az %20–%25'i kadar bir sönümlenme ve oturma (settling) penceresi** tanınmalıdır (örn. Blastoise'da 1900ms'den 2100ms'ye %10.5 genişletme). Bu artık enerji penceresi animasyona tokluk ve sinematik tamamlanmışlık kazandırır.
+
+### N. Dual-Nozzle Convergent Jet Kinematics & Anchored Fluid Dissipation (İkili Nozul Akışkan Konverjansı ve Nozul Kenetli Sönümlenme)
+- **Asimetrik Nozul Eksenleri ve Vuruş Konverjansı:**
+  Çift organdan (ikili namlular, iki el, çift boynuz) hedefe yönelen akışkan veya enerji akımları asla doğrusal paralel şeritler veya hedefin önünde bir çatı makası gibi çapraz kesişen çizgiler ("A" harfi tuzağı) olamaz. Her iki akım da organların anatomik yönelimine uygun doğal açılarla (örn. Sol +28°, Sağ +30°) fırlamalı ve hedef Pokémon illüstrasyon vizörünün tam merkezinde tek bir darbe odağında (`top: 50px`, `left: calc(50% - 1px)`) kusursuz bir konverjansla buluşmalıdır.
+- **Nozul Kenetli Sönümlenme Kuralı (Anchored Dissipation vs. Detached Bleed):**
+  Su veya enerji jetleri animasyonun sönümlenme fazında (%75–%100) namludan veya organdan koparılıp yukarı fırlatılamaz (`translateY(-28px)` yasağı). Akıntılar namlu tabanına pikseli pikseline kenetli kalarak yerinde daralmalı, şeffaflaşmalı ve Gaussian mist difüzyonu ile buharlaşmalıdır. Akıntının kaynaktan kopması oyuncuda iki ayrı parçanın havada anlamsızca uçuştuğu algısına yol açar.
+- **Sola Öteleme Açıklığı (Actor Clearance Offset):**
+  Geniş hücum duruşlu veya asimetrik aktörlerde, aktör kartın tam ortasına konduğunda arkada kalan organlar kart dışına taşabilir veya hedefe açı oluşturacak menzil bulamaz. Aktör sol kenara teğet olacak şekilde sola ötelenerek (`left: calc(50% - 34px * wi)`), sağ organa kart içinde geniş ve ferah bir fışkırma mesafesi sağlanmalıdır.
+
 ---
 
 ## 3. Scale, Proportion & Whiff Standards
@@ -376,6 +397,9 @@ Bu 5 katman zorla doldurulacak statik bir kalıp değil, **modüler bir orkestra
    - Bir Pokémon'un, saldırı animasyonunun veya görsel varlığın mevcut durumunu analiz ederken veya raporlarken; ASLA naif regex aramalarına veya geçici terminal script özetlerine körü körüne güvenilerek varsayımda bulunulamaz.
    - Herhangi bir varlığın (`.png`/`.svg`) veya saldırının kodda aktif olup olmadığı, istisnasız olarak doğrudan `BattleFXOverlay.tsx` içindeki gerçek JSX satır numaraları (`<img src="..." />` ve `fx.type === ...`) ve `cards.json` eşleşmeleri okunarak KESİNLEŞTİRİLMELİDİR.
    - Depoda zaten mevcut ve 5 katmanlı mimaride çalışan bir varlık için kod teyidi yapılmadan "eksik", "yapılacak" veya "stok görsel adayı" şeklinde yanıltıcı iddialarda bulunulması KESİNLİKLE YASAKTIR. Her analiz doğrudan kod referansıyla belgelenmelidir.
+5. **Proactive High-Fidelity Architectural Guidance & Optimum Quality Search (Proaktif Yüksek Sadakat ve İleri Düzey Görsel Alternatif Rehberliği):**
+   - Kullanıcı bazı ileri düzey grafik, fizik veya simülasyon alternatiflerinin (akışkanlar mekaniği, Gooey metaball yüzey gerilimi, Perlin türbülansı, Eulerian akışkan ızgaraları, yay-kütle dalga fiziği, WebGL shader caustics vb.) teknik ayrıntılarının farkında olmasa dahi; eğer istenen saldırı temasına ve animasyon tarzına uygunsa (su jeti, gaz/zehir bulutu, balçık kütlesi, kar/blizzard fırtınası, kıvılcım yağmuru, plazma vb.), model kullanıcıya yol gösterici mahiyette daha gerçekçi ve yüksek sinematik kalite sunabilecek zenginleştirilmiş yöntemleri (§7.K) proaktif olarak sunmaya hazır olmalıdır.
+   - Model, kullanıcı talebini kolaya kaçan düz/ilkel SVG çizgileriyle geçiştirmek yerine; daima istenen implementasyon senaryosu dahilinde optimum kalite, fiziksel inandırıcılık ve zenginleştirilmiş sadakat (*Enriched Visual Fidelity*) arayışı ilkesiyle hareket etmeli, mimari seçenekleri ve "tatlı nokta" (sweet spot) alternatiflerini kullanıcıya bilinçli bir vizyonla önermelidir.
 
 ---
 
@@ -488,6 +512,100 @@ Bu bölüm bir yasaklar listesi değil, §§1–6'yı tamamlayan **açık uçlu 
 - **Stok+SVG Hibrit Katmanlaşma:** Raster `<img>` aktör ve SVG overlay aynı DOM konteyneri içinde nested olarak konumlanır. Raster aktör z-30'da, SVG overlay (wing vein) aynı konteynerin içinde `absolute inset-0` ile, wing-tip sparks ise ayrı z-32 katmanında. Bu, aktörün whole-actor transform'unun (§8.H) tüm child katmanlara otomatik olarak uygulanmasını sağlar.
 - **Raster Aktör Anticipation Yayı (Dense Stop Chain):** Stok aktör keyframe'lerinde anticipation fazı, tek bir geri çekilme noktası yerine **yoğun stop zinciri** ile modellenir: 0%→7%→14% (coil), 20%→26%→32% (rise), 40%→48% (peak hold), 56%→64%→72%→80% (decay), 88%→94%→100% (settle). 14+ stop'lu bu zincir, `cubic-bezier` interpolasyonunun üretemeyeceği "anticipation coil → explosive rise → sustained hold → graceful decay" dört fazlı yayı gerçekleştirir.
 - **Thunderbolt FAZ6 doğrulaması:** `gbaThunderboltStockStrike` 14 keyframe stop'u ile 1.65s zarfında dört fazlı yay (CSS L15604); `gbaZapdosWingVeinDraw` 4 stop (0%, 18%, 40%, 100%) ile draw-on (CSS L12286); `gbaZapdosWingVeinFlash` 8 stop ile çift nabız flash (CSS L12273). TSX L19576–19609. Tüm katmanlar `npx tsc --noEmit` hatasız.
+
+### K. Advanced Organic Fidelity & Enhanced Fluid/Gas Simulation Toolkit (İleri Düzey Organik Doğallık, Akışkan/Gaz Simülasyon Alet Çantası & Enriched Visual Fidelity)
+
+> **Kavramsal Temel & Felsefe:**
+> Kullanıcı istemlerinde yer alan *"sinematik kalite"*, *"görsel estetik"* ve *"kinematik/dinamik doğallık"* hedefleri; yalnızca daha fazla CSS keyframe'i eklemek veya SVG çizgisini sıklaştırmak anlamına gelmez. Bu kavramların gerçek karşılığı: **Normal, düz ve rijit bir SVG'nin ötesine geçerek; akışkanların (su, balçık, zehir) ve gazların (duman, sis, buhar) fiziksel dünyadaki mikro davranışlarını (yüzey gerilimi, viskozite, türbülans, optik kırılma/refraksiyon ve kavitasyon) simüle eden "Zenginleştirilmiş Görsel Doğallık" (Enriched Visual Fidelity) seviyesine ulaşmaktır.**
+> 
+> Klasik 1996 Ken Sugimori suluboya mirasını ve retro Pokémon TCG 1999 ruhunu asla bozmadan; modern web grafiklerinin gücüyle suluboyayı "statik bir çizimden yaşayan bir akışkana" dönüştürecek araçlar, prensipler ve yol haritası aşağıda tanımlanmıştır.
+
+#### 1. Sıfır Bağımlılıklı Yerel SVG Filtre Alet Çantası (Native SVG Primitives / 0 KB)
+Harici hiçbir JavaScript kütüphanesi yüklemeden, tamamen tarayıcının yerel donanım hızlandırmalı SVG filtre primitifleriyle akışkanları hiper-gerçekçi kılma yöntemleri:
+
+1. **"Gooey" / Metaball Sıvı Yüzey Gerilimi & Boyunlaşma Filtresi (`feGaussianBlur` + `feColorMatrix`):**
+   - *Matematiksel Prensip:* Alfa kanalını kontrollü biçimde genişletip ardından yüksek kontrastlı bir renk matrisiyle eşiklemek (cutoff threshold):
+     ```xml
+     <filter id="liquidGooFilter">
+       <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+       <feColorMatrix in="blur" mode="matrix" 
+         values="1 0 0 0 0  
+                 0 1 0 0 0  
+                 0 0 1 0 0  
+                 0 0 0 22 -9" result="goo" />
+       <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+     </filter>
+     ```
+   - *Fiziksel Etkisi:* İki su damlası veya balçık kütlesi birbirine yaklaştığında, bulanıklaşan alfa kanalları üst üste biner ve matris eşiği iki damla arasında **organik bir sıvı köprüsü (viskoz boyunlaşma / necking)** oluşturur. Damlalar koparken elastik bir zar gibi uzayıp aniden kopar; çarptıklarında ise cıva gibi kendiliğinden kaynaşır.
+   - *Kullanım Alanları:*
+     - **Muk / Grimer Balçığı (Sludge Deluge / Nasty Goo):** Zeminden yükselen ve damlayan balçığın yapay poligonlar yerine gerçek viskoz jelatin gibi gerilip kopması.
+     - **Blastoise Hydro Pump:** Namludan fışkıran damlacıkların ana su kütlesinden kopuş anı ve savunan kartın göğsünde birleşerek su tabakası oluşturması.
+     - **Zehir & Asit Damlaları (Acid / Poison Fang):** Ayrık daireler yerine yüzey gerilimi taşıyan canlı asit damlaları.
+
+2. **Organik Türbülans ve Refraktif Akışkan Bükülmesi (`feTurbulence` + `feDisplacementMap`):**
+   - *Matematiksel Prensip:* GPU üzerinde gerçek zamanlı Perlin gürültüsü üretip, bu gürültüyü arkasındaki görsel varlığı fiziksel olarak bükmekte doku haritası olarak kullanmak:
+     ```xml
+     <filter id="fluidTurbulence">
+       <feTurbulence type="fractalNoise" baseFrequency="0.04 0.08" numOctaves="3" result="noise" />
+       <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" xChannelSelector="R" yChannelSelector="G" />
+     </filter>
+     ```
+   - *Fiziksel Etkisi:* Duman ve gaz bulutları tekdüze mekanik yuvarlaklar olmaktan çıkar; gerçek Kelvin-Helmholtz kararsızlık girdapları ve konveksiyon akımları sergiler. Su jetlerinde ise tazyik dalgalanması ve suyun altındaki kartı hafifçe kıran optik kostik (caustics) efekti üretir.
+   - *Kullanım Alanları:*
+     - **Dark Arbok Poison Vapor & Weezing Smog:** Dumanın kenarlarındaki statik Bézier çizgilerini gerçek zamanlı dağılan kaotik gaz bulutlarına dönüştürmek.
+     - **Charizard Fire Spin / Sıcak Hava Dalgası (Heat Haze):** Alevlerin etrafındaki havayı optik olarak titreştiren serap kırılması.
+
+3. **Dinamik Vektörel Yol Morfizmi (Native Path Morphing via `d: path(...)`):**
+   - Modern tarayıcılar (Chromium, WebKit, Gecko) artık CSS keyframe'leri içinde `<path d="...">` koordinatlarının doğrudan interpolasyonunu (`transition: d 0.35s cubic-bezier(...)`) desteklemektedir.
+   - *Fiziksel Etkisi:* Havadayken aerodinamik gözyaşı/damla formunda (`teardrop`) uçan bir su veya asit tanesi, hedefin göğsüne çarptığı anda ek bir div/layer açılmaksızın yassılaşan bir taç sıçramasına (`crown splash`) morflanabilir.
+
+---
+
+#### 2. SVG Ötesi Yerel Web Grafik Alternatifleri (Zero-DOM High-Density)
+
+1. **HTML5 Micro-Canvas 2D Parçacık & Yay Fiziği Emitter'ı:**
+   - *Mimari:* DOM ağacına 14–20 ayrı `<div>` koyup her birine bağımsız keyframe çalıştırmak yerine; kart yuvası (`184px × 253px`) üzerine tam oturan tek bir şeffaf `<canvas>` yerleştirilir.
+   - *Fiziksel Gücü:*
+     - Tek bir `requestAnimationFrame` döngüsünde (60 FPS) **150–400 adet mikro su zerreciği, köpük ve sprey parçacığı** çizilebilir.
+     - Gerçek Euler/Verlet yerçekimi ($g = 9.8$), rüzgâr direnci ve savunan kartın fiziksel sınırlarından sekme (elastic bounce) 30–40 satırlık hafif bir JS parçacık modeliyle çalıştırılır.
+     - React DOM ağacında sıfır kirlilik yaratır; unmount anında tüm bellek anında temizlenir.
+   - *Kullanım Alanı:* Blizzard kar fırtınası, devasa tsunami köpükleri, kıvılcım yağmurları.
+
+2. **2D WebGL Fragment Shader Kanvası (GPU Sıvı Simülasyonu):**
+   - Piksel bazında ışık kırılması, specular yansımalar ve su altı caustics dalgalanmaları için mikro WebGL kanvasları.
+
+---
+
+#### 3. Kütüphane Tabanlı Harici Toolset Alternatifleri (Ekosistem Çözümleri)
+
+| Kütüphane | Mimari Rolü | Projedeki Potansiyeli | Entegrasyon Değerlendirmesi |
+|---|---|---|---|
+| **Lottie-Web (`lottie-react` / `dotLottie`)** | After Effects'te sıvı fiziği eklentileriyle (Mr. Mercury, Trapcode, Newton) çizilmiş 2D akışkan animasyonlarını JSON vektör olarak oynatır. | Kusursuz organik su sıçramaları, alev dilleri ve duman pufuları. | Sıfır CSS kodu; ancak retro Sugimori renk paletine harici uyum gerektirir. |
+| **Flubber.js / GSAP MorphSVG** | İki farklı karmaşık çok loblu Bézier SVG yolu arasında matematiksel olarak kusursuz interpolasyon/morfizm yapar. | Balçığın uzayıp damlaya dönüşmesi, suyun yayılması, uzuv amorf deformasyonu. | ~8KB minimal ayak izi; React ile son derece uyumlu. |
+| **PixiJS (`pixi.js` + `pixi-filters`)** | WebGL tabanlı 2D oyun motoru grafik katmanı. | Hazır `DisplacementFilter`, `ShockwaveFilter`, `WaterReflectionFilter` ve GPU emitörleri. | Çok güçlü fakat TCG DOM mimarisi için ağır bir kütüphane bağımlılığı yaratır. |
+
+---
+
+#### 4. Proje İçin Uygulama Yol Haritası ve "Tatlı Nokta" (The Sweet Spot Roadmap)
+
+Retro Ken Sugimori estetiğini bozmadan, tarayıcıyı kasmadan ve harici bağımlılık şişkinliği yaratmadan görsel kaliteyi sıçratacak **3 Kademeli Uygulama Stratejisi**:
+
+* **Kademe 1 (Öncelikli Zirve — Sıfır Bağımlılık & 0 KB Maliyet):**
+  * `BattleFXOverlay.tsx` içine global bir `<defs>` bloku açılarak **`#liquidGooFilter`** ve **`#fluidTurbulence`** SVG filtre primitiflerinin tanımlanması.
+  * Bu filtrelerin Muk balçığına, Blastoise damlacıklarına ve Arbok zehrine `filter: url(#liquidGooFilter)` ile tek bir CSS satırıyla bağlanması.
+  * *Sonuç:* Damlaların havada ve çarpma anında birbirine cıva gibi yapışıp ayrılması, dumanların gerçek gaz gibi kıvrılması — sıfır harici kütüphane ile sinematik sıvı doğallığı.
+* **Kademe 2 (Vektörel Dinamik Morfizm):**
+  * Yassılaşan veya kopan damlacıklarda CSS native `d: path(...)` interpolasyonunun devreye alınması.
+* **Kademe 3 (Yüksek Yoğunluklu Parçacık Gereksinimi):**
+  * Blizzard, Fire Spin veya devasa Tsunami gibi 50+ parçacık gerektiren alan saldırılarında, DOM div'leri yerine tek bir şeffaf 2D Micro-Canvas parçacık emitörüne geçilmesi.
+
+---
+
+#### 5. Kırmızı Çizgiler & Estetik Bütünlük Uyarıları (Anti-Drift Guardrails)
+
+1. **Retro Sugimori Çizgisinden Sapma Yasağı:** Kullanılan hiçbir filtre veya shader, Pokémon TCG 1999'un suluboya ve mürekkep dokusunu 3D konsol oyunu sterilize pürüzsüzlüğüne dönüştüremez. Efektler her zaman suluboya ebrulisi ve organik mürekkep hatlarıyla harmanlanmalıdır.
+2. **GPU Bulanıklık Sınırı (Filter Radius Discipline):** `feGaussianBlur` `stdDeviation` değeri mobil cihazların ve entegre GPU'ların performansı gözetilerek **`12px`** üzerine çıkarılamaz; aşırı yüksek blur değerleri kare düşmesine (frame drop) yol açar.
+3. **Kapsayıcı Güvenlik Payı:** Gooey ve türbülans filtreleri uygulanan SVG konteynerleri, filtrenin kenarlarda sert kırpılmasını önlemek için en az `+16px` taşma payına (`overflow: visible` veya genişletilmiş `viewBox`) sahip olmalıdır.
 
 > **Terfi Notu:** Bu ilkeler zamanla kanıtlanıp kullanıcı onayıyla olgunlaştıkça §§1–6'nın kanonik maddelerine terfi ettirilebilir; tersine, yeni bir teknik ekranda daha iyisini kanıtlarsa bu bölüm onunla genişletilir. Amaç kuralları dondurmak değil, toolset'i birlikte büyütmektir.
 
@@ -1154,43 +1272,61 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
     3. *CardView Durum Şeridi:* HP göstergesi ve segmentli yeşil can pips'leri entegre edildi.
     4. *Çift Modlu Görsel Doğrulama:* Base Set Muk (#13), Grimer (#48), Weezing (#14), Koffing (#51) otantik kart altlıkları ve dinamik "Real Card Mode" / "Dark Canvas" mod toggle düğmesi (`#btnMode`) eklendi.
 
-### 10.11 Vaka Çalışması: Blastoise Hidro Pompa (Hydro Pump) Hücum Duruşlu Ken Sugimori Stok Aktör & Doğrudan Atış Vektörleri
-- **A. Problem Tanımı ve Eski Durum:**
-  - Eski `hydro_pump_cannons` animasyonunda aktör tam vücuda kavuşturulmuş olsa da, su jetlerinin rotasında ve sunumunda kritik kusurlar bulunuyordu:
-    1. *Ters 'J' Bükülen Su Kancası Tuzağı (Anti-patern #32):* Namluların dışa bakan açıları nedeniyle su jetleri hedefe yönelebilmek için geriye doğru bükülen yapay baston/şemsiye sapı veya ters 'J' kancası biçiminde bir trajektori izliyordu. Bu kinematik hata akışkan basınç hissiyatını tamamen yok ediyordu.
-    2. *Statik SVG Kutu Görünümü (Bounding-Box Artifact):* Su jetleri dar bir SVG konteyneri içinde ölçeklenerek belirdiğinden, kendilerine ait yapay bir arka planı varmış gibi kutu sınırları içinde hapsedilmiş bir illüzyon yaratıyordu.
+### 10.11 Vaka Çalışması: Blastoise Hidro Pompa (Hydro Pump) Hücum Duruşlu Ken Sugimori Stok Aktör, Asimetrik İkili Nozul Konverjansı, Akkor Basınç Kubbesi & Parabolik Yerçekimli Damlacık Kinematiği
+- **A. Problem Tanımı ve Tarihsel Evrim (8 Tuzak ve Çözüm Matrisi):**
+  - Eski `hydro_pump_cannons` animasyonunda aktör tam vücuda kavuşturulmuş olsa da, su jetlerinin rotasında, nozul kenetlenmesinde, sahne sınırlarında ve sönümlenme fiziğinde kritik kusurlar bulunuyordu. Blastoise implementasyonu, projenin en kapsamlı hidrodinamik vaka çalışması olarak şu 8 tuzağı çözüme kavuşturmuştur:
+    1. *Ters 'J' Bükülen Su Kancası Tuzağı (Anti-patern #32):* Namluların dışa bakan açıları nedeniyle su jetleri hedefe yönelebilmek için geriye doğru bükülen yapay baston/şemsiye sapı veya ters 'J' kancası biçiminde bir trajektori izliyordu. Bu kinematik hata akışkan basınç hissiyatını tamamen yok ediyordu. Çözüm: Hücum pozisyonundaki yeni Sugimori suluboya aktörü ve hedefe doğrudan kilitli asimetrik atış açıları (+28° Sol, +30° Sağ) ile doğrusal konik fışkırma sağlandı.
+    2. *Statik SVG Kutu Sınırı Kırpılması (Bounding-Box Clipping Artifact):* Su jetleri dar bir SVG konteyneri içine hapsedildiğinden kenarlarda sert kesilmeler yaşanıyordu. Çözüm: Kart genişliğini kapsayan akışkan konteynerleri ve kret taşmaları inşa edildi.
+    3. *Nozuldan Kopup Havada Yüzen Akıntı Gövdesi Tuzağı (Detached Floating Stream / Anti-patern #34):* Su akıntıları sönümlenirken namlu deliğinden kopup hedefe doğru uçup gidiyordu. Çözüm: Nozul kenetli akışkan sönümlenmesi (`transform-origin: bottom center`). Jetler havaya uçmaz; kökleri namlu ağzına kilitli kalarak kendi tabanında daralıp (`scaleX(0.05) scaleY(0.7)`) sönümlenir (§2.N).
+    4. *Aktörün Kart Sol Kenarını İhlal Etmesi (Actor Boundary Bleed):* Kabuk ve kuyruk geometrisi kartın sol dış sınırına taşıyordu. Çözüm: Aktör sola `calc(50% - 34px * wi)` kadar ötelenerek kuyruğun kartın sol kenarına tam teğet (0px pay) durması sağlandı.
+    5. *Havada Kayan / Aktörden Kopuk Zemin Aurası:* Zemin aurası kart merkezinde kaldığı için sola ötelenen Blastoise'un ayaklarının altında boşluk kalıyordu. Çözüm: Zemin su aurası aktörün ayak tabanlarına pikseli pikseline kenetlendi (`left: calc(50% - 38px * wi)`, `transform: translateX(-50%)`).
+    6. *Ham Emojiler, Düz Çizgiler veya CAD Çemberleri (Kural 7):* Çözüm: Çok loblu Bézier SVG eğrileri (`M... C...`), 10 loblu Sugimori tsunami taç sıçraması ve kavitasyon kretleri inşa edildi.
+    7. *Erken Kesilen Animasyon ve Tokluk Hissiyatının Yarım Kalması (Anti-patern #35):* 1900ms sürede su jetleri kesildikten sonra darbe sönümü aceleye geliyor ve sahneye ağırlık oturmuyordu. Çözüm: Süre %10.5 genişletilerek 2100ms'ye çıkarıldı; bu süre artık enerji sönümü ve damlacıkların hedefin göğsüne dökülüşüne tahsis edildi.
+    8. *Yerçekimsiz Yukarı Buharlaşan Damlacık Tuzağı (Anti-patern #35):* Damlacıklar yukarı fırladıktan sonra tepe noktasında asılı kalıp buharlaşıyordu. Çözüm: 4-fazlı parabolik balistik kinematik (§2.M). Damlacıklar apeks noktasından sonra yerçekimi ivmesiyle hedefin göğsüne doğru **+12px ila +104px** dökülür.
 - **B. Ken Sugimori Suluboya Hücum Duruşlu Stok Varlık & Sıkı Kırpma (Kural 10, Kural 13):**
   - Kullanıcı tarafından sağlanan, hydro cannon'ları doğrudan rakibe yöneltilmiş hücum pozisyonundaki otantik 1996 Ken Sugimori suluboyası `public/assets/raw/Blastoise_raw_edited_002.png` (2048×2048) incelendi.
   - +12px güvenli pay ile sıkı kırpılarak (`tight crop` 1381×1346) `public/assets/blastoise_hydro_pump_actor.png` ve `public/assets/blastoise_full_body.png` olarak sisteme alındı.
   - Tier 1 Apex ölçeklendirmesi (`118px × 115px`, whiff `82px × 80px`, `bottom: 2px`) uygulandı (Kural 3).
-- **C. Doğrudan Hedefe Kilitli Asimetrik Nozul Eksenleri (Kural 8 Nozzle Pinning):**
+- **C. Aktör Sola Öteleme Açıklığı, Kuyruk Teğeti ve Ayak Tabanı Zemin Aurası Kenetlenmesi (Kural 8):**
+  - *Aktör Sola Ötelemesi:* Blastoise'un geniş kabuğu ve sol arkadaki kuyruğu kart çerçevesini ihlal etmemesi için aktör sola `calc(50% - 34px * wi)` koordinatına kilitlendi. Kuyruk kartın sol kenarına tam teğettir (0px pay).
+  - *Ayak Tabanı Zemin Aurası:* Zemin aurası aktörün ayak tabanlarının izdüşümüne (`left: calc(50% - 38px * wi)`, `transform: translateX(-50%)`) kilitlendi (`gbaHydroFloorSurge 2.1s`). Böylece Blastoise sahneye indiğinde su dalgası ayaklarının altından organik biçimde taşar.
+- **D. İkili Nozul ve Akışkan Konverjans Geometrisi (+28° Sol, +30° Sağ) & Nozul Kenetli Sönümlenme (§2.N):**
   - Hücum duruşundaki Blastoise'un her iki namlu deliğinin merkez koordinatları piksel matrisinden hassasiyetle okundu:
-    - *Sol Namlu Ağzı:* Kart ekseninde `left: calc(50% - 16px * wi)`, `bottom: 115px * wi`. Namlu hedef merkezine (`top: 48px`, `left: 50%`) doğru **`+10°`** doğrudan atış açısıyla kilitlendi.
-    - *Sağ Namlu Ağzı:* Kart ekseninde `left: calc(50% + 54px * wi)`, `bottom: 98px * wi`. Namlu hedef merkezine (`top: 48px`, `left: 50%`) doğru **`-27°`** doğrudan atış açısıyla kilitlendi.
-  - Her iki namlu ağzına, nozul çıkış basıncını simgeleyen eşmerkezli su halkaları (`gbaHydroMuzzleCollarL` +10°, `gbaHydroMuzzleCollarR` -27°) kenetlendi.
-- **D. Doğrudan Atış Vektörleri & Akışkan Dalga Kretleri (Kural 1, 2, 7):**
-  - *Doğrusal Konik Basınç Püskürmesi:* Ters 'J' kancaları çöpe atıldı. Nozuldan çıkan su kütlesi namlu deliğinden başlayıp hedefe doğru hızla genişleyen konik bir akışkan hacmiyle (`scale(0.15, 0.05) → scale(1.05, 1.02)`) ileriye fırlar.
-  - *Üç Katmanlı Volumetrik Hidrodinamik Mimarisi:* Dış serulean su kılıfı (`#0284c7`), basınçlı ara akıntı (`#38bdf8`), akkor beyaz kavitasyon omurgası (`#ffffff`), çok loblu dalga kretleri (`M... C...`) ve sarmal girdap şeritleri inşa edildi.
-  - *Akkor Hidro-Basınç Kubbesi & Şok Halkası:* Hedef temasında (top: 48px) darbe enerjisini soğuran akkor beyaz-camgöbeği basınç kubbesi (`gbaHydroConcussionDome 1.9s`) ve akışkan şok dalgası halkası (`gbaHydroShockRing`) patlatıldı.
-  - *14 Loblu Tsunami Taç Sıçraması:* Darbe anında hedef kartın üzerinden fışkıran 14 loblu organik taç sıçraması (`gbaHydroTsunamiCrown`) devreye alındı.
-  - *Şelale Kaskadı (Deluge Cascade):* Hedefe çarpan suyun kartın ön yüzeyi boyunca aşağı dökülmesini sağlayan dalgalanan şeffaf su perdesi ve kıvrımlı su dereleri (`gbaHydroDelugeCascade`) korundu.
-  - *Savunan Kart Hidrolik Titremesi:* Yüksek tonajlı su kütlesinin yarattığı kinetik sarsıntı için `gbaDefendingCardHydraulicTremor` tetiklendi.
-- **E. 4-Fazlı Sumo Basınç Kinematiği ve Kesintisiz Momentum (%15 Kuralı, Kural 2):**
-  - *Faz 1 (0%–22%):* Yerçekimli sumo girişi ve çömelme hazırlığı (`translateY(2px) scale(1.02, 0.98)`).
-  - *Faz 2 (22%–28%):* Namlulardan su patladığı anda kütlesel hidrolik geri tepme (`translateY(-4px) scale(0.97, 1.03)`).
-  - *Faz 3 (28%–68%):* Sürekli basınç boşalması boyunca mikro-titreme ve hidrolik gerilim osilasyonu (`translateY(±1px) scale(1.01, 0.99)`). Asla statik donma yaşanmaz.
-  - *Faz 4 (68%–100%):* 3 kademeli feathered ease-out dissolve (`blur(0px) → blur(2px) → blur(4px)`, `translateY(-2px)`).
-- **F. 5 Katmanlı Mimari ve Whiff Standartları (Kural 1, Kural 5):**
-  - *Katman 1:* Zemin Okyanus Dalgası Aurası (`gbaHydroFloorSurge 1.9s`, taban su kabarması).
-  - *Katman 2:* Blastoise Hücum Duruşlu Tam Vücut Aktörü (`blastoise_hydro_pump_actor.png`).
-  - *Katman 3:* Nozul Ağzı Su Halkaları (`gbaHydroMuzzleCollarL/R`) + Akkor Hidro-Basınç Kubbesi (`gbaHydroConcussionDome`) + Akışkan Şok Halkası (`gbaHydroShockRing`).
-  - *Katman 4:* Volumetrik İkili Hidro Torrenti (`gbaHydroTorrentL/R`) + 14 Loblu Tsunami Taç Sıçraması (`gbaHydroTsunamiCrown`) + Şelale Kaskadı (`gbaHydroDelugeCascade`).
-  - *Katman 5:* 4 Yönlü Balistik Su Kavitasyon Damlacıkları (`gbaHydroScatterUpL/R`, `gbaHydroScatterSideL/R`).
-  - *Whiff Durumu:* Iskalama halinde (`fx.whiffed === true`) aktör 82px'e küçülür, namlulardan su fışkırmaz, nozul halkaları, basınç kubbesi ve hedef sarsıntısı bastırılır, cılız bir geri çekilme (`gbaBlastoiseWhiffRecede`) ile sahneden ayrılır.
-- **G. GameBoard Paritesi ve Önizleme Sayfası (`preview_blastoise.html`):**
-  - `184px × 253px` (`aspect-ratio: 600 / 825`, `border-radius: 12px`), HP ve segmentli pips durum şeridi, Base Set Blastoise #2 altlığı, `#btnMode` çift mod, hız kontrolü (`1.0x`, `0.5x`, `0.25x`), kart hidrolik titremesi ve Kural 14 dayanıklı yollar.
-- **H. Teknik Süre Senkronizasyonu (Kural 6):**
-  - `getFXDuration('hydro_pump_cannons')` 1900ms'ye çekilerek tüm CSS keyframe'leriyle milisaniyesine eşitlendi.
+    - *Sol Namlu Ağzı:* `left: calc(50% - 54px * wi)`, `bottom: 105px * wi`. Namlu hedef odak noktasına doğru **`+28°`** atış açısıyla kilitlendi.
+    - *Sağ Namlu Ağzı:* `left: calc(50% + 10px * wi)`, `bottom: 98px * wi`. Namlu hedef odak noktasına doğru **`+30°`** atış açısıyla kilitlendi.
+  - *Hedef Konverjans Odak Noktası:* Her iki jet, savunan kart üzerinde `top: 50px`, `left: calc(50% - 1px)` noktasında kesişerek iki devasa akışkan kütlesinin momentumunu tek bir süper-basınç çekirdeğinde birleştirir.
+  - *Nozul Kenetli Akışkan Sönümlenmesi (Anti-patern #34):* Su akıntıları `gbaHydroTorrentL` ve `gbaHydroTorrentR` keyframe'lerinde `transform-origin: bottom center` ile namlu ağzına kenetlenmiştir. Sönümlenme fazında (%60–%100) jet gövdesi namludan kopup havaya uçmaz; namlu köküne kilitli kalarak kendi tabanında incelir (`scaleX(0.05) scaleY(0.7) opacity: 0`).
+- **E. Akkor Basınç Kubbesi, Şok Kırılma Halkaları ve 10 Loblu Sugimori Tsunami Taç Sıçraması:**
+  - *Hedef Temas Anı:* `0.48s`.
+  - *Akkor Basınç Kubbesi (`gbaHydroConcussionDome 1.15s @ 0.48s`):* İki jetin çarpıştığı anda konverjans merkezinde (`top: 50px, left: calc(50% - 1px)`) üç aşamalı optik kırılma alanı patlar: Akkor beyaz çekirdek (`#ffffff`), camgöbeği basınç kubbesi (`#38bdf8`), dış kavitasyon halosu (`rgba(2, 132, 199, 0.45)`).
+  - *10 Loblu Sugimori Tsunami Taç Sıçraması (`gbaHydroTsunamiCrown 1.15s @ 0.48s`):* Kavitasyon darbesi savunan kartın üzerine yayılan 10 loblu organik dalga mantosu, köpüklü kret şeritleri ve havalandırılmış su perdesi oluşturur.
+  - *Savunan Kart Hidrolik Titremesi (`gbaDefendingCardHydraulicTremor`):* Yüksek tonajlı suyun yarattığı kinetik sarsıntı savunan kartta elastik bir mikro-titreme oluşturur.
+- **F. Dört Fazlı Parabolik Balistik Kinematik & Yerçekimli Damlacık İnişi (§2.M, Anti-patern #35):**
+  - Tsunami tacından ve basınç kubbesinden fırlayan kavitasyon damlacıkları gerçek sıvı fiziğini simüle eden 4 fazlı parabolik bir yol izler:
+    - *Faz 1 (Balistik Fırlama / Ejection, %0–%18):* Nozul ve darbe merkezinden yüksek kinetik enerjiyle dışarı ve yukarı fırlama.
+    - *Faz 2 (Apeks Kret / Kinetic Apex, %18–%38):* Dikey hız sıfıra yaklaşır, yatay kavitasyon yayılımı genişler.
+    - *Faz 3 (Yerçekimli Dökülüş / Gravitational Descent, %38–%78):* Damlacıklar apeks noktasında asılı kalmaz; yerçekimi ivmesiyle hedefin göğsüne doğru **+12px ila +104px** aşağı dökülür.
+    - *Faz 4 (Tok Sönümlenme / Vapor Dispersion, %78–%100):* Hedef kart yüzeyine dökülen damlacıklar yumuşakça sönümlenir.
+- **G. 14-Vektörlü Doğal Kavitasyon Dispersiyon Takımyıldızı:**
+  - Tekdüze veya simetrik yapay desenleri kırmak amacıyla 14 bağımsız balistik damlacık keyframe'i (`gbaHydroSpray1` – `gbaHydroSpray14`) oluşturulmuştur:
+    - *Damlacık 1–3 (Sol Dış Balistik):* Sol üst ve dışa fırlayan, ardından +22px ila +38px aşağı süzülen damlalar.
+    - *Damlacık 4–6 (Merkez/Tepe Fıskiyesi):* Apeks noktasına dik fırlayıp kartın tam göğsüne doğru +48px ila +104px derin dökülen ana kütle.
+    - *Damlacık 7–9 (Sağ Dış Balistik):* Sağ kret boyunca fırlayıp +28px ila +42px aşağı inen serpintiler.
+    - *Damlacık 10–12 (İkincil Çapraz Kavitasyon):* Asimetrik yaylarla kartın alt çeyreğine dökülen mikro zerreler (+14px ila +64px).
+    - *Damlacık 13–14 (Gecikmeli Ağır Damlalar):* Darbenin en son fazında yerçekimiyle süzülen ağır su damlaları (+12px ila +56px).
+- **H. %10.5 Süre Genişletmesi (2100ms), Tokluk/Tamamlanmışlık ve Artık Enerji Sönümü:**
+  - Animasyon süresinin 1900ms'den 2100ms'ye çıkarılması, vuruş sonrası sahnede kalan kinetik enerjinin "tok" biçimde sindirilmesini sağlar. Erken kesilen animasyonların yarattığı "aceleye getirilmiş / eksik" his tamamen engellenir.
+- **I. 5 Katmanlı Mimari ve Whiff Standartları (Kural 1, Kural 5):**
+  - *Katman 1:* Ayak Tabanı Zemin Dalgası Aurası (`gbaHydroFloorSurge 2.1s`).
+  - *Katman 2:* Blastoise Hücum Duruşlu Tam Vücut Aktörü (`blastoise_hydro_pump_actor.png`, Tier 1 Apex 118px).
+  - *Katman 3:* Akkor Basınç Kubbesi (`gbaHydroConcussionDome 1.15s`) + Şok Kırılma Halkaları.
+  - *Katman 4:* İkili Konverjan Su Jetleri (`gbaHydroTorrentL/R`) + 10 Loblu Sugimori Tsunami Taç Sıçraması (`gbaHydroTsunamiCrown`).
+  - *Katman 5:* 14 Vektörlü Balistik Yerçekimli Kavitasyon Damlacıkları (`gbaHydroSpray1` – `gbaHydroSpray14`).
+  - *Whiff Durumu:* Iskalama halinde (`fx.whiffed === true`) aktör Tier-whiff ölçeğine (`82px × 80px`) küçülür; su jetleri, taç sıçraması ve basınç kubbesi bastırılır; cılız bir geri çekilme (`gbaBlastoiseWhiffRecede`) gerçekleşir.
+- **J. GameBoard Paritesi ve Önizleme Sayfası Doğrulaması (Kural 14):**
+  - `184px × 253px` (`aspect-ratio: 600 / 825`, `border-radius: 12px`), HP ve segmentli yeşil can pips'leri durum şeridi, Base Set Blastoise #2 altlığı, `#btnMode` çift mod ("Real Card" / "Dark Board Canvas"), hız kontrolü (`1.0x`, `0.5x`, `0.25x`), savunan kart hidrolik titremesi ve Kural 14 dayanıklı varlık yolları (`candidatePaths`).
+- **K. Teknik Süre Senkronizasyonu (Kural 6):**
+  - `BattleFXOverlay.tsx` içindeki `getFXDuration('hydro_pump_cannons')` 2100ms'ye eşitlenmiş olup, `index.css` ve önizleme sayfasındaki en uzun CSS keyframe süreleriyle tam uyumludur.
 
 
 ## 11. Karşılaştırma Tablosu ve Anti-Paternler
@@ -1209,18 +1345,18 @@ Implementasyona geçmeden önce her stok görsel şu 6 kapıdan geçer:
 | Overflow | hidden | hidden | **visible** (orb taşması) | **visible** (fırtına ve kristaller) |
 | Ana renk kimliği | Mavi/camgöbeği (ses) | Mor/eflatun (psişik) | Kızıl→zümrüt (kan→iyileşme) | Buzul beyazı/gök mavisi (soğuk) |
 
-### 11.A.2 — Akışkan & Dövüş Sanatları Animasyonlarının Yapısal Karşılaştırması (Grimer, Muk, Scyther, Mewtwo)
+### 11.A.2 — Akışkan & Dövüş Sanatları Animasyonlarının Yapısal Karşılaştırması (Grimer, Muk, Scyther, Mewtwo, Blastoise)
 
-| Boyut | Grimer Nasty Goo | Grimer Sticky Hands | Muk Sludge Deluge | Scyther Blade Dance | Mewtwo Psychic |
-|---|---|---|---|---|---|
-| Anlatı modeli | Viskoz boyunlaşma → kopma → taç sıçraması | Bilateral amorf kıskaç + biyoelektrik deşarj | Apex amorf kütle + toksik bataklık tsunamisi | 4-Fazlı Zootrop Mantis dansı + 3 odaklı glint | Psişik kara delik tekilliği + volumetrik eter |
-| Döngü / Süre | Tek seferlik (1.55s, 1550ms) | Tek seferlik (1.65s, 1650ms) | Tek seferlik (1.75s, 1750ms) | Tek seferlik (1.82s, 1820ms) | Tek seferlik (1.75s, 1750ms) |
-| Kinetik Faz | 3 aşamalı akışkan fazı | İki yanlı amorf atılma + elastik mikro-titreme | 5 katmanlı kabarma + kavitasyon baloncukları | %72–%89 apeks sustain (~420ms) + nefes tansiyonu | Telekinetik süzülme + 3 eşmerkezli şok dalgası |
-| Çıkış / Dissolve | Taban taç sıçramasıyla zemine dağılma | Geri çekilme sönümü (timing smoothing) | Asit dumanı ve köpük süblimasyonu | %89–%100 feathered ease-out dissolve (blur 0→4px) | Psişik tekillik çöküşü ve aura emilimi |
-| Whiff davranışı | Boyun uzamadan kurur, damla ve zemin sıçraması yok | Kıskaç ıskalar, biyoelektrik ark ve şok bastırılır | Kütle kabarmaz, tsunami ve asit baloncukları yok | Duruşlar küçülür, spektral bıçak ve kılıç parıltıları yok | Aktör 88px'e küçülür, şok ve zemin aurası yok |
-| Stok aktör | Özel Bézier SVG boyun/damla geometrisi | Grimer_Sticky_Hands_Actor.png | Muk_Sludge_Actor.png (Tier 1 Apex 114px) | Scyther_SwordsDance_Actor (4 poz zootrop) | Mewtwo_Psychic_Actor.png (Tier 1 Apex 120px) |
-| Özel Teknik | Eş eksenli dikey kilitlenme (`left: 50%`) | Taşan CAD elipsleri yerine organik ark poligonları | Multi-lobed Bézier asit tsunamisi | 3 noktalı anatomik kılıç parıltı takımyıldızı | Video-to-sprite kosinüs karartması + hasar katsayısı |
-| Ana renk kimliği | Zehirli mor / lila damlacık | Koyu amorf mor + neon sarı elektrik | Toksik derin mor + zümrüt asit yeşili | Orman yeşili + akkor limon/kehribar kılıç ışıltısı | İmperyal derin mor + akkor magenta/lila buhar |
+| Boyut | Grimer Nasty Goo | Grimer Sticky Hands | Muk Sludge Deluge | Scyther Blade Dance | Mewtwo Psychic | Blastoise Hydro Pump |
+|---|---|---|---|---|---|---|
+| Anlatı modeli | Viskoz boyunlaşma → kopma → taç sıçraması | Bilateral amorf kıskaç + biyoelektrik deşarj | Apex amorf kütle + toksik bataklık tsunamisi | 4-Fazlı Zootrop Mantis dansı + 3 odaklı glint | Psişik kara delik tekilliği + volumetrik eter | Hücum duruşlu ikili nozul konverjansı + akkor basınç kubbesi + yerçekimli dökülüş |
+| Döngü / Süre | Tek seferlik (1.55s, 1550ms) | Tek seferlik (1.65s, 1650ms) | Tek seferlik (1.75s, 1750ms) | Tek seferlik (1.82s, 1820ms) | Tek seferlik (1.75s, 1750ms) | Tek seferlik (2.1s, 2100ms) |
+| Kinetik Faz | 3 aşamalı akışkan fazı | İki yanlı amorf atılma + elastik mikro-titreme | 5 katmanlı kabarma + kavitasyon baloncukları | %72–%89 apeks sustain (~420ms) + nefes tansiyonu | Telekinetik süzülme + 3 eşmerkezli şok dalgası | 4-Fazlı sumo kinematiği (çömelme → kütlesel hidrolik geri tepme → basınç osilasyonu) |
+| Çıkış / Dissolve | Taban taç sıçramasıyla zemine dağılma | Geri çekilme sönümü (timing smoothing) | Asit dumanı ve köpük süblimasyonu | %89–%100 feathered ease-out dissolve (blur 0→4px) | Psişik tekillik çöküşü ve aura emilimi | %78–%100 artık enerji sönümü + yerçekimli damlacık inişi (+12px ila +104px) |
+| Whiff davranışı | Boyun uzamadan kurur, damla ve zemin sıçraması yok | Kıskaç ıskalar, biyoelektrik ark ve şok bastırılır | Kütle kabarmaz, tsunami ve asit baloncukları yok | Duruşlar küçülür, spektral bıçak ve kılıç parıltıları yok | Aktör 88px'e küçülür, şok ve zemin aurası yok | Aktör 82px'e küçülür; su jetleri, taç sıçraması ve kubbe bastırılır; cılız geri çekilme |
+| Stok aktör | Özel Bézier SVG boyun/damla geometrisi | Grimer_Sticky_Hands_Actor.png | Muk_Sludge_Actor.png (Tier 1 Apex 114px) | Scyther_SwordsDance_Actor (4 poz zootrop) | Mewtwo_Psychic_Actor.png (Tier 1 Apex 120px) | Blastoise_raw_edited_002 tight crop (Tier 1 Apex 118px) |
+| Özel Teknik | Eş eksenli dikey kilitlenme (`left: 50%`) | Taşan CAD elipsleri yerine organik ark poligonları | Multi-lobed Bézier asit tsunamisi | 3 noktalı anatomik kılıç parıltı takımyıldızı | Video-to-sprite kosinüs karartması + hasar katsayısı | Asimetrik ikili nozul konverjansı (+28° / +30°), nozul kenetli sönüm & parabolik balistik |
+| Ana renk kimliği | Zehirli mor / lila damlacık | Koyu amorf mor + neon sarı elektrik | Toksik derin mor + zümrüt asit yeşili | Orman yeşili + akkor limon/kehribar kılıç ışıltısı | İmperyal derin mor + akkor magenta/lila buhar | Okyanus mavisi + camgöbeği basınç kubbesi + akkor beyaz çekirdek |
 
 ### 11.B — Anti-patern listesi (bu implementasyonlardan çıkarılan yasaklar)
 
@@ -1358,6 +1494,8 @@ Yeni bir animasyon teslim edilmeden önce bu sıra ile ayar turu yapılır:
 | 23 | 2026-09-25 | §10.11 Blastoise Hidro Pompa (Hydro Pump) Sağ Su Jeti Nozul Kenetlenmesi (+30° @ `calc(50% + 10px)`), Çift Translate Kusuru Tasfiyesi & Hedef Blast Kubbesi Sol Jet Varış Kilitlenmesi (-1px, top 50px): Kullanıcı geri bildirimi ve görsel/geometrik teyit uyarınca 3 kritik iyileştirme sağlandı: 1) Sağ su jetinin Blastoise'un alnından/çenesinden fırlaması ve aşırı dik açısı (+15°) giderildi; Blastoise'un 18px sola kaymasıyla (`left: calc(50% - 34px)`) orantılı olarak sağ jet orijini `calc(50% + 10px)`, `bottom: 98px` nozul konumuna kilitlendi ve açısı onaylı referansındaki doğal +30° eğimine (`rotate(30deg)`) restore edildi. 2) Concussive hydro dome, şok halkaları ve Tsunami taç sıçramasının parent sarmalayıcı div'lerinde bulunan `transform: translate(-50%, -50%)` kaldırılarak child keyframe'lerin kendi merkezleme translate'i ile çakışan çift -%50 öteleme (blast küresinin sol-üst dış sınır köşesine fırlaması) hatası tamamen çözüldü; tüm patlama unsurları sol su jetinin vardığı tam koordinata (`top: 50px`, `left: calc(50% - 1px)`) oturtularak hedef Pokémon illüstrasyon alanında kusursuz merkezlendi. 3) Kullanıcının onayladığı sol su jeti (+28° @ `calc(50% - 54px)`, `bottom: 105px`), Blastoise aktörünün kuyruk sol sınır teğeti (`left: calc(50% - 34px)`) ve zemin mavi difüzyon aurası (`left: calc(50% - 38px)`) muhafaza edildi. `BattleFXOverlay.tsx`, `src/index.css`, `preview_blastoise.html` ve test koşucuları tam pariteyle güncellendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_blastoise_hydro_pump.py` 48/48 PASS · `python scratch/test_css_balance.py` PASS |
 | 24 | 2026-09-25 | §10.11 Blastoise Hidro Pompa (Hydro Pump) Hidrodinamik Sıçrama (Splash Plume) Kinematiği, 10 Loblu Sugimori Dalga Mantosu & Nozul Kenetli Akışkan Sönümlenmesi Overhaul'ı: Kullanıcı geri bildirimi ve iletilen iki referans görsel doğrultusunda 3 kritik görsel yapaylık tamamen giderildi: 1) Dairesel radyal çekirdeğin etrafında beliren, uçlarında yapay beyaz noktalar taşıyan 6 sivri uçlu taç benzeri cisim (Anti-patern #34) tasfiye edildi; yerine 10 loblu organik eğrisel Ken Sugimori suluboya dalga mantosu (`M80 106 C64 106...`), dairesel aeratör köpük tabakası (`tsunamiFoamWash_bfx`) ve kıvrımlı dalga köpüğü kret şeritleri entegre edildi. 2) Animasyonun son fazında merkezde yan yana beliren iki adet üçgenimsi beyaz parlaklık bloğu giderildi: Bu hataya yol açan iç köpük katmanındaki iki keskin üçgen tepe (`C44 61, 52 46, 63 30... 97 30`) organik yumuşak kret yaylarıyla değiştirildi; ayrıca su akıntıları keyframe'lerindeki kopup yukarı fırlayan `translateY(-24px)` ve `translateY(-28px)` ötelenmeleri kaldırılarak akıntıların nozul eksenlerine kenetli kalarak yerinde Gaussian buğulanmayla yumuşakça sönümlenmesi sağlandı. 3) Concussion dome içindeki CAD izlenimi veren ince tel kafes elipsler kaldırılarak hacimsel akışkan kırılma halkaları ve akkor beyaz çekirdek oturtuldu; süreler 0.98s ile (0.48s–1.46s) akıntılar ve taçla milisaniyesine senkronize edildi. `BattleFXOverlay.tsx`, `src/index.css` ve `preview_blastoise.html` tam pariteyle güncellendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_blastoise_hydro_pump.py` 48/48 PASS · `python scratch/test_css_balance.py` PASS |
 | 25 | 2026-09-25 | §10.11 Blastoise Hidro Pompa (Hydro Pump) Süre Genişletmesi (+%10.5, 2100ms), Yerçekimli Parabolik Damlacık İnişi (Gravitational Droplet Descent) & 14-Vektörlü Doğal Dağılım Overhaul'ı: Kullanıcı geri bildirimi doğrultusunda animasyonun erken bitmesinden kaynaklanan tokluk/tamamlanmışlık eksikliği giderildi: 1) Toplam animasyon süresi 1900ms'den 2100ms'ye (+%10.5) genişletildi; `getFXDuration('hydro_pump_cannons') = 2100` ve `durSec = 2.10s` güncellendi. Su torrenterinin süresi 1.15s'den 1.25s'ye (0.30s–1.55s), merkezi sarsıntı kubbesi 0.98s'den 1.15s'ye (0.48s–1.63s), Tsunami taç sıçraması 0.98s'den 1.15s'ye uzatıldı; son sönümlenmede Gaussian mist ve buharlaşma yumuşatması sağlandı. 2) Damlacıkların yerçekimine aykırı şekilde sadece yukarı uçup tepede yok olması sorunu çözüldü; keyframe'lere gerçekçi parabolik balistik kinematiği entegre edildi: Faz 1 (fırlama %0–%18) $\rightarrow$ Faz 2 (zirve apeks %36–%42) $\rightarrow$ Faz 3 (yerçekimi ivmeli aşağı iniş %65–%90, başlangıç seviyesinin +12px ila +104px altına inen süzülüş) $\rightarrow$ Faz 4 (aerodinamik aeratör sönümlenme %88–%100). 3) Damlacık sayısı ve çeşitliliği 10'dan 14'e çıkarıldı (Droplet 11 basamaklı sol sprey, Droplet 12 basamaklı sağ sprey, Droplet 13 yüksek irtifa ince aerosol sisi, Droplet 14 rakip kart göğsüne inen +104px derin gözyaşı sıçraması). Damlacıkların aktif ömrü 1.78s–1.92s'ye yayılarak genişletilen süre maksimum tokluk ve akıcılıkla değerlendirildi. `BattleFXOverlay.tsx`, `src/index.css` ve `preview_blastoise.html` tam pariteyle güncellendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_blastoise_hydro_pump.py` 49/49 PASS · `python scratch/test_css_balance.py` PASS |
+| 26 | 2026-09-26 | §7.K İleri Düzey Organik Doğallık, Akışkan/Gaz Simülasyon Alet Çantası & Enriched Visual Fidelity kılavuz bölümü eklendi: "Sinematik kalite", "görsel estetik" ve "kinematik doğallık" kavramsal temeli kanonlaştırıldı; sıfır bağımlılıklı yerel SVG Gooey/Metaball yüzey gerilimi (`feGaussianBlur` + `feColorMatrix`), Perlin türbülansı ve optik kırılma (`feTurbulence` + `feDisplacementMap`), dinamik path morfizmi (`d: path(...)`), HTML5 2D Micro-Canvas parçacık/yay fiziği emitörleri, Lottie/Flubber/PixiJS ekosistem alternatifleri ve 3 Kademeli Tatlı Nokta (Sweet Spot) Yol Haritası sisteme mühürlendi. §1.D içine çapraz referans işlendi. | `npx tsc --noEmit` EXIT=0 · `python scratch/test_blastoise_hydro_pump.py` 49/49 PASS · `python scratch/test_css_balance.py` PASS |
+| 27 | 2026-09-26 | §5.5 Proactive High-Fidelity Architectural Guidance & Optimum Quality Search (Proaktif Yüksek Sadakat ve İleri Düzey Görsel Alternatif Rehberliği) protokolü sisteme eklendi ve `GEMINI.md` Kural 15 olarak mühürlendi: Kullanıcı teknik detayların farkında olmasa dahi modelin optimum sinematik kalite, akışkanlar mekaniği ve zenginleştirilmiş sadakat (Enriched Visual Fidelity) arayışıyla alternatifleri proaktif önerme ilkesi operasyonel anayasaya bağlandı. | `python scratch/test_advanced_vfx_preview.py` 7/7 PASS · `python scratch/test_css_balance.py` PASS |
 
 
 

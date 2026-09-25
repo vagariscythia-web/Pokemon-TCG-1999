@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon TCG 1999 — İleri Düzey Organik FX & Akışkan Simülasyonu Numune Paneli</title>
+  
+  <!-- GSAP CDN for smooth, concise timeline & parameter interpolation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #080b12;
+      --panel-bg: rgba(18, 24, 38, 0.88);
+      --card-w: 184px;
+      --card-h: 253px;
+      --accent-cyan: #38bdf8;
+      --accent-purple: #c084fc;
+      --accent-lime: #a3e635;
+      --accent-gold: #facc15;
+      --accent-rose: #fb7185;
+      --accent-emerald: #34d399;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 15%, #151d30 0%, #06080e 100%);
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 80px;
+    }
+
+    header {
+      text-align: center;
+      max-width: 960px;
+      margin-bottom: 20px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent-cyan);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* Global Control Bar */
+    .global-toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: rgba(51, 65, 85, 0.9);
+      border-color: rgba(56, 189, 248, 0.5);
+      color: #fff;
+    }
+
+    .btn.active {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent-cyan);
+      color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+    }
+
+    /* Grid of Showcase Cards */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 22px;
+      max-width: 1260px;
+      width: 100%;
+    }
+
+    .showcase-card {
+      background: var(--panel-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(12px);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .showcase-card:hover {
+      border-color: rgba(56, 189, 248, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .showcase-header {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    .showcase-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .showcase-desc {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    /* Card Slot with Parity (Rule 14: 184px x 253px) */
+    .card-slot-wrapper {
+      position: relative;
+      width: var(--card-w);
+      height: var(--card-h);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0f172a;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      margin-bottom: 12px;
+    }
+
+    .card-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.9;
+    }
+
+    .dark-board-mode .card-bg-img {
+      opacity: 0.10;
+      filter: grayscale(100%) brightness(0.3);
+    }
+
+    /* Status Strip (CardView.tsx parity) */
+    .status-strip {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-hp {
+      font-size: 9px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .status-pips {
+      display: flex;
+      gap: 2px;
+    }
+
+    .pip {
+      width: 4px;
+      height: 6px;
+      border-radius: 1px;
+      background: #22c55e;
+    }
+
+    /* FX Overlay Canvas / Stage */
+    .fx-stage {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* Controls Panel under Card */
+    .card-controls {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    .switch-btn {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .switch-btn.on {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    /* ========================================================= */
+    /* NUMUNE 1: GAZ / BUHAR BULUTU (PERLIN TURBULENCE)          */
+    /* ========================================================= */
+    .gas-cloud-container {
+      position: absolute;
+      top: 25%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 150px;
+      pointer-events: none;
+    }
+
+    .gas-plume {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 45% 45%, #a3e635 0%, #4d7c0f 45%, #14532d 75%, transparent 100%);
+      opacity: 0.88;
+      filter: blur(4px);
+    }
+
+    .gas-turbulence-active .gas-plume {
+      filter: url(#gasTurbulenceFilter) blur(2px);
+    }
+
+    /* ========================================================= */
+    /* NUMUNE 2: SU JETİ TÜRBÜLANSI & KIRILMA                    */
+    /* ========================================================= */
+    .water-jet-container {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 180px;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .water-stream {
+      width: 32px;
+      height: 160px;
+      background: linear-gradient(to top, rgba(2, 132, 199, 0.95), rgba(56, 189, 248, 0.85), #ffffff);
+      border-radius: 16px 16px 6px 6px;
+      box-shadow: 0 0 16px rgba(56, 189, 248, 0.6), inset 0 0 10px #ffffff;
+      transform-origin: bottom center;
+    }
+
+    .water-turbulence-active .water-stream {
+      filter: url(#waterJetTurbulenceFilter);
+    }
+
+    /* ========================================================= */
+    /* NUMUNE 3: SIVI YÜZEY GERİLİMİ & METABALL (GOOEY)          */
+    /* ========================================================= */
+    .gooey-stage {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .gooey-active {
+      filter: url(#liquidGooFilter);
+    }
+
+    .goo-blob {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #93c5fd 0%, #0284c7 70%, #0369a1 100%);
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+    }
+
+    /* Root-level keyframes for Numune 3 */
+    @keyframes gbaBlobFloat1 {
+      0%   { transform: translate(50px, 80px); }
+      50%  { transform: translate(75px, 125px); }
+      100% { transform: translate(50px, 80px); }
+    }
+    @keyframes gbaBlobFloat2 {
+      0%   { transform: translate(110px, 140px); }
+      50%  { transform: translate(85px, 125px); }
+      100% { transform: translate(110px, 140px); }
+    }
+    @keyframes gbaBlobDrip {
+      0%   { transform: translate(80px, 40px) scale(0.8, 1.2); opacity: 0; }
+      15%  { opacity: 1; }
+      70%  { transform: translate(80px, 190px) scale(1.1, 0.9); opacity: 1; }
+      100% { transform: translate(80px, 205px) scale(1.4, 0.5); opacity: 0; }
+    }
+
+    .blob-1 {
+      width: 44px;
+      height: 44px;
+      animation: gbaBlobFloat1 2.8s ease-in-out infinite;
+    }
+    .blob-2 {
+      width: 38px;
+      height: 38px;
+      animation: gbaBlobFloat2 2.8s ease-in-out infinite;
+    }
+    .blob-drip {
+      width: 24px;
+      height: 24px;
+      background: radial-gradient(circle at 35% 35%, #ffffff 0%, #38bdf8 60%, #0284c7 100%);
+      animation: gbaBlobDrip 2.0s cubic-bezier(0.4, 0, 0.8, 1) infinite;
+    }
+
+    /* Canvases */
+    .micro-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    #shaderCanvas {
+      mix-blend-mode: screen;
+      opacity: 0.9;
+    }
+
+    /* Footer info */
+    .info-footer {
+      max-width: 1000px;
+      width: 100%;
+      margin-top: 36px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 20px;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .info-footer h3 {
+      font-size: 14px;
+      color: #f1f5f9;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hidden SVG Global Filter Defs (Zero dependency web standards) -->
+  <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+    <defs>
+      <!-- 1. Liquid Gooey / Metaball Filter (Surface Tension & Viscous Necking) -->
+      <filter id="liquidGooFilter" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" 
+          values="1 0 0 0 0  
+                  0 1 0 0 0  
+                  0 0 1 0 0  
+                  0 0 0 24 -9" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+
+      <!-- 2. Gas / Smoke Turbulence Filter (Perlin Noise & Displacement) -->
+      <filter id="gasTurbulenceFilter" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence id="gasTurbulenceElem" type="fractalNoise" baseFrequency="0.035" numOctaves="3" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+
+      <!-- 3. Water Jet Turbulence Filter (Anisotropic High-Pressure Ripple) -->
+      <filter id="waterJetTurbulenceFilter" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence id="waterTurbulenceElem" type="turbulence" baseFrequency="0.02 0.09" numOctaves="2" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
+
+  <header>
+    <div class="badge">Master FX Architecture</div>
+    <h1>İleri Düzey Organik FX & Akışkan Simülasyonu Numune Paneli</h1>
+    <p class="subtitle">
+      Düz vektör SVG'lerin ötesine geçen; <strong>Gooey yüzey gerilimi</strong>, <strong>Perlin türbülansı</strong>, <strong>Eulerian akışkanlar dinamiği</strong>, <strong>Spring-Mass dalga fiziği</strong> ve <strong>WebGL kaustik kırılması</strong> teknolojilerinin retro GameBoard paritesinde canlı temsili.
+    </p>
+  </header>
+
+  <div class="global-toolbar">
+    <button id="btnMode" class="btn" onclick="toggleBoardMode()">
+      <span id="modeIcon">🃏</span> <span id="modeText">Mod: Real Card Mode</span>
+    </button>
+    <button class="btn" onclick="triggerBurstAll()">
+      <span>⚡</span> Tüm Efektleri Tetikle
+    </button>
+  </div>
+
+  <div class="showcase-grid">
+
+    <!-- NUMUNE 1: GAZ / BUHAR BULUTU -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">1. Gaz & Zehir Buharı</div>
+        <div class="showcase-desc">Perlin Gürültüsü (`feTurbulence`) ile Kaotik Girdaplar</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot1">
+        <img class="card-bg-img" data-src="cards/14.jpg" alt="Weezing">
+        <div class="status-strip">
+          <span class="status-hp">HP 60</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <div class="gas-cloud-container gas-turbulence-active" id="gasContainer">
+            <div class="gas-plume"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Türbülans Filtresi:</span>
+          <button class="switch-btn on" id="btnGasTurb" onclick="toggleGasTurbulence()">AÇIK (Perlin)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-lime);">Native SVG + GSAP</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 2: SU JETİ TÜRBÜLANSI -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">2. Su Jeti Hidrodinamiği</div>
+        <div class="showcase-desc">Anizotropik Basınç Dalgası ve Kırılma (Caustics)</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot2">
+        <img class="card-bg-img" data-src="cards/2.jpg" alt="Blastoise">
+        <div class="status-strip">
+          <span class="status-hp">HP 100</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <div class="water-jet-container water-turbulence-active" id="waterContainer">
+            <div class="water-stream"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Basınç Kırılması:</span>
+          <button class="switch-btn on" id="btnWaterTurb" onclick="toggleWaterTurbulence()">AÇIK (Türbülans)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-cyan);">feDisplacementMap</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 3: SIVI YÜZEY GERİLİMİ & METABALL (GOOEY) -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">3. Sıvı Yüzey Gerilimi & Boyunlaşma</div>
+        <div class="showcase-desc">Gooey Filtresi ile Damlaların Kaynaşması (Metaball)</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot3">
+        <img class="card-bg-img" data-src="cards/48.jpg" alt="Grimer">
+        <div class="status-strip">
+          <span class="status-hp">HP 50</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <div class="gooey-stage gooey-active" id="gooeyStage">
+            <div class="goo-blob blob-1"></div>
+            <div class="goo-blob blob-2"></div>
+            <div class="goo-blob blob-drip"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Metaball Yüzey Gerilimi:</span>
+          <button class="switch-btn on" id="btnGooey" onclick="toggleGooey()">AÇIK (Gooey)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-purple);">feColorMatrix + Blur</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 4: 2D MICRO-CANVAS PARTICLE EMITTER -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">4. Micro-Canvas Yüksek Yoğunluk</div>
+        <div class="showcase-desc">Tek Tag ile 250 Parçacık, Yerçekimi ve Sekme</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot4">
+        <img class="card-bg-img" data-src="cards/2.jpg" alt="Blastoise">
+        <div class="status-strip">
+          <span class="status-hp">HP 100</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="sprayCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Parçacık Sayısı:</span>
+          <button class="switch-btn on" id="btnCanvasCount" onclick="cycleParticleCount()">250 Parçacık</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-gold);">HTML5 2D Canvas</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 5: NAVIER-STOKES AKIŞKANLAR DİNAMİĞİ (EULERIAN GRID FLUID SOLVER) -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">5. Navier-Stokes Akışkan Simülasyonu</div>
+        <div class="showcase-desc">Eulerian Grid ile Gerçek Girdaplı (Vorticity) Duman</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot5">
+        <img class="card-bg-img" data-src="cards/29.jpg" alt="Haunter">
+        <div class="status-strip">
+          <span class="status-hp">HP 70</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="fluidCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Miazma Püskürt:</span>
+          <button class="switch-btn on" id="btnFluidInject" onclick="injectMiasmaPulse()">Darbe Püskürt</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-rose);">CFD Fluid Solver (60 FPS)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 6: SPRING-MASS (YAY-KÜTLE) BÉZIER SIVI YÜZEYİ & ÇALKANTI -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">6. Spring-Mass Hidrodinamik Yüzey</div>
+        <div class="showcase-desc">Yay-Kütle Ağı ile Fiziksel Dalga ve Çalkantı</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot6">
+        <img class="card-bg-img" data-src="cards/13.jpg" alt="Poliwrath">
+        <div class="status-strip">
+          <span class="status-hp">HP 90</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="waveCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Suya Darbe İndir:</span>
+          <button class="switch-btn on" id="btnWaveSplash" onclick="splashWave()">Suya Çarp</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-emerald);">Hooke's Law + Bézier Spline</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 7: WEBGL 2D SIVI KAUSTİK & KIRILMA SHADER'I -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">7. WebGL Sıvı Kırılması & Caustics</div>
+        <div class="showcase-desc">Saf GPU Fragment Shader ile Su Işık Kırılması</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot7">
+        <img class="card-bg-img" data-src="cards/6.jpg" alt="Gyarados">
+        <div class="status-strip">
+          <span class="status-hp">HP 100</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="shaderCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Shader Parıltısı:</span>
+          <button class="switch-btn on" id="btnShaderToggle" onclick="toggleShader()">AÇIK (GPU Shader)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-cyan);">WebGL GLSL Shader</strong>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="info-footer">
+    <h3>Mimarinin Sağladığı Çözümler & Alternatif Karşılaştırma Matrisi</h3>
+    <ul>
+      <li><strong>1 & 2 (Native SVG Filters):</strong> Sıfır kütüphane bağımlılığıyla gaz ve su jetlerine yaşayan Perlin gürültüsü ve optik kırılma katar.</li>
+      <li><strong>3 (Gooey Metaball):</strong> Damlalar çarpışırken/ayrılırken viskoz yüzey gerilimi köprüsü kurar; balçık ve su damlacıklarını plastik daire olmaktan kurtarır.</li>
+      <li><strong>4 (Micro-Canvas Particles):</strong> Tek canvas etiketiyle DOM kirliliği yaratmadan 400 parçacığı yerçekimiyle simüle eder.</li>
+      <li><strong>5 (Navier-Stokes Eulerian Grid):</strong> Dumanın kendi etrafında kıvrılan gerçek aerodinamik girdaplar (vorticity) üretmesini sağlayan hesaplamalı akışkanlar dinamiği algoritması.</li>
+      <li><strong>6 (Spring-Mass Wave Mesh):</strong> Su yüzeyine darbe indiğinde, fiziksel Hooke yasası ($F = -kx - cv$) ile çalkalanan ve pürüzsüz Bézier eğrileriyle bağlanan yaşayan su havuzu.</li>
+      <li><strong>7 (WebGL Fragment Shader):</strong> Sıvı içindeki ışık dalgalanmalarını (caustics) ve tazyikli su parlamasını doğrudan GPU piksellerinde hesaplayan en üst düzey optik kırılma standardı.</li>
+    </ul>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. Resilient Asset Loading (Rule 14 Parity)
+    // ==========================================
+    const candidatePaths = [
+      'cards/',
+      './cards/',
+      '/cards/',
+      '../public/cards/',
+      'public/cards/'
+    ];
+
+    document.querySelectorAll('.card-bg-img').forEach(img => {
+      const rel = img.getAttribute('data-src');
+      let idx = 0;
+      function tryLoad() {
+        if (idx < candidatePaths.length) {
+          const prefix = candidatePaths[idx++];
+          img.src = prefix + rel.replace('cards/', '');
+        }
+      }
+      img.onerror = tryLoad;
+      tryLoad();
+    });
+
+    // ==========================================
+    // 2. Dual-Mode Toggle (Rule 14 Parity)
+    // ==========================================
+    let isDarkBoard = false;
+    function toggleBoardMode() {
+      isDarkBoard = !isDarkBoard;
+      document.body.classList.toggle('dark-board-mode', isDarkBoard);
+      const icon = document.getElementById('modeIcon');
+      const text = document.getElementById('modeText');
+      if (isDarkBoard) {
+        icon.textContent = '🌙';
+        text.textContent = 'Mod: Dark Board Canvas';
+        document.getElementById('btnMode').classList.add('active');
+      } else {
+        icon.textContent = '🃏';
+        text.textContent = 'Mod: Real Card Mode';
+        document.getElementById('btnMode').classList.remove('active');
+      }
+    }
+
+    // ==========================================
+    // 3. GSAP Real-Time Filter Turbulence Loops
+    // ==========================================
+    if (typeof gsap !== 'undefined') {
+      const gasTurbElem = document.getElementById('gasTurbulenceElem');
+      if (gasTurbElem) {
+        const gasObj = { bfX: 0.035, bfY: 0.045 };
+        gsap.to(gasObj, {
+          bfX: 0.055,
+          bfY: 0.075,
+          duration: 3.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          onUpdate: () => {
+            gasTurbElem.setAttribute('baseFrequency', `${gasObj.bfX} ${gasObj.bfY}`);
+          }
+        });
+      }
+
+      const waterTurbElem = document.getElementById('waterTurbulenceElem');
+      if (waterTurbElem) {
+        const waterObj = { bfX: 0.02, bfY: 0.09 };
+        gsap.to(waterObj, {
+          bfX: 0.035,
+          bfY: 0.15,
+          duration: 1.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "power1.inOut",
+          onUpdate: () => {
+            waterTurbElem.setAttribute('baseFrequency', `${waterObj.bfX} ${waterObj.bfY}`);
+          }
+        });
+      }
+    }
+
+    function toggleGasTurbulence() {
+      const container = document.getElementById('gasContainer');
+      const btn = document.getElementById('btnGasTurb');
+      const active = container.classList.toggle('gas-turbulence-active');
+      btn.classList.toggle('on', active);
+      btn.textContent = active ? 'AÇIK (Perlin)' : 'KAPALI (Düz Vektör)';
+    }
+
+    function toggleWaterTurbulence() {
+      const container = document.getElementById('waterContainer');
+      const btn = document.getElementById('btnWaterTurb');
+      const active = container.classList.toggle('water-turbulence-active');
+      btn.classList.toggle('on', active);
+      btn.textContent = active ? 'AÇIK (Türbülans)' : 'KAPALI (Laminar)';
+    }
+
+    function toggleGooey() {
+      const stage = document.getElementById('gooeyStage');
+      const btn = document.getElementById('btnGooey');
+      const active = stage.classList.toggle('gooey-active');
+      btn.classList.toggle('on', active);
+      btn.textContent = active ? 'AÇIK (Gooey)' : 'KAPALI (Ayrık)';
+    }
+
+    // ==========================================
+    // 4. Numune 4: 2D Micro-Canvas Particle Emitter
+    // ==========================================
+    const sprayCanvas = document.getElementById('sprayCanvas');
+    const sprayCtx = sprayCanvas.getContext('2d');
+    let maxParticles = 250;
+    const sprayParticles = [];
+
+    class WaterParticle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = sprayCanvas.width * 0.5 + (Math.random() - 0.5) * 16;
+        this.y = sprayCanvas.height * 0.85;
+        const angle = -Math.PI / 2 + (Math.random() - 0.5) * 0.55;
+        const speed = 3.5 + Math.random() * 4.5;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.gravity = 0.16 + Math.random() * 0.08;
+        this.radius = 1.2 + Math.random() * 2.2;
+        this.alpha = 0.9;
+        this.color = Math.random() > 0.4 ? '#ffffff' : (Math.random() > 0.5 ? '#38bdf8' : '#0284c7');
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += this.gravity;
+        this.vx *= 0.99;
+        this.alpha -= 0.012;
+        if (this.y > sprayCanvas.height - 4 || this.alpha <= 0) {
+          this.reset();
+        }
+      }
+      draw(c) {
+        c.save();
+        c.globalAlpha = Math.max(0, this.alpha);
+        c.fillStyle = this.color;
+        c.beginPath();
+        c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        c.fill();
+        c.restore();
+      }
+    }
+
+    for (let i = 0; i < maxParticles; i++) {
+      const p = new WaterParticle();
+      p.y = sprayCanvas.height * 0.85 - Math.random() * 120;
+      sprayParticles.push(p);
+    }
+
+    function animateSpray() {
+      sprayCtx.clearRect(0, 0, sprayCanvas.width, sprayCanvas.height);
+      for (let i = 0; i < maxParticles; i++) {
+        sprayParticles[i].update();
+        sprayParticles[i].draw(sprayCtx);
+      }
+      requestAnimationFrame(animateSpray);
+    }
+    requestAnimationFrame(animateSpray);
+
+    function cycleParticleCount() {
+      const btn = document.getElementById('btnCanvasCount');
+      if (maxParticles === 250) {
+        maxParticles = 80;
+        btn.textContent = '80 Parçacık';
+      } else if (maxParticles === 80) {
+        maxParticles = 400;
+        btn.textContent = '400 Parçacık (Fırtına)';
+      } else {
+        maxParticles = 250;
+        btn.textContent = '250 Parçacık';
+      }
+      while (sprayParticles.length < maxParticles) {
+        sprayParticles.push(new WaterParticle());
+      }
+    }
+
+    // ==========================================
+    // 5. Numune 5: Navier-Stokes Eulerian Fluid Solver
+    // ==========================================
+    const fluidCanvas = document.getElementById('fluidCanvas');
+    const fCtx = fluidCanvas.getContext('2d');
+    const fW = 32, fH = 44;
+    const fSize = (fW + 2) * (fH + 2);
+    let u = new Float32Array(fSize), v = new Float32Array(fSize);
+    let u_prev = new Float32Array(fSize), v_prev = new Float32Array(fSize);
+    let dens = new Float32Array(fSize), dens_prev = new Float32Array(fSize);
+
+    function fIdx(x, y) { return x + (fW + 2) * y; }
+
+    function addSource(x, s, dt) {
+      for (let i = 0; i < fSize; i++) x[i] += dt * s[i];
+    }
+
+    function diffuse(b, x, x0, diff, dt) {
+      const a = dt * diff * fW * fH;
+      for (let k = 0; k < 4; k++) {
+        for (let i = 1; i <= fW; i++) {
+          for (let j = 1; j <= fH; j++) {
+            x[fIdx(i,j)] = (x0[fIdx(i,j)] + a * (x[fIdx(i-1,j)] + x[fIdx(i+1,j)] + x[fIdx(i,j-1)] + x[fIdx(i,j+1)])) / (1 + 4 * a);
+          }
+        }
+      }
+    }
+
+    function advect(b, d, d0, u_vel, v_vel, dt) {
+      const dt0 = dt * fW;
+      for (let i = 1; i <= fW; i++) {
+        for (let j = 1; j <= fH; j++) {
+          let x = i - dt0 * u_vel[fIdx(i,j)];
+          let y = j - dt0 * v_vel[fIdx(i,j)];
+          if (x < 0.5) x = 0.5; if (x > fW + 0.5) x = fW + 0.5;
+          let i0 = Math.floor(x), i1 = i0 + 1;
+          if (y < 0.5) y = 0.5; if (y > fH + 0.5) y = fH + 0.5;
+          let j0 = Math.floor(y), j1 = j0 + 1;
+          let s1 = x - i0, s0 = 1 - s1;
+          let t1 = y - j0, t0 = 1 - t1;
+          d[fIdx(i,j)] = s0 * (t0 * d0[fIdx(i0,j0)] + t1 * d0[fIdx(i0,j1)]) +
+                         s1 * (t0 * d0[fIdx(i1,j0)] + t1 * d0[fIdx(i1,j1)]);
+        }
+      }
+    }
+
+    function project(u_vel, v_vel, p, div) {
+      for (let i = 1; i <= fW; i++) {
+        for (let j = 1; j <= fH; j++) {
+          div[fIdx(i,j)] = -0.5 * (u_vel[fIdx(i+1,j)] - u_vel[fIdx(i-1,j)] + v_vel[fIdx(i,j+1)] - v_vel[fIdx(i,j-1)]) / fW;
+          p[fIdx(i,j)] = 0;
+        }
+      }
+      for (let k = 0; k < 4; k++) {
+        for (let i = 1; i <= fW; i++) {
+          for (let j = 1; j <= fH; j++) {
+            p[fIdx(i,j)] = (div[fIdx(i,j)] + p[fIdx(i-1,j)] + p[fIdx(i+1,j)] + p[fIdx(i,j-1)] + p[fIdx(i,j+1)]) / 4;
+          }
+        }
+      }
+      for (let i = 1; i <= fW; i++) {
+        for (let j = 1; j <= fH; j++) {
+          u_vel[fIdx(i,j)] -= 0.5 * fW * (p[fIdx(i+1,j)] - p[fIdx(i-1,j)]);
+          v_vel[fIdx(i,j)] -= 0.5 * fH * (p[fIdx(i,j+1)] - p[fIdx(i,j-1)]);
+        }
+      }
+    }
+
+    let miasmaPulseTimer = 0;
+    function injectMiasmaPulse() {
+      const cx = Math.floor(fW * 0.5);
+      const cy = Math.floor(fH * 0.85);
+      for (let dx = -3; dx <= 3; dx++) {
+        for (let dy = -2; dy <= 2; dy++) {
+          dens_prev[fIdx(cx+dx, cy+dy)] += 8.0;
+          v_prev[fIdx(cx+dx, cy+dy)] -= 12.0; // strong upward impulse
+          u_prev[fIdx(cx+dx, cy+dy)] += (Math.random() - 0.5) * 6.0; // vortex curl
+        }
+      }
+    }
+
+    const offscreenImg = fCtx.createImageData(fW, fH);
+    function animateFluid() {
+      // Periodic automatic miasma pulse
+      if (++miasmaPulseTimer % 55 === 0) {
+        injectMiasmaPulse();
+      }
+
+      // Physics step
+      const dt = 0.12;
+      diffuse(1, u, u_prev, 0.0001, dt);
+      diffuse(2, v, v_prev, 0.0001, dt);
+      project(u, v, u_prev, v_prev);
+      advect(1, u_prev, u, u, v, dt);
+      advect(2, v_prev, v, u, v, dt);
+      project(u_prev, v_prev, u, v);
+
+      diffuse(0, dens, dens_prev, 0.0001, dt);
+      advect(0, dens_prev, dens, u_prev, v_prev, dt);
+
+      // Render to fluid canvas (bilinear scaling)
+      fCtx.clearRect(0, 0, fluidCanvas.width, fluidCanvas.height);
+      const scaleX = fluidCanvas.width / fW;
+      const scaleY = fluidCanvas.height / fH;
+      
+      fCtx.save();
+      for (let j = 1; j <= fH; j++) {
+        for (let i = 1; i <= fW; i++) {
+          const d = dens_prev[fIdx(i,j)];
+          if (d > 0.05) {
+            const alpha = Math.min(0.85, d * 0.4);
+            fCtx.fillStyle = `rgba(168, 85, 247, ${alpha})`;
+            fCtx.fillRect((i-1) * scaleX, (j-1) * scaleY, scaleX + 1, scaleY + 1);
+          }
+          dens_prev[fIdx(i,j)] *= 0.985; // dissipation
+        }
+      }
+      fCtx.restore();
+
+      requestAnimationFrame(animateFluid);
+    }
+    requestAnimationFrame(animateFluid);
+
+    // ==========================================
+    // 6. Numune 6: Spring-Mass Wave Mesh Solver
+    // ==========================================
+    const waveCanvas = document.getElementById('waveCanvas');
+    const wCtx = waveCanvas.getContext('2d');
+    const nodeCount = 18;
+    const waveNodes = [];
+    const baselineY = waveCanvas.height * 0.70;
+
+    for (let i = 0; i < nodeCount; i++) {
+      waveNodes.push({
+        x: (waveCanvas.width / (nodeCount - 1)) * i,
+        y: baselineY,
+        vy: 0,
+        targetY: baselineY
+      });
+    }
+
+    function splashWave() {
+      // Plunge in center
+      const mid = Math.floor(nodeCount / 2);
+      waveNodes[mid].vy = 28;
+      if (waveNodes[mid-1]) waveNodes[mid-1].vy = 18;
+      if (waveNodes[mid+1]) waveNodes[mid+1].vy = 18;
+    }
+
+    let waveTimer = 0;
+    function animateWaves() {
+      if (++waveTimer % 90 === 0) {
+        splashWave();
+      }
+
+      // Spring-mass physics (Hooke's law)
+      const k = 0.024;
+      const damping = 0.038;
+      const spread = 0.22;
+
+      for (let i = 0; i < nodeCount; i++) {
+        const n = waveNodes[i];
+        const dy = n.y - n.targetY;
+        const force = -k * dy - damping * n.vy;
+        n.vy += force;
+        n.y += n.vy;
+      }
+
+      // Spread wave energy to neighbors
+      for (let j = 0; j < 3; j++) {
+        for (let i = 0; i < nodeCount; i++) {
+          if (i > 0) {
+            const leftDelta = spread * (waveNodes[i].y - waveNodes[i-1].y);
+            waveNodes[i-1].vy += leftDelta;
+            waveNodes[i-1].y += leftDelta;
+          }
+          if (i < nodeCount - 1) {
+            const rightDelta = spread * (waveNodes[i].y - waveNodes[i+1].y);
+            waveNodes[i+1].vy += rightDelta;
+            waveNodes[i+1].y += rightDelta;
+          }
+        }
+      }
+
+      // Draw smooth cubic Bézier water surface
+      wCtx.clearRect(0, 0, waveCanvas.width, waveCanvas.height);
+      wCtx.save();
+
+      // Liquid body gradient
+      const grad = wCtx.createLinearGradient(0, baselineY - 40, 0, waveCanvas.height);
+      grad.addColorStop(0, 'rgba(56, 189, 248, 0.75)');
+      grad.addColorStop(0.3, 'rgba(2, 132, 199, 0.85)');
+      grad.addColorStop(1, 'rgba(15, 23, 42, 0.95)');
+
+      wCtx.fillStyle = grad;
+      wCtx.beginPath();
+      wCtx.moveTo(waveNodes[0].x, waveNodes[0].y);
+
+      for (let i = 0; i < nodeCount - 1; i++) {
+        const p0 = waveNodes[i];
+        const p1 = waveNodes[i+1];
+        const midX = (p0.x + p1.x) * 0.5;
+        const midY = (p0.y + p1.y) * 0.5;
+        wCtx.quadraticCurveTo(p0.x, p0.y, midX, midY);
+      }
+      wCtx.lineTo(waveNodes[nodeCount-1].x, waveNodes[nodeCount-1].y);
+      wCtx.lineTo(waveCanvas.width, waveCanvas.height);
+      wCtx.lineTo(0, waveCanvas.height);
+      wCtx.closePath();
+      wCtx.fill();
+
+      // White foam crest line
+      wCtx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
+      wCtx.lineWidth = 2.5;
+      wCtx.beginPath();
+      wCtx.moveTo(waveNodes[0].x, waveNodes[0].y);
+      for (let i = 0; i < nodeCount - 1; i++) {
+        const p0 = waveNodes[i];
+        const p1 = waveNodes[i+1];
+        const midX = (p0.x + p1.x) * 0.5;
+        const midY = (p0.y + p1.y) * 0.5;
+        wCtx.quadraticCurveTo(p0.x, p0.y, midX, midY);
+      }
+      wCtx.stroke();
+      wCtx.restore();
+
+      requestAnimationFrame(animateWaves);
+    }
+    requestAnimationFrame(animateWaves);
+
+    // ==========================================
+    // 7. Numune 7: WebGL 2D Fluid Caustics Shader
+    // ==========================================
+    const sCanvas = document.getElementById('shaderCanvas');
+    const gl = sCanvas.getContext('webgl', { alpha: true, premultipliedAlpha: true });
+    let shaderActive = true;
+
+    if (gl) {
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+      const vsSrc = `
+        attribute vec2 a_pos;
+        void main() {
+          gl_Position = vec4(a_pos, 0.0, 1.0);
+        }
+      `;
+      const fsSrc = `
+        precision mediump float;
+        uniform vec2 u_res;
+        uniform float u_time;
+        void main() {
+          vec2 uv = gl_FragCoord.xy / u_res;
+          float t = u_time * 0.8;
+          
+          // Multi-wave interference caustics
+          float w1 = sin(uv.x * 24.0 + t) * cos(uv.y * 22.0 + t * 0.8);
+          float w2 = sin(uv.x * 32.0 - t * 1.2 + w1 * 2.0) * cos(uv.y * 28.0 + t + w1 * 1.5);
+          float w3 = sin((uv.x + uv.y) * 20.0 + t * 0.7 + w2) * cos((uv.x - uv.y) * 20.0 - t * 0.9);
+          
+          // Caustic concentration (sharp filaments, transparent valleys)
+          float caustic = pow(abs(w1 + w2 + w3) / 3.0, 3.5) * 2.5;
+          caustic = clamp(caustic, 0.0, 1.0);
+          
+          // Radiant cyan-white light filaments
+          vec3 col = mix(vec3(0.08, 0.55, 0.95), vec3(0.95, 1.0, 1.0), caustic);
+          float alpha = caustic * 0.75;
+          
+          gl_FragColor = vec4(col * alpha, alpha);
+        }
+      `;
+
+      function createShader(gl, type, src) {
+        const s = gl.createShader(type);
+        gl.shaderSource(s, src);
+        gl.compileShader(s);
+        return s;
+      }
+
+      const prg = gl.createProgram();
+      gl.attachShader(prg, createShader(gl, gl.VERTEX_SHADER, vsSrc));
+      gl.attachShader(prg, createShader(gl, gl.FRAGMENT_SHADER, fsSrc));
+      gl.linkProgram(prg);
+      gl.useProgram(prg);
+
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        -1, -1,  1, -1, -1,  1,
+        -1,  1,  1, -1,  1,  1
+      ]), gl.STATIC_DRAW);
+
+      const posLoc = gl.getAttribLocation(prg, 'a_pos');
+      gl.enableVertexAttribArray(posLoc);
+      gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+      const resLoc = gl.getUniformLocation(prg, 'u_res');
+      const timeLoc = gl.getUniformLocation(prg, 'u_time');
+      gl.uniform2f(resLoc, sCanvas.width, sCanvas.height);
+
+      let startTime = performance.now();
+      function renderShader() {
+        if (shaderActive) {
+          gl.viewport(0, 0, sCanvas.width, sCanvas.height);
+          const t = (performance.now() - startTime) * 0.001;
+          gl.uniform1f(timeLoc, t);
+          gl.drawArrays(gl.TRIANGLES, 0, 6);
+        } else {
+          gl.clearColor(0, 0, 0, 0);
+          gl.clear(gl.COLOR_BUFFER_BIT);
+        }
+        requestAnimationFrame(renderShader);
+      }
+      requestAnimationFrame(renderShader);
+    }
+
+    function toggleShader() {
+      shaderActive = !shaderActive;
+      const btn = document.getElementById('btnShaderToggle');
+      btn.classList.toggle('on', shaderActive);
+      btn.textContent = shaderActive ? 'AÇIK (GPU Shader)' : 'KAPALI';
+    }
+
+    function triggerBurstAll() {
+      if (typeof gsap !== 'undefined') {
+        gsap.fromTo('.water-stream', { scaleY: 0.2 }, { scaleY: 1.1, duration: 0.4, yoyo: true, repeat: 1 });
+        gsap.fromTo('.gas-plume', { scale: 0.6 }, { scale: 1.25, duration: 0.6, yoyo: true, repeat: 1 });
+      }
+      injectMiasmaPulse();
+      splashWave();
+    }
+  </script>
+</body>
+</html>
