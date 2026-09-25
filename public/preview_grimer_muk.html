@@ -132,10 +132,11 @@
       border: 1px solid #7e22ce;
     }
     
-    /* Authentic 1999 Card Stage Frame */
+    /* Authentic Pokémon TCG Card Canvas: Exact match to GameBoard desktop active card (184px x 253px, aspect-ratio: 600 / 825) */
     .card-stage {
-      width: 180px;
-      height: 252px;
+      width: 184px;
+      height: 253px;
+      aspect-ratio: 600 / 825;
       background: radial-gradient(circle at 50% 35%, #1f1138 0%, #0d061c 100%);
       border: 3px solid #7e22ce;
       border-radius: 12px;
@@ -145,6 +146,32 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      box-sizing: border-box;
+      transition: all 0.25s ease;
+    }
+    .card-stage.real-card-mode {
+      background: #f5cb39;
+      border: 2.5px solid #c79808;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.8), inset 0 0 0 1px rgba(255,255,255,0.25);
+    }
+    .card-underlay {
+      position: absolute;
+      inset: 2px;
+      border-radius: 6px;
+      overflow: hidden;
+      z-index: 1;
+      pointer-events: none;
+      display: none;
+      background: #f5cb39;
+    }
+    .card-stage.real-card-mode .card-underlay {
+      display: block;
+    }
+    .card-stage.real-card-mode .card-mockup-label,
+    .card-stage.real-card-mode .card-mockup-hp,
+    .card-stage.real-card-mode .card-art-box,
+    .card-stage.real-card-mode::before {
+      display: none !important;
     }
     .card-stage::before {
       content: "";
@@ -164,6 +191,7 @@
       opacity: 0.45;
       text-transform: uppercase;
       letter-spacing: 1px;
+      z-index: 2;
     }
     .card-mockup-hp {
       position: absolute;
@@ -173,6 +201,7 @@
       font-weight: bold;
       color: #ef4444;
       opacity: 0.55;
+      z-index: 2;
     }
     .card-art-box {
       width: 136px;
@@ -187,6 +216,7 @@
       color: #a855f7;
       opacity: 0.3;
       pointer-events: none;
+      z-index: 2;
     }
 
     .btn-row {
@@ -316,18 +346,18 @@
     /* Grimer Sticky Hands 1996 Ken Sugimori Stock Actor Kinematics */
     @keyframes gbaGrimerStickyActorLunge {
       0%   { opacity: 0; transform: scale(0.4) translateY(32px) scaleX(1.15) scaleY(0.85); }
-      14%  { opacity: 0.95; transform: scale(0.8) translateY(14px) scaleX(0.92) scaleY(1.12); }
-      28%  { opacity: 1; transform: scale(1.18) translateY(-8px) scaleX(1.08) scaleY(0.94); }
-      34%  { opacity: 1; transform: scale(1.15) translateY(-4px) scaleX(1.18) scaleY(0.88) rotate(-1.5deg); }
-      40%  { opacity: 1; transform: scale(1.13) translateY(-3px) scaleX(1.10) scaleY(0.94) rotate(1.2deg); }
-      48%  { opacity: 1; transform: scale(1.11) translateY(-2px) scaleX(1.05) scaleY(0.97) rotate(-0.8deg); }
-      56%  { opacity: 1; transform: scale(1.10) translateY(-1px) scaleX(0.95) scaleY(1.07) rotate(0.6deg); }
-      66%  { opacity: 0.98; transform: scale(1.08) translateY(1px) scaleX(1.04) scaleY(0.98) rotate(-0.5deg); }
-      76%  { opacity: 0.95; transform: scale(1.05) translateY(3px) scaleX(0.98) scaleY(1.03); }
-      84%  { opacity: 0.88; transform: scale(1.02) translateY(6px) scaleX(1.02) scaleY(0.99); }
-      92%  { opacity: 0.65; transform: scale(0.98) translateY(12px) scaleX(0.98) scaleY(1.02); }
-      97%  { opacity: 0.30; transform: scale(0.94) translateY(18px); }
-      100% { opacity: 0; transform: scale(0.90) translateY(24px); }
+      14%  { opacity: 0.95; transform: scale(0.78) translateY(12px) scaleX(0.92) scaleY(1.12); }
+      28%  { opacity: 1; transform: scale(1.08) translateY(-6px) scaleX(1.06) scaleY(0.95); }
+      34%  { opacity: 1; transform: scale(1.06) translateY(-3px) scaleX(1.12) scaleY(0.90) rotate(-1.5deg); }
+      40%  { opacity: 1; transform: scale(1.04) translateY(-2px) scaleX(1.06) scaleY(0.95) rotate(1.2deg); }
+      48%  { opacity: 1; transform: scale(1.03) translateY(-2px) scaleX(1.03) scaleY(0.97) rotate(-0.8deg); }
+      56%  { opacity: 1; transform: scale(1.02) translateY(-1px) scaleX(0.96) scaleY(1.05) rotate(0.6deg); }
+      66%  { opacity: 0.98; transform: scale(1.01) translateY(1px) scaleX(1.02) scaleY(0.98) rotate(-0.5deg); }
+      76%  { opacity: 0.95; transform: scale(0.99) translateY(3px) scaleX(0.98) scaleY(1.03); }
+      84%  { opacity: 0.88; transform: scale(0.97) translateY(6px) scaleX(1.02) scaleY(0.99); }
+      92%  { opacity: 0.65; transform: scale(0.94) translateY(12px) scaleX(0.98) scaleY(1.02); }
+      97%  { opacity: 0.30; transform: scale(0.90) translateY(18px); }
+      100% { opacity: 0; transform: scale(0.86) translateY(24px); }
     }
 
     /* Dynamic Hand Drip Path Tracing: Drops falling straight down from outstretched fingers */
@@ -393,13 +423,13 @@
 
     @keyframes gbaStickyParalysisRing {
       0%, 28% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
-      34%     { opacity: 0.95; transform: translate(-50%, -50%) scale(1.02); filter: drop-shadow(0 0 20px #c084fc) drop-shadow(0 0 32px #a3e635); }
-      46%     { opacity: 0.92; transform: translate(-50%, -50%) scale(1.18); filter: drop-shadow(0 0 24px #84cc16); }
-      60%     { opacity: 0.82; transform: translate(-50%, -50%) scale(1.36); filter: drop-shadow(0 0 28px #a3e635); }
-      74%     { opacity: 0.68; transform: translate(-50%, -50%) scale(1.52); filter: drop-shadow(0 0 22px #84cc16); }
-      86%     { opacity: 0.45; transform: translate(-50%, -50%) scale(1.65); }
-      94%     { opacity: 0.22; transform: translate(-50%, -50%) scale(1.75); }
-      100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.85); }
+      34%     { opacity: 0.95; transform: translate(-50%, -50%) scale(0.88); filter: drop-shadow(0 0 20px #c084fc) drop-shadow(0 0 32px #a3e635); }
+      46%     { opacity: 0.92; transform: translate(-50%, -50%) scale(1.02); filter: drop-shadow(0 0 24px #84cc16); }
+      60%     { opacity: 0.82; transform: translate(-50%, -50%) scale(1.18); filter: drop-shadow(0 0 28px #a3e635); }
+      74%     { opacity: 0.68; transform: translate(-50%, -50%) scale(1.32); filter: drop-shadow(0 0 22px #84cc16); }
+      86%     { opacity: 0.45; transform: translate(-50%, -50%) scale(1.44); }
+      94%     { opacity: 0.22; transform: translate(-50%, -50%) scale(1.52); }
+      100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.60); }
     }
 
     @keyframes gbaGrimerHandDripMid {
@@ -530,6 +560,7 @@
   <div class="control-bar">
     <button class="main-btn" onclick="playAll()">▶ Tümünü Oynat (Play All)</button>
     <button class="main-btn" style="background:#581c87" onclick="resetAll()">⏹ Sıfırla (Reset)</button>
+    <button class="main-btn" id="toggle-card-btn" style="background:#2563eb" onclick="toggleCardMode()">🃏 Mod: Gerçek TCG Kartı (Magnemite / Grimer)</button>
     <div class="speed-btn-group">
       <span style="font-size:11px;color:#94a3b8;align-self:center;padding:0 6px;">Hız:</span>
       <button class="speed-btn active" onclick="setSpeed(1, this)">1.0x Normal</button>
@@ -545,7 +576,10 @@
         <h3>MUK: SLUDGE DELUGE</h3>
         <span class="badge">1750ms · Tier 1 Apex Stock Visual</span>
       </div>
-      <div class="card-stage" id="stage-muk-hit">
+      <div class="card-stage real-card-mode" id="stage-muk-hit" data-card="53">
+        <div class="card-underlay">
+          <img class="card-underlay-img" alt="Target Magnemite" style="width:100%;height:100%;object-fit:fill;" />
+        </div>
         <span class="card-mockup-label">MUK LV.34</span>
         <span class="card-mockup-hp">70 HP</span>
         <div class="card-art-box">MUK ART</div>
@@ -563,7 +597,10 @@
         <h3>GRIMER: STICKY HANDS</h3>
         <span class="badge">1650ms · 1996 Ken Sugimori Asymmetric Claws</span>
       </div>
-      <div class="card-stage" id="stage-grimer-sticky">
+      <div class="card-stage real-card-mode" id="stage-grimer-sticky" data-card="53">
+        <div class="card-underlay">
+          <img class="card-underlay-img" alt="Target Magnemite" style="width:100%;height:100%;object-fit:fill;" />
+        </div>
         <span class="card-mockup-label">GRIMER LV.17</span>
         <span class="card-mockup-hp">40 HP</span>
         <div class="card-art-box">GRIMER ART</div>
@@ -581,7 +618,10 @@
         <h3>GRIMER: NASTY GOO</h3>
         <span class="badge">1550ms · Fluid Necking & Drop Pinch-Off</span>
       </div>
-      <div class="card-stage" id="stage-grimer-goo">
+      <div class="card-stage real-card-mode" id="stage-grimer-goo" data-card="53">
+        <div class="card-underlay">
+          <img class="card-underlay-img" alt="Target Magnemite" style="width:100%;height:100%;object-fit:fill;" />
+        </div>
         <span class="card-mockup-label">GRIMER LV.17</span>
         <span class="card-mockup-hp">50 HP</span>
         <div class="card-art-box">GRIMER ART</div>
@@ -599,7 +639,10 @@
         <h3>GRIMER: MINIMIZE</h3>
         <span class="badge">1500ms · Puddle Liquefaction & Ripples</span>
       </div>
-      <div class="card-stage" id="stage-grimer-minimize">
+      <div class="card-stage real-card-mode" id="stage-grimer-minimize" data-card="48">
+        <div class="card-underlay">
+          <img class="card-underlay-img" alt="Self Grimer" style="width:100%;height:100%;object-fit:fill;" />
+        </div>
         <span class="card-mockup-label">GRIMER LV.17</span>
         <span class="card-mockup-hp">50 HP</span>
         <div class="card-art-box">GRIMER ART</div>
@@ -613,6 +656,55 @@
 
   <script>
     let globalSpeed = 1;
+    let realCardMode = true;
+
+    function cleanStage(stage) {
+      Array.from(stage.children).forEach(c => {
+        if (!c.classList.contains('card-underlay') && !c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
+          stage.removeChild(c);
+        }
+      });
+    }
+
+    function toggleCardMode() {
+      realCardMode = !realCardMode;
+      const btn = document.getElementById('toggle-card-btn');
+      document.querySelectorAll('.card-stage').forEach(s => {
+        if (realCardMode) {
+          s.classList.add('real-card-mode');
+        } else {
+          s.classList.remove('real-card-mode');
+        }
+      });
+      if (btn) {
+        btn.textContent = realCardMode 
+          ? '🃏 Mod: Gerçek TCG Kartı (Magnemite / Grimer)' 
+          : '⬛ Mod: Sade Aşama (Clean Dark Stage)';
+        btn.style.background = realCardMode ? '#2563eb' : '#475569';
+      }
+    }
+
+    function loadCardImages() {
+      document.querySelectorAll('.card-stage').forEach(stage => {
+        const cardNum = stage.getAttribute('data-card');
+        const img = stage.querySelector('.card-underlay-img');
+        if (!cardNum || !img) return;
+        const candidatePaths = [
+          `cards/${cardNum}.jpg`,
+          `/cards/${cardNum}.jpg`,
+          `./cards/${cardNum}.jpg`,
+          `../public/cards/${cardNum}.jpg`
+        ];
+        let idx = 0;
+        img.onerror = function() {
+          idx++;
+          if (idx < candidatePaths.length) {
+            this.src = candidatePaths[idx];
+          }
+        };
+        img.src = candidatePaths[0];
+      });
+    }
 
     function setSpeed(spd, btn) {
       globalSpeed = spd;
@@ -629,24 +721,19 @@
     /* 1. MUK SLUDGE DELUGE */
     function renderMuk(stageId, whiffed) {
       const stage = document.getElementById(stageId);
-      // Clean previous dynamic fx elements while keeping mockup labels
-      Array.from(stage.children).forEach(c => {
-        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
-          stage.removeChild(c);
-        }
-      });
+      cleanStage(stage);
 
       // Layer 1: Floor Mire
       const floor = document.createElement('div');
-      floor.style.cssText = 'position:absolute;bottom:8px;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;animation:gbaMukSludgeFloor forwards;';
+      floor.style.cssText = 'position:absolute;bottom:8px;width:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;animation:gbaMukSludgeFloor forwards;';
       applySpeed(floor, 1.75);
       floor.innerHTML = '<div style="width:210px;height:56px;border-radius:9999px;background:radial-gradient(ellipse at 50% 50%, #3b0764 0%, #1e1b4b 75%, transparent 100%);filter:blur(2px);box-shadow:0 0 24px #581c87;"></div>';
       stage.appendChild(floor);
 
-      // Layer 2: Muk Stock Actor (Tier 1 Apex Monolithic 144px)
+      // Layer 2: Muk Stock Actor (Calibrated 126px)
       const actor = document.createElement('div');
-      const w = whiffed ? '98px' : '144px';
-      const h = whiffed ? '70px' : '103px';
+      const w = whiffed ? '86px' : '126px';
+      const h = whiffed ? '61px' : '90px';
       const opacityClass = whiffed ? 'opacity:0.4;filter:brightness(0.7);' : 'opacity:1;';
       actor.style.cssText = `position:absolute;left:50%;top:50%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:25;animation:gbaMukSludgeActorSurge cubic-bezier(0.18, 0.9, 0.28, 1) forwards;${opacityClass}`;
       applySpeed(actor, 1.75);
@@ -676,7 +763,7 @@
       wave.style.cssText = 'position:absolute;bottom:0;width:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:30;animation:gbaMukDelugeSurge cubic-bezier(0.12, 0.85, 0.25, 1) forwards;';
       applySpeed(wave, 1.75);
       wave.innerHTML = `
-        <svg width="220" height="175" viewBox="0 0 220 175" style="overflow:visible">
+        <svg width="194" height="154" viewBox="0 0 220 175" style="overflow:visible">
           <defs>
             <linearGradient id="mukWaveDeepGrad_prev" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stop-color="#7e22ce" />
@@ -753,23 +840,19 @@
     /* 2. GRIMER STICKY HANDS */
     function renderSticky(stageId, whiffed) {
       const stage = document.getElementById(stageId);
-      Array.from(stage.children).forEach(c => {
-        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
-          stage.removeChild(c);
-        }
-      });
+      cleanStage(stage);
 
       // Layer 1: Adhesion Aura
       const aura = document.createElement('div');
       aura.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:15;animation:gbaStickyClampTremor forwards;';
       applySpeed(aura, 1.65);
-      aura.innerHTML = '<div style="width:160px;height:190px;border-radius:12px;background:rgba(59, 7, 100, 0.35);filter:blur(8px);border:1px solid rgba(168, 85, 247, 0.4);box-shadow:0 0 30px #7e22ce;"></div>';
+      aura.innerHTML = '<div style="width:140px;height:165px;border-radius:12px;background:rgba(59, 7, 100, 0.35);filter:blur(8px);border:1px solid rgba(168, 85, 247, 0.4);box-shadow:0 0 30px #7e22ce;"></div>';
       stage.appendChild(aura);
 
-      // Layer 2: Primary Visual Actor (1996 Ken Sugimori Grimer Sticky Hands Actor — Two-Layer Wrapper)
+      // Layer 2: Primary Visual Actor (1996 Ken Sugimori Grimer Sticky Hands Actor — Calibrated 122px)
       const actorWrapper = document.createElement('div');
-      const w = whiffed ? '98px' : '140px';
-      const h = whiffed ? '88px' : '126px';
+      const w = whiffed ? '86px' : '122px';
+      const h = whiffed ? '77px' : '110px';
       actorWrapper.style.cssText = `position:absolute;top:36%;left:50%;transform:translate(-50%,-50%);width:${w};height:${h};pointer-events:none;z-index:30;display:flex;align-items:center;justify-content:center;`;
       
       const actorInner = document.createElement('div');
@@ -800,11 +883,11 @@
       // Layer 3: Dynamic Hand Sludge Drips (5 Asymmetric Gravity Droplets Pinching Off from Hands & Chin)
       if (!whiffed) {
         const handDrips = [
-          { x: 48, top: 'calc(36% - 6px)', kf: 'gbaGrimerHandDripR', delay: 0, w: 12, h: 18, r: 6 },
-          { x: 34, top: 'calc(36% - 14px)', kf: 'gbaGrimerHandDripR', delay: 0.14, w: 14, h: 22, r: 7 },
-          { x: -44, top: 'calc(36% + 14px)', kf: 'gbaGrimerHandDripL', delay: 0.02, w: 13, h: 19, r: 6.5 },
-          { x: -24, top: 'calc(36% + 22px)', kf: 'gbaGrimerHandDripL', delay: 0.16, w: 14, h: 22, r: 7 },
-          { x: 0, top: 'calc(36% + 18px)', kf: 'gbaGrimerHandDripMid', delay: 0.22, w: 11, h: 16, r: 5.5 }
+          { x: 42, top: 'calc(36% - 5px)', kf: 'gbaGrimerHandDripR', delay: 0, w: 12, h: 18, r: 6 },
+          { x: 30, top: 'calc(36% - 12px)', kf: 'gbaGrimerHandDripR', delay: 0.14, w: 14, h: 22, r: 7 },
+          { x: -38, top: 'calc(36% + 12px)', kf: 'gbaGrimerHandDripL', delay: 0.02, w: 13, h: 19, r: 6.5 },
+          { x: -21, top: 'calc(36% + 19px)', kf: 'gbaGrimerHandDripL', delay: 0.16, w: 14, h: 22, r: 7 },
+          { x: 0, top: 'calc(36% + 16px)', kf: 'gbaGrimerHandDripMid', delay: 0.22, w: 11, h: 16, r: 5.5 }
         ];
         handDrips.forEach(d => {
           const dripWrap = document.createElement('div');
@@ -828,8 +911,8 @@
         handSplat.style.cssText = 'position:absolute;bottom:10px;pointer-events:none;z-index:20;animation:gbaGrimerHandDripSplat forwards;opacity:0;display:flex;justify-content:center;width:100%;';
         applySpeed(handSplat, 1.65);
         handSplat.innerHTML = `
-          <div style="position:relative;width:216px;height:24px;display:flex;align-items:center;justify-content:center;">
-            <div style="position:absolute;left:calc(50% - 34px);transform:translateX(-50%);">
+          <div style="position:relative;width:188px;height:24px;display:flex;align-items:center;justify-content:center;">
+            <div style="position:absolute;left:calc(50% - 30px);transform:translateX(-50%);">
               <svg width="34" height="14" viewBox="0 0 34 14" style="overflow:visible;filter:drop-shadow(0 0 8px #c084fc)">
                 <ellipse cx="17" cy="8" rx="14" ry="4.5" fill="#581c87" opacity="0.92" />
                 <ellipse cx="17" cy="7" rx="8" ry="2.5" fill="#a855f7" />
@@ -841,7 +924,7 @@
                 <ellipse cx="19" cy="7" rx="10" ry="2.8" fill="#c084fc" />
               </svg>
             </div>
-            <div style="position:absolute;left:calc(50% + 41px);transform:translateX(-50%);">
+            <div style="position:absolute;left:calc(50% + 36px);transform:translateX(-50%);">
               <svg width="36" height="14" viewBox="0 0 36 14" style="overflow:visible;filter:drop-shadow(0 0 8px #c084fc)">
                 <ellipse cx="18" cy="8" rx="15" ry="4.5" fill="#581c87" opacity="0.92" />
                 <ellipse cx="18" cy="7" rx="9" ry="2.5" fill="#a855f7" />
@@ -857,7 +940,7 @@
       tendrils.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:38;animation:gbaStickyWebPulse ease-out forwards;';
       applySpeed(tendrils, 1.65);
       tendrils.innerHTML = `
-        <svg width="150" height="110" viewBox="0 0 150 110" style="overflow:visible">
+        <svg width="132" height="96" viewBox="0 0 150 110" style="overflow:visible">
           <path d="M 28 62 C 48 42, 85 45, 122 30" fill="none" stroke="#d8b4fe" stroke-width="3" stroke-linecap="round" opacity="0.92" style="filter:drop-shadow(0 0 8px #c084fc)" />
           <path d="M 34 72 C 55 60, 95 56, 126 38" fill="none" stroke="#d8b4fe" stroke-width="2.5" stroke-linecap="round" opacity="0.88" style="filter:drop-shadow(0 0 8px #c084fc)" />
           <path d="M 48 46 C 72 38, 98 28, 114 26" fill="none" stroke="#f5d0fe" stroke-width="1.8" stroke-linecap="round" opacity="0.95" />
@@ -875,7 +958,7 @@
         pulse.style.cssText = 'position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:40;animation:gbaStickyParalysisRing ease-out forwards;';
         applySpeed(pulse, 1.65);
         pulse.innerHTML = `
-          <svg width="160" height="120" viewBox="0 0 160 120" style="overflow:visible">
+          <svg width="138" height="104" viewBox="0 0 160 120" style="overflow:visible">
             <defs>
               <radialGradient id="neuroParalysisPulse_p" cx="50%" cy="50%" r="50%">
                 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
@@ -894,23 +977,19 @@
     /* 3. GRIMER NASTY GOO */
     function renderGoo(stageId, whiffed) {
       const stage = document.getElementById(stageId);
-      Array.from(stage.children).forEach(c => {
-        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
-          stage.removeChild(c);
-        }
-      });
+      cleanStage(stage);
 
       // Layer 1: Mire Floor
       const floor = document.createElement('div');
-      floor.style.cssText = 'position:absolute;bottom:8px;pointer-events:none;z-index:15;animation:gbaGrimerFloorMire forwards;display:flex;justify-content:center;';
+      floor.style.cssText = 'position:absolute;bottom:8px;width:100%;pointer-events:none;z-index:15;animation:gbaGrimerFloorMire forwards;display:flex;justify-content:center;';
       applySpeed(floor, 1.55);
-      floor.innerHTML = '<div style="width:160px;height:40px;border-radius:9999px;background:radial-gradient(ellipse at 50% 50%, #3b0764 0%, #1e1b4b 70%, transparent 100%);filter:blur(2px);box-shadow:0 0 20px #581c87;"></div>';
+      floor.innerHTML = '<div style="width:140px;height:35px;border-radius:9999px;background:radial-gradient(ellipse at 50% 50%, #3b0764 0%, #1e1b4b 70%, transparent 100%);filter:blur(2px);box-shadow:0 0 20px #581c87;"></div>';
       stage.appendChild(floor);
 
       // Layer 2: Main Blob (Centered on target Pokémon body at top 32%)
       const blobWrapper = document.createElement('div');
-      const w = whiffed ? '112px' : '160px';
-      const h = whiffed ? '77px' : '110px';
+      const w = whiffed ? '98px' : '140px';
+      const h = whiffed ? '67px' : '96px';
       blobWrapper.style.cssText = `position:absolute;left:50%;top:32%;transform:translate(-50%,-50%);width:${w};height:${h};pointer-events:none;z-index:30;display:flex;align-items:center;justify-content:center;`;
       
       const blobInner = document.createElement('div');
@@ -954,9 +1033,9 @@
       stage.appendChild(blobWrapper);
 
       if (!whiffed) {
-        // Layer 3: Organic Necking Filaments anchored directly to Nozzles at top: calc(32% + 43px) (Two-Layer Wrapper)
+        // Layer 3: Organic Necking Filaments anchored directly to Nozzles at top: calc(32% + 38px) (Two-Layer Wrapper)
         const neckingWrapper = document.createElement('div');
-        neckingWrapper.style.cssText = 'position:absolute;left:50%;top:calc(32% + 43px);transform:translateX(-50%);width:160px;pointer-events:none;z-index:25;display:flex;justify-content:center;';
+        neckingWrapper.style.cssText = 'position:absolute;left:50%;top:calc(32% + 38px);transform:translateX(-50%);width:140px;pointer-events:none;z-index:25;display:flex;justify-content:center;';
         const neckingInner = document.createElement('div');
         neckingInner.style.cssText = 'width:100%;display:flex;justify-content:center;transform-origin:top center;animation:gbaGrimerNeckingThread forwards;';
         applySpeed(neckingInner, 1.55);
@@ -1022,20 +1101,16 @@
     /* 4. GRIMER MINIMIZE */
     function renderMinimize(stageId) {
       const stage = document.getElementById(stageId);
-      Array.from(stage.children).forEach(c => {
-        if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
-          stage.removeChild(c);
-        }
-      });
+      cleanStage(stage);
 
       // Layer 1: Organic Bézier Liquid Surface Tension Ripples (Surrounding Floor Puddle at bottom: 8px) (Two-Layer Wrapper)
       const r1Wrapper = document.createElement('div');
-      r1Wrapper.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:170px;height:75px;pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;';
+      r1Wrapper.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:150px;height:66px;pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;';
       const r1Inner = document.createElement('div');
       r1Inner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-origin:center center;animation:gbaGrimerOrganicRipple1 forwards;';
       applySpeed(r1Inner, 1.5);
       r1Inner.innerHTML = `
-        <svg width="170" height="75" viewBox="0 0 170 75" style="overflow:visible">
+        <svg width="150" height="66" viewBox="0 0 170 75" style="overflow:visible">
           <defs>
             <linearGradient id="minR1_p" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stop-color="#c084fc" stop-opacity="0" />
@@ -1051,13 +1126,13 @@
       stage.appendChild(r1Wrapper);
 
       const r2Wrapper = document.createElement('div');
-      r2Wrapper.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:170px;height:75px;pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;';
+      r2Wrapper.style.cssText = 'position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:150px;height:66px;pointer-events:none;z-index:20;display:flex;align-items:center;justify-content:center;';
       const r2Inner = document.createElement('div');
       r2Inner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-origin:center center;animation:gbaGrimerOrganicRipple2 forwards;opacity:0;';
       applySpeed(r2Inner, 1.5);
       r2Inner.style.animationDelay = (0.22 / globalSpeed) + 's';
       r2Inner.innerHTML = `
-        <svg width="170" height="75" viewBox="0 0 170 75" style="overflow:visible">
+        <svg width="150" height="66" viewBox="0 0 170 75" style="overflow:visible">
           <defs>
             <linearGradient id="minR2_p" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stop-color="#9333ea" stop-opacity="0" />
@@ -1074,7 +1149,7 @@
 
       // Layer 2: Genuine Liquefying Slime Mass Collapse (Floor-Centered at bottom: 12px) (Two-Layer Wrapper)
       const poolWrapper = document.createElement('div');
-      poolWrapper.style.cssText = 'position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:140px;height:64px;pointer-events:none;z-index:30;display:flex;align-items:center;justify-content:center;';
+      poolWrapper.style.cssText = 'position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:122px;height:56px;pointer-events:none;z-index:30;display:flex;align-items:center;justify-content:center;';
       const poolInner = document.createElement('div');
       poolInner.style.cssText = 'width:100%;height:100%;display:flex;align-items:center;justify-content:center;transform-origin:center bottom;animation:gbaGrimerPuddleMelt cubic-bezier(0.18, 0.9, 0.3, 1) forwards;';
       applySpeed(poolInner, 1.5);
@@ -1118,15 +1193,12 @@
     function resetAll() {
       ['stage-muk-hit', 'stage-grimer-sticky', 'stage-grimer-goo', 'stage-grimer-minimize'].forEach(id => {
         const stage = document.getElementById(id);
-        Array.from(stage.children).forEach(c => {
-          if (!c.classList.contains('card-mockup-label') && !c.classList.contains('card-mockup-hp') && !c.classList.contains('card-art-box')) {
-            stage.removeChild(c);
-          }
-        });
+        cleanStage(stage);
       });
     }
 
     // Auto-init on load
+    loadCardImages();
     playAll();
   </script>
 </body>

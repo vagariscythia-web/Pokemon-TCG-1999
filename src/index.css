@@ -17084,18 +17084,18 @@ html, body {
 /* Grimer Sticky Hands 1996 Ken Sugimori Stock Actor Kinematics */
 @keyframes gbaGrimerStickyActorLunge {
   0%   { opacity: 0; transform: scale(0.4) translateY(32px) scaleX(1.15) scaleY(0.85); }
-  14%  { opacity: 0.95; transform: scale(0.8) translateY(14px) scaleX(0.92) scaleY(1.12); }
-  28%  { opacity: 1; transform: scale(1.18) translateY(-8px) scaleX(1.08) scaleY(0.94); }
-  34%  { opacity: 1; transform: scale(1.15) translateY(-4px) scaleX(1.18) scaleY(0.88) rotate(-1.5deg); }
-  40%  { opacity: 1; transform: scale(1.13) translateY(-3px) scaleX(1.10) scaleY(0.94) rotate(1.2deg); }
-  48%  { opacity: 1; transform: scale(1.11) translateY(-2px) scaleX(1.05) scaleY(0.97) rotate(-0.8deg); }
-  56%  { opacity: 1; transform: scale(1.10) translateY(-1px) scaleX(0.95) scaleY(1.07) rotate(0.6deg); }
-  66%  { opacity: 0.98; transform: scale(1.08) translateY(1px) scaleX(1.04) scaleY(0.98) rotate(-0.5deg); }
-  76%  { opacity: 0.95; transform: scale(1.05) translateY(3px) scaleX(0.98) scaleY(1.03); }
-  84%  { opacity: 0.88; transform: scale(1.02) translateY(6px) scaleX(1.02) scaleY(0.99); }
-  92%  { opacity: 0.65; transform: scale(0.98) translateY(12px) scaleX(0.98) scaleY(1.02); }
-  97%  { opacity: 0.30; transform: scale(0.94) translateY(18px); }
-  100% { opacity: 0; transform: scale(0.90) translateY(24px); }
+  14%  { opacity: 0.95; transform: scale(0.78) translateY(12px) scaleX(0.92) scaleY(1.12); }
+  28%  { opacity: 1; transform: scale(1.08) translateY(-6px) scaleX(1.06) scaleY(0.95); }
+  34%  { opacity: 1; transform: scale(1.06) translateY(-3px) scaleX(1.12) scaleY(0.90) rotate(-1.5deg); }
+  40%  { opacity: 1; transform: scale(1.04) translateY(-2px) scaleX(1.06) scaleY(0.95) rotate(1.2deg); }
+  48%  { opacity: 1; transform: scale(1.03) translateY(-2px) scaleX(1.03) scaleY(0.97) rotate(-0.8deg); }
+  56%  { opacity: 1; transform: scale(1.02) translateY(-1px) scaleX(0.96) scaleY(1.05) rotate(0.6deg); }
+  66%  { opacity: 0.98; transform: scale(1.01) translateY(1px) scaleX(1.02) scaleY(0.98) rotate(-0.5deg); }
+  76%  { opacity: 0.95; transform: scale(0.99) translateY(3px) scaleX(0.98) scaleY(1.03); }
+  84%  { opacity: 0.88; transform: scale(0.97) translateY(6px) scaleX(1.02) scaleY(0.99); }
+  92%  { opacity: 0.65; transform: scale(0.94) translateY(12px) scaleX(0.98) scaleY(1.02); }
+  97%  { opacity: 0.30; transform: scale(0.90) translateY(18px); }
+  100% { opacity: 0; transform: scale(0.86) translateY(24px); }
 }
 
 /* Dynamic Hand Drip Path Tracing: Drops falling straight down from outstretched fingers */
@@ -17161,13 +17161,13 @@ html, body {
 
 @keyframes gbaStickyParalysisRing {
   0%, 28% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
-  34%     { opacity: 0.95; transform: translate(-50%, -50%) scale(1.02); filter: drop-shadow(0 0 20px #c084fc) drop-shadow(0 0 32px #a3e635); }
-  46%     { opacity: 0.92; transform: translate(-50%, -50%) scale(1.18); filter: drop-shadow(0 0 24px #84cc16); }
-  60%     { opacity: 0.82; transform: translate(-50%, -50%) scale(1.36); filter: drop-shadow(0 0 28px #a3e635); }
-  74%     { opacity: 0.68; transform: translate(-50%, -50%) scale(1.52); filter: drop-shadow(0 0 22px #84cc16); }
-  86%     { opacity: 0.45; transform: translate(-50%, -50%) scale(1.65); }
-  94%     { opacity: 0.22; transform: translate(-50%, -50%) scale(1.75); }
-  100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.85); }
+  34%     { opacity: 0.95; transform: translate(-50%, -50%) scale(0.88); filter: drop-shadow(0 0 20px #c084fc) drop-shadow(0 0 32px #a3e635); }
+  46%     { opacity: 0.92; transform: translate(-50%, -50%) scale(1.02); filter: drop-shadow(0 0 24px #84cc16); }
+  60%     { opacity: 0.82; transform: translate(-50%, -50%) scale(1.18); filter: drop-shadow(0 0 28px #a3e635); }
+  74%     { opacity: 0.68; transform: translate(-50%, -50%) scale(1.32); filter: drop-shadow(0 0 22px #84cc16); }
+  86%     { opacity: 0.45; transform: translate(-50%, -50%) scale(1.44); }
+  94%     { opacity: 0.22; transform: translate(-50%, -50%) scale(1.52); }
+  100%    { opacity: 0; transform: translate(-50%, -50%) scale(1.60); }
 }
 
 @keyframes gbaGrimerHandDripMid {

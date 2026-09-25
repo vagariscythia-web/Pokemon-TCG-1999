@@ -7761,21 +7761,25 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Layer 1: Boiling Toxic Mire Floor Aura */}
           <div
-            className="absolute bottom-2 flex items-center justify-center pointer-events-none z-15"
+            className="absolute bottom-2 w-full flex items-center justify-center pointer-events-none z-15"
             style={{ animation: 'gbaMukSludgeFloor 1.75s ease-out forwards' }}
           >
-            <div className="w-56 h-16 rounded-full bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-500/40 blur-[1px] shadow-[0_0_24px_#581c87]" />
+            <div className="w-[196px] h-14 rounded-full bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-500/40 blur-[1px] shadow-[0_0_24px_#581c87]" />
           </div>
 
-          {/* Layer 2: Primary Visual Actor (Authentic 1996 Ken Sugimori Muk Stock Visual — Tier 1 Apex Monolithic 144px) */}
+          {/* Layer 2: Primary Visual Actor (Authentic 1996 Ken Sugimori Muk Stock Visual — Calibrated 126px) */}
           <div
-            className={`absolute flex items-center justify-center pointer-events-none z-25 ${fx.whiffed ? 'scale-75 opacity-40' : ''}`}
-            style={{ animation: 'gbaMukSludgeActorSurge 1.75s cubic-bezier(0.18, 0.9, 0.28, 1) forwards' }}
+            className={`absolute pointer-events-none z-25 flex items-center justify-center ${fx.whiffed ? 'scale-75 opacity-40' : ''}`}
+            style={{
+              left: '50%',
+              top: '50%',
+              animation: 'gbaMukSludgeActorSurge 1.75s cubic-bezier(0.18, 0.9, 0.28, 1) forwards'
+            }}
           >
             <img
               src="/assets/Muk_Sludge_Actor.png"
               alt="Muk Sludge Deluge"
-              className={`object-contain drop-shadow-[0_0_24px_#a855f7] drop-shadow-[0_0_40px_#581c87] ${fx.whiffed ? 'w-[98px] h-[70px]' : 'w-[144px] h-[103px]'}`}
+              className={`object-contain drop-shadow-[0_0_24px_#a855f7] drop-shadow-[0_0_40px_#581c87] ${fx.whiffed ? 'w-[86px] h-[61px]' : 'w-[126px] h-[90px]'}`}
             />
           </div>
 
@@ -7784,7 +7788,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
             className="absolute bottom-0 w-full flex items-center justify-center pointer-events-none z-30"
             style={{ animation: 'gbaMukDelugeSurge 1.75s cubic-bezier(0.12, 0.85, 0.25, 1) forwards' }}
           >
-            <svg width="220" height="175" viewBox="0 0 220 175" className="overflow-visible">
+            <svg width="194" height="154" viewBox="0 0 220 175" className="overflow-visible">
               <defs>
                 <linearGradient id="mukWaveDeepGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#7e22ce" />
@@ -7864,6 +7868,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               key={`muk-glob-${i}`}
               className="absolute pointer-events-none z-35"
               style={{
+                left: '50%',
+                top: '50%',
                 width: `${glob.size}px`,
                 height: `${Math.round(glob.size * 0.8)}px`,
                 borderRadius: '50% 60% 40% 50%',
@@ -7903,7 +7909,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
           {/* Sizzling Corrosive Acid Fumes */}
           <div
-            className="absolute flex items-center justify-center z-15 pointer-events-none"
+            className="absolute inset-0 flex items-center justify-center z-15 pointer-events-none"
             style={{ animation: 'gbaMukAcidSizzle 1.75s ease-out forwards' }}
           >
             <div className="w-32 h-32 rounded-full bg-lime-500/20 blur-xl shadow-[0_0_35px_#84cc16]" />
@@ -16143,21 +16149,25 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Layer 1: Slime Grappling Floor Mire & Atmosphere */}
           <div
-            className="absolute flex items-center justify-center pointer-events-none z-15"
-            style={{ animation: 'gbaStickyClampTremor 1.65s ease-out forwards' }}
+            className="absolute pointer-events-none z-15 flex items-center justify-center"
+            style={{
+              left: '50%',
+              top: '50%',
+              animation: 'gbaStickyClampTremor 1.65s ease-out forwards'
+            }}
           >
-            <div className="w-56 h-48 rounded-xl bg-purple-950/40 blur-md border border-purple-500/30 shadow-[0_0_30px_#7e22ce]" />
+            <div className="w-[196px] h-[168px] rounded-xl bg-purple-950/40 blur-md border border-purple-500/30 shadow-[0_0_30px_#7e22ce]" />
           </div>
 
-          {/* Layer 2: Primary Visual Actor (1996 Ken Sugimori Grimer Sticky Hands Actor — Two-Layer Wrapper) */}
+          {/* Layer 2: Primary Visual Actor (1996 Ken Sugimori Grimer Sticky Hands Actor — Calibrated 122px) */}
           <div
             className="absolute pointer-events-none z-30 flex items-center justify-center"
             style={{
               top: '36%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: fx.whiffed ? '98px' : '140px',
-              height: fx.whiffed ? '88px' : '126px'
+              width: fx.whiffed ? '86px' : '122px',
+              height: fx.whiffed ? '77px' : '110px'
             }}
           >
             <div
@@ -16178,12 +16188,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           {/* Layer 3: Path Tracing Dynamic Hand Sludge Drips (5 Asymmetric Gravity Droplets Pinching Off from Hands & Chin) */}
           {!fx.whiffed && (
             <div className="absolute inset-0 pointer-events-none z-35">
-              {/* Drip 1: High Right Hand Outer Fingertip (X = +48px, Y = top: calc(36% - 6px)) */}
+              {/* Drip 1: High Right Hand Outer Fingertip (X = +42px, Y = top: calc(36% - 5px)) */}
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  left: 'calc(50% + 48px)',
-                  top: 'calc(36% - 6px)',
+                  left: 'calc(50% + 42px)',
+                  top: 'calc(36% - 5px)',
                   transform: 'translateX(-50%)'
                 }}
               >
@@ -16197,12 +16207,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 </div>
               </div>
 
-              {/* Drip 2: High Right Hand Inner Webbing (X = +34px, Y = top: calc(36% - 14px)) */}
+              {/* Drip 2: High Right Hand Inner Webbing (X = +30px, Y = top: calc(36% - 12px)) */}
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  left: 'calc(50% + 34px)',
-                  top: 'calc(36% - 14px)',
+                  left: 'calc(50% + 30px)',
+                  top: 'calc(36% - 12px)',
                   transform: 'translateX(-50%)'
                 }}
               >
@@ -16216,12 +16226,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 </div>
               </div>
 
-              {/* Drip 3: Low Left Hand Outer Fingertip (X = -44px, Y = top: calc(36% + 14px)) */}
+              {/* Drip 3: Low Left Hand Outer Fingertip (X = -38px, Y = top: calc(36% + 12px)) */}
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  left: 'calc(50% - 44px)',
-                  top: 'calc(36% + 14px)',
+                  left: 'calc(50% - 38px)',
+                  top: 'calc(36% + 12px)',
                   transform: 'translateX(-50%)'
                 }}
               >
@@ -16235,12 +16245,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 </div>
               </div>
 
-              {/* Drip 4: Low Left Hand Inner Palm (X = -24px, Y = top: calc(36% + 22px)) */}
+              {/* Drip 4: Low Left Hand Inner Palm (X = -21px, Y = top: calc(36% + 19px)) */}
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  left: 'calc(50% - 24px)',
-                  top: 'calc(36% + 22px)',
+                  left: 'calc(50% - 21px)',
+                  top: 'calc(36% + 19px)',
                   transform: 'translateX(-50%)'
                 }}
               >
@@ -16254,12 +16264,12 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 </div>
               </div>
 
-              {/* Drip 5: Center Mouth / Chin Viscous Drop (X = 0px, Y = top: calc(36% + 18px)) */}
+              {/* Drip 5: Center Mouth / Chin Viscous Drop (X = 0px, Y = top: calc(36% + 16px)) */}
               <div
                 className="absolute pointer-events-none"
                 style={{
                   left: '50%',
-                  top: 'calc(36% + 18px)',
+                  top: 'calc(36% + 16px)',
                   transform: 'translateX(-50%)'
                 }}
               >
@@ -16278,8 +16288,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 className="absolute bottom-3 pointer-events-none z-20 flex justify-center w-full"
                 style={{ animation: 'gbaGrimerHandDripSplat 1.65s ease-out forwards' }}
               >
-                <div className="relative w-56 h-8 flex items-center justify-center">
-                  <div className="absolute" style={{ left: 'calc(50% - 34px)', transform: 'translateX(-50%)' }}>
+                <div className="relative w-48 h-8 flex items-center justify-center">
+                  <div className="absolute" style={{ left: 'calc(50% - 30px)', transform: 'translateX(-50%)' }}>
                     <svg width="34" height="14" viewBox="0 0 34 14" className="overflow-visible drop-shadow-[0_0_8px_#c084fc]">
                       <ellipse cx="17" cy="8" rx="14" ry="4.5" fill="#581c87" opacity="0.92" />
                       <ellipse cx="17" cy="7" rx="8" ry="2.5" fill="#a855f7" />
@@ -16291,7 +16301,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                       <ellipse cx="19" cy="7" rx="10" ry="2.8" fill="#c084fc" />
                     </svg>
                   </div>
-                  <div className="absolute" style={{ left: 'calc(50% + 41px)', transform: 'translateX(-50%)' }}>
+                  <div className="absolute" style={{ left: 'calc(50% + 36px)', transform: 'translateX(-50%)' }}>
                     <svg width="36" height="14" viewBox="0 0 36 14" className="overflow-visible drop-shadow-[0_0_8px_#c084fc]">
                       <ellipse cx="18" cy="8" rx="15" ry="4.5" fill="#581c87" opacity="0.92" />
                       <ellipse cx="18" cy="7" rx="9" ry="2.5" fill="#a855f7" />
@@ -16304,10 +16314,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
           {/* Layer 4: Viscous Elastic Slime Web Strands (Anchoring the Victim & Spanning Hand Webbing) */}
           <div
-            className="absolute flex items-center justify-center pointer-events-none z-38"
-            style={{ animation: 'gbaStickyWebPulse 1.65s ease-out forwards' }}
+            className="absolute pointer-events-none z-38 flex items-center justify-center"
+            style={{
+              left: '50%',
+              top: '50%',
+              animation: 'gbaStickyWebPulse 1.65s ease-out forwards'
+            }}
           >
-            <svg width="150" height="110" viewBox="0 0 150 110" className="overflow-visible">
+            <svg width="132" height="96" viewBox="0 0 150 110" className="overflow-visible">
               {/* Elastic Adhesion Cords Spanning Towards Target Across Asymmetric Claws */}
               <path d="M 28 62 C 48 42, 85 45, 122 30" fill="none" stroke="#d8b4fe" strokeWidth="3" strokeLinecap="round" opacity="0.92" style={{ filter: 'drop-shadow(0 0 8px #c084fc)' }} />
               <path d="M 34 72 C 55 60, 95 56, 126 38" fill="none" stroke="#d8b4fe" strokeWidth="2.5" strokeLinecap="round" opacity="0.88" style={{ filter: 'drop-shadow(0 0 8px #c084fc)' }} />
@@ -16324,10 +16338,14 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
           {/* Layer 5: Neurotoxic Bioluminescent Paralysis Pulse (Ethereal Radial Corona Bloom) */}
           {!fx.whiffed && (
             <div
-              className="absolute flex items-center justify-center pointer-events-none z-40"
-              style={{ animation: 'gbaStickyParalysisRing 1.65s ease-out forwards' }}
+              className="absolute pointer-events-none z-40 flex items-center justify-center"
+              style={{
+                left: '50%',
+                top: '50%',
+                animation: 'gbaStickyParalysisRing 1.65s ease-out forwards'
+              }}
             >
-              <svg width="160" height="120" viewBox="0 0 160 120" className="overflow-visible">
+              <svg width="138" height="104" viewBox="0 0 160 120" className="overflow-visible">
                 <defs>
                   <radialGradient id="neuroParalysisPulse" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
@@ -22377,10 +22395,10 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40 overflow-visible">
           {/* Layer 1: Ambient Toxic Slime Mire Floor Aura */}
           <div
-            className="absolute bottom-2 pointer-events-none z-15 flex justify-center"
+            className="absolute bottom-2 w-full pointer-events-none z-15 flex justify-center"
             style={{ animation: 'gbaGrimerFloorMire 1.55s ease-out forwards' }}
           >
-            <div className="w-52 h-14 rounded-full bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-500/30 blur-[2px] shadow-[0_0_24px_#581c87]" />
+            <div className="w-[182px] h-12 rounded-full bg-gradient-to-r from-purple-950 via-purple-900 to-indigo-950 border border-purple-500/30 blur-[2px] shadow-[0_0_24px_#581c87]" />
           </div>
 
           {/* Layer 2: Main Viscous Toxic Sludge Core Splatter (Centered on target Pokémon body at top 32%) */}
@@ -22390,8 +22408,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               top: '32%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              width: fx.whiffed ? '112px' : '160px',
-              height: fx.whiffed ? '77px' : '110px'
+              width: fx.whiffed ? '98px' : '140px',
+              height: fx.whiffed ? '67px' : '96px'
             }}
           >
             <div
@@ -22612,8 +22630,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               left: '50%',
               bottom: '8px',
               transform: 'translateX(-50%)',
-              width: '170px',
-              height: '75px'
+              width: '150px',
+              height: '66px'
             }}
           >
             <div
@@ -22623,7 +22641,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 animation: 'gbaGrimerOrganicRipple1 1.5s ease-out forwards'
               }}
             >
-              <svg width="170" height="75" viewBox="0 0 170 75" className="overflow-visible">
+              <svg width="150" height="66" viewBox="0 0 170 75" className="overflow-visible">
                 <defs>
                   <linearGradient id="grimerRippleGrad1" x1="0" y1="0" x2="1" y2="0">
                     <stop offset="0%" stopColor="#c084fc" stopOpacity="0" />
@@ -22651,8 +22669,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               left: '50%',
               bottom: '8px',
               transform: 'translateX(-50%)',
-              width: '170px',
-              height: '75px'
+              width: '150px',
+              height: '66px'
             }}
           >
             <div
@@ -22663,7 +22681,7 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                 opacity: 0
               }}
             >
-              <svg width="170" height="75" viewBox="0 0 170 75" className="overflow-visible">
+              <svg width="150" height="66" viewBox="0 0 170 75" className="overflow-visible">
                 <defs>
                   <linearGradient id="grimerRippleGrad2" x1="0" y1="0" x2="1" y2="0">
                     <stop offset="0%" stopColor="#9333ea" stopOpacity="0" />
@@ -22691,8 +22709,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               left: '50%',
               bottom: '12px',
               transform: 'translateX(-50%)',
-              width: '140px',
-              height: '64px'
+              width: '122px',
+              height: '56px'
             }}
           >
             <div
