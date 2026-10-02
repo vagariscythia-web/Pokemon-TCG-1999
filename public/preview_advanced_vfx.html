@@ -392,6 +392,51 @@
       opacity: 0.9;
     }
 
+    /* Numune 9: Tumbling Faceted Ice Shards */
+    @keyframes gbaIceShardTumble1 {
+      0%   { transform: translate(35px, 20px) rotate(0deg) scale(0.75); opacity: 0; }
+      20%  { opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translate(65px, 210px) rotate(260deg) scale(1.05); opacity: 0; }
+    }
+    @keyframes gbaIceShardTumble2 {
+      0%   { transform: translate(125px, 15px) rotate(0deg) scale(0.85); opacity: 0; }
+      25%  { opacity: 1; }
+      85%  { opacity: 1; }
+      100% { transform: translate(95px, 200px) rotate(-210deg) scale(1.1); opacity: 0; }
+    }
+
+    .ice-shard {
+      position: absolute;
+      width: 20px;
+      height: 36px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(207, 250, 254, 0.8) 50%, rgba(2, 132, 199, 0.7) 100%);
+      clip-path: polygon(50% 0%, 100% 35%, 80% 100%, 20% 100%, 0% 35%);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+      pointer-events: none;
+    }
+    .shard-1 { animation: gbaIceShardTumble1 2.2s cubic-bezier(0.25, 0.8, 0.35, 1) infinite; }
+    .shard-2 { animation: gbaIceShardTumble2 2.6s cubic-bezier(0.25, 0.8, 0.35, 1) infinite 0.6s; }
+
+    @keyframes gbaFrostShatterShake {
+      0%, 100% { transform: translate(0, 0); }
+      15% { transform: translate(-3px, 2px); }
+      30% { transform: translate(3px, -2px); }
+      50% { transform: translate(-2px, 1px); }
+      70% { transform: translate(2px, -1px); }
+    }
+    .shattering-shake {
+      animation: gbaFrostShatterShake 0.35s ease-out;
+    }
+
+    .heat-mirage-active {
+      filter: url(#heatMirageFilter);
+    }
+
+    .card-slot-interactive {
+      cursor: crosshair;
+    }
+
     /* Footer info */
     .info-footer {
       max-width: 1000px;
@@ -439,6 +484,12 @@
       <filter id="waterJetTurbulenceFilter" x="-20%" y="-20%" width="140%" height="140%">
         <feTurbulence id="waterTurbulenceElem" type="turbulence" baseFrequency="0.02 0.09" numOctaves="2" result="noise" />
         <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+
+      <!-- 4. Thermal Mirage / Heat Convection Filter -->
+      <filter id="heatMirageFilter" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence id="heatTurbulenceElem" type="fractalNoise" baseFrequency="0.015 0.08" numOctaves="2" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" />
       </filter>
     </defs>
   </svg>
@@ -666,6 +717,192 @@
       </div>
     </div>
 
+    <!-- NUMUNE 8: BLIZZARD KAR & TİPİ GİRDABI (AERODYNAMIC FLURRY & FROST VORTEX) -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">8. Blizzard Kar & Tipi Girdabı</div>
+        <div class="showcase-desc">228° Açılı 300 Aerodinamik Kar Tanesi ve Savrulma</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot8">
+        <img class="card-bg-img" data-src="cards/17.jpg" alt="Articuno">
+        <div class="status-strip">
+          <span class="status-hp">HP 70</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="blizzardCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Tipi Şiddeti:</span>
+          <button class="switch-btn on" id="btnBlizzardWind" onclick="cycleBlizzardWind()">Fırtına (1.8x)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-cyan);">Vector-Field Flurry</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 9: KRİYOJENİK DONMA & BUZ KRİSTALLERİ (DENDRITIC FROST & SHARDS) -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">9. Kriyojenik Donma & Kristaller</div>
+        <div class="showcase-desc">Prosedürel Çatallanan Buz Kristalleşmesi & Prizmatik Şarapnel</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot9">
+        <img class="card-bg-img" data-src="cards/17.jpg" alt="Articuno">
+        <div class="status-strip">
+          <span class="status-hp">HP 70</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="frostCanvas" width="184" height="253"></canvas>
+          <div class="ice-shard shard-1"></div>
+          <div class="ice-shard shard-2"></div>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Buz Kristali Çatlaması:</span>
+          <button class="switch-btn on" id="btnFrostTrigger" onclick="triggerFrostShatter()">Dondur / Çatlat</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-purple);">Dendritic Fractal + 3D Shards</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 10: PLAZMA & DİELEKTRİK ELEKTRİK BOŞALMASI -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">10. Plazma & Dielektrik Ark</div>
+        <div class="showcase-desc">Brownian Motion Fraktal Elektrik Delinmesi & Korona</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot10">
+        <img class="card-bg-img" data-src="cards/16.jpg" alt="Zapdos">
+        <div class="status-strip">
+          <span class="status-hp">HP 90</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="plasmaCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Yıldırım Darbesi:</span>
+          <button class="switch-btn on" id="btnPlasmaStrike" onclick="triggerLightningStrike()">Yıldırım İndir</button>
+        </div>
+        <div class="control-row">
+          <span>Ark Yoğunluğu:</span>
+          <button class="switch-btn on" id="btnPlasmaDensity" onclick="cyclePlasmaDensity()">Yoğun (8 Ark)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-gold);">Brownian Fractal Plasma</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 11: TERMAL KONVEKSİYON & ISI SERABI -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">11. Termal Konveksiyon & Közler</div>
+        <div class="showcase-desc">SVG feDisplacement Serabı ve Yukarı Çıkan Akkor Közler</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot11">
+        <img class="card-bg-img heat-mirage-active" id="charizardCardImg" data-src="cards/4.jpg" alt="Charizard">
+        <div class="status-strip">
+          <span class="status-hp">HP 120</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="thermalCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Isı Dalgası Serabı:</span>
+          <button class="switch-btn on" id="btnHeatMirage" onclick="toggleHeatMirage()">AÇIK (Serap)</button>
+        </div>
+        <div class="control-row">
+          <span>Ateş Püskürmesi:</span>
+          <button class="switch-btn on" id="btnFireBurst" onclick="triggerFireBurst()">Köz Patlat</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-rose);">Thermal Buoyancy + SVG Mirage</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 12: KOZMİK / GRAVİTASYONEL ÇEKİM & OLAY UFKU -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">12. Gravitasyonel Merceklenme</div>
+        <div class="showcase-desc">Psişik Olay Ufku, Kepler Girdabı ve Süpernova</div>
+      </div>
+      <div class="card-slot-wrapper" id="slot12">
+        <img class="card-bg-img" data-src="cards/10.jpg" alt="Mewtwo">
+        <div class="status-strip">
+          <span class="status-hp">HP 60</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="gravityCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Psişik Süpernova:</span>
+          <button class="switch-btn on" id="btnGravityPulse" onclick="triggerGravitySupernova()">Süpernova Çak</button>
+        </div>
+        <div class="control-row">
+          <span>Çekim Gücü:</span>
+          <button class="switch-btn on" id="btnGravityForce" onclick="cycleGravityForce()">Standart (1.0x)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-purple);">Keplerian Vortex + Lensing</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMUNE 13: BİYO-LÜMİNESANS SPOR & POLEN SÜRÜKLENMESİ -->
+    <div class="showcase-card">
+      <div class="showcase-header">
+        <div class="showcase-title">13. Biyo-Lüminesans Sporlar</div>
+        <div class="showcase-desc">Brownian Sürüklenme, Parıltı ve İnteraktif Kaçışma</div>
+      </div>
+      <div class="card-slot-wrapper card-slot-interactive" id="slot13" onmousemove="handleSporeHover(event)" onclick="handleSporeClick(event)">
+        <img class="card-bg-img" data-src="cards/15.jpg" alt="Venusaur">
+        <div class="status-strip">
+          <span class="status-hp">HP 100</span>
+          <div class="status-pips"><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div></div>
+        </div>
+        <div class="fx-stage">
+          <canvas class="micro-canvas" id="sporeCanvas" width="184" height="253"></canvas>
+        </div>
+      </div>
+      <div class="card-controls">
+        <div class="control-row">
+          <span>Spor Püskürt:</span>
+          <button class="switch-btn on" id="btnSporePuff" onclick="triggerSporePuff()">Spor Bulutu Fışkırt</button>
+        </div>
+        <div class="control-row">
+          <span>Spor Türü:</span>
+          <button class="switch-btn on" id="btnSporeType" onclick="cycleSporeType()">Uyku Tozu (Altın)</button>
+        </div>
+        <div class="control-row">
+          <span>Teknoloji:</span>
+          <strong style="color: var(--accent-emerald);">Brownian Drift + Verlet Physics</strong>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <div class="info-footer">
@@ -677,6 +914,12 @@
       <li><strong>5 (Navier-Stokes Eulerian Grid):</strong> Dumanın kendi etrafında kıvrılan gerçek aerodinamik girdaplar (vorticity) üretmesini sağlayan hesaplamalı akışkanlar dinamiği algoritması.</li>
       <li><strong>6 (Spring-Mass Wave Mesh):</strong> Su yüzeyine darbe indiğinde, fiziksel Hooke yasası ($F = -kx - cv$) ile çalkalanan ve pürüzsüz Bézier eğrileriyle bağlanan yaşayan su havuzu.</li>
       <li><strong>7 (WebGL Fragment Shader):</strong> Sıvı içindeki ışık dalgalanmalarını (caustics) ve tazyikli su parlamasını doğrudan GPU piksellerinde hesaplayan en üst düzey optik kırılma standardı.</li>
+      <li><strong>8 (Blizzard Tipi & Kar Girdabı):</strong> 228° açıyla savrulan, 3 derinlik katmanlı (ön bulanık zerre, orta keskin kristal, arka hız çizgisi) 300 aerodinamik kar tanesi ve türbülanslı rüzgâr ivmesi.</li>
+      <li><strong>9 (Kriyojenik Donma & Şarapnel):</strong> Kart yüzeyinde 60°/30° simetriyle organik çatallanan fraktal buz kristalleri ve 3D prizmatik şarapnel parçaları.</li>
+      <li><strong>10 (Plazma & Dielektrik Boşalma):</strong> Brownian motion fraktal kırılma algoritması ile havanın elektriksel delinmesini simüle eden organik akkor arklar.</li>
+      <li><strong>11 (Termal Konveksiyon & Közler):</strong> SVG feDisplacementMap serap dalgalanması ile Charizard illüstrasyonunu titreten optik sıcak hava ve yükselen volkanik korlar.</li>
+      <li><strong>12 (Gravitasyonel Çekim & Olay Ufku):</strong> Kepler yörünge mekaniğiyle merkeze hızlanarak çekilen psişik yıldız tozu ve gravitasyonel merceklenme halkası.</li>
+      <li><strong>13 (Biyo-Lüminesans Sporlar):</strong> Hava çalkantılarına kapılan, kart etkileşimiyle fiziksel olarak dağılan ve nabız gibi parıldayan organik polen bulutu.</li>
     </ul>
   </div>
 
@@ -1187,6 +1430,1028 @@
       btn.textContent = shaderActive ? 'AÇIK (GPU Shader)' : 'KAPALI';
     }
 
+    // ==========================================
+    // 8. Numune 8: Blizzard Kar & Tipi Girdabı
+    // ==========================================
+    const blizzardCanvas = document.getElementById('blizzardCanvas');
+    const bCtx = blizzardCanvas.getContext('2d');
+    const bW = blizzardCanvas.width;
+    const bH = blizzardCanvas.height;
+
+    let blizzardWindMode = 1; // 0: Sakin (0.8x), 1: Fırtına (1.8x), 2: Blizzard Bora (2.8x)
+    const blizzardModes = [
+      { name: 'Sakin Tipi (0.8x)', mult: 0.8, count: 180 },
+      { name: 'Fırtına (1.8x)', mult: 1.8, count: 320 },
+      { name: 'Blizzard Bora (2.8x)', mult: 2.8, count: 450 }
+    ];
+
+    class BlizzardParticle {
+      constructor() {
+        this.reset(true);
+      }
+      reset(randomY = false) {
+        if (Math.random() < 0.65) {
+          this.x = Math.random() * (bW + 80) - 20;
+          this.y = randomY ? Math.random() * bH : -15;
+        } else {
+          this.x = bW + 15;
+          this.y = randomY ? Math.random() * bH : Math.random() * (bH * 0.75);
+        }
+
+        const roll = Math.random();
+        if (roll < 0.45) {
+          this.tier = 0;
+          this.speed = 1.8 + Math.random() * 2.0;
+          this.size = 0.8 + Math.random() * 0.9;
+          this.alpha = 0.3 + Math.random() * 0.3;
+          this.color = '#bae6fd';
+        } else if (roll < 0.82) {
+          this.tier = 1;
+          this.speed = 3.8 + Math.random() * 3.2;
+          this.size = 1.8 + Math.random() * 1.4;
+          this.alpha = 0.7 + Math.random() * 0.25;
+          this.color = '#e0f2fe';
+        } else {
+          this.tier = 2;
+          this.speed = 7.0 + Math.random() * 4.5;
+          this.size = 2.6 + Math.random() * 2.2;
+          this.alpha = 0.85 + Math.random() * 0.15;
+          this.color = '#ffffff';
+        }
+
+        this.angle = (224 + (Math.random() - 0.5) * 18) * (Math.PI / 180);
+        this.swaySeed = Math.random() * 100;
+        this.swayFreq = 0.035 + Math.random() * 0.045;
+        this.swayAmp = 0.5 + Math.random() * 1.1;
+      }
+
+      update(time, mult) {
+        const curSpeed = this.speed * mult;
+        const sway = Math.sin(time * this.swayFreq + this.swaySeed) * this.swayAmp * (mult * 0.8);
+        this.vx = Math.cos(this.angle) * curSpeed + sway * 0.5;
+        this.vy = Math.sin(this.angle) * curSpeed - sway * 0.3;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < -30 || this.y > bH + 25) {
+          this.reset(false);
+        }
+      }
+
+      draw(ctx, mult) {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+
+        if (this.tier === 2) {
+          const streakLen = (10 + this.size * 3.5) * (mult * 0.65);
+          ctx.strokeStyle = this.color;
+          ctx.lineWidth = this.size * 0.65;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          ctx.moveTo(this.x, this.y);
+          ctx.lineTo(this.x - Math.cos(this.angle) * streakLen, this.y - Math.sin(this.angle) * streakLen);
+          ctx.stroke();
+        } else if (this.tier === 1) {
+          ctx.fillStyle = this.color;
+          ctx.shadowColor = '#38bdf8';
+          ctx.shadowBlur = 5;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+    }
+
+    const blizzardParticles = [];
+    for (let i = 0; i < 450; i++) {
+      blizzardParticles.push(new BlizzardParticle());
+    }
+
+    let bTime = 0;
+    let blizzardGust = 0;
+
+    function animateBlizzard() {
+      bTime++;
+      if (blizzardGust > 0) {
+        blizzardGust *= 0.96;
+        if (blizzardGust < 0.02) blizzardGust = 0;
+      }
+
+      const mode = blizzardModes[blizzardWindMode];
+      const activeMult = mode.mult + blizzardGust;
+      const activeCount = Math.min(450, Math.floor(mode.count * (1 + blizzardGust * 0.25)));
+
+      bCtx.clearRect(0, 0, bW, bH);
+
+      // Atmospheric frost wash
+      bCtx.save();
+      const grad = bCtx.createLinearGradient(bW, 0, 0, bH);
+      grad.addColorStop(0, 'rgba(224, 242, 254, 0.09)');
+      grad.addColorStop(0.5, 'rgba(56, 189, 248, 0.04)');
+      grad.addColorStop(1, 'rgba(15, 23, 42, 0.12)');
+      bCtx.fillStyle = grad;
+      bCtx.fillRect(0, 0, bW, bH);
+      bCtx.restore();
+
+      for (let i = 0; i < activeCount; i++) {
+        const p = blizzardParticles[i];
+        p.update(bTime, activeMult);
+        p.draw(bCtx, activeMult);
+      }
+
+      requestAnimationFrame(animateBlizzard);
+    }
+    requestAnimationFrame(animateBlizzard);
+
+    function cycleBlizzardWind() {
+      blizzardWindMode = (blizzardWindMode + 1) % blizzardModes.length;
+      const btn = document.getElementById('btnBlizzardWind');
+      btn.textContent = blizzardModes[blizzardWindMode].name;
+    }
+
+    // ==========================================
+    // 9. Numune 9: Kriyojenik Donma & Kristaller
+    // ==========================================
+    const frostCanvas = document.getElementById('frostCanvas');
+    const frostCtx = frostCanvas.getContext('2d');
+    const frostW = frostCanvas.width;
+    const frostH = frostCanvas.height;
+
+    // Procedural Dendritic Frost Lattice
+    const frostBranches = [];
+
+    function buildDendriticTree(x, y, angle, length, depth, startP, endP, maxDepth = 2) {
+      const x1 = x + Math.cos(angle) * length;
+      const y1 = y + Math.sin(angle) * length;
+      const width = depth === 0 ? 2.4 : (depth === 1 ? 1.4 : 0.8);
+
+      frostBranches.push({
+        x0: x, y0: y, x1: x1, y1: y1,
+        depth: depth,
+        startP: startP,
+        endP: endP,
+        width: width
+      });
+
+      if (depth < maxDepth) {
+        // Lateral hexagonal pins (60° angles)
+        const steps = depth === 0 ? [0.28, 0.52, 0.74, 0.92] : [0.4, 0.75];
+        steps.forEach((stepFrac) => {
+          const px = x + (x1 - x) * stepFrac;
+          const py = y + (y1 - y) * stepFrac;
+          const subLen = length * (depth === 0 ? 0.44 : 0.38) * (1 - stepFrac * 0.3);
+          const subStart = startP + (endP - startP) * stepFrac;
+          const subEnd = Math.min(1.0, subStart + 0.28);
+
+          buildDendriticTree(px, py, angle - Math.PI / 3, subLen, depth + 1, subStart, subEnd, maxDepth);
+          buildDendriticTree(px, py, angle + Math.PI / 3, subLen, depth + 1, subStart, subEnd, maxDepth);
+        });
+      }
+    }
+
+    // Initialize 6 fractal root systems (4 corners + 2 lateral edges)
+    buildDendriticTree(0, 0, Math.PI * 0.27, 95, 0, 0.0, 0.45);
+    buildDendriticTree(0, 0, Math.PI * 0.12, 70, 0, 0.1, 0.52);
+    buildDendriticTree(frostW, 0, Math.PI * 0.73, 95, 0, 0.05, 0.5);
+    buildDendriticTree(frostW, 0, Math.PI * 0.88, 70, 0, 0.12, 0.55);
+    buildDendriticTree(0, frostH, -Math.PI * 0.26, 105, 0, 0.02, 0.48);
+    buildDendriticTree(0, frostH, -Math.PI * 0.12, 75, 0, 0.15, 0.58);
+    buildDendriticTree(frostW, frostH, -Math.PI * 0.74, 105, 0, 0.06, 0.52);
+    buildDendriticTree(frostW, frostH, -Math.PI * 0.88, 75, 0, 0.18, 0.6);
+    buildDendriticTree(0, frostH * 0.52, Math.PI * 0.05, 55, 0, 0.25, 0.68);
+    buildDendriticTree(frostW, frostH * 0.48, Math.PI * 0.95, 55, 0, 0.28, 0.7);
+
+    // Fixed sparkle star nodes
+    const glintNodes = [
+      { x: 38, y: 46, phase: 0 },
+      { x: 146, y: 42, phase: 1.5 },
+      { x: 42, y: 206, phase: 3.0 },
+      { x: 142, y: 208, phase: 4.5 },
+      { x: 78, y: 78, phase: 2.2 },
+      { x: 106, y: 175, phase: 5.2 },
+      { x: 28, y: 130, phase: 0.8 },
+      { x: 156, y: 125, phase: 3.8 }
+    ];
+
+    let freezeProgress = 0.0;
+    let freezeState = 'growing'; // 'growing', 'frozen', 'shattered'
+    let shatterTimer = 0;
+    const shatterShards = [];
+    const shatterCracks = [];
+
+    function triggerFrostShatter() {
+      if (freezeState === 'shattered') return;
+
+      const slot = document.getElementById('slot9');
+      if (slot) {
+        slot.classList.remove('shattering-shake');
+        void slot.offsetWidth;
+        slot.classList.add('shattering-shake');
+      }
+
+      freezeState = 'shattered';
+      shatterTimer = 0;
+      shatterShards.length = 0;
+      shatterCracks.length = 0;
+
+      // Generate radial fracture lines
+      const cx = frostW * 0.5;
+      const cy = frostH * 0.5;
+      for (let i = 0; i < 9; i++) {
+        const baseAngle = (i / 9) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+        const pts = [{ x: cx, y: cy }];
+        let curR = 0;
+        let curA = baseAngle;
+        while (curR < frostW) {
+          curR += 18 + Math.random() * 22;
+          curA += (Math.random() - 0.5) * 0.5;
+          pts.push({
+            x: cx + Math.cos(curA) * curR,
+            y: cy + Math.sin(curA) * curR
+          });
+        }
+        shatterCracks.push(pts);
+      }
+
+      // Generate 38 explosive faceted ice glass shards
+      for (let i = 0; i < 38; i++) {
+        const sx = cx + (Math.random() - 0.5) * frostW * 0.75;
+        const sy = cy + (Math.random() - 0.5) * frostH * 0.75;
+        const dist = Math.hypot(sx - cx, sy - cy) + 1;
+        const nx = (sx - cx) / dist;
+        const ny = (sy - cy) / dist;
+        const blastSpeed = 4.0 + Math.random() * 7.5;
+
+        shatterShards.push({
+          x: sx,
+          y: sy,
+          vx: nx * blastSpeed + (Math.random() - 0.5) * 2,
+          vy: ny * blastSpeed + (Math.random() - 0.5) * 2 - 2.5,
+          rot: Math.random() * Math.PI * 2,
+          rotSpeed: (Math.random() - 0.5) * 0.35,
+          size: 5 + Math.random() * 9,
+          alpha: 1.0,
+          aspect: 0.4 + Math.random() * 0.6
+        });
+      }
+    }
+
+    function drawGlintStar(ctx, x, y, size, alpha) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#38bdf8';
+      ctx.shadowBlur = 8;
+      ctx.beginPath();
+      ctx.moveTo(x, y - size);
+      ctx.quadraticCurveTo(x, y, x + size, y);
+      ctx.quadraticCurveTo(x, y, x, y + size);
+      ctx.quadraticCurveTo(x, y, x - size, y);
+      ctx.quadraticCurveTo(x, y, x, y - size);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    let frostTime = 0;
+
+    function animateFrost() {
+      frostTime += 0.05;
+      frostCtx.clearRect(0, 0, frostW, frostH);
+
+      // State progression
+      if (freezeState === 'growing') {
+        freezeProgress += 0.0055;
+        if (freezeProgress >= 1.0) {
+          freezeProgress = 1.0;
+          freezeState = 'frozen';
+        }
+      } else if (freezeState === 'shattered') {
+        shatterTimer++;
+        freezeProgress *= 0.94;
+        if (shatterTimer > 75) {
+          freezeState = 'growing';
+          freezeProgress = 0.0;
+        }
+      }
+
+      // 1. Frosted Cryogenic Vignette Film
+      if (freezeProgress > 0.02) {
+        frostCtx.save();
+        const vig = frostCtx.createRadialGradient(frostW * 0.5, frostH * 0.5, frostW * 0.25, frostW * 0.5, frostH * 0.5, frostW * 0.85);
+        vig.addColorStop(0, 'rgba(224, 242, 254, 0)');
+        vig.addColorStop(0.55, `rgba(186, 230, 253, ${freezeProgress * 0.22})`);
+        vig.addColorStop(0.85, `rgba(56, 189, 248, ${freezeProgress * 0.42})`);
+        vig.addColorStop(1, `rgba(255, 255, 255, ${freezeProgress * 0.72})`);
+        frostCtx.fillStyle = vig;
+        frostCtx.fillRect(0, 0, frostW, frostH);
+        frostCtx.restore();
+      }
+
+      // 2. Procedural Dendritic Branches
+      if (freezeProgress > 0.01) {
+        frostCtx.save();
+        frostCtx.lineCap = 'round';
+
+        frostBranches.forEach(b => {
+          if (freezeProgress < b.startP) return;
+
+          let t = 1.0;
+          if (freezeProgress < b.endP) {
+            t = (freezeProgress - b.startP) / (b.endP - b.startP);
+          }
+          const curX = b.x0 + (b.x1 - b.x0) * t;
+          const curY = b.y0 + (b.y1 - b.y0) * t;
+
+          // Outer glowing ice halo
+          frostCtx.strokeStyle = 'rgba(56, 189, 248, 0.65)';
+          frostCtx.lineWidth = b.width + 1.8;
+          frostCtx.shadowColor = '#38bdf8';
+          frostCtx.shadowBlur = 6;
+          frostCtx.beginPath();
+          frostCtx.moveTo(b.x0, b.y0);
+          frostCtx.lineTo(curX, curY);
+          frostCtx.stroke();
+
+          // Inner incandescent white ice core
+          frostCtx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+          frostCtx.lineWidth = b.width;
+          frostCtx.shadowBlur = 0;
+          frostCtx.beginPath();
+          frostCtx.moveTo(b.x0, b.y0);
+          frostCtx.lineTo(curX, curY);
+          frostCtx.stroke();
+        });
+        frostCtx.restore();
+      }
+
+      // 3. Shimmering Diamond Glints (Active when frozen)
+      if (freezeProgress > 0.65 && freezeState !== 'shattered') {
+        glintNodes.forEach(node => {
+          const pulse = (Math.sin(frostTime * 2.5 + node.phase) + 1) * 0.5;
+          if (pulse > 0.4) {
+            const glintAlpha = (pulse - 0.4) / 0.6 * Math.min(1.0, (freezeProgress - 0.65) / 0.35);
+            drawGlintStar(frostCtx, node.x, node.y, 4 + pulse * 4, glintAlpha);
+          }
+        });
+      }
+
+      // 4. Shatter Cracks & Exploding Glass Shards
+      if (freezeState === 'shattered') {
+        const crackAlpha = Math.max(0, 1.0 - shatterTimer / 35);
+        if (crackAlpha > 0) {
+          frostCtx.save();
+          frostCtx.strokeStyle = `rgba(255, 255, 255, ${crackAlpha * 0.95})`;
+          frostCtx.lineWidth = 1.4;
+          frostCtx.shadowColor = '#38bdf8';
+          frostCtx.shadowBlur = 8;
+          shatterCracks.forEach(pts => {
+            frostCtx.beginPath();
+            frostCtx.moveTo(pts[0].x, pts[0].y);
+            for (let i = 1; i < pts.length; i++) {
+              frostCtx.lineTo(pts[i].x, pts[i].y);
+            }
+            frostCtx.stroke();
+          });
+          frostCtx.restore();
+        }
+
+        // Render bursting shards
+        frostCtx.save();
+        shatterShards.forEach(s => {
+          s.x += s.vx;
+          s.y += s.vy;
+          s.vy += 0.22;
+          s.vx *= 0.97;
+          s.rot += s.rotSpeed;
+          s.alpha = Math.max(0, s.alpha - 0.016);
+
+          if (s.alpha > 0) {
+            frostCtx.save();
+            frostCtx.translate(s.x, s.y);
+            frostCtx.rotate(s.rot);
+            frostCtx.globalAlpha = s.alpha;
+
+            const w = s.size;
+            const h = s.size * s.aspect;
+            frostCtx.fillStyle = 'rgba(224, 242, 254, 0.85)';
+            frostCtx.strokeStyle = '#ffffff';
+            frostCtx.lineWidth = 0.8;
+            frostCtx.shadowColor = '#38bdf8';
+            frostCtx.shadowBlur = 6;
+
+            frostCtx.beginPath();
+            frostCtx.moveTo(0, -h);
+            frostCtx.lineTo(w * 0.8, -h * 0.2);
+            frostCtx.lineTo(w * 0.5, h);
+            frostCtx.lineTo(-w * 0.6, h * 0.6);
+            frostCtx.lineTo(-w * 0.7, -h * 0.4);
+            frostCtx.closePath();
+            frostCtx.fill();
+            frostCtx.stroke();
+            frostCtx.restore();
+          }
+        });
+        frostCtx.restore();
+      }
+
+      requestAnimationFrame(animateFrost);
+    }
+    requestAnimationFrame(animateFrost);
+
+    // ==========================================
+    // 10. Numune 10: Plazma & Dielektrik Ark Motoru
+    // ==========================================
+    const plasmaCanvas = document.getElementById('plasmaCanvas');
+    const plasmaCtx = plasmaCanvas.getContext('2d');
+    const plasmaW = plasmaCanvas.width;
+    const plasmaH = plasmaCanvas.height;
+
+    let plasmaDensityMode = 1; // 0: Sakin (4 Ark), 1: Yoğun (8 Ark), 2: Çılgın (14 Ark)
+    const plasmaModes = [
+      { name: 'Sakin (4 Ark)', count: 4 },
+      { name: 'Yoğun (8 Ark)', count: 8 },
+      { name: 'Çılgın (14 Ark)', count: 14 }
+    ];
+
+    let lightningStrikeActive = false;
+    let lightningStrikeTimer = 0;
+    const strikeSparks = [];
+
+    // Brownian Motion / Midpoint Displacement Lightning Generator
+    function generateLightningBranch(x0, y0, x1, y1, displace, depth, maxDepth, branches) {
+      if (depth >= maxDepth) {
+        branches.push({ x0, y0, x1, y1, depth });
+        return;
+      }
+      const midX = (x0 + x1) * 0.5;
+      const midY = (y0 + y1) * 0.5;
+      const normalX = -(y1 - y0);
+      const normalY = x1 - x0;
+      const len = Math.hypot(normalX, normalY) || 1;
+      const offset = (Math.random() - 0.5) * displace;
+      const nx = midX + (normalX / len) * offset;
+      const ny = midY + (normalY / len) * offset;
+
+      generateLightningBranch(x0, y0, nx, ny, displace * 0.55, depth + 1, maxDepth, branches);
+      generateLightningBranch(nx, ny, x1, y1, displace * 0.55, depth + 1, maxDepth, branches);
+
+      // Sprout lateral fork with 35% chance
+      if (depth >= 1 && Math.random() < 0.35) {
+        const forkAngle = Math.atan2(y1 - y0, x1 - x0) + (Math.random() > 0.5 ? 0.6 : -0.6);
+        const forkLen = (Math.hypot(x1 - x0, y1 - y0) * 0.45);
+        const fx1 = nx + Math.cos(forkAngle) * forkLen;
+        const fy1 = ny + Math.sin(forkAngle) * forkLen;
+        generateLightningBranch(nx, ny, fx1, fy1, displace * 0.45, depth + 1, maxDepth, branches);
+      }
+    }
+
+    function renderLightningSegments(ctx, segments, isMajorStrike = false) {
+      ctx.save();
+      ctx.lineCap = 'round';
+      // Pass 1: Coronal Aura (Purple/Blue ionization)
+      ctx.strokeStyle = isMajorStrike ? 'rgba(168, 85, 247, 0.65)' : 'rgba(168, 85, 247, 0.35)';
+      ctx.lineWidth = isMajorStrike ? 9.0 : 5.5;
+      ctx.shadowColor = '#c084fc';
+      ctx.shadowBlur = isMajorStrike ? 18 : 10;
+      ctx.beginPath();
+      segments.forEach(s => {
+        ctx.moveTo(s.x0, s.y0);
+        ctx.lineTo(s.x1, s.y1);
+      });
+      ctx.stroke();
+
+      // Pass 2: Neon Amber / Electric Yellow
+      ctx.strokeStyle = isMajorStrike ? 'rgba(254, 240, 138, 0.95)' : 'rgba(250, 204, 21, 0.85)';
+      ctx.lineWidth = isMajorStrike ? 4.5 : 2.6;
+      ctx.shadowColor = '#facc15';
+      ctx.shadowBlur = isMajorStrike ? 12 : 6;
+      ctx.beginPath();
+      segments.forEach(s => {
+        ctx.moveTo(s.x0, s.y0);
+        ctx.lineTo(s.x1, s.y1);
+      });
+      ctx.stroke();
+
+      // Pass 3: Incandescent Pure White Core
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = isMajorStrike ? 2.0 : 1.0;
+      ctx.shadowBlur = 0;
+      ctx.beginPath();
+      segments.forEach(s => {
+        ctx.moveTo(s.x0, s.y0);
+        ctx.lineTo(s.x1, s.y1);
+      });
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function triggerLightningStrike() {
+      lightningStrikeActive = true;
+      lightningStrikeTimer = 0;
+      strikeSparks.length = 0;
+
+      const hitX = plasmaW * (0.35 + Math.random() * 0.3);
+      const hitY = plasmaH * 0.85;
+      for (let i = 0; i < 30; i++) {
+        const ang = -Math.PI * (0.1 + Math.random() * 0.8);
+        const spd = 3.0 + Math.random() * 7.0;
+        strikeSparks.push({
+          x: hitX,
+          y: hitY,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd,
+          alpha: 1.0,
+          color: Math.random() > 0.4 ? '#ffffff' : '#facc15'
+        });
+      }
+    }
+
+    function cyclePlasmaDensity() {
+      plasmaDensityMode = (plasmaDensityMode + 1) % plasmaModes.length;
+      const btn = document.getElementById('btnPlasmaDensity');
+      btn.textContent = plasmaModes[plasmaDensityMode].name;
+    }
+
+    let plasmaFrame = 0;
+    function animatePlasma() {
+      plasmaFrame++;
+      plasmaCtx.clearRect(0, 0, plasmaW, plasmaH);
+
+      const arcCount = plasmaModes[plasmaDensityMode].count;
+      const idleArcs = [];
+
+      const zapdosNodes = [
+        { x: plasmaW * 0.5, y: plasmaH * 0.4 },
+        { x: plasmaW * 0.22, y: plasmaH * 0.35 },
+        { x: plasmaW * 0.78, y: plasmaH * 0.35 },
+        { x: plasmaW * 0.3, y: plasmaH * 0.7 },
+        { x: plasmaW * 0.7, y: plasmaH * 0.7 },
+        { x: plasmaW * 0.5, y: plasmaH * 0.9 }
+      ];
+
+      for (let i = 0; i < arcCount; i++) {
+        const n0 = zapdosNodes[Math.floor(Math.random() * zapdosNodes.length)];
+        const n1 = zapdosNodes[Math.floor(Math.random() * zapdosNodes.length)];
+        if (n0 !== n1) {
+          const x0 = n0.x + (Math.random() - 0.5) * 20;
+          const y0 = n0.y + (Math.random() - 0.5) * 20;
+          const x1 = n1.x + (Math.random() - 0.5) * 25;
+          const y1 = n1.y + (Math.random() - 0.5) * 25;
+          generateLightningBranch(x0, y0, x1, y1, 28, 0, 4, idleArcs);
+        }
+      }
+      renderLightningSegments(plasmaCtx, idleArcs, false);
+
+      // Massive Thunderbolt Strike
+      if (lightningStrikeActive) {
+        lightningStrikeTimer++;
+        const strikeArcs = [];
+        const topX = plasmaW * 0.5 + (Math.random() - 0.5) * 30;
+        const groundX = plasmaW * 0.5 + (Math.random() - 0.5) * 40;
+        generateLightningBranch(topX, -10, groundX, plasmaH * 0.88, 48, 0, 5, strikeArcs);
+
+        plasmaCtx.save();
+        plasmaCtx.fillStyle = `rgba(255, 255, 255, ${Math.max(0, 0.45 - lightningStrikeTimer * 0.04)})`;
+        plasmaCtx.fillRect(0, 0, plasmaW, plasmaH);
+        plasmaCtx.restore();
+
+        renderLightningSegments(plasmaCtx, strikeArcs, true);
+
+        // Ground impact sparks
+        plasmaCtx.save();
+        strikeSparks.forEach(sp => {
+          sp.x += sp.vx;
+          sp.y += sp.vy;
+          sp.vy += 0.25;
+          sp.alpha = Math.max(0, sp.alpha - 0.035);
+          if (sp.alpha > 0) {
+            plasmaCtx.fillStyle = sp.color;
+            plasmaCtx.globalAlpha = sp.alpha;
+            plasmaCtx.shadowColor = '#facc15';
+            plasmaCtx.shadowBlur = 4;
+            plasmaCtx.beginPath();
+            plasmaCtx.arc(sp.x, sp.y, 1.6, 0, Math.PI * 2);
+            plasmaCtx.fill();
+          }
+        });
+        plasmaCtx.restore();
+
+        if (lightningStrikeTimer > 18) {
+          lightningStrikeActive = false;
+        }
+      }
+
+      requestAnimationFrame(animatePlasma);
+    }
+    requestAnimationFrame(animatePlasma);
+
+    // ==========================================
+    // 11. Numune 11: Termal Konveksiyon & Közler
+    // ==========================================
+    const thermalCanvas = document.getElementById('thermalCanvas');
+    const thermalCtx = thermalCanvas.getContext('2d');
+    const thermalW = thermalCanvas.width;
+    const thermalH = thermalCanvas.height;
+
+    let heatMirageActive = true;
+    let heatTurbSeed = 0;
+    const heatTurbElem = document.getElementById('heatTurbulenceElem');
+
+    function toggleHeatMirage() {
+      heatMirageActive = !heatMirageActive;
+      const img = document.getElementById('charizardCardImg');
+      const btn = document.getElementById('btnHeatMirage');
+      img.classList.toggle('heat-mirage-active', heatMirageActive);
+      btn.classList.toggle('on', heatMirageActive);
+      btn.textContent = heatMirageActive ? 'AÇIK (Serap)' : 'KAPALI (Düz)';
+    }
+
+    class ConvectionEmber {
+      constructor(isBurst = false) {
+        this.reset(isBurst);
+      }
+      reset(isBurst = false) {
+        this.x = thermalW * (0.15 + Math.random() * 0.7);
+        this.y = isBurst ? thermalH * 0.85 : (thermalH + Math.random() * 20);
+        this.baseVy = isBurst ? -(4.0 + Math.random() * 6.5) : -(1.2 + Math.random() * 2.4);
+        this.vy = this.baseVy;
+        this.vx = (Math.random() - 0.5) * (isBurst ? 3.0 : 0.8);
+        this.seed = Math.random() * 100;
+        this.size = 1.4 + Math.random() * 2.4;
+        this.maxLife = 60 + Math.random() * 80;
+        this.life = this.maxLife;
+      }
+      update(time) {
+        this.life--;
+        const flutter = Math.sin(time * 0.05 + this.seed) * 0.7;
+        this.x += this.vx + flutter;
+        this.y += this.vy;
+        this.vy *= 0.985;
+        if (this.life <= 0 || this.y < -15) {
+          this.reset(false);
+        }
+      }
+      draw(ctx) {
+        const progress = 1 - (this.life / this.maxLife);
+        const alpha = Math.sin((this.life / this.maxLife) * Math.PI);
+
+        let color;
+        if (progress < 0.25) {
+          color = '#ffffff';
+        } else if (progress < 0.55) {
+          color = '#fef08a';
+        } else if (progress < 0.8) {
+          color = '#f97316';
+        } else {
+          color = '#dc2626';
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.fillStyle = color;
+        ctx.shadowColor = progress < 0.5 ? '#facc15' : '#ea580c';
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * (1 - progress * 0.4), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    const convectionEmbers = [];
+    for (let i = 0; i < 90; i++) {
+      convectionEmbers.push(new ConvectionEmber());
+    }
+
+    function triggerFireBurst() {
+      for (let i = 0; i < 50; i++) {
+        convectionEmbers.push(new ConvectionEmber(true));
+      }
+      setTimeout(() => {
+        while (convectionEmbers.length > 90) {
+          convectionEmbers.pop();
+        }
+      }, 2500);
+    }
+
+    let thermalTime = 0;
+    function animateThermal() {
+      thermalTime++;
+      thermalCtx.clearRect(0, 0, thermalW, thermalH);
+
+      if (heatMirageActive && heatTurbElem && thermalTime % 2 === 0) {
+        heatTurbSeed += 0.008;
+        const fy = 0.065 + Math.sin(heatTurbSeed) * 0.015;
+        heatTurbElem.setAttribute('baseFrequency', `0.018 ${fy.toFixed(4)}`);
+      }
+
+      thermalCtx.save();
+      const floorGrad = thermalCtx.createLinearGradient(0, thermalH * 0.65, 0, thermalH);
+      floorGrad.addColorStop(0, 'rgba(234, 88, 12, 0)');
+      floorGrad.addColorStop(0.5, 'rgba(249, 115, 22, 0.15)');
+      floorGrad.addColorStop(1, 'rgba(220, 38, 38, 0.35)');
+      thermalCtx.fillStyle = floorGrad;
+      thermalCtx.fillRect(0, 0, thermalW, thermalH);
+      thermalCtx.restore();
+
+      for (let i = 0; i < convectionEmbers.length; i++) {
+        const e = convectionEmbers[i];
+        e.update(thermalTime);
+        e.draw(thermalCtx);
+      }
+
+      requestAnimationFrame(animateThermal);
+    }
+    requestAnimationFrame(animateThermal);
+
+    // ==========================================
+    // 12. Numune 12: Kozmik / Gravitasyonel Çekim & Olay Ufku
+    // ==========================================
+    const gravityCanvas = document.getElementById('gravityCanvas');
+    const gravityCtx = gravityCanvas.getContext('2d');
+    const gravityW = gravityCanvas.width;
+    const gravityH = gravityCanvas.height;
+    const singularityX = gravityW * 0.5;
+    const singularityY = gravityH * 0.46;
+
+    let gravityMultiplier = 1.0;
+    let supernovaShock = 0;
+
+    class StardustParticle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.r = 25 + Math.random() * 95;
+        this.theta = Math.random() * Math.PI * 2;
+        this.size = 1.0 + Math.random() * 1.8;
+        this.baseAngularSpeed = (0.015 + Math.random() * 0.02) * (Math.random() > 0.5 ? 1 : -1);
+        this.radialInwardSpeed = 0.22 + Math.random() * 0.35;
+        this.colorSeed = Math.random();
+      }
+      update(mult) {
+        if (supernovaShock > 0) {
+          this.r += 6.5 * (mult * 0.8);
+          if (this.r > 130) this.r = 130;
+        } else {
+          const keplerBoost = 1 + (45 / (this.r + 5));
+          this.theta += this.baseAngularSpeed * keplerBoost * mult;
+          this.r -= this.radialInwardSpeed * mult;
+
+          if (this.r < 13) {
+            this.r = 105 + Math.random() * 25;
+            this.theta = Math.random() * Math.PI * 2;
+          }
+        }
+      }
+      draw(ctx) {
+        const x = singularityX + Math.cos(this.theta) * this.r;
+        const y = singularityY + Math.sin(this.theta) * this.r * 0.72;
+
+        let col = '#c084fc';
+        if (this.r < 25) {
+          col = '#ffffff';
+        } else if (this.r < 55) {
+          col = '#38bdf8';
+        }
+
+        const alpha = Math.min(1.0, (this.r - 12) / 20) * (0.6 + Math.random() * 0.4);
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, alpha);
+        ctx.fillStyle = col;
+        ctx.shadowColor = col;
+        ctx.shadowBlur = this.r < 30 ? 6 : 2;
+        ctx.beginPath();
+        ctx.arc(x, y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    const stardustArray = [];
+    for (let i = 0; i < 180; i++) {
+      stardustArray.push(new StardustParticle());
+    }
+
+    function triggerGravitySupernova() {
+      supernovaShock = 1.0;
+    }
+
+    function cycleGravityForce() {
+      gravityMultiplier = gravityMultiplier === 1.0 ? 1.8 : (gravityMultiplier === 1.8 ? 2.6 : 1.0);
+      const btn = document.getElementById('btnGravityForce');
+      btn.textContent = gravityMultiplier === 1.0 ? 'Standart (1.0x)' : (gravityMultiplier === 1.8 ? 'Kuvvetli (1.8x)' : 'Devasa (2.6x)');
+    }
+
+    let gravityTime = 0;
+    function animateGravity() {
+      gravityTime += 0.02;
+      gravityCtx.clearRect(0, 0, gravityW, gravityH);
+
+      if (supernovaShock > 0) {
+        supernovaShock -= 0.025;
+        if (supernovaShock < 0) supernovaShock = 0;
+      }
+
+      // 1. Gravitational Lensing Halo
+      gravityCtx.save();
+      const lensGrad = gravityCtx.createRadialGradient(singularityX, singularityY, 14, singularityX, singularityY, 80);
+      lensGrad.addColorStop(0, 'rgba(3, 4, 8, 0.95)');
+      lensGrad.addColorStop(0.2, 'rgba(192, 132, 252, 0.35)');
+      lensGrad.addColorStop(0.55, 'rgba(56, 189, 248, 0.18)');
+      lensGrad.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      gravityCtx.fillStyle = lensGrad;
+      gravityCtx.beginPath();
+      gravityCtx.arc(singularityX, singularityY, 80, 0, Math.PI * 2);
+      gravityCtx.fill();
+      gravityCtx.restore();
+
+      // 2. Accretion Disk Stardust Particles
+      stardustArray.forEach(p => {
+        p.update(gravityMultiplier);
+        p.draw(gravityCtx);
+      });
+
+      // 3. Central Event Horizon (Black Hole Sphere & Photon Ring)
+      gravityCtx.save();
+      gravityCtx.strokeStyle = '#ffffff';
+      gravityCtx.lineWidth = 2.2;
+      gravityCtx.shadowColor = '#c084fc';
+      gravityCtx.shadowBlur = 12;
+      gravityCtx.beginPath();
+      gravityCtx.arc(singularityX, singularityY, 13.5, 0, Math.PI * 2);
+      gravityCtx.stroke();
+
+      gravityCtx.fillStyle = '#030408';
+      gravityCtx.shadowBlur = 0;
+      gravityCtx.beginPath();
+      gravityCtx.arc(singularityX, singularityY, 13, 0, Math.PI * 2);
+      gravityCtx.fill();
+      gravityCtx.restore();
+
+      // 4. Supernova Blast Wave
+      if (supernovaShock > 0) {
+        const shockRadius = (1 - supernovaShock) * (gravityW * 0.75);
+        gravityCtx.save();
+        gravityCtx.strokeStyle = `rgba(255, 255, 255, ${supernovaShock * 0.9})`;
+        gravityCtx.lineWidth = 3.5;
+        gravityCtx.shadowColor = '#38bdf8';
+        gravityCtx.shadowBlur = 14;
+        gravityCtx.beginPath();
+        gravityCtx.arc(singularityX, singularityY, shockRadius, 0, Math.PI * 2);
+        gravityCtx.stroke();
+        gravityCtx.restore();
+      }
+
+      requestAnimationFrame(animateGravity);
+    }
+    requestAnimationFrame(animateGravity);
+
+    // ==========================================
+    // 13. Numune 13: Biyo-Lüminesans Spor & Polen Sürüklenmesi
+    // ==========================================
+    const sporeCanvas = document.getElementById('sporeCanvas');
+    const sporeCtx = sporeCanvas.getContext('2d');
+    const sporeW = sporeCanvas.width;
+    const sporeH = sporeCanvas.height;
+
+    let sporeTypeMode = 0; // 0: Sleep Powder (Altın), 1: Poison Powder (Zümrüt/Mor), 2: Stun Spore (Kehribar)
+    const sporePalettes = [
+      { name: 'Uyku Tozu (Altın)', primary: '#facc15', secondary: '#fef08a', halo: '#eab308' },
+      { name: 'Zehir Sporu (Zümrüt)', primary: '#34d399', secondary: '#a7f3d0', halo: '#10b981' },
+      { name: 'Felç Tozu (Kehribar)', primary: '#fb923c', secondary: '#fed7aa', halo: '#ea580c' }
+    ];
+
+    class SporeParticle {
+      constructor(fromFlower = false) {
+        this.reset(fromFlower);
+      }
+      reset(fromFlower = false) {
+        if (fromFlower) {
+          this.x = sporeW * 0.5 + (Math.random() - 0.5) * 24;
+          this.y = sporeH * 0.5 + (Math.random() - 0.5) * 16;
+          const ang = -Math.PI * (0.2 + Math.random() * 0.6);
+          const spd = 2.0 + Math.random() * 4.5;
+          this.vx = Math.cos(ang) * spd;
+          this.vy = Math.sin(ang) * spd;
+        } else {
+          this.x = Math.random() * sporeW;
+          this.y = Math.random() * sporeH;
+          this.vx = (Math.random() - 0.5) * 0.6;
+          this.vy = -(0.3 + Math.random() * 0.7);
+        }
+        this.size = 1.2 + Math.random() * 2.2;
+        this.phase = Math.random() * Math.PI * 2;
+        this.pulseSpeed = 0.04 + Math.random() * 0.06;
+      }
+      update(time) {
+        const windX = Math.sin(time * 0.02 + this.y * 0.02) * 0.4;
+        const windY = Math.cos(time * 0.015 + this.x * 0.02) * 0.2;
+        this.vx = (this.vx * 0.96) + windX * 0.08;
+        this.vy = (this.vy * 0.96) + windY * 0.06 - 0.02;
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        if (this.x < -10) this.x = sporeW + 10;
+        if (this.x > sporeW + 10) this.x = -10;
+        if (this.y < -15) this.y = sporeH + 10;
+        if (this.y > sporeH + 15) this.y = -10;
+      }
+      draw(ctx, time, palette) {
+        const pulse = (Math.sin(time * this.pulseSpeed + this.phase) + 1) * 0.5;
+        const alpha = 0.4 + pulse * 0.55;
+
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = pulse > 0.65 ? palette.secondary : palette.primary;
+        ctx.shadowColor = palette.halo;
+        ctx.shadowBlur = 4 + pulse * 6;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * (0.8 + pulse * 0.4), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    const sporeArray = [];
+    for (let i = 0; i < 130; i++) {
+      sporeArray.push(new SporeParticle());
+    }
+
+    function triggerSporePuff() {
+      for (let i = 0; i < 45; i++) {
+        sporeArray.push(new SporeParticle(true));
+      }
+      setTimeout(() => {
+        while (sporeArray.length > 130) {
+          sporeArray.shift();
+        }
+      }, 3500);
+    }
+
+    function cycleSporeType() {
+      sporeTypeMode = (sporeTypeMode + 1) % sporePalettes.length;
+      const btn = document.getElementById('btnSporeType');
+      btn.textContent = sporePalettes[sporeTypeMode].name;
+    }
+
+    function handleSporeHover(e) {
+      const rect = sporeCanvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      sporeArray.forEach(p => {
+        const dx = p.x - mouseX;
+        const dy = p.y - mouseY;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 45 && dist > 0) {
+          const force = (45 - dist) / 45 * 3.5;
+          p.vx += (dx / dist) * force;
+          p.vy += (dy / dist) * force;
+        }
+      });
+    }
+
+    function handleSporeClick(e) {
+      const rect = sporeCanvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      sporeArray.forEach(p => {
+        const dx = p.x - mouseX;
+        const dy = p.y - mouseY;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 75 && dist > 0) {
+          const force = (75 - dist) / 75 * 7.0;
+          p.vx += (dx / dist) * force;
+          p.vy += (dy / dist) * force;
+        }
+      });
+    }
+
+    let sporeTime = 0;
+    function animateSpores() {
+      sporeTime++;
+      sporeCtx.clearRect(0, 0, sporeW, sporeH);
+
+      const pal = sporePalettes[sporeTypeMode];
+      sporeArray.forEach(s => {
+        s.update(sporeTime);
+        s.draw(sporeCtx, sporeTime, pal);
+      });
+
+      requestAnimationFrame(animateSpores);
+    }
+    requestAnimationFrame(animateSpores);
+
     function triggerBurstAll() {
       if (typeof gsap !== 'undefined') {
         gsap.fromTo('.water-stream', { scaleY: 0.2 }, { scaleY: 1.1, duration: 0.4, yoyo: true, repeat: 1 });
@@ -1194,6 +2459,12 @@
       }
       injectMiasmaPulse();
       splashWave();
+      blizzardGust = 2.4;
+      triggerFrostShatter();
+      triggerLightningStrike();
+      triggerFireBurst();
+      triggerGravitySupernova();
+      triggerSporePuff();
     }
   </script>
 </body>

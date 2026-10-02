@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="176" height="136" viewBox="0 0 176 136" style="background:#050b14;">
+  <defs>
+    <!-- Deep High-Pressure Hydraulic Mass Gradient -->
+    <radialGradient id="fanDeepGrad" cx="50%" cy="65%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+      <stop offset="20%" stop-color="#e0f2fe" stop-opacity="0.98" />
+      <stop offset="42%" stop-color="#7dd3fc" stop-opacity="0.95" />
+      <stop offset="68%" stop-color="#0284c7" stop-opacity="0.90" />
+      <stop offset="88%" stop-color="#0369a1" stop-opacity="0.80" />
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Lateral Left Eruption Sheet Gradient -->
+    <linearGradient id="fanSheetL" x1="100%" y1="90%" x2="0%" y2="10%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.92" />
+      <stop offset="35%" stop-color="#0ea5e9" stop-opacity="0.96" />
+      <stop offset="70%" stop-color="#7dd3fc" stop-opacity="0.98" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="1" />
+    </linearGradient>
+
+    <!-- Lateral Right Eruption Sheet Gradient -->
+    <linearGradient id="fanSheetR" x1="0%" y1="90%" x2="100%" y2="10%">
+      <stop offset="0%" stop-color="#0284c7" stop-opacity="0.92" />
+      <stop offset="35%" stop-color="#0ea5e9" stop-opacity="0.96" />
+      <stop offset="70%" stop-color="#7dd3fc" stop-opacity="0.98" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="1" />
+    </linearGradient>
+
+    <!-- Central Upward Sheaf Gradient -->
+    <linearGradient id="fanSheafC" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.95" />
+      <stop offset="40%" stop-color="#38bdf8" stop-opacity="0.98" />
+      <stop offset="80%" stop-color="#bae6fd" stop-opacity="1" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="1" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Broad Volumetric Hydraulic Sheet Basin (Full-Mass Core Envelope) -->
+  <path d="M88 102 C60 102, 32 94, 14 76 C2 64, 2 46, 12 32 C22 18, 42 12, 60 16 C68 18, 76 26, 88 10 C100 26, 108 18, 116 16 C134 12, 154 18, 164 32 C174 46, 174 64, 162 76 C144 94, 116 102, 88 102 Z"
+        fill="url(#fanDeepGrad)" />
+
+  <!-- 2. Left High-Velocity Hydraulic Fan Wing (Dense Multilobed Sheet) -->
+  <path d="M88 86 C68 82, 44 70, 24 52 C12 40, 4 28, 6 18 C12 24, 22 40, 38 52 C54 64, 72 74, 88 78 Z"
+        fill="url(#fanSheetL)" />
+  <path d="M84 82 C66 76, 46 64, 28 46 C18 36, 12 26, 14 18 C20 24, 30 38, 44 48 C58 58, 74 68, 84 82 Z"
+        fill="#e0f2fe" opacity="0.85" />
+  <!-- Left Outer Ligaments & Liquid Tendons -->
+  <path d="M52 64 C36 50, 18 36, 8 22 C6 18, 8 16, 12 18 C20 24, 34 38, 48 50 Z"
+        fill="#ffffff" opacity="0.9" />
+  <path d="M38 72 C22 60, 10 46, 4 34 C2 30, 4 28, 8 30 C16 36, 28 48, 38 60 Z"
+        fill="#7dd3fc" opacity="0.85" />
+
+  <!-- 3. Right High-Velocity Hydraulic Fan Wing (Dense Multilobed Sheet) -->
+  <path d="M88 86 C108 82, 132 70, 152 52 C164 40, 172 28, 170 18 C164 24, 154 40, 138 52 C122 64, 104 74, 88 78 Z"
+        fill="url(#fanSheetR)" />
+  <path d="M92 82 C110 76, 130 64, 148 46 C158 36, 164 26, 162 18 C156 24, 146 38, 132 48 C118 58, 102 68, 92 82 Z"
+        fill="#e0f2fe" opacity="0.85" />
+  <!-- Right Outer Ligaments & Liquid Tendons -->
+  <path d="M124 64 C140 50, 158 36, 168 22 C170 18, 168 16, 164 18 C156 24, 142 38, 128 50 Z"
+        fill="#ffffff" opacity="0.9" />
+  <path d="M138 72 C154 60, 166 46, 172 34 C174 30, 172 28, 168 30 C160 36, 148 48, 138 60 Z"
+        fill="#7dd3fc" opacity="0.85" />
+
+  <!-- 4. Central Surging Vertical Hydraulic Sheaf (Triple Plume Crest) -->
+  <!-- Center Main Tongue -->
+  <path d="M74 88 C70 60, 68 34, 88 6 C108 34, 106 60, 102 88 Z"
+        fill="url(#fanSheafC)" />
+  <path d="M78 82 C76 56, 76 34, 88 12 C100 34, 100 56, 98 82 Z"
+        fill="#ffffff" opacity="0.95" />
+  <!-- Left Flank Crest -->
+  <path d="M62 86 C58 64, 52 42, 66 18 C72 32, 74 54, 76 84 Z"
+        fill="url(#fanSheetL)" opacity="0.92" />
+  <!-- Right Flank Crest -->
+  <path d="M114 86 C118 64, 124 42, 110 18 C104 32, 102 54, 100 84 Z"
+        fill="url(#fanSheetR)" opacity="0.92" />
+
+  <!-- 5. Sugimori Volumetric Wave Foams & Streamline Curls (Radiating from Epicenter) -->
+  <path d="M88 86 Q 58 56, 16 28 Q 42 58, 68 76" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.95" />
+  <path d="M88 86 Q 118 56, 160 28 Q 134 58, 108 76" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.95" />
+  <path d="M88 86 Q 74 44, 88 10 Q 102 44, 88 86" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" opacity="0.95" />
+  <path d="M80 84 Q 58 48, 66 22" fill="none" stroke="#e0f2fe" stroke-width="2.0" stroke-linecap="round" opacity="0.9" />
+  <path d="M96 84 Q 118 48, 110 22" fill="none" stroke="#e0f2fe" stroke-width="2.0" stroke-linecap="round" opacity="0.9" />
+  <path d="M88 94 C64 94, 40 84, 26 68 C40 76, 62 82, 88 82 C114 82, 136 76, 150 68 C136 84, 112 94, 88 94 Z"
+        fill="#ffffff" opacity="0.88" />
+
+  <!-- 6. Epicenter Fluid Collision Core (Pure Natural Hyperbaric High-Density Glow - No Plastic Polygon) -->
+  <circle cx="88" cy="82" r="16" fill="#ffffff" />
+  <circle cx="88" cy="82" r="26" fill="#e0f2fe" opacity="0.75" />
+  <circle cx="88" cy="82" r="38" fill="#7dd3fc" opacity="0.45" />
+</svg>

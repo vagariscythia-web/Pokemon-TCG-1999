@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Card, Attack } from '../types/game';
 import { Language } from '../i18n/translations';
 
@@ -1499,6 +1499,283 @@ const STOCK_IMAGE_FX_TYPES = new Set<string>([
   'alakazam_confuse_ray', 'muk_sludge_deluge',
   'mewtwo_psychic', 'poison_vapor'
 ]);
+
+/**
+ * Advanced Fluid Dynamics: Blastoise Micro-Canvas Cavitation Emitter (220+ particles)
+ * & Spring-Mass Deluge Water Wave Simulation for Hydro Pump
+ */
+interface BlastoiseHydroCavitationCanvasProps {
+  fxId: string;
+  wi: number;
+}
+
+class FineFluidParticle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  gravity: number;
+  drag: number;
+  initRadius: number;
+  radius: number;
+  minRadius: number;
+  alpha: number;
+  decay: number;
+  color: string;
+  type: 'foam' | 'water' | 'mist';
+
+  constructor(ox: number, oy: number, type: 'foam' | 'water' | 'mist', angleSpread?: { min: number; max: number }, speedMultVal = 1.0, wi = 1.0) {
+    this.x = ox + (Math.random() - 0.5) * 8 * wi;
+    this.y = oy + (Math.random() - 0.5) * 6 * wi;
+    this.type = type;
+
+    let angle: number;
+    let speed: number;
+    if (angleSpread) {
+      angle = angleSpread.min + Math.random() * (angleSpread.max - angleSpread.min);
+    } else {
+      angle = -Math.PI * (0.10 + Math.random() * 0.80);
+    }
+
+    if (type === 'foam') {
+      speed = (2.2 + Math.random() * 4.2) * speedMultVal * wi;
+      this.initRadius = (1.6 + Math.random() * 1.4) * wi;
+      this.radius = this.initRadius;
+      this.minRadius = 0.6 * wi;
+      this.color = Math.random() > 0.4 ? '#ffffff' : '#e0f2fe';
+      this.alpha = 0.96;
+      this.decay = 0.010 + Math.random() * 0.008;
+      this.gravity = (0.13 + Math.random() * 0.04) * wi;
+    } else if (type === 'water') {
+      speed = (3.0 + Math.random() * 5.5) * speedMultVal * wi;
+      this.initRadius = (1.2 + Math.random() * 1.6) * wi;
+      this.radius = this.initRadius;
+      this.minRadius = 0.5 * wi;
+      this.color = Math.random() > 0.45 ? '#0ea5e9' : (Math.random() > 0.5 ? '#38bdf8' : '#0284c7');
+      this.alpha = 0.88;
+      this.decay = 0.009 + Math.random() * 0.007;
+      this.gravity = (0.16 + Math.random() * 0.05) * wi;
+    } else { // 'mist'
+      speed = (3.8 + Math.random() * 6.8) * speedMultVal * wi;
+      this.initRadius = (0.7 + Math.random() * 0.9) * wi;
+      this.radius = this.initRadius;
+      this.minRadius = 0.4 * wi;
+      this.color = Math.random() > 0.5 ? '#bae6fd' : '#ffffff';
+      this.alpha = 0.92;
+      this.decay = 0.014 + Math.random() * 0.010;
+      this.gravity = (0.15 + Math.random() * 0.06) * wi;
+    }
+
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.drag = 0.966;
+  }
+
+  update() {
+    this.vx *= this.drag;
+    this.vy = (this.vy * this.drag) + this.gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+
+    // Progressive atomization: aerodynamic breakup into fine mist when falling
+    if (this.vy > 0.2) {
+      this.radius = Math.max(this.minRadius, this.radius * 0.984);
+    }
+
+    if (this.y >= 246) {
+      this.vy = 0;
+      this.vx *= 1.25;
+      this.alpha = Math.max(0, this.alpha - 0.09);
+    } else {
+      this.alpha = Math.max(0, this.alpha - this.decay);
+    }
+  }
+
+  draw(ctx: CanvasRenderingContext2D) {
+    if (this.alpha <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = this.color;
+
+    if (this.type === 'foam' || this.radius < 1.0) {
+      ctx.shadowColor = '#ffffff';
+      ctx.shadowBlur = 3;
+    } else {
+      ctx.shadowColor = '#38bdf8';
+      ctx.shadowBlur = 2;
+    }
+
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Glistening micro-specular glints
+    if (this.vy > 1.2 && this.alpha > 0.45 && Math.random() > 0.8) {
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(this.x - 0.3, this.y - 0.3, Math.max(0.3, this.radius * 0.4), 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+}
+
+export const BlastoiseHydroCavitationCanvas: React.FC<BlastoiseHydroCavitationCanvasProps> = ({ fxId, wi }) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    let simTime = 0;
+    let particlesSpawned = false;
+    const particles: FineFluidParticle[] = [];
+    const turbElem = document.getElementById(`blastoiseTurbElem_${fxId}`);
+    const shockDisp = document.getElementById(`blastoiseShockDisp_${fxId}`);
+    let shockStartTime = 0;
+
+    const oxL = Math.round(87 * wi);
+    const oyL = Math.round(56 * wi);
+    const oxR = Math.round(165 * wi);
+    const oyR = Math.round(43 * wi);
+
+    const step = () => {
+      simTime += 16.6;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 1. Dynamic Anisotropic Jet Turbulence BaseFrequency
+      if (turbElem) {
+        const t = simTime * 0.0035;
+        const fy = 0.08 + Math.sin(t * 8) * 0.03;
+        turbElem.setAttribute('baseFrequency', `0.02 ${fy.toFixed(4)}`);
+      }
+
+      // 2. Concussive Shockwave Pulse at 0.48s
+      if (simTime >= 480 && shockStartTime === 0) {
+        shockStartTime = simTime;
+      }
+      if (shockStartTime > 0 && shockDisp) {
+        const elapsed = (simTime - shockStartTime);
+        if (elapsed < 300) {
+          const shockScale = Math.sin((elapsed / 300) * Math.PI) * 10 * wi;
+          shockDisp.setAttribute('scale', shockScale.toFixed(2));
+        } else {
+          shockDisp.setAttribute('scale', '0');
+        }
+      }
+
+      // 3. Dual-Impact Atomizing Particle Burst at 0.48s
+      if (simTime >= 480 && !particlesSpawned) {
+        particlesSpawned = true;
+
+        // Left Jet Impact Core & Burst (130 particles)
+        for (let i = 0; i < 60; i++) particles.push(new FineFluidParticle(oxL, oyL, 'water', { min: -Math.PI * 0.95, max: -Math.PI * 0.25 }, 1.0, wi));
+        for (let i = 0; i < 40; i++) particles.push(new FineFluidParticle(oxL, oyL, 'foam', { min: -Math.PI * 0.85, max: -Math.PI * 0.35 }, 1.0, wi));
+        for (let i = 0; i < 30; i++) particles.push(new FineFluidParticle(oxL, oyL, 'mist', { min: -Math.PI * 1.0, max: -Math.PI * 0.15 }, 1.0, wi));
+
+        // Right Jet Impact Core & Burst (130 particles) — Concentric on actual 30° tip!
+        for (let i = 0; i < 60; i++) particles.push(new FineFluidParticle(oxR, oyR, 'water', { min: -Math.PI * 0.75, max: -Math.PI * 0.05 }, 1.0, wi));
+        for (let i = 0; i < 40; i++) particles.push(new FineFluidParticle(oxR, oyR, 'foam', { min: -Math.PI * 0.65, max: -Math.PI * 0.15 }, 1.0, wi));
+        for (let i = 0; i < 30; i++) particles.push(new FineFluidParticle(oxR, oyR, 'mist', { min: -Math.PI * 0.85, max: 0.0 }, 1.0, wi));
+
+        // Collision Convergence Bridge & Downward Cascade (160 particles)
+        for (let i = 0; i < 160; i++) {
+          const u = Math.random();
+          const bx = oxL + (oxR - oxL) * u;
+          const by = oyL + (oyR - oyL) * u + (Math.random() - 0.5) * 8 * wi;
+          const pType: 'foam' | 'water' | 'mist' = Math.random() > 0.4 ? 'water' : (Math.random() > 0.5 ? 'foam' : 'mist');
+          particles.push(new FineFluidParticle(bx, by, pType, { min: -Math.PI * 0.75, max: -Math.PI * 0.25 }, 0.9, wi));
+        }
+      }
+
+      // 4. Update and render particles with soft surface tension ligaments
+      if (particles.length > 0) {
+        ctx.save();
+        ctx.lineWidth = 1.6 * wi;
+        for (let i = 0; i < particles.length; i += 2) {
+          const p1 = particles[i];
+          if (p1.alpha <= 0.2) continue;
+          for (let j = i + 1; j < Math.min(i + 4, particles.length); j++) {
+            const p2 = particles[j];
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const distSq = dx * dx + dy * dy;
+            if (distSq < 95 * wi * wi) {
+              const alpha = Math.min(p1.alpha, p2.alpha) * 0.45;
+              ctx.strokeStyle = `rgba(56, 189, 248, ${alpha.toFixed(3)})`;
+              ctx.beginPath();
+              ctx.moveTo(p1.x, p1.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.stroke();
+            }
+          }
+        }
+        ctx.restore();
+
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw(ctx);
+        }
+      }
+
+      // 5. Dual Caustic Shock Rings (0.48s - 1.25s)
+      if (simTime >= 480 && simTime <= 1250) {
+        const shockProgress = (simTime - 480) / 770;
+        const shockAlpha = Math.sin(shockProgress * Math.PI) * 0.82;
+        const shockRadius = (10 + shockProgress * 42) * wi;
+
+        ctx.save();
+        ctx.strokeStyle = `rgba(186, 230, 253, ${shockAlpha.toFixed(3)})`;
+        ctx.lineWidth = Math.max(0.8, 2.2 * (1 - shockProgress) * wi);
+        ctx.shadowColor = '#38bdf8';
+        ctx.shadowBlur = 5;
+
+        const centers = [{ x: oxL, y: oyL }, { x: oxR, y: oyR }];
+        const wavePhase = simTime * 0.015;
+
+        centers.forEach(c => {
+          ctx.beginPath();
+          for (let a = 0; a <= Math.PI * 2 + 0.15; a += 0.25) {
+            const rOffset = Math.sin(a * 5 + wavePhase) * 3.2 * wi + Math.cos(a * 4 - wavePhase) * 1.6 * wi;
+            const r = shockRadius + rOffset;
+            const px = c.x + Math.cos(a) * r;
+            const py = c.y + Math.sin(a) * r * 0.72;
+            if (a === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          }
+          ctx.closePath();
+          ctx.stroke();
+        });
+
+        ctx.restore();
+      }
+
+      if (simTime < 2400) {
+        animId = requestAnimationFrame(step);
+      }
+    };
+
+    animId = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(animId);
+      if (shockDisp) shockDisp.setAttribute('scale', '0');
+    };
+  }, [fxId, wi]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      width={184}
+      height={253}
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 35 }}
+    />
+  );
+};
 
 export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' }) => {
   const delayMs = fx.delayMs ?? 0;
@@ -5603,6 +5880,38 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
 
           {!fx.whiffed && (
             <>
+              {/* Hidden Global SVG Filter Defs for Hydro Pump Fluid Dynamics */}
+              <svg width="0" height="0" className="absolute pointer-events-none" style={{ position: 'absolute' }}>
+                <defs>
+                  {/* 1. Anisotropic Water Jet Pressure Turbulence */}
+                  <filter id={`blastoiseJetTurbulence_${fx.id}`} x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence id={`blastoiseTurbElem_${fx.id}`} type="turbulence" baseFrequency="0.02 0.08" numOctaves={2} result="noise" />
+                    <feDisplacementMap in="SourceGraphic" in2="noise" scale={10 * wi} xChannelSelector="R" yChannelSelector="G" />
+                  </filter>
+
+                  {/* 2. Viscous Fluid Surface Tension & Necking (Gooey Metaball) */}
+                  <filter id={`blastoiseGooeyFilter_${fx.id}`} colorInterpolationFilters="sRGB">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation={3.2 * wi} result="blur" />
+                    <feColorMatrix
+                      in="blur"
+                      mode="matrix"
+                      values="1 0 0 0 0  
+                              0 1 0 0 0  
+                              0 0 1 0 0  
+                              0 0 0 19 -7"
+                      result="goo"
+                    />
+                    <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+                  </filter>
+
+                  {/* 3. Concussive Hydraulic Shockwave Displacement */}
+                  <filter id={`blastoiseShockDisplacement_${fx.id}`} x="-10%" y="-10%" width="120%" height="120%">
+                    <feTurbulence id={`blastoiseShockTurb_${fx.id}`} type="fractalNoise" baseFrequency="0.04" numOctaves={2} result="noise" />
+                    <feDisplacementMap id={`blastoiseShockDisp_${fx.id}`} in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G" />
+                  </filter>
+                </defs>
+              </svg>
+
               {/* Layer 4: Left Cannon Volumetric Hydrodynamic Torrent (Erupts along +28 deg axis converging to central impact dome) */}
               <div
                 className="absolute"
@@ -5610,7 +5919,8 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                   left: `calc(50% - ${Math.round(54 * wi)}px)`,
                   bottom: `${Math.round(105 * wi)}px`,
                   zIndex: 18,
-                  pointerEvents: 'none'
+                  pointerEvents: 'none',
+                  filter: `url(#blastoiseJetTurbulence_${fx.id})`
                 }}
               >
                 <div
@@ -5708,10 +6018,11 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
               <div
                 className="absolute"
                 style={{
-                  left: `calc(50% + ${Math.round(10 * wi)}px)`,
+                  left: `calc(50% + ${Math.round(8.5 * wi)}px)`,
                   bottom: `${Math.round(98 * wi)}px`,
                   zIndex: 18,
-                  pointerEvents: 'none'
+                  pointerEvents: 'none',
+                  filter: `url(#blastoiseJetTurbulence_${fx.id})`
                 }}
               >
                 <div
@@ -5794,341 +6105,58 @@ export const SingleFX: React.FC<SingleFXProps> = ({ fx, onComplete, lang = 'tr' 
                       strokeLinecap="round"
                       opacity={0.9}
                     />
-                    {/* Sputtering Cavitation Droplets */}
-                    <circle cx="12" cy="24" r={2.2 * wi} fill="#7dd3fc" opacity={0.9} />
-                    <circle cx="10" cy="14" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
-                    <circle cx="26" cy="7" r={1.8 * wi} fill="#ffffff" opacity={0.85} />
-                    <circle cx="46" cy="7" r={1.8 * wi} fill="#ffffff" opacity={0.85} />
-                    <circle cx="60" cy="14" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
-                    <circle cx="58" cy="24" r={2.2 * wi} fill="#7dd3fc" opacity={0.9} />
                   </svg>
                 </div>
               </div>
 
-              {/* Layer 3: Expanding Fluid Shockwave Ring on Target Impact */}
+              {/* Layer 3: Left Jet Arrival Impact Flash Pop (x=87, y=56) */}
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  top: `${Math.round(50 * wi)}px`,
-                  left: `calc(50% - ${Math.round(1 * wi)}px)`,
-                  zIndex: 25
+                  left: `${Math.round(87 * wi)}px`,
+                  top: `${Math.round(56 * wi)}px`,
+                  zIndex: 30
                 }}
               >
                 <div
                   style={{
-                    width: `${Math.round(140 * wi)}px`,
-                    height: `${Math.round(100 * wi)}px`,
-                    animation: 'gbaHydroShockRing 1.05s ease-out 0.48s forwards',
+                    animation: 'gbaImpactSplashPopL 0.85s ease-out 0.48s forwards',
                     opacity: 0
                   }}
                 >
-                  <svg width={Math.round(140 * wi)} height={Math.round(100 * wi)} viewBox="0 0 140 100">
-                    <ellipse cx="70" cy="50" rx={64 * wi} ry={44 * wi} fill="none" stroke="#7dd3fc" strokeWidth={3 * wi} opacity={0.8} style={{ filter: 'blur(1px)' }} />
-                    <ellipse cx="70" cy="50" rx={46 * wi} ry={30 * wi} fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} opacity={0.85} />
-                    <ellipse cx="70" cy="50" rx={28 * wi} ry={18 * wi} fill="none" stroke="#ffffff" strokeWidth={2.0 * wi} opacity={0.95} />
+                  <svg width={Math.round(48 * wi)} height={Math.round(48 * wi)} viewBox="0 0 48 48" style={{ overflow: 'visible' }}>
+                    <circle cx="24" cy="24" r="16" fill="rgba(56,189,248,0.35)" filter="blur(3px)" />
+                    <circle cx="24" cy="24" r="9" fill="#ffffff" filter="drop-shadow(0 0 8px #ffffff)" />
+                    <path d="M 24 6 Q 24 18, 12 24 Q 24 24, 24 36 Q 24 24, 36 24 Q 24 18, 24 6" fill="#ffffff" />
                   </svg>
                 </div>
               </div>
 
-              {/* Layer 3: Central Concussive Hydro Dome (Impact Explosion — positioned directly at water jet arrival point in arena center) */}
+              {/* Layer 3: Right Jet Arrival Impact Flash Pop (x=165, y=43 — 100% concentric with 30° jet tip) */}
               <div
                 className="absolute pointer-events-none"
                 style={{
-                  top: `${Math.round(50 * wi)}px`,
-                  left: `calc(50% - ${Math.round(1 * wi)}px)`,
-                  zIndex: 32
+                  left: `${Math.round(165 * wi)}px`,
+                  top: `${Math.round(43 * wi)}px`,
+                  zIndex: 30
                 }}
               >
                 <div
                   style={{
-                    width: `${Math.round(92 * wi)}px`,
-                    height: `${Math.round(92 * wi)}px`,
-                    animation: 'gbaHydroConcussionDome 1.15s ease-out 0.48s forwards',
+                    animation: 'gbaImpactSplashPopR 0.85s ease-out 0.48s forwards',
                     opacity: 0
                   }}
                 >
-                  <svg width={Math.round(92 * wi)} height={Math.round(92 * wi)} viewBox="0 0 92 92">
-                    <defs>
-                      <radialGradient id="hydroDomeGradL_bfx" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                        <stop offset="25%" stopColor="#e0f2fe" stopOpacity="0.98" />
-                        <stop offset="50%" stopColor="#7dd3fc" stopOpacity="0.90" />
-                        <stop offset="75%" stopColor="#0284c7" stopOpacity="0.60" />
-                        <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
-                      </radialGradient>
-                    </defs>
-                    {/* 1. Outer Diffuse Pressure Field */}
-                    <circle cx="46" cy="46" r={44 * wi} fill="url(#hydroDomeGradL_bfx)" />
-                    {/* 2. Volumetric Fluid Refraction Rings (No thin CAD wireframes) */}
-                    <circle cx="46" cy="46" r={32 * wi} fill="none" stroke="#e0f2fe" strokeWidth={3.5 * wi} opacity={0.65} style={{ filter: 'blur(1.5px)' }} />
-                    <ellipse cx="46" cy="46" rx={42 * wi} ry={24 * wi} fill="none" stroke="#bae6fd" strokeWidth={2.5 * wi} opacity={0.5} style={{ filter: 'blur(2px)' }} />
-                    {/* 3. Superheated Incandescent White Core */}
-                    <circle cx="46" cy="46" r={20 * wi} fill="#ffffff" opacity={0.95} style={{ filter: 'blur(1.5px)' }} />
-                    <circle cx="46" cy="46" r={10 * wi} fill="#ffffff" />
+                  <svg width={Math.round(48 * wi)} height={Math.round(48 * wi)} viewBox="0 0 48 48" style={{ overflow: 'visible' }}>
+                    <circle cx="24" cy="24" r="16" fill="rgba(56,189,248,0.35)" filter="blur(3px)" />
+                    <circle cx="24" cy="24" r="9" fill="#ffffff" filter="drop-shadow(0 0 8px #ffffff)" />
+                    <path d="M 24 6 Q 24 18, 12 24 Q 24 24, 24 36 Q 24 24, 36 24 Q 24 18, 24 6" fill="#ffffff" />
                   </svg>
                 </div>
               </div>
 
-              {/* Layer 4: Multi-Lobed Tsunami Splash Crown across upper rim */}
-              <div
-                className="absolute pointer-events-none"
-                style={{
-                  top: `${Math.round(48 * wi)}px`,
-                  left: `calc(50% - ${Math.round(1 * wi)}px)`,
-                  zIndex: 28
-                }}
-              >
-                <div
-                  style={{
-                    width: `${Math.round(160 * wi)}px`,
-                    height: `${Math.round(115 * wi)}px`,
-                    animation: 'gbaHydroTsunamiCrown 1.15s cubic-bezier(0.18, 0.85, 0.35, 1) 0.48s forwards',
-                    opacity: 0
-                  }}
-                >
-                  <svg width={Math.round(160 * wi)} height={Math.round(115 * wi)} viewBox="0 0 160 115" style={{ overflow: 'visible' }}>
-                    <defs>
-                      <radialGradient id="tsunamiCrownGrad_bfx" cx="50%" cy="88%" r="75%">
-                        <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                        <stop offset="22%" stopColor="#e0f2fe" stopOpacity="0.98" />
-                        <stop offset="45%" stopColor="#7dd3fc" stopOpacity="0.95" />
-                        <stop offset="72%" stopColor="#0284c7" stopOpacity="0.90" />
-                        <stop offset="92%" stopColor="#0369a1" stopOpacity="0.75" />
-                        <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
-                      </radialGradient>
-                      <radialGradient id="tsunamiFoamWash_bfx" cx="50%" cy="85%" r="65%">
-                        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-                        <stop offset="35%" stopColor="#e0f2fe" stopOpacity="0.85" />
-                        <stop offset="70%" stopColor="#bae6fd" stopOpacity="0.55" />
-                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
-                      </radialGradient>
-                    </defs>
-                    {/* 1. Outer Hydrodynamic Volumetric Water Sheet (Organic Curved Sugimori Wave Lobes) */}
-                    <path
-                      d="M80 106 C64 106, 42 98, 28 84 C16 72, 10 56, 16 46 C20 38, 30 44, 32 54 C34 40, 42 26, 52 18 C60 12, 68 20, 66 34 C68 20, 74 9, 80 8 C86 9, 92 20, 94 34 C92 20, 100 12, 108 18 C118 26, 126 40, 128 54 C130 44, 140 38, 144 46 C150 56, 144 72, 132 84 C118 98, 96 106, 80 106 Z"
-                      fill="url(#tsunamiCrownGrad_bfx)"
-                      filter="drop-shadow(0 0 10px rgba(56,189,248,0.85))"
-                    />
-                    {/* 2. Inner Aerated White-Water Core & Continuous Rolling Wave Foam (No sharp triangles) */}
-                    <path
-                      d="M80 102 C68 102, 50 94, 38 82 C30 72, 26 58, 32 52 C36 48, 42 54, 44 62 C46 50, 52 38, 60 32 C66 28, 72 34, 71 44 C73 34, 77 22, 80 20 C83 22, 87 34, 89 44 C88 34, 94 28, 100 32 C108 38, 114 50, 116 62 C118 54, 124 48, 128 52 C134 58, 130 72, 122 82 C110 94, 92 102, 80 102 Z"
-                      fill="url(#tsunamiFoamWash_bfx)"
-                    />
-                    {/* 3. Dynamic Curved Foam Crest Ribbons (Sugimori wave foam curl lines) */}
-                    <path
-                      d="M16 46 Q24 38, 32 54 Q42 26, 52 18 Q62 14, 66 34 Q74 12, 80 8 Q86 12, 94 34 Q98 14, 108 18 Q118 26, 128 54 Q136 38, 144 46"
-                      fill="none"
-                      stroke="#ffffff"
-                      strokeWidth={2.2 * wi}
-                      strokeLinecap="round"
-                      opacity={0.95}
-                    />
-                    <path
-                      d="M32 52 Q44 38, 60 32 Q72 26, 80 20 Q88 26, 100 32 Q116 38, 128 52"
-                      fill="none"
-                      stroke="#e0f2fe"
-                      strokeWidth={1.6 * wi}
-                      strokeLinecap="round"
-                      opacity={0.85}
-                    />
-                    {/* 4. Natural Centrifugal Droplets & Micro-Cavitation Spray (Organically placed ahead of wave curls) */}
-                    <circle cx="12" cy="40" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
-                    <circle cx="22" cy="30" r={2.2 * wi} fill="#ffffff" opacity={0.9} />
-                    <circle cx="38" cy="18" r={2.0 * wi} fill="#e0f2fe" opacity={0.85} />
-                    <circle cx="48" cy="10" r={2.4 * wi} fill="#ffffff" opacity={0.95} />
-                    <circle cx="68" cy="6" r={1.8 * wi} fill="#bae6fd" opacity={0.8} />
-                    <circle cx="80" cy="3" r={2.4 * wi} fill="#ffffff" opacity={0.95} />
-                    <circle cx="92" cy="6" r={1.8 * wi} fill="#bae6fd" opacity={0.8} />
-                    <circle cx="112" cy="10" r={2.4 * wi} fill="#ffffff" opacity={0.95} />
-                    <circle cx="122" cy="18" r={2.0 * wi} fill="#e0f2fe" opacity={0.85} />
-                    <circle cx="138" cy="30" r={2.2 * wi} fill="#ffffff" opacity={0.9} />
-                    <circle cx="148" cy="40" r={1.8 * wi} fill="#bae6fd" opacity={0.85} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Layer 5: Ballistic Cavitation Droplets (14-Vector Natural Gravitational Dispersion & Descent) */}
-              {/* Droplet 1: North-West high velocity arc */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '48px', left: `calc(50% - ${Math.round(16 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray1 1.35s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
-                  <svg width={Math.round(12 * wi)} height={Math.round(15 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
-                    <ellipse cx="5" cy="8" rx={1.8 * wi} ry={2.4 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 2: North-North-West arc */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '42px', left: `calc(50% - ${Math.round(8 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray2 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.51s forwards', opacity: 0 }}>
-                  <svg width={Math.round(10 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#7dd3fc" />
-                    <ellipse cx="5" cy="8" rx={1.6 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 3: Vertical Apex high-pressure plume */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '36px', left: '50%', transform: 'translateX(-50%)', zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray3 1.42s cubic-bezier(0.22, 0.85, 0.36, 1) 0.49s forwards', opacity: 0 }}>
-                  <svg width={Math.round(11 * wi)} height={Math.round(15 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#bae6fd" />
-                    <ellipse cx="7" cy="8" rx={2.2 * wi} ry={3.0 * wi} fill="#ffffff" opacity={0.95} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 4: North-North-East arc */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '42px', left: `calc(50% + ${Math.round(8 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray4 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.51s forwards', opacity: 0 }}>
-                  <svg width={Math.round(10 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#7dd3fc" />
-                    <ellipse cx="9" cy="8" rx={1.6 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 5: North-East high velocity arc */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '48px', left: `calc(50% + ${Math.round(16 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray5 1.35s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
-                  <svg width={Math.round(12 * wi)} height={Math.round(15 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
-                    <ellipse cx="9" cy="8" rx={1.8 * wi} ry={2.4 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 6: Lateral West ejecta */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '52px', left: `calc(50% - ${Math.round(22 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray6 1.32s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
-                  <svg width={Math.round(9 * wi)} height={Math.round(12 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#0ea5e9" />
-                    <ellipse cx="5" cy="8" rx={1.4 * wi} ry={1.8 * wi} fill="#ffffff" opacity={0.85} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 7: Lateral East ejecta */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '52px', left: `calc(50% + ${Math.round(22 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray7 1.32s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
-                  <svg width={Math.round(9 * wi)} height={Math.round(12 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#0ea5e9" />
-                    <ellipse cx="9" cy="8" rx={1.4 * wi} ry={1.8 * wi} fill="#ffffff" opacity={0.85} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 8: Down-West ricochet mist bead */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '58px', left: `calc(50% - ${Math.round(12 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray8 1.36s cubic-bezier(0.22, 0.85, 0.36, 1) 0.53s forwards', opacity: 0 }}>
-                  <svg width={Math.round(8 * wi)} height={Math.round(10 * wi)} viewBox="0 0 14 18">
-                    <circle cx="7" cy="9" r={4 * wi} fill="#7dd3fc" opacity={0.85} />
-                    <circle cx="6" cy="8" r={1.6 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 9: Down-East ricochet mist bead */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '58px', left: `calc(50% + ${Math.round(12 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray9 1.36s cubic-bezier(0.22, 0.85, 0.36, 1) 0.53s forwards', opacity: 0 }}>
-                  <svg width={Math.round(8 * wi)} height={Math.round(10 * wi)} viewBox="0 0 14 18">
-                    <circle cx="7" cy="9" r={4 * wi} fill="#7dd3fc" opacity={0.85} />
-                    <circle cx="8" cy="8" r={1.6 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 10: Fast micro cavitation bead */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '44px', left: '50%', transform: 'translateX(-50%)', zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray10 1.28s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
-                  <svg width={Math.round(6 * wi)} height={Math.round(8 * wi)} viewBox="0 0 14 18">
-                    <circle cx="7" cy="9" r={3 * wi} fill="#bae6fd" opacity={0.9} />
-                    <circle cx="7" cy="8" r={1.2 * wi} fill="#ffffff" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 11: Mid-West cascading spray */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '46px', left: `calc(50% - ${Math.round(14 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray11 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
-                  <svg width={Math.round(9 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
-                    <ellipse cx="6" cy="8" rx={1.5 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 12: Mid-East cascading spray */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '46px', left: `calc(50% + ${Math.round(14 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray12 1.38s cubic-bezier(0.22, 0.85, 0.36, 1) 0.52s forwards', opacity: 0 }}>
-                  <svg width={Math.round(9 * wi)} height={Math.round(13 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#38bdf8" />
-                    <ellipse cx="8" cy="8" rx={1.5 * wi} ry={2.0 * wi} fill="#ffffff" opacity={0.9} />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 13: High-altitude fine mist plume */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '38px', left: `calc(50% + ${Math.round(3 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray13 1.40s cubic-bezier(0.22, 0.85, 0.36, 1) 0.51s forwards', opacity: 0 }}>
-                  <svg width={Math.round(7 * wi)} height={Math.round(9 * wi)} viewBox="0 0 14 18">
-                    <circle cx="7" cy="9" r={3.2 * wi} fill="#bae6fd" opacity={0.92} />
-                    <circle cx="7" cy="8" r={1.4 * wi} fill="#ffffff" />
-                  </svg>
-                </div>
-              </div>
-
-              {/* Droplet 14: Deep downward hydro splash tear */}
-              <div
-                className="absolute pointer-events-none"
-                style={{ top: '54px', left: `calc(50% - ${Math.round(4 * wi)}px)`, zIndex: 34 }}
-              >
-                <div style={{ animation: 'gbaHydroSpray14 1.42s cubic-bezier(0.22, 0.85, 0.36, 1) 0.50s forwards', opacity: 0 }}>
-                  <svg width={Math.round(10 * wi)} height={Math.round(14 * wi)} viewBox="0 0 14 18">
-                    <path d="M7 1 Q11 6, 11 10 Q11 15, 7 17 Q3 15, 3 10 Q3 6, 7 1 Z" fill="#0284c7" />
-                    <ellipse cx="6" cy="9" rx={1.8 * wi} ry={2.6 * wi} fill="#ffffff" opacity={0.92} />
-                  </svg>
-                </div>
-              </div>
+              {/* Layer 5: Advanced Fluid Cavitation Emitter (420 atomizing particles) & Dual Caustic Shock Rings */}
+              <BlastoiseHydroCavitationCanvas fxId={fx.id} wi={wi} />
             </>
           )}
         </div>

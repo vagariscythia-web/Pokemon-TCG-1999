@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+import re
+
+content = '''<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
@@ -1053,4 +1055,10 @@
     });
   </script>
 </body>
-</html>\n
+</html>
+'''
+
+with open('public/preview_blastoise.html', 'w', encoding='utf-8') as f:
+    f.write(content.strip() + '\\n')
+
+print('preview_blastoise.html updated successfully!')
