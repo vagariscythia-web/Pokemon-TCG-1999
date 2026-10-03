@@ -1,0 +1,3804 @@
+{
+  "stockStats": [
+    {
+      "fxType": "alakazam_confuse_ray",
+      "isStock": true,
+      "attacks": [
+        "Alakazam (Confuse Ray)",
+        "Alakazam (Confuse Ray)"
+      ]
+    },
+    {
+      "fxType": "hydro_pump_cannons",
+      "isStock": true,
+      "attacks": [
+        "Blastoise (Hydro Pump)",
+        "Blastoise (Hydro Pump)"
+      ]
+    },
+    {
+      "fxType": "clefairy_metronome",
+      "isStock": true,
+      "attacks": [
+        "Clefairy (Metronome)",
+        "Clefairy (Metronome)"
+      ]
+    },
+    {
+      "fxType": "dragon_rage",
+      "isStock": true,
+      "attacks": [
+        "Gyarados (Dragon Rage)",
+        "Gyarados (Dragon Rage)"
+      ]
+    },
+    {
+      "fxType": "hitmonchan_jab",
+      "isStock": true,
+      "attacks": [
+        "Hitmonchan (Jab)",
+        "Hitmonchan (Jab)"
+      ]
+    },
+    {
+      "fxType": "hitmonchan_special_punch",
+      "isStock": true,
+      "attacks": [
+        "Hitmonchan (Special Punch)",
+        "Hitmonchan (Special Punch)"
+      ]
+    },
+    {
+      "fxType": "mewtwo_psychic",
+      "isStock": true,
+      "attacks": [
+        "Mewtwo (Psychic)",
+        "Mewtwo (Psychic)"
+      ]
+    },
+    {
+      "fxType": "zapdos_thunderbolt",
+      "isStock": true,
+      "attacks": [
+        "Zapdos (Thunderbolt)",
+        "Zapdos (Thunderbolt)"
+      ]
+    },
+    {
+      "fxType": "beedrill_twineedle",
+      "isStock": true,
+      "attacks": [
+        "Beedrill (Twineedle)",
+        "Beedrill (Twineedle)"
+      ]
+    },
+    {
+      "fxType": "dugtrio_earthquake",
+      "isStock": true,
+      "attacks": [
+        "Dugtrio (Earthquake)",
+        "Dugtrio (Earthquake)"
+      ]
+    },
+    {
+      "fxType": "thunder_punch",
+      "isStock": true,
+      "attacks": [
+        "Electabuzz (Thunderpunch)",
+        "Electabuzz (Thunderpunch)"
+      ]
+    },
+    {
+      "fxType": "farfetchd_leek_slap",
+      "isStock": true,
+      "attacks": [
+        "Farfetch'd (Leek Slap)",
+        "Farfetch'd (Leek Slap)"
+      ]
+    },
+    {
+      "fxType": "haunter_dream_eater",
+      "isStock": true,
+      "attacks": [
+        "Haunter (Dream Eater)",
+        "Haunter (Nightmare)",
+        "Haunter (Nightmare)",
+        "Haunter (Dream Eater)"
+      ]
+    },
+    {
+      "fxType": "doubleslap",
+      "isStock": true,
+      "attacks": [
+        "Jynx (Doubleslap)",
+        "Poliwhirl (Doubleslap)",
+        "Jynx (Doubleslap)",
+        "Poliwhirl (Doubleslap)",
+        "Dark Wartortle (Doubleslap)"
+      ]
+    },
+    {
+      "fxType": "machamp_karate_chop",
+      "isStock": true,
+      "attacks": [
+        "Machoke (Karate Chop)",
+        "Machoke (Karate Chop)"
+      ]
+    },
+    {
+      "fxType": "fish_flail",
+      "isStock": true,
+      "attacks": [
+        "Magikarp (Flail)",
+        "Magikarp (Flail)",
+        "Magikarp (Flop)"
+      ]
+    },
+    {
+      "fxType": "super_fang_guillotine",
+      "isStock": true,
+      "attacks": [
+        "Raticate (Super Fang)",
+        "Raticate (Super Fang)",
+        "Dark Raticate (Hyper Fang)"
+      ]
+    },
+    {
+      "fxType": "squirtle_shell_defense",
+      "isStock": true,
+      "attacks": [
+        "Wartortle (Withdraw)",
+        "Squirtle (Withdraw)",
+        "Wartortle (Withdraw)",
+        "Squirtle (Withdraw)",
+        "Squirtle (Shell Attack)"
+      ]
+    },
+    {
+      "fxType": "bulbasaur_leech_seed",
+      "isStock": true,
+      "attacks": [
+        "Bulbasaur (Leech Seed)",
+        "Bulbasaur (Leech Seed)"
+      ]
+    },
+    {
+      "fxType": "caterpie_string_shot",
+      "isStock": true,
+      "attacks": [
+        "Caterpie (String Shot)",
+        "Caterpie (String Shot)"
+      ]
+    },
+    {
+      "fxType": "charmander_ember_flame",
+      "isStock": true,
+      "attacks": [
+        "Charmander (Ember)",
+        "Charmander (Ember)"
+      ]
+    },
+    {
+      "fxType": "koffing_foul_gas",
+      "isStock": true,
+      "attacks": [
+        "Koffing (Foul Gas)",
+        "Koffing (Poison Gas)"
+      ]
+    },
+    {
+      "fxType": "pikachu_thunder_jolt",
+      "isStock": true,
+      "attacks": [
+        "Pikachu (Gnaw)",
+        "Pikachu (Thunder Jolt)",
+        "Pikachu (Spark)",
+        "Pikachu (Gnaw)",
+        "Pikachu (Thunder Jolt)"
+      ]
+    },
+    {
+      "fxType": "sandshrew_sand_attack",
+      "isStock": true,
+      "attacks": [
+        "Sandshrew (Sand-attack)",
+        "Sandshrew (Sand-attack)"
+      ]
+    },
+    {
+      "fxType": "star_freeze",
+      "isStock": true,
+      "attacks": [
+        "Starmie (Star Freeze)",
+        "Starmie (Star Freeze)"
+      ]
+    },
+    {
+      "fxType": "starfish_slap",
+      "isStock": true,
+      "attacks": [
+        "Staryu (Slap)",
+        "Staryu (Slap)"
+      ]
+    },
+    {
+      "fxType": "weedle_poison_sting",
+      "isStock": true,
+      "attacks": [
+        "Weedle (Poison Sting)",
+        "Weedle (Poison Sting)"
+      ]
+    },
+    {
+      "fxType": "kangaskhan_comet_punch",
+      "isStock": true,
+      "attacks": [
+        "Kangaskhan (Comet Punch)",
+        "Kangaskhan (Comet Punch)",
+        "Kangaskhan (Comet Punch)"
+      ]
+    },
+    {
+      "fxType": "pinsir_guillotine",
+      "isStock": true,
+      "attacks": [
+        "Pinsir (Guillotine)",
+        "Pinsir (Guillotine)",
+        "Pinsir (Guillotine)"
+      ]
+    },
+    {
+      "fxType": "scyther_blade_dance",
+      "isStock": true,
+      "attacks": [
+        "Scyther (Swords Dance)",
+        "Scyther (Swords Dance)",
+        "Scyther (Swords Dance)"
+      ]
+    },
+    {
+      "fxType": "snorlax_body_slam",
+      "isStock": true,
+      "attacks": [
+        "Snorlax (Body Slam)",
+        "Snorlax (Body Slam)",
+        "Snorlax (Body Slam)"
+      ]
+    },
+    {
+      "fxType": "victreebel_acid_melt",
+      "isStock": true,
+      "attacks": [
+        "Victreebel (Acid)",
+        "Victreebel (Acid)",
+        "Victreebel (Acid)"
+      ]
+    },
+    {
+      "fxType": "exeggutor_big_eggsplosion",
+      "isStock": true,
+      "attacks": [
+        "Exeggutor (Big Eggsplosion)",
+        "Exeggutor (Big Eggsplosion)"
+      ]
+    },
+    {
+      "fxType": "fearow_drill_peck",
+      "isStock": true,
+      "attacks": [
+        "Fearow (Drill Peck)",
+        "Fearow (Drill Peck)"
+      ]
+    },
+    {
+      "fxType": "lickitung_tongue_wrap",
+      "isStock": true,
+      "attacks": [
+        "Lickitung (Tongue Wrap)",
+        "Lickitung (Tongue Wrap)"
+      ]
+    },
+    {
+      "fxType": "rhydon_horn_drill",
+      "isStock": true,
+      "attacks": [
+        "Rhydon (Horn Attack)",
+        "Rhyhorn (Horn Attack)",
+        "Rhydon (Horn Attack)",
+        "Rhyhorn (Horn Attack)"
+      ]
+    },
+    {
+      "fxType": "tauros_stomp",
+      "isStock": true,
+      "attacks": [
+        "Tauros (Stomp)",
+        "Tauros (Stomp)"
+      ]
+    },
+    {
+      "fxType": "tauros_rampage",
+      "isStock": true,
+      "attacks": [
+        "Tauros (Rampage)",
+        "Tauros (Rampage)"
+      ]
+    },
+    {
+      "fxType": "cubone_bone_strike",
+      "isStock": true,
+      "attacks": [
+        "Cubone (Snivel)",
+        "Cubone (Rage)",
+        "Cubone (Snivel)",
+        "Cubone (Rage)"
+      ]
+    },
+    {
+      "fxType": "jigglypuff_lullaby",
+      "isStock": true,
+      "attacks": [
+        "Jigglypuff (Lullaby)",
+        "Jigglypuff (Lullaby)"
+      ]
+    },
+    {
+      "fxType": "articuno_blizzard",
+      "isStock": true,
+      "attacks": [
+        "Articuno (Blizzard)",
+        "Articuno (Blizzard)"
+      ]
+    },
+    {
+      "fxType": "gengar_dark_mind",
+      "isStock": true,
+      "attacks": [
+        "Gengar (Dark Mind)",
+        "Hypno (Dark Mind)",
+        "Gengar (Dark Mind)",
+        "Hypno (Dark Mind)"
+      ]
+    },
+    {
+      "fxType": "muk_sludge_deluge",
+      "isStock": true,
+      "attacks": [
+        "Muk (Sludge)",
+        "Muk (Sludge)",
+        "Dark Muk (Sludge Punch)"
+      ]
+    },
+    {
+      "fxType": "arbok_wrap_constrict",
+      "isStock": true,
+      "attacks": [
+        "Arbok (Terror Strike)"
+      ]
+    },
+    {
+      "fxType": "cloyster_clamp",
+      "isStock": true,
+      "attacks": [
+        "Cloyster (Clamp)"
+      ]
+    },
+    {
+      "fxType": "cloyster_spike_cannon",
+      "isStock": true,
+      "attacks": [
+        "Cloyster (Spike Cannon)"
+      ]
+    },
+    {
+      "fxType": "golbat_leech_life",
+      "isStock": true,
+      "attacks": [
+        "Golbat (Leech Life)"
+      ]
+    },
+    {
+      "fxType": "weezing_toxic_smog",
+      "isStock": true,
+      "attacks": [
+        "Weezing (Smog)",
+        "Weezing (Selfdestruct)",
+        "Dark Weezing (Mass Explosion)",
+        "Dark Weezing (Stun Gas)",
+        "Dark Weezing (Mass Explosion)",
+        "Dark Weezing (Stun Gas)"
+      ]
+    },
+    {
+      "fxType": "ekans_wrap_constrict",
+      "isStock": true,
+      "attacks": [
+        "Ekans (Wrap)"
+      ]
+    },
+    {
+      "fxType": "cobra_stare",
+      "isStock": true,
+      "attacks": [
+        "Dark Arbok (Stare)",
+        "Dark Arbok (Stare)"
+      ]
+    },
+    {
+      "fxType": "poison_vapor",
+      "isStock": true,
+      "attacks": [
+        "Dark Arbok (Poison Vapor)",
+        "Dark Arbok (Poison Vapor)"
+      ]
+    },
+    {
+      "fxType": "psybeam_kaleidoscope",
+      "isStock": true,
+      "attacks": [
+        "Porygon (Psybeam)"
+      ]
+    },
+    {
+      "fxType": "charmander_fire_tail_whip",
+      "isStock": true,
+      "attacks": [
+        "Charmander (Fire Tail)"
+      ]
+    },
+    {
+      "fxType": "rattata_quick_attack",
+      "isStock": true,
+      "attacks": [
+        "Rattata (Quick Attack)"
+      ]
+    }
+  ],
+  "customSvgStats": [
+    {
+      "fxType": "chansey_scrunch",
+      "isStock": false,
+      "attacks": [
+        "Chansey (Scrunch)",
+        "Chansey (Scrunch)"
+      ]
+    },
+    {
+      "fxType": "fire_spin_vortex",
+      "isStock": false,
+      "attacks": [
+        "Charizard (Fire Spin)",
+        "Charizard (Fire Spin)"
+      ]
+    },
+    {
+      "fxType": "clefairy_sing",
+      "isStock": false,
+      "attacks": [
+        "Clefairy (Sing)",
+        "Clefairy (Sing)"
+      ]
+    },
+    {
+      "fxType": "seismic_toss_machamp",
+      "isStock": false,
+      "attacks": [
+        "Machamp (Seismic Toss)"
+      ]
+    },
+    {
+      "fxType": "mewtwo_barrier",
+      "isStock": false,
+      "attacks": [
+        "Mewtwo (Barrier)",
+        "Mewtwo (Barrier)"
+      ]
+    },
+    {
+      "fxType": "nidoking_thrash_fury",
+      "isStock": false,
+      "attacks": [
+        "Nidoking (Thrash)",
+        "Nidoking (Thrash)"
+      ]
+    },
+    {
+      "fxType": "ninetales_fire_blast",
+      "isStock": false,
+      "attacks": [
+        "Ninetales (Fire Blast)",
+        "Ninetales (Fire Blast)"
+      ]
+    },
+    {
+      "fxType": "poliwag_water_gun",
+      "isStock": false,
+      "attacks": [
+        "Poliwrath (Water Gun)",
+        "Poliwag (Water Gun)",
+        "Poliwrath (Water Gun)",
+        "Poliwag (Water Gun)"
+      ]
+    },
+    {
+      "fxType": "poliwrath_whirlpool_vortex",
+      "isStock": false,
+      "attacks": [
+        "Poliwrath (Whirlpool)",
+        "Poliwrath (Whirlpool)",
+        "Dark Vaporeon (Whirlpool)"
+      ]
+    },
+    {
+      "fxType": "agility_dash",
+      "isStock": false,
+      "attacks": [
+        "Raichu (Agility)",
+        "Fearow (Agility)",
+        "Rapidash (Agility)",
+        "Seadra (Agility)",
+        "Raichu (Agility)",
+        "Fearow (Agility)"
+      ]
+    },
+    {
+      "fxType": "heavy_thunder_strike",
+      "isStock": false,
+      "attacks": [
+        "Raichu (Thunder)",
+        "Raichu (Thunder)",
+        "Dark Jolteon (Thunder Attack)",
+        "Dark Raichu (Surprise Thunder)"
+      ]
+    },
+    {
+      "fxType": "solar_beam_charge_blast",
+      "isStock": false,
+      "attacks": [
+        "Venusaur (Solarbeam)",
+        "Venusaur (Solarbeam)"
+      ]
+    },
+    {
+      "fxType": "zapdos_thunder",
+      "isStock": false,
+      "attacks": [
+        "Zapdos (Thunder)",
+        "Zapdos (Thunder)"
+      ]
+    },
+    {
+      "fxType": "dragonite_slam",
+      "isStock": false,
+      "attacks": [
+        "Dragonair (Slam)",
+        "Dragonite (Slam)",
+        "Dragonite (Slam)",
+        "Dragonair (Slam)"
+      ]
+    },
+    {
+      "fxType": "hyper_beam_annihilation",
+      "isStock": false,
+      "attacks": [
+        "Dragonair (Hyper Beam)",
+        "Dragonair (Hyper Beam)"
+      ]
+    },
+    {
+      "fxType": "pidgey_whirlwind",
+      "isStock": false,
+      "attacks": [
+        "Pidgeotto (Whirlwind)",
+        "Pidgey (Whirlwind)",
+        "Pidgeotto (Whirlwind)",
+        "Pidgey (Whirlwind)"
+      ]
+    },
+    {
+      "fxType": "flamethrower_stream",
+      "isStock": false,
+      "attacks": [
+        "Arcanine (Flamethrower)",
+        "Charmeleon (Flamethrower)",
+        "Magmar (Flamethrower)",
+        "Flareon (Flamethrower)",
+        "Flareon (Flamethrower)",
+        "Arcanine (Flamethrower)",
+        "Charmeleon (Flamethrower)",
+        "Magmar (Flamethrower)"
+      ]
+    },
+    {
+      "fxType": "fire_take_down",
+      "isStock": false,
+      "attacks": [
+        "Arcanine (Take Down)",
+        "Arcanine (Take Down)"
+      ]
+    },
+    {
+      "fxType": "dewgong_aurora_beam",
+      "isStock": false,
+      "attacks": [
+        "Dewgong (Aurora Beam)",
+        "Dewgong (Aurora Beam)"
+      ]
+    },
+    {
+      "fxType": "dewgong_ice_beam",
+      "isStock": false,
+      "attacks": [
+        "Dewgong (Ice Beam)",
+        "Dewgong (Ice Beam)"
+      ]
+    },
+    {
+      "fxType": "dratini_pound",
+      "isStock": false,
+      "attacks": [
+        "Dratini (Pound)",
+        "Dratini (Pound)"
+      ]
+    },
+    {
+      "fxType": "seismic_slam",
+      "isStock": false,
+      "attacks": [
+        "Farfetch'd (Pot Smash)",
+        "Diglett (Dig)",
+        "Farfetch'd (Pot Smash)",
+        "Diglett (Dig)",
+        "Diglett (Dig Under)"
+      ]
+    },
+    {
+      "fxType": "flare_burst",
+      "isStock": false,
+      "attacks": [
+        "Growlithe (Flare)",
+        "Growlithe (Flare)"
+      ]
+    },
+    {
+      "fxType": "vine_whip_lash",
+      "isStock": false,
+      "attacks": [
+        "Ivysaur (Vine Whip)",
+        "Bellsprout (Vine Whip)",
+        "Ivysaur (Vine Whip)",
+        "Bellsprout (Vine Whip)"
+      ]
+    },
+    {
+      "fxType": "submission_grapple",
+      "isStock": false,
+      "attacks": [
+        "Machoke (Submission)",
+        "Machoke (Submission)"
+      ]
+    },
+    {
+      "fxType": "fire_punch_blaze",
+      "isStock": false,
+      "attacks": [
+        "Magmar (Fire Punch)",
+        "Magmar (Fire Punch)"
+      ]
+    },
+    {
+      "fxType": "nidoran_horn_hazard",
+      "isStock": false,
+      "attacks": [
+        "Nidorino (Horn Drill)",
+        "Nidoran Male (Horn Hazard)",
+        "Nidorino (Horn Drill)",
+        "Nidoran Male (Horn Hazard)"
+      ]
+    },
+    {
+      "fxType": "amnesia_mind_wipe",
+      "isStock": false,
+      "attacks": [
+        "Poliwhirl (Amnesia)",
+        "Poliwhirl (Amnesia)"
+      ]
+    },
+    {
+      "fxType": "porygon_conversion",
+      "isStock": false,
+      "attacks": [
+        "Porygon (Conversion 1)",
+        "Porygon (Conversion 2)",
+        "Porygon (Conversion 1)"
+      ]
+    },
+    {
+      "fxType": "seel_horn_headbutt",
+      "isStock": false,
+      "attacks": [
+        "Seel (Headbutt)",
+        "Seel (Headbutt)"
+      ]
+    },
+    {
+      "fxType": "psyshock_lite_waves",
+      "isStock": false,
+      "attacks": [
+        "Abra (Psyshock)",
+        "Abra (Psyshock)",
+        "Abra (Psyshock)"
+      ]
+    },
+    {
+      "fxType": "doduo_fury_attack",
+      "isStock": false,
+      "attacks": [
+        "Doduo (Fury Attack)",
+        "Doduo (Fury Attack)"
+      ]
+    },
+    {
+      "fxType": "drowzee_pound",
+      "isStock": false,
+      "attacks": [
+        "Drowzee (Pound)",
+        "Drowzee (Pound)"
+      ]
+    },
+    {
+      "fxType": "drowzee_confuse_ray",
+      "isStock": false,
+      "attacks": [
+        "Drowzee (Confuse Ray)",
+        "Drowzee (Confuse Ray)"
+      ]
+    },
+    {
+      "fxType": "gastly_sleeping_gas",
+      "isStock": false,
+      "attacks": [
+        "Gastly (Sleeping Gas)",
+        "Gastly (Destiny Bond)",
+        "Gastly (Lick)",
+        "Gastly (Sleeping Gas)",
+        "Gastly (Destiny Bond)"
+      ]
+    },
+    {
+      "fxType": "magnemite_thunder_wave",
+      "isStock": false,
+      "attacks": [
+        "Magnemite (Thunder Wave)",
+        "Magnemite (Thunder Wave)"
+      ]
+    },
+    {
+      "fxType": "stun_spore",
+      "isStock": false,
+      "attacks": [
+        "Metapod (Stun Spore)",
+        "Metapod (Stun Spore)"
+      ]
+    },
+    {
+      "fxType": "big_boulder",
+      "isStock": false,
+      "attacks": [
+        "Onix (Rock Throw)",
+        "Graveler (Rock Throw)",
+        "Onix (Rock Throw)"
+      ]
+    },
+    {
+      "fxType": "flame_tail_whip",
+      "isStock": false,
+      "attacks": [
+        "Ponyta (Flame Tail)"
+      ]
+    },
+    {
+      "fxType": "rattata_gnaw_bite",
+      "isStock": false,
+      "attacks": [
+        "Rattata (Bite)",
+        "Rattata (Bite)"
+      ]
+    },
+    {
+      "fxType": "bubble_gentle",
+      "isStock": false,
+      "attacks": [
+        "Squirtle (Bubble)",
+        "Squirtle (Bubble)"
+      ]
+    },
+    {
+      "fxType": "tangela_bind",
+      "isStock": false,
+      "attacks": [
+        "Tangela (Bind)",
+        "Tangela (Bind)"
+      ]
+    },
+    {
+      "fxType": "vulpix_confuse_ray",
+      "isStock": false,
+      "attacks": [
+        "Vulpix (Confuse Ray)",
+        "Vulpix (Confuse Ray)"
+      ]
+    },
+    {
+      "fxType": "electrode_chain_lightning",
+      "isStock": false,
+      "attacks": [
+        "Electrode (Chain Lightning)",
+        "Electrode (Chain Lightning)"
+      ]
+    },
+    {
+      "fxType": "quick_attack_dash",
+      "isStock": false,
+      "attacks": [
+        "Flareon (Quick Attack)",
+        "Jolteon (Quick Attack)",
+        "Vaporeon (Quick Attack)",
+        "Flareon (Quick Attack)",
+        "Jolteon (Quick Attack)",
+        "Vaporeon (Quick Attack)",
+        "Eevee (Quick Attack)"
+      ]
+    },
+    {
+      "fxType": "jolteon_pin_missile",
+      "isStock": false,
+      "attacks": [
+        "Jolteon (Pin Missile)",
+        "Jolteon (Pin Missile)"
+      ]
+    },
+    {
+      "fxType": "kangaskhan_fetch",
+      "isStock": false,
+      "attacks": [
+        "Kangaskhan (Fetch)",
+        "Kangaskhan (Fetch)",
+        "Kangaskhan (Fetch)"
+      ]
+    },
+    {
+      "fxType": "mr_mime_meditate",
+      "isStock": false,
+      "attacks": [
+        "Mr. Mime (Meditate)",
+        "Mr. Mime (Meditate)",
+        "Mr. Mime (Meditate)"
+      ]
+    },
+    {
+      "fxType": "mega_punch_nidoqueen",
+      "isStock": false,
+      "attacks": [
+        "Nidoqueen (Boyfriends)",
+        "Nidoqueen (Mega Punch)",
+        "Nidoqueen (Boyfriends)",
+        "Nidoqueen (Mega Punch)",
+        "Nidoqueen (Boyfriends)",
+        "Nidoqueen (Mega Punch)",
+        "Dark Machamp (Mega Punch)",
+        "Dark Machamp (Mega Punch)"
+      ]
+    },
+    {
+      "fxType": "pidgeot_hurricane",
+      "isStock": false,
+      "attacks": [
+        "Pidgeot (Hurricane)",
+        "Pidgeot (Hurricane)",
+        "Pidgeot (Hurricane)"
+      ]
+    },
+    {
+      "fxType": "pinsir_irongrip",
+      "isStock": false,
+      "attacks": [
+        "Pinsir (Irongrip)",
+        "Pinsir (Irongrip)",
+        "Pinsir (Irongrip)"
+      ]
+    },
+    {
+      "fxType": "venomoth_venom_powder",
+      "isStock": false,
+      "attacks": [
+        "Venomoth (Venom Powder)",
+        "Venomoth (Venom Powder)",
+        "Venomoth (Venom Powder)"
+      ]
+    },
+    {
+      "fxType": "vileplume_petal_dance",
+      "isStock": false,
+      "attacks": [
+        "Vileplume (Petal Dance)",
+        "Vileplume (Petal Dance)",
+        "Dark Vileplume (Petal Whirlpool)",
+        "Dark Vileplume (Petal Whirlpool)"
+      ]
+    },
+    {
+      "fxType": "wigglytuff_do_the_wave",
+      "isStock": false,
+      "attacks": [
+        "Wigglytuff (Do the Wave)",
+        "Wigglytuff (Do the Wave)",
+        "Wigglytuff (Do the Wave)"
+      ]
+    },
+    {
+      "fxType": "butterfree_mega_drain",
+      "isStock": false,
+      "attacks": [
+        "Butterfree (Mega Drain)",
+        "Butterfree (Mega Drain)"
+      ]
+    },
+    {
+      "fxType": "dodrio_tri_fury",
+      "isStock": false,
+      "attacks": [
+        "Dodrio (Rage)",
+        "Dodrio (Rage)"
+      ]
+    },
+    {
+      "fxType": "foul_odor",
+      "isStock": false,
+      "attacks": [
+        "Gloom (Foul Odor)"
+      ]
+    },
+    {
+      "fxType": "lickitung_supersonic",
+      "isStock": false,
+      "attacks": [
+        "Lickitung (Supersonic)",
+        "Lickitung (Supersonic)"
+      ]
+    },
+    {
+      "fxType": "marowak_bonemerang",
+      "isStock": false,
+      "attacks": [
+        "Marowak (Bonemerang)",
+        "Marowak (Bonemerang)"
+      ]
+    },
+    {
+      "fxType": "zubat_supersonic",
+      "isStock": false,
+      "attacks": [
+        "Nidorina (Supersonic)",
+        "Tentacruel (Supersonic)",
+        "Zubat (Supersonic)",
+        "Nidorina (Supersonic)"
+      ]
+    },
+    {
+      "fxType": "paras_spore",
+      "isStock": false,
+      "attacks": [
+        "Parasect (Spore)",
+        "Paras (Spore)",
+        "Parasect (Spore)",
+        "Paras (Spore)"
+      ]
+    },
+    {
+      "fxType": "primeape_tantrum_rampage",
+      "isStock": false,
+      "attacks": [
+        "Primeape (Tantrum)"
+      ]
+    },
+    {
+      "fxType": "stomp_hoof",
+      "isStock": false,
+      "attacks": [
+        "Rapidash (Stomp)"
+      ]
+    },
+    {
+      "fxType": "waterfall_surf",
+      "isStock": false,
+      "attacks": [
+        "Seaking (Waterfall)",
+        "Seaking (Waterfall)"
+      ]
+    },
+    {
+      "fxType": "tail_wag",
+      "isStock": false,
+      "attacks": [
+        "Eevee (Tail Wag)"
+      ]
+    },
+    {
+      "fxType": "exeggcute_hypnosis",
+      "isStock": false,
+      "attacks": [
+        "Exeggcute (Hypnosis)",
+        "Exeggcute (Hypnosis)"
+      ]
+    },
+    {
+      "fxType": "leech_seed_vines",
+      "isStock": false,
+      "attacks": [
+        "Exeggcute (Leech Seed)",
+        "Exeggcute (Leech Seed)"
+      ]
+    },
+    {
+      "fxType": "jigglypuff_pound",
+      "isStock": false,
+      "attacks": [
+        "Jigglypuff (Pound)",
+        "Jigglypuff (Pound)"
+      ]
+    },
+    {
+      "fxType": "meowth_pay_day",
+      "isStock": false,
+      "attacks": [
+        "Meowth (Pay Day)",
+        "Meowth (Pay Day)"
+      ]
+    },
+    {
+      "fxType": "oddish_stun_spore",
+      "isStock": false,
+      "attacks": [
+        "Oddish (Stun Spore)"
+      ]
+    },
+    {
+      "fxType": "oddish_sprout",
+      "isStock": false,
+      "attacks": [
+        "Oddish (Sprout)"
+      ]
+    },
+    {
+      "fxType": "glare_leer",
+      "isStock": false,
+      "attacks": [
+        "Rhyhorn (Leer)",
+        "Rhyhorn (Leer)"
+      ]
+    },
+    {
+      "fxType": "spearow_peck",
+      "isStock": false,
+      "attacks": [
+        "Spearow (Peck)",
+        "Spearow (Peck)"
+      ]
+    },
+    {
+      "fxType": "spearow_mirror_move",
+      "isStock": false,
+      "attacks": [
+        "Spearow (Mirror Move)",
+        "Spearow (Mirror Move)"
+      ]
+    },
+    {
+      "fxType": "venonat_stun_spore",
+      "isStock": false,
+      "attacks": [
+        "Venonat (Stun Spore)",
+        "Venonat (Stun Spore)"
+      ]
+    },
+    {
+      "fxType": "venonat_leech_life",
+      "isStock": false,
+      "attacks": [
+        "Venonat (Leech Life)",
+        "Venonat (Leech Life)"
+      ]
+    },
+    {
+      "fxType": "aerodactyl_wing_attack",
+      "isStock": false,
+      "attacks": [
+        "Aerodactyl (Wing Attack)",
+        "Aerodactyl (Wing Attack)"
+      ]
+    },
+    {
+      "fxType": "articuno_freeze_dry",
+      "isStock": false,
+      "attacks": [
+        "Articuno (Freeze Dry)",
+        "Articuno (Freeze Dry)"
+      ]
+    },
+    {
+      "fxType": "ditto_transform",
+      "isStock": false,
+      "attacks": [
+        "Ditto (Transform Attack)",
+        "Ditto (Transform Attack)"
+      ]
+    },
+    {
+      "fxType": "hitmonlee_stretch_kick",
+      "isStock": false,
+      "attacks": [
+        "Hitmonlee (Stretch Kick)",
+        "Hitmonlee (Stretch Kick)"
+      ]
+    },
+    {
+      "fxType": "hitmonlee_high_jump_kick",
+      "isStock": false,
+      "attacks": [
+        "Hitmonlee (High Jump Kick)",
+        "Hitmonlee (High Jump Kick)"
+      ]
+    },
+    {
+      "fxType": "hypno_hypnotic_pendulum",
+      "isStock": false,
+      "attacks": [
+        "Hypno (Prophecy)",
+        "Hypno (Prophecy)"
+      ]
+    },
+    {
+      "fxType": "kabutops_sickle_slash",
+      "isStock": false,
+      "attacks": [
+        "Kabutops (Sharp Sickle)",
+        "Kabutops (Absorb)",
+        "Kabutops (Sharp Sickle)",
+        "Kabutops (Absorb)"
+      ]
+    },
+    {
+      "fxType": "lapras_glacial_surge",
+      "isStock": false,
+      "attacks": [
+        "Lapras (Water Gun)",
+        "Lapras (Water Gun)"
+      ]
+    },
+    {
+      "fxType": "lapras_aurora_ray",
+      "isStock": false,
+      "attacks": [
+        "Lapras (Confuse Ray)",
+        "Lapras (Confuse Ray)"
+      ]
+    },
+    {
+      "fxType": "hyper_beam_laser",
+      "isStock": false,
+      "attacks": [
+        "Magneton (Sonicboom)",
+        "Magneton (Sonicboom)",
+        "Dark Magneton (Sonicboom)",
+        "Dark Magneton (Sonicboom)",
+        "Dark Electrode (Energy Bomb)"
+      ]
+    },
+    {
+      "fxType": "moltres_wildfire",
+      "isStock": false,
+      "attacks": [
+        "Moltres (Wildfire)",
+        "Moltres (Wildfire)"
+      ]
+    },
+    {
+      "fxType": "moltres_dive_bomb",
+      "isStock": false,
+      "attacks": [
+        "Moltres (Dive Bomb)",
+        "Moltres (Dive Bomb)"
+      ]
+    },
+    {
+      "fxType": "raichu_gigashock",
+      "isStock": false,
+      "attacks": [
+        "Raichu (Gigashock)",
+        "Raichu (Gigashock)"
+      ]
+    },
+    {
+      "fxType": "zapdos_thunderstorm",
+      "isStock": false,
+      "attacks": [
+        "Zapdos (Thunderstorm)",
+        "Zapdos (Thunderstorm)"
+      ]
+    },
+    {
+      "fxType": "bite_jaw",
+      "isStock": false,
+      "attacks": [
+        "Arbok (Poison Fang)",
+        "Ekans (Bite)"
+      ]
+    },
+    {
+      "fxType": "hyper_beam_ice",
+      "isStock": false,
+      "attacks": [
+        "Golduck (Hyper Beam)"
+      ]
+    },
+    {
+      "fxType": "golem_avalanche",
+      "isStock": false,
+      "attacks": [
+        "Golem (Avalanche)"
+      ]
+    },
+    {
+      "fxType": "golem_selfdestruct",
+      "isStock": false,
+      "attacks": [
+        "Golem (Selfdestruct)"
+      ]
+    },
+    {
+      "fxType": "kingler_crabhammer",
+      "isStock": false,
+      "attacks": [
+        "Kingler (Crabhammer)"
+      ]
+    },
+    {
+      "fxType": "magmar_smog",
+      "isStock": false,
+      "attacks": [
+        "Magmar (Smog)"
+      ]
+    },
+    {
+      "fxType": "omastar_spike_cannon",
+      "isStock": false,
+      "attacks": [
+        "Omastar (Spike Cannon)"
+      ]
+    },
+    {
+      "fxType": "tentacruel_crimson_lash",
+      "isStock": false,
+      "attacks": [
+        "Tentacruel (Jellyfish Sting)"
+      ]
+    },
+    {
+      "fxType": "ekans_poison_sting",
+      "isStock": false,
+      "attacks": [
+        "Ekans (Spit Poison)",
+        "Ekans (Poison Sting)"
+      ]
+    },
+    {
+      "fxType": "stone_barrage_single",
+      "isStock": false,
+      "attacks": [
+        "Geodude (Stone Barrage)"
+      ]
+    },
+    {
+      "fxType": "grimer_nasty_goo",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Nasty Goo)"
+      ]
+    },
+    {
+      "fxType": "grimer_minimize",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Minimize)"
+      ]
+    },
+    {
+      "fxType": "horsea_smokescreen",
+      "isStock": false,
+      "attacks": [
+        "Horsea (Smokescreen)"
+      ]
+    },
+    {
+      "fxType": "krabby_irongrip",
+      "isStock": false,
+      "attacks": [
+        "Krabby (Irongrip)"
+      ]
+    },
+    {
+      "fxType": "psyduck_headache",
+      "isStock": false,
+      "attacks": [
+        "Psyduck (Headache)"
+      ]
+    },
+    {
+      "fxType": "psyduck_fury_swipes",
+      "isStock": false,
+      "attacks": [
+        "Psyduck (Fury Swipes)"
+      ]
+    },
+    {
+      "fxType": "shellder_supersonic",
+      "isStock": false,
+      "attacks": [
+        "Shellder (Supersonic)"
+      ]
+    },
+    {
+      "fxType": "shellder_hide_in_shell",
+      "isStock": false,
+      "attacks": [
+        "Shellder (Hide in Shell)"
+      ]
+    },
+    {
+      "fxType": "slowpoke_spacing_out",
+      "isStock": false,
+      "attacks": [
+        "Slowpoke (Spacing Out)"
+      ]
+    },
+    {
+      "fxType": "tentacool_acid",
+      "isStock": false,
+      "attacks": [
+        "Tentacool (Acid)"
+      ]
+    },
+    {
+      "fxType": "zubat_leech_life",
+      "isStock": false,
+      "attacks": [
+        "Zubat (Leech Life)"
+      ]
+    },
+    {
+      "fxType": "lick_tongue",
+      "isStock": false,
+      "attacks": [
+        "Dark Charizard (Nail Flick)",
+        "Dark Charizard (Nail Flick)"
+      ]
+    },
+    {
+      "fxType": "dark_charizard_fireball",
+      "isStock": false,
+      "attacks": [
+        "Dark Charizard (Continuous Fireball)",
+        "Dark Charizard (Continuous Fireball)"
+      ]
+    },
+    {
+      "fxType": "bat_wing_flap",
+      "isStock": false,
+      "attacks": [
+        "Dark Golbat (Flitter)",
+        "Dark Golbat (Flitter)"
+      ]
+    },
+    {
+      "fxType": "dark_gyarados_ice_beam",
+      "isStock": false,
+      "attacks": [
+        "Dark Gyarados (Ice Beam)",
+        "Dark Gyarados (Ice Beam)"
+      ]
+    },
+    {
+      "fxType": "fireball_barrage",
+      "isStock": false,
+      "attacks": [
+        "Dark Charmeleon (Fireball)"
+      ]
+    },
+    {
+      "fxType": "playing_with_fire",
+      "isStock": false,
+      "attacks": [
+        "Dark Flareon (Playing with Fire)"
+      ]
+    },
+    {
+      "fxType": "super_psy_blast",
+      "isStock": false,
+      "attacks": [
+        "Dark Golduck (Super Psy)"
+      ]
+    },
+    {
+      "fxType": "flame_pillar",
+      "isStock": false,
+      "attacks": [
+        "Dark Rapidash (Flame Pillar)"
+      ]
+    },
+    {
+      "fxType": "abra_vanish",
+      "isStock": false,
+      "attacks": [
+        "Abra (Vanish)"
+      ]
+    },
+    {
+      "fxType": "dratini_tail_wrap",
+      "isStock": false,
+      "attacks": [
+        "Dratini (Wrap)"
+      ]
+    },
+    {
+      "fxType": "drowzee_nightmare",
+      "isStock": false,
+      "attacks": [
+        "Drowzee (Nightmare)"
+      ]
+    },
+    {
+      "fxType": "sand_attack_dust",
+      "isStock": false,
+      "attacks": [
+        "Eevee (Sand-attack)"
+      ]
+    },
+    {
+      "fxType": "poison_gas",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Poison Gas)"
+      ]
+    },
+    {
+      "fxType": "grimer_sticky_hands",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Sticky Hands)"
+      ]
+    },
+    {
+      "fxType": "magnemite_magnetism",
+      "isStock": false,
+      "attacks": [
+        "Magnemite (Magnetism)"
+      ]
+    },
+    {
+      "fxType": "mankey_anger",
+      "isStock": false,
+      "attacks": [
+        "Mankey (Mischief)",
+        "Mankey (Anger)"
+      ]
+    },
+    {
+      "fxType": "meowth_coin_hurl",
+      "isStock": false,
+      "attacks": [
+        "Meowth (Coin Hurl)"
+      ]
+    },
+    {
+      "fxType": "sleep_powder_drift",
+      "isStock": false,
+      "attacks": [
+        "Oddish (Sleep Powder)"
+      ]
+    },
+    {
+      "fxType": "psyduck_dizziness",
+      "isStock": false,
+      "attacks": [
+        "Psyduck (Dizziness)"
+      ]
+    },
+    {
+      "fxType": "slowpoke_afternoon_nap",
+      "isStock": false,
+      "attacks": [
+        "Slowpoke (Afternoon Nap)"
+      ]
+    },
+    {
+      "fxType": "voltorb_speed_ball",
+      "isStock": false,
+      "attacks": [
+        "Voltorb (Speed Ball)"
+      ]
+    }
+  ],
+  "genericStats": [
+    {
+      "fxType": "physical_charge",
+      "isStock": false,
+      "attacks": [
+        "Chansey (Double-edge)",
+        "Persian (Pounce)",
+        "Rhydon (Ram)",
+        "Kingler (Flail)",
+        "Chansey (Double-edge)",
+        "Persian (Pounce)",
+        "Rhydon (Ram)",
+        "Dark Blastoise (Rocket Tackle)",
+        "Dark Dragonite (Giant Tail)",
+        "Dark Dugtrio (Knock Down)",
+        "Dark Blastoise (Rocket Tackle)",
+        "Dark Dragonite (Giant Tail)",
+        "Dark Dugtrio (Knock Down)",
+        "Dark Charmeleon (Tail Slap)",
+        "Dark Dragonair (Tail Strike)",
+        "Dark Electrode (Rolling Tackle)",
+        "Dark Machoke (Knock Back)",
+        "Dark Primeape (Frenzied Attack)",
+        "Slowpoke (Headbutt)",
+        "Zubat (Ram)"
+      ]
+    },
+    {
+      "fxType": "bubblebeam",
+      "isStock": false,
+      "attacks": [
+        "Gyarados (Bubblebeam)",
+        "Gyarados (Bubblebeam)"
+      ]
+    },
+    {
+      "fxType": "thunder_wave",
+      "isStock": false,
+      "attacks": [
+        "Magneton (Thunder Wave)",
+        "Electabuzz (Thundershock)",
+        "Electrode (Electric Shock)",
+        "Voltorb (Tackle)",
+        "Electrode (Tackle)",
+        "Electrode (Tackle)",
+        "Magneton (Thunder Wave)",
+        "Electabuzz (Thundershock)",
+        "Electrode (Electric Shock)",
+        "Voltorb (Tackle)",
+        "Dark Magneton (Magnetic Lines)",
+        "Dark Magneton (Magnetic Lines)",
+        "Dark Jolteon (Lightning Flash)",
+        "Magnemite (Tackle)"
+      ]
+    },
+    {
+      "fxType": "selfdestruct_shockwave",
+      "isStock": false,
+      "attacks": [
+        "Magneton (Selfdestruct)",
+        "Magnemite (Selfdestruct)",
+        "Magneton (Selfdestruct)",
+        "Magneton (Selfdestruct)",
+        "Magneton (Selfdestruct)",
+        "Magnemite (Selfdestruct)"
+      ]
+    },
+    {
+      "fxType": "toxic_corrosion",
+      "isStock": false,
+      "attacks": [
+        "Nidoking (Toxic)",
+        "Nidoking (Toxic)"
+      ]
+    },
+    {
+      "fxType": "sing_lullaby",
+      "isStock": false,
+      "attacks": [
+        "Ninetales (Lure)",
+        "Victreebel (Lure)",
+        "Wigglytuff (Lullaby)",
+        "Victreebel (Lure)",
+        "Wigglytuff (Lullaby)",
+        "Marowak (Call for Friend)",
+        "Bellsprout (Call for Family)",
+        "Nidoran Female (Call for Family)",
+        "Krabby (Call for Family)",
+        "Ninetales (Lure)",
+        "Wigglytuff (Lullaby)",
+        "Victreebel (Lure)",
+        "Marowak (Call for Friend)",
+        "Bellsprout (Call for Family)",
+        "Nidoran Female (Call for Family)",
+        "Dark Persian (Fascinate)"
+      ]
+    },
+    {
+      "fxType": "poison_sting",
+      "isStock": false,
+      "attacks": [
+        "Beedrill (Poison Sting)",
+        "Beedrill (Poison Sting)"
+      ]
+    },
+    {
+      "fxType": "slash",
+      "isStock": false,
+      "attacks": [
+        "Dugtrio (Slash)",
+        "Charmeleon (Slash)",
+        "Charmander (Scratch)",
+        "Scyther (Slash)",
+        "Scyther (Slash)",
+        "Parasect (Slash)",
+        "Persian (Scratch)",
+        "Primeape (Fury Swipes)",
+        "Mankey (Scratch)",
+        "Nidoran Female (Fury Swipes)",
+        "Paras (Scratch)",
+        "Sandslash (Slash)",
+        "Sandslash (Fury Swipes)",
+        "Kabuto (Scratch)",
+        "Scyther (Slash)",
+        "Dugtrio (Slash)",
+        "Charmeleon (Slash)",
+        "Parasect (Slash)",
+        "Persian (Scratch)",
+        "Charmander (Scratch)",
+        "Nidoran Female (Fury Swipes)",
+        "Paras (Scratch)",
+        "Dark Persian (Poison Claws)",
+        "Dark Raticate (Gnaw)",
+        "Diglett (Scratch)"
+      ]
+    },
+    {
+      "fxType": "psychic_distortion",
+      "isStock": false,
+      "attacks": [
+        "Pidgeotto (Mirror Move)",
+        "Haunter (Hypnosis)",
+        "Clefable (Metronome)",
+        "Clefable (Metronome)",
+        "Exeggutor (Teleport)",
+        "Gastly (Energy Conversion)",
+        "Clefable (Metronome)",
+        "Pidgeotto (Mirror Move)",
+        "Exeggutor (Teleport)",
+        "Haunter (Hypnosis)",
+        "Dark Alakazam (Teleport Blast)",
+        "Dark Alakazam (Teleport Blast)"
+      ]
+    },
+    {
+      "fxType": "poisonpowder_shower",
+      "isStock": false,
+      "attacks": [
+        "Ivysaur (Poisonpowder)",
+        "Kakuna (Poisonpowder)",
+        "Tangela (Poisonpowder)",
+        "Gloom (Poisonpowder)",
+        "Weepinbell (Poisonpowder)",
+        "Ivysaur (Poisonpowder)",
+        "Kakuna (Poisonpowder)",
+        "Weepinbell (Poisonpowder)",
+        "Tangela (Poisonpowder)",
+        "Dark Gloom (Poisonpowder)",
+        "Koffing (Tackle)",
+        "Oddish (Poisonpowder)"
+      ]
+    },
+    {
+      "fxType": "meditate_zen",
+      "isStock": false,
+      "attacks": [
+        "Jynx (Meditate)",
+        "Jynx (Meditate)",
+        "Dark Golduck (Third Eye)"
+      ]
+    },
+    {
+      "fxType": "recover_heal",
+      "isStock": false,
+      "attacks": [
+        "Kadabra (Recover)",
+        "Starmie (Recover)",
+        "Kadabra (Recover)",
+        "Starmie (Recover)",
+        "Magikarp (Rapid Evolution)"
+      ]
+    },
+    {
+      "fxType": "psyshock_waves",
+      "isStock": false,
+      "attacks": [
+        "Kadabra (Super Psy)",
+        "Golduck (Psyshock)",
+        "Slowbro (Psyshock)",
+        "Kadabra (Super Psy)",
+        "Dark Alakazam (Mind Shock)",
+        "Dark Hypno (Psypunch)",
+        "Dark Hypno (Bench Manipulation)",
+        "Dark Slowbro (Fickle Attack)",
+        "Dark Alakazam (Mind Shock)",
+        "Dark Hypno (Psypunch)",
+        "Dark Hypno (Bench Manipulation)",
+        "Dark Slowbro (Fickle Attack)",
+        "Dark Kadabra (Mind Shock)"
+      ]
+    },
+    {
+      "fxType": "defensive_harden",
+      "isStock": false,
+      "attacks": [
+        "Kakuna (Stiffen)",
+        "Metapod (Stiffen)",
+        "Onix (Harden)",
+        "Clefable (Minimize)",
+        "Clefable (Minimize)",
+        "Graveler (Harden)",
+        "Clefable (Minimize)",
+        "Kakuna (Stiffen)",
+        "Metapod (Stiffen)",
+        "Onix (Harden)",
+        "Dark Wartortle (Mirror Shell)"
+      ]
+    },
+    {
+      "fxType": "water_gun_stream",
+      "isStock": false,
+      "attacks": [
+        "Magikarp (Tackle)",
+        "Vaporeon (Water Gun)",
+        "Vaporeon (Water Gun)",
+        "Omastar (Water Gun)",
+        "Seadra (Water Gun)",
+        "Omanyte (Water Gun)",
+        "Magikarp (Tackle)",
+        "Dark Blastoise (Hydrocannon)",
+        "Dark Blastoise (Hydrocannon)",
+        "Psyduck (Water Gun)"
+      ]
+    },
+    {
+      "fxType": "kick_strike",
+      "isStock": false,
+      "attacks": [
+        "Nidorino (Double Kick)",
+        "Nidorina (Double Kick)",
+        "Nidorina (Double Kick)",
+        "Nidorino (Double Kick)",
+        "Dark Rapidash (Rear Kick)",
+        "Machop (Kick)"
+      ]
+    },
+    {
+      "fxType": "bite",
+      "isStock": false,
+      "attacks": [
+        "Raticate (Bite)",
+        "Wartortle (Bite)",
+        "Raticate (Bite)",
+        "Wartortle (Bite)",
+        "Dark Vaporeon (Bite)",
+        "Zubat (Bite)"
+      ]
+    },
+    {
+      "fxType": "mud_slap_throw",
+      "isStock": false,
+      "attacks": [
+        "Diglett (Mud Slap)",
+        "Diglett (Mud Slap)"
+      ]
+    },
+    {
+      "fxType": "kick_low",
+      "isStock": false,
+      "attacks": [
+        "Machop (Low Kick)",
+        "Machop (Low Kick)"
+      ]
+    },
+    {
+      "fxType": "kick_smash",
+      "isStock": false,
+      "attacks": [
+        "Ponyta (Smash Kick)"
+      ]
+    },
+    {
+      "fxType": "wing_slash",
+      "isStock": false,
+      "attacks": [
+        "Pidgeot (Wing Attack)",
+        "Pidgeot (Wing Attack)",
+        "Golbat (Wing Attack)",
+        "Pidgeot (Wing Attack)"
+      ]
+    },
+    {
+      "fxType": "whirlwind_cyclone",
+      "isStock": false,
+      "attacks": [
+        "Butterfree (Whirlwind)",
+        "Butterfree (Whirlwind)"
+      ]
+    },
+    {
+      "fxType": "horn_thrust",
+      "isStock": false,
+      "attacks": [
+        "Seaking (Horn Attack)",
+        "Goldeen (Horn Attack)",
+        "Seaking (Horn Attack)",
+        "Goldeen (Horn Attack)"
+      ]
+    },
+    {
+      "fxType": "razor_leaf",
+      "isStock": false,
+      "attacks": [
+        "Weepinbell (Razor Leaf)",
+        "Weepinbell (Razor Leaf)"
+      ]
+    },
+    {
+      "fxType": "smokescreen_cloud",
+      "isStock": false,
+      "attacks": [
+        "Magmar (Smokescreen)"
+      ]
+    },
+    {
+      "fxType": "pay_day_coins",
+      "isStock": false,
+      "attacks": [
+        "Slowpoke (Scavenge)"
+      ]
+    },
+    {
+      "fxType": "punch",
+      "isStock": false,
+      "attacks": [
+        "Dark Machamp (Fling)",
+        "Dark Machamp (Fling)",
+        "Dark Machoke (Drag Off)",
+        "Machop (Punch)"
+      ]
+    },
+    {
+      "fxType": "flamethrower_blaze",
+      "isStock": false,
+      "attacks": [
+        "Dark Flareon (Rage)"
+      ]
+    },
+    {
+      "fxType": "tackle",
+      "isStock": false,
+      "attacks": [
+        "Eevee (Tackle)"
+      ]
+    },
+    {
+      "fxType": "ember_spark",
+      "isStock": false,
+      "attacks": [
+        "Ponyta (Ember)"
+      ]
+    }
+  ],
+  "byFxType": {
+    "alakazam_confuse_ray": {
+      "fxType": "alakazam_confuse_ray",
+      "isStock": true,
+      "attacks": [
+        "Alakazam (Confuse Ray)",
+        "Alakazam (Confuse Ray)"
+      ]
+    },
+    "hydro_pump_cannons": {
+      "fxType": "hydro_pump_cannons",
+      "isStock": true,
+      "attacks": [
+        "Blastoise (Hydro Pump)",
+        "Blastoise (Hydro Pump)"
+      ]
+    },
+    "chansey_scrunch": {
+      "fxType": "chansey_scrunch",
+      "isStock": false,
+      "attacks": [
+        "Chansey (Scrunch)",
+        "Chansey (Scrunch)"
+      ]
+    },
+    "physical_charge": {
+      "fxType": "physical_charge",
+      "isStock": false,
+      "attacks": [
+        "Chansey (Double-edge)",
+        "Persian (Pounce)",
+        "Rhydon (Ram)",
+        "Kingler (Flail)",
+        "Chansey (Double-edge)",
+        "Persian (Pounce)",
+        "Rhydon (Ram)",
+        "Dark Blastoise (Rocket Tackle)",
+        "Dark Dragonite (Giant Tail)",
+        "Dark Dugtrio (Knock Down)",
+        "Dark Blastoise (Rocket Tackle)",
+        "Dark Dragonite (Giant Tail)",
+        "Dark Dugtrio (Knock Down)",
+        "Dark Charmeleon (Tail Slap)",
+        "Dark Dragonair (Tail Strike)",
+        "Dark Electrode (Rolling Tackle)",
+        "Dark Machoke (Knock Back)",
+        "Dark Primeape (Frenzied Attack)",
+        "Slowpoke (Headbutt)",
+        "Zubat (Ram)"
+      ]
+    },
+    "fire_spin_vortex": {
+      "fxType": "fire_spin_vortex",
+      "isStock": false,
+      "attacks": [
+        "Charizard (Fire Spin)",
+        "Charizard (Fire Spin)"
+      ]
+    },
+    "clefairy_sing": {
+      "fxType": "clefairy_sing",
+      "isStock": false,
+      "attacks": [
+        "Clefairy (Sing)",
+        "Clefairy (Sing)"
+      ]
+    },
+    "clefairy_metronome": {
+      "fxType": "clefairy_metronome",
+      "isStock": true,
+      "attacks": [
+        "Clefairy (Metronome)",
+        "Clefairy (Metronome)"
+      ]
+    },
+    "dragon_rage": {
+      "fxType": "dragon_rage",
+      "isStock": true,
+      "attacks": [
+        "Gyarados (Dragon Rage)",
+        "Gyarados (Dragon Rage)"
+      ]
+    },
+    "bubblebeam": {
+      "fxType": "bubblebeam",
+      "isStock": false,
+      "attacks": [
+        "Gyarados (Bubblebeam)",
+        "Gyarados (Bubblebeam)"
+      ]
+    },
+    "hitmonchan_jab": {
+      "fxType": "hitmonchan_jab",
+      "isStock": true,
+      "attacks": [
+        "Hitmonchan (Jab)",
+        "Hitmonchan (Jab)"
+      ]
+    },
+    "hitmonchan_special_punch": {
+      "fxType": "hitmonchan_special_punch",
+      "isStock": true,
+      "attacks": [
+        "Hitmonchan (Special Punch)",
+        "Hitmonchan (Special Punch)"
+      ]
+    },
+    "seismic_toss_machamp": {
+      "fxType": "seismic_toss_machamp",
+      "isStock": false,
+      "attacks": [
+        "Machamp (Seismic Toss)"
+      ]
+    },
+    "thunder_wave": {
+      "fxType": "thunder_wave",
+      "isStock": false,
+      "attacks": [
+        "Magneton (Thunder Wave)",
+        "Electabuzz (Thundershock)",
+        "Electrode (Electric Shock)",
+        "Voltorb (Tackle)",
+        "Electrode (Tackle)",
+        "Electrode (Tackle)",
+        "Magneton (Thunder Wave)",
+        "Electabuzz (Thundershock)",
+        "Electrode (Electric Shock)",
+        "Voltorb (Tackle)",
+        "Dark Magneton (Magnetic Lines)",
+        "Dark Magneton (Magnetic Lines)",
+        "Dark Jolteon (Lightning Flash)",
+        "Magnemite (Tackle)"
+      ]
+    },
+    "selfdestruct_shockwave": {
+      "fxType": "selfdestruct_shockwave",
+      "isStock": false,
+      "attacks": [
+        "Magneton (Selfdestruct)",
+        "Magnemite (Selfdestruct)",
+        "Magneton (Selfdestruct)",
+        "Magneton (Selfdestruct)",
+        "Magneton (Selfdestruct)",
+        "Magnemite (Selfdestruct)"
+      ]
+    },
+    "mewtwo_psychic": {
+      "fxType": "mewtwo_psychic",
+      "isStock": true,
+      "attacks": [
+        "Mewtwo (Psychic)",
+        "Mewtwo (Psychic)"
+      ]
+    },
+    "mewtwo_barrier": {
+      "fxType": "mewtwo_barrier",
+      "isStock": false,
+      "attacks": [
+        "Mewtwo (Barrier)",
+        "Mewtwo (Barrier)"
+      ]
+    },
+    "nidoking_thrash_fury": {
+      "fxType": "nidoking_thrash_fury",
+      "isStock": false,
+      "attacks": [
+        "Nidoking (Thrash)",
+        "Nidoking (Thrash)"
+      ]
+    },
+    "toxic_corrosion": {
+      "fxType": "toxic_corrosion",
+      "isStock": false,
+      "attacks": [
+        "Nidoking (Toxic)",
+        "Nidoking (Toxic)"
+      ]
+    },
+    "sing_lullaby": {
+      "fxType": "sing_lullaby",
+      "isStock": false,
+      "attacks": [
+        "Ninetales (Lure)",
+        "Victreebel (Lure)",
+        "Wigglytuff (Lullaby)",
+        "Victreebel (Lure)",
+        "Wigglytuff (Lullaby)",
+        "Marowak (Call for Friend)",
+        "Bellsprout (Call for Family)",
+        "Nidoran Female (Call for Family)",
+        "Krabby (Call for Family)",
+        "Ninetales (Lure)",
+        "Wigglytuff (Lullaby)",
+        "Victreebel (Lure)",
+        "Marowak (Call for Friend)",
+        "Bellsprout (Call for Family)",
+        "Nidoran Female (Call for Family)",
+        "Dark Persian (Fascinate)"
+      ]
+    },
+    "ninetales_fire_blast": {
+      "fxType": "ninetales_fire_blast",
+      "isStock": false,
+      "attacks": [
+        "Ninetales (Fire Blast)",
+        "Ninetales (Fire Blast)"
+      ]
+    },
+    "poliwag_water_gun": {
+      "fxType": "poliwag_water_gun",
+      "isStock": false,
+      "attacks": [
+        "Poliwrath (Water Gun)",
+        "Poliwag (Water Gun)",
+        "Poliwrath (Water Gun)",
+        "Poliwag (Water Gun)"
+      ]
+    },
+    "poliwrath_whirlpool_vortex": {
+      "fxType": "poliwrath_whirlpool_vortex",
+      "isStock": false,
+      "attacks": [
+        "Poliwrath (Whirlpool)",
+        "Poliwrath (Whirlpool)",
+        "Dark Vaporeon (Whirlpool)"
+      ]
+    },
+    "agility_dash": {
+      "fxType": "agility_dash",
+      "isStock": false,
+      "attacks": [
+        "Raichu (Agility)",
+        "Fearow (Agility)",
+        "Rapidash (Agility)",
+        "Seadra (Agility)",
+        "Raichu (Agility)",
+        "Fearow (Agility)"
+      ]
+    },
+    "heavy_thunder_strike": {
+      "fxType": "heavy_thunder_strike",
+      "isStock": false,
+      "attacks": [
+        "Raichu (Thunder)",
+        "Raichu (Thunder)",
+        "Dark Jolteon (Thunder Attack)",
+        "Dark Raichu (Surprise Thunder)"
+      ]
+    },
+    "solar_beam_charge_blast": {
+      "fxType": "solar_beam_charge_blast",
+      "isStock": false,
+      "attacks": [
+        "Venusaur (Solarbeam)",
+        "Venusaur (Solarbeam)"
+      ]
+    },
+    "zapdos_thunder": {
+      "fxType": "zapdos_thunder",
+      "isStock": false,
+      "attacks": [
+        "Zapdos (Thunder)",
+        "Zapdos (Thunder)"
+      ]
+    },
+    "zapdos_thunderbolt": {
+      "fxType": "zapdos_thunderbolt",
+      "isStock": true,
+      "attacks": [
+        "Zapdos (Thunderbolt)",
+        "Zapdos (Thunderbolt)"
+      ]
+    },
+    "beedrill_twineedle": {
+      "fxType": "beedrill_twineedle",
+      "isStock": true,
+      "attacks": [
+        "Beedrill (Twineedle)",
+        "Beedrill (Twineedle)"
+      ]
+    },
+    "poison_sting": {
+      "fxType": "poison_sting",
+      "isStock": false,
+      "attacks": [
+        "Beedrill (Poison Sting)",
+        "Beedrill (Poison Sting)"
+      ]
+    },
+    "dragonite_slam": {
+      "fxType": "dragonite_slam",
+      "isStock": false,
+      "attacks": [
+        "Dragonair (Slam)",
+        "Dragonite (Slam)",
+        "Dragonite (Slam)",
+        "Dragonair (Slam)"
+      ]
+    },
+    "hyper_beam_annihilation": {
+      "fxType": "hyper_beam_annihilation",
+      "isStock": false,
+      "attacks": [
+        "Dragonair (Hyper Beam)",
+        "Dragonair (Hyper Beam)"
+      ]
+    },
+    "slash": {
+      "fxType": "slash",
+      "isStock": false,
+      "attacks": [
+        "Dugtrio (Slash)",
+        "Charmeleon (Slash)",
+        "Charmander (Scratch)",
+        "Scyther (Slash)",
+        "Scyther (Slash)",
+        "Parasect (Slash)",
+        "Persian (Scratch)",
+        "Primeape (Fury Swipes)",
+        "Mankey (Scratch)",
+        "Nidoran Female (Fury Swipes)",
+        "Paras (Scratch)",
+        "Sandslash (Slash)",
+        "Sandslash (Fury Swipes)",
+        "Kabuto (Scratch)",
+        "Scyther (Slash)",
+        "Dugtrio (Slash)",
+        "Charmeleon (Slash)",
+        "Parasect (Slash)",
+        "Persian (Scratch)",
+        "Charmander (Scratch)",
+        "Nidoran Female (Fury Swipes)",
+        "Paras (Scratch)",
+        "Dark Persian (Poison Claws)",
+        "Dark Raticate (Gnaw)",
+        "Diglett (Scratch)"
+      ]
+    },
+    "dugtrio_earthquake": {
+      "fxType": "dugtrio_earthquake",
+      "isStock": true,
+      "attacks": [
+        "Dugtrio (Earthquake)",
+        "Dugtrio (Earthquake)"
+      ]
+    },
+    "thunder_punch": {
+      "fxType": "thunder_punch",
+      "isStock": true,
+      "attacks": [
+        "Electabuzz (Thunderpunch)",
+        "Electabuzz (Thunderpunch)"
+      ]
+    },
+    "pidgey_whirlwind": {
+      "fxType": "pidgey_whirlwind",
+      "isStock": false,
+      "attacks": [
+        "Pidgeotto (Whirlwind)",
+        "Pidgey (Whirlwind)",
+        "Pidgeotto (Whirlwind)",
+        "Pidgey (Whirlwind)"
+      ]
+    },
+    "psychic_distortion": {
+      "fxType": "psychic_distortion",
+      "isStock": false,
+      "attacks": [
+        "Pidgeotto (Mirror Move)",
+        "Haunter (Hypnosis)",
+        "Clefable (Metronome)",
+        "Clefable (Metronome)",
+        "Exeggutor (Teleport)",
+        "Gastly (Energy Conversion)",
+        "Clefable (Metronome)",
+        "Pidgeotto (Mirror Move)",
+        "Exeggutor (Teleport)",
+        "Haunter (Hypnosis)",
+        "Dark Alakazam (Teleport Blast)",
+        "Dark Alakazam (Teleport Blast)"
+      ]
+    },
+    "flamethrower_stream": {
+      "fxType": "flamethrower_stream",
+      "isStock": false,
+      "attacks": [
+        "Arcanine (Flamethrower)",
+        "Charmeleon (Flamethrower)",
+        "Magmar (Flamethrower)",
+        "Flareon (Flamethrower)",
+        "Flareon (Flamethrower)",
+        "Arcanine (Flamethrower)",
+        "Charmeleon (Flamethrower)",
+        "Magmar (Flamethrower)"
+      ]
+    },
+    "fire_take_down": {
+      "fxType": "fire_take_down",
+      "isStock": false,
+      "attacks": [
+        "Arcanine (Take Down)",
+        "Arcanine (Take Down)"
+      ]
+    },
+    "dewgong_aurora_beam": {
+      "fxType": "dewgong_aurora_beam",
+      "isStock": false,
+      "attacks": [
+        "Dewgong (Aurora Beam)",
+        "Dewgong (Aurora Beam)"
+      ]
+    },
+    "dewgong_ice_beam": {
+      "fxType": "dewgong_ice_beam",
+      "isStock": false,
+      "attacks": [
+        "Dewgong (Ice Beam)",
+        "Dewgong (Ice Beam)"
+      ]
+    },
+    "dratini_pound": {
+      "fxType": "dratini_pound",
+      "isStock": false,
+      "attacks": [
+        "Dratini (Pound)",
+        "Dratini (Pound)"
+      ]
+    },
+    "farfetchd_leek_slap": {
+      "fxType": "farfetchd_leek_slap",
+      "isStock": true,
+      "attacks": [
+        "Farfetch'd (Leek Slap)",
+        "Farfetch'd (Leek Slap)"
+      ]
+    },
+    "seismic_slam": {
+      "fxType": "seismic_slam",
+      "isStock": false,
+      "attacks": [
+        "Farfetch'd (Pot Smash)",
+        "Diglett (Dig)",
+        "Farfetch'd (Pot Smash)",
+        "Diglett (Dig)",
+        "Diglett (Dig Under)"
+      ]
+    },
+    "flare_burst": {
+      "fxType": "flare_burst",
+      "isStock": false,
+      "attacks": [
+        "Growlithe (Flare)",
+        "Growlithe (Flare)"
+      ]
+    },
+    "haunter_dream_eater": {
+      "fxType": "haunter_dream_eater",
+      "isStock": true,
+      "attacks": [
+        "Haunter (Dream Eater)",
+        "Haunter (Nightmare)",
+        "Haunter (Nightmare)",
+        "Haunter (Dream Eater)"
+      ]
+    },
+    "vine_whip_lash": {
+      "fxType": "vine_whip_lash",
+      "isStock": false,
+      "attacks": [
+        "Ivysaur (Vine Whip)",
+        "Bellsprout (Vine Whip)",
+        "Ivysaur (Vine Whip)",
+        "Bellsprout (Vine Whip)"
+      ]
+    },
+    "poisonpowder_shower": {
+      "fxType": "poisonpowder_shower",
+      "isStock": false,
+      "attacks": [
+        "Ivysaur (Poisonpowder)",
+        "Kakuna (Poisonpowder)",
+        "Tangela (Poisonpowder)",
+        "Gloom (Poisonpowder)",
+        "Weepinbell (Poisonpowder)",
+        "Ivysaur (Poisonpowder)",
+        "Kakuna (Poisonpowder)",
+        "Weepinbell (Poisonpowder)",
+        "Tangela (Poisonpowder)",
+        "Dark Gloom (Poisonpowder)",
+        "Koffing (Tackle)",
+        "Oddish (Poisonpowder)"
+      ]
+    },
+    "doubleslap": {
+      "fxType": "doubleslap",
+      "isStock": true,
+      "attacks": [
+        "Jynx (Doubleslap)",
+        "Poliwhirl (Doubleslap)",
+        "Jynx (Doubleslap)",
+        "Poliwhirl (Doubleslap)",
+        "Dark Wartortle (Doubleslap)"
+      ]
+    },
+    "meditate_zen": {
+      "fxType": "meditate_zen",
+      "isStock": false,
+      "attacks": [
+        "Jynx (Meditate)",
+        "Jynx (Meditate)",
+        "Dark Golduck (Third Eye)"
+      ]
+    },
+    "recover_heal": {
+      "fxType": "recover_heal",
+      "isStock": false,
+      "attacks": [
+        "Kadabra (Recover)",
+        "Starmie (Recover)",
+        "Kadabra (Recover)",
+        "Starmie (Recover)",
+        "Magikarp (Rapid Evolution)"
+      ]
+    },
+    "psyshock_waves": {
+      "fxType": "psyshock_waves",
+      "isStock": false,
+      "attacks": [
+        "Kadabra (Super Psy)",
+        "Golduck (Psyshock)",
+        "Slowbro (Psyshock)",
+        "Kadabra (Super Psy)",
+        "Dark Alakazam (Mind Shock)",
+        "Dark Hypno (Psypunch)",
+        "Dark Hypno (Bench Manipulation)",
+        "Dark Slowbro (Fickle Attack)",
+        "Dark Alakazam (Mind Shock)",
+        "Dark Hypno (Psypunch)",
+        "Dark Hypno (Bench Manipulation)",
+        "Dark Slowbro (Fickle Attack)",
+        "Dark Kadabra (Mind Shock)"
+      ]
+    },
+    "defensive_harden": {
+      "fxType": "defensive_harden",
+      "isStock": false,
+      "attacks": [
+        "Kakuna (Stiffen)",
+        "Metapod (Stiffen)",
+        "Onix (Harden)",
+        "Clefable (Minimize)",
+        "Clefable (Minimize)",
+        "Graveler (Harden)",
+        "Clefable (Minimize)",
+        "Kakuna (Stiffen)",
+        "Metapod (Stiffen)",
+        "Onix (Harden)",
+        "Dark Wartortle (Mirror Shell)"
+      ]
+    },
+    "machamp_karate_chop": {
+      "fxType": "machamp_karate_chop",
+      "isStock": true,
+      "attacks": [
+        "Machoke (Karate Chop)",
+        "Machoke (Karate Chop)"
+      ]
+    },
+    "submission_grapple": {
+      "fxType": "submission_grapple",
+      "isStock": false,
+      "attacks": [
+        "Machoke (Submission)",
+        "Machoke (Submission)"
+      ]
+    },
+    "water_gun_stream": {
+      "fxType": "water_gun_stream",
+      "isStock": false,
+      "attacks": [
+        "Magikarp (Tackle)",
+        "Vaporeon (Water Gun)",
+        "Vaporeon (Water Gun)",
+        "Omastar (Water Gun)",
+        "Seadra (Water Gun)",
+        "Omanyte (Water Gun)",
+        "Magikarp (Tackle)",
+        "Dark Blastoise (Hydrocannon)",
+        "Dark Blastoise (Hydrocannon)",
+        "Psyduck (Water Gun)"
+      ]
+    },
+    "fish_flail": {
+      "fxType": "fish_flail",
+      "isStock": true,
+      "attacks": [
+        "Magikarp (Flail)",
+        "Magikarp (Flail)",
+        "Magikarp (Flop)"
+      ]
+    },
+    "fire_punch_blaze": {
+      "fxType": "fire_punch_blaze",
+      "isStock": false,
+      "attacks": [
+        "Magmar (Fire Punch)",
+        "Magmar (Fire Punch)"
+      ]
+    },
+    "kick_strike": {
+      "fxType": "kick_strike",
+      "isStock": false,
+      "attacks": [
+        "Nidorino (Double Kick)",
+        "Nidorina (Double Kick)",
+        "Nidorina (Double Kick)",
+        "Nidorino (Double Kick)",
+        "Dark Rapidash (Rear Kick)",
+        "Machop (Kick)"
+      ]
+    },
+    "nidoran_horn_hazard": {
+      "fxType": "nidoran_horn_hazard",
+      "isStock": false,
+      "attacks": [
+        "Nidorino (Horn Drill)",
+        "Nidoran Male (Horn Hazard)",
+        "Nidorino (Horn Drill)",
+        "Nidoran Male (Horn Hazard)"
+      ]
+    },
+    "amnesia_mind_wipe": {
+      "fxType": "amnesia_mind_wipe",
+      "isStock": false,
+      "attacks": [
+        "Poliwhirl (Amnesia)",
+        "Poliwhirl (Amnesia)"
+      ]
+    },
+    "porygon_conversion": {
+      "fxType": "porygon_conversion",
+      "isStock": false,
+      "attacks": [
+        "Porygon (Conversion 1)",
+        "Porygon (Conversion 2)",
+        "Porygon (Conversion 1)"
+      ]
+    },
+    "bite": {
+      "fxType": "bite",
+      "isStock": false,
+      "attacks": [
+        "Raticate (Bite)",
+        "Wartortle (Bite)",
+        "Raticate (Bite)",
+        "Wartortle (Bite)",
+        "Dark Vaporeon (Bite)",
+        "Zubat (Bite)"
+      ]
+    },
+    "super_fang_guillotine": {
+      "fxType": "super_fang_guillotine",
+      "isStock": true,
+      "attacks": [
+        "Raticate (Super Fang)",
+        "Raticate (Super Fang)",
+        "Dark Raticate (Hyper Fang)"
+      ]
+    },
+    "seel_horn_headbutt": {
+      "fxType": "seel_horn_headbutt",
+      "isStock": false,
+      "attacks": [
+        "Seel (Headbutt)",
+        "Seel (Headbutt)"
+      ]
+    },
+    "squirtle_shell_defense": {
+      "fxType": "squirtle_shell_defense",
+      "isStock": true,
+      "attacks": [
+        "Wartortle (Withdraw)",
+        "Squirtle (Withdraw)",
+        "Wartortle (Withdraw)",
+        "Squirtle (Withdraw)",
+        "Squirtle (Shell Attack)"
+      ]
+    },
+    "psyshock_lite_waves": {
+      "fxType": "psyshock_lite_waves",
+      "isStock": false,
+      "attacks": [
+        "Abra (Psyshock)",
+        "Abra (Psyshock)",
+        "Abra (Psyshock)"
+      ]
+    },
+    "bulbasaur_leech_seed": {
+      "fxType": "bulbasaur_leech_seed",
+      "isStock": true,
+      "attacks": [
+        "Bulbasaur (Leech Seed)",
+        "Bulbasaur (Leech Seed)"
+      ]
+    },
+    "caterpie_string_shot": {
+      "fxType": "caterpie_string_shot",
+      "isStock": true,
+      "attacks": [
+        "Caterpie (String Shot)",
+        "Caterpie (String Shot)"
+      ]
+    },
+    "charmander_ember_flame": {
+      "fxType": "charmander_ember_flame",
+      "isStock": true,
+      "attacks": [
+        "Charmander (Ember)",
+        "Charmander (Ember)"
+      ]
+    },
+    "mud_slap_throw": {
+      "fxType": "mud_slap_throw",
+      "isStock": false,
+      "attacks": [
+        "Diglett (Mud Slap)",
+        "Diglett (Mud Slap)"
+      ]
+    },
+    "doduo_fury_attack": {
+      "fxType": "doduo_fury_attack",
+      "isStock": false,
+      "attacks": [
+        "Doduo (Fury Attack)",
+        "Doduo (Fury Attack)"
+      ]
+    },
+    "drowzee_pound": {
+      "fxType": "drowzee_pound",
+      "isStock": false,
+      "attacks": [
+        "Drowzee (Pound)",
+        "Drowzee (Pound)"
+      ]
+    },
+    "drowzee_confuse_ray": {
+      "fxType": "drowzee_confuse_ray",
+      "isStock": false,
+      "attacks": [
+        "Drowzee (Confuse Ray)",
+        "Drowzee (Confuse Ray)"
+      ]
+    },
+    "gastly_sleeping_gas": {
+      "fxType": "gastly_sleeping_gas",
+      "isStock": false,
+      "attacks": [
+        "Gastly (Sleeping Gas)",
+        "Gastly (Destiny Bond)",
+        "Gastly (Lick)",
+        "Gastly (Sleeping Gas)",
+        "Gastly (Destiny Bond)"
+      ]
+    },
+    "koffing_foul_gas": {
+      "fxType": "koffing_foul_gas",
+      "isStock": true,
+      "attacks": [
+        "Koffing (Foul Gas)",
+        "Koffing (Poison Gas)"
+      ]
+    },
+    "kick_low": {
+      "fxType": "kick_low",
+      "isStock": false,
+      "attacks": [
+        "Machop (Low Kick)",
+        "Machop (Low Kick)"
+      ]
+    },
+    "magnemite_thunder_wave": {
+      "fxType": "magnemite_thunder_wave",
+      "isStock": false,
+      "attacks": [
+        "Magnemite (Thunder Wave)",
+        "Magnemite (Thunder Wave)"
+      ]
+    },
+    "stun_spore": {
+      "fxType": "stun_spore",
+      "isStock": false,
+      "attacks": [
+        "Metapod (Stun Spore)",
+        "Metapod (Stun Spore)"
+      ]
+    },
+    "big_boulder": {
+      "fxType": "big_boulder",
+      "isStock": false,
+      "attacks": [
+        "Onix (Rock Throw)",
+        "Graveler (Rock Throw)",
+        "Onix (Rock Throw)"
+      ]
+    },
+    "pikachu_thunder_jolt": {
+      "fxType": "pikachu_thunder_jolt",
+      "isStock": true,
+      "attacks": [
+        "Pikachu (Gnaw)",
+        "Pikachu (Thunder Jolt)",
+        "Pikachu (Spark)",
+        "Pikachu (Gnaw)",
+        "Pikachu (Thunder Jolt)"
+      ]
+    },
+    "kick_smash": {
+      "fxType": "kick_smash",
+      "isStock": false,
+      "attacks": [
+        "Ponyta (Smash Kick)"
+      ]
+    },
+    "flame_tail_whip": {
+      "fxType": "flame_tail_whip",
+      "isStock": false,
+      "attacks": [
+        "Ponyta (Flame Tail)"
+      ]
+    },
+    "rattata_gnaw_bite": {
+      "fxType": "rattata_gnaw_bite",
+      "isStock": false,
+      "attacks": [
+        "Rattata (Bite)",
+        "Rattata (Bite)"
+      ]
+    },
+    "sandshrew_sand_attack": {
+      "fxType": "sandshrew_sand_attack",
+      "isStock": true,
+      "attacks": [
+        "Sandshrew (Sand-attack)",
+        "Sandshrew (Sand-attack)"
+      ]
+    },
+    "bubble_gentle": {
+      "fxType": "bubble_gentle",
+      "isStock": false,
+      "attacks": [
+        "Squirtle (Bubble)",
+        "Squirtle (Bubble)"
+      ]
+    },
+    "star_freeze": {
+      "fxType": "star_freeze",
+      "isStock": true,
+      "attacks": [
+        "Starmie (Star Freeze)",
+        "Starmie (Star Freeze)"
+      ]
+    },
+    "starfish_slap": {
+      "fxType": "starfish_slap",
+      "isStock": true,
+      "attacks": [
+        "Staryu (Slap)",
+        "Staryu (Slap)"
+      ]
+    },
+    "tangela_bind": {
+      "fxType": "tangela_bind",
+      "isStock": false,
+      "attacks": [
+        "Tangela (Bind)",
+        "Tangela (Bind)"
+      ]
+    },
+    "vulpix_confuse_ray": {
+      "fxType": "vulpix_confuse_ray",
+      "isStock": false,
+      "attacks": [
+        "Vulpix (Confuse Ray)",
+        "Vulpix (Confuse Ray)"
+      ]
+    },
+    "weedle_poison_sting": {
+      "fxType": "weedle_poison_sting",
+      "isStock": true,
+      "attacks": [
+        "Weedle (Poison Sting)",
+        "Weedle (Poison Sting)"
+      ]
+    },
+    "electrode_chain_lightning": {
+      "fxType": "electrode_chain_lightning",
+      "isStock": false,
+      "attacks": [
+        "Electrode (Chain Lightning)",
+        "Electrode (Chain Lightning)"
+      ]
+    },
+    "quick_attack_dash": {
+      "fxType": "quick_attack_dash",
+      "isStock": false,
+      "attacks": [
+        "Flareon (Quick Attack)",
+        "Jolteon (Quick Attack)",
+        "Vaporeon (Quick Attack)",
+        "Flareon (Quick Attack)",
+        "Jolteon (Quick Attack)",
+        "Vaporeon (Quick Attack)",
+        "Eevee (Quick Attack)"
+      ]
+    },
+    "jolteon_pin_missile": {
+      "fxType": "jolteon_pin_missile",
+      "isStock": false,
+      "attacks": [
+        "Jolteon (Pin Missile)",
+        "Jolteon (Pin Missile)"
+      ]
+    },
+    "kangaskhan_fetch": {
+      "fxType": "kangaskhan_fetch",
+      "isStock": false,
+      "attacks": [
+        "Kangaskhan (Fetch)",
+        "Kangaskhan (Fetch)",
+        "Kangaskhan (Fetch)"
+      ]
+    },
+    "kangaskhan_comet_punch": {
+      "fxType": "kangaskhan_comet_punch",
+      "isStock": true,
+      "attacks": [
+        "Kangaskhan (Comet Punch)",
+        "Kangaskhan (Comet Punch)",
+        "Kangaskhan (Comet Punch)"
+      ]
+    },
+    "mr_mime_meditate": {
+      "fxType": "mr_mime_meditate",
+      "isStock": false,
+      "attacks": [
+        "Mr. Mime (Meditate)",
+        "Mr. Mime (Meditate)",
+        "Mr. Mime (Meditate)"
+      ]
+    },
+    "mega_punch_nidoqueen": {
+      "fxType": "mega_punch_nidoqueen",
+      "isStock": false,
+      "attacks": [
+        "Nidoqueen (Boyfriends)",
+        "Nidoqueen (Mega Punch)",
+        "Nidoqueen (Boyfriends)",
+        "Nidoqueen (Mega Punch)",
+        "Nidoqueen (Boyfriends)",
+        "Nidoqueen (Mega Punch)",
+        "Dark Machamp (Mega Punch)",
+        "Dark Machamp (Mega Punch)"
+      ]
+    },
+    "wing_slash": {
+      "fxType": "wing_slash",
+      "isStock": false,
+      "attacks": [
+        "Pidgeot (Wing Attack)",
+        "Pidgeot (Wing Attack)",
+        "Golbat (Wing Attack)",
+        "Pidgeot (Wing Attack)"
+      ]
+    },
+    "pidgeot_hurricane": {
+      "fxType": "pidgeot_hurricane",
+      "isStock": false,
+      "attacks": [
+        "Pidgeot (Hurricane)",
+        "Pidgeot (Hurricane)",
+        "Pidgeot (Hurricane)"
+      ]
+    },
+    "pinsir_irongrip": {
+      "fxType": "pinsir_irongrip",
+      "isStock": false,
+      "attacks": [
+        "Pinsir (Irongrip)",
+        "Pinsir (Irongrip)",
+        "Pinsir (Irongrip)"
+      ]
+    },
+    "pinsir_guillotine": {
+      "fxType": "pinsir_guillotine",
+      "isStock": true,
+      "attacks": [
+        "Pinsir (Guillotine)",
+        "Pinsir (Guillotine)",
+        "Pinsir (Guillotine)"
+      ]
+    },
+    "scyther_blade_dance": {
+      "fxType": "scyther_blade_dance",
+      "isStock": true,
+      "attacks": [
+        "Scyther (Swords Dance)",
+        "Scyther (Swords Dance)",
+        "Scyther (Swords Dance)"
+      ]
+    },
+    "snorlax_body_slam": {
+      "fxType": "snorlax_body_slam",
+      "isStock": true,
+      "attacks": [
+        "Snorlax (Body Slam)",
+        "Snorlax (Body Slam)",
+        "Snorlax (Body Slam)"
+      ]
+    },
+    "venomoth_venom_powder": {
+      "fxType": "venomoth_venom_powder",
+      "isStock": false,
+      "attacks": [
+        "Venomoth (Venom Powder)",
+        "Venomoth (Venom Powder)",
+        "Venomoth (Venom Powder)"
+      ]
+    },
+    "victreebel_acid_melt": {
+      "fxType": "victreebel_acid_melt",
+      "isStock": true,
+      "attacks": [
+        "Victreebel (Acid)",
+        "Victreebel (Acid)",
+        "Victreebel (Acid)"
+      ]
+    },
+    "vileplume_petal_dance": {
+      "fxType": "vileplume_petal_dance",
+      "isStock": false,
+      "attacks": [
+        "Vileplume (Petal Dance)",
+        "Vileplume (Petal Dance)",
+        "Dark Vileplume (Petal Whirlpool)",
+        "Dark Vileplume (Petal Whirlpool)"
+      ]
+    },
+    "wigglytuff_do_the_wave": {
+      "fxType": "wigglytuff_do_the_wave",
+      "isStock": false,
+      "attacks": [
+        "Wigglytuff (Do the Wave)",
+        "Wigglytuff (Do the Wave)",
+        "Wigglytuff (Do the Wave)"
+      ]
+    },
+    "whirlwind_cyclone": {
+      "fxType": "whirlwind_cyclone",
+      "isStock": false,
+      "attacks": [
+        "Butterfree (Whirlwind)",
+        "Butterfree (Whirlwind)"
+      ]
+    },
+    "butterfree_mega_drain": {
+      "fxType": "butterfree_mega_drain",
+      "isStock": false,
+      "attacks": [
+        "Butterfree (Mega Drain)",
+        "Butterfree (Mega Drain)"
+      ]
+    },
+    "dodrio_tri_fury": {
+      "fxType": "dodrio_tri_fury",
+      "isStock": false,
+      "attacks": [
+        "Dodrio (Rage)",
+        "Dodrio (Rage)"
+      ]
+    },
+    "exeggutor_big_eggsplosion": {
+      "fxType": "exeggutor_big_eggsplosion",
+      "isStock": true,
+      "attacks": [
+        "Exeggutor (Big Eggsplosion)",
+        "Exeggutor (Big Eggsplosion)"
+      ]
+    },
+    "fearow_drill_peck": {
+      "fxType": "fearow_drill_peck",
+      "isStock": true,
+      "attacks": [
+        "Fearow (Drill Peck)",
+        "Fearow (Drill Peck)"
+      ]
+    },
+    "foul_odor": {
+      "fxType": "foul_odor",
+      "isStock": false,
+      "attacks": [
+        "Gloom (Foul Odor)"
+      ]
+    },
+    "lickitung_tongue_wrap": {
+      "fxType": "lickitung_tongue_wrap",
+      "isStock": true,
+      "attacks": [
+        "Lickitung (Tongue Wrap)",
+        "Lickitung (Tongue Wrap)"
+      ]
+    },
+    "lickitung_supersonic": {
+      "fxType": "lickitung_supersonic",
+      "isStock": false,
+      "attacks": [
+        "Lickitung (Supersonic)",
+        "Lickitung (Supersonic)"
+      ]
+    },
+    "marowak_bonemerang": {
+      "fxType": "marowak_bonemerang",
+      "isStock": false,
+      "attacks": [
+        "Marowak (Bonemerang)",
+        "Marowak (Bonemerang)"
+      ]
+    },
+    "zubat_supersonic": {
+      "fxType": "zubat_supersonic",
+      "isStock": false,
+      "attacks": [
+        "Nidorina (Supersonic)",
+        "Tentacruel (Supersonic)",
+        "Zubat (Supersonic)",
+        "Nidorina (Supersonic)"
+      ]
+    },
+    "paras_spore": {
+      "fxType": "paras_spore",
+      "isStock": false,
+      "attacks": [
+        "Parasect (Spore)",
+        "Paras (Spore)",
+        "Parasect (Spore)",
+        "Paras (Spore)"
+      ]
+    },
+    "primeape_tantrum_rampage": {
+      "fxType": "primeape_tantrum_rampage",
+      "isStock": false,
+      "attacks": [
+        "Primeape (Tantrum)"
+      ]
+    },
+    "stomp_hoof": {
+      "fxType": "stomp_hoof",
+      "isStock": false,
+      "attacks": [
+        "Rapidash (Stomp)"
+      ]
+    },
+    "rhydon_horn_drill": {
+      "fxType": "rhydon_horn_drill",
+      "isStock": true,
+      "attacks": [
+        "Rhydon (Horn Attack)",
+        "Rhyhorn (Horn Attack)",
+        "Rhydon (Horn Attack)",
+        "Rhyhorn (Horn Attack)"
+      ]
+    },
+    "horn_thrust": {
+      "fxType": "horn_thrust",
+      "isStock": false,
+      "attacks": [
+        "Seaking (Horn Attack)",
+        "Goldeen (Horn Attack)",
+        "Seaking (Horn Attack)",
+        "Goldeen (Horn Attack)"
+      ]
+    },
+    "waterfall_surf": {
+      "fxType": "waterfall_surf",
+      "isStock": false,
+      "attacks": [
+        "Seaking (Waterfall)",
+        "Seaking (Waterfall)"
+      ]
+    },
+    "tauros_stomp": {
+      "fxType": "tauros_stomp",
+      "isStock": true,
+      "attacks": [
+        "Tauros (Stomp)",
+        "Tauros (Stomp)"
+      ]
+    },
+    "tauros_rampage": {
+      "fxType": "tauros_rampage",
+      "isStock": true,
+      "attacks": [
+        "Tauros (Rampage)",
+        "Tauros (Rampage)"
+      ]
+    },
+    "razor_leaf": {
+      "fxType": "razor_leaf",
+      "isStock": false,
+      "attacks": [
+        "Weepinbell (Razor Leaf)",
+        "Weepinbell (Razor Leaf)"
+      ]
+    },
+    "cubone_bone_strike": {
+      "fxType": "cubone_bone_strike",
+      "isStock": true,
+      "attacks": [
+        "Cubone (Snivel)",
+        "Cubone (Rage)",
+        "Cubone (Snivel)",
+        "Cubone (Rage)"
+      ]
+    },
+    "tail_wag": {
+      "fxType": "tail_wag",
+      "isStock": false,
+      "attacks": [
+        "Eevee (Tail Wag)"
+      ]
+    },
+    "exeggcute_hypnosis": {
+      "fxType": "exeggcute_hypnosis",
+      "isStock": false,
+      "attacks": [
+        "Exeggcute (Hypnosis)",
+        "Exeggcute (Hypnosis)"
+      ]
+    },
+    "leech_seed_vines": {
+      "fxType": "leech_seed_vines",
+      "isStock": false,
+      "attacks": [
+        "Exeggcute (Leech Seed)",
+        "Exeggcute (Leech Seed)"
+      ]
+    },
+    "jigglypuff_lullaby": {
+      "fxType": "jigglypuff_lullaby",
+      "isStock": true,
+      "attacks": [
+        "Jigglypuff (Lullaby)",
+        "Jigglypuff (Lullaby)"
+      ]
+    },
+    "jigglypuff_pound": {
+      "fxType": "jigglypuff_pound",
+      "isStock": false,
+      "attacks": [
+        "Jigglypuff (Pound)",
+        "Jigglypuff (Pound)"
+      ]
+    },
+    "meowth_pay_day": {
+      "fxType": "meowth_pay_day",
+      "isStock": false,
+      "attacks": [
+        "Meowth (Pay Day)",
+        "Meowth (Pay Day)"
+      ]
+    },
+    "oddish_stun_spore": {
+      "fxType": "oddish_stun_spore",
+      "isStock": false,
+      "attacks": [
+        "Oddish (Stun Spore)"
+      ]
+    },
+    "oddish_sprout": {
+      "fxType": "oddish_sprout",
+      "isStock": false,
+      "attacks": [
+        "Oddish (Sprout)"
+      ]
+    },
+    "glare_leer": {
+      "fxType": "glare_leer",
+      "isStock": false,
+      "attacks": [
+        "Rhyhorn (Leer)",
+        "Rhyhorn (Leer)"
+      ]
+    },
+    "spearow_peck": {
+      "fxType": "spearow_peck",
+      "isStock": false,
+      "attacks": [
+        "Spearow (Peck)",
+        "Spearow (Peck)"
+      ]
+    },
+    "spearow_mirror_move": {
+      "fxType": "spearow_mirror_move",
+      "isStock": false,
+      "attacks": [
+        "Spearow (Mirror Move)",
+        "Spearow (Mirror Move)"
+      ]
+    },
+    "venonat_stun_spore": {
+      "fxType": "venonat_stun_spore",
+      "isStock": false,
+      "attacks": [
+        "Venonat (Stun Spore)",
+        "Venonat (Stun Spore)"
+      ]
+    },
+    "venonat_leech_life": {
+      "fxType": "venonat_leech_life",
+      "isStock": false,
+      "attacks": [
+        "Venonat (Leech Life)",
+        "Venonat (Leech Life)"
+      ]
+    },
+    "aerodactyl_wing_attack": {
+      "fxType": "aerodactyl_wing_attack",
+      "isStock": false,
+      "attacks": [
+        "Aerodactyl (Wing Attack)",
+        "Aerodactyl (Wing Attack)"
+      ]
+    },
+    "articuno_freeze_dry": {
+      "fxType": "articuno_freeze_dry",
+      "isStock": false,
+      "attacks": [
+        "Articuno (Freeze Dry)",
+        "Articuno (Freeze Dry)"
+      ]
+    },
+    "articuno_blizzard": {
+      "fxType": "articuno_blizzard",
+      "isStock": true,
+      "attacks": [
+        "Articuno (Blizzard)",
+        "Articuno (Blizzard)"
+      ]
+    },
+    "ditto_transform": {
+      "fxType": "ditto_transform",
+      "isStock": false,
+      "attacks": [
+        "Ditto (Transform Attack)",
+        "Ditto (Transform Attack)"
+      ]
+    },
+    "gengar_dark_mind": {
+      "fxType": "gengar_dark_mind",
+      "isStock": true,
+      "attacks": [
+        "Gengar (Dark Mind)",
+        "Hypno (Dark Mind)",
+        "Gengar (Dark Mind)",
+        "Hypno (Dark Mind)"
+      ]
+    },
+    "hitmonlee_stretch_kick": {
+      "fxType": "hitmonlee_stretch_kick",
+      "isStock": false,
+      "attacks": [
+        "Hitmonlee (Stretch Kick)",
+        "Hitmonlee (Stretch Kick)"
+      ]
+    },
+    "hitmonlee_high_jump_kick": {
+      "fxType": "hitmonlee_high_jump_kick",
+      "isStock": false,
+      "attacks": [
+        "Hitmonlee (High Jump Kick)",
+        "Hitmonlee (High Jump Kick)"
+      ]
+    },
+    "hypno_hypnotic_pendulum": {
+      "fxType": "hypno_hypnotic_pendulum",
+      "isStock": false,
+      "attacks": [
+        "Hypno (Prophecy)",
+        "Hypno (Prophecy)"
+      ]
+    },
+    "kabutops_sickle_slash": {
+      "fxType": "kabutops_sickle_slash",
+      "isStock": false,
+      "attacks": [
+        "Kabutops (Sharp Sickle)",
+        "Kabutops (Absorb)",
+        "Kabutops (Sharp Sickle)",
+        "Kabutops (Absorb)"
+      ]
+    },
+    "lapras_glacial_surge": {
+      "fxType": "lapras_glacial_surge",
+      "isStock": false,
+      "attacks": [
+        "Lapras (Water Gun)",
+        "Lapras (Water Gun)"
+      ]
+    },
+    "lapras_aurora_ray": {
+      "fxType": "lapras_aurora_ray",
+      "isStock": false,
+      "attacks": [
+        "Lapras (Confuse Ray)",
+        "Lapras (Confuse Ray)"
+      ]
+    },
+    "hyper_beam_laser": {
+      "fxType": "hyper_beam_laser",
+      "isStock": false,
+      "attacks": [
+        "Magneton (Sonicboom)",
+        "Magneton (Sonicboom)",
+        "Dark Magneton (Sonicboom)",
+        "Dark Magneton (Sonicboom)",
+        "Dark Electrode (Energy Bomb)"
+      ]
+    },
+    "moltres_wildfire": {
+      "fxType": "moltres_wildfire",
+      "isStock": false,
+      "attacks": [
+        "Moltres (Wildfire)",
+        "Moltres (Wildfire)"
+      ]
+    },
+    "moltres_dive_bomb": {
+      "fxType": "moltres_dive_bomb",
+      "isStock": false,
+      "attacks": [
+        "Moltres (Dive Bomb)",
+        "Moltres (Dive Bomb)"
+      ]
+    },
+    "muk_sludge_deluge": {
+      "fxType": "muk_sludge_deluge",
+      "isStock": true,
+      "attacks": [
+        "Muk (Sludge)",
+        "Muk (Sludge)",
+        "Dark Muk (Sludge Punch)"
+      ]
+    },
+    "raichu_gigashock": {
+      "fxType": "raichu_gigashock",
+      "isStock": false,
+      "attacks": [
+        "Raichu (Gigashock)",
+        "Raichu (Gigashock)"
+      ]
+    },
+    "zapdos_thunderstorm": {
+      "fxType": "zapdos_thunderstorm",
+      "isStock": false,
+      "attacks": [
+        "Zapdos (Thunderstorm)",
+        "Zapdos (Thunderstorm)"
+      ]
+    },
+    "arbok_wrap_constrict": {
+      "fxType": "arbok_wrap_constrict",
+      "isStock": true,
+      "attacks": [
+        "Arbok (Terror Strike)"
+      ]
+    },
+    "bite_jaw": {
+      "fxType": "bite_jaw",
+      "isStock": false,
+      "attacks": [
+        "Arbok (Poison Fang)",
+        "Ekans (Bite)"
+      ]
+    },
+    "cloyster_clamp": {
+      "fxType": "cloyster_clamp",
+      "isStock": true,
+      "attacks": [
+        "Cloyster (Clamp)"
+      ]
+    },
+    "cloyster_spike_cannon": {
+      "fxType": "cloyster_spike_cannon",
+      "isStock": true,
+      "attacks": [
+        "Cloyster (Spike Cannon)"
+      ]
+    },
+    "golbat_leech_life": {
+      "fxType": "golbat_leech_life",
+      "isStock": true,
+      "attacks": [
+        "Golbat (Leech Life)"
+      ]
+    },
+    "hyper_beam_ice": {
+      "fxType": "hyper_beam_ice",
+      "isStock": false,
+      "attacks": [
+        "Golduck (Hyper Beam)"
+      ]
+    },
+    "golem_avalanche": {
+      "fxType": "golem_avalanche",
+      "isStock": false,
+      "attacks": [
+        "Golem (Avalanche)"
+      ]
+    },
+    "golem_selfdestruct": {
+      "fxType": "golem_selfdestruct",
+      "isStock": false,
+      "attacks": [
+        "Golem (Selfdestruct)"
+      ]
+    },
+    "kingler_crabhammer": {
+      "fxType": "kingler_crabhammer",
+      "isStock": false,
+      "attacks": [
+        "Kingler (Crabhammer)"
+      ]
+    },
+    "smokescreen_cloud": {
+      "fxType": "smokescreen_cloud",
+      "isStock": false,
+      "attacks": [
+        "Magmar (Smokescreen)"
+      ]
+    },
+    "magmar_smog": {
+      "fxType": "magmar_smog",
+      "isStock": false,
+      "attacks": [
+        "Magmar (Smog)"
+      ]
+    },
+    "omastar_spike_cannon": {
+      "fxType": "omastar_spike_cannon",
+      "isStock": false,
+      "attacks": [
+        "Omastar (Spike Cannon)"
+      ]
+    },
+    "tentacruel_crimson_lash": {
+      "fxType": "tentacruel_crimson_lash",
+      "isStock": false,
+      "attacks": [
+        "Tentacruel (Jellyfish Sting)"
+      ]
+    },
+    "weezing_toxic_smog": {
+      "fxType": "weezing_toxic_smog",
+      "isStock": true,
+      "attacks": [
+        "Weezing (Smog)",
+        "Weezing (Selfdestruct)",
+        "Dark Weezing (Mass Explosion)",
+        "Dark Weezing (Stun Gas)",
+        "Dark Weezing (Mass Explosion)",
+        "Dark Weezing (Stun Gas)"
+      ]
+    },
+    "ekans_poison_sting": {
+      "fxType": "ekans_poison_sting",
+      "isStock": false,
+      "attacks": [
+        "Ekans (Spit Poison)",
+        "Ekans (Poison Sting)"
+      ]
+    },
+    "ekans_wrap_constrict": {
+      "fxType": "ekans_wrap_constrict",
+      "isStock": true,
+      "attacks": [
+        "Ekans (Wrap)"
+      ]
+    },
+    "stone_barrage_single": {
+      "fxType": "stone_barrage_single",
+      "isStock": false,
+      "attacks": [
+        "Geodude (Stone Barrage)"
+      ]
+    },
+    "grimer_nasty_goo": {
+      "fxType": "grimer_nasty_goo",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Nasty Goo)"
+      ]
+    },
+    "grimer_minimize": {
+      "fxType": "grimer_minimize",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Minimize)"
+      ]
+    },
+    "horsea_smokescreen": {
+      "fxType": "horsea_smokescreen",
+      "isStock": false,
+      "attacks": [
+        "Horsea (Smokescreen)"
+      ]
+    },
+    "krabby_irongrip": {
+      "fxType": "krabby_irongrip",
+      "isStock": false,
+      "attacks": [
+        "Krabby (Irongrip)"
+      ]
+    },
+    "psyduck_headache": {
+      "fxType": "psyduck_headache",
+      "isStock": false,
+      "attacks": [
+        "Psyduck (Headache)"
+      ]
+    },
+    "psyduck_fury_swipes": {
+      "fxType": "psyduck_fury_swipes",
+      "isStock": false,
+      "attacks": [
+        "Psyduck (Fury Swipes)"
+      ]
+    },
+    "shellder_supersonic": {
+      "fxType": "shellder_supersonic",
+      "isStock": false,
+      "attacks": [
+        "Shellder (Supersonic)"
+      ]
+    },
+    "shellder_hide_in_shell": {
+      "fxType": "shellder_hide_in_shell",
+      "isStock": false,
+      "attacks": [
+        "Shellder (Hide in Shell)"
+      ]
+    },
+    "slowpoke_spacing_out": {
+      "fxType": "slowpoke_spacing_out",
+      "isStock": false,
+      "attacks": [
+        "Slowpoke (Spacing Out)"
+      ]
+    },
+    "pay_day_coins": {
+      "fxType": "pay_day_coins",
+      "isStock": false,
+      "attacks": [
+        "Slowpoke (Scavenge)"
+      ]
+    },
+    "tentacool_acid": {
+      "fxType": "tentacool_acid",
+      "isStock": false,
+      "attacks": [
+        "Tentacool (Acid)"
+      ]
+    },
+    "zubat_leech_life": {
+      "fxType": "zubat_leech_life",
+      "isStock": false,
+      "attacks": [
+        "Zubat (Leech Life)"
+      ]
+    },
+    "cobra_stare": {
+      "fxType": "cobra_stare",
+      "isStock": true,
+      "attacks": [
+        "Dark Arbok (Stare)",
+        "Dark Arbok (Stare)"
+      ]
+    },
+    "poison_vapor": {
+      "fxType": "poison_vapor",
+      "isStock": true,
+      "attacks": [
+        "Dark Arbok (Poison Vapor)",
+        "Dark Arbok (Poison Vapor)"
+      ]
+    },
+    "lick_tongue": {
+      "fxType": "lick_tongue",
+      "isStock": false,
+      "attacks": [
+        "Dark Charizard (Nail Flick)",
+        "Dark Charizard (Nail Flick)"
+      ]
+    },
+    "dark_charizard_fireball": {
+      "fxType": "dark_charizard_fireball",
+      "isStock": false,
+      "attacks": [
+        "Dark Charizard (Continuous Fireball)",
+        "Dark Charizard (Continuous Fireball)"
+      ]
+    },
+    "bat_wing_flap": {
+      "fxType": "bat_wing_flap",
+      "isStock": false,
+      "attacks": [
+        "Dark Golbat (Flitter)",
+        "Dark Golbat (Flitter)"
+      ]
+    },
+    "dark_gyarados_ice_beam": {
+      "fxType": "dark_gyarados_ice_beam",
+      "isStock": false,
+      "attacks": [
+        "Dark Gyarados (Ice Beam)",
+        "Dark Gyarados (Ice Beam)"
+      ]
+    },
+    "punch": {
+      "fxType": "punch",
+      "isStock": false,
+      "attacks": [
+        "Dark Machamp (Fling)",
+        "Dark Machamp (Fling)",
+        "Dark Machoke (Drag Off)",
+        "Machop (Punch)"
+      ]
+    },
+    "fireball_barrage": {
+      "fxType": "fireball_barrage",
+      "isStock": false,
+      "attacks": [
+        "Dark Charmeleon (Fireball)"
+      ]
+    },
+    "flamethrower_blaze": {
+      "fxType": "flamethrower_blaze",
+      "isStock": false,
+      "attacks": [
+        "Dark Flareon (Rage)"
+      ]
+    },
+    "playing_with_fire": {
+      "fxType": "playing_with_fire",
+      "isStock": false,
+      "attacks": [
+        "Dark Flareon (Playing with Fire)"
+      ]
+    },
+    "super_psy_blast": {
+      "fxType": "super_psy_blast",
+      "isStock": false,
+      "attacks": [
+        "Dark Golduck (Super Psy)"
+      ]
+    },
+    "flame_pillar": {
+      "fxType": "flame_pillar",
+      "isStock": false,
+      "attacks": [
+        "Dark Rapidash (Flame Pillar)"
+      ]
+    },
+    "psybeam_kaleidoscope": {
+      "fxType": "psybeam_kaleidoscope",
+      "isStock": true,
+      "attacks": [
+        "Porygon (Psybeam)"
+      ]
+    },
+    "abra_vanish": {
+      "fxType": "abra_vanish",
+      "isStock": false,
+      "attacks": [
+        "Abra (Vanish)"
+      ]
+    },
+    "charmander_fire_tail_whip": {
+      "fxType": "charmander_fire_tail_whip",
+      "isStock": true,
+      "attacks": [
+        "Charmander (Fire Tail)"
+      ]
+    },
+    "dratini_tail_wrap": {
+      "fxType": "dratini_tail_wrap",
+      "isStock": false,
+      "attacks": [
+        "Dratini (Wrap)"
+      ]
+    },
+    "drowzee_nightmare": {
+      "fxType": "drowzee_nightmare",
+      "isStock": false,
+      "attacks": [
+        "Drowzee (Nightmare)"
+      ]
+    },
+    "tackle": {
+      "fxType": "tackle",
+      "isStock": false,
+      "attacks": [
+        "Eevee (Tackle)"
+      ]
+    },
+    "sand_attack_dust": {
+      "fxType": "sand_attack_dust",
+      "isStock": false,
+      "attacks": [
+        "Eevee (Sand-attack)"
+      ]
+    },
+    "poison_gas": {
+      "fxType": "poison_gas",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Poison Gas)"
+      ]
+    },
+    "grimer_sticky_hands": {
+      "fxType": "grimer_sticky_hands",
+      "isStock": false,
+      "attacks": [
+        "Grimer (Sticky Hands)"
+      ]
+    },
+    "magnemite_magnetism": {
+      "fxType": "magnemite_magnetism",
+      "isStock": false,
+      "attacks": [
+        "Magnemite (Magnetism)"
+      ]
+    },
+    "mankey_anger": {
+      "fxType": "mankey_anger",
+      "isStock": false,
+      "attacks": [
+        "Mankey (Mischief)",
+        "Mankey (Anger)"
+      ]
+    },
+    "meowth_coin_hurl": {
+      "fxType": "meowth_coin_hurl",
+      "isStock": false,
+      "attacks": [
+        "Meowth (Coin Hurl)"
+      ]
+    },
+    "sleep_powder_drift": {
+      "fxType": "sleep_powder_drift",
+      "isStock": false,
+      "attacks": [
+        "Oddish (Sleep Powder)"
+      ]
+    },
+    "ember_spark": {
+      "fxType": "ember_spark",
+      "isStock": false,
+      "attacks": [
+        "Ponyta (Ember)"
+      ]
+    },
+    "psyduck_dizziness": {
+      "fxType": "psyduck_dizziness",
+      "isStock": false,
+      "attacks": [
+        "Psyduck (Dizziness)"
+      ]
+    },
+    "rattata_quick_attack": {
+      "fxType": "rattata_quick_attack",
+      "isStock": true,
+      "attacks": [
+        "Rattata (Quick Attack)"
+      ]
+    },
+    "slowpoke_afternoon_nap": {
+      "fxType": "slowpoke_afternoon_nap",
+      "isStock": false,
+      "attacks": [
+        "Slowpoke (Afternoon Nap)"
+      ]
+    },
+    "voltorb_speed_ball": {
+      "fxType": "voltorb_speed_ball",
+      "isStock": false,
+      "attacks": [
+        "Voltorb (Speed Ball)"
+      ]
+    }
+  }
+}

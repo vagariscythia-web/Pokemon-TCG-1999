@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon TCG 1999 — İleri Düzey VFX Sanat Yönetmenliği Numune Paneli</title>
+  <!-- GSAP CDN for real-time fluid turbulence interpolation (Demo 2 Parity) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <style>
+    :root {
+      --bg-dark: #07090e;
+      --panel-bg: rgba(13, 18, 30, 0.96);
+      --card-w: 184px;
+      --card-h: 253px;
+      --accent-cyan: #38bdf8;
+      --accent-lime: #a3e635;
+      --accent-gold: #facc15;
+      --accent-sky: #0ea5e9;
+      --accent-emerald: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 8%, #141c2e 0%, #05070b 100%);
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 80px;
+    }
+
+    header {
+      text-align: center;
+      max-width: 1020px;
+      margin-bottom: 22px;
+    }
+
+    .badge-master {
+      display: inline-block;
+      padding: 5px 16px;
+      border-radius: 9999px;
+      background: rgba(163, 230, 53, 0.15);
+      border: 1px solid rgba(163, 230, 53, 0.5);
+      color: var(--accent-lime);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.55;
+    }
+
+    /* Global Control Bar */
+    .global-toolbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.88);
+      padding: 10px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      color: #cbd5e1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+
+    .btn:hover {
+      background: rgba(51, 65, 85, 0.95);
+      border-color: rgba(56, 189, 248, 0.5);
+      color: #fff;
+    }
+
+    .btn.active {
+      background: rgba(56, 189, 248, 0.22);
+      border-color: var(--accent-cyan);
+      color: #38bdf8;
+      box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+    }
+
+    /* Grid of 4 Masterpiece Cards */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 26px;
+      max-width: 1420px;
+      width: 100%;
+    }
+
+    .showcase-card {
+      background: var(--panel-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(14px);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+      position: relative;
+    }
+
+    .showcase-card:hover {
+      border-color: rgba(163, 230, 53, 0.4);
+      transform: translateY(-3px);
+    }
+
+    .showcase-header {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 14px;
+    }
+
+    .showcase-badge {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-solar {
+      background: rgba(163, 230, 53, 0.2);
+      color: #bef264;
+      border: 1px solid rgba(163, 230, 53, 0.45);
+    }
+
+    .badge-hydro {
+      background: rgba(14, 165, 233, 0.2);
+      color: #38bdf8;
+      border: 1px solid rgba(14, 165, 233, 0.45);
+    }
+
+    .badge-acid {
+      background: rgba(234, 179, 8, 0.2);
+      color: #fde047;
+      border: 1px solid rgba(234, 179, 8, 0.45);
+    }
+
+    .showcase-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .showcase-desc {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* Card Slot with Parity (Rule 14: 184px x 253px) */
+    .card-slot-wrapper {
+      position: relative;
+      width: var(--card-w);
+      height: var(--card-h);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #090d16;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.75), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      margin-bottom: 14px;
+    }
+
+    .card-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.95;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+    }
+
+    .dark-board-mode .card-bg-img {
+      opacity: 0.08;
+      filter: grayscale(100%) brightness(0.25);
+    }
+
+    /* Status Strip (CardView.tsx parity) */
+    .status-strip {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+      z-index: 28;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(10, 15, 28, 0.88);
+      backdrop-filter: blur(5px);
+      padding: 2px 7px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .status-hp {
+      font-size: 9px;
+      font-weight: 800;
+      color: #f8fafc;
+    }
+
+    .status-pips {
+      display: flex;
+      gap: 2px;
+    }
+
+    .pip {
+      width: 4px;
+      height: 6px;
+      border-radius: 1px;
+      background: #22c55e;
+    }
+
+    /* FX Overlay Canvas / Stage */
+    .fx-stage {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    /* Controls Panel under Card */
+    .card-controls {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-play {
+      width: 100%;
+      background: linear-gradient(135deg, rgba(163, 230, 53, 0.25) 0%, rgba(30, 41, 59, 0.85) 100%);
+      border: 1px solid rgba(163, 230, 53, 0.45);
+      color: #f7fee7;
+      padding: 9px;
+      border-radius: 9px;
+      font-weight: 700;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-play:hover {
+      background: linear-gradient(135deg, rgba(163, 230, 53, 0.45) 0%, rgba(30, 41, 59, 0.95) 100%);
+      border-color: #bef264;
+      box-shadow: 0 0 16px rgba(163, 230, 53, 0.4);
+      color: #fff;
+    }
+
+    .vfx-breakdown {
+      font-size: 10px;
+      color: #94a3b8;
+      line-height: 1.45;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .vfx-breakdown strong {
+      color: #e2e8f0;
+    }
+
+    /* =====================================================================
+       ROOT-LEVEL KEYFRAMES (Rule 14 & Rule 18 Invariant: Strictly Balanced Root Keyframes)
+       ===================================================================== */
+
+    /* Universal Shudder Tremor */
+    @keyframes fxCardShudder {
+      0% { transform: translate(0, 0); }
+      18% { transform: translate(-3px, 2px) rotate(-0.8deg); }
+      36% { transform: translate(3px, -2px) rotate(0.8deg); }
+      54% { transform: translate(-2px, 1px) rotate(-0.4deg); }
+      72% { transform: translate(2px, -1px) rotate(0.4deg); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* 1. VENUSAUR SOLARBEAM ULTRA-REVAMPED KEYFRAMES */
+    @keyframes sbOpticalLensingVignette {
+      0% { opacity: 0; }
+      20% { opacity: 0.75; }
+      75% { opacity: 0.95; }
+      85% { opacity: 0; }
+      100% { opacity: 0; }
+    }
+
+    /* Radiant photon needles converging inward */
+    @keyframes sbPhotonNeedleInflow {
+      0% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.2); }
+      25% { opacity: 0.95; transform: translate(calc(var(--dx) * 0.65), calc(var(--dy) * 0.65)) scale(1); filter: drop-shadow(0 0 8px #fef08a); }
+      70% { opacity: 1; transform: translate(calc(var(--dx) * 0.18), calc(var(--dy) * 0.18)) scale(0.85); filter: drop-shadow(0 0 14px #ffffff); }
+      88% { opacity: 1; transform: translate(0, 0) scale(0.1); filter: drop-shadow(0 0 25px #ffffff); }
+      92% { opacity: 0; transform: translate(0, 0) scale(0); }
+      100% { opacity: 0; }
+    }
+
+    /* Concentrated solar photosphere core & vacuum snap (Kademeli hızlanan kozmik birikim!) */
+    @keyframes sbHyperSolarCorePulse {
+      0% { opacity: 0; transform: scale(0.18) rotate(0deg); }
+      35% { opacity: 0.88; transform: scale(0.85) rotate(45deg); filter: drop-shadow(0 0 20px #bef264); }
+      70% { opacity: 1; transform: scale(1.22) rotate(220deg); filter: drop-shadow(0 0 35px #fef08a) drop-shadow(0 0 55px #ffffff); }
+      90% { opacity: 1; transform: scale(1.45) rotate(640deg); } /* Critical mass hyper-speed spin */
+      95% { opacity: 1; transform: scale(0.03) rotate(900deg); filter: drop-shadow(0 0 75px #ffffff); } /* Violent singularity implosion */
+      98% { opacity: 0; transform: scale(0); }
+      100% { opacity: 0; }
+    }
+
+    /* Roiling Solar Prominence Flares (Kademeli Hızlanan Organik Plazma Taçları) */
+    @keyframes sbCoronalProminenceSpin {
+      0% { opacity: 0; transform: rotate(0deg) scale(0.65); }
+      35% { opacity: 0.92; transform: rotate(50deg) scale(0.95); filter: drop-shadow(0 0 16px #fef08a); }
+      70% { opacity: 0.98; transform: rotate(260deg) scale(1.18); filter: drop-shadow(0 0 28px #bef264); }
+      90% { opacity: 1; transform: rotate(720deg) scale(1.35); filter: drop-shadow(0 0 45px #ffffff); }
+      95% { opacity: 1; transform: rotate(980deg) scale(0.05); }
+      98% { opacity: 0; transform: scale(0); }
+      100% { opacity: 0; }
+    }
+
+    /* Pure Cylindrical Laser Column (Detonation at 1.12s) */
+    @keyframes sbLaserColumnDischarge {
+      0% { opacity: 0; transform: scaleY(0.05); }
+      6% { opacity: 1; transform: scaleY(1.02); filter: drop-shadow(0 0 35px #a3e635) drop-shadow(0 0 65px #fef08a); }
+      25% { opacity: 1; transform: scaleY(1); }
+      55% { opacity: 0.95; transform: scaleY(0.99); }
+      80% { opacity: 0.7; transform: scaleY(0.98); }
+      100% { opacity: 0; transform: scaleY(1.01) scaleX(0.6); filter: blur(5px); }
+    }
+
+    /* Cascading Ground Energy Surge Wave 1 (Zemine Tam Kilitli — transform-origin: 50% 100%, bottom: 0px!) */
+    @keyframes sbGroundSurgeWave1 {
+      0% { opacity: 0; transform: scaleX(0.18) scaleY(0.18); }
+      15% { opacity: 1; transform: scaleX(1.35) scaleY(1.0); filter: drop-shadow(0 0 30px #ffffff) drop-shadow(0 0 55px #fef08a); }
+      45% { opacity: 0.9; transform: scaleX(2.3) scaleY(1.45); }
+      75% { opacity: 0.45; transform: scaleX(3.1) scaleY(1.85); }
+      100% { opacity: 0; transform: scaleX(3.6) scaleY(2.1); filter: blur(14px); }
+    }
+
+    /* Cascading Ground Energy Surge Wave 2 (Sekonder Klorofil Plazma Dalgası — bottom: 0px kilitli) */
+    @keyframes sbGroundSurgeWave2 {
+      0% { opacity: 0; transform: scaleX(0.2) scaleY(0.2); }
+      18% { opacity: 0.95; transform: scaleX(1.45) scaleY(1.05); filter: drop-shadow(0 0 35px #bef264); }
+      50% { opacity: 0.82; transform: scaleX(2.6) scaleY(1.55); }
+      78% { opacity: 0.38; transform: scaleX(3.3) scaleY(1.95); }
+      100% { opacity: 0; transform: scaleX(3.9) scaleY(2.3); filter: blur(16px); }
+    }
+
+    /* Cascading Ground Energy Surge Wave 3 (Tersiyer Atmosferik İyonizasyon Dalgası — bottom: 0px kilitli) */
+    @keyframes sbGroundSurgeWave3 {
+      0% { opacity: 0; transform: scaleX(0.25) scaleY(0.25); }
+      22% { opacity: 0.85; transform: scaleX(1.55) scaleY(1.1); filter: drop-shadow(0 0 25px #84cc16); }
+      55% { opacity: 0.7; transform: scaleX(2.9) scaleY(1.7); }
+      82% { opacity: 0.3; transform: scaleX(3.7) scaleY(2.1); }
+      100% { opacity: 0; transform: scaleX(4.3) scaleY(2.5); filter: blur(18px); }
+    }
+
+    /* Central Scorched Hearth Core (Zemin tabanında kalan akkor eriyik çekirdeği — bottom: 0px) */
+    @keyframes sbGroundHearthCore {
+      0% { opacity: 0; transform: scale(0.25); }
+      14% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 24px #ffffff) drop-shadow(0 0 45px #fef08a); }
+      50% { opacity: 0.95; transform: scale(1.0); }
+      80% { opacity: 0.65; transform: scale(1.08); }
+      100% { opacity: 0; transform: scale(1.28); filter: blur(8px); }
+    }
+
+    /* Rising convective solar embers & shards */
+    @keyframes sbSolarSparksAscent {
+      0% { opacity: 0; transform: translateY(0) scale(0.35); }
+      20% { opacity: 1; transform: translateY(-30px) scale(1); filter: drop-shadow(0 0 8px #fef08a); }
+      60% { opacity: 0.85; transform: translateY(-90px) scale(0.85); }
+      100% { opacity: 0; transform: translateY(-145px) scale(0.2); }
+    }
+
+    /* 2. POLIWRATH WHIRLPOOL KEYFRAMES */
+    @keyframes wpStreamlineMantleSpin {
+      0% { opacity: 0; transform: rotate(0deg) scale(0.7); }
+      20% { opacity: 0.85; transform: rotate(70deg) scale(0.95); filter: drop-shadow(0 0 20px #0284c7); }
+      55% { opacity: 0.95; transform: rotate(240deg) scale(1.02); }
+      80% { opacity: 0.7; transform: rotate(380deg) scale(1.08); }
+      100% { opacity: 0; transform: rotate(480deg) scale(1.18); filter: blur(6px); }
+    }
+
+    @keyframes wpDeepSiphonVortex {
+      0% { opacity: 0; transform: rotate(0deg) scale(0.35); }
+      20% { opacity: 0.95; transform: rotate(180deg) scale(0.85); filter: drop-shadow(0 0 18px #38bdf8); }
+      55% { opacity: 1; transform: rotate(540deg) scale(1.02); }
+      80% { opacity: 0.75; transform: rotate(840deg) scale(0.95); }
+      100% { opacity: 0; transform: rotate(1080deg) scale(1.1); filter: blur(5px); }
+    }
+
+    @keyframes wpCavitationFrothOrbit {
+      0% { opacity: 0; transform: rotate(0deg) translateX(58px) scale(0.3); }
+      20% { opacity: 1; transform: rotate(130deg) translateX(42px) scale(1); }
+      55% { opacity: 0.9; transform: rotate(360deg) translateX(24px) scale(0.9); }
+      80% { opacity: 0.7; transform: rotate(580deg) translateX(10px) scale(0.5); }
+      100% { opacity: 0; transform: rotate(760deg) translateX(2px) scale(0.1); }
+    }
+
+    @keyframes wpOrganicSurgeWave {
+      0% { opacity: 0; transform: scale(0.25); }
+      22% { opacity: 0.92; transform: scale(0.75); filter: drop-shadow(0 0 18px #38bdf8); }
+      58% { opacity: 0.65; transform: scale(1.35); }
+      100% { opacity: 0; transform: scale(2.0); filter: blur(6px); }
+    }
+
+    /* 3. VICTREEBEL ACID MELT KEYFRAMES */
+    @keyframes amOrganicPuddleExpansion {
+      0% { opacity: 0; transform: scale(0.25) rotate(-3deg); }
+      25% { opacity: 0.95; transform: scale(0.9) rotate(0deg); filter: drop-shadow(0 0 20px #4d7c0f) drop-shadow(0 0 32px #15803d); }
+      50% { opacity: 1; transform: scale(1.04) rotate(1.5deg); }
+      75% { opacity: 0.85; transform: scale(1) rotate(0deg); }
+      100% { opacity: 0; transform: scale(1.15) rotate(2deg); filter: blur(6px); }
+    }
+
+    @keyframes amViscousStreamCascade {
+      0% { opacity: 0; transform: translateY(-50px) scaleY(0.2) scaleX(0.7); }
+      18% { opacity: 1; transform: translateY(0px) scaleY(1.08) scaleX(1.05); filter: drop-shadow(0 0 18px #84cc16); }
+      40% { opacity: 1; transform: translateY(18px) scaleY(1) scaleX(1); }
+      65% { opacity: 0.85; transform: translateY(32px) scaleY(0.95) scaleX(0.95); }
+      100% { opacity: 0; transform: translateY(55px) scaleY(0.8) scaleX(0.8); filter: blur(4px); }
+    }
+
+    @keyframes amPinchOffBeadCascade {
+      0% { opacity: 0; transform: translateY(-20px) scale(0.3); }
+      25% { opacity: 1; transform: translateY(18px) scale(1.1); filter: drop-shadow(0 0 12px #bef264); }
+      65% { opacity: 0.9; transform: translateY(58px) scale(1); }
+      100% { opacity: 0; transform: translateY(96px) scale(0.4); filter: blur(3px); }
+    }
+
+    @keyframes amChemicalBlisterBoil {
+      0% { opacity: 0; transform: translateY(8px) scale(0.2); }
+      25% { opacity: 1; transform: translateY(-10px) scale(1.15); filter: drop-shadow(0 0 10px #bef264); }
+      65% { opacity: 0.9; transform: translateY(-26px) scale(1.35); }
+      85% { opacity: 1; transform: translateY(-34px) scale(1.6); }
+      100% { opacity: 0; transform: translateY(-40px) scale(2.2); filter: blur(4px); }
+    }
+
+    @keyframes amSulfurVaporHeptagon {
+      0% { opacity: 0; transform: translateY(12px) scale(0.4) rotate(0deg); }
+      30% { opacity: 0.88; transform: translateY(-16px) scale(0.95) rotate(18deg); }
+      65% { opacity: 0.72; transform: translateY(-38px) scale(1.28) rotate(35deg); filter: drop-shadow(0 0 16px #65a30d); }
+      100% { opacity: 0; transform: translateY(-65px) scale(1.55) rotate(52deg); filter: blur(6px); }
+    }
+
+    /* 4. DARK BLASTOISE HYDROCANNON ADVANCED HYDRAULIC TORRENTS KEYFRAMES */
+    /* Nozzle Bore Pressurized Ejection Blowout (Süpersonik Buhar Tahliyesi) */
+    @keyframes hcMuzzleVaporBlowout {
+      0% { opacity: 0; transform: scale(0.2); }
+      18% { opacity: 0.95; transform: scale(1.15); filter: drop-shadow(0 0 14px #38bdf8); }
+      50% { opacity: 0.65; transform: scale(1.45) translateY(6px); }
+      100% { opacity: 0; transform: scale(1.85) translateY(12px); filter: blur(4px); }
+    }
+
+    /* Hydrodynamic Column Left: Doğrusal +21.0 deg eksen boyunca hedefe (92px, 135px) çakılan sıvı sütun (Demo 2 Mimarisi) */
+    @keyframes hcHydroStreamL {
+      0% { opacity: 0; transform: rotate(21.0deg) scaleY(0.06); }
+      14% { opacity: 1; transform: rotate(21.0deg) scaleY(1.02); }
+      35% { opacity: 1; transform: rotate(21.0deg) scaleY(1.0); }
+      68% { opacity: 0.9; transform: rotate(21.0deg) scaleY(0.98); }
+      85% { opacity: 0.45; transform: rotate(21.0deg) scaleY(0.95); filter: blur(2px); }
+      100% { opacity: 0; transform: rotate(21.0deg) scaleY(0.92); filter: blur(4px); }
+    }
+
+    /* Hydrodynamic Column Right: Doğrusal -21.0 deg eksen boyunca hedefe (92px, 135px) çakılan sıvı sütun (Demo 2 Mimarisi) */
+    @keyframes hcHydroStreamR {
+      0% { opacity: 0; transform: rotate(-21.0deg) scaleY(0.06); }
+      14% { opacity: 1; transform: rotate(-21.0deg) scaleY(1.02); }
+      35% { opacity: 1; transform: rotate(-21.0deg) scaleY(1.0); }
+      68% { opacity: 0.9; transform: rotate(-21.0deg) scaleY(0.98); }
+      85% { opacity: 0.45; transform: rotate(-21.0deg) scaleY(0.95); filter: blur(2px); }
+      100% { opacity: 0; transform: rotate(-21.0deg) scaleY(0.92); filter: blur(4px); }
+    }
+
+    /* Dynamic Gooey Cavitation Foam Bubbles (Geliştirilmiş Organik Köpüklü Blast Mimarisi) */
+    @keyframes hcDispersingFoamBubble {
+      0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0.2);
+      }
+      18% {
+        opacity: 1;
+        transform: translate(calc(var(--dx) * 0.35), calc(var(--dy) * 0.35)) scale(1.15);
+        filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.75));
+      }
+      50% {
+        opacity: 0.95;
+        transform: translate(calc(var(--dx) * 0.75), calc(var(--dy) * 0.75)) scale(1.0);
+      }
+      75% {
+        opacity: 0.75;
+        transform: translate(var(--dx), var(--dy)) scale(0.85);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(calc(var(--dx) * 1.25), calc(var(--dy) * 1.25 + 14px)) scale(0.1);
+        filter: blur(4px);
+      }
+    }
+
+    /* Core Nucleating Foam Bloom */
+    @keyframes hcCoreFoamBloom {
+      0% { opacity: 0; transform: scale(0.2); }
+      20% { opacity: 1; transform: scale(1.15); filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.8)); }
+      50% { opacity: 0.9; transform: scale(1.28); }
+      80% { opacity: 0.45; transform: scale(1.45); filter: blur(3px); }
+      100% { opacity: 0; transform: scale(1.6); filter: blur(6px); }
+    }
+
+    /* Diffuse Atmospheric Vapor Flash (SIFIR STATIK BUZ MAVISI DAIRE!) */
+    @keyframes hcAtmosphericVaporFlash {
+      0% { opacity: 0; transform: scale(0.3); }
+      20% { opacity: 0.85; transform: scale(1.1); }
+      55% { opacity: 0.5; transform: scale(1.6); }
+      100% { opacity: 0; transform: scale(2.2); filter: blur(10px); }
+    }
+
+    @keyframes hcAerosolMistPlume {
+      0% { opacity: 0; transform: translateY(12px) scale(0.35); }
+      25% { opacity: 0.85; transform: translateY(-10px) scale(1.12); filter: drop-shadow(0 0 20px #38bdf8); }
+      60% { opacity: 0.65; transform: translateY(-26px) scale(1.45); }
+      100% { opacity: 0; transform: translateY(-44px) scale(1.8); filter: blur(6px); }
+    }
+
+    /* Parabolic Gravity Droplets (Kinetik sıçrama ve yerçekimli çakılma) */
+    @keyframes hcParabolicGravityDroplet {
+      0% { opacity: 0; transform: translate(0, 0) scale(0.3); }
+      16% { opacity: 1; transform: translate(var(--dx-up), var(--dy-up)) scale(1.2); filter: drop-shadow(0 0 7px #ffffff); }
+      48% { opacity: 0.92; transform: translate(calc(var(--dx-up) * 1.35), calc(var(--dy-up) + 40px)) scale(0.95); }
+      100% { opacity: 0; transform: translate(calc(var(--dx-up) * 1.7), calc(var(--dy-up) + 120px)) scale(0.2); filter: blur(1.5px); }
+    }
+
+    /* Variant Switcher Pill Styles */
+    .variant-selector {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .btn-var {
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #94a3b8;
+      border-radius: 6px;
+      padding: 4px 9px;
+      cursor: pointer;
+      font-size: 11px;
+      font-family: inherit;
+      transition: all 0.2s ease;
+    }
+    .btn-var:hover {
+      border-color: #38bdf8;
+      color: #f8fafc;
+      background: rgba(2, 132, 199, 0.25);
+    }
+    .btn-var.active {
+      background: rgba(2, 132, 199, 0.45);
+      border-color: #38bdf8;
+      color: #38bdf8;
+      font-weight: 600;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+    }
+
+    /* VARYANT 1: Revize Edilmiş Örgülü Kordonlu Şelale */
+    @keyframes hcBraidedStreamFlow {
+      0% {
+        opacity: 0;
+        transform: translateY(-8px) scaleY(0.12) scaleX(0.9);
+      }
+      18% {
+        opacity: 0.95;
+        transform: translateY(0) scaleY(1.02) scaleX(1.0);
+        filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
+      }
+      52% {
+        opacity: 0.88;
+        transform: translateY(8px) scaleY(1.0) scaleX(1.06);
+      }
+      78% {
+        opacity: 0.58;
+        transform: translateY(22px) scaleY(0.96) scaleX(1.15);
+        filter: blur(1.5px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(38px) scaleY(0.92) scaleX(1.22);
+        filter: blur(4px);
+      }
+    }
+
+    /* VARYANT 2: Genişleyen Hidrodinamik Çağlayan & Dipten Yükselen Buhar Dalgası */
+    @keyframes hcTurbulentFanningCascade {
+      0% {
+        opacity: 0;
+        transform: rotate(var(--angle)) scaleY(0.08) scaleX(0.7) translateY(-8px);
+      }
+      18% {
+        opacity: 0.95;
+        transform: rotate(var(--angle)) scaleY(1.02) scaleX(1.0) translateY(0);
+        filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
+      }
+      50% {
+        opacity: 0.90;
+        transform: rotate(calc(var(--angle) * 1.12)) scaleY(1.0) scaleX(1.28) translateY(8px);
+      }
+      75% {
+        opacity: 0.65;
+        transform: rotate(calc(var(--angle) * 1.22)) scaleY(0.96) scaleX(1.50) translateY(20px);
+        filter: blur(1.5px);
+      }
+      100% {
+        opacity: 0;
+        transform: rotate(calc(var(--angle) * 1.32)) scaleY(0.92) scaleX(1.70) translateY(36px);
+        filter: blur(4px);
+      }
+    }
+
+    /* Cohesive Caustic Fluid Matrix (Varyant 2: Kordonlar arası boşlukları birleştiren geniş taban perdesi) */
+    @keyframes hcCohesiveCausticMatrix {
+      0% {
+        opacity: 0;
+        transform: scaleY(0.1) scaleX(0.6) translateY(-10px);
+      }
+      20% {
+        opacity: 0.78;
+        transform: scaleY(1.02) scaleX(1.0) translateY(0);
+        filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.65));
+      }
+      52% {
+        opacity: 0.68;
+        transform: scaleY(1.0) scaleX(1.18) translateY(10px);
+      }
+      78% {
+        opacity: 0.42;
+        transform: scaleY(0.95) scaleX(1.32) translateY(22px);
+        filter: blur(2px);
+      }
+      100% {
+        opacity: 0;
+        transform: scaleY(0.90) scaleX(1.48) translateY(38px);
+        filter: blur(5px);
+      }
+    }
+
+    /* Zeminle çarpışma anında dipten genişleyen ve yükselen buhar/sis dalgası */
+    @keyframes hcGroundImpactVaporBillow {
+      0% {
+        opacity: 0;
+        transform: translateY(22px) scale(0.65) scaleX(0.7);
+      }
+      22% {
+        opacity: 0.92;
+        transform: translateY(2px) scale(1.05) scaleX(1.0);
+        filter: drop-shadow(0 -4px 18px rgba(56, 189, 248, 0.85)) blur(3.5px);
+      }
+      55% {
+        opacity: 0.72;
+        transform: translateY(-16px) scale(1.30) scaleX(1.24);
+        filter: blur(6px);
+      }
+      80% {
+        opacity: 0.40;
+        transform: translateY(-28px) scale(1.50) scaleX(1.40);
+        filter: blur(8px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-42px) scale(1.68) scaleX(1.52);
+        filter: blur(12px);
+      }
+    }
+
+    /* Cohesive Water Bed Matrix (Boşlukları kapatan akışkan zemin perdesi) */
+    @keyframes hcCohesiveWaterBed {
+      0% {
+        opacity: 0;
+        transform: scaleY(0.1) translateY(-6px);
+      }
+      20% {
+        opacity: 0.72;
+        transform: scaleY(1.02) translateY(0);
+        filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.5));
+      }
+      52% {
+        opacity: 0.62;
+        transform: scaleY(1.0) translateY(10px);
+      }
+      78% {
+        opacity: 0.38;
+        transform: scaleY(0.96) translateY(24px);
+        filter: blur(2px);
+      }
+      100% {
+        opacity: 0;
+        transform: scaleY(0.92) translateY(40px);
+        filter: blur(5px);
+      }
+    }
+
+    /* Fine-Grained High-Velocity Gravitational Droplet Cascade */
+    @keyframes hcFineGrainVelocityCascade {
+      0% { opacity: 0; transform: translateY(-10px) scale(0.4); }
+      15% { opacity: 1; transform: translateY(22px) scale(1.1); filter: drop-shadow(0 0 5px #ffffff); }
+      48% { opacity: 0.95; transform: translateY(72px) scale(0.95); }
+      78% { opacity: 0.8; transform: translateY(132px) scale(0.8); }
+      100% { opacity: 0; transform: translateY(175px) scale(0.2); }
+    }
+
+    /* Bottom Edge Recoil Micro-Splashes */
+    @keyframes hcBottomRecoilSplash {
+      0% { opacity: 0; transform: translateY(0) scale(0.3); }
+      25% { opacity: 0.95; transform: translateY(-8px) scale(1.15); filter: drop-shadow(0 0 6px #ffffff); }
+      60% { opacity: 0.75; transform: translateY(-12px) scale(0.9); }
+      100% { opacity: 0; transform: translateY(-4px) scale(0.2); filter: blur(2px); }
+    }
+
+      </style>
+</head>
+<body>
+
+  <!-- Static Global SVG Filter Defs (Exact Demo 2 & Demo 3 Architecture) -->
+  <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+    <defs>
+      <!-- 1. Liquid Gooey / Metaball Filter (Surface Tension & Organic Splash) -->
+      <filter id="liquidGooFilter" color-interpolation-filters="sRGB">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+        <feColorMatrix in="blur" mode="matrix" 
+          values="1 0 0 0 0  
+                  0 1 0 0 0  
+                  0 0 1 0 0  
+                  0 0 0 24 -9" result="goo" />
+        <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+      </filter>
+
+      <!-- 2. Water Jet Turbulence Filter (Anisotropic High-Pressure Ripple - Demo 2 Standard) -->
+      <filter id="waterJetTurbulenceFilter" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence id="waterTurbulenceElem" type="turbulence" baseFrequency="0.02 0.09" numOctaves="2" result="noise" />
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
+
+  <header>
+    <div class="badge-master">Cinema-Grade VFX &amp; Art Direction Focus</div>
+    <h1>İleri Düzey Saldırı Animasyonları — 4 Büyük Başyapıt</h1>
+    <p class="subtitle">
+      Kural 18 doğrultusunda; Dark Blastoise'da yapay küresel toplar kaldırıldı, düz balistik eksenli, feTurbulence ile canlı dalgalanan, optik caustics saçaklarına ve Sugimori dalga konturlarına sahip gerçekçi hidrodinamik su sütunları (Hydraulic Torrents) inşa edildi. Venusaur'da kademeli hızlanan korona fotosferi ve tam zemin tabanına (bottom: 0px) kilitli eşmerkezli füzyon dalgaları uygulandı.
+    </p>
+  </header>
+
+  <!-- Global Toolbar Controls -->
+  <div class="global-toolbar">
+    <button class="btn" id="btnPlayAll">▶ Dördünü Birden Oynat (Play All)</button>
+    <button class="btn active" id="btnMode">🎴 Real Card Mode</button>
+    <button class="btn active" id="btnSpeed1">1.0x Normal</button>
+    <button class="btn" id="btnSpeed05">0.5x Slow-Mo</button>
+    <button class="btn" id="btnSpeed025">0.25x Super Slow</button>
+    <button class="btn" id="btnWhiffToggle">🎯 Hit Modu (Whiff: Kapalı)</button>
+  </div>
+
+  <!-- Showcase Cards Grid -->
+  <div class="showcase-grid" id="showcaseGrid">
+    <!-- Showcase items injected by script -->
+  </div>
+
+  <script>
+    // Real-Time GSAP / rAF Turbulence Engine on Page Load (Demo 2 Parity)
+    window.addEventListener('DOMContentLoaded', () => {
+      const waterTurbElem = document.getElementById('waterTurbulenceElem');
+      if (waterTurbElem && typeof gsap !== 'undefined') {
+        const waterObj = { bfX: 0.02, bfY: 0.09 };
+        gsap.to(waterObj, {
+          bfX: 0.038,
+          bfY: 0.16,
+          duration: 1.1,
+          repeat: -1,
+          yoyo: true,
+          ease: "power1.inOut",
+          onUpdate: () => {
+            waterTurbElem.setAttribute('baseFrequency', `${waterObj.bfX.toFixed(3)} ${waterObj.bfY.toFixed(3)}`);
+          }
+        });
+      } else if (waterTurbElem) {
+        let st = performance.now();
+        const loop = () => {
+          const el = (performance.now() - st) / 1000;
+          const x = 0.02 + 0.015 * Math.sin(el * 6);
+          const y = 0.09 + 0.06 * Math.cos(el * 8);
+          waterTurbElem.setAttribute('baseFrequency', `${x.toFixed(3)} ${y.toFixed(3)}`);
+          requestAnimationFrame(loop);
+        };
+        requestAnimationFrame(loop);
+      }
+    });
+
+    // Resilient Asset Loading Protocol (Rule 14)
+    function loadResilientImg(imgEl, candidatePaths) {
+      let idx = 0;
+      function tryNext() {
+        if (idx < candidatePaths.length) {
+          imgEl.src = candidatePaths[idx++];
+        }
+      }
+      imgEl.onerror = tryNext;
+      tryNext();
+    }
+
+    // Showcase Items Definition (The 4 Revamped Masterpieces)
+    const REVAMPED_DATA = [
+      {
+        id: 'venusaur_solarbeam_master',
+        badge: 'badge-solar',
+        category: 'Grup B: Özel SVG Başyapıtı',
+        pokemon: 'Venusaur',
+        move: 'Solarbeam (Güneş Işını)',
+        cardImg: '15.jpg',
+        hp: '100 HP',
+        pips: 10,
+        desc: 'Kademeli hızlanan (acceleration) korona fotosferi ve dönen plazma taçları; darbe anında doğrudan solarbeam bitiş tabanından (bottom: 0px) yayılan 3 kademeli eşmerkezli zemin eriyik dalgaları.',
+        breakdown: '<strong>Advanced VFX İyileştirmesi:</strong> 12 odaklı foton ışık iğnesi $\\rightarrow$ kademeli hızlanarak dönen (0° → 720° hyper-spin) korona fotosferi $\\rightarrow$ 1.12s tekillik içe çöküşü (vacuum snap) $\\rightarrow$ silindirik lazer sütunu $\\rightarrow$ solarbeam bitiş çizgisine (bottom: 0px) tam kilitli 3 kademeli zemin füzyon dalgaları $\\rightarrow$ 26 dikey foton kıvılcımı.',
+        duration: 2400,
+        render: function(stage, whiff) {
+          if (!whiff) {
+            // Layer 1: Anisotropic Optical Lensing Vignette (Gravitasyonel Kararma)
+            const vig = document.createElement('div');
+            vig.style.cssText = 'position:absolute; inset:0; background:radial-gradient(circle at 50% 45%, rgba(254,240,138,0.2) 0%, rgba(6,78,59,0.75) 60%, rgba(2,44,34,0.98) 100%); z-index:11; opacity:0; pointer-events:none; animation:sbOpticalLensingVignette 2.3s ease-out forwards;';
+            stage.appendChild(vig);
+
+            // Layer 2: 12 Radiant Photon Inflow Needles (Temiz Foton İğneleri)
+            const needlesContainer = document.createElement('div');
+            needlesContainer.style.cssText = 'position:absolute; inset:0; z-index:15; pointer-events:none;';
+            
+            const angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
+            const dist = 80;
+            angles.forEach((deg, idx) => {
+              const rad = (deg * Math.PI) / 180;
+              const dx = Math.round(Math.cos(rad) * dist);
+              const dy = Math.round(Math.sin(rad) * dist);
+              const delay = (0.02 + (idx % 4) * 0.06).toFixed(2);
+              
+              const needle = document.createElement('div');
+              needle.style.cssText = `
+                position: absolute;
+                top: 110px;
+                left: 92px;
+                width: 34px;
+                height: 2px;
+                transform-origin: 0% 50%;
+                --dx: ${dx}px;
+                --dy: ${dy}px;
+                background: linear-gradient(90deg, #ffffff 0%, #fef08a 50%, rgba(190,242,100,0) 100%);
+                border-radius: 2px;
+                opacity: 0;
+                animation: sbPhotonNeedleInflow 1.08s cubic-bezier(0.4, 0, 0.2, 1) ${delay}s forwards;
+              `;
+              needlesContainer.appendChild(needle);
+            });
+            stage.appendChild(needlesContainer);
+
+            // Layer 3: Advanced VFX Roiling Solar Photosphere Core (Kademeli Hızlanan Korona Fotosferi & Organik Taçlar)
+            const sun = document.createElement('div');
+            sun.style.cssText = 'position:absolute; top:65px; left:47px; width:90px; height:90px; z-index:18; pointer-events:none; opacity:0; animation:sbHyperSolarCorePulse 1.14s cubic-bezier(0.3, 0, 0.9, 1) forwards;';
+            sun.innerHTML = `
+              <svg width="90" height="90" viewBox="0 0 90 90" style="overflow:visible;">
+                <!-- Deep Chromosphere Radial Halo -->
+                <circle cx="45" cy="45" r="43" fill="url(#gradSunChromosphereHalo)" opacity="0.88" style="filter:blur(3px);"/>
+
+                <!-- Roiling Coronal Prominences (Kademeli Hızlanan Organik Alev Taçları — 4 Büyük Kıvrımlı Korona Kolu) -->
+                <g style="transform-origin:45px 45px; animation:sbCoronalProminenceSpin 1.14s cubic-bezier(0.3, 0, 0.9, 1) forwards;">
+                  <!-- Arm 1 (Kuzey-Doğu Ana Alev Kolu) -->
+                  <path d="M 45 6 C 60 6, 72 16, 72 32 C 72 40, 62 42, 54 34 C 46 26, 52 16, 45 16 C 39 16, 36 22, 32 22 C 28 22, 30 14, 45 6 Z" fill="url(#gradSunProminenceLobe1)" opacity="0.92" style="filter:drop-shadow(0 0 10px #fef08a);"/>
+                  <!-- Arm 2 (Güney-Batı Ana Alev Kolu) -->
+                  <path d="M 45 84 C 30 84, 18 74, 18 58 C 18 50, 28 48, 36 56 C 44 64, 38 74, 45 74 C 51 74, 54 68, 58 68 C 62 68, 60 76, 45 84 Z" fill="url(#gradSunProminenceLobe2)" opacity="0.92" style="filter:drop-shadow(0 0 10px #bef264);"/>
+                  <!-- Arm 3 (Güneydoğu Kanat Dili) -->
+                  <path d="M 84 45 C 84 60, 74 72, 58 72 C 50 72, 48 62, 56 54 C 64 46, 74 52, 74 45 C 74 39, 68 36, 68 32 C 68 28, 76 30, 84 45 Z" fill="url(#gradSunProminenceLobe1)" opacity="0.88"/>
+                  <!-- Arm 4 (Kuzeybatı Kanat Dili) -->
+                  <path d="M 6 45 C 6 30, 16 18, 32 18 C 40 18, 42 28, 34 36 C 26 44, 16 38, 16 45 C 16 51, 22 54, 22 58 C 22 62, 14 60, 6 45 Z" fill="url(#gradSunProminenceLobe3)" opacity="0.88"/>
+                </g>
+
+                <!-- Radiant Solar Corona Outer Glow -->
+                <circle cx="45" cy="45" r="32" fill="url(#gradSunCoronaBody)" opacity="0.95"/>
+                <!-- White Hot Central Plasma Core -->
+                <circle cx="45" cy="45" r="21" fill="#ffffff" style="filter:drop-shadow(0 0 22px #ffffff) drop-shadow(0 0 40px #fef08a) drop-shadow(0 0 68px #84cc16);"/>
+                <circle cx="45" cy="45" r="11" fill="#ffffff"/>
+
+                <defs>
+                  <radialGradient id="gradSunChromosphereHalo" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="35%" stop-color="#fef08a"/>
+                    <stop offset="65%" stop-color="#84cc16" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                  </radialGradient>
+                  <radialGradient id="gradSunCoronaBody" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="30%" stop-color="#fef08a"/>
+                    <stop offset="65%" stop-color="#a3e635"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                  </radialGradient>
+                  <linearGradient id="gradSunProminenceLobe1" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="50%" stop-color="#fef08a"/>
+                    <stop offset="100%" stop-color="#84cc16"/>
+                  </linearGradient>
+                  <linearGradient id="gradSunProminenceLobe2" x1="1" y1="1" x2="0" y2="0">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="50%" stop-color="#fef08a"/>
+                    <stop offset="100%" stop-color="#a3e635"/>
+                  </linearGradient>
+                  <linearGradient id="gradSunProminenceLobe3" x1="0" y1="1" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#fef08a"/>
+                    <stop offset="60%" stop-color="#84cc16"/>
+                    <stop offset="100%" stop-color="#365314" stop-opacity="0.7"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            `;
+            stage.appendChild(sun);
+
+            // Layer 4: Pure Cylindrical Solar Laser Column (Cue: 1.12s)
+            const beam = document.createElement('div');
+            beam.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:22; pointer-events:none; opacity:0; animation:sbLaserColumnDischarge 1.28s cubic-bezier(0.18, 0.92, 0.28, 1) 1.12s forwards;';
+            beam.innerHTML = `
+              <svg width="160" height="253" viewBox="0 0 160 253" style="overflow:visible;">
+                <!-- Volumetric Pure Laser Sheath -->
+                <polygon points="62,0 50,253 110,253 98,0" fill="url(#gradSolarBeamCylinder)" opacity="0.95" style="filter:drop-shadow(0 0 28px #a3e635) drop-shadow(0 0 55px #65a30d);"/>
+                
+                <!-- Incandescent Laser Spine Core -->
+                <polygon points="73,0 67,253 93,253 87,0" fill="#ffffff" opacity="0.98" style="filter:drop-shadow(0 0 14px #ffffff) drop-shadow(0 0 25px #fef08a);"/>
+                <line x1="80" y1="0" x2="80" y2="253" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+
+                <!-- High-Velocity Vertical Photon Streams -->
+                <line x1="68" y1="0" x2="62" y2="253" stroke="#fef08a" stroke-width="1.8" opacity="0.85"/>
+                <line x1="92" y1="0" x2="98" y2="253" stroke="#fef08a" stroke-width="1.8" opacity="0.85"/>
+                <line x1="58" y1="0" x2="54" y2="253" stroke="#bef264" stroke-width="1.4" opacity="0.75"/>
+                <line x1="102" y1="0" x2="106" y2="253" stroke="#bef264" stroke-width="1.4" opacity="0.75"/>
+
+                <defs>
+                  <linearGradient id="gradSolarBeamCylinder" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#365314" stop-opacity="0.8"/>
+                    <stop offset="20%" stop-color="#84cc16"/>
+                    <stop offset="50%" stop-color="#fef08a"/>
+                    <stop offset="80%" stop-color="#84cc16"/>
+                    <stop offset="100%" stop-color="#365314" stop-opacity="0.8"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            `;
+            stage.appendChild(beam);
+
+            // Layer 5: Advanced VFX Concentric Ground Surge Waves (Solarbeam bitiş noktasına tam kilitli — bottom: 0px, transform-origin: 50% 100%)
+            const groundSurgeContainer = document.createElement('div');
+            groundSurgeContainer.style.cssText = 'position:absolute; bottom:0; left:-30px; right:-30px; height:120px; z-index:16; pointer-events:none; overflow:visible;';
+            groundSurgeContainer.innerHTML = `
+              <!-- Surge Wave 1: Akkor Termal Füzyon Dalgası (Cue: 1.12s — Doğrudan taban hizasından (bottom: 0px) patlar) -->
+              <div style="position:absolute; bottom:0px; left:50%; width:140px; height:48px; margin-left:-70px; transform-origin:50% 100%; border-radius:50% 50% 0 0; background:radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.98) 0%, rgba(254,240,138,0.9) 30%, rgba(163,230,53,0.6) 65%, rgba(20,83,45,0.2) 85%, transparent 100%); opacity:0; animation:sbGroundSurgeWave1 1.28s cubic-bezier(0.18, 0.9, 0.28, 1) 1.12s forwards; filter:blur(4px);"></div>
+
+              <!-- Surge Wave 2: Sekonder Klorofil Plazma Dalgası (Cue: 1.20s, dışa açılan rezonant dalga) -->
+              <div style="position:absolute; bottom:0px; left:50%; width:125px; height:42px; margin-left:-62.5px; transform-origin:50% 100%; border-radius:50% 50% 0 0; background:radial-gradient(ellipse at 50% 100%, rgba(254,240,138,0.92) 0%, rgba(132,204,22,0.75) 45%, rgba(16,185,129,0.4) 75%, transparent 100%); opacity:0; animation:sbGroundSurgeWave2 1.28s cubic-bezier(0.18, 0.9, 0.28, 1) 1.20s forwards; filter:blur(5px);"></div>
+
+              <!-- Surge Wave 3: Tersiyer Atmosferik İyonizasyon Dalgası (Cue: 1.28s, en dış hava ve zemin dalgası) -->
+              <div style="position:absolute; bottom:0px; left:50%; width:110px; height:36px; margin-left:-55px; transform-origin:50% 100%; border-radius:50% 50% 0 0; background:radial-gradient(ellipse at 50% 100%, rgba(190,242,100,0.8) 0%, rgba(77,124,15,0.45) 60%, transparent 100%); opacity:0; animation:sbGroundSurgeWave3 1.25s cubic-bezier(0.18, 0.9, 0.28, 1) 1.28s forwards; filter:blur(6px);"></div>
+
+              <!-- Central Molten Hearth Core: Tabanda kalan parıldayan eriyik çekirdeği (Cue: 1.12s — Solarbeam temas noktası) -->
+              <div style="position:absolute; bottom:0px; left:50%; width:96px; height:32px; margin-left:-48px; transform-origin:50% 100%; border-radius:50% 50% 0 0; background:radial-gradient(ellipse at 50% 100%, #ffffff 0%, #fef08a 40%, #84cc16 75%, transparent 100%); opacity:0; animation:sbGroundHearthCore 1.45s ease-out 1.12s forwards; filter:blur(2px);"></div>
+            `;
+            stage.appendChild(groundSurgeContainer);
+
+            // Layer 6: Rising Solar Embers & Shards (26 Adet Geniş Saçılan Dikey Foton Kıvılcımı)
+            for (let i = 0; i < 26; i++) {
+              const sp = document.createElement('div');
+              const left = 8 + (i * 3.3);
+              const delay = 1.14 + (i * 0.022);
+              const size = 2.4 + (i % 3) * 1.8;
+              sp.style.cssText = `position:absolute; bottom:2%; left:${left}%; width:${size}px; height:${size}px; border-radius:50%; background:#fff; box-shadow:0 0 10px #fef08a, 0 0 18px #a3e635; z-index:24; opacity:0; animation:sbSolarSparksAscent 1.20s cubic-bezier(0.2, 0.8, 0.3, 1) ${delay.toFixed(3)}s forwards;`;
+              stage.appendChild(sp);
+            }
+          } else {
+            const whiff = document.createElement('div');
+            whiff.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:18;';
+            whiff.innerHTML = '<div style="width:50px; height:50px; border-radius:50%; background:radial-gradient(circle, rgba(163,230,53,0.3) 0%, transparent 70%); animation:sbGroundHearthCore 0.8s ease-out forwards;"></div>';
+            stage.appendChild(whiff);
+          }
+        }
+      },
+      {
+        id: 'poliwrath_whirlpool_master',
+        badge: 'badge-hydro',
+        category: 'Grup B: Özel SVG Başyapıtı',
+        pokemon: 'Poliwrath',
+        move: 'Whirlpool (Okyanus Burgacı)',
+        cardImg: '13.jpg',
+        hp: '90 HP',
+        pips: 9,
+        desc: 'Mavi renkli tangled çizgiler kaldırıldı; dönen akışkan hidrodinamik su mantosu, derin okyanus hunisi ve Arşimet köpük zerreleri inşa edildi.',
+        breakdown: '<strong>VFX İyileştirmesi:</strong> Çizgisel tangled tel örgüleri tamamen tasfiye edildi $\\rightarrow$ akışkan dönen vorteks mantosu $\\rightarrow$ derin okyanus hunisi $\\rightarrow$ merkeze emilen 28 fine-grained kavitasyon damlası $\\rightarrow$ difüze su dalgası halkaları.',
+        duration: 1900,
+        render: function(stage, whiff) {
+          if (!whiff) {
+            // Layer 1: Swirling Hydrodynamic Ocean Mantle
+            const mantle = document.createElement('div');
+            mantle.style.cssText = 'position:absolute; inset:-12px; z-index:12; pointer-events:none; opacity:0; animation:wpStreamlineMantleSpin 1.85s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;';
+            mantle.innerHTML = `
+              <svg width="208" height="277" viewBox="0 0 208 277" style="overflow:visible;">
+                <!-- Broad Oceanic Swirl Gradients -->
+                <ellipse cx="104" cy="138" rx="98" ry="128" fill="url(#gradOceanicMantle)" opacity="0.65" style="filter:blur(6px);"/>
+                <ellipse cx="104" cy="138" rx="75" ry="98" fill="url(#gradOceanicCoreGlow)" opacity="0.75" style="filter:blur(4px);"/>
+
+                <defs>
+                  <radialGradient id="gradOceanicMantle" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.2"/>
+                    <stop offset="60%" stop-color="#0284c7" stop-opacity="0.6"/>
+                    <stop offset="90%" stop-color="#0369a1" stop-opacity="0.8"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                  </radialGradient>
+                  <radialGradient id="gradOceanicCoreGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+                    <stop offset="45%" stop-color="#7dd3fc" stop-opacity="0.65"/>
+                    <stop offset="80%" stop-color="#0284c7" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+            `;
+            stage.appendChild(mantle);
+
+            // Layer 2: Deep Siphon Vortex (Logaritmik Spiral Kollar)
+            const spiral = document.createElement('div');
+            spiral.style.cssText = 'position:absolute; top:36px; left:2px; width:180px; height:180px; z-index:18; pointer-events:none; opacity:0; animation:wpDeepSiphonVortex 1.85s cubic-bezier(0.18, 0.88, 0.28, 1) forwards;';
+            spiral.innerHTML = `
+              <svg width="180" height="180" viewBox="0 0 180 180" style="overflow:visible; filter:drop-shadow(0 0 18px #0284c7) drop-shadow(0 0 32px #0369a1);">
+                <!-- Arm 1 (Primary Arc) -->
+                <path d="M 90 10 C 135 10, 168 45, 168 90 C 168 135, 130 168, 90 168 C 50 168, 22 135, 22 95 C 22 62, 50 40, 80 40 C 105 40, 125 60, 125 85 C 125 105, 108 120, 90 120 C 76 120, 68 108, 68 96 C 68 86, 76 80, 85 80 C 90 80, 95 85, 95 90" fill="none" stroke="#0369a1" stroke-width="14" stroke-linecap="round"/>
+                <path d="M 90 15 C 130 15, 160 48, 160 90 C 160 130, 125 160, 90 160 C 55 160, 30 130, 30 95 C 30 68, 55 48, 80 48 C 100 48, 118 65, 118 85 C 118 100, 105 114, 90 114 C 80 114, 74 104, 74 96 C 74 88, 80 84, 85 84" fill="none" stroke="#38bdf8" stroke-width="7" stroke-linecap="round"/>
+                <path d="M 90 18 C 125 18, 152 50, 152 90 C 152 125, 120 152, 90 152 C 60 152, 38 125, 38 95 C 38 72, 60 55, 80 55" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" opacity="0.95" style="filter:drop-shadow(0 0 8px #ffffff);"/>
+
+                <!-- Arm 2 (Counter-Balanced Opposing Surge) -->
+                <path d="M 90 170 C 45 170, 12 135, 12 90 C 12 45, 50 12, 90 12 C 130 12, 158 45, 158 85 C 158 118, 130 140, 100 140 C 75 140, 55 120, 55 95 C 55 75, 72 60, 90 60 C 104 60, 112 72, 112 84 C 112 94, 104 100, 95 100" fill="none" stroke="#0284c7" stroke-width="12" stroke-linecap="round" opacity="0.88"/>
+                <path d="M 90 165 C 50 165, 20 132, 20 90 C 20 50, 55 20, 90 20 C 125 20, 150 50, 150 85 C 150 114, 125 134, 100 134 C 80 134, 62 118, 62 95" fill="none" stroke="#7dd3fc" stroke-width="6" stroke-linecap="round" opacity="0.92"/>
+                <path d="M 90 162 C 55 162, 28 130, 28 90 C 28 55, 60 28, 90 28" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.9"/>
+                
+                <!-- Central Vortex Eye (Karanlık Huni) -->
+                <circle cx="90" cy="90" r="14" fill="#021a29" style="filter:drop-shadow(0 0 10px #0284c7);"/>
+                <circle cx="90" cy="90" r="7" fill="#010e17"/>
+              </svg>
+            `;
+            stage.appendChild(spiral);
+
+            // Layer 3: Swirling Fine-Grained Cavitation Froth Beads
+            for (let i = 0; i < 24; i++) {
+              const bead = document.createElement('div');
+              const delay = (i * 0.055).toFixed(2);
+              const size = 2 + (i % 3) * 1.5;
+              bead.style.cssText = `position:absolute; top:116px; left:82px; width:${size}px; height:${size}px; border-radius:50%; background:#fff; box-shadow:0 0 6px #38bdf8, 0 0 12px #0284c7; z-index:22; opacity:0; animation:wpCavitationFrothOrbit 1.4s cubic-bezier(0.2, 0.85, 0.35, 1) ${delay}s forwards;`;
+              stage.appendChild(bead);
+            }
+
+            // Layer 4: Expanding Organic Wave Surges
+            const surge = document.createElement('div');
+            surge.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:16; pointer-events:none;';
+            surge.innerHTML = `
+              <div style="width:130px; height:130px; border-radius:50%; background:radial-gradient(circle, transparent 55%, rgba(56,189,248,0.4) 75%, transparent 100%); opacity:0; animation:wpOrganicSurgeWave 1.2s ease-out 0.65s forwards; filter:blur(3px);"></div>
+              <div style="position:absolute; width:110px; height:110px; border-radius:50%; background:radial-gradient(circle, transparent 50%, rgba(224,242,254,0.6) 70%, transparent 100%); opacity:0; animation:wpOrganicSurgeWave 1.2s ease-out 0.82s forwards; filter:blur(2px);"></div>
+            `;
+            stage.appendChild(surge);
+          } else {
+            const whiff = document.createElement('div');
+            whiff.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:18;';
+            whiff.innerHTML = '<div style="width:45px; height:45px; border-radius:50%; border:2px solid #0284c7; opacity:0; animation:wpOrganicSurgeWave 0.7s ease-out forwards;"></div>';
+            stage.appendChild(whiff);
+          }
+        }
+      },
+      {
+        id: 'victreebel_acid_master',
+        badge: 'badge-acid',
+        category: 'Kategori 1: Advanced VFX Başyapıtı',
+        pokemon: 'Victreebel',
+        move: 'Acid Melt (Kostik Kimyasal Aşınma)',
+        cardImg: '44.jpg',
+        hp: '80 HP',
+        pips: 8,
+        desc: 'Kesik çizgili CAD çemberi ve düz daire kaldırıldı; yerine çok loblu erozyon göleti, kaynayan asit kabarcıkları ve acı sülfür dumanı getirildi.',
+        breakdown: '<strong>VFX İyileştirmesi:</strong> Kesik çizgili yapay çember temizlendi $\\rightarrow$ çok loblu Bézier erozyon göleti $\\rightarrow$ kart dokusunda cızırdama ve yanık klorofil aurası $\\rightarrow$ 14 kaynayan kabarcık $\\rightarrow$ sülfürik gaz pufcukları.',
+        duration: 1850,
+        render: function(stage, whiff) {
+          if (!whiff) {
+            // Layer 1: Multi-Lobed Organic Corrosive Acid Puddle
+            const puddle = document.createElement('div');
+            puddle.style.cssText = 'position:absolute; bottom:8%; left:5%; right:5%; height:95px; z-index:13; pointer-events:none; opacity:0; animation:amOrganicPuddleExpansion 1.6s ease-out 0.28s forwards;';
+            puddle.innerHTML = `
+              <svg width="166" height="95" viewBox="0 0 166 95" style="overflow:visible;">
+                <!-- Dark Scorched Chemical Burn Underlayer -->
+                <path d="M 25 45 C 10 35, 5 60, 20 75 C 35 90, 75 92, 110 88 C 145 94, 160 75, 155 55 C 150 35, 125 40, 105 32 C 85 24, 45 28, 25 45 Z" fill="#14532d" opacity="0.92" style="filter:drop-shadow(0 0 16px #052e16);"/>
+                
+                <!-- Boiling Neon Acid Body -->
+                <path d="M 32 48 C 20 40, 16 62, 28 72 C 40 82, 75 84, 108 80 C 138 84, 150 70, 146 54 C 140 38, 120 42, 102 36 C 84 30, 48 34, 32 48 Z" fill="url(#gradAcidPoolMaster)" opacity="0.95"/>
+                
+                <!-- Incandescent Sulfur Core Highlights -->
+                <ellipse cx="65" cy="58" rx="28" ry="12" fill="#bef264" opacity="0.85" style="filter:drop-shadow(0 0 8px #bef264);"/>
+                <ellipse cx="115" cy="62" rx="20" ry="9" fill="#fef08a" opacity="0.9"/>
+                
+                <!-- Etched Corrosive Spatter -->
+                <circle cx="18" cy="35" r="3.5" fill="#84cc16"/>
+                <circle cx="152" cy="38" r="4" fill="#84cc16"/>
+                <circle cx="85" cy="22" r="3" fill="#bef264"/>
+                <circle cx="135" cy="85" r="3.5" fill="#84cc16"/>
+
+                <defs>
+                  <linearGradient id="gradAcidPoolMaster" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#bef264"/>
+                    <stop offset="30%" stop-color="#84cc16"/>
+                    <stop offset="70%" stop-color="#4d7c0f"/>
+                    <stop offset="100%" stop-color="#14532d"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            `;
+            stage.appendChild(puddle);
+
+            // Layer 2: Rayleigh-Plateau Viscous Necking Stream
+            const stream = document.createElement('div');
+            stream.style.cssText = 'position:absolute; top:15px; left:47px; width:90px; height:150px; z-index:20; pointer-events:none; opacity:0; animation:amViscousStreamCascade 1.35s cubic-bezier(0.18, 0.88, 0.28, 1) 0.06s forwards;';
+            stream.innerHTML = `
+              <svg width="90" height="150" viewBox="0 0 90 150" style="overflow:visible; filter:drop-shadow(0 0 16px #65a30d);">
+                <!-- Viscous Stretching Neck -->
+                <path d="M 45 0 C 35 25, 40 50, 42 75 C 44 95, 25 110, 35 135 C 42 150, 48 150, 55 135 C 65 110, 46 95, 48 75 C 50 50, 55 25, 45 0 Z" fill="url(#gradAcidStreamMaster)" opacity="0.95"/>
+                <!-- Core Hot Highlight -->
+                <path d="M 45 10 C 40 30, 43 55, 44 75 C 45 90, 35 105, 42 125 C 45 135, 45 135, 48 125 C 55 105, 45 90, 46 75 C 47 55, 50 30, 45 10 Z" fill="#fef08a" opacity="0.92"/>
+                <defs>
+                  <linearGradient id="gradAcidStreamMaster" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#bef264"/>
+                    <stop offset="40%" stop-color="#84cc16"/>
+                    <stop offset="75%" stop-color="#65a30d"/>
+                    <stop offset="100%" stop-color="#4d7c0f"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            `;
+            stage.appendChild(stream);
+
+            // Layer 3: Pinch-Off Droplet Beads
+            for (let i = 0; i < 4; i++) {
+              const bead = document.createElement('div');
+              const top = 32 + i * 24;
+              const left = 46 + (i % 2 === 0 ? -3 : 4);
+              const delay = 0.1 + i * 0.09;
+              const sizeW = 12 - i * 1.5;
+              const sizeH = 18 - i * 2;
+              bead.style.cssText = `position:absolute; top:${top}px; left:${left}%; width:${sizeW}px; height:${sizeH}px; border-radius:50% 50% 45% 45%; background:radial-gradient(ellipse at 40% 30%, #fef08a 0%, #bef264 45%, #65a30d 100%); z-index:21; opacity:0; animation:amPinchOffBeadCascade 1.1s cubic-bezier(0.2, 0.85, 0.35, 1) ${delay}s forwards; box-shadow:0 0 10px #84cc16;`;
+              stage.appendChild(bead);
+            }
+
+            // Layer 4: Boiling Caustic Acid Blisters
+            for (let i = 0; i < 14; i++) {
+              const bub = document.createElement('div');
+              const left = 20 + (i * 4.6);
+              const delay = 0.35 + (i * 0.07);
+              const size = 6 + (i % 4) * 3;
+              bub.style.cssText = `position:absolute; bottom:18%; left:${left}%; width:${size}px; height:${size}px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #ffffff 0%, #fef08a 40%, #84cc16 100%); border:1px solid #d9f99d; z-index:24; opacity:0; animation:amChemicalBlisterBoil 1.1s ease-out ${delay}s forwards;`;
+              stage.appendChild(bub);
+            }
+
+            // Layer 5: Billowing Acrid Sulfuric Vapor Clouds
+            for (let i = 0; i < 4; i++) {
+              const vap = document.createElement('div');
+              const left = 25 + (i * 14);
+              const delay = 0.42 + (i * 0.12);
+              vap.style.cssText = `position:absolute; bottom:22%; left:${left}%; width:50px; height:50px; border-radius:50%; background:radial-gradient(circle, rgba(254,240,138,0.75) 0%, rgba(163,230,53,0.45) 45%, transparent 80%); z-index:26; opacity:0; animation:amSulfurVaporHeptagon 1.4s ease-out ${delay}s forwards;`;
+              stage.appendChild(vap);
+            }
+          } else {
+            const whiff = document.createElement('div');
+            whiff.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:18;';
+            whiff.innerHTML = '<div style="width:40px; height:40px; border-radius:50%; background:radial-gradient(circle, rgba(132,204,22,0.35) 0%, transparent 70%); animation:amOrganicPuddleExpansion 0.7s ease-out forwards;"></div>';
+            stage.appendChild(whiff);
+          }
+        }
+      },
+      {
+        id: 'darkblastoise_hydrocannon_master',
+        badge: 'badge-hydro',
+        category: 'Kategori 1: Advanced VFX Başyapıtı',
+        pokemon: 'Dark Blastoise',
+        move: 'Hydrocannon (Çift Namlulu Su Mermisi)',
+        cardImg: '2.jpg',
+        hp: '100 HP',
+        pips: 10,
+        desc: 'Çift Varyantlı (Coin-Flip) Hidrodinamik Çağlayan Sentezi: 24 kavitasyon köpüğü, fine-grained mikro serpinti ve dipten yükselen buhar dalgasıyla desteklenen iki ayrı başyapıt mimarisi.',
+        breakdown: '<strong>İki Alternatifli Hidrodinamik Sentez:</strong><br>• <strong>Varyant 1 (Örgülü Kordonlu Şelale):</strong> 6 adet birbirine binen örgülü su kordonu, alt akışkan örtü (sıfır boşluk) ve fine-grained mikro kavitasyon serpintisi.<br>• <strong>Varyant 2 (Genişleyen Çağlayan & Dipten Yükselen Buhar):</strong> Aşağı doğru genişleyen yelpaze su kütlesi (9 kordon, scaleX: 1.70), zeminle çarpışma anında dipten yükselen ve genişleyen hacimli buhar dalgası (Ground Vapor Billow) ve 156px taban köpük sıçraması.<br>• <strong>Ortak Standartlar:</strong> Nozul çıkışında süpersonik buhar $\rightarrow$ anizotropik ikiz hidrolik sütunlar (21° eksenle tam V-çarpışması) $\rightarrow$ darbe anında geniş alana (40-75px) 360° saçılan 24 kavitasyon köpüğü $\rightarrow$ Micro-Canvas ile hız vektörüne kilitli (sıfır diken/ok!) fine-grained su damlacıkları $\rightarrow$ tam DOM temizliği.',
+        duration: 2100,
+        render: function(stage, whiff, variant) {
+          const chosenVariant = (variant === 1 || variant === 2) ? variant : 1;
+          if (!whiff) {
+            // Layer 1: Nozzle Bore Pressurized Ejection Blowout (Süpersonik Buhar Tahliyesi)
+            const muzzles = document.createElement('div');
+            muzzles.style.cssText = 'position:absolute; inset:0; z-index:26; pointer-events:none;';
+            muzzles.innerHTML = `
+              <!-- Left Muzzle Vapor Blowout -->
+              <div style="position:absolute; top:2px; left:29px; width:36px; height:32px; border-radius:50%; background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.95) 0%, rgba(125,211,252,0.85) 40%, rgba(2,132,199,0.2) 75%, transparent 100%); opacity:0; animation:hcMuzzleVaporBlowout 0.45s ease-out 0.08s forwards; filter:blur(2px);"></div>
+
+              <!-- Right Muzzle Vapor Blowout -->
+              <div style="position:absolute; top:2px; left:119px; width:36px; height:32px; border-radius:50%; background:radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.95) 0%, rgba(125,211,252,0.85) 40%, rgba(2,132,199,0.2) 75%, transparent 100%); opacity:0; animation:hcMuzzleVaporBlowout 0.45s ease-out 0.08s forwards; filter:blur(2px);"></div>
+            `;
+            stage.appendChild(muzzles);
+
+            // Layer 2: Dual Collimated Hydrodynamic Water Streams (Exact Demo 2 Architecture)
+            const torrents = document.createElement('div');
+            torrents.style.cssText = 'position:absolute; inset:0; z-index:22; pointer-events:none;';
+            torrents.innerHTML = `
+              <!-- Left Stream (width: 30px, length: 126px, transform-origin: 15px 0) -->
+              <div style="position:absolute; top:18px; left:32px; width:30px; height:126px; transform-origin:15px 0; opacity:0; animation:hcHydroStreamL 1.35s cubic-bezier(0.18, 0.88, 0.32, 1) 0.10s forwards;">
+                <div style="width:100%; height:100%; background:linear-gradient(to bottom, #ffffff 0%, rgba(56,189,248,0.88) 35%, rgba(2,132,199,0.95) 100%); border-radius:15px 15px 6px 6px; box-shadow:0 0 16px rgba(56,189,248,0.65), inset 0 0 10px #ffffff; filter:url(#waterJetTurbulenceFilter); position:relative;">
+                  <div style="position:absolute; top:4px; left:10px; width:10px; height:116px; border-radius:5px; background:linear-gradient(to bottom, #ffffff 0%, #e0f2fe 35%, rgba(125,211,252,0.6) 80%, transparent 100%); box-shadow:0 0 8px #ffffff; opacity:0.9; filter:blur(1px);"></div>
+                </div>
+              </div>
+
+              <!-- Right Stream (width: 30px, length: 126px, transform-origin: 15px 0) -->
+              <div style="position:absolute; top:18px; left:122px; width:30px; height:126px; transform-origin:15px 0; opacity:0; animation:hcHydroStreamR 1.35s cubic-bezier(0.18, 0.88, 0.32, 1) 0.10s forwards;">
+                <div style="width:100%; height:100%; background:linear-gradient(to bottom, #ffffff 0%, rgba(56,189,248,0.88) 35%, rgba(2,132,199,0.95) 100%); border-radius:15px 15px 6px 6px; box-shadow:0 0 16px rgba(56,189,248,0.65), inset 0 0 10px #ffffff; filter:url(#waterJetTurbulenceFilter); position:relative;">
+                  <div style="position:absolute; top:4px; left:10px; width:10px; height:116px; border-radius:5px; background:linear-gradient(to bottom, #ffffff 0%, #e0f2fe 35%, rgba(125,211,252,0.6) 80%, transparent 100%); box-shadow:0 0 8px #ffffff; opacity:0.9; filter:blur(1px);"></div>
+                </div>
+              </div>
+            `;
+            stage.appendChild(torrents);
+
+            // Layer 3: Dynamic Wide-Dispersing Cavitation Foam Blast (24 Çok Kademeli Saçılan Köpük Küresi)
+            const foamStage = document.createElement('div');
+            foamStage.style.cssText = 'position:absolute; top:55px; left:12px; width:160px; height:160px; z-index:24; pointer-events:none;';
+
+            // Central Nucleation Foam Mass
+            const coreFoam = document.createElement('div');
+            coreFoam.style.cssText = 'position:absolute; top:64px; left:64px; width:32px; height:32px; border-radius:50%; background:radial-gradient(circle at 35% 35%, #ffffff 0%, rgba(224,242,254,0.95) 25%, #7dd3fc 60%, rgba(2,132,199,0.9) 85%, transparent 100%); box-shadow:0 0 16px rgba(56,189,248,0.8), inset 0 0 8px #ffffff; opacity:0; animation:hcCoreFoamBloom 0.95s cubic-bezier(0.18, 0.88, 0.32, 1) 0.20s forwards;';
+            foamStage.appendChild(coreFoam);
+
+            // 24 Dispersing Cavitation Foam Bubbles
+            const dispersingBubbles = [
+              [26, 49.7, -9.8, 0.20, 0.77],
+              [25, -48.2, -12.4, 0.21, 0.82],
+              [24, 42.6, 26.8, 0.22, 0.80],
+              [24, -40.5, 24.5, 0.21, 0.79],
+              [18, 0.0, -52.0, 0.21, 0.85],
+              [17, -24.0, -46.0, 0.22, 0.80],
+              [17, 24.0, -44.0, 0.22, 0.80],
+              [16, 56.0, 8.0, 0.23, 0.75],
+              [16, -58.0, 6.0, 0.23, 0.75],
+              [15, 32.0, 44.0, 0.24, 0.72],
+              [15, -34.0, 42.0, 0.24, 0.72],
+              [14, 0.0, 48.0, 0.25, 0.70],
+              [14, 52.0, -28.0, 0.23, 0.76],
+              [13, -54.0, -26.0, 0.23, 0.76],
+              [10, -18.0, -58.0, 0.22, 0.70],
+              [10, 18.0, -56.0, 0.22, 0.70],
+              [9, 64.0, -4.0, 0.24, 0.65],
+              [9, -65.0, -2.0, 0.24, 0.65],
+              [8, 44.0, 40.0, 0.25, 0.62],
+              [8, -42.0, 38.0, 0.25, 0.62],
+              [8, -60.0, 22.0, 0.24, 0.64],
+              [7, 62.0, 20.0, 0.24, 0.64],
+              [7, -32.0, -50.0, 0.23, 0.66],
+              [6, 30.0, -48.0, 0.23, 0.66]
+            ];
+
+            dispersingBubbles.forEach(([sz, dx, dy, del, dur]) => {
+              const b = document.createElement('div');
+              b.style.cssText = `
+                position: absolute;
+                top: ${80 - sz / 2}px;
+                left: ${80 - sz / 2}px;
+                width: ${sz}px;
+                height: ${sz}px;
+                border-radius: 50%;
+                background: radial-gradient(circle at 35% 35%, #ffffff 0%, rgba(224,242,254,0.95) 25%, #7dd3fc 60%, rgba(2,132,199,0.9) 90%, #0369a1 100%);
+                box-shadow: 0 0 10px rgba(56,189,248,0.7), inset 0 0 5px #ffffff;
+                --dx: ${dx}px;
+                --dy: ${dy}px;
+                opacity: 0;
+                animation: hcDispersingFoamBubble ${dur}s cubic-bezier(0.18, 0.88, 0.32, 1) ${del}s forwards;
+              `;
+              foamStage.appendChild(b);
+            });
+            stage.appendChild(foamStage);
+
+            // Layer 4: Diffuse Atmospheric Vapor Flash (Sıfır Statik Daire)
+            const shockContainer = document.createElement('div');
+            shockContainer.style.cssText = 'position:absolute; top:85px; left:12px; width:160px; height:100px; z-index:23; pointer-events:none; opacity:0; animation:hcAtmosphericVaporFlash 1.05s ease-out 0.22s forwards;';
+            shockContainer.innerHTML = `
+              <div style="width:100%; height:100%; border-radius:50%; background:radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.9) 0%, rgba(186,230,253,0.45) 30%, rgba(56,189,248,0.15) 60%, transparent 80%); filter:blur(8px);"></div>
+            `;
+            stage.appendChild(shockContainer);
+
+            // Layer 5: High-Density Micro-Canvas Physical Water Particle Emitter + Fine-Grained Micro-Spray
+            const particleCanvas = document.createElement('canvas');
+            particleCanvas.width = 184;
+            particleCanvas.height = 253;
+            particleCanvas.style.cssText = 'position:absolute; inset:0; z-index:25; pointer-events:none;';
+            stage.appendChild(particleCanvas);
+            const pCtx = particleCanvas.getContext('2d');
+
+            class FluidDroplet {
+              constructor(ox, oy, isSputter) {
+                this.x = ox + (Math.random() - 0.5) * 8;
+                this.y = oy + (Math.random() - 0.5) * 6;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = isSputter ? (1.5 + Math.random() * 4.2) : (2.5 + Math.random() * 6.5);
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed * 0.85 - (Math.random() * 2.2);
+                this.gravity = 0.14 + Math.random() * 0.08;
+                this.drag = 0.965;
+                this.radius = 0.8 + Math.random() * 1.5;
+                this.alpha = 1.0;
+                this.decay = 0.016 + Math.random() * 0.015;
+                const r = Math.random();
+                this.color = r > 0.55 ? '#ffffff' : (r > 0.3 ? '#bae6fd' : '#38bdf8');
+              }
+              update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.vx *= this.drag;
+                this.vy *= this.drag;
+                this.alpha -= this.decay;
+              }
+              draw(c) {
+                if (this.alpha <= 0) return;
+                c.save();
+                c.globalAlpha = Math.max(0, this.alpha);
+                c.fillStyle = this.color;
+                c.beginPath();
+                c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                c.fill();
+                c.restore();
+              }
+            }
+
+            // Fine-Grained Hydrodynamic Micro-Spray (Hız vektörüne kilitli minyatür damlalar)
+            class FluidMicroSpray {
+              constructor(ox, oy, angleOffset, speedMult) {
+                this.x = ox + (Math.random() - 0.5) * 36;
+                this.y = oy + (Math.random() - 0.5) * 8;
+                const angle = Math.PI / 2 + (angleOffset || 0) + (Math.random() - 0.5) * 0.55;
+                const speed = (3.5 + Math.random() * 4.5) * (speedMult || 1.0);
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.gravity = 0.18 + Math.random() * 0.06;
+                this.drag = 0.98;
+                this.radius = 0.8 + Math.random() * 1.2;
+                this.alpha = 0.95;
+                this.decay = 0.018 + Math.random() * 0.016;
+                const r = Math.random();
+                this.color = r > 0.6 ? '#ffffff' : (r > 0.3 ? '#bae6fd' : '#38bdf8');
+              }
+              update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += this.gravity;
+                this.vx *= this.drag;
+                this.alpha -= this.decay;
+              }
+              draw(c) {
+                if (this.alpha <= 0) return;
+                c.save();
+                c.globalAlpha = Math.max(0, this.alpha);
+                const vLen = Math.hypot(this.vx, this.vy);
+                const tailLen = Math.min(5.0, vLen * 0.45);
+                const tailX = this.x - (this.vx / (vLen || 1)) * tailLen;
+                const tailY = this.y - (this.vy / (vLen || 1)) * tailLen;
+
+                c.strokeStyle = this.color;
+                c.lineWidth = this.radius * 1.4;
+                c.lineCap = 'round';
+                c.beginPath();
+                c.moveTo(tailX, tailY);
+                c.lineTo(this.x, this.y);
+                c.stroke();
+
+                c.fillStyle = '#ffffff';
+                c.beginPath();
+                c.arc(this.x, this.y, this.radius * 0.8, 0, Math.PI * 2);
+                c.fill();
+                c.restore();
+              }
+            }
+
+            // Dipten Yükselen ve Genişleyen Buhar Zerreleri (Ground Mist Puffs)
+            class FluidGroundMist {
+              constructor(ox, oy) {
+                this.x = ox + (Math.random() - 0.5) * 120;
+                this.y = oy + (Math.random() - 0.5) * 12;
+                this.vx = (Math.random() - 0.5) * 2.2;
+                this.vy = -(1.2 + Math.random() * 2.4); // Dipten yukarı yükselen buhar ivmesi!
+                this.radius = 3.5 + Math.random() * 5.0;
+                this.alpha = 0.42;
+                this.decay = 0.013 + Math.random() * 0.011;
+              }
+              update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.radius += 0.12; // Yükseldikçe genişleyen buhar
+                this.alpha -= this.decay;
+              }
+              draw(c) {
+                if (this.alpha <= 0) return;
+                c.save();
+                c.globalAlpha = Math.max(0, this.alpha);
+                c.fillStyle = 'rgba(186, 230, 253, 0.45)';
+                c.beginPath();
+                c.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                c.fill();
+                c.restore();
+              }
+            }
+
+            const particles = [];
+            // Wave 1: Çarpışma anında (0.22s) 60 adet patlayan mikro damlacık
+            setTimeout(() => {
+              for (let i = 0; i < 60; i++) {
+                particles.push(new FluidDroplet(92, 135, false));
+              }
+            }, 220);
+
+            // Wave 2: İnce taneli mikro kavitasyon serpintisi (0.28s) 50 damla
+            setTimeout(() => {
+              const spreadBias = (chosenVariant === 2) ? 0.45 : 0.20;
+              for (let i = 0; i < 50; i++) {
+                const off = (Math.random() - 0.5) * spreadBias;
+                particles.push(new FluidMicroSpray(92, 135, off, 1.0));
+              }
+            }, 280);
+
+            // Wave 3: Zeminle çarpışma anında (0.36s) DİPTEN YÜKSELEN VE GENİŞLEYEN BUHAR (28 adet)
+            if (chosenVariant === 2) {
+              setTimeout(() => {
+                for (let i = 0; i < 28; i++) {
+                  particles.push(new FluidGroundMist(92, 240));
+                }
+              }, 360);
+            }
+
+            // Wave 4: Su akışı sürerken (0.42s) 30 adet kavitasyon sıçraması
+            setTimeout(() => {
+              for (let i = 0; i < 30; i++) {
+                particles.push(new FluidDroplet(92, 135, true));
+              }
+            }, 420);
+
+            let animId;
+            let startSim = performance.now();
+            function renderParticles() {
+              pCtx.clearRect(0, 0, particleCanvas.width, particleCanvas.height);
+              let activeCount = 0;
+              for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                if (p.alpha > 0) {
+                  p.update();
+                  p.draw(pCtx);
+                  activeCount++;
+                }
+              }
+              if (activeCount > 0 || (performance.now() - startSim < 1800)) {
+                animId = requestAnimationFrame(renderParticles);
+              }
+            }
+            animId = requestAnimationFrame(renderParticles);
+
+            // Layer 6: Water Cascade (Seçili Varyanta Göre Render Edilir)
+            const cascadeStage = document.createElement('div');
+            cascadeStage.style.cssText = 'position:absolute; inset:0; z-index:21; pointer-events:none;';
+
+            const bottomSplashes = document.createElement('div');
+            bottomSplashes.style.cssText = 'position:absolute; bottom:6px; left:14px; width:156px; height:18px; z-index:22; pointer-events:none;';
+
+            if (chosenVariant === 1) {
+              // ==========================================
+              // VARYANT 1: Revize Edilmiş Örgülü Kordonlu Şelale (Braided Stream Torrents)
+              // ==========================================
+              const waterBed = document.createElement('div');
+              waterBed.style.cssText = `
+                position: absolute;
+                top: 135px;
+                left: 46px;
+                width: 92px;
+                height: 114px;
+                transform-origin: 50% 0;
+                opacity: 0;
+                animation: hcCohesiveWaterBed 1.15s cubic-bezier(0.18, 0.88, 0.32, 1) 0.25s forwards;
+              `;
+              waterBed.innerHTML = `
+                <div style="width:100%; height:100%; border-radius:10px 10px 4px 4px; background:linear-gradient(to bottom, rgba(224,242,254,0.75) 0%, rgba(56,189,248,0.45) 35%, rgba(2,132,199,0.25) 75%, transparent 100%); filter:url(#waterJetTurbulenceFilter); box-shadow:0 0 14px rgba(56,189,248,0.45);"></div>
+              `;
+              cascadeStage.appendChild(waterBed);
+
+              const braidedStreams = [
+                [72, 22, 114, 0.24, 0.98],
+                [84, 24, 116, 0.24, 1.02],
+                [94, 22, 114, 0.25, 0.98],
+                [64, 18, 110, 0.26, 0.94],
+                [102, 18, 110, 0.26, 0.94],
+                [80, 20, 112, 0.27, 0.92]
+              ];
+
+              braidedStreams.forEach(([left, width, height, delay, duration]) => {
+                const sEl = document.createElement('div');
+                sEl.style.cssText = `
+                  position: absolute;
+                  top: 135px;
+                  left: ${left}px;
+                  width: ${width}px;
+                  height: ${height}px;
+                  transform-origin: 50% 0;
+                  opacity: 0;
+                  animation: hcBraidedStreamFlow ${duration}s cubic-bezier(0.18, 0.88, 0.32, 1) ${delay}s forwards;
+                `;
+                sEl.innerHTML = `
+                  <div style="width:100%; height:100%; background:linear-gradient(to bottom, #ffffff 0%, rgba(56,189,248,0.85) 30%, rgba(2,132,199,0.75) 75%, transparent 100%); border-radius:8px 8px 4px 4px; box-shadow:0 0 10px rgba(56,189,248,0.5), inset 0 0 6px #ffffff; filter:url(#waterJetTurbulenceFilter); position:relative;">
+                    <div style="position:absolute; top:2px; left:22%; width:56%; height:88%; border-radius:4px; background:linear-gradient(to bottom, #ffffff 0%, #e0f2fe 38%, rgba(125,211,252,0.4) 78%, transparent 100%); opacity:0.88; filter:blur(0.8px);"></div>
+                  </div>
+                `;
+                cascadeStage.appendChild(sEl);
+              });
+
+              for (let i = 0; i < 8; i++) {
+                const bSplash = document.createElement('div');
+                const xPos = 48 + (i * 11);
+                const delay = 0.40 + (i * 0.04);
+                const size = 3.2 + (i % 3) * 1.5;
+                bSplash.style.cssText = `
+                  position: absolute;
+                  bottom: 2px;
+                  left: ${xPos}px;
+                  width: ${size}px;
+                  height: ${size * 1.2}px;
+                  border-radius: 50% 50% 35% 35%;
+                  background: radial-gradient(circle, #ffffff 0%, #7dd3fc 55%, #0284c7 95%);
+                  box-shadow: 0 0 5px rgba(56,189,248,0.7);
+                  opacity: 0;
+                  animation: hcBottomRecoilSplash 0.55s ease-out ${delay.toFixed(3)}s forwards;
+                `;
+                bottomSplashes.appendChild(bSplash);
+              }
+
+            } else {
+              // ==========================================
+              // VARYANT 2: Genişleyen Hidrodinamik Çağlayan & Dipten Yükselen Buhar Dalgası
+              // Aşağı doğru genişleyen yelpaze perdesi (9 kordon, scaleX: 1.70)
+              // + Zeminle çarpışma anında dipten yükselen ve genişleyen hacimli buhar dalgası!
+              // ==========================================
+              const matrixSheet = document.createElement('div');
+              matrixSheet.style.cssText = `
+                position: absolute;
+                top: 135px;
+                left: 18px;
+                width: 148px;
+                height: 116px;
+                transform-origin: 50% 0;
+                opacity: 0;
+                animation: hcCohesiveCausticMatrix 1.15s cubic-bezier(0.18, 0.88, 0.32, 1) 0.25s forwards;
+              `;
+              matrixSheet.innerHTML = `
+                <div style="width:100%; height:100%; border-radius:12px 12px 4px 4px; background:linear-gradient(to bottom, rgba(224,242,254,0.78) 0%, rgba(56,189,248,0.50) 32%, rgba(2,132,199,0.32) 70%, transparent 100%); filter:url(#waterJetTurbulenceFilter); box-shadow:0 0 18px rgba(56,189,248,0.45);"></div>
+              `;
+              cascadeStage.appendChild(matrixSheet);
+
+              // 9 Adet Genişleyen ve Yelpazelenen Türbülanslı Su Kordonu (scaleX: 1.70 genişleme!)
+              // [left, width, height, angle, delay, duration]
+              const fanningRivulets = [
+                // Center Main Torrents (Spine)
+                [80, 24, 116, 0, 0.24, 1.02],
+                // Inner Swell Left & Right
+                [74, 20, 114, -7, 0.25, 0.98],
+                [90, 20, 114, 7, 0.25, 0.98],
+                // Mid Flank Wings Left & Right
+                [66, 18, 110, -15, 0.27, 0.94],
+                [100, 18, 110, 15, 0.27, 0.94],
+                // Outer Lateral Expansions (Aşağı indikçe dışarı açılan kanatlar)
+                [60, 16, 106, -24, 0.28, 0.90],
+                [108, 16, 106, 24, 0.28, 0.90],
+                // Extreme Outer Splash Ribbons (En dış kanatlar)
+                [54, 14, 102, -32, 0.30, 0.86],
+                [116, 14, 102, 32, 0.30, 0.86]
+              ];
+
+              fanningRivulets.forEach(([left, width, height, angle, delay, duration]) => {
+                const rEl = document.createElement('div');
+                rEl.style.cssText = `
+                  position: absolute;
+                  top: 135px;
+                  left: ${left}px;
+                  width: ${width}px;
+                  height: ${height}px;
+                  transform-origin: 50% 0;
+                  --angle: ${angle}deg;
+                  opacity: 0;
+                  animation: hcTurbulentFanningCascade ${duration}s cubic-bezier(0.18, 0.88, 0.32, 1) ${delay}s forwards;
+                `;
+                rEl.innerHTML = `
+                  <div style="width:100%; height:100%; background:linear-gradient(to bottom, #ffffff 0%, rgba(56,189,248,0.85) 28%, rgba(2,132,199,0.75) 72%, transparent 100%); border-radius:8px 8px 4px 4px; box-shadow:0 0 10px rgba(56,189,248,0.5), inset 0 0 6px #ffffff; filter:url(#waterJetTurbulenceFilter); position:relative;">
+                    <div style="position:absolute; top:2px; left:22%; width:56%; height:88%; border-radius:4px; background:linear-gradient(to bottom, #ffffff 0%, #e0f2fe 38%, rgba(125,211,252,0.4) 78%, transparent 100%); opacity:0.88; filter:blur(0.8px);"></div>
+                  </div>
+                `;
+                cascadeStage.appendChild(rEl);
+              });
+
+              // Ground-Impact Billowing Vapor Surge (Zeminle çarpışma anında dipten yükselen ve genişleyen buhar kütlesi!)
+              const groundVapor = document.createElement('div');
+              groundVapor.style.cssText = `
+                position: absolute;
+                bottom: 0;
+                left: 6px;
+                right: 6px;
+                height: 96px;
+                z-index: 23;
+                pointer-events: none;
+                opacity: 0;
+                animation: hcGroundImpactVaporBillow 1.15s cubic-bezier(0.16, 0.85, 0.35, 1) 0.34s forwards;
+              `;
+              groundVapor.innerHTML = `
+                <div style="width:100%; height:100%; border-radius:50% 50% 0 0; background:radial-gradient(ellipse at 50% 90%, rgba(255,255,255,0.92) 0%, rgba(186,230,253,0.75) 30%, rgba(56,189,248,0.35) 60%, transparent 85%); filter:blur(6px); box-shadow:0 -8px 24px rgba(56,189,248,0.5);"></div>
+              `;
+              cascadeStage.appendChild(groundVapor);
+
+              // Taban Sıçramaları (12 adet, 156px taban yayılımı)
+              for (let i = 0; i < 12; i++) {
+                const bSplash = document.createElement('div');
+                const xPos = 2 + (i * 12.8);
+                const delay = 0.38 + (i * 0.035);
+                const size = 3.2 + (i % 3) * 1.6;
+                bSplash.style.cssText = `
+                  position: absolute;
+                  bottom: 2px;
+                  left: ${xPos.toFixed(1)}px;
+                  width: ${size}px;
+                  height: ${size * 1.2}px;
+                  border-radius: 50% 50% 35% 35%;
+                  background: radial-gradient(circle, #ffffff 0%, #7dd3fc 55%, #0284c7 95%);
+                  box-shadow: 0 0 5px rgba(56,189,248,0.7);
+                  opacity: 0;
+                  animation: hcBottomRecoilSplash 0.55s ease-out ${delay.toFixed(3)}s forwards;
+                `;
+                bottomSplashes.appendChild(bSplash);
+              }
+            }
+
+            stage.appendChild(cascadeStage);
+            stage.appendChild(bottomSplashes);
+
+            // Layer 7: Fine-Grained Gravitational Droplets
+            for (let i = 0; i < 16; i++) {
+              const fdrop = document.createElement('div');
+              const left = (chosenVariant === 2) ? (16 + i * 4.2) : (26 + i * 3.2);
+              const delay = 0.30 + (i * 0.034);
+              const size = 1.6 + (i % 3) * 1.0;
+              fdrop.style.cssText = `position:absolute; top:135px; left:${left}%; width:${size}px; height:${size * 1.5}px; border-radius:50% 50% 40% 40%; background:radial-gradient(ellipse, #ffffff 0%, #7dd3fc 65%, #0284c7 100%); z-index:22; opacity:0; animation:hcFineGrainVelocityCascade 0.72s cubic-bezier(0.45, 0.05, 0.9, 1) ${delay.toFixed(3)}s forwards; pointer-events:none; box-shadow:0 0 4px #7dd3fc;`;
+              stage.appendChild(fdrop);
+            }
+
+            // Hard DOM Cleanup
+            setTimeout(() => {
+              if (foamStage && foamStage.parentNode) foamStage.parentNode.removeChild(foamStage);
+              if (shockContainer && shockContainer.parentNode) shockContainer.parentNode.removeChild(shockContainer);
+              if (cascadeStage && cascadeStage.parentNode) cascadeStage.parentNode.removeChild(cascadeStage);
+              if (bottomSplashes && bottomSplashes.parentNode) bottomSplashes.parentNode.removeChild(bottomSplashes);
+            }, 1480);
+          } else {
+            const whiff = document.createElement('div');
+            whiff.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:18;';
+            whiff.innerHTML = '<div style="width:45px; height:45px; border-radius:50%; border:2px solid #0284c7; opacity:0; animation:hcAtmosphericVaporFlash 0.7s ease-out forwards;"></div>';
+            stage.appendChild(whiff);
+          }
+        }
+      }
+    ];
+
+    // Global State
+    let isDarkBoard = false;
+    let isWhiff = false;
+    let globalSpeed = 1.0;
+
+    // Render Cards in Grid
+    const grid = document.getElementById('showcaseGrid');
+
+    REVAMPED_DATA.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'showcase-card';
+      card.id = `card-${item.id}`;
+
+      // Status Pips HTML
+      let pipsHtml = '';
+      for (let p = 0; p < item.pips; p++) {
+        pipsHtml += '<div class="pip"></div>';
+      }
+
+      card.innerHTML = `
+        <div class="showcase-header">
+          <span class="showcase-badge ${item.badge}">${item.category}</span>
+          <div class="showcase-title">
+            <span>${index + 1}. ${item.pokemon}</span>
+            <span style="color:#64748b; font-weight:400;">—</span>
+            <span style="color:#f8fafc;">${item.move}</span>
+          </div>
+          <div class="showcase-desc">${item.desc}</div>
+        </div>
+
+        <div class="card-slot-wrapper" id="slot-${item.id}">
+          <!-- Card Background Image with Resilient Loading -->
+          <img class="card-bg-img" id="img-${item.id}" alt="${item.pokemon} Card" draggable="false" />
+          
+          <!-- Status Strip (CardView.tsx Parity) -->
+          <div class="status-strip">
+            <span class="status-hp">${item.hp}</span>
+            <div class="status-pips">${pipsHtml}</div>
+          </div>
+
+          <!-- FX Overlay Stage -->
+          <div class="fx-stage" id="stage-${item.id}"></div>
+        </div>
+
+        <div class="card-controls">
+          ${item.id === 'darkblastoise_hydrocannon_master' ? `
+            <div class="variant-selector">
+              <button class="btn-var active" id="btnVarCoin" onclick="setHydroVariant('coinflip')">🎲 Coin-Flip (Rastgele)</button>
+              <button class="btn-var" id="btnVar1" onclick="setHydroVariant('v1')">1️⃣ Varyant 1: Örgülü Kordonlar</button>
+              <button class="btn-var" id="btnVar2" onclick="setHydroVariant('v2')">2️⃣ Varyant 2: Asimetrik Çağlayan</button>
+            </div>
+            <div id="hydroVariantBadge" style="font-size:11.5px; color:#38bdf8; font-weight:600; margin-bottom:8px; min-height:16px;">🎲 Coin-Flip Modu Aktif (Oynatıldığında Rastgele Seçilecek)</div>
+          ` : ''}
+          <button class="btn-play" onclick="playFX('${item.id}')">
+            <span>▶</span>
+            <span>Oynat (Replay)</span>
+          </button>
+          <div class="vfx-breakdown">${item.breakdown}</div>
+        </div>
+      `;
+
+      grid.appendChild(card);
+
+      // Load resilient image
+      const imgEl = card.querySelector(`#img-${item.id}`);
+      loadResilientImg(imgEl, [
+        `cards/${item.cardImg}`,
+        `./cards/${item.cardImg}`,
+        `/cards/${item.cardImg}`,
+        `../public/cards/${item.cardImg}`
+      ]);
+    });
+
+    // Play Effect on Given Stage
+    function playFX(id) {
+      const item = REVAMPED_DATA.find(d => d.id === id);
+      if (!item) return;
+
+      const stage = document.getElementById(`stage-${id}`);
+      const slot = document.getElementById(`slot-${id}`);
+      if (!stage) return;
+
+      // Clear previous animations
+      stage.innerHTML = '';
+      stage.style.animation = 'none';
+      if (slot) slot.style.animation = 'none';
+      void stage.offsetWidth; // Trigger reflow
+
+      // Card-level reaction shudder (hit only)
+      if (!isWhiff && slot) {
+        slot.style.animation = `fxCardShudder 0.5s ease-out 0.15s forwards`;
+      }
+
+      // Adjust animation speed via style
+      stage.style.animationDuration = `${item.duration / globalSpeed}ms`;
+
+      // Variant Coin-Flip or Fixed Selection for Dark Blastoise
+      let chosenVariant = 1;
+      if (id === 'darkblastoise_hydrocannon_master') {
+        if (hydroVariantMode === 'coinflip') {
+          chosenVariant = Math.random() < 0.5 ? 1 : 2;
+          const badge = document.getElementById('hydroVariantBadge');
+          if (badge) {
+            badge.innerHTML = `🎲 Coin-Flip Sonucu: <strong>Varyant ${chosenVariant}</strong> (${chosenVariant === 1 ? 'Örgülü Kordonlu Şelale' : 'Asimetrik Hidrodinamik Çağlayan'})`;
+          }
+        } else if (hydroVariantMode === 'v1') {
+          chosenVariant = 1;
+          const badge = document.getElementById('hydroVariantBadge');
+          if (badge) badge.innerHTML = `1️⃣ Sabit Mod: <strong>Varyant 1</strong> (Örgülü Kordonlu Şelale)`;
+        } else if (hydroVariantMode === 'v2') {
+          chosenVariant = 2;
+          const badge = document.getElementById('hydroVariantBadge');
+          if (badge) badge.innerHTML = `2️⃣ Sabit Mod: <strong>Varyant 2</strong> (Gelişmiş Asimetrik Çağlayan)`;
+        }
+      }
+
+      // Render FX layers
+      item.render(stage, isWhiff, chosenVariant);
+    }
+
+    // Hydrocannon Variant Switcher Function
+    let hydroVariantMode = 'coinflip';
+    function setHydroVariant(mode) {
+      hydroVariantMode = mode;
+      ['btnVarCoin', 'btnVar1', 'btnVar2'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('active');
+      });
+      if (mode === 'coinflip') {
+        const el = document.getElementById('btnVarCoin');
+        if (el) el.classList.add('active');
+        const badge = document.getElementById('hydroVariantBadge');
+        if (badge) badge.innerHTML = '🎲 Coin-Flip Modu Aktif (Oynatıldığında Rastgele 1 veya 2 Seçilecek)';
+      } else if (mode === 'v1') {
+        const el = document.getElementById('btnVar1');
+        if (el) el.classList.add('active');
+        const badge = document.getElementById('hydroVariantBadge');
+        if (badge) badge.innerHTML = '1️⃣ Sabit Mod: Varyant 1 (Örgülü Kordonlu Şelale)';
+      } else if (mode === 'v2') {
+        const el = document.getElementById('btnVar2');
+        if (el) el.classList.add('active');
+        const badge = document.getElementById('hydroVariantBadge');
+        if (badge) badge.innerHTML = '2️⃣ Sabit Mod: Varyant 2 (Gelişmiş Asimetrik Çağlayan)';
+      }
+      playFX('darkblastoise_hydrocannon_master');
+    }
+
+    // Play All Effects
+    function playAll() {
+      REVAMPED_DATA.forEach((item, idx) => {
+        setTimeout(() => {
+          playFX(item.id);
+        }, idx * 180);
+      });
+    }
+
+    // Toggle Real Card / Dark Board Mode
+    document.getElementById('btnMode').addEventListener('click', function() {
+      isDarkBoard = !isDarkBoard;
+      const wrappers = document.querySelectorAll('.card-slot-wrapper');
+      wrappers.forEach(w => {
+        if (isDarkBoard) {
+          w.classList.add('dark-board-mode');
+        } else {
+          w.classList.remove('dark-board-mode');
+        }
+      });
+      this.classList.toggle('active', isDarkBoard);
+      this.innerHTML = isDarkBoard ? '⬛ Dark Board Canvas' : '🎴 Real Card Mode';
+    });
+
+    // Toggle Whiff Mode
+    document.getElementById('btnWhiffToggle').addEventListener('click', function() {
+      isWhiff = !isWhiff;
+      this.classList.toggle('active', isWhiff);
+      this.innerHTML = isWhiff ? '💨 Whiff (Iskalama: Açık)' : '🎯 Hit Modu (Whiff: Kapalı)';
+      playAll();
+    });
+
+    // Speed Controls
+    function setSpeed(sp, btnId) {
+      globalSpeed = sp;
+      ['btnSpeed1', 'btnSpeed05', 'btnSpeed025'].forEach(id => {
+        document.getElementById(id).classList.remove('active');
+      });
+      document.getElementById(btnId).classList.add('active');
+    }
+
+    document.getElementById('btnSpeed1').addEventListener('click', () => setSpeed(1.0, 'btnSpeed1'));
+    document.getElementById('btnSpeed05').addEventListener('click', () => setSpeed(0.5, 'btnSpeed05'));
+    document.getElementById('btnSpeed025').addEventListener('click', () => setSpeed(0.25, 'btnSpeed025'));
+
+    // Global Play All
+    document.getElementById('btnPlayAll').addEventListener('click', playAll);
+
+    // Initial Trigger on Load
+    window.addEventListener('load', () => {
+      setTimeout(playAll, 500);
+    });
+  </script>
+</body>
+</html>
